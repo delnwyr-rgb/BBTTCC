@@ -32,7 +32,8 @@
       const res = await orig(args);
 
       try {
-        if (args?.apply && !_isRunning) {
+        // Not when the base turn was skipped (turn lock) or threw (2026-10-01).
+        if (args?.apply && !_isRunning && !res?.skipped && !res?.error) {
           _isRunning = true;
 
           const factionId = args.factionId || args.actorId || args.attackerId || null;

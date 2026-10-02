@@ -335,6 +335,12 @@ async function _writePartialPrice(item, partial) {
   if ("marks" in partial || "bound" in partial) {
     next.saleBack = computeSaleBack(next.marks, next.bound);
   }
+  // setFlag deep-MERGES, so a pool dropped from the split would survive the
+  // write (split {economy:50} over a stored {economy:30, violence:20} keeps
+  // violence). Clear the stored split first so the new one replaces it.
+  if ("split" in partial && cur.price?.split && typeof cur.price.split === "object") {
+    await item.unsetFlag(RFI_ITEM_FLAG_NS, `${RFI_ITEM_FLAG_KEY}.price.split`);
+  }
   return item.setFlag(RFI_ITEM_FLAG_NS, RFI_ITEM_FLAG_KEY, { ...cur, price: next });
 }
 

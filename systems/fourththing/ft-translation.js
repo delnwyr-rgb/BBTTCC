@@ -56,7 +56,7 @@ export const FT_TERM_MAP = [
   [/\bHP\b/g,                     "Integrity"],
   [/\barmor class\b/gi,           "Guard"],
   [/\bAC\b/g,                     "Guard"],
-  [/\binitiative\b/gi,            "Initiative (Intrigue)"],
+  [/\binitiative\b(?! \()/gi,     "Initiative (Intrigue)"],
   [/\bspeed\b/gi,                 "movement"],
   [/\bpassive perception\b/gi,    "passive Perception"],
 
@@ -74,6 +74,9 @@ export const FT_TERM_MAP = [
   [/\bki points?\b/gi,            "Clarity points"],
 
   // ── Saving throws (specific phrases BEFORE bare attribute names) ──────────
+  // "death saving throw" first — the generic saving-throw rule below would
+  // otherwise turn it into "death defense check" before this rule could fire.
+  [/\bdeath saving throws?\b/gi,   "last stand check"],
   // Compound forms must run first; bare-name rules below would otherwise
   // mutate "Strength" inside "Strength saving throw" and break the match.
   [/\bStrength saving throws?\b/gi,     "Violence check"],
@@ -109,31 +112,33 @@ export const FT_TERM_MAP = [
   [/\bPB\b/g,                     "tier"],
 
   // ── Skills (5E → FT equivalents) ─────────────────────────────────────────
-  [/\bAcrobatics\b/g,     "Athletics (Intrigue)"],
-  [/\bAnimal Handling\b/g,"Empathy (Presence)"],
-  [/\bArcana\b/g,         "Occult (Mind)"],
-  [/\bAthletics\b/g,      "Athletics (Violence)"],
-  [/\bDeception\b/g,      "Stealth (Presence)"],
-  [/\bHistory\b/g,        "Lore (Mind)"],
-  [/\bInsight\b/g,        "Insight (Soul)"],
-  [/\bIntimidation\b/g,   "Intimidation (Presence)"],
-  [/\bInvestigation\b/g,  "Investigation (Mind)"],
-  [/\bMedicine\b/g,       "Faith (Soul)"],
-  [/\bNature\b/g,         "Lore (Mind)"],
-  [/\bPerception\b/g,     "Perception (Mind)"],
-  [/\bPerformance\b/g,    "Performance (Presence)"],
-  [/\bPersuasion\b/g,     "Diplomacy (Presence)"],
-  [/\bReligion\b/g,       "Faith (Soul)"],
-  [/\bSleight of Hand\b/g,"Tinkering (Intrigue)"],
-  [/\bStealth\b/g,        "Stealth (Intrigue)"],
-  [/\bSurvival\b/g,       "Athletics (Body)"],
+  // `(?! \()` — rules run in sequence over the rewritten text, so a name an
+  // earlier rule already decorated ("Athletics (Intrigue)" from Acrobatics) must
+  // not be decorated again; also keeps a second pass idempotent.
+  [/\bAcrobatics\b(?! \()/g,     "Athletics (Intrigue)"],
+  [/\bAnimal Handling\b(?! \()/g,"Empathy (Presence)"],
+  [/\bArcana\b(?! \()/g,         "Occult (Mind)"],
+  [/\bAthletics\b(?! \()/g,      "Athletics (Violence)"],
+  [/\bDeception\b(?! \()/g,      "Stealth (Presence)"],
+  [/\bHistory\b(?! \()/g,        "Lore (Mind)"],
+  [/\bInsight\b(?! \()/g,        "Insight (Soul)"],
+  [/\bIntimidation\b(?! \()/g,   "Intimidation (Presence)"],
+  [/\bInvestigation\b(?! \()/g,  "Investigation (Mind)"],
+  [/\bMedicine\b(?! \()/g,       "Faith (Soul)"],
+  [/\bNature\b(?! \()/g,         "Lore (Mind)"],
+  [/\bPerception\b(?! \()/g,     "Perception (Mind)"],
+  [/\bPerformance\b(?! \()/g,    "Performance (Presence)"],
+  [/\bPersuasion\b(?! \()/g,     "Diplomacy (Presence)"],
+  [/\bReligion\b(?! \()/g,       "Faith (Soul)"],
+  [/\bSleight of Hand\b(?! \()/g,"Tinkering (Intrigue)"],
+  [/\bStealth\b(?! \()/g,        "Stealth (Intrigue)"],
+  [/\bSurvival\b(?! \()/g,       "Athletics (Body)"],
 
   // ── Combat ─────────────────────────────────────────────────────────────────
   [/\bhit dice?\b/gi,             "Body dice"],
   [/\bbonus action\b/gi,          "Bonus action"],
   [/\bopportunity attacks?\b/gi,  m => m.toLowerCase().endsWith("s") ? "reaction strikes" : "reaction strike"],
   [/\bsneak attack\b/gi,          "precision strike"],
-  [/\bdeath saving throw\b/gi,    "last stand check"],
   [/\btemporary hit points?\b/gi, "temporary Integrity"],
   [/\bfighting style\b/gi,        "combat style"],
   [/\bhealer'?s kit\b/gi,         "medkit"],

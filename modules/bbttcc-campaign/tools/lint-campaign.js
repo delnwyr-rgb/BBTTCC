@@ -670,7 +670,7 @@ for (const b of beats) {
       if (!SM.registryOf(rid)) F("D05", "ERROR", b.id, `gate questBucket '${rid}' maps to no quest or chapter in QUEST_MAP`);
     }
 
-    // ── scripts: SC01–SC06 (STORY FLOW encode Phase B, 2026-09-17) — a scripted quest DECLARES its order ─────
+    // ── scripts: SC01–SC07 (STORY FLOW encode Phase B, 2026-09-17; SC07 2026-10-01) — a scripted quest DECLARES its order ─────
     // Mirrors story-model.js scriptView(): steps in order, groups any-order, done-rules, handoffs, doors, epilogues.
     const SCRIPTS = SM.QUEST_SCRIPTS || {};
     const scriptOwner = new Map();   // beat id → quest key (SC05: a beat plays in ONE quest's steps)
@@ -680,9 +680,11 @@ for (const b of beats) {
       const stepsAll = [...((sc.arrival && Array.isArray(sc.arrival.steps)) ? sc.arrival.steps.map(x => ({ ...x, arrival: true })) : []), ...(Array.isArray(sc.steps) ? sc.steps : [])];
       if (!stepsAll.length) F("SC03", "ERROR", null, `script ${qdef.name}: no steps`, { quest: qk });
       const idsOf = (st) => [...(Array.isArray(st.beats) ? st.beats : []), ...(st.done?.anyOf || []), ...(st.done?.allOf || []), ...(st.done?.mark ? [st.done.mark] : [])].map(s);
-      let lastStep = null;
+      let lastStep = null; const stepIds = new Set();
       for (const st of stepsAll) {
         if (!st || !st.id) { F("SC03", "ERROR", null, `script ${qdef.name}: a step has no id`, { quest: qk }); continue; }
+        // a duplicate step id is silently collapsed by every id-keyed edit (the KT `word` clash dropped the Official Word climax, 2026-09-30)
+        if (stepIds.has(s(st.id))) F("SC03", "ERROR", null, `script ${qdef.name}: two steps share the id '${st.id}' (steps + arrival.steps)`, { quest: qk }); stepIds.add(s(st.id));
         if (!s(st.line)) F("SC03", "WARN", null, `script ${qdef.name} · step '${st.id}': no next-step line`, { quest: qk });
         for (const id of idsOf(st)) if (!byId.has(id)) F("SC01", "ERROR", null, `script ${qdef.name} · step '${st.id}': beat '${id}' is not in the campaign`, { quest: qk });
         for (const id of (Array.isArray(st.beats) ? st.beats : []).map(s)) {
@@ -712,6 +714,16 @@ for (const b of beats) {
         // Tifaret's three answers) or when the later steps are one optional group (the Cadence's rematch loop); WARN otherwise
         const lastGroup = lastStep.group || null; const laterGroups = new Set();
         for (const st of stepsAll) if (st !== lastStep && !st.arrival) { const ids = new Set(idsOf(st)); const hit = closers.find(c => ids.has(c)); if (!hit) continue; const after = stepsAll.slice(stepsAll.indexOf(st) + 1); const optionalTail = after.length && after.every(x => x.group && x.group === after[0].group); const sev = (lastGroup && st.group === lastGroup) || optionalTail ? "INFO" : "WARN"; F("SC06", sev, null, `script ${qdef.name} · step '${st.id}' reaches closer '${hit}' before the last step${sev === "INFO" ? " (the later steps are an any-order group — fine if they are alternatives)" : " — later steps can never show (re-declare the closer, or reorder)"}`, { quest: qk }); }
+      }
+      // SC07 (2026-10-01, review): a chapter the steps name must reach one of its declared ENDINGS — through the steps' beats, their
+      // done-lists, or one choice hop from their beats. SC06 only checks quest closers, so a chapter whose ending fell out of the
+      // script (the KT Official Word, 2026-09-30) raised nothing and the replay walked past it.
+      const chSteps = new Map(); for (const st of stepsAll) if (st && st.chapter) { if (!chSteps.has(st.chapter)) chSteps.set(st.chapter, []); chSteps.get(st.chapter).push(st); }
+      for (const [ch, sts] of chSteps) {
+        const endings = beats.filter(b => { const d = SM.declOf(b); return d && d.quest === qk && d.chapter === ch && d.role === "ending"; }).map(b => s(b.id));
+        if (!endings.length) continue;
+        const reach = new Set(); for (const st of sts) { for (const id of idsOf(st)) reach.add(id); for (const id of (Array.isArray(st.beats) ? st.beats : []).map(s)) for (const c of (byId.get(id)?.choices || [])) for (const t of [c?.next, c?.failNext]) if (t) reach.add(s(t)); }
+        if (!endings.some(e => reach.has(e))) F("SC07", "WARN", null, `script ${qdef.name} · chapter '${ch}': no step reaches one of its endings (${endings.join(", ")}) by its beats, done-list or one route — the chapter can never end from the script`, { quest: qk });
       }
       for (const d of (Array.isArray(sc.doors) ? sc.doors : [])) for (const id of (Array.isArray(d.beats) ? d.beats : []).map(s)) if (!byId.has(id)) F("SC01", "ERROR", null, `script ${qdef.name} · door '${d.id}': beat '${id}' is not in the campaign`, { quest: qk });
       for (const id of (Array.isArray(sc.after) ? sc.after : []).map(s)) if (!byId.has(id)) F("SC01", "ERROR", null, `script ${qdef.name} · after: beat '${id}' is not in the campaign`, { quest: qk });

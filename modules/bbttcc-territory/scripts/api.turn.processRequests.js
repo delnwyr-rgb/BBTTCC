@@ -63,7 +63,6 @@
     if (!req?.requests || !Array.isArray(req.requests) || !req.requests.length) return { count:0 };
 
     let done = 0;
-    const newFF = copy(FFlags);
     const remaining = [];
 
     for (const r of req.requests) {
@@ -93,9 +92,9 @@
       done += 1;
     }
 
-    newFF.requests = newFF.requests || {};
-    newFF.requests.repairs = { ...(newFF.requests.repairs||{}), requests: remaining };
-    await game.actors.get(A.id)?.update({ [`flags.${MOD_FACTIONS}`]: newFF });
+    // Write ONLY the queue (2026-10-01): writing the whole namespace back from the pre-loop
+    // snapshot reverted the warLogs entries pushWarLog added above (arrays replace on update).
+    await game.actors.get(A.id)?.update({ [`flags.${MOD_FACTIONS}.requests.repairs.requests`]: remaining });
 
     return { count: done };
   }
@@ -373,7 +372,10 @@
     }
 
     // --- Global mode: no factionId provided --------------------------------
-    const factions = game.actors.filter(a => a.flags?.[MOD_FACTIONS]);
+    // Real factions only (2026-10-01) — members also carry bbttcc-factions flags (factionId),
+    // and each one grew a junk war-log line per turn.
+    const factions = game.actors.filter(a => a.getFlag?.(MOD_FACTIONS, "isFaction") === true
+      || String(a.system?.details?.type?.value ?? "").toLowerCase() === "faction");
     const perFaction = [];
     let grandTotal = 0;
 
@@ -384,13 +386,7 @@
       const total = (r1.count||0);
       grandTotal += total;
 
-      if (total === 0) {
-        await pushWarLog(A, {
-          type: "turn",
-          activity: "process_requests",
-          summary: "No queued repair requests to process."
-        });
-      } else {
+      if (total > 0) {
         await pushWarLog(A, {
           type: "turn",
           activity: "process_requests",

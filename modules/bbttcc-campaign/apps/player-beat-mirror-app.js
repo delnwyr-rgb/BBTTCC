@@ -196,9 +196,14 @@ function renderMirrorHTML(data) {
 }
 
 /**
- * We prefer ApplicationV2 if available; fallback to Application.
+ * V1 Application (v14 keeps it at foundry.appv1.api.Application). The V2 class
+ * lives at foundry.applications.api.ApplicationV2, never on globalThis, so the
+ * old `globalThis.ApplicationV2 ??` probe always fell through to V1 anyway —
+ * and V1 needs _renderInner (no template) to render at all.
+ * DORMANT: nothing in the module calls show(); the live player mirror is the
+ * chat-courier Dialog in scripts/module.js.
  */
-const BaseApp = globalThis.ApplicationV2 ?? globalThis.Application;
+const BaseApp = foundry.appv1?.api?.Application ?? globalThis.Application;
 
 export class BBTTCCPlayerBeatMirrorApp extends BaseApp {
   constructor(beatData = {}, options = {}) {
@@ -234,6 +239,12 @@ export class BBTTCCPlayerBeatMirrorApp extends BaseApp {
   async _prepareContext(options = {}) {
     // ApplicationV2 path
     return normalizeBeatData(this._beatData);
+  }
+
+  async _renderInner(data) {
+    // Application (V1) render path — no template; build the markup directly.
+    injectMirrorCSSOnce();
+    return $($.parseHTML(String(renderMirrorHTML(data)).trim()));
   }
 
   async _renderHTML(context, options) {

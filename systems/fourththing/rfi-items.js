@@ -56,6 +56,8 @@ const FRAME_BY_TYPE = {
   class:       null,
   subclass:    null,
   race:        null,
+  species:     null,          // identity items, never gear (no price stamp)
+  spark:       null,
   // dnd5e legacy (master-content pack)
   equipment:   "armor",
   consumable:  "consumable",

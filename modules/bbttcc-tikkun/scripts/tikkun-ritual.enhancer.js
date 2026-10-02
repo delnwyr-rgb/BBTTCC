@@ -145,6 +145,11 @@
 
     flags.warLogs = war;
     await A.update({ [`flags.${MODF}`]: flags });
+    // A later SUCCESS lifts the failed-ritual stain (update() merges, so the key
+    // must be unset explicitly). Any other recovery path is an owner ruling.
+    if (success && A.getFlag(MODF, "tikkun.corrupted.finalRitual") !== undefined) {
+      await A.unsetFlag(MODF, "tikkun.corrupted.finalRitual");
+    }
   }
 
   function roundSpec(round) {

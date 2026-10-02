@@ -390,8 +390,21 @@
       try { game.socket?.emit?.("module.bbttcc-campaign", { t: "bbttccEncounterChainLaunched", ts }); } catch (_eLS) {}
     } catch (_eL) {}
 
+    // A missing campaign/beat makes runBeat return a ui.notifications value, not a refusal object —
+    // check up front so it is not counted as a completed chain.
     try {
-      await runBeat.call(campaignApi, campaignId, beatId, chainCtx);
+      const c = campaignApi.getCampaign?.(campaignId);
+      if (typeof campaignApi.getCampaign === "function") {
+        const beats = c?.beats;
+        const has = Array.isArray(beats) ? beats.some(b => b?.id === beatId) : !!(beats && beats[beatId]);
+        if (!c || !has) return { ok:false, refused:true, why: !c ? "campaign not found" : "beat not found" };
+      }
+    } catch (_eChk) {}
+
+    try {
+      const r = await runBeat.call(campaignApi, campaignId, beatId, chainCtx);
+      // Refusals (sealed / not yet / gated / not here) come back as {ok:false} without throwing.
+      if (r && typeof r === "object" && r.ok === false) return { ok:false, refused:true, why: String(r.why || (r.sealed ? "sealed" : "refused")) };
       return { ok:true };
     } catch (e) {
       warn("campaign.runBeat failed", { campaignId, beatId, e });
@@ -445,6 +458,7 @@
 
       if (choice?.action === "reroll") {
         const tier = clampTier(enc?.tier ?? enc?.result?.tier ?? 1);
+        let rerolled = false;
         const stepCtx = buildStepCtx(ctx);
         const activeCampaignId = String(
           game.bbttcc?.api?.campaign?.getActiveCampaignId?.() ||
@@ -467,22 +481,40 @@
           return;
         }
 
-        const picked = pickEncounterFromCampaignTables({ activeCampaignId, terrainKey, tier, preferredTableId });
+        // Prefer the canonical api.travel picker (phaseGte/phaseLte + once:true aware); the local one is a fallback.
+        let picked = null;
+        const canon = game.bbttcc?.api?.travel?.pickEncounter;
+        if (typeof canon === "function") {
+          const res = canon({ campaignId: activeCampaignId, terrainKey: _normKey(terrainKey, "generic"), tier });
+          if (res?.ok && res.pick) picked = res.pick;
+        } else {
+          picked = pickEncounterFromCampaignTables({ activeCampaignId, terrainKey, tier, preferredTableId });
+        }
         if (picked?.ok) {
+          const newLabel = picked.label || picked.encounterKey;
           ctx.encounter = {
             triggered: true,
             tier,
             key: picked.encounterKey,
             beatId: picked.beatId,
             campaignId: picked.campaignId,
-            label: ctx?.encounter?.label || picked.encounterKey,
+            label: newLabel,
             meta: { ...(ctx?.encounter?.meta || {}), tableId: picked.tableId, terrainKey: _normKey(terrainKey, "generic") },
-            result: { key: picked.encounterKey, label: (ctx?.encounter?.label || picked.encounterKey), tier }
+            result: { key: picked.encounterKey, label: newLabel, tier }
           };
+          rerolled = true;
           log("Encounter rerolled (campaign tables) →", ctx.encounter);
         } else {
           ui.notifications?.warn?.("Reroll produced no result; leaving original encounter.");
         }
+
+        // Re-prompt so the GM sees what the reroll produced before it launches.
+        const again = await promptGM(String(ctx.encounter?.key || encKey), ctx);
+        if (again?.action === "decline") {
+          ui.notifications?.info?.(`Encounter declined: ${ctx.encounter?.label || encKey}`);
+          return;
+        }
+        if (again?.action === "reroll" && rerolled) log("Second reroll requested — launching the rerolled encounter (one reroll per leg).");
       }
 
       // fallthrough to launch
@@ -538,7 +570,26 @@
         await settleEncounter(ctx);
         return;
       }
+      // Not launched: clear the one-shot dive (else the next unrelated beat with a scene dives the table),
+      // and declare the chain settled — it was stamped LAUNCHED, so a pending arrival would otherwise wait
+      // out the 45-minute hard stop.
+      if (dived) { try { txn?.consumeDive?.(); } catch (_eCD) {} }
+      if (res?.refused) {
+        warn("afterTravel: encounter beat refused — nothing launched", res);
+        try {
+          await ChatMessage.create({
+            content: `<div style="border-left:3px solid #b08a3a;padding:.3em .6em;"><b>Road encounter not run.</b> ` +
+              `${foundry.utils.escapeHTML(String(enc.label || encKey))} (<code>${foundry.utils.escapeHTML(beatId)}</code>) was refused: ` +
+              `${foundry.utils.escapeHTML(String(res.why || "refused"))}. The ride continues.</div>`,
+            whisper: (game.users?.filter(u => u.isGM) ?? []).map(u => u.id),
+            speaker: { alias: "Mal" }
+          });
+        } catch (_eMsg) {}
+        _announceSettled(ctx);
+        return;
+      }
       warn("afterTravel: campaign.runBeat failed; falling back (best effort)", res);
+      _announceSettled(ctx);
       // continue to legacy fallback
     }
 

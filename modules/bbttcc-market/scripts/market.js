@@ -800,6 +800,23 @@ async function _getFactionRigsArray(factionActor) {
   return Array.isArray(rigs) ? foundry.utils.duplicate(rigs) : [];
 }
 
+// Target rig for an upgrade: rigId / name when the entry names one (MUST match — a
+// missing named rig is an error, never "the first rig"), else the first rig.
+function _findRigIndex(rigs, target) {
+  target = target || {};
+  if (!Array.isArray(rigs) || !rigs.length) return -1;
+  if (target.rigId || target.name) {
+    let idx = -1;
+    if (target.rigId) idx = rigs.findIndex(r => r?.rigId === target.rigId);
+    if (idx < 0 && target.name) idx = rigs.findIndex(r => String(r?.name||"") === String(target.name));
+    return idx;
+  }
+  return 0;
+}
+
+const _POOL_ALIAS = { soft_power: "softpower", "soft-power": "softpower", non_lethal: "nonlethal", "non-lethal": "nonlethal" };
+function _normPool(k) { const s = String(k || "").trim().toLowerCase(); return _POOL_ALIAS[s] || s; }
+
 async function applyRigUpgradePatch(factionId, patch, meta = {}) {
   const faction = game.actors.get(factionId);
   if (!faction) throw new Error("Faction not found.");
@@ -807,15 +824,14 @@ async function applyRigUpgradePatch(factionId, patch, meta = {}) {
   const rigs = await _getFactionRigsArray(faction);
   if (!rigs.length) throw new Error("Faction has no rigs to upgrade.");
 
-  const target = patch?.target || {};
-  let idx = -1;
-  if (target.rigId) idx = rigs.findIndex(r => r?.rigId === target.rigId);
-  if (idx < 0 && target.name) idx = rigs.findIndex(r => String(r?.name||"") === String(target.name));
-  if (idx < 0 && target.latest) idx = 0;
-  if (idx < 0) idx = 0;
+  const idx = _findRigIndex(rigs, patch?.target);
+  if (idx < 0) throw new Error("The upgrade's target rig was not found on this faction.");
 
+  // Merge only the patch body — never the `target` selector wrapper.
+  let body = patch?.patch;
+  if (!body) { body = foundry.utils.duplicate(patch || {}); delete body.target; }
   const cur = rigs[idx] || {};
-  const next = foundry.utils.mergeObject(foundry.utils.duplicate(cur), foundry.utils.duplicate(patch?.patch || patch), { inplace:false, overwrite:true });
+  const next = foundry.utils.mergeObject(foundry.utils.duplicate(cur), foundry.utils.duplicate(body), { inplace:false, overwrite:true });
   rigs[idx] = next;
   await faction.setFlag(MOD_FACTIONS, "rigs", rigs);
 
@@ -918,8 +934,8 @@ async function openBuyConfirmDialog({ entry, factionId, faction }) {
     const DialogV2 = foundry.applications.api?.DialogV2;
     if (!DialogV2) return { ok: true, payFromPool: null };
     const confirmed = await DialogV2.confirm({
-      window: { title: `Buy — ${entry.name}` },
-      content: `<p><b>${entry.name}</b> requires split payment:</p><ul${_tipAttr("splitPay")} data-tour="market.splitPay">${parts}</ul>
+      window: { title: `Buy — ${entry.name}` },   // AppV2 sets the title as textContent — no escape (it would show entities)
+      content: `<p><b>${esc(entry.name)}</b> requires split payment:</p><ul${_tipAttr("splitPay")} data-tour="market.splitPay">${parts}</ul>
                 <p style="font-size:0.85rem;opacity:0.7;">Split items always pay each portion to its native pool — no override.</p>`,
       defaultYes: true,
       rejectClose: false
@@ -955,10 +971,10 @@ async function openBuyConfirmDialog({ entry, factionId, faction }) {
 
   let savedPool = null;
   const dialog = new DialogV2({
-    window: { title: `Buy — ${entry.name}` },
+    window: { title: `Buy — ${entry.name}` },   // AppV2 sets the title as textContent — no escape (it would show entities)
     content: `
       <form>
-        <p><b>${entry.name}</b> — native pool: <strong>${POOL_SHORT_LABEL[nativePool] ?? nativePool}</strong> (${nativeMarks} marks)${scaleNote}</p>
+        <p><b>${esc(entry.name)}</b> — native pool: <strong>${POOL_SHORT_LABEL[nativePool] ?? nativePool}</strong> (${nativeMarks} marks)${scaleNote}</p>
         <div style="margin:0.6rem 0;"${_tipAttr("payFromPool")} data-tour="market.payFromPool">
           <label style="font-weight:600;display:block;margin-bottom:0.3rem;">Pay from:</label>
           <select name="payFromPool" style="width:100%;">${opts}</select>
@@ -997,7 +1013,20 @@ async function openBuyConfirmDialog({ entry, factionId, faction }) {
   return { ok: true, payFromPool: savedPool };
 }
 
-async function purchase({ entryId, factionId, characterId, hexUuid, note, payFromPool } = {}) {
+// PLAYER SEATS (2026-10-01): a purchase delivers onto hex Drawings, creates Actors and
+// can fill another seat's character — writes a player cannot make (the spend already
+// relayed, so those buys always failed and auto-refunded). A player's whole purchase now
+// runs on the primary GM via bbttcc-core gmExec "market.purchase", validated GM-side.
+const PURCHASE_RELAY = "market.purchase";
+
+async function purchase({ entryId, factionId, characterId, hexUuid, note, payFromPool, _relayed = false } = {}) {
+  if (!game.user?.isGM) {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (gx && typeof gx.call === "function") {
+      return gx.call(PURCHASE_RELAY, { entryId, factionId, characterId, hexUuid, note, payFromPool }, { timeoutMs: 30000 });
+    }
+    // gmExec absent (core disabled): fall through to the direct attempt.
+  }
   const faction = game.actors.get(factionId);
   if (!faction || !isFactionActor(faction)) throw new Error("Buyer faction not found.");
 
@@ -1037,7 +1066,7 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
   //    Warn + throw a pre-notified error (the Market app's buy handler skips
   //    its own error toast for these; direct API callers still get the throw).
   const _abortPurchase = (msg) => {
-    ui.notifications?.warn?.(msg);
+    if (!_relayed) ui.notifications?.warn?.(msg);   // relayed: the player's seat shows the error
     const err = new Error(msg);
     err.notified = true;
     throw err;
@@ -1059,6 +1088,7 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
   } else if (kind === "rig_upgrade") {
     const rigs = faction.getFlag(MOD_FACTIONS, "rigs");
     if (!Array.isArray(rigs) || !rigs.length) _abortPurchase("Faction has no rigs to upgrade.");
+    if (_findRigIndex(rigs, entry.patch?.target) < 0) _abortPurchase(`"${entry.name}" targets a rig this faction does not have.`);
   }
 
   // Build per-pool marks deltas (negative). For flag-priced gear: split items
@@ -1081,13 +1111,25 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
       : flagPrice.currency;
     // Cross-pool override (Phase 5.5): if payFromPool was explicitly chosen
     // and differs from native, apply × 1.5 friction (rubric §1.5).
-    const chosenPool = payFromPool || nativePool;
-    const isCross = (chosenPool !== nativePool);
+    const chosenPool = _normPool(payFromPool || nativePool);
+    const isCross = (chosenPool !== _normPool(nativePool));
     const friction = isCross ? (pricing?.CROSS_POOL_FRICTION ?? 1.5) : 1.0;
     const adjustedMarks = Math.round(totalMarks * friction);
     payDeltas = { [chosenPool]: -adjustedMarks };
   } else {
     payDeltas = { economy: -totalMarks };
+  }
+
+  // Every pay key must be one of the nine OP pools: the OP engine silently drops an
+  // unknown key and still reports committed, so the goods would be delivered free.
+  {
+    const norm = {};
+    for (const [k, v] of Object.entries(payDeltas)) {
+      const kk = _normPool(k);
+      if (!OP_POOLS.includes(kk)) _abortPurchase(`"${entry.name}" names an unknown pay pool "${k}" — not bought.`);
+      norm[kk] = (norm[kk] || 0) + (Number(v) || 0);
+    }
+    payDeltas = norm;
   }
 
   // 1) Spend
@@ -1611,6 +1653,9 @@ try {
       if (!entryId) return;
 
       const ctxNow = this._loadCtx();
+      // Charge the faction the window SHOWS (lastContext can be changed from a faction sheet).
+      const shownFaction = this.element?.querySelector?.("select[name='factionId']")?.value;
+      if (shownFaction) ctxNow.factionId = shownFaction;
 
       // Phase 5.5: pre-purchase confirmation dialog with cross-pool override.
       // Resolves the catalog entry + faction, then opens openBuyConfirmDialog.
@@ -1649,6 +1694,20 @@ try {
 
 
 /* ===================== Catalog Editor (Drag & Drop) ===================== */
+
+// Every Item uuid in a world or compendium folder, subfolders included.
+async function _folderItemUuids(folder) {
+  if (!folder || folder.documentName !== "Folder" || folder.type !== "Item") return [];
+  const ids = new Set([folder.id, ...((folder.getSubfolders?.(true) || []).map(f => f.id))]);
+  const packId = folder.pack || folder.compendium?.collection || null;
+  if (packId) {
+    const pack = game.packs?.get?.(packId);
+    if (!pack || pack.documentName !== "Item") return [];
+    const index = await pack.getIndex({ fields: ["folder"] });
+    return index.filter(e => ids.has(e.folder?._id ?? e.folder)).map(e => e.uuid || pack.getUuid?.(e._id)).filter(Boolean);
+  }
+  return (game.items?.contents || []).filter(it => ids.has(it.folder?.id)).map(it => it.uuid);
+}
 
 export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
@@ -1917,19 +1976,15 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
     if (uuid && _uuidish(uuid)) {
       if (type === "item") {
         uuids = [uuid];
-      } else if (type === "folder" || uuid.startsWith("Folder.")) {
-        const folderId = data.id || (uuid.split(".")[1] || "");
-        const folder = game.folders?.get?.(folderId);
-        const items = folder?.contents?.filter?.(d => d.documentName === "Item") || [];
-        uuids = items.map(it => it.uuid).filter(Boolean);
+      } else if (type === "folder" || uuid.startsWith("Folder.") || uuid.includes(".Folder.")) {
+        // fromUuid resolves world AND compendium folders; recurse into subfolders.
+        uuids = await _folderItemUuids(await fromUuid(uuid).catch(() => null));
       } else {
         const doc = await fromUuid(uuid);
         if (doc?.documentName === "Item") uuids = [doc.uuid];
       }
     } else if (type === "folder" && data.id) {
-      const folder = game.folders?.get?.(data.id);
-      const items = folder?.contents?.filter?.(d => d.documentName === "Item") || [];
-      uuids = items.map(it => it.uuid).filter(Boolean);
+      uuids = await _folderItemUuids(game.folders?.get?.(data.id));
     }
 
     if (!uuids.length) throw new Error("Drop did not resolve to any Items.");
@@ -1961,10 +2016,26 @@ Hooks.once("ready", () => {
   game.bbttcc?.help?.register?.("market", MARKET_TIPS);
 
   game.bbttcc.api.market.purchase = purchase;
+
+  // GM side of the player purchase relay — re-validate everything the seat could fake.
+  try {
+    game.bbttcc?.api?.gmExec?.register?.(PURCHASE_RELAY, async (p, meta) => {
+      const u = game.users?.get?.(meta?.fromUserId);
+      const faction = game.actors?.get?.(String(p?.factionId || ""));
+      if (!u || !faction || !isFactionActor(faction)) throw new Error("Buyer faction not found.");
+      if (!u.isGM && !faction.testUserPermission(u, "OWNER")) throw new Error("You can only buy for a faction you own.");
+      const entry = _catalogArray().find(e => e?.id === p?.entryId);
+      const vendor = entry ? _vendorsArray().map(_normalizeVendor).find(v => v.id === entry.vendorId) : null;
+      if (!u.isGM && vendor && vendor.active === false) throw new Error("That market is closed.");
+      return purchase({ entryId: p?.entryId, factionId: faction.id, characterId: p?.characterId, hexUuid: p?.hexUuid, note: p?.note, payFromPool: p?.payFromPool, _relayed: !meta?.local });
+    });
+  } catch (eReg) { warn("gmExec market.purchase registration failed", eReg); }
   game.bbttcc.api.market.openMarket = (() => {
     let inst = null;
     return () => {
-      if (inst && inst.rendered) { inst.bringToTop?.(); return inst; }
+      // Re-render an open window: the faction-sheet button changes lastContext, and a
+      // stale on-screen faction would otherwise disagree with the one Buy charges.
+      if (inst && inst.rendered) { inst.render({ force: true }); inst.bringToFront?.(); return inst; }
       inst = new BBTTCCMarketApp();
       inst.render(true, { focus: true });
       return inst;
@@ -1975,7 +2046,7 @@ game.bbttcc.api.market.openCatalogEditor = (() => {
   let inst = null;
   return () => {
     if (!game.user?.isGM) return ui.notifications?.warn?.("GM only.");
-    if (inst && inst.rendered) { inst.bringToTop?.(); return inst; }
+    if (inst && inst.rendered) { inst.bringToFront?.(); return inst; }
     inst = new BBTTCCMarketCatalogEditorApp();
     inst.render(true, { focus: true });
     return inst;
@@ -2006,12 +2077,12 @@ game.bbttcc.api.market.openCatalogEditor = (() => {
           label: "Market",
           class: "bbttcc-open-market",
           icon: "fas fa-store",
-          onclick: () => {
+          onclick: async () => {
             try {
               // preselect faction for convenience
               const cur = game.settings.get(MODULE_ID, "lastContext") || {};
               const next = foundry.utils.mergeObject(cur, { factionId: actor.id }, { inplace:false, overwrite:true });
-              game.settings.set(MODULE_ID, "lastContext", next);
+              await game.settings.set(MODULE_ID, "lastContext", next);
             } catch (_e) {}
             try { game.bbttcc?.api?.market?.openMarket?.(); } catch (e) { console.error(e); }
           }

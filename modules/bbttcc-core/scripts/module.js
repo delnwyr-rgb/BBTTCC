@@ -115,7 +115,7 @@ function _installGMApi() {
   // This requires module.json to allow module scripts, but is harmless if it fails.
   try {
     // eslint-disable-next-line no-undef
-    import(`./scripts/api.gm.js`).then(function () {
+    import(`./api.gm.js`).then(function () {
       if (globalThis.BBTTCC_GM_API && typeof globalThis.BBTTCC_GM_API.install === "function") {
         try {
           globalThis.BBTTCC_GM_API.install(game.bbttcc);

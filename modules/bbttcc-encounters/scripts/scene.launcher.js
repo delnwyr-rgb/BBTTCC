@@ -81,6 +81,17 @@ async function showTextStep(step, ctx) {
       return;
     }
 
+    // Scout Signs: the chosen option's `effects` are the faction's one-shot travel modifier for its next leg
+    // (hex-travel consumes flags.bbttcc-factions.travelMods.next: encounterChanceDelta / encounterTierDelta /
+    // abortTravel / preventHazard).
+    if (String(scenario.key || "").startsWith("travel_scout_signs") && choice.effects && typeof choice.effects === "object") {
+      try {
+        await actor.setFlag("bbttcc-factions", "travelMods.next", { ...choice.effects, from: `${scenario.key}:${choice.key}` });
+        log("Scout Signs outcome queued travelMods.next", choice.key, choice.effects);
+      } catch (e) { warn("Scout Signs travelMods write failed", e); }
+      return;
+    }
+
     let hexDoc = ctx?.to?.obj ?? ctx?.to?.document ?? ctx?.to ?? null;
     if (!hexDoc) {
       log("No hex context in ctx.to; world effects skipped.");

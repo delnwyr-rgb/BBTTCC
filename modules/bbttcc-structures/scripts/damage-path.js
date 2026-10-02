@@ -252,11 +252,13 @@ export function computeStructureDamage(state, damage, opts = {}) {
   for (const row of queueAfter) {
     bom[row.index].qty = row.qty;
   }
-  // Drop entries with qty 0
-  const newBOM = bom.filter(r => Number(r.qty) > 0);
+  // Keep depleted rows at qty 0 while they carry an originalQty — repair and
+  // fullRepair refill from that baseline. Dropping them lost the material for
+  // good (and shrank platesMax on every Full Repair / siege reset).
+  const newBOM = bom.filter(r => Number(r.qty) > 0 || Number(r.originalQty) > 0);
 
   // 5. Recompute loadBearing post-chip (sephirotic could have been chipped to 0)
-  const newLoadBearing = newBOM.some(r => r.family === "sephirotic");
+  const newLoadBearing = newBOM.some(r => r.family === "sephirotic" && Number(r.qty) > 0);
 
   // 6. New plates state
   const newPlatesCurr = Math.max(0, platesCurr - platesLost);
@@ -308,7 +310,22 @@ function computeStateFromPlates(platesCurrent, platesMax, loadBearing) {
  * Caller (the damage-wedge) is responsible for routing integrityOverflow
  * back into the actor's integrity track via the original _applyDamageToActor.
  */
-export async function applyStructureDamage(actor, damage, opts = {}) {
+// Per-actor serialization: the system's GM relay fires the primary hit and every
+// extra damage part concurrently, and this is a read-modify-write of the plates/BOM
+// flags — unserialized, the last writer wins and earlier hits vanish.
+const _applyChains = new Map();   // actor.uuid → tail Promise
+
+export function applyStructureDamage(actor, damage, opts = {}) {
+  const key = actor?.uuid ?? actor?.id ?? "";
+  const prev = _applyChains.get(key) ?? Promise.resolve();
+  const run = prev.catch(() => {}).then(() => _applyStructureDamageNow(actor, damage, opts));
+  const tail = run.catch(() => {});
+  _applyChains.set(key, tail);
+  tail.then(() => { if (_applyChains.get(key) === tail) _applyChains.delete(key); });
+  return run;
+}
+
+async function _applyStructureDamageNow(actor, damage, opts = {}) {
   const api = game.bbttcc?.api?.structures;
   if (!api) {
     console.warn(TAG, "API not loaded — falling back to noop");

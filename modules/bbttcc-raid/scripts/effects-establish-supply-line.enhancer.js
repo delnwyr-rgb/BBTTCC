@@ -1,4 +1,4 @@
-// v1.0.1 — Establish Supply Line: tag + trade yield, safe boot guard
+// v1.0.1 — Establish Supply Line: tag + route edge (trade-yield write retired), safe boot guard
 
 (() => {
   const MOD_R="bbttcc-raid", MOD_T="bbttcc-territory";
@@ -36,7 +36,7 @@
     if (!pend.repairs.addModifiers.includes("Supply Line")) pend.repairs.addModifiers.push("Supply Line");
     // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader; the tag/route is the bonus
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
-    return `Queued: add "Supply Line" • +${tradeYieldDelta} Trade Yield${edgeMsg}`;
+    return `Queued: add "Supply Line"${edgeMsg}`;
   }
 
   // Idempotent install (2026-09-12). A load-order race left this wrap missing at resolution on the

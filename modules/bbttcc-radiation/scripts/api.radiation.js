@@ -18,8 +18,26 @@
   function _asActor(aOrId) {
     if (!aOrId) return null;
     if (aOrId instanceof Actor) return aOrId;
-    return game.actors?.get(String(aOrId).replace(/^Actor\./,"")) ?? null;
+    const s = String(aOrId);
+    // A full uuid (e.g. an unlinked token's synthetic actor "Scene.x.Token.y.Actor.z") resolves to THAT actor.
+    if (s.includes(".") && !/^Actor\.[^.]+$/.test(s)) {
+      try { const d = fromUuidSync(s); if (d instanceof Actor) return d; if (d?.actor instanceof Actor) return d.actor; } catch (_e) {}
+    }
+    return game.actors?.get(s.replace(/^Actor\./,"")) ?? null;
   }
+
+  // Per-actor write queue: add() is read-modify-write, and two afterTravel listeners (hex + zone) can
+  // hit the same actor back-to-back — serialize so neither exposure is lost.
+  const _queue = new Map();
+  function _serial(A, fn) {
+    const k = A.uuid;
+    const p = (_queue.get(k) || Promise.resolve()).then(fn);
+    const tail = p.catch(() => {});
+    _queue.set(k, tail);
+    tail.then(() => { if (_queue.get(k) === tail) _queue.delete(k); });
+    return p;
+  }
+  const RELAY = "radiation.add";   // gmExec type: exposure on an actor this seat cannot write
 
   // ── Single source of truth ─────────────────────────────────────────────────
   // On the fourththing system, RP lives in the actor data model at
@@ -76,8 +94,17 @@
     }
 
     static async add(actorId, amount) {
-      const prev = this.get(actorId);
-      return this.set(actorId, prev + Number(amount || 0));
+      const A = _asActor(actorId);
+      if (!A) throw new Error("Radiation.add: actor not found");
+      const amt = Number(amount || 0);
+      // A seat that cannot write the actor (player-driven travel on a faction it does not own) relays to the GM.
+      if (!game.user?.isGM && !A.isOwner) {
+        const gx = game.bbttcc?.api?.gmExec;
+        if (!gx?.call) throw new Error("Radiation.add: no write permission and gmExec unavailable");
+        const r = await gx.call(RELAY, { actorUuid: A.uuid, amount: amt });
+        return Number(r?.rp ?? 0);
+      }
+      return _serial(A, () => this.set(A, this.get(A) + amt));
     }
   }
 
@@ -93,6 +120,7 @@
       api.set      = RadiationAPI.set.bind(RadiationAPI);
       api.add      = RadiationAPI.add.bind(RadiationAPI);
       api.levelFor = levelFor;
+      _registerRelay();
 
       // Attach to module API
       const mod = game.modules.get(MOD);
@@ -106,6 +134,25 @@
     } catch (e) {
       console.warn(TAG, "install failed:", e);
     }
+  }
+
+  // GM side of the player-seat exposure relay. Exposure only ever RAISES RP, so the relay accepts
+  // positive amounts only (a player seat cannot clear RP through it).
+  let _relayRegistered = false;
+  function _registerRelay() {
+    try {
+      const gx = game.bbttcc?.api?.gmExec;
+      if (!gx?.register || _relayRegistered) return;
+      gx.register(RELAY, async (p) => {
+        const amt = Number(p?.amount);
+        if (!Number.isFinite(amt) || amt <= 0 || amt > 50) throw new Error("radiation relay: bad amount");
+        const A = _asActor(String(p?.actorUuid || ""));
+        if (!A) throw new Error("radiation relay: actor not found");
+        const rp = await RadiationAPI.add(A, amt);
+        return { ok: true, rp };
+      });
+      _relayRegistered = true;
+    } catch (e) { console.warn(TAG, "relay register failed", e); }
   }
 
   // ── One-time flag→system RP unification ─────────────────────────────────────

@@ -103,6 +103,21 @@
   voice([E("locals"), E("locals_friendly"), E("locals_neutral"), E("locals_hostile")], "Sox");
   voice([E("replicator"), E("replicator_friendly"), E("replicator_neutral"), E("replicator_hostile")], "Lars von Replicator");
   voice([E("gilbert"), "gilbert_theater_intro", "gilbert_theater_parley", "gilbert_theater_parley_fail", "gilbert_theater_fight", "gilbert_theater_resolution"], "Gilbert, Attendant Eternal");
+  // REVIEW 2026-10-01 (MEDIUM + LOW ×2) — keep in sync with tools/patch-template-review-fixes-b-2026-10-01.macro.js
+  //  • Gilbert's voice made the good-ending closer (and the parley-fail / fight outcome nodes) conversation moments: any Gilbert talk could
+  //    close the Vault with its rewards, no parley. They are routing-only now (gated on the beats that route to them, dialogueOffer:false).
+  //  • the manifest beat is gated on the office visit (the theater) — the script no longer hands out the receipt directly (see the `office` step)
+  //  • the replicator was unreachable and its outcomes dead-ended: the council's outcomes route to it, its outcomes route to the last stub
+  const ensureReq = (b, conds) => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; };
+  const HV_GATES = {
+    gilbert_theater_resolution: [P3, { anyOf: [{ beatMark: "gilbert_theater_parley" }, { beatMark: "gilbert_theater_fight" }] }, { questBucket: Q_MAIN, isNot: "completed" }],
+    gilbert_theater_parley_fail: [P3, { beatMark: "gilbert_theater_parley" }],
+    gilbert_theater_fight: [P3, { anyOf: [{ beatMark: E("gilbert") }, { beatMark: "gilbert_theater_intro" }, { beatMark: "gilbert_theater_parley" }] }]
+  };
+  for (const [id, gate] of Object.entries(HV_GATES)) edit(id, b => { ensureReq(b, gate); if (b.dialogueOffer !== false) b.dialogueOffer = false; }, "routing-only outcome: gated on its route; dialogueOffer:false");
+  edit("hv_service_manifest", b => ensureReq(b, [P3, { beatMark: E("inside") }]), "gated on the theater (the office is behind the concession stand)");
+  for (const s of ["council_friendly", "council_neutral", "council_hostile"]) addChoice(E(s), ch("Follow the hum to the machine.", E("replicator"), { description: "Something in the back is printing, and complaining about it." }), "→ the replicator");
+  for (const s of ["replicator_friendly", "replicator_neutral", "replicator_hostile"]) edit(E(s), b => { if (!(b.choices || []).some(c => c.next === "hv_last_stub")) b.choices = [...(b.choices || []), ch("Back to the lobby.", "hv_last_stub")]; }, "→ the last stub");
   // hand-off: the Pactkeeper learns to read the manifest (if the AG retrofit has run)
   edit("ag_tamsin_pactkeeper", b => { if (!(b.choices || []).some(c => /service manifest/i.test(c.label))) b.choices = [...(b.choices || []).filter(c => !/found so far/i.test(c.label)), ch("Show him the service manifest.", "", { requires: { beatMark: "hv_service_manifest" }, description: "TAMSIN MINE POWER. One client. He reads it three times. His family's echo stops being a story. He sits down on the floor." }), ...(b.choices || []).filter(c => /found so far/i.test(c.label))]; }, "Pactkeeper reads the manifest");
 
@@ -120,7 +135,9 @@
       { ...old.locals, line: "The family outside has been waiting for the 300th customer since 2077. Ask Sox what the Prize is. Decide if that's you." },
       { ...old.door, line: "The door wants a password. The family had it. It is, of course, GHSTBSTRZ." },
       { ...old.theater, line: "Empty rows, dead screens, the smell of butter. Go in. Check the manager's office on the way." },
-      { id: "office", label: "The Manager's Office", line: "Gilbert's clipboard of demands is not a list. It's a contract. Read who paid.", beats: ["hv_service_manifest"], done: { mark: "hv_service_manifest" } },
+      // the step names the THEATER (the office is a Mind 12 choice inside it) and is done by the receipt, the failed door, or moving on —
+      // listing the receipt beat itself made NOW hand THE SERVICE MANIFEST out with no check (review 2026-10-01)
+      { id: "office", label: "The Manager's Office", line: "Gilbert's clipboard of demands is not a list. It's a contract. Read who paid.", beats: [E("inside")], done: { anyOf: ["hv_service_manifest", "hv_office_fail", E("council")] } },
       old.council,
       { ...old.replicator, line: "Lars prints disappointment. Ask him what he's printing. Make a deal or don't." },
       { id: "stub", label: "The Last Stub", line: "Gilbert tears you a ticket. Look at the roll.", beats: ["hv_last_stub"] },
@@ -130,7 +147,11 @@
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script hidden_vault → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-hidden-vault-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

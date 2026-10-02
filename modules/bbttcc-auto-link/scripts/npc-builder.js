@@ -646,12 +646,17 @@ function _echoSuggestIdentity({ familyKey, member, ancestries, heritages }) {
 function _echoFamilyFor(entryName) {
   const slug = _echoSlug(entryName);
   if (!slug) return null;
+  // Pass 1: exact key or an explicit `match` hit wins over any substring hit.
   for (const [key, fam] of Object.entries(ECHO_FAMILIES)) {
     if (slug === key || (fam.match ?? []).includes(slug)) return { key, ...fam };
-    // Tolerate partial slugs ("kabbalist" inside "occult-association-kabbalist").
-    if (slug.includes(key) || key.includes(slug)) return { key, ...fam };
   }
-  return null;
+  // Pass 2: tolerate partial slugs ("kabbalist" inside "occult-association-kabbalist"),
+  // preferring the longest matching key.
+  let best = null;
+  for (const [key, fam] of Object.entries(ECHO_FAMILIES)) {
+    if ((slug.includes(key) || key.includes(slug)) && (!best || key.length > best.key.length)) best = { key, ...fam };
+  }
+  return best;
 }
 
 function _echoCallingFor(family, role) {

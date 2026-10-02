@@ -477,7 +477,7 @@ export function createFXAPI() {
         await wait(Number(spec.postCinematicGapMs || 220));
       }
 
-      await enqueueBanner(text, tone, duration, spacing, { raidType });
+      if (opts.banner !== false) await enqueueBanner(text, tone, duration, spacing, { raidType });
       if (ctx.root) engine.outcomeFlash(ctx.root, text);
       maybeOverlay(spec, family, "resolve");
       maybeShake(spec, "resolve", tone);

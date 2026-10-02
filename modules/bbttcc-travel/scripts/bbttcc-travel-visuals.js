@@ -170,14 +170,19 @@
         return linked === fid || source === fid;
       };
 
+      // A steward's token rides for its faction too (the table rides on a steward's token, not a faction token).
+      const member = (t) => {
+        if (!t || !factionId) return false;
+        const f = t?.actor?.flags?.["bbttcc-factions"];
+        return String(f?.factionId || "").replace(/^Actor\./, "") === String(factionId);
+      };
       if (factionId) {
-        const ctl = controlled.find(matches);
-        if (ctl) return ctl;
-        const any = all.find(matches);
-        if (any) return any;
+        // Never drag an unrelated token: with a faction named and no party token on the canvas, return null so
+        // resolveTokenWithRetry keeps waiting (e.g. for the auto-return from an encounter scene).
+        return controlled.find(matches) || all.find(matches) || controlled.find(member) || all.find(member) || null;
       }
 
-      // fallback
+      // fallback (no faction known)
       if (controlled.length) return controlled[0];
       return all.find(t => !t.hidden) || all[0] || null;
     } catch (_e) {

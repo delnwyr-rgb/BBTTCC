@@ -247,9 +247,13 @@ export class BBTTCCCampaignTableEditorApp extends Application {
     const tablesApi = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign && game.bbttcc.api.campaign.tables;
     const campApi = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign;
 
-    const table = this.tableId && tablesApi && tablesApi.getTable
-      ? foundry.utils.deepClone(tablesApi.getTable(this.tableId))
-      : null;
+    // Unsaved edits live in this._draft (harvested before every re-render);
+    // only Save persists. Fall back to the stored table when there is no draft.
+    const table = this._draft
+      ? foundry.utils.deepClone(this._draft)
+      : (this.tableId && tablesApi && tablesApi.getTable
+        ? foundry.utils.deepClone(tablesApi.getTable(this.tableId))
+        : null);
 
     const t = table || {
       id: this.tableId || "(new)",
@@ -304,8 +308,8 @@ export class BBTTCCCampaignTableEditorApp extends Application {
 
     // Row-index snapshot of the stored entries: Save overlays the form columns
     // onto these so fields the grid does not show (once, phaseGte/phaseLte,
-    // terrains, hex lists, tag lists) survive. Add/Remove write the stored
-    // table and re-render, so form row i is always stored entry i.
+    // terrains, hex lists, tag lists) survive. Add/Remove edit the draft and
+    // re-render, so form row i is always draft entry i.
     this._renderedEntries = foundry.utils.deepClone(t.entries);
 
     const entries = t.entries.map(e => {
@@ -313,7 +317,7 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       return {
         campaignId: String((e && e.campaignId) || "").trim(),
         beatId: String((e && e.beatId) || "").trim(),
-        weight: Number(e && e.weight != null ? e.weight : 1) || 1,
+        weight: (e && e.weight != null && Number.isFinite(Number(e.weight))) ? Number(e.weight) : 1,
         terrain: String(c.terrain || "").trim(),
         tier: String(c.tier || "").trim(),
         requiredTag: String(c.requiredTag || "").trim()
@@ -391,18 +395,21 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       ev.preventDefault();
       const tab = ev.currentTarget && ev.currentTarget.dataset ? ev.currentTarget.dataset.tab : null;
       if (!tab) return;
+      this._harvestFormIntoDraft();
       this.activeTab = tab;
       this.render(false);
     });
 
     html.find("[data-action='cancel']").on("click", ev => {
       ev.preventDefault();
+      this._draft = null;
       this.close();
     });
 
     // Scope change swaps the Table ID control (text <-> terrain/tier). Re-render
     // with a transient override so the swap happens before the user saves.
     html.find("[data-action='scope-change']").on("change", ev => {
+      this._harvestFormIntoDraft();
       this._scopeOverride = String(ev.currentTarget?.value || "").trim() || null;
       this.render(false);
     });
@@ -422,20 +429,15 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       this._saveFromForm(ev.currentTarget);
     });
 
-    html.find("[data-action='add-entry']").on("click", async ev => {
+    html.find("[data-action='add-entry']").on("click", ev => {
       ev.preventDefault();
-      const tablesApi = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign && game.bbttcc.api.campaign.tables;
-      if (!tablesApi || !tablesApi.getTable || !tablesApi.saveTable) return;
-
-      const t = foundry.utils.deepClone(tablesApi.getTable(this.tableId));
-      t.entries = Array.isArray(t.entries) ? t.entries : [];
+      const t = this._harvestFormIntoDraft();
       t.entries.push({
         campaignId: "",
         beatId: "",
         weight: 1,
         conditions: {}
       });
-      await tablesApi.saveTable(this.tableId, t);
       this.render(false);
     });
 
@@ -444,13 +446,8 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       const idx = Number(ev.currentTarget && ev.currentTarget.dataset ? ev.currentTarget.dataset.index : NaN);
       if (!Number.isFinite(idx)) return;
 
-      const tablesApi = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign && game.bbttcc.api.campaign.tables;
-      if (!tablesApi || !tablesApi.getTable || !tablesApi.saveTable) return;
-
-      const t = foundry.utils.deepClone(tablesApi.getTable(this.tableId));
-      if (!t || !Array.isArray(t.entries)) return;
+      const t = this._harvestFormIntoDraft();
       t.entries.splice(idx, 1);
-      await tablesApi.saveTable(this.tableId, t);
       this.render(false);
     });
 
@@ -461,10 +458,7 @@ export class BBTTCCCampaignTableEditorApp extends Application {
 
     html.find("[data-action='normalize-weights']").on("click", async ev => {
       ev.preventDefault();
-      const tablesApi = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign && game.bbttcc.api.campaign.tables;
-      if (!tablesApi || !tablesApi.getTable || !tablesApi.saveTable) return;
-
-      const t = foundry.utils.deepClone(tablesApi.getTable(this.tableId));
+      const t = this._harvestFormIntoDraft();
       if (!t || !Array.isArray(t.entries) || !t.entries.length) return;
 
       const pool = t.entries
@@ -481,10 +475,9 @@ export class BBTTCCCampaignTableEditorApp extends Application {
         x.e.weight = Math.max(1, Math.round((x.w / sum) * 100));
       }
 
-      await tablesApi.saveTable(this.tableId, t);
       const total = (t.entries || []).reduce((s, e) => s + Math.max(0, Number(e && e.weight != null ? e.weight : 0) || 0), 0);
       const tableLabel = _labelForTable(this.tableId);
-      ui.notifications && ui.notifications.info && ui.notifications.info("Weights normalized: " + tableLabel + " (total=" + total + ")");
+      ui.notifications && ui.notifications.info && ui.notifications.info("Weights normalized: " + tableLabel + " (total=" + total + ") — click Save to keep.");
       this.render(false);
     });
 
@@ -624,6 +617,85 @@ export class BBTTCCCampaignTableEditorApp extends Application {
     }
   }
 
+
+  /**
+   * Form entry rows -> entry objects, each overlaid onto the entry rendered in
+   * that row (fields the grid does not show survive). keepBlank keeps
+   * incomplete / zero-weight rows so draft indexes stay aligned with the grid.
+   */
+  _entriesFromForm(fd, { keepBlank = false } = {}) {
+    const entryCampaignIds = fd.getAll("entry-campaign-id").map(v => String(v || "").trim());
+    const entryBeatIds = fd.getAll("entry-beat-id").map(v => String(v || "").trim());
+    const entryWeights = fd.getAll("entry-weight").map(v => _safeNum(v, 0));
+    const entryTerrains = fd.getAll("entry-terrain").map(v => String(v || "").trim());
+    const entryTiers = fd.getAll("entry-tier").map(v => String(v || "").trim());
+    const entryRequiredTags = fd.getAll("entry-required-tag").map(v => String(v || "").trim());
+
+    const entries = [];
+    const n = Math.max(
+      entryCampaignIds.length,
+      entryBeatIds.length,
+      entryWeights.length,
+      entryTerrains.length,
+      entryTiers.length,
+      entryRequiredTags.length
+    );
+
+    for (let i = 0; i < n; i++) {
+      const campaignId = entryCampaignIds[i] || "";
+      const beatId = entryBeatIds[i] || "";
+      const weight = Number(entryWeights[i] != null ? entryWeights[i] : 0) || 0;
+
+      if (!keepBlank && (!campaignId || !beatId)) continue;
+      if (!keepBlank && weight <= 0) continue;
+
+      // Start from the stored entry behind this row; overlay only the columns
+      // the grid edits.
+      const prev = (Array.isArray(this._renderedEntries) && this._renderedEntries[i] && typeof this._renderedEntries[i] === "object")
+        ? foundry.utils.deepClone(this._renderedEntries[i])
+        : {};
+      const conditions = (prev.conditions && typeof prev.conditions === "object") ? prev.conditions : {};
+      const setCond = (key, val) => { if (val) conditions[key] = val; else delete conditions[key]; };
+      setCond("terrain", entryTerrains[i]);
+      setCond("tier", entryTiers[i]);
+      setCond("requiredTag", entryRequiredTags[i]);
+
+      entries.push(Object.assign(prev, {
+        campaignId: campaignId,
+        beatId: beatId,
+        weight: weight,
+        conditions: conditions
+      }));
+    }
+    return entries;
+  }
+
+  /** Read the whole form into this._draft (in memory) and return it. Never persists. */
+  _harvestFormIntoDraft() {
+    const tablesApi = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign && game.bbttcc.api.campaign.tables;
+    const stored = (this.tableId && tablesApi && tablesApi.getTable) ? tablesApi.getTable(this.tableId) : null;
+    const t = foundry.utils.deepClone(this._draft || stored || { id: this.tableId || "(new)", label: "", scope: "global", tags: [], entries: [] });
+    t.entries = Array.isArray(t.entries) ? t.entries : [];
+    const form = this.element && this.element.find ? this.element.find("form")[0] : null;
+    if (form instanceof HTMLFormElement) {
+      const fd = new FormData(form);
+      t.scope = String(fd.get("scope") || t.scope || "global").trim() || "global";
+      if (fd.has("travel-terrain")) t.id = _composeTravelTableId(fd.get("travel-terrain"), fd.get("travel-tier") || "1");
+      else if (fd.has("id")) t.id = String(fd.get("id") || "").trim() || t.id;
+      if (fd.has("label")) t.label = String(fd.get("label") || "").trim();
+      if (fd.has("tags")) t.tags = _normalizeTags(fd.get("tags") || "");
+      if (fd.has("entry-campaign-id")) t.entries = this._entriesFromForm(fd, { keepBlank: true });
+      else if (!form.querySelector("tbody tr")) t.entries = [];
+    }
+    this._draft = t;
+    return t;
+  }
+
+  async close(options) {
+    this._draft = null;
+    return super.close(options);
+  }
+
   async _saveFromForm(clickedEl) {
     let form = clickedEl && clickedEl.closest ? clickedEl.closest("form") : null;
     if (!form) form = this.element && this.element.find ? this.element.find("form")[0] : null;
@@ -678,49 +750,7 @@ export class BBTTCCCampaignTableEditorApp extends Application {
     const label = String(fd.get("label") || "").trim() || id;
     const tags = _normalizeTags(fd.get("tags") || "");
 
-    const entryCampaignIds = fd.getAll("entry-campaign-id").map(v => String(v || "").trim());
-    const entryBeatIds = fd.getAll("entry-beat-id").map(v => String(v || "").trim());
-    const entryWeights = fd.getAll("entry-weight").map(v => _safeNum(v, 0));
-    const entryTerrains = fd.getAll("entry-terrain").map(v => String(v || "").trim());
-    const entryTiers = fd.getAll("entry-tier").map(v => String(v || "").trim());
-    const entryRequiredTags = fd.getAll("entry-required-tag").map(v => String(v || "").trim());
-
-    const entries = [];
-    const n = Math.max(
-      entryCampaignIds.length,
-      entryBeatIds.length,
-      entryWeights.length,
-      entryTerrains.length,
-      entryTiers.length,
-      entryRequiredTags.length
-    );
-
-    for (let i = 0; i < n; i++) {
-      const campaignId = entryCampaignIds[i] || "";
-      const beatId = entryBeatIds[i] || "";
-      const weight = Number(entryWeights[i] != null ? entryWeights[i] : 0) || 0;
-
-      if (!campaignId || !beatId) continue;
-      if (weight <= 0) continue;
-
-      // Start from the stored entry behind this row; overlay only the columns
-      // the grid edits.
-      const prev = (Array.isArray(this._renderedEntries) && this._renderedEntries[i] && typeof this._renderedEntries[i] === "object")
-        ? foundry.utils.deepClone(this._renderedEntries[i])
-        : {};
-      const conditions = (prev.conditions && typeof prev.conditions === "object") ? prev.conditions : {};
-      const setCond = (key, val) => { if (val) conditions[key] = val; else delete conditions[key]; };
-      setCond("terrain", entryTerrains[i]);
-      setCond("tier", entryTiers[i]);
-      setCond("requiredTag", entryRequiredTags[i]);
-
-      entries.push(Object.assign(prev, {
-        campaignId: campaignId,
-        beatId: beatId,
-        weight: weight,
-        conditions: conditions
-      }));
-    }
+    const entries = this._entriesFromForm(fd, { keepBlank: false });
 
     const payload = {
       id: id,
@@ -741,6 +771,7 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       renaming ? `Encounter Table saved (renamed ${this.tableId} -> ${id}).` : "Encounter Table saved."
     );
     this._scopeOverride = null;
+    this._draft = null;
     this.tableId = id;
     this.close();
   }

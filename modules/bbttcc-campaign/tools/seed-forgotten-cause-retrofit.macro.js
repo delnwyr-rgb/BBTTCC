@@ -105,6 +105,14 @@
     b.worldEffects = b.worldEffects || {}; const qe = b.worldEffects.questEffects || [];
     if (!qe.some(q => q.questId === Q_MAIN && q.action === "complete")) b.worldEffects.questEffects = [...qe, { action: "complete", questId: Q_MAIN, beatId: "", state: "completed", text: "Peace by deletion — the names left, and so did the reason." }];
   }, "BREAK completes the parent quest");
+  // REVIEW 2026-10-01 (MEDIUM ×2): (1) for a DECLARED beat the engine ignores questEffects bucket moves — Break closes the quest by its story
+  // declaration (alsoEnds, the map_legansus_waystation_verified pattern), so forgotten_cause can close on Break. (2) the Maître-D' voices the three
+  // Long Table endings, so a talk with ANY Maître-D' (the road Wendigo too) could enact Restore/Redirect/Break cold: they are routing-only now —
+  // gated on the table + the chapter still open, dialogueOffer:false (the table's choices still route; a route never consults inject.requires).
+  const ensureReq = (b, conds) => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; };
+  const GATE_TABLE_END = [P2, { beatMark: "wendigo_confluence_the_long_table" }, { questBucket: Q_TABLE, isNot: "completed" }];
+  for (const id of ["wendigo_confluence_repair", "wendigo_confluence_redirect", "wendigo_confluence_break"]) edit(id, b => { ensureReq(b, GATE_TABLE_END); if (b.dialogueOffer !== false) b.dialogueOffer = false; }, "routing-only ending: gated on the table + chapter open; dialogueOffer:false");
+  edit("wendigo_confluence_break", b => { b.story = b.story && typeof b.story === "object" ? b.story : { ...TABLE, role: "ending", ending: "break" }; const ae = Array.isArray(b.story.alsoEnds) ? b.story.alsoEnds : []; if (!ae.some(x => x && x.quest === KEY && !x.chapter)) b.story.alsoEnds = [...ae, { quest: KEY, ending: "break" }]; }, "BREAK closes the Forgotten Cause (story.alsoEnds)");
   // the Ledger, read aloud
   edit("gullywasher_cultural_summit", b => { if (!(b.choices || []).some(c => /Petting-Zoo/i.test(c.label))) b.choices = [ch("Read the Petting-Zoo Receipt into the reason-column, by name.", "gullywasher_cultural_summit_success", { requires: { beatMark: "wendigo_confluence_repair" }, description: "No roll. A Steward's voice, a goat, a team rate, a date. The Chupacabra at one end and the Jackalope at the other hear the same sentence for the first time in two hundred years, and one of them laughs first, and it doesn't matter which." }), ...(b.choices || [])]; }, "the Ledger read aloud");
 
@@ -115,6 +123,10 @@
   if (!codeQuest || !codeScript) say("✗ code story for forgotten_cause not readable — story script NOT written (hard-reload and re-run)");
   const QUEST = codeQuest ? JSON.parse(JSON.stringify(codeQuest)) : null;
   const SCRIPT = codeScript ? JSON.parse(JSON.stringify(codeScript)) : null;
+  // REVIEW 2026-10-01: the table's direct choices (read the cards, Restore/Redirect/Break) skip Seated and the Night — those count as done too,
+  // or NOW falls back to "the host is waiting to seat you" after the table is decided
+  const FC_DECIDED = ["wendigo_confluence_repair", "wendigo_confluence_redirect", "wendigo_confluence_break"];
+  const FC_SEATED_DONE = ["fc_seated", "wendigo_confluence_name_cards", ...FC_DECIDED], FC_NIGHT_DONE = ["fc_night_one", ...FC_DECIDED];
   if (SCRIPT) {
     const old = Object.fromEntries(SCRIPT.steps.map(s => [s.id, s]));
     SCRIPT.steps = [
@@ -122,9 +134,9 @@
       { id: "road", label: "The Politest Monsters in the World", line: "Thank them for the directions you didn't ask for. Try to give one of them something. Watch what happens to it.", beats: ["fc_road_wendigo"] },
       { ...old.dougan, line: "Dougan has stopped polishing the glass. Go to the bar. Ask who kept staging the feud." },
       { ...old.table, label: "The Long Table Is Set", line: "Where the leylines knot, a table is set. Do not sit yet. Read the room first; the room has been reading you.", beats: ["fc_bridge_confluence", "wendigo_confluence_the_long_table"], done: { mark: "wendigo_confluence_the_long_table" } },
-      { id: "seated", label: "Seated", chapter: "the_long_table", line: "The host is waiting to seat you. There is a card at your place. Let them read it to you.", beats: ["fc_seated"] },
+      { id: "seated", label: "Seated", chapter: "the_long_table", line: "The host is waiting to seat you. There is a card at your place. Let them read it to you.", beats: ["fc_seated"], done: { anyOf: FC_SEATED_DONE } },
       { id: "guests", label: "The Guest List", chapter: "the_long_table", line: "Read the cards. They are not a memorial. They are a client list, and the client is one mine.", beats: ["wendigo_confluence_name_cards"], done: { mark: "wendigo_confluence_name_cards" } },
-      { id: "night", label: "The Night Itself", chapter: "the_long_table", line: "Ask them the name of their night. They say it flatly, like a date. Then they say the other one.", beats: ["fc_night_one"] },
+      { id: "night", label: "The Night Itself", chapter: "the_long_table", line: "Ask them the name of their night. They say it flatly, like a date. Then they say the other one.", beats: ["fc_night_one"], done: { anyOf: FC_NIGHT_DONE } },
       { id: "decide", label: "Restore, Redirect, Break", chapter: "the_long_table", line: "Restore the node, take the trust onto yourselves, or sever the network. Restore comes back with a receipt, and the receipt has a goat on it.", beats: ["wendigo_confluence_the_long_table"], done: { chapter: ["forgotten_cause", "the_long_table"] } },
       { ...old.reason },
       { ...old.ledger, line: "A Chupacabra at one end, a Jackalope at the other, the Ledger open between them. Read the receipt into the reason-column, out loud, by name. No roll." }
@@ -137,7 +149,11 @@
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script forgotten_cause → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-forgotten-cause-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

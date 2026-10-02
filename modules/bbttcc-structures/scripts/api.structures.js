@@ -265,8 +265,11 @@ export function canonicalizeDamageType(damageType, damageFlavor = "") {
 export async function normalizeBOM(rawBom) {
   const out = [];
   for (const row of (Array.isArray(rawBom) ? rawBom : [])) {
-    if (!row?.materialKey || !(Number(row.qty) > 0)) continue;
-    const qty = Number(row.qty);
+    // A fully chipped row (qty 0) survives while it has an originalQty, so
+    // repair / fullRepair can refill it.
+    if (!row?.materialKey) continue;
+    if (!(Number(row.qty) > 0) && !(Number(row.originalQty) > 0)) continue;
+    const qty = Math.max(0, Number(row.qty) || 0);
     // Phase B: respect existing originalQty if caller passed one (allows
     // re-stamp paths that want to preserve depletion baseline). Otherwise
     // initialize to qty.
@@ -364,8 +367,21 @@ export async function stampBOM(actor, rawBom, opts = {}) {
     history: actor.getFlag(FLAG_SCOPE, "history") ?? []
   };
 
+  // update() MERGES objects, so resist / vulnerability / collapse-profile keys
+  // from the previous BOM would survive a re-stamp. Clear the map-valued keys first.
+  await clearDerivedMaps(actor, ["resists", "vulnerabilities", "collapseProfile"]);
   await actor.update({ [`flags.${FLAG_SCOPE}`]: payload });
   return { ...payload, breakdownByFamily: derived.breakdownByFamily };
+}
+
+/**
+ * Unset map-valued structure flags before a re-derive writes them back (a merging
+ * update can't drop keys). Shared with recipes.harden / recipes.repair.
+ */
+export async function clearDerivedMaps(actor, keys = ["resists", "vulnerabilities"]) {
+  for (const k of keys) {
+    if (actor?.getFlag?.(FLAG_SCOPE, k) !== undefined) await actor.unsetFlag(FLAG_SCOPE, k);
+  }
 }
 
 /**
@@ -373,7 +389,9 @@ export async function stampBOM(actor, rawBom, opts = {}) {
  */
 export async function clearStructure(actor) {
   if (!actor) return;
-  await actor.update({ [`flags.-=${FLAG_SCOPE}`]: null });
+  // v14 dropped the `-=key` syntax — use the ForcedDeletion operator when present.
+  const FD = foundry?.data?.operators?.ForcedDeletion;
+  await actor.update(FD ? { [`flags.${FLAG_SCOPE}`]: new FD() } : { [`flags.-=${FLAG_SCOPE}`]: null });
 }
 
 // ── Reading ─────────────────────────────────────────────────────────────────
@@ -504,6 +522,7 @@ const _API = {
   normalizeBOM,
   // Mutating
   stampBOM,
+  clearDerivedMaps,
   clearStructure,
   fullRepair,
   // Reading

@@ -200,6 +200,7 @@ async function _maybeFirstOpenOffer(spec) {
     if (game.user?.getFlag?.("bbttcc-onboarding", `firstOpenOffered.${spec.tour}`)) return;
     await game.user.setFlag("bbttcc-onboarding", `firstOpenOffered.${spec.tour}`, true);
     await new Promise(r => setTimeout(r, 800));                   // let the app render first
+    if (ns?.tours?.active?.()) return;                            // a tour started meanwhile (its own open())
     await _offerTour({ tour: spec.tour, prompt: spec.prompt, label: spec.label });
   } catch (e) { console.warn(TAG, "first-open offer failed", e); }
 }

@@ -78,7 +78,7 @@
   const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, scene = null } = {}) => ({
     id, label, type, timeScale: "scene", timePoints, questId: Q_MAIN, tags: TAGS, politicalTags: "",
     description, outcomes: { success: null, failure: null },
-    inject: { cooldownTurns: 0, repeatable: true, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}) },
+    inject: { cooldownTurns: 0, repeatable: false, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}) },
     actors: [], refs: {}, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true,
     storyChain: KEY, priority, ...(scene ? { sceneId: scene } : {}), ...(speaker ? { speakerActorId: speaker } : {}),
     story: story || { quest: KEY }, ...(memoryText ? { memoryText } : {}),
@@ -125,6 +125,7 @@
           ch("Ask about the three doorstops.", "", { description: "\"Wrong fitting. Every one. Nobody brought a spanner.\" He taps the drawing in the margin. \"Nobody's forgetting again.\"" })
         ] })
   ];
+  const FIXIT_NEW = NEW.map(b => b.id);
   for (const nb of NEW) { if (byId.get(nb.id)) { say(`· ok beat (already) ${nb.id}`); continue; } camp.beats.push(nb); byId.set(nb.id, nb); changes++; say(`✚ beat ${nb.id}`); }
 
   const edit = (id, fn, what) => { const b = byId.get(id); if (!b) return say(`✗ MISSING ${id}`); const before = JSON.stringify(b); fn(b); if (JSON.stringify(b) !== before) { changes++; say(`✎ ${id}: ${what}`); } else say(`· ok ${id}`); };
@@ -135,6 +136,11 @@
   addChoice("fixit_arc_bay_conversation_2", ch("Get Mara. Talk.", "fixit_leyline_stabilizer"), "routes to the stabilizer");
   addChoice("fixit_leyline_stabilizer_delay", ch("Come back tomorrow.", "fixit_leyline_stabilizer", { description: "Mara's price has not changed. Neither has Mara." }), "delay can come back");
   edit("fixit_backstairs_exterior", b => { for (const c of b.choices || []) if (c.label === "Go up" && !c.next) { c.next = "fixit_route_board"; c.description = "The runner loft. The board is the first thing you see and the last thing you look at."; } if (!(b.choices || []).some(c => c.next === "fixit_route_board_after")) b.choices.push(ch("Go up (after the Vault)", "fixit_route_board_after", { requires: { questBucket: Q_VAULT, is: "completed" } })); }, "Go up → the Route Board");
+  // REVIEW 2026-10-01 (LOW ×2): (1) the new beats were built repeatable — Young Gearbox re-offered Load the Crate in every talk and it re-granted
+  // THE CERTIFICATION; none of them is a hub, so all are once-only (a route still plays them again). (2) the plain "Go up" led to the PRE-Vault
+  // board after the Vault — it hides once the Vault is done (the after-Vault choice takes over).
+  for (const id of FIXIT_NEW) edit(id, b => { b.inject = b.inject || {}; if (b.inject.repeatable !== false) b.inject.repeatable = false; }, "once-only (repeatable:false)");
+  edit("fixit_backstairs_exterior", b => { const up = (b.choices || []).find(c => c.label === "Go up" && c.next === "fixit_route_board"); if (!up) return; const r = Array.isArray(up.requires) ? up.requires : (up.requires ? [up.requires] : []); if (!r.some(x => x && x.questBucket === Q_VAULT)) up.requires = [...r, { questBucket: Q_VAULT, isNot: "completed" }]; }, "\"Go up\" hides after the Vault");
   edit("fixit_gullywasher_welcome", b => { for (const c of b.choices || []) if (/amber thing/i.test(c.label) && !c.description) c.description = "Carbonated, aggressively. It is, on balance, a drink. The second one costs where you're from."; }, "the amber thing gets a line");
   edit("fixit_intro_scene", b => { if (!String(b.description || "").trim()) b.description = "The yard, from the middle of it: generators, chimes, the OPEN!!! sign, a Chupacabra visible through a bar window washing a glass and looking at you the way you are looking at him. Everything here is for sale, for some values of sale, and everybody here is deciding what you are."; }, "hub gets a description");
   edit("fixit_arc_bay_conversation", b => { if (!String(b.description || "").trim()) b.description = "Amazing machines of war and discounted air filters, and Young Gearbox in the middle of it with his boot on a tarp that has a shape under it. He is delighted to see you. He is delighted to see anyone. \"Browse,\" he says. \"Touch nothing. Ask anything.\""; }, "Arc Bay gets a description");
@@ -175,7 +181,11 @@
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script fixit_farm → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-fixit-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

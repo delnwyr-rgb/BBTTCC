@@ -175,7 +175,9 @@
         return;
       }
 
-      await doc.update({ [`flags.${MOD}.terrain`]: { key, label } });
+      // Write the legacy mirrors too (2026-10-01) — travel / seeders read terrainType / terrainKey
+      // first, and closing without Save left them stale.
+      await doc.update({ [`flags.${MOD}.terrain`]: { key, label }, [`flags.${MOD}.terrainKey`]: key, [`flags.${MOD}.terrainType`]: key });
 
       // Keep the hidden label in sync (optional)
       const root = (app?.element instanceof jQuery ? app.element[0] : app?.element)?.querySelector?.(".bbttcc-hex-config");
@@ -205,8 +207,9 @@
       if (!host) return;
       // Avoid double-binding
       if (!host._bbttccTerrainBound) {
+        // 'change' only (2026-10-01) — a <select> fires input AND change, so binding both
+        // saved every terrain pick twice.
         host.addEventListener("change", ev => handleChange(app, ev), true);
-        host.addEventListener("input",  ev => handleChange(app, ev), true);
         host._bbttccTerrainBound = true;
       }
     } catch (e) { warn("bind listeners failed:", e); }

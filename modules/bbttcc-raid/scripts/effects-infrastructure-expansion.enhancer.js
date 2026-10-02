@@ -1,5 +1,5 @@
 // v1.0.0 — Infrastructure Expansion (mechanical)
-// Adds "Expanded Infrastructure" to the target hex drawing and queues +2 Defense, +10 Trade Yield.
+// Adds "Expanded Infrastructure" to the target hex drawing and queues +2 Defense (the trade-yield write is retired).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.infrastructure_expansion.
 
 (() => {
@@ -39,7 +39,7 @@
     // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader; the tag/route is the bonus
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pending });
-    return `Queued: add "Expanded Infrastructure" • +${def} Defense • +${trade} Trade Yield`;
+    return `Queued: add "Expanded Infrastructure" • +${def} Defense`;
   }
 
   whenRaidReady((api)=>{
@@ -61,6 +61,6 @@
       }
     });
 
-    console.log(TAG, "installed (Expanded Infrastructure tag, +2 Def/+10 Trade).");
+    console.log(TAG, "installed (Expanded Infrastructure tag, +2 Def).");
   });
 })();

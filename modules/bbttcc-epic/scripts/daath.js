@@ -77,9 +77,12 @@ async function gmCard(html) {
 
 // ── Lamp watch (debounced; single writer = active GM) ───────────────────────
 let _checkTimer = null;
+// Serialized: a run awaits several chat cards before persisting lampsLit/opened, so a second run that
+// started meanwhile would read the stale state and announce the same lamp (or Daath) twice.
+let _lampChain = Promise.resolve();
 function queueLampCheck(reason) {
   if (_checkTimer) return;
-  _checkTimer = setTimeout(() => { _checkTimer = null; checkLamps(reason); }, 250);
+  _checkTimer = setTimeout(() => { _checkTimer = null; _lampChain = _lampChain.then(() => checkLamps(reason)).catch(() => {}); }, 250);
 }
 
 async function checkLamps(reason = "manual") {
@@ -141,7 +144,7 @@ async function knock(actorOrId = null) {
         if (!a) continue;
         const frags = (() => { try { return game.fourththing?.darkness?.fragments?.(a) ?? []; } catch (_e) { return []; } })();
         const open = ids.filter(id => frags.some(f => f.id === id && !f.faced));
-        if (open.length) unmet.push(`${a.name} (${open.length})`);
+        if (open.length) unmet.push(`${foundry.utils.escapeHTML(a.name)} (${open.length})`);
       }
       if (unmet.length) {
         ui.notifications?.warn(`The door remembers the rout. Un-faced rout fragments remain: ${unmet.join(", ")}. Face them, then knock again.`);
@@ -165,9 +168,9 @@ async function knock(actorOrId = null) {
       const next = { ...state, risen: true, darkDoor: true };
       await game.settings.set(MOD, "daath", next);
       await beatCard("🐉 THE DARK DOOR",
-        `<b>${actor.name}</b> did not wait for the lamps. At Darkness ten, the aperture knows its own, and it opens <em>inward</em>. The Dragon rises early — on its terms, in the dark, for one caller.`,
+        `<b>${foundry.utils.escapeHTML(actor.name)}</b> did not wait for the lamps. At Darkness ten, the aperture knows its own, and it opens <em>inward</em>. The Dragon rises early — on its terms, in the dark, for one caller.`,
         `The dark door · ${daathState().lampsLit.length}/10 lamps · this is worse`);
-      await gmCard(`🐉 <b>DARK DOOR RISE</b> — ${actor.name} knocked at Threshold band. Run the confrontation harsher: no unlit Lamp lends its instrument, and the party may not be present. (G2 ritual engine will formalize; today the table decides.)`);
+      await gmCard(`🐉 <b>DARK DOOR RISE</b> — ${foundry.utils.escapeHTML(actor.name)} knocked at Threshold band. Run the confrontation harsher: no unlit Lamp lends its instrument, and the party may not be present. (G2 ritual engine will formalize; today the table decides.)`);
       Hooks.callAll("bbttcc:dragon:risen", { darkDoor: true, lamps: state.lampsLit });
       await activateDaathScene();
       return next;
@@ -230,7 +233,7 @@ Hooks.on("ready", () => {
     if (game.system?.id !== "fourththing") return;
     game.fourththing = game.fourththing || {};
     game.fourththing.epic = game.fourththing.epic || {};
-    game.fourththing.epic.daath = { status, knock, bindScene, check: () => checkLamps("manual") };
+    game.fourththing.epic.daath = { status, knock, bindScene, check: () => (_lampChain = _lampChain.then(() => checkLamps("manual")).catch(() => {})) };
     log("The Threshold is wired (G1: lamps, gate, knock, dark door).");
   } catch (e) { warn("ready error", e); }
 });

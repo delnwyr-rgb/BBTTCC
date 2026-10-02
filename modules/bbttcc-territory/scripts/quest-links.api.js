@@ -121,8 +121,8 @@ async function unlinkHexQuest(drawingId, questId) {
   if (doc) {
     const map = _hexQuestsMap(doc);
     if (map[qid]) {
-      delete map[qid];
-      await _writeHexQuestsMap(doc, map);
+      // unsetFlag (2026-10-01) — setFlag of the pruned map MERGES, so the link never left the hex.
+      await doc.unsetFlag(MOD, `quests.${qid}`);
     }
   }
 
@@ -282,7 +282,7 @@ async function visitedMark(hexDoc, factionId = null, { via = "travel" } = {}) {
   const doc = _hexDocOf(hexDoc); if (!doc?.update) return null;
   const fid = String(factionId || "").replace(/^Actor\./, "");
   const v = foundry.utils.deepClone(_visitedMap(doc)); v.byFaction ??= {};
-  const ts = _now(); let turn = 0; try { turn = Number(game.bbttcc?.api?.world?.getTurnNumber?.() ?? game.settings.get("bbttcc-world", "turnNumber")) || 0; } catch (_e) {}
+  const ts = _now(); let turn = 0; try { turn = Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) {}   // (getTurnNumber / the turnNumber setting never existed — 2026-10-01)
   const bump = (rec) => ({ first: rec?.first ?? ts, firstTurn: rec?.firstTurn ?? turn, last: ts, lastTurn: turn, n: (Number(rec?.n) || 0) + 1, via });
   v.any = bump(v.any);
   if (fid) v.byFaction[fid] = bump(v.byFaction[fid]);
@@ -339,7 +339,7 @@ async function surveyWord({ hexDoc, factionId, actor = null, report = null } = {
   try { Hooks.callAll("bbttcc:survey:word", { hexUuid: _hexUuidOf(doc), hexName: _hexNameOf(doc), factionId: fid || null, questKeys: r.questKeys || [], registryIds: ids }); } catch (_e) {}
   return { ...r, word };
 }
-async function surveyClear(hexDoc) { const doc = _hexDocOf(hexDoc); if (!doc?.update) return false; await doc.update({ [`flags.${MOD}.-=survey`]: null }); return true; }
+async function surveyClear(hexDoc) { const doc = _hexDocOf(hexDoc); if (!doc?.update) return false; await doc.unsetFlag(MOD, "survey"); return true; }   // v14: no "-=key"
 // Marker data for one scene: every territory hex with a story to show, and who may see it.
 function questMarkersFor(scene = null) {
   const sc = scene || canvas?.scene; if (!sc) return [];
@@ -371,6 +371,7 @@ const VISITED_RELAY = "territory.visited.mark";
 Hooks.on("bbttcc:afterTravel", async (ctx) => {
   try {
     if (ctx?.encounter) return;
+    if (ctx?.relayed) return;   // a GM-side re-fire of a player's arrival — that seat already relayed the mark
     const to = _hexDocOf(ctx?.to); if (!to?.update || !to?.uuid) return;
     const fid = ctx?.factionId || ctx?.actor?.id || null;
     const via = String(ctx?.source || "travel");

@@ -56,16 +56,6 @@
     return ref.document ?? ref;
   }
 
-  function getTerrainCostForHex(doc){
-    const tf = doc.flags?.[MOD_T];
-    if (!tf) return {};
-    const terrain = (tf.terrain?.key || tf.terrain || "").toLowerCase();
-    const travelApi = game.bbttcc?.api?.travel;
-    if (!travelApi || !travelApi.__terrain) return {};
-    const spec = travelApi.__terrain[terrain] || {};
-    return copy(spec.cost || {});
-  }
-
   function integrationFor(hexFlags){
     const f = copy(hexFlags || {});
     const integ = f.integration || {};
@@ -109,7 +99,7 @@
       kind:  "strategic",
       band:  "standard",
       label: EFFECTS.establish_outpost?.label || "Establish Outpost",
-      cost:  EFFECTS.establish_outpost?.cost  || { economy:20, logistics:10 }, // terrain cost added dynamically
+      cost:  EFFECTS.establish_outpost?.cost  || { economy:20, logistics:10 },
       description: EFFECTS.establish_outpost?.description || "Plant a flag and found a new outpost in an unclaimed hex.",
       async apply({ actor, entry }){
         const A = actor;
@@ -170,19 +160,11 @@
         // size-none zeros (Bedlam Barrens, Mark 6, 2026-09-12) unless the GM re-saved the hex.
         try { const rc = game.bbttcc?.api?.territory?.recomputeHexResources; if (typeof rc === "function") await rc(doc, { source: "establish_outpost" }); }
         catch (eRc) { console.warn(TAG, "post-founding resource recompute failed (non-fatal)", eRc); }
-        const travelCost = getTerrainCostForHex(doc);
-        const extraEcon = Number(travelCost.economy || 0);
-        const extraNonL = Number(travelCost.nonlethal || 0);
-        const spent = [];
-        const raidApi = game.bbttcc?.api?.raid || game.modules.get(MOD_R)?.api;
-        if (raidApi?.spendOP){
-          if (extraEcon) { await raidApi.spendOP({ actor: A, type:"economy", amount: extraEcon }); spent.push(`+${extraEcon} ⓔ terrain`); }
-          if (extraNonL){ await raidApi.spendOP({ actor: A, type:"nonlethal", amount: extraNonL }); spent.push(`+${extraNonL} ☮ terrain`); }
-        }
-
+        // (A terrain surcharge block lived here — it read api.travel.__terrain and api.raid.spendOP,
+        // neither of which exists, so it never charged anything. Removed 2026-10-01; an outpost
+        // costs its planned price. Wiring a real surcharge is an owner/balance call.)
         const msgParts = [
           "Outpost founded (status: Occupied, size: Outpost).",
-          extraEcon || extraNonL ? `Terrain cost applied (${spent.join(", ")})` : "",
           "Integration progress +1 (wilderness foundation)."
         ].filter(Boolean);
 

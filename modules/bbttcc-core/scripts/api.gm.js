@@ -324,7 +324,8 @@
     var flat = flattenPatch(patch);
     var changed = applyToObject(cur, flat, "faction");
 
-    return actor.setFlag("bbttcc-factions", "gmState", cur).then(function () {
+    // unset first: setFlag MERGES, so a null-cleared key would otherwise survive.
+    return actor.unsetFlag("bbttcc-factions", "gmState").then(function () { return actor.setFlag("bbttcc-factions", "gmState", cur); }).then(function () {
       var rec = {
         at: nowISO(),
         by: (game.user && game.user.id) || null,
@@ -357,7 +358,8 @@
     var flat = flattenPatch(patch);
     var changed = applyToObject(cur, flat, "actor");
 
-    return actor.setFlag("bbttcc-core", "gmState", cur).then(function () {
+    // unset first: setFlag MERGES, so a null-cleared key would otherwise survive.
+    return actor.unsetFlag("bbttcc-core", "gmState").then(function () { return actor.setFlag("bbttcc-core", "gmState", cur); }).then(function () {
       var rec = {
         at: nowISO(),
         by: (game.user && game.user.id) || null,

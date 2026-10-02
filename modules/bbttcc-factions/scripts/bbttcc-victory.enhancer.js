@@ -194,7 +194,8 @@
       });
 
       try {
-        if (args?.apply) {
+        // Skipped (turn lock) or failed base turns award no VP.
+        if (args?.apply && !res?.skipped && !res?.error) {
           await victoryPass();
         }
       } catch (e) {

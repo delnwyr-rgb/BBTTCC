@@ -76,8 +76,23 @@
     return isFaction ? A : null;
   }
 
+  // Direct append to the faction's War Logs (flags.bbttcc-factions.warLogs) — bbttcc-factions
+  // publishes no addWarLog API (2026-10-01), so this is the writer every call site lands on.
+  async function _appendWarLogDirect(factionId, entry) {
+    try {
+      const F = asFactionActor(factionId);
+      if (!F) return false;
+      const cur = F.getFlag ? F.getFlag(MOD_FACTIONS, "warLogs") : null;
+      const wl = Array.isArray(cur) ? clone(cur) : [];
+      const ts = Date.now();
+      wl.push(Object.assign({ ts: ts, date: (new Date(ts)).toLocaleString() }, entry));
+      await F.update({ ["flags."+MOD_FACTIONS+".warLogs"]: wl });
+      return true;
+    } catch (_e) { return false; }
+  }
+
   async function _callAddWarLog(factionsApi, factionId, entry) {
-    if (!factionsApi || typeof factionsApi.addWarLog !== "function") return false;
+    if (!factionsApi || typeof factionsApi.addWarLog !== "function") return _appendWarLogDirect(factionId, entry);
     try {
       await factionsApi.addWarLog({ factionId: factionId, entry: entry });
       return true;
@@ -95,7 +110,7 @@
         } catch (e3) {}
       }
     }
-    return false;
+    return _appendWarLogDirect(factionId, entry);
   }
 
   async function _fallbackWriteDarkness(factionId, delta) {
@@ -381,8 +396,10 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     const opApi = get(game, "bbttcc.api.op", null);
     if (!opApi || typeof opApi.commit !== "function") return { ok:false, error:"opApi.commit missing" };
     try {
-      await opApi.commit(factionId, deltas, meta || {});
-      return { ok:true };
+      // op.commit RETURNS {ok:false, committed:false} on cap / underflow refusals (it does not throw).
+      const res = await opApi.commit(factionId, deltas, meta || {});
+      if (res && (res.ok === false || res.committed === false)) return { ok:false, error: res.error || (res.underflow ? "underflow" : "overcap"), res };
+      return { ok:true, res };
     } catch (e) {
       return { ok:false, error:e };
     }
@@ -1240,13 +1257,14 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
               const deltas = _cleanOpDeltas(opD);
               if (Object.keys(deltas).length) {
                 const allowOC_immediate = (row.allowOvercap === true);
-                await _applyOpDeltaViaOpAPI(factionId, deltas, {
+                const opRes = await _applyOpDeltaViaOpAPI(factionId, deltas, {
                   source: "world_effect",
                   allowOvercap: allowOC_immediate,
                   label: "Beat: " + beatCtx.beatLabel,
                   note: "Beat OP delta (" + beatCtx.beatType + ")"
                 });
-                notes.push("op:" + factionId);
+                if (opRes && opRes.ok) notes.push("op:" + factionId);
+                else { notes.push("opRefused:" + factionId); console.warn(TAG, "Beat OP delta refused", factionId, deltas, opRes && opRes.error); }
               }
             }
           } catch (eOP) {
@@ -1699,7 +1717,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     // 5) War log note
     if (we.warLog && typeof we.warLog === "string" && we.warLog.trim()) {
       const summary = we.warLog.trim();
-      if (warFactionId && factions) {
+      if (warFactionId) {   // _callAddWarLog appends directly when api.factions has no addWarLog
         try {
           const entry = {
             type: (ctx.logType !== undefined ? ctx.logType : "world_effect"),

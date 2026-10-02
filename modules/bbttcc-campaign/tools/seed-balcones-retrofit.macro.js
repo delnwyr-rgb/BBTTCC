@@ -97,7 +97,27 @@
     if (!(b.choices || []).some(c => /complaint back/i.test(c.label))) b.choices = [ch("Read its own complaint back to it, itemized.", "balcones_faulting_you_persuasion", { requires: { beatMark: "balcones_complaint" }, description: "No roll. Item one, item two, item three, in order, out loud. Acknowledgement was the whole demand. The creek is a separate matter." }), ...(b.choices || [])];
   }, "the Fault speaks; the complaint read back (hidden, no roll); back to the chair");
   for (const id of ["balcones_faulting_you_appease_spirit", "balcones_faulting_you_narrative", "balcones_faulting_you_persuasion", "balcones_faulting_you_impose_your_will", "balcones_faulting_you_build_a_bridge", "balcones_faulting_you_line_final_fail"]) edit(id, b => { if (b.sceneId && !liveScene(b.sceneId)) b.sceneId = null; }, "dangling sceneId cleared");
-  edit("enc_circuit_riders_file_it", b => { if (!(b.choices || []).some(c => c.label === "File the itemized complaint.")) b.choices = [...(b.choices || []).filter(c => c.next === "enc_circuit_riders_filed"), ch("File the itemized complaint.", "enc_circuit_riders_filed", { requires: { beatMark: "balcones_complaint" }, description: "Howard holds the trace up to the light and says nothing for a long time. \"A WITNESS,\" says Captain Robot, \"THAT CANNOT BE ACCUSED OF THEATRICS.\"" }), ...(b.choices || []).filter(c => c.next !== "enc_circuit_riders_filed")]; }, "File the itemized complaint (hidden)");
+  edit("enc_circuit_riders_file_it", b => { if (!(b.choices || []).some(c => c.label === "File the itemized complaint.")) b.choices = [...(b.choices || []).filter(c => /^enc_circuit_riders_filed/.test(String(c.next || ""))), ch("File the itemized complaint.", "enc_circuit_riders_filed", { requires: { beatMark: "balcones_complaint" }, description: "Howard holds the trace up to the light and says nothing for a long time. \"A WITNESS,\" says Captain Robot, \"THAT CANNOT BE ACCUSED OF THEATRICS.\"" }), ...(b.choices || []).filter(c => !/^enc_circuit_riders_filed/.test(String(c.next || "")))]; }, "File the itemized complaint (hidden)");
+  // REVIEW 2026-10-01 (MEDIUM): every filing is SINGLE-USE. A filing choice routes to its OWN outcome beat (`enc_circuit_riders_filed_<receipt
+  // mark>`: the Filed narration, repeatable:false, routing-only) which carries the +1 crVerify, and the choice hides once that beat has played.
+  // The shared `enc_circuit_riders_filed` landing is retired (no meter, no conversation offer) — it was a repeatable Captain Robot beat any
+  // talk could enact, and one receipt could be filed again and again. The same helper lives in seed-circuit-riders / seed-flooded-towns /
+  // seed-balcones and tools/patch-template-review-fixes-b-2026-10-01 (whichever runs last converts every filing it finds).
+  const singleUseFilings = () => {
+    const TPL = "enc_circuit_riders_filed", tpl = byId.get(TPL), fi = byId.get("enc_circuit_riders_file_it"); if (!tpl || !fi) return;
+    const meters = (Array.isArray(tpl.worldEffects?.meters) && tpl.worldEffects.meters.length) ? tpl.worldEffects.meters : [{ key: "crVerify", delta: 1, max: 4 }];
+    for (const c of fi.choices || []) {
+      const req = Array.isArray(c.requires) ? c.requires : (c.requires && typeof c.requires === "object" ? [c.requires] : []);
+      const mark = req.find(x => x && x.beatMark && x.not !== true)?.beatMark; if (c.next !== TPL || !mark) continue;
+      const id = `${TPL}_${mark}`;
+      if (!byId.get(id)) { const nb = JSON.parse(JSON.stringify(tpl)); Object.assign(nb, { id, dialogueOffer: false }); nb.inject = { ...(nb.inject || {}), repeatable: false, requires: [{ flag: "storyPhase", gte: 2 }, { beatMark: mark }] }; nb.worldEffects = { ...(nb.worldEffects || {}), meters: JSON.parse(JSON.stringify(meters)) }; camp.beats.push(nb); byId.set(id, nb); changes++; say(`✚ beat ${id} (single-use filing)`); }
+      c.next = id; c.requires = [...req, { beatMark: id, not: true }]; changes++; say(`✎ enc_circuit_riders_file_it: "${c.label}" → ${id} (single-use)`);
+    }
+    const before = JSON.stringify(tpl);
+    if (tpl.worldEffects?.meters) delete tpl.worldEffects.meters; if (tpl.dialogueOffer !== false) tpl.dialogueOffer = false; tpl.inject = { ...(tpl.inject || {}), repeatable: false };
+    if (JSON.stringify(tpl) !== before) { changes++; say(`✎ ${TPL}: retired (no meter, routing-only)`); }
+  };
+  singleUseFilings();
 
   // ── 3. story script ────────────────────────────────────────────────────────
   const storyApi = game.bbttcc?.api?.campaign?.story?.data;
@@ -122,7 +142,11 @@
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script balcones → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-balcones-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

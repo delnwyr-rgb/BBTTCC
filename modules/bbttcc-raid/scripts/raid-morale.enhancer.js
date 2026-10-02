@@ -17,7 +17,7 @@
     const war = get(A, `flags.${MOD}.warLogs`, []);
     war.push({ type:"turn", date:(new Date()).toLocaleString(), summary:`Morale ${delta>=0?"+":""}${delta} — ${reason}` });
     await setFlag(A, `${MOD}.warLogs`, war);
-    A.sheet?.render(true);
+    if (A.sheet?.rendered) A.sheet.render(false);   // refresh an OPEN sheet only — never pop sheets open over the battle scene
   }
   function rulesFor(A){ const custom = get(A, `flags.${MOD}.moraleRules`, null); return custom ? { ...DEF, ...custom } : DEF; }
 

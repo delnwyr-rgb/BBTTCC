@@ -247,11 +247,26 @@ export async function triggerCollapse(actor, { fromState, toState }) {
   if ((_SEV[toState] ?? -1) < (_SEV[triggerState] ?? 2)) return;
   const alreadyFired = !!actor.getFlag(FLAG_SCOPE, "collapseFired");
   if (alreadyFired) return;
+  // Claim the one-shot BEFORE any await: a second transition (multi-part hit,
+  // concurrent relay parts) arriving while this collapse is still rolling/
+  // applying would otherwise pass the flag check and collapse it twice.
+  const claimKey = actor.uuid ?? actor.id;
+  if (_collapsing.has(claimKey)) return;
+  _collapsing.add(claimKey);
+  try {
+    await actor.setFlag(FLAG_SCOPE, "collapseFired", true);
+    await _runCollapse(actor, profile, toState, breacher);
+  } finally {
+    _collapsing.delete(claimKey);
+  }
+}
 
+const _collapsing = new Set();   // actor uuids with a collapse in flight
+
+async function _runCollapse(actor, profile, toState, breacher) {
   const structToken = findStructureToken(actor);
   if (!structToken) {
     console.log(TAG, `${actor.name} entered ${toState} but has no token on canvas — skipping collapse footprint resolution`);
-    await actor.setFlag(FLAG_SCOPE, "collapseFired", true);
     await postCollapseHeaderCard(actor, profile, /*tokensCount=*/0);
     return;
   }
@@ -350,8 +365,6 @@ export async function triggerCollapse(actor, { fromState, toState }) {
   }
 
   console.log(TAG, `collapse of ${actor.name}: ${tokensOnTop.length} on footprint, ${results.length} processed`);
-
-  await actor.setFlag(FLAG_SCOPE, "collapseFired", true);
 
   Hooks.callAll("bbttcc:structure:collapse", { actor, results, tokensOnTop: tokensOnTop.length, profile });
 }

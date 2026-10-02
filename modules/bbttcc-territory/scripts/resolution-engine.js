@@ -97,15 +97,23 @@
           tf.productionMult = h.productionMult;
         }
 
+        // Case/spacing-insensitive match (2026-10-01): the outcome matrix says
+        // "hostile_population" but tracks / strategic activities store "Hostile Population",
+        // so exact-string removes missed. Population tags are written in the Title Case
+        // form the upkeep + tracks code reads.
+        const _mk = (m) => String(m ?? "").trim().toLowerCase().replace(/[\s_]+/g, "_");
+        const _canon = (m) => ({ hostile_population: "Hostile Population", loyal_population: "Loyal Population" })[_mk(m)] || m;
+
         if (h.addModifiers && Array.isArray(h.addModifiers)) {
           tf.modifiers = tf.modifiers || [];
           for (const m of h.addModifiers) {
-            if (!tf.modifiers.includes(m)) tf.modifiers.push(m);
+            if (!tf.modifiers.some(x => _mk(x) === _mk(m))) tf.modifiers.push(_canon(m));
           }
         }
 
         if (h.removeModifiers && Array.isArray(h.removeModifiers)) {
-          tf.modifiers = (tf.modifiers || []).filter(x => !h.removeModifiers.includes(x));
+          const rm = new Set(h.removeModifiers.map(_mk));
+          tf.modifiers = (tf.modifiers || []).filter(x => !rm.has(_mk(x)));
         }
 
         if (h.removePopulation) {
@@ -119,14 +127,19 @@
       if (outcome.integration) {
         // Snapshot the integration spec on the hex so the per-turn
         // Occupation/Integration pipeline can read it later.
+        // MERGE (2026-10-01) — a wholesale replace reset an integrated hex to progress 0 and
+        // erased its phase/history on every outcome.
+        const prevInteg = (tf.integration && typeof tf.integration === "object") ? tf.integration : {};
         tf.integration = {
+          ...prevInteg,
           outcomeKey,
           tier,
           appliedAt: Date.now(),
           spec: foundry.utils.duplicate(outcome.integration),
           // These will be used by the per-turn integration engine later.
-          progress: 0,
-          lastTurnProcessed: null
+          // Salt the Earth (integration.blocked) is the one outcome that DOES reset progress.
+          progress: outcome.integration.blocked ? 0 : Number(prevInteg.progress || 0),
+          lastTurnProcessed: prevInteg.lastTurnProcessed ?? null
         };
       }
 

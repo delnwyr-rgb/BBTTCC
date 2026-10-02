@@ -691,6 +691,8 @@ const SCENARIOS = {
 
   function getScenario(scenarioKey) {
     if (!scenarioKey) return null;
+    // A force-registered external entry (e.g. a campaign beat that claims a core key) overrides the core one.
+    if (EXTERNAL_META[scenarioKey]?.force && EXTERNAL_SCENARIOS[scenarioKey]) return EXTERNAL_SCENARIOS[scenarioKey];
     return SCENARIOS[scenarioKey] ?? EXTERNAL_SCENARIOS[scenarioKey] ?? null;
   }
 
@@ -861,7 +863,8 @@ const SCENARIOS = {
 
     const ctx = {
       ...opts.ctx,
-      source: opts.source || "encounters.testFire",
+      // "manual-testFire" is the source the scene launcher's no-world-effects guards check for.
+      source: opts.source || "manual-testFire",
       encounter: opts.encounter || null,
       scenario: {
         key: scenarioKey,
@@ -899,7 +902,7 @@ const SCENARIOS = {
     }
 
     EXTERNAL_SCENARIOS[key] = { ...scenario, key };
-    EXTERNAL_META[key] = { source, ts: Date.now() };
+    EXTERNAL_META[key] = { source, ts: Date.now(), force: force && !!SCENARIOS[key] };
     return true;
   }
 

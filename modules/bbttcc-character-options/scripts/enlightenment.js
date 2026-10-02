@@ -251,16 +251,18 @@ async function _applyEnlightenment(actor) {
   catch (e) { warn("Failed to sync faction enlightenment", e); }
 }
 
+// Accepts the V1 jQuery html or the V2 HTMLElement (fourththing sheets are ActorSheetV2).
 function decorateSheet(app, html) {
   try {
     const actor = app.actor;
     if (!actor || actor.type !== "character") return;
+    const el = (html instanceof HTMLElement) ? html : html?.[0];
+    if (!el) return;
     const level = (actor.getFlag(MOD, "enlightenment")?.level || "").toUpperCase() || "—";
 
-    const target = html.find(".sheet-body").first().length ? html.find(".sheet-body").first() : html;
-    if (!target.length) return;
+    const target = el.querySelector(".sheet-body") ?? el.querySelector(".window-content") ?? el;
 
-    target.find("#bbttcc-enlightenment-row").remove();
+    el.querySelector("#bbttcc-enlightenment-row")?.remove();
 
     const showMiracle = canMiracle(actor);
     const spent = !!actor.getFlag(MOD, "miracleUsed");
@@ -270,25 +272,29 @@ function decorateSheet(app, html) {
            style="padding:.1rem .4rem;${spent ? "opacity:.5;" : ""}">✦ Miracle${spent ? " (spent)" : ""}</button>`
       : "";
 
-    const row = $(`
-      <section id="bbttcc-enlightenment-row" class="bbttcc card" style="margin:.35rem 0; padding:.35rem; border:1px solid var(--color-border,#555); border-radius:8px;">
+    const row = document.createElement("section");
+    row.id = "bbttcc-enlightenment-row";
+    row.className = "bbttcc card";
+    row.style.cssText = "margin:.35rem 0; padding:.35rem; border:1px solid var(--color-border,#555); border-radius:8px;";
+    row.innerHTML = `
         <div class="flexrow" style="gap:.5rem; align-items:center;">
           <strong class="flex0">Enlightenment</strong>
-          <span class="flex0">${level}</span>
+          <span class="flex0">${foundry.utils.escapeHTML(level)}</span>
           <span class="flex1"></span>
           ${miracleBtn}
           <small class="flex0" style="opacity:.75;">(Bad Eden)</small>
-        </div>
-      </section>
-    `);
-    if (showMiracle && !spent) row.find(".bbttcc-miracle-btn").on("click", () => castMinorMiracle(actor));
+        </div>`;
+    if (showMiracle && !spent) row.querySelector(".bbttcc-miracle-btn")?.addEventListener("click", () => castMinorMiracle(actor));
     target.prepend(row);
-  } catch (_e) {}
+  } catch (e) { warn("decorateSheet failed", e); }
 }
 
-Hooks.on("renderActorSheet", (app, html) => {
-  try { decorateSheet(app, html); } catch(e){ warn("decorateSheet error", e); }
-});
+// V1 sheets fire renderActorSheet; ActorSheetV2 (fourththing) fires renderActorSheetV2.
+for (const h of ["renderActorSheet", "renderActorSheetV2"]) {
+  Hooks.on(h, (app, html) => {
+    try { decorateSheet(app, html); } catch(e){ warn("decorateSheet error", e); }
+  });
+}
 
 Hooks.on("ready", async () => {
   try {
@@ -351,7 +357,9 @@ function _installOpRegenBonus() {
   const host = (typeof terr?.advanceOPRegen === "function") ? terr
              : (typeof turn?.advanceOPRegen === "function") ? turn : null;
   if (!host) return false;
-  if (host.advanceOPRegen.__bbttccEnlightenRegenWrapped) return true;
+  // Install once: marker on the HOST too, since another wrapper (territory Unity)
+  // may later wrap over ours and hide the function-level marker.
+  if (host.__bbttccEnlightenRegenWrapped || host.advanceOPRegen.__bbttccEnlightenRegenWrapped) return true;
 
   const orig = host.advanceOPRegen;
   const wrapped = async function wrappedEnlightenRegen(opts = {}) {
@@ -367,7 +375,7 @@ function _installOpRegenBonus() {
       }
     } catch (_e) {}
 
-    const res = await orig(opts);
+    const res = await orig(opts);   // opts forwarded unchanged (deferCapClamp, factionId, …)
 
     try {
       if (apply && eligible.length) {
@@ -383,7 +391,14 @@ function _installOpRegenBonus() {
             }
           }
           if (!Object.keys(bonus).length) continue;
-          if (typeof op?.commit === "function") {
+          if (opts.deferCapClamp) {
+            // Advance Turn: the bank may sit over cap until the driver's post-spend
+            // clamp, so op.commit would refuse the credit (overcapIncrease). Add raw
+            // marks (same as territory Unity) and leave the cap to that clamp.
+            const bank = foundry.utils.duplicate(F.flags?.["bbttcc-factions"]?.opBank ?? {});
+            for (const [k, v] of Object.entries(bonus)) bank[k] = Number(bank[k] || 0) + v;
+            await F.setFlag("bbttcc-factions", "opBank", bank);
+          } else if (typeof op?.commit === "function") {
             await op.commit(F.id, bonus, { context: "enlightenment-opRegenBonus" });
           }
           log(`OP regen bonus (+10%, enlightened member) → ${F.name}:`, bonus);
@@ -395,6 +410,7 @@ function _installOpRegenBonus() {
   };
   wrapped.__bbttccEnlightenRegenWrapped = true;
   host.advanceOPRegen = wrapped;
+  host.__bbttccEnlightenRegenWrapped = true;
   log("Enlightened OP regen bonus installed (advanceOPRegen wrapper, +10%).");
   return true;
 }
@@ -444,11 +460,21 @@ async function refreshClarityAuras() {
       }
     }
 
-    for (const t of toks) {
-      const actor = t.actor;
-      if (!actor) continue;
+    // Per ACTOR, not per token: a linked actor with two tokens wants the effect
+    // if ANY of its tokens is in range (else the tokens flip it on and off).
+    const wanted = new Set();
+    for (const t of recipients) if (t.actor) wanted.add(t.actor);
+    const visit = new Set();
+    for (const t of toks) if (t.actor) visit.add(t.actor);
+    // Sweep world actors too, so a linked actor whose token was deleted or is
+    // on another scene doesn't keep the grant forever.
+    for (const a of game.actors?.contents ?? []) {
+      if (a.effects?.some(e => e.getFlag(MOD, AURA_AE_FLAG) === true)) visit.add(a);
+    }
+
+    for (const actor of visit) {
       const has = actor.effects?.find(e => e.getFlag(MOD, AURA_AE_FLAG) === true);
-      const want = recipients.has(t);
+      const want = wanted.has(actor);
       if (want && !has) {
         await actor.createEmbeddedDocuments("ActiveEffect", [{
           name: AURA_NAME,
@@ -476,7 +502,11 @@ function scheduleAuraRefresh() {
 Hooks.on("canvasReady", scheduleAuraRefresh);
 for (const h of ["createToken", "updateToken", "deleteToken"]) Hooks.on(h, () => scheduleAuraRefresh());
 Hooks.on("updateActor", (actor, changes) => {
-  if (foundry.utils.hasProperty(changes, `flags.${MOD}.enlightenment`)) scheduleAuraRefresh();
+  if (!foundry.utils.hasProperty(changes, `flags.${MOD}.enlightenment`)) return;
+  scheduleAuraRefresh();
+  // A player seat can't write the faction, so the active GM mirrors every
+  // roster level change onto flags.bbttcc-factions.enlightenmentLevel.
+  if (game.users?.activeGM?.isSelf && actor?.type === "character") syncFactionLevel(actor);
 });
 
 /* ───────────────────────── Minor Miracles (Enlightened) ───────────────────────

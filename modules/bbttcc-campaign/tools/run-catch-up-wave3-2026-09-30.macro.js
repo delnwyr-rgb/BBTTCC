@@ -8,7 +8,8 @@
  *   water (Flooded Towns, Lost Statues, Balcones) → diplomacy (Siege, Bandit Accord, Trojan Gift) → faith (Cadence, Tifaret, Ninth Guest) → Finale.
  *
  * HOW TO RUN: 1) hard-reload; 2) DRY_RUN = true (default) → read the summary card + console; 3) DRY_RUN = false, run again; 4) F5.
- * Re-running is safe — every step is idempotent. DRY-RUN counts on later steps read a little low (dry steps create no actors/beats).
+ * Re-running is safe — every step is idempotent, and since 2026-10-01 a seeder never overwrites a story script edited after seeding (it reports it and skips; the dated patch macros repair seeded worlds).
+ * DRY-RUN counts on later steps read a little low (dry steps create no actors/beats).
  */
 (async () => {
   const DRY_RUN = true;                     // <-- master switch: false = APPLY everything below, in order
@@ -42,8 +43,7 @@
       (foundry.utils.saveDataToFile ?? saveDataToFile)(typeof raw === "string" ? raw : JSON.stringify(raw), "text/json", `backup-campaigns-before-wave3-${Date.now()}.json`);
     } catch (e) { return ui.notifications.error("Backup failed — aborting without writing. " + (e?.message || e)); }
   }
-  const saved = { fu: foundry.utils.saveDataToFile, confirm: globalThis.Dialog?.confirm, log: console.log };
-  if (SUPPRESS_STEP_BACKUPS) { try { foundry.utils.saveDataToFile = () => {}; } catch (_e) {} }
+  const saved = { confirm: globalThis.Dialog?.confirm, log: console.log };
   if (AUTO_CONFIRM && globalThis.Dialog) { try { Dialog.confirm = async () => true; } catch (_e) {} }
 
   try {
@@ -57,6 +57,9 @@
         let src = await res.text();
         if (!/const DRY_RUN\s*=\s*(true|false)/.test(src)) throw new Error("no DRY_RUN constant in this macro — refusing to run it blind");
         src = src.replace(/const DRY_RUN\s*=\s*(true|false)/, `const DRY_RUN = ${DRY_RUN}`);
+        // one backup up front: the step's own campaigns backup is cut out of its SOURCE (reassigning foundry.utils.saveDataToFile at run time does
+        // not take effect, so every step used to download its own copy; review 2026-10-01)
+        if (SUPPRESS_STEP_BACKUPS) src = src.replace(/foundry\.utils\.saveDataToFile\s*(\?\?|\|\|)\s*saveDataToFile/g, "(() => {})");
         for (const [k, v] of Object.entries(step.vars || {})) {
           const re = new RegExp(`const ${k}\\s*=\\s*("[^"]*"|'[^']*'|[^;]+);`); if (!re.test(src)) throw new Error(`no const ${k} in this macro`);
           src = src.replace(re, `const ${k} = ${JSON.stringify(v)};`);
@@ -75,7 +78,6 @@
       } finally { console.log = saved.log; ui.notifications.error = savedNotifyError; }
     }
   } finally {
-    try { foundry.utils.saveDataToFile = saved.fu; } catch (_e) {}
     if (saved.confirm && globalThis.Dialog) { try { Dialog.confirm = saved.confirm; } catch (_e) {} }
     console.log = saved.log;
   }

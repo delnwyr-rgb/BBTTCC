@@ -870,7 +870,7 @@ export function deriveSituation(ctx) {
   let nowOut = now;
   if (!nowOut || !nowOut.next || ["turn", "complete", "empty", "done-no-closer"].includes(String(nowOut.why || ""))) {
     const inDoors = (b) => Object.values(QUEST_SCRIPTS).some(sc => (sc.doors || []).some(d => (d.beats || []).map(String).includes(String(b.id))));
-    const readyNow = (b) => { const r = readyOf(String(b.id)); return !!(r && r.ready) && !(sealOfDecl(b, ctx.store, phase)?.sealed); };
+    const readyNow = (b) => { const r = readyOf(String(b.id)); return !!(r && r.ready) && !(sealOfDecl(b, store || undefined, phase)?.sealed); };
     const entryFor = (x) => { const ins = beats.filter(p => p && p.id !== x.id && (p.choices || []).some(c => String(c?.next || "") === String(x.id) || String(c?.failNext || "") === String(x.id)) && String(p.story?.quest || "") === String(x.story?.quest || "") && (!fired.has(String(p.id)) || p.inject?.repeatable === true) && readyNow(p)); return ins.find(inDoors) || ins.find(p => p.inject?.repeatable === true) || ins.find(p => !fired.has(String(p.id))) || null; };
     outer: for (const q of inPlay) {
       for (const r of (q.next?.reasons || [])) {

@@ -1,4 +1,4 @@
-// v1.0.1 — Reconstruction Drive: remove "Damaged Infrastructure", add "Well-Maintained", +def/+trade, safe boot guard
+// v1.0.1 — Reconstruction Drive: remove "Damaged Infrastructure", add "Well-Maintained", +def (trade write retired), safe boot guard
 
 (() => {
   const MOD_R="bbttcc-raid", MOD_T="bbttcc-territory";
@@ -31,7 +31,7 @@
     const upd = { [`flags.${MOD_T}.turn.pending`]: pend };
     if (claim) upd[`flags.${MOD_T}.status`] = "claimed";
     await doc.update(upd);
-    return `Queued: -Damaged Infrastructure, +Well-Maintained • +${defenseDelta} Defense, +${tradeYieldDelta} Trade Yield${claim ? " • status → Claimed" : ""}`;
+    return `Queued: -Damaged Infrastructure, +Well-Maintained • +${defenseDelta} Defense${claim ? " • status → Claimed" : ""}`;
   }
 
   whenRaidReady((api)=>{

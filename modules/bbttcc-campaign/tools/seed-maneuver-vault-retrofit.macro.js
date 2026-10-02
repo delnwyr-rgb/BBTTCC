@@ -44,10 +44,10 @@
 
   const TAGS = "maneuver_vault story";
   const P4 = { flag: "storyPhase", gte: 4 };
-  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, requires = null, timePoints = 0, priority = "background", memoryText = null, scene = null, story = null, questId = Q_MAIN, tags = TAGS, factionEffects = null } = {}) => ({
+  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, requires = null, timePoints = 0, priority = "background", memoryText = null, scene = null, story = null, questId = Q_MAIN, tags = TAGS, factionEffects = null, repeatable = true } = {}) => ({
     id, label, type, timeScale: "scene", timePoints, questId, tags, politicalTags: "",
     description, outcomes: { success: null, failure: null },
-    inject: { cooldownTurns: 0, repeatable: true, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}) },
+    inject: { cooldownTurns: 0, repeatable, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}) },
     actors: [], refs: {}, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true,
     storyChain: story?.quest || KEY, priority, ...(scene ? { sceneId: scene } : {}), ...(speaker ? { speakerActorId: speaker } : {}),
     story: story || { quest: KEY }, ...(memoryText ? { memoryText } : {}),
@@ -84,7 +84,7 @@
       { speaker: sp("Drax Calder"), story: { quest: "khezek_tor", chapter: "the_official_word" }, questId: Q_WORD, tags: "khezek_tor official_word story", priority: "high",
         requires: [{ flag: "storyPhase", gte: 2 }, { beatMark: M("pulled_files") }, { anyOf: [{ beatMark: "kt_official_word_given" }, { beatMark: "kt_official_word_thin" }] }],
         factionEffects: ["6H5Grt3HybAs1rSq", "eIXghZ73hKSXmP3x"].map(factionId => ({ factionId, moraleDelta: 1, loyaltyDelta: 1, unityDelta: 0, darknessDelta: 0, opDeltas: {}, allowOvercap: false })),
-        memoryText: "The pulled files reached the cookline at Khezek-Tor. The official word is provable.",
+        memoryText: "The pulled files reached the cookline at Khezek-Tor. The official word is provable.", repeatable: false,
         choices: [ch("Eat what Bez gives you.", "")] })
   ];
   for (const nb of NEW) { if (byId.get(nb.id)) { say(`· ok beat (already) ${nb.id}`); continue; } camp.beats.push(nb); byId.set(nb.id, nb); changes++; say(`✚ beat ${nb.id}`); }
@@ -98,6 +98,9 @@
   for (const s of ["foyer_infiltration_failure", "foyer_diplomacy_failure", "foyer_violence_failure"]) addChoice(M(s), ch("Try another way.", M("foyer_of_procedure")), "exit");
   addChoice(M("echo_archive_failure"), ch("Read it again.", M("echo_archive")), "exit");
   for (const s of ["the_containment_loop_let_pip_learn", "the_containment_loop_let_pip_learn_more"]) edit(M(s), b => { if (b.worldEffects?.recipeGrants) delete b.worldEffects.recipeGrants; }, "single-fire the Pavise");
+  // REVIEW 2026-10-01 (MEDIUM): the KT epilogue pays +1 morale / +1 loyalty to two factions — it fires ONCE (it was built repeatable and Calder
+  // offered it in every conversation, an unbounded stat farm)
+  edit("kt_pulled_files_filed", b => { b.inject = b.inject || {}; if (b.inject.repeatable !== false) b.inject.repeatable = false; }, "fires once (repeatable:false)");
   edit(M("the_containment_loop"), b => { if (b.sceneId === "Jz5pDMnc9AiyN6hp" && vaultScene) b.sceneId = vaultScene; }, "Loop scene → The Maneuver Vault");
   const voice = (ids, name) => { for (const id of ids) edit(id, b => { if (!b.speakerActorId && sp(name)) b.speakerActorId = sp(name); }, `speaker ${name}`); };
   voice([M("foyer_of_procedure"), M("echo_archive"), M("slippage_chamber"), M("the_containment_loop"), M("infiltration_fail")], "Mechanism 52603");
@@ -112,16 +115,22 @@
   if (!codeQuest || !codeScript) say("✗ code story for maneuver_vault not readable — story script NOT written (hard-reload and re-run)");
   const QUEST = codeQuest ? JSON.parse(JSON.stringify(codeQuest)) : null;
   const SCRIPT = codeScript ? JSON.parse(JSON.stringify(codeScript)) : null;
+  // the drawer is optional: moving on to the floor (or the Loop) counts as done, or NOW sticks on it (review 2026-10-01)
+  const MV_RECORDS_DONE = [M("pulled_files"), M("slippage_chamber"), M("the_containment_loop")];
   if (SCRIPT) {
     const lines = { summons: "Mara found you herself, which is how you know it's bad. Pip didn't come home. Ask her what happened; she has one sentence.", accept: "The Vault is on the books. Somebody has to walk in first. It will thank you.", approach: "A concrete hill that welcomes pupils. Knock. It has been waiting to be knocked on.", infiltrate: "The door wants to play. Let it. If you lose, it opens anyway, eagerly.", foyer: "The foyer grades you: sneak, charm, or punch it in the sensors. It is perpetually disappointed and lonely. Pass anyway.", archive: "The archive whispers half nonsense, half directions. Read it. Then ask what it isn't allowed to show you.", slippage: "The floor drifts over places that are gone. Cross it. One tile has a garden on it.", loop: "Training loop currently occupied. Enter pupil number to join the queue. You know the number." };
     for (const s of SCRIPT.steps) if (lines[s.id]) s.line = lines[s.id];
-    if (!SCRIPT.steps.some(s => s.id === "records")) { const i = SCRIPT.steps.findIndex(s => s.id === "archive"); SCRIPT.steps.splice(i + 1, 0, { id: "records", label: "The Sealed Records", line: "The drawer is above 52603's clearance. It will tell you it can't. Then watch the drawer.", beats: [M("sealed_records")], done: { mark: M("pulled_files") } }); }
+    if (!SCRIPT.steps.some(s => s.id === "records")) { const i = SCRIPT.steps.findIndex(s => s.id === "archive"); SCRIPT.steps.splice(i + 1, 0, { id: "records", label: "The Sealed Records", line: "The drawer is above 52603's clearance. It will tell you it can't. Then watch the drawer.", beats: [M("sealed_records")], done: { anyOf: MV_RECORDS_DONE } }); }
     if (!(SCRIPT.doors || []).some(d => d.id === "runner")) SCRIPT.doors = [...(SCRIPT.doors || []), { id: "runner", label: "The Missing Runner", line: "Runners are never late, never lost, never off the check-in. One of them is all three. Mara has one sentence about it.", beats: [M("missing_runner")] }];
     SCRIPT.after = Array.from(new Set([...(SCRIPT.after || []), M("honor_roll")]));
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script maneuver_vault → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors, after +honor roll)`); } else if (SCRIPT) say("· ok story script (already)");
   // KT data script: the filed-files epilogue
   let KT = null; const ktHave = haveData.scripts?.khezek_tor; const ktQuest = haveData.quests?.khezek_tor;

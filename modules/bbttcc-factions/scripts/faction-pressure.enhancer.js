@@ -74,7 +74,7 @@
     return "low";
   }
 
-  function detectUnpaidUpkeepFromWarLogs(actor) {
+  function detectUnpaidUpkeepFromWarLogs(actor, sinceTs = null) {
     // Garrison Upkeep Engine writes:
     // { activity:"garrison_upkeep", unpaid:true|false, ... } :contentReference[oaicite:3]{index=3}
     const warLogs = readWarLogs(actor);
@@ -84,13 +84,18 @@
       return act === "garrison_upkeep";
     });
 
+    // Only an entry written by THIS turn's upkeep run counts: the upkeep engine writes
+    // nothing for a faction with no conquest-state hexes, so an old unpaid entry would
+    // otherwise stay "current" forever.
+    const current = (sinceTs == null) || (Number(last?.ts ?? 0) >= sinceTs);
+
     return {
-      unpaidUpkeep: !!last?.unpaid,
+      unpaidUpkeep: current && !!last?.unpaid,
       lastUpkeepTs: last?.ts ?? null
     };
   }
 
-  async function writePressureForAll() {
+  async function writePressureForAll(sinceTs = null) {
     const facs = (game.actors?.contents ?? []).filter(isFactionActor);
     if (!facs.length) return;
 
@@ -99,7 +104,7 @@
       const logisticsBand = readLogisticsBand(A);
       const bandNum = bandToNum(logisticsBand);
 
-      const { unpaidUpkeep, lastUpkeepTs } = detectUnpaidUpkeepFromWarLogs(A);
+      const { unpaidUpkeep, lastUpkeepTs } = detectUnpaidUpkeepFromWarLogs(A, sinceTs);
 
       // Risk escalates if upkeep is unpaid, regardless of overextension band.
       const risk = unpaidUpkeep ? "high" : bandToRisk(bandNum);
@@ -120,19 +125,37 @@
     if (updates.length) await Promise.allSettled(updates);
   }
 
-  Hooks.once("ready", () => {
-    Hooks.on("bbttcc:advanceTurn:end", async (ctx) => {
+  // Pressure must be computed AFTER garrison upkeep, which runs in an advanceTurn
+  // WRAPPER after the driver has already fired bbttcc:advanceTurn:end — so listening
+  // to that hook always read last turn's upkeep. Instead wrap territory.advanceTurn
+  // OUTERMOST (installed one tick after ready, once every ready-time wrapper is in),
+  // write pressure after the whole turn resolves, then fire bbttcc:pressure:written
+  // (the tier-stability counter listens for it). 2026-10-01.
+  function install() {
+    const terr = game.bbttcc?.api?.territory;
+    if (!terr || typeof terr.advanceTurn !== "function") {
+      console.warn(TAG, "territory.advanceTurn not found; pressure writer not installed.");
+      return;
+    }
+    if (terr.__bbttccPressureWrapped) return;
+    const base = terr.advanceTurn.bind(terr);
+    terr.advanceTurn = async function advanceTurnPressureWrapped(args = {}) {
+      const t0 = Date.now();
+      const res = await base(args);
       try {
-        if (!game.user?.isGM) return;   // world-state writes run once, on the GM
-        if (ctx?.apply === false) return; // dry-run preview — no derived-pressure writes
-        // Defer one tick so garrison upkeep + facility effects + war logs settle first.
-        await new Promise(resolve => setTimeout(resolve, 0));
-        await writePressureForAll();
+        // Apply turns only, on the GM; a skipped (turn-locked) or failed turn writes nothing.
+        if (game.user?.isGM && args?.apply && !res?.skipped && !res?.error) {
+          await writePressureForAll(t0);
+          Hooks.callAll("bbttcc:pressure:written", { apply: true, sinceTs: t0 });
+        }
       } catch (e) {
         console.warn(TAG, "pressure write failed:", e);
       }
-    });
+      return res;
+    };
+    terr.__bbttccPressureWrapped = true;
+    console.log(TAG, "installed (outermost advanceTurn wrapper).");
+  }
 
-    console.log(TAG, "installed (bbttcc:advanceTurn:end, deferred).");
-  });
+  Hooks.once("ready", () => { setTimeout(install, 0); });
 })();

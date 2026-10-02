@@ -492,11 +492,22 @@ try {
                 }
                 map[band] = sceneUuid;
                 ui.notifications?.info?.(`Linked ${band} → "${scene?.name || sceneUuid}" (3D depth on).`);
+                await doc.update({ [`flags.bbttcc-travel.${cfg.flagKey}`]: map });
               } else {
-                delete map[band];
+                // unsetFlag (2026-10-01) — deleting from a copy and merging it back removed nothing.
+                const oldUuid = map[band];
+                await doc.unsetFlag("bbttcc-travel", `${cfg.flagKey}.${band}`);
+                // Reset the old target only when it still points back at THIS hex.
+                try {
+                  const old = oldUuid ? await fromUuid(oldUuid) : null;
+                  if (old?.unsetFlag && old.flags?.["bbttcc-travel"]?.diveOrigin?.hexUuid === doc.uuid) {
+                    await old.unsetFlag("bbttcc-travel", "diveOrigin");
+                    await old.unsetFlag("bbttcc-travel", "returnLink");
+                    await old.unsetFlag("fourththing", cfg.envFlag);
+                  }
+                } catch (eU) { warn("unlink target reset failed", eU); }
                 ui.notifications?.info?.(`Unlinked ${band}.`);
               }
-              await doc.update({ [`flags.bbttcc-travel.${cfg.flagKey}`]: map });
               app.render(false);
             } catch (e) { warn(`${cfg.id} link failed`, e); ui.notifications?.error?.("Link failed — see console."); }
             return;

@@ -26,14 +26,17 @@
   const MOD_F = "bbttcc-factions";
   const TAG = "[bbttcc/siege-threat]";
 
-  function whenRaidReady(cb, tries = 0){
+  // Retry `go` itself — re-entering whenRaidReady after ready re-registered Hooks.once("ready"),
+  // which never fires again, so the retry loop was dead.
+  function whenRaidReady(cb){
+    let tries = 0;
     const go = () => {
       const api = game?.bbttcc?.api?.raid || game?.modules?.get?.(MOD_R)?.api?.raid;
       if (api?.EFFECTS && api?.STRATEGIC_THROUGHPUT) return cb(api);
-      if (tries > 80) return console.warn(TAG, "raid API not ready after timeout");
-      setTimeout(() => whenRaidReady(cb, tries + 1), 250);
+      if (tries++ > 80) return console.warn(TAG, "raid API not ready after timeout");
+      setTimeout(go, 250);
     };
-    if (globalThis.Hooks) Hooks.once("ready", go); else go();
+    if (globalThis.game?.ready || !globalThis.Hooks) go(); else Hooks.once("ready", go);
   }
 
   function whenSiegeStateReady(cb, tries = 0){

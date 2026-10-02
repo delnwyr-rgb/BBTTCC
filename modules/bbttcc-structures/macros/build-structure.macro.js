@@ -17,8 +17,10 @@
   const recipes = api.recipes.list();
   if (!recipes.length) return ui.notifications?.warn?.("No structure recipes available.");
 
+  // Factions are type "npc" + the isFaction flag — route through actorKind.
   const factions = (game.actors?.contents ?? []).filter(a =>
-    a.type === "character" && a.getFlag("bbttcc-factions", "isFaction"));
+    (game.bbttcc?.api?.actorKind?.(a)
+      ?? (a.flags?.["bbttcc-factions"]?.isFaction === true ? "faction" : a.type)) === "faction");
   if (!factions.length) return ui.notifications?.warn?.("No faction actors found.");
 
   const recipeOptions = recipes.map(r =>

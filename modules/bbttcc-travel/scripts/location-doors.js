@@ -307,6 +307,15 @@
     const link = d ? linkOf(d) : null;
     if (!link) return ui.notifications?.warn?.("That door leads nowhere (no locationLink)."), false;
     const where = `${link.label || "location"} · ${townLabel()}`;
+    // The walk-in gate guards the CLICK too (it lives on the door's Region link; a click on the Drawing used to skip it).
+    const gated = _gateForDoor(d.document, link);
+    if (gated && !gateMet(gated.gate)) {
+      ui.notifications?.info?.(gated.gate?.message || `${where}: not yet.`);
+      if (game.user.isGM) return _gmOnce(`fallback:${gated.key}`) ? _runFallbackBeat(gated.region, gated.link) : false;
+      const gx = game.bbttcc?.api?.gmExec;
+      if (gated.region && gx?.call && gx.primaryGmId?.()) { try { const r = await gx.call("travel.doors.enter", { regionUuid: gated.region.uuid, sceneUuid: canvas?.scene?.uuid }, { timeoutMs: 8000 }); return !!r?.ok; } catch (e) { warn("gate relay failed", e); } }
+      return false;
+    }
     if (game.user.isGM) {
       if (await _runDoorBeat(d.document, link, { audience: "activate", label: link.label })) return true;
       return _diveLocal(d, { audience: "activate", label: link.label });
@@ -326,10 +335,28 @@
   // A door may also be a Region over the same rectangle (town-hub runner, `walkIn: true`): walking a token into it
   // fires this on the mover's client. The Region carries flags[bbttcc-travel].locationLink = { ...door link, doorKey,
   // gate? }. gate = { beatMark | anyOf:[beatMark…], fallback?: beatId, message? }: unmet → the fallback beat plays
-  // instead of the interior (Donny on the wall; nobody gets past him without a vibe check). One fire per token per
-  // region per 8 s, so a party crossing a threshold does not open the same door four times.
+  // instead of the interior (Donny on the wall; nobody gets past him without a vibe check). One fire per region per
+  // 8 s on each seat, and once per door per 8 s on the GM relays, so a party crossing a threshold does not open the
+  // same door four times. The same gate guards a click on the door Drawing (dive + the travel.doors.dive relay).
   const _entered = new Map();
   const regionLinkOf = (doc) => { const l = doc?.flags?.[SCOPE]?.locationLink; return (l && typeof l === "object" && l.doorKey) ? l : null; };
+  /** The gate guarding a door Drawing: its own link.gate, else the walk-in Region with the same doorKey. */
+  function _gateForDoor(drawingDoc, link) {
+    const key = String(link?.doorKey || link?.key || "");
+    const region = key ? ((drawingDoc?.parent?.regions?.contents || []).find(r => regionLinkOf(r)?.doorKey === key) || null) : null;
+    const rlink = region ? regionLinkOf(region) : null;
+    const gate = link?.gate || rlink?.gate || null;
+    if (!gate) return null;
+    return { gate, region, link: rlink || { ...link, doorKey: key, gate }, key: region?.uuid || drawingDoc?.uuid || key };
+  }
+  // GM-side once-per-window (a party crossing a threshold, or four players walking in, fires once per door).
+  const _gmFired = new Map();
+  function _gmOnce(key, ms = 8000) {
+    const now = Date.now();
+    if ((_gmFired.get(key) || 0) > now - ms) return false;
+    _gmFired.set(key, now);
+    return true;
+  }
   function gateMet(gate) {
     if (!gate || typeof gate !== "object") return true;
     const st = game.bbttcc?.api?.campaign?.story; const has = (m) => { try { return !!st?.hasMark?.(m); } catch (_e) { return false; } };
@@ -349,18 +376,20 @@
     const doc = await fromUuid(String(regionUuid || "")).catch(() => null);
     const link = doc ? regionLinkOf(doc) : null;
     if (!link || !isTownHub(doc.parent)) return false;
-    const k = `${doc.uuid}:${tokenUuid || "?"}`; const now = Date.now();
+    // Keyed on the REGION (not region+token): a party walking in together opens the door once.
+    const k = doc.uuid; const now = Date.now();
     if ((_entered.get(k) || 0) > now - 8000) return false; _entered.set(k, now);
     const door = (doc.parent.drawings?.contents || []).find(d => linkOf(d)?.key === link.doorKey);
+    // A Region whose door Drawing was removed (runner removeDoors) is an orphan — it opens nothing, gate or not.
+    if (!door) { warn(`walk-in door ${link.doorKey} has no Drawing on ${doc.parent.name}`); return false; }
     const where = `${link.label || link.doorKey} · ${townLabel(doc.parent)}`;
     if (!gateMet(link.gate)) {
       ui.notifications?.info?.(link.gate?.message || `${where}: not yet.`);
-      if (game.user.isGM) return _runFallbackBeat(doc, link);
+      if (game.user.isGM) return _gmOnce(`fallback:${doc.uuid}`) ? _runFallbackBeat(doc, link) : false;
       const gx = game.bbttcc?.api?.gmExec;
       if (gx?.call && gx.primaryGmId?.()) { try { const r = await gx.call("travel.doors.enter", { regionUuid: doc.uuid, tokenUuid, sceneUuid: canvas?.scene?.uuid }, { timeoutMs: 8000 }); return !!r?.ok; } catch (e) { warn("gate relay failed", e); } }
       return false;
     }
-    if (!door) { warn(`walk-in door ${link.doorKey} has no Drawing on ${doc.parent.name}`); return false; }
     return dive(door.uuid);
   }
 
@@ -451,7 +480,8 @@
         if (!link || !isTownHub(doc.parent)) return { ok: false, why: "not-a-door" };
         if (game.scenes?.active?.id !== doc.parent.id) return { ok: false, why: "table-elsewhere" };
         if (gateMet(link.gate)) return { ok: false, why: "gate-open" };   // open gates go through the dive relay instead
-        (async () => { await _runFallbackBeat(doc, link); })();
+        if (!_gmOnce(`fallback:${doc.uuid}`)) return { ok: true, deduped: true };   // the party's other movers
+        (async () => { await _runFallbackBeat(doc, link); })().catch(e => warn("relay fallback failed", e));
         return { ok: true };
       });
     } catch (e) { warn("gmExec enter relay register failed", e); }
@@ -467,6 +497,14 @@
         if (!scene) return { ok: false, why: "no-scene" };
         // Only honour a click on the hub the table is actually on.
         if (game.scenes?.active?.id !== doc.parent.id) return { ok: false, why: "table-elsewhere" };
+        // The walk-in gate is re-checked here — a player click cannot skip it.
+        const gated = _gateForDoor(doc, link);
+        if (gated && !gateMet(gated.gate)) {
+          if (_gmOnce(`fallback:${gated.key}`)) _runFallbackBeat(gated.region || doc, gated.link).catch(e => warn("relay fallback failed", e));
+          return { ok: true, gated: true };
+        }
+        // Several seats walking/clicking the same door at once open it once.
+        if (!_gmOnce(`dive:${doc.uuid}`)) return { ok: true, deduped: true };
         const tx = game.bbttcc?.api?.transition; const c = centerOf(doc);
         const label = `${link.label || "inside"} (${meta?.fromUserName || "a player"})`;
         // Fire-and-forget (gmExec rule: return fast); the beat chain may take minutes.

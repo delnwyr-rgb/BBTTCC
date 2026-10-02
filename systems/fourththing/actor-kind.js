@@ -130,11 +130,20 @@ const KIND_RELEVANT_PATHS = [
   `flags.${AUTOLINK}.entityKind`,
   "system.details.type.value"
 ];
+// Rule 2b (bestiary) keys — matched by PREFIX, since a lineage/bestiary write
+// flattens to deeper keys (flags.fourththing.rfi.actor.lineage.<field>).
+const KIND_RELEVANT_PREFIXES = [
+  "flags.fourththing.rfi.actor.lineage",
+  "flags.fourththing.rfi.actor.bestiary",
+  "flags.fourththing.rfi.actor.-=lineage",
+  "flags.fourththing.rfi.actor.-=bestiary"
+];
 
 function _changeTouchesKind(changed) {
   try {
     const flat = foundry.utils.flattenObject(changed || {});
-    return KIND_RELEVANT_PATHS.some(p => Object.prototype.hasOwnProperty.call(flat, p));
+    if (KIND_RELEVANT_PATHS.some(p => Object.prototype.hasOwnProperty.call(flat, p))) return true;
+    return Object.keys(flat).some(k => KIND_RELEVANT_PREFIXES.some(p => k === p || k.startsWith(p + ".")));
   } catch (_e) {
     return true; // be safe: restamp if we can't tell
   }

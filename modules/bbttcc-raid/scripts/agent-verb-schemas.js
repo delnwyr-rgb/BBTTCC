@@ -51,6 +51,22 @@
   // to game.bbttcc.api.agent.* by bbttcc-agent-api.js. Schemas document the
   // shape; the existing code holds the behavior.
   function _verbs(agent) {
+    // gm.suggest* callers usually pass only {observation}; the resolvers walk `recommendations`
+    // (and read detectors), so derive both from the faction's world signals when absent.
+    async function _fillAdvisorSignals(observation, detectors, recommendations) {
+      if (Array.isArray(recommendations) && recommendations.length) return { detectors, recommendations };
+      try {
+        const fid = observation?.factionId || observation?.faction?.id || null;
+        const sig = fid ? await agent.gm?.getWorldSignals?.(fid) : null;
+        if (sig?.ok) {
+          return {
+            detectors: detectors || { stability: sig.stability, overextension: sig.overextension, narrative: sig.narrative, difficulty: sig.difficulty },
+            recommendations: Array.isArray(sig.recommendations) ? sig.recommendations : []
+          };
+        }
+      } catch (_e) {}
+      return { detectors, recommendations: Array.isArray(recommendations) ? recommendations : [] };
+    }
     return [
       // ============================================================
       // QUERIES (Layer 1) — read-only, no side effects
@@ -219,7 +235,8 @@
         returns: S_OBJ,
         permissions: ["any"],
         sideEffects: { audit: false },
-        handler: async (args) => agent.estimateTravel(args)
+        // Schema names (hexFromUuid/hexToUuid) → the implementation's fromHexUuid/toHexUuid.
+        handler: async (args = {}) => agent.estimateTravel({ ...args, fromHexUuid: args.fromHexUuid ?? args.hexFromUuid, toHexUuid: args.toHexUuid ?? args.hexToUuid })
       },
       {
         name: "raid.estimate",
@@ -238,7 +255,8 @@
         returns: S_OBJ,
         permissions: ["any"],
         sideEffects: { audit: false },
-        handler: async (args) => agent.estimateRaid(args)
+        // Schema names (attackerFactionId/defenderHexUuid) → the implementation's factionId/targetUuid.
+        handler: async (args = {}) => agent.estimateRaid({ ...args, factionId: args.factionId ?? args.attackerFactionId, targetUuid: args.targetUuid ?? args.defenderHexUuid })
       },
       {
         name: "candidates.score",
@@ -265,7 +283,8 @@
         returns: S_OBJ,
         permissions: ["any"],
         sideEffects: { audit: false },
-        handler: async (args) => agent.buildStrategicCandidates(args)
+        // The builders are positional (factionId, observation, opts) — unpack the args object.
+        handler: async ({ factionId } = {}) => agent.buildStrategicCandidates(factionId)
       },
       {
         name: "travel.buildCandidates",
@@ -275,7 +294,11 @@
         returns: S_OBJ,
         permissions: ["any"],
         sideEffects: { audit: false },
-        handler: async (args) => agent.buildTravelCandidates(args)
+        handler: async ({ factionId } = {}) => {
+          const obs = await agent.getObservationSnapshot(factionId);
+          if (!obs?.ok) return obs;
+          return agent.buildTravelCandidates(factionId, obs);
+        }
       },
       {
         name: "raid.buildCandidates",
@@ -285,7 +308,11 @@
         returns: S_OBJ,
         permissions: ["any"],
         sideEffects: { audit: false },
-        handler: async (args) => agent.buildRaidCandidates(args)
+        handler: async ({ factionId } = {}) => {
+          const obs = await agent.getObservationSnapshot(factionId);
+          if (!obs?.ok) return obs;
+          return agent.buildRaidCandidates(factionId, obs);
+        }
       },
       {
         name: "strategic.recommendNext",
@@ -302,7 +329,7 @@
         returns: S_OBJ,
         permissions: ["any"],
         sideEffects: { audit: false },
-        handler: async (args) => agent.recommendNextActions(args)
+        handler: async ({ factionId, n, ...opts } = {}) => agent.recommendNextActions(factionId, { ...opts, n })
       },
       {
         name: "simulate.maneuver",
@@ -343,7 +370,11 @@
         returns: S_OBJ,
         permissions: ["gm"],
         sideEffects: { audit: false },
-        handler: async (args) => agent.gm?.inferFactionId?.(args)
+        // inferGMFactionId returns a bare id string — wrap it so callers can read r.factionId.
+        handler: async (args = {}) => {
+          const id = agent.gm?.inferFactionId?.(args?.userOrGMContext || args) || null;
+          return { ok: !!id, factionId: id };
+        }
       },
       {
         name: "gm.getWorldSignals",
@@ -373,7 +404,8 @@
         returns: S_OBJ,
         permissions: ["gm"],
         sideEffects: { audit: false },
-        handler: async (args) => agent.gm?.computeAdvisorTableTier?.(args)
+        handler: async ({ observation, detectors, recommendations, opts } = {}) =>
+          agent.gm?.computeAdvisorTableTier?.(observation, detectors, recommendations, opts)
       },
       {
         name: "gm.suggestCampaignBeats",
@@ -392,8 +424,10 @@
         returns: S_OBJ,
         permissions: ["gm"],
         sideEffects: { audit: false },
-        handler: async ({ observation, detectors, recommendations, opts } = {}) =>
-          agent.gm?.resolveCampaignBeatSuggestions?.(observation, detectors, recommendations, opts)
+        handler: async ({ observation, detectors, recommendations, opts } = {}) => {
+          ({ detectors, recommendations } = await _fillAdvisorSignals(observation, detectors, recommendations));
+          return agent.gm?.resolveCampaignBeatSuggestions?.(observation, detectors, recommendations, opts);
+        }
       },
       {
         name: "gm.suggestCampaignTables",
@@ -412,8 +446,10 @@
         returns: S_OBJ,
         permissions: ["gm"],
         sideEffects: { audit: false },
-        handler: async ({ observation, detectors, recommendations, opts } = {}) =>
-          agent.gm?.resolveCampaignTableSuggestions?.(observation, detectors, recommendations, opts)
+        handler: async ({ observation, detectors, recommendations, opts } = {}) => {
+          ({ detectors, recommendations } = await _fillAdvisorSignals(observation, detectors, recommendations));
+          return agent.gm?.resolveCampaignTableSuggestions?.(observation, detectors, recommendations, opts);
+        }
       }
     ];
   }

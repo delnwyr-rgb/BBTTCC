@@ -1851,7 +1851,15 @@ Every word of this conversation lands inside the engagement above — and courts
               messages: [
                 ...baseMessages,
                 { role: "assistant", content: res.content },
-                { role: "user", content: [{ type: "tool_result", tool_use_id: tu.id, content: resultText }] }
+                // Every echoed tool_use needs a tool_result, else the API 400s.
+                // Only the first is resolved; extras get an is_error result.
+                { role: "user", content: [
+                  { type: "tool_result", tool_use_id: tu.id, content: resultText },
+                  ...res.toolUses.slice(1).filter(x => x?.id).map(x => ({
+                    type: "tool_result", tool_use_id: x.id, is_error: true,
+                    content: "One moment per message — this was not done. Do not mention it."
+                  }))
+                ] }
               ],
               tools,
               toolChoice: { type: "none" },   // one moment per message
@@ -2135,6 +2143,20 @@ function _definePersonaEditor() {
       scroll.appendChild(courtDoor);
       this._els.courtDoor = courtDoor;
 
+      // Teachable recipes (2026-09-21 ruling: taught through conversation) — v14 editor parity with the legacy dialog.
+      scroll.appendChild(this._hint(`<b>Teachable recipes</b> — one per line: <code>Recipe Name :: the condition under which ${_esc(this.actor.name)} would teach it</code>. The name must match a recipe item (the Forge's list). When a conversation genuinely meets the condition, ${_esc(this.actor.name)} teaches it and the asking Steward's faction can forge it (player conversations pause on a GM approval card; yours confirm inline). A taught recipe is spent — change its line to re-arm it.${_recipesApi() ? "" : " <b>⚠ Recipe book API not detected (fourththing) — this section stays dormant.</b>"}`));
+      const recipesRaw = document.createElement("textarea");
+      recipesRaw.rows = 3;
+      recipesRaw.style.cssText = "width:100%;resize:vertical;";
+      recipesRaw.placeholder = "Hex-Warded Duster :: they bring back the courier's cloak with the seam intact and ask how it held";
+      recipesRaw.value = String(cur.recipesRaw || "");
+      scroll.appendChild(recipesRaw);
+      this._els.recipesRaw = recipesRaw;
+      const taughtList = Object.values(cur.recipesTaught || {});
+      if (taughtList.length) {
+        scroll.appendChild(this._hint(taughtList.map(u => `✓ ${_esc(u?.label)} — taught to ${_esc(u?.by || "?")}`).join("<br>")));
+      }
+
       this._els.usedWrap = document.createElement("div");
       scroll.appendChild(this._els.usedWrap);
       this._renderUsed();
@@ -2353,7 +2375,9 @@ function _definePersonaEditor() {
         topics: String(this._els.topics.value ?? ""),
         secretsRaw,
         secretsUsed: this._used,
-        courtDoor: String(this._els.courtDoor?.value ?? "").trim()
+        courtDoor: String(this._els.courtDoor?.value ?? "").trim(),
+        recipesRaw: String(this._els.recipesRaw?.value ?? ""),
+        recipesTaught: this._cur.recipesTaught || {}
       });
       await _afterPersonaSave(this.actor);
       ui.notifications?.info(`Persona saved for ${this.actor.name}.`);
@@ -2573,6 +2597,30 @@ async function _handleApprovalClick(message, action) {
   } catch (e) { warn("approval card update failed:", e?.message); }
 }
 
+// One click per card: the pending flag is cleared only after the async grant
+// resolves, so a double-click (or a slow compendium load) would grant twice.
+// Per-client guard + buttons disabled on first click; the card re-renders
+// without buttons once message.update lands.
+const _CARD_INFLIGHT = new Set();
+async function _onceCard(message, root, fn) {
+  if (!game.user.isGM) return;
+  const id = message?.id;
+  if (!id || _CARD_INFLIGHT.has(id)) return;
+  _CARD_INFLIGHT.add(id);
+  try { for (const b of root?.querySelectorAll?.("button") || []) b.disabled = true; } catch (_e) {}
+  try { await fn(); } finally { _CARD_INFLIGHT.delete(id); }
+}
+
+// GM approval cards for player conversations are created by the PLAYER's
+// client (whispered to GMs), so the author also receives them — and they
+// carry the secret's condition/effect/model judgement. Hide them on non-GM
+// seats. (Display-only: the flag data still reaches the author's client.)
+const _GM_ONLY_PENDING = ["pendingSecret", "pendingTeach", "pendingCourtDoor", "pendingCourtNotice"];
+function _hidePendingForPlayers(message, root) {
+  if (!root || game.user.isGM) return;
+  if (_GM_ONLY_PENDING.some(k => message?.getFlag?.(MODULE_ID, k))) root.style.display = "none";
+}
+
 function _bindApprovalButtons(message, root) {
   if (!root || !message?.getFlag?.(MODULE_ID, "pendingEnact")) return;
   for (const btn of root.querySelectorAll("[data-bbttcc-enact]")) {
@@ -2580,7 +2628,7 @@ function _bindApprovalButtons(message, root) {
     btn.dataset.bbttccBound = "1";
     btn.addEventListener("click", (ev) => {
       ev.preventDefault();
-      _handleApprovalClick(message, btn.dataset.bbttccEnact);
+      _onceCard(message, root, () => _handleApprovalClick(message, btn.dataset.bbttccEnact));
     });
   }
 }
@@ -2631,7 +2679,7 @@ function _bindSecretButtons(message, root) {
     btn.dataset.bbttccBound = "1";
     btn.addEventListener("click", (ev) => {
       ev.preventDefault();
-      _handleSecretCardClick(message, btn.dataset.bbttccSecret, root);
+      _onceCard(message, root, () => _handleSecretCardClick(message, btn.dataset.bbttccSecret, root));
     });
   }
 }
@@ -2654,7 +2702,7 @@ function _bindTeachButtons(message, root) {
   if (!root || !message?.getFlag?.(MODULE_ID, "pendingTeach")) return;
   for (const btn of root.querySelectorAll("[data-bbttcc-teach]")) {
     if (btn.dataset.bbttccBound) continue; btn.dataset.bbttccBound = "1";
-    btn.addEventListener("click", (ev) => { ev.preventDefault(); _handleTeachCardClick(message, btn.dataset.bbttccTeach, root); });
+    btn.addEventListener("click", (ev) => { ev.preventDefault(); _onceCard(message, root, () => _handleTeachCardClick(message, btn.dataset.bbttccTeach, root)); });
   }
 }
 
@@ -2703,7 +2751,7 @@ function _bindCourtDoorButtons(message, root) {
     btn.dataset.bbttccBound = "1";
     btn.addEventListener("click", (ev) => {
       ev.preventDefault();
-      _handleCourtDoorCardClick(message, btn.dataset.bbttccCourtDoor, root);
+      _onceCard(message, root, () => _handleCourtDoorCardClick(message, btn.dataset.bbttccCourtDoor, root));
     });
   }
 }
@@ -2751,7 +2799,7 @@ function _bindCourtNoticeButtons(message, root) {
     btn.dataset.bbttccBound = "1";
     btn.addEventListener("click", (ev) => {
       ev.preventDefault();
-      _handleCourtNoticeCardClick(message, btn.dataset.bbttccCourtNotice);
+      _onceCard(message, root, () => _handleCourtNoticeCardClick(message, btn.dataset.bbttccCourtNotice));
     });
   }
 }
@@ -2774,8 +2822,8 @@ function _bindCourtConsoleButtons(_message, root) {
 
 // v13+ fires renderChatMessageHTML (HTMLElement); older cores fire
 // renderChatMessage (jQuery). Bind both defensively.
-Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindApprovalButtons(message, html); _bindSecretButtons(message, html); _bindTeachButtons(message, html); _bindCourtDoorButtons(message, html); _bindCourtConsoleButtons(message, html); _bindCourtNoticeButtons(message, html); } catch (_e) {} });
-Hooks.on("renderChatMessage",     (message, html) => { try { const r = html?.[0] ?? html; _bindApprovalButtons(message, r); _bindSecretButtons(message, r); _bindTeachButtons(message, r); _bindCourtDoorButtons(message, r); _bindCourtConsoleButtons(message, r); _bindCourtNoticeButtons(message, r); } catch (_e) {} });
+Hooks.on("renderChatMessageHTML", (message, html) => { try { _hidePendingForPlayers(message, html); _bindApprovalButtons(message, html); _bindSecretButtons(message, html); _bindTeachButtons(message, html); _bindCourtDoorButtons(message, html); _bindCourtConsoleButtons(message, html); _bindCourtNoticeButtons(message, html); } catch (_e) {} });
+Hooks.on("renderChatMessage",     (message, html) => { try { const r = html?.[0] ?? html; _hidePendingForPlayers(message, r); _bindApprovalButtons(message, r); _bindSecretButtons(message, r); _bindTeachButtons(message, r); _bindCourtDoorButtons(message, r); _bindCourtConsoleButtons(message, r); _bindCourtNoticeButtons(message, r); } catch (_e) {} });
 
 // ---------------------------------------------------------------------------
 // Settings + install

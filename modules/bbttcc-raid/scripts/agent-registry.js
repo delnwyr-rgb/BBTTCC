@@ -374,10 +374,11 @@
         validateAgainstSchema,
         registerSocketEnvelope,
         socketEnvelopes,
-        validateSocketEnvelope,
-        get _registrySize()    { return REGISTRY.size; },
-        get _registryVersion() { return VERSION; }
+        validateSocketEnvelope
       });
+      // Real accessors — Object.assign would snapshot a getter's value (size 0 at install).
+      Object.defineProperty(globalThis.game.bbttcc.api.agent, "_registrySize", { get: () => REGISTRY.size, configurable: true, enumerable: true });
+      Object.defineProperty(globalThis.game.bbttcc.api.agent, "_registryVersion", { get: () => VERSION, configurable: true, enumerable: true });
 
       log(`Registry installed (v${VERSION}). Verbs registered: ${REGISTRY.size}.`);
     } catch (e) {

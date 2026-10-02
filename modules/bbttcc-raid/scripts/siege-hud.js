@@ -45,7 +45,7 @@
     return Object.values(buffer || {}).reduce((a, b) => a + (Number(b) || 0), 0);
   }
   // Buffer is stored in MARKS — and marks are the unit everywhere (owner ruling 2026-09-06).
-  function _mToOP(m) { return String(Math.round(Number(m) || 0)); }
+  function _marks(m) { return String(Math.round(Number(m) || 0)); }
 
   function _champCounts(arr) {
     const a = Array.isArray(arr) ? arr : [];
@@ -157,9 +157,9 @@
       const glyph = joined ? "✓" : "✉";
       const opTotal = Object.values(p.contribution || {}).reduce((a, b) => a + (Number(b) || 0), 0);
       const tip = joined
-        ? `joined turn ${p.joinedTurn ?? "?"} — committed ${_mToOP(opTotal)} marks to the buffer`
+        ? `joined turn ${p.joinedTurn ?? "?"} — committed ${_marks(opTotal)} marks to the buffer`
         : "invited — has not yet joined (Join Siege to commit)";
-      return `<span title="${esc(tip)}" style="font-size:0.64rem;padding:1px 5px;border:1px solid ${col};border-radius:8px;color:${col};${joined ? "" : "opacity:.65;font-style:italic;"}">${glyph} ${esc(nm)}${joined && opTotal ? ` <span style="opacity:.7;">+${_mToOP(opTotal)}</span>` : ""}</span>`;
+      return `<span title="${esc(tip)}" style="font-size:0.64rem;padding:1px 5px;border:1px solid ${col};border-radius:8px;color:${col};${joined ? "" : "opacity:.65;font-style:italic;"}">${glyph} ${esc(nm)}${joined && opTotal ? ` <span style="opacity:.7;">+${_marks(opTotal)}</span>` : ""}</span>`;
     }).join(" ");
     return `<div style="margin-top:.3rem;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
       <span style="font-size:0.6rem;color:#998;opacity:.7;text-transform:uppercase;letter-spacing:.05em;">allies</span>${chips}</div>`;
@@ -278,7 +278,7 @@
     const rows = buckets.map(b => `<div style="display:flex;align-items:center;gap:6px;margin:.25rem 0;">
         <label style="flex:1;text-transform:capitalize;">${b}</label>
         <input type="number" name="${b}" min="0" step="10" value="${defOP(b)}" style="width:5rem;text-align:right;"/>
-        <span style="opacity:.6;font-size:.8em;">/ ${bankOP(b)} OP</span>
+        <span style="opacity:.6;font-size:.8em;">/ ${bankOP(b)} marks</span>
       </div>`).join("");
     new Dialog({
       title: `⚔ Join the Siege — ${fac.name}`,
@@ -384,7 +384,7 @@
           <span style="font-size:0.6rem;color:#c9a;letter-spacing:.05em;text-transform:uppercase;grid-column:1/-1;opacity:.75;">Clash maneuvers · fire now</span>
           ${clashMans.map(m => {
             const afford = total >= (m.costTotal || 0);   // marks vs marks
-            return `<button type="button" data-act="maneuver" data-key="${esc(m.key)}" data-hex="${esc(entry.hexUuid)}" title="${afford ? `Fire ${esc(m.label)} now — Buffer −${_mToOP(m.costTotal)} marks` : `Need ${_mToOP(m.costTotal)} marks (Buffer has ${_mToOP(total)})`}" style="display:flex;align-items:center;justify-content:center;gap:4px;text-align:center;line-height:1.15;min-height:34px;padding:4px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${afford ? "1" : "0.55"};">${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${_mToOP(m.costTotal)}</span></button>`;
+            return `<button type="button" data-act="maneuver" data-key="${esc(m.key)}" data-hex="${esc(entry.hexUuid)}" title="${afford ? `Fire ${esc(m.label)} now — Buffer −${_marks(m.costTotal)} marks` : `Need ${_marks(m.costTotal)} marks (Buffer has ${_marks(total)})`}" style="display:flex;align-items:center;justify-content:center;gap:4px;text-align:center;line-height:1.15;min-height:34px;padding:4px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${afford ? "1" : "0.55"};">${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${_marks(m.costTotal)}</span></button>`;
           }).join("")}
         </div>`
       : "";
@@ -449,9 +449,9 @@
           rows.push(`<button type="button" data-act="p-muster" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" title="Form up ${esc(nm)}'s contingents on the battle scene" style="flex:1;padding:3px 6px;background:#102818;color:#8fd6a0;border:1px solid #3f8a55;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⛺ Muster${many ? ` (${esc(nm)})` : ""}</button>`);
           for (const m of atkMans) {
             const afford = total >= (m.costTotal || 0);
-            rows.push(`<button type="button" data-act="p-maneuver" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" data-key="${esc(m.key)}" title="${afford ? `Fire ${esc(m.label)} now as ${esc(nm)} — Buffer −${_mToOP(m.costTotal)} marks` : `Need ${_mToOP(m.costTotal)} marks (Buffer has ${_mToOP(total)})`}" style="flex:1;padding:3px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:${afford ? "pointer" : "not-allowed"};font-weight:600;opacity:${afford ? "1" : "0.55"};" ${afford ? "" : "disabled"}>${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${_mToOP(m.costTotal)}</span></button>`);
+            rows.push(`<button type="button" data-act="p-maneuver" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" data-key="${esc(m.key)}" title="${afford ? `Fire ${esc(m.label)} now as ${esc(nm)} — Buffer −${_marks(m.costTotal)} marks` : `Need ${_marks(m.costTotal)} marks (Buffer has ${_marks(total)})`}" style="flex:1;padding:3px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:${afford ? "pointer" : "not-allowed"};font-weight:600;opacity:${afford ? "1" : "0.55"};" ${afford ? "" : "disabled"}>${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${_marks(m.costTotal)}</span></button>`);
           }
-          rows.push(`<button type="button" data-act="p-raise" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" title="Raise troops for ${esc(nm)} — recruits cost OP (1 OP per 10 troops; overextension surcharges)" style="flex:1;padding:3px 6px;background:#221c10;color:#e0c080;border:1px solid #8a763a;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⚒ Raise${many ? ` (${esc(nm)})` : ""}</button>`);
+          rows.push(`<button type="button" data-act="p-raise" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" title="Raise troops for ${esc(nm)} — recruits cost marks (about 1 mark per troop before the price multiplier; overextension surcharges)" style="flex:1;padding:3px 6px;background:#221c10;color:#e0c080;border:1px solid #8a763a;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⚒ Raise${many ? ` (${esc(nm)})` : ""}</button>`);
           rows.push(`<button type="button" data-act="p-recall" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" title="Recall ${esc(nm)}'s contingents from the field" style="flex:0 0 auto;padding:3px 7px;background:#1a1a22;color:#bbb;border:1px solid #555;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">↩</button>`);
         }
         if (fighting.length && (Number.isFinite(aMus) || Number.isFinite(dMus))) rows.push(musRead);
@@ -472,7 +472,7 @@
       </div>
       <div style="margin:.3rem 0 2px;display:flex;justify-content:space-between;font-size:0.7rem;color:#ccc;">
         <span style="color:${BRONZE};">Buffer</span>
-        <span>${_mToOP(total)}${start > 0 ? `/${_mToOP(start)}` : ""} OP</span>
+        <span>${_marks(total)}${start > 0 ? `/${_marks(start)}` : ""} marks</span>
       </div>
       <div style="position:relative;height:7px;background:#1a1a22;border:1px solid #333;border-radius:3px;overflow:hidden;">
         <div style="position:absolute;left:0;top:0;bottom:0;width:${pct}%;background:${bufColor};box-shadow:0 0 6px ${bufColor};transition:width .3s;"></div>

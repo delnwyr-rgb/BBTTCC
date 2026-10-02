@@ -104,7 +104,7 @@ async function _forgeSteward(user) {
 function _registerFoundingOp() {
   const relay = _ns()?.relay;
   if (!relay?.registerOp) return console.warn(TAG, "relay missing — founding op not registered.");
-  relay.registerOp("foundPlayerFaction", async ({ name, creed, stewardId, userId }) => {
+  relay.registerOp("foundPlayerFaction", async ({ name, creed, stewardId, userId, rigChassis = "hexmobile" }) => {
     name = String(name || "").trim();
     if (!name) throw new Error("faction name required");
     const steward = game.actors.get(String(stewardId || ""));
@@ -135,7 +135,10 @@ function _registerFoundingOp() {
     if (!faction) throw new Error("faction creation failed");
     try {
       const apply = game.bbttcc?.api?.factions?.applyStartingPackage;
-      if (typeof apply === "function") await apply({ actor: faction, packageKey: "standard", starterRig: "hexmobile" });
+      // The player's founding-dialog pick IS the starter rig (the client's
+      // follow-up mintRig only names/dresses it — mintRig never mints a twin).
+      const starterRig = ["hexmobile", "space_marine"].includes(String(rigChassis)) ? String(rigChassis) : "hexmobile";
+      if (typeof apply === "function") await apply({ actor: faction, packageKey: "standard", starterRig });
       else console.warn(TAG, "applyStartingPackage missing — faction founded without the standard package (run repair-onboarded-faction-parity)");
     } catch (e) { console.warn(TAG, "standard package apply failed", e); }
     await steward.setFlag(FMOD, "factionId", faction.id);
@@ -147,7 +150,10 @@ function _registerFoundingOp() {
 async function _foundFaction(ctx) {
   const ns = _ns();
   const existing = ns?.resolve?.faction?.(ctx.user, ctx.steward);
-  if (existing || !ctx.steward) return existing || null;
+  // A faction bound mid-run (GM by hand, or a founding relay that timed out but
+  // landed) must reach the remaining beats — ctx.faction was computed at start().
+  if (existing) { if (ctx && !ctx.faction) ctx.faction = existing; return existing; }
+  if (!ctx.steward) return null;
 
   await ctx.speak("A body needs a banner, One. Before you drive, claim, or raid, the world wants to know: in whose name?");
 
@@ -193,7 +199,8 @@ async function _foundFaction(ctx) {
 
   const res = await ns.runAsGM("foundPlayerFaction", {
     name: picked.name, creed: picked.creed,
-    stewardId: ctx.steward.id, userId: ctx.user?.id || game.user.id
+    stewardId: ctx.steward.id, userId: ctx.user?.id || game.user.id,
+    rigChassis: picked.rigChassis || "hexmobile"
   });
   if (!res?.factionId) {
     ui.notifications?.warn?.("Faction founding failed (no GM online, or creation refused) — you can create one from the Actors tab later.");

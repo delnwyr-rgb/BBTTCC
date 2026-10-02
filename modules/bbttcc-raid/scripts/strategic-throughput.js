@@ -337,6 +337,27 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     return A.update({ [`flags.${MODF}.bonuses`]: bonuses });
   }
 
+  // bonuses.nextTurn.attackDC is cleared by turn-driver's tickFactionBonuses, which runs AFTER
+  // the planned activities resolve in the same Advance — a write made here would be wiped before
+  // any raid. So the shift is held and written on bbttcc:advanceTurn:end (after the tick); it then
+  // covers the coming turn's raids and the NEXT Advance's tick clears it, as designed.
+  const _pendingAttackDC = new Map();   // factionId → summed delta (only on the client running the Advance)
+  function _queueAttackDC(A, delta){
+    if (!A?.id) return;
+    _pendingAttackDC.set(A.id, (Number(_pendingAttackDC.get(A.id)) || 0) + Number(delta || 0));
+  }
+  Hooks.on("bbttcc:advanceTurn:end", async (p) => {
+    if (!_pendingAttackDC.size) return;
+    if (!p?.apply || !game.user?.isGM) { _pendingAttackDC.clear(); return; }
+    const rows = Array.from(_pendingAttackDC.entries()); _pendingAttackDC.clear();
+    for (const [fid, d] of rows) {
+      try {
+        const F = game.actors.get(fid); if (!F || !d) continue;
+        await setNextTurnFlag(F, { attackDC: Number(F.getFlag(MODF,"bonuses")?.nextTurn?.attackDC || 0) + d });
+      } catch (e) { console.warn("[bbttcc-raid/strategic-throughput] attackDC write failed", fid, e); }
+    }
+  });
+
   function incNextTurn(A, key, by){
     by = Number(by || 1) || 1;
     if (!A) return 0;
@@ -469,7 +490,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await adjustHexTrack(ctx.targetUuid, "loyalty", +1);
       await pushWarLog(A, 'Propaganda: +Propaganda; +2 Morale, +1 Loyalty (target hex).');
     },
-    async propaganda_campaign(ctx){ return this.propaganda_tour(ctx); },
+    async propaganda_campaign(ctx){ return STRATEGIC_THROUGHPUT.propaganda_tour(ctx); },
     async psych_ops_broadcast(ctx){
       const A = game.actors.get(ctx.factionId);
       if (!ctx.targetUuid) { await pushWarLog(A, "Psych Ops Broadcast: No target hex."); return; }
@@ -598,7 +619,10 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await revealHex(doc);
       const tf = tfOf(doc); const owner = tf.faction || tf.ownerName || (hexOwnerId(doc) ? game.actors.get(hexOwnerId(doc))?.name : "") || "unclaimed";
       await whisperFaction(A, `Intel — ${hexName(doc)}`, `Held by <b>${esc(owner)}</b> · ${esc(tf.type || "?")} / ${esc(tf.size || "?")} · status ${esc(tf.status || "?")} · defense <b>${Number(tf.defense || 0)}</b> · loyalty ${Number(game.bbttcc?.facts?.hex?.loyaltyScore?.(tf) ?? 0)} · morale ${Number(game.bbttcc?.facts?.hex?.morale?.(tf) ?? 0)} · integration ${Number(tf.integration?.progress || 0)}/6<br>Modifiers: ${(tf.modifiers || []).map(esc).join(", ") || "none"}<br>Alignment: ${esc(tf.sephirotName || tf.sephirotKey || "none")}`);
-      await pushWarLog(A, `Gather Intel: ${hexName(doc)} scouted — dossier whispered; +Intel next turn.`);
+      // Owner-ruled attacker DC shift (−2 on the next raid) — this handler runs INSTEAD of the
+      // enhancer apply() that used to write it, so the write lives here now (deferred past the tick).
+      _queueAttackDC(A, -2);
+      await pushWarLog(A, `Gather Intel: ${hexName(doc)} scouted — dossier whispered; +Intel next turn; next raid DC −2.`);
     },
     // Alignment Shift (std) — +Sanctified, +Pilgrimage Site, Morale/Loyalty +1 next turn, and the faith boon is real: +10 marks Faith next turn.
     async alignment_shift(ctx){
@@ -614,7 +638,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async policy_reforms(ctx){
       const A = game.actors.get(ctx.factionId); if (!A) return;
       await addRegenPlan(A, [{ inTurns: 1, mult: 1.05, label: "Policy Reforms" }]);
-      await pushWarLog(A, "Policy Reforms: OP income ×1.05 this turn.");
+      _queueAttackDC(A, -1);   // next raid DC −1 (was enhancer-only)
+      await pushWarLog(A, "Policy Reforms: OP income ×1.05 this turn; next raid DC −1.");
     },
 
     // ═══════════════════════════ T3 / T4 — THE LEGENDARY BLOCK ═══════════════════════════
@@ -767,7 +792,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       if (B && B.id !== A?.id) await pushWarLog(B, `${A.name} detonated a weapon over ${hexName(doc)} — it is Contaminated and contested. Your Darkness +1.`);
     },
     // Dragon's Parley — a 2d10 check (DC 14, +1 per lit Lamp): success = Darkness −3 and stewards wash 1; failure = Darkness +1 and the Adversary stirs.
-    async dragon_s_parley(ctx){ return this.dragons_parley(ctx); },
+    async dragon_s_parley(ctx){ return STRATEGIC_THROUGHPUT.dragons_parley(ctx); },
     async dragons_parley(ctx){
       const A = game.actors.get(ctx.factionId); if (!A) return;
       const lamps = Number(game.fourththing?.epic?.daath?.status?.()?.lampsCount || 0);
@@ -797,7 +822,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await pushWarLog(A, r?.ok && !r.skipped ? `Consecrated Alignment: ${hexName(doc)} is aligned to ${r.sephirotName || steward.key} by ${steward.s.name}.` : `Consecrated Alignment: ${hexName(doc)} — ${r?.reason || r?.error || "already aligned; kept"}.`);
     },
     async optact_administrative_optimization(ctx){ const A = game.actors.get(ctx.factionId); await addRegenPlan(A, [{ inTurns: 1, mult: 1.05, label: "Administrative Optimization" }]); await pushWarLog(A, "Administrative Optimization: OP income ×1.05 this turn."); },
-    async optact_arcane_attribution(ctx){ return this.gather_intel(ctx); },
+    async optact_arcane_attribution(ctx){ return STRATEGIC_THROUGHPUT.gather_intel(ctx); },
     async optact_dynastic_resonance(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
@@ -818,7 +843,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await adjustHexTrack(ctx.targetUuid, "loyalty", +1);
       await pushWarLog(A, `Stability Enforcement at ${hexName(doc)}: ${m.removed.length ? "Hostile Population removed; " : ""}+Patrolled; Loyalty +1.`);
     },
-    async optact_deep_cover_network(ctx){ return this.spy_insertion(ctx); },
+    async optact_deep_cover_network(ctx){ return STRATEGIC_THROUGHPUT.spy_insertion(ctx); },
     async optact_cultural_diffusion(ctx){
       const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid); if (!doc) { await pushWarLog(A, "Cultural Diffusion: no target hex."); return; }
       await setHexModifiers(doc, ["Loyal Population"], [], { activity: "optact_cultural_diffusion", factionId: ctx.factionId });
@@ -840,10 +865,10 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await pushWarLog(A, `Guided Ascent: ${n} steward(s) washed 1 Darkness.`);
     },
     async optact_philosophic_exchange(ctx){ const A = game.actors.get(ctx.factionId); const m = await bumpFactionMeter(A, "morale", +1); await scheduleFactionOP(A, { culture: 10 }, 1); await pushWarLog(A, `Philosophic Exchange: Morale (Empathy) ${m.before} → ${m.after}; +10 marks Culture next turn.`); },
-    async optact_thread_the_spread(ctx){ return this.recon_sweep(ctx); },
+    async optact_thread_the_spread(ctx){ return STRATEGIC_THROUGHPUT.recon_sweep(ctx); },
     async optact_doctrine_of_clarity(ctx){ const A = game.actors.get(ctx.factionId); const d = await adjustFactionDarkness(A, -1); await pushWarLog(A, `Doctrine of Clarity: Darkness ${d.before} → ${d.after}.`); },
-    async optact_ritual_binding(ctx){ return this.great_work_ritual(ctx); },
-    async optact_silent_brotherhood(ctx){ return this.courtly_intrigue_council(ctx); }
+    async optact_ritual_binding(ctx){ return STRATEGIC_THROUGHPUT.great_work_ritual(ctx); },
+    async optact_silent_brotherhood(ctx){ return STRATEGIC_THROUGHPUT.courtly_intrigue_council(ctx); }
   };
 
   // ----------------------------

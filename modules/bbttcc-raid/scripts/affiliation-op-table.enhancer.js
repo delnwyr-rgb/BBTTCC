@@ -141,12 +141,29 @@ function _slotKey(slot){
  *  Used to read per-item-flag overrides (flags.bbttcc-factions.opContribution).
  *  Returns null if the slot has no resolvable item or fromUuidSync isn't available.
  */
+// fromUuidSync on a compendium uuid returns the INDEX entry unless the document happens to be
+// cached on this client — so the opContribution flag must be IN the index. Prime each pack's
+// index with that field once (on ready for bbttcc packs, lazily for any other slot pack); until
+// a lazy prime lands the override reads null exactly as before.
+const _OPC_FIELD = `flags.${FCT_ID}.opContribution`;
+const _primedPacks = new Set();
+function _primePackIndex(packId){
+  if (!packId || _primedPacks.has(packId)) return;
+  _primedPacks.add(packId);
+  try { game.packs?.get?.(packId)?.getIndex?.({ fields: [_OPC_FIELD] })?.catch?.(() => _primedPacks.delete(packId)); }
+  catch (_e) { _primedPacks.delete(packId); }
+}
+Hooks.once("ready", () => {
+  try { for (const p of (game.packs || [])) if (p.documentName === "Item" && String(p.metadata?.packageName || "").startsWith("bbttcc")) _primePackIndex(p.collection); } catch (_e) {}
+});
+
 function _slotItemDoc(slot){
   try {
     if (!slot || typeof slot !== "object") return null;
     const id = slot.id;
     const pack = slot.pack;
     if (!id || !pack) return null;
+    _primePackIndex(pack);
     const uuid = `Compendium.${pack}.Item.${id}`;
     if (typeof fromUuidSync === "function") return fromUuidSync(uuid);
   } catch(_e){}

@@ -150,9 +150,11 @@
       ?? null;
   }
 
+  // dnd5e 5.x hook names (verified against 5.3.x): saves/checks fire WITHOUT a
+  // V2 suffix. Concentration rolls via rollSavingThrow internally, so the save
+  // hook already covers it — no rollConcentration listener (would double-bank).
   const ROLL_HOOKS = [
-    "dnd5e.rollAttackV2", "dnd5e.rollSavingThrowV2", "dnd5e.rollAbilityCheckV2",
-    "dnd5e.rollSkillV2", "dnd5e.rollAbilityTestV2", "dnd5e.rollConcentrationV2"
+    "dnd5e.rollAttackV2", "dnd5e.rollSavingThrow", "dnd5e.rollAbilityCheck", "dnd5e.rollSkillV2"
   ];
 
   Hooks.once("ready", () => {

@@ -34,8 +34,10 @@
   }
 
   function install() {
-    Hooks.on("bbttcc:advanceTurn:end", () => {
+    Hooks.on("bbttcc:advanceTurn:end", (p) => {
       if (!game.user?.isGM) return;   // world-state writes run once, on the GM
+      if (game.users?.activeGM && !game.users.activeGM.isSelf) return; // ...the active GM of several
+      if (p?.apply !== true) return;  // dry-run / preview advances never tick weather
       // Let other end-of-turn hooks finish first
       setTimeout(() => { tickWeather(); }, 0);
     });

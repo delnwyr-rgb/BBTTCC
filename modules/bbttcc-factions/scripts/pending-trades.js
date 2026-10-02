@@ -128,12 +128,17 @@ async function _setStatus(faction, id, patch) {
   return inbox[idx];
 }
 
+// In-flight accepts on THIS client; the persisted "settling" status covers other seats.
+const _settling = new Set();
+
 async function accept(faction, id) {
   const F = _resolveActor(faction);
   if (!F) return { ok: false, error: "faction not found" };
   const entry = _readInbox(F).find(e => e?.id === id);
   if (!entry) return { ok: false, error: "entry not found" };
   if (entry.status !== "pending") return { ok: false, error: `entry already ${entry.status}` };
+  if (Number(entry.expiresAt || 0) && Date.now() > Number(entry.expiresAt)) return { ok: false, error: "entry has expired" };
+  if (_settling.has(id)) return { ok: false, error: "entry is already being settled" };
 
   const ex = game?.bbttcc?.api?.factions?.exchange;
   if (!ex?.trade) return { ok: false, error: "exchange API not loaded" };
@@ -142,13 +147,26 @@ async function accept(faction, id) {
   const to   = game.actors.get(entry.toId);
   if (!from || !to) return { ok: false, error: "actors missing" };
 
-  const res = await ex.trade({
-    from, to,
-    offer: entry.offer,
-    ask:   entry.ask,
-    reason: entry.reason ? `[Async] ${entry.reason}` : "[Async trade] settled from inbox"
-  });
-  if (!res?.ok) return { ok: false, error: res?.error || "settlement failed" };
+  // Claim the entry BEFORE settling, so an overlapping accept can't settle it twice.
+  _settling.add(id);
+  let res;
+  try {
+    await _setStatus(F, id, { status: "settling" });
+    res = await ex.trade({
+      from, to,
+      offer: entry.offer,
+      ask:   entry.ask,
+      reason: entry.reason ? `[Async] ${entry.reason}` : "[Async trade] settled from inbox"
+    });
+  } catch (e) {
+    res = { ok: false, error: String(e?.message || e) };
+  } finally {
+    _settling.delete(id);
+  }
+  if (!res?.ok) {
+    try { await _setStatus(F, id, { status: "pending" }); } catch (_e) {}
+    return { ok: false, error: res?.error || "settlement failed" };
+  }
 
   const updated = await _setStatus(F, id, { status: "accepted", settledTs: Date.now(), settledBy: game.user?.id || null });
   try { Hooks.callAll("bbttcc:trade:settled", { entry: updated, kind: "accepted" }); }
@@ -158,6 +176,8 @@ async function accept(faction, id) {
 }
 
 async function decline(faction, id, reason = "") {
+  const cur = _readInbox(_resolveActor(faction)).find(e => e?.id === id);
+  if (cur?.status === "settling") return { ok: false, error: "entry is being settled" };
   const updated = await _setStatus(faction, id, {
     status: "declined", settledTs: Date.now(), settledBy: game.user?.id || null,
     declineReason: String(reason || "")

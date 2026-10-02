@@ -383,7 +383,11 @@ async function _commitNow(factionId, deltas, context) {
   }
 
   try {
-    await faction.update({ [`flags.${MOD_ID}.opBank`]: result.after }, { diff: true, recursive: true });
+    const upd = { [`flags.${MOD_ID}.opBank`]: result.after };
+    // A bank's FIRST write is marks-native: stamp it migrated so the one-shot ×10 marks
+    // migration never inflates a pre-epoch actor that only now gains a bank.
+    if (!faction.getFlag(MOD_ID, "opBank")) upd[`flags.${MOD_ID}.${MIGRATION_FLAG}`] = true;
+    await faction.update(upd, { diff: true, recursive: true });
     log("OP commit applied", { faction: faction.name, deltas: result.finalCost, context: ctx });
     result.committed = true;
     // If we allowed overcap, treat ok as true.

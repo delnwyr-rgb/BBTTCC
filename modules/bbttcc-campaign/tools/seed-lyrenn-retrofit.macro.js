@@ -65,6 +65,10 @@
   });
   const ch = (label, next = "", extra = {}) => ({ label, next, description: "", checkStat: "", checkDC: 0, failNext: "", ...extra });
   const P2 = { flag: "storyPhase", gte: 2 };
+  // REVIEW 2026-10-01 (LOW): the script plays the planting BEFORE the label on the default path, so "Plant the seeds" re-ran the planting beat
+  // (narration, worldEffects, the quest accept row, alsoStarts) — it hides once planted, and "Keep the label." covers the already-planted case
+  const PLANTED = { beatMark: "lyrenn_red_thread_planting" };
+  const LABEL_CHOICES = () => [ch("Keep the label. Plant the seeds.", "lyrenn_red_thread_planting", { requires: [{ ...PLANTED, not: true }] }), ch("Keep the label.", "", { requires: [PLANTED] }), ch("Keep the label. Leave the seeds.", "", { requires: [{ ...PLANTED, not: true }] })];
 
   const NEW = [
     beat("lyrenn_choir_children", "Lyrenn — The Choir Grades You",
@@ -82,7 +86,7 @@
       { type: "narration", speaker: sp("Elsin Quade"), scene: SC.vault, priority: "high", requires: [P2],
         receipts: [{ label: "The Vault Label", effectKey: "rollPlus2", acquisition: "earned", source: { name: "the red-thread jar in Lyrenn's seed vault" },
           truth: "Lyrenn's own hand recorded where the standing stones went quiet, and when. Show it to Sable Nine and her six points get a seventh; show it to Etta Bloom and she goes still, because it is her kin's address; hold it beside the Forest of Early Tifaret's heading and the Lost Statues have a direction." }],
-        choices: [ch("Keep the label. Plant the seeds.", "lyrenn_red_thread_planting"), ch("Keep the label. Leave the seeds.", "")] }),
+        choices: LABEL_CHOICES() }),
     beat("lyrenn_whisper", "Lyrenn — What the Land Was Told",
       "The flat basin isn't flat any more. It has words. The children are not singing them; they are standing very still with their eyes shut while the water does, and the water says, in a voice made of a channel and a stone hand, what it was told that one night: <i>you were lied to. You were always lied to. Be what they made you.</i> It does not say who told it. The Choir only knows toward, not what.",
       { speaker: sp("Wren Ashby"), scene: SC.choir, priority: "high", timePoints: 1, requires: [P2, { beatMark: "lyrenn_red_thread_planting" }], choices: [
@@ -103,6 +107,12 @@
     if (!/not by hers/i.test(b.description)) b.description += "\n\nNobody has planted those. Not in years: ever. \"Not by my mother,\" Elsin says, from the top of the hatch, \"not by hers.\" She has never once asked to see what's down here and she is, visibly, itching to look.";
     if (!(b.choices || []).some(c => c.next === "lyrenn_vault_label")) b.choices = [...(b.choices || []).filter(c => c.label !== "Leave"), ch("Take the label off the red-thread jar.", "lyrenn_vault_label"), ...(b.choices || []).filter(c => c.label === "Leave")];
   }, "R7 line (not by my mother, not by hers) + the label + Elsin speaks");
+  edit("lyrenn_vault_label", b => {
+    const plant = (b.choices || []).find(c => c.next === "lyrenn_red_thread_planting");
+    if (plant && !(Array.isArray(plant.requires) ? plant.requires : (plant.requires ? [plant.requires] : [])).some(r => r && r.beatMark === PLANTED.beatMark)) { const r = Array.isArray(plant.requires) ? plant.requires : (plant.requires ? [plant.requires] : []); plant.requires = [...r, { ...PLANTED, not: true }]; }
+    const leave = (b.choices || []).find(c => c.label === "Keep the label. Leave the seeds."); if (leave && !leave.requires) leave.requires = [{ ...PLANTED, not: true }];
+    if (!(b.choices || []).some(c => c.label === "Keep the label.")) { const i = (b.choices || []).indexOf(plant); b.choices = [...(b.choices || [])]; b.choices.splice(i >= 0 ? i + 1 : b.choices.length, 0, ch("Keep the label.", "", { requires: [PLANTED] })); }
+  }, "Plant the seeds only while unplanted; \"Keep the label.\" once planted");
   edit("lyrenn_green_ring", b => {
     if (!String(b.description || "").trim()) b.description = "The Green Ring is a radial field around the old grain elevator, furrows running out from it like a clock with too many hands, and every furrow bends, very slightly, around an empty plinth at the centre where something stood. Nobody says what. The bend is in the soil, not the planting; whoever ploughs here ploughs around it without deciding to. Rowan is on one knee at the plinth with a palm flat on the ground, and does not look up.";
     if (!(b.choices || []).some(c => /plinth/i.test(c.label))) b.choices = [ch("Ask Rowan about the plinth.", "lyrenn_rowan_of_the_loam_convo", { description: "They go very still. \"The soil around them stopped talking.\"" }), ...(b.choices || [])];
@@ -136,7 +146,11 @@
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script lyrenn → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-lyrenn-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

@@ -69,13 +69,14 @@ class BBTTCCRadiationModule {
     };
 
     const mutItems = (mutations || []).map(m => {
-      const tierLabel = m.tier
-        ? m.tier.charAt(0).toUpperCase() + m.tier.slice(1)
-        : "Unknown";
+      const tierStr = m.tier != null ? String(m.tier) : "";
+      const tierLabel = foundry.utils.escapeHTML(tierStr
+        ? tierStr.charAt(0).toUpperCase() + tierStr.slice(1)
+        : "Unknown");
       const desc  = foundry.utils.escapeHTML(m.description || "");
       const name  = foundry.utils.escapeHTML(m.name || "Mutation");
       const src   = foundry.utils.escapeHTML(m.source || "radiation");
-      const rpStr = m.rpAtTrigger != null ? ` (RP ${m.rpAtTrigger})` : "";
+      const rpStr = m.rpAtTrigger != null ? ` (RP ${foundry.utils.escapeHTML(String(m.rpAtTrigger))})` : "";
       const effStr = Array.isArray(m.effects) && m.effects.length
         ? m.effects.map(e => `${Number(e.value) >= 0 ? "+" : "−"}${Math.abs(Number(e.value))} ${DEFLBL[e.key] ?? e.key}`).join(", ")
         : "";
@@ -90,7 +91,7 @@ class BBTTCCRadiationModule {
             <span style="font-size:0.9em;">${desc}</span>${effHtml}<br/>
             <span style="font-size:0.8em; opacity:0.8;">Source: ${src}${rpStr}</span>
           </div>
-          <button type="button" class="reset-button" data-cure-mutation="${m.id}" title="Cure this mutation — removes it and its effects permanently" style="align-self:flex-start;">Cure</button>
+          <button type="button" class="reset-button" data-cure-mutation="${foundry.utils.escapeHTML(String(m.id ?? ""))}" title="Cure this mutation — removes it and its effects permanently" style="align-self:flex-start;">Cure</button>
         </li>
       `;
     }).join("");

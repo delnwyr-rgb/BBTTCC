@@ -234,7 +234,8 @@
     return { effect: "influenceDmg3", oppInfluenceAfter: result };
   }
   async function _effectCoverTracks(actor, side, scenario) {
-    await scenario.raiseSuspicion(-2, `secret:coverTracks:${actor.name}`);
+    // raiseSuspicion clamps negative input to 0 (and resets the quiet streak) — lower it properly.
+    await scenario.lowerSuspicion(2, `secret:coverTracks:${actor.name}`);
     return { effect: "coverTracks", suspicion: "-2" };
   }
   async function _effectFavorPlus2(actor, side, scenario) {
@@ -301,12 +302,17 @@
       // on the GM client. A player-side play request forwards there instead of
       // dead-ending on "no active courtly scenario".
       if (!game.user?.isGM && game.users?.activeGM) {
-        game.socket?.emit?.(`module.${MOD_R}`, { t: "courtlyPlaySecret", actorId: actor.id, itemId, opts });
+        game.socket?.emit?.(`module.${MOD_R}`, { t: "courtlyPlaySecret", actorId: actor.id, itemId, opts, userId: game.user?.id });
         ui.notifications?.info?.(`"${item.name}" sent to the GM's court — it plays from there.`);
         return { ok: true, relayed: true };
       }
       ui.notifications?.error?.("Receipts: no active court to produce it in.");
       return { ok: false, error: "no-scenario" };
+    }
+    // The HUD lingers after the court concludes — a Receipt played now would be consumed for nothing.
+    if ((scenario.getState?.()?.outcome ?? "ongoing") !== "ongoing") {
+      ui.notifications?.warn?.("That court has concluded.");
+      return { ok: false, error: "concluded" };
     }
 
     const side = _holderSide(actor, scenario);
@@ -426,9 +432,17 @@
     _install();
     // GM-side receiver for player-relayed secret plays (active-GM only, so a
     // multi-GM table doesn't double-play).
-    game.socket?.on?.(`module.${MOD_R}`, (msg) => {
+    game.socket?.on?.(`module.${MOD_R}`, (msg, senderId) => {
       if (msg?.t !== "courtlyPlaySecret") return;
       if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) return;
+      // Only a user who OWNS the holder may play its Receipt (the server-supplied sender id
+      // when present; the emitter's stamped id otherwise).
+      const user = game.users?.get?.(String((typeof senderId === "string" && senderId) || msg.userId || ""));
+      const holder = game.actors?.get?.(String(msg.actorId || "").replace(/^Actor\./, ""));
+      if (!user || !holder || !holder.testUserPermission(user, "OWNER")) {
+        console.warn(TAG, "relayed playSecret refused — sender does not own the holder", { senderId, msgUserId: msg.userId, actorId: msg.actorId });
+        return;
+      }
       playSecret(msg.actorId, msg.itemId, msg.opts || {})
         .catch(e => console.warn(TAG, "relayed playSecret failed", e));
     });

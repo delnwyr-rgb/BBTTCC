@@ -54,13 +54,11 @@ function computeRitualDC(baseDc, darknessNow) {
 class BBTTCC_RitualConsole extends HBM(AppV2) {
   static DEFAULT_OPTIONS = {
     id: "bbttcc-ritual-console",
-    title: "Bad Eden — Final Ritual",
     classes: ["bbttcc", "bbttcc-ritual-console", "bbttcc-be", "bbttcc-theme-player"],
-    width: 960,
-    height: 720,
-    resizable: true,
-    minimizable: true,
-    positionOrtho: true
+    // ApplicationV2 reads title/resizable/minimizable under `window` and size under
+    // `position` — at the top level they were silently ignored.
+    window: { title: "Bad Eden — Final Ritual", resizable: true, minimizable: true },
+    position: { width: 960, height: 720 }
   };
 
   static PARTS = {
@@ -171,37 +169,46 @@ class BBTTCC_RitualConsole extends HBM(AppV2) {
     // Advance round
     root.on("click.bbttccRit","[data-action='advance']", async (ev) => {
       ev.preventDefault();
+      // In-flight guard: a double-click ran two rounds (two debits, two rolls).
+      if (this._advancing) return;
       if (!this.ritual || !this._ritualState || this._ritualState.outcome !== "ongoing") return;
-
-      const form = this.element.querySelector("[data-ritual-form]");
-      if (!form) return;
-
-      const val = (name) => Number(form.querySelector(`[name='${name}']`)?.value || 0);
-
-      const spendFaith     = val("spendFaith");
-      const spendCulture   = val("spendCulture");
-      const spendDiplomacy = val("spendDiplomacy");
-      const skillBonus     = val("skillBonus");
-      const note           = form.querySelector("[name='note']")?.value || "";
-
+      this._advancing = true;
+      const btn = ev.currentTarget;
+      try { btn.disabled = true; } catch {}
       try {
-        const tApi = ensureTikkunNS();
-        const newState = await this.ritual.step({
-          spendFaith,
-          spendCulture,
-          spendDiplomacy,
-          skillBonus,
-          note
-        });
-        this._ritualState = newState;
-      } catch (e) {
-        console.error(TAG_RITCON, "ritual.step failed", e);
-        ui.notifications?.error?.("Ritual step failed — see console.");
-      }
+        const form = this.element.querySelector("[data-ritual-form]");
+        if (!form) return;
 
-      // Clear numeric inputs for next round
-      form.querySelectorAll("input[type='number']").forEach(i => { i.value = ""; });
-      form.querySelector("[name='note']").value = "";
+        const val = (name) => Number(form.querySelector(`[name='${name}']`)?.value || 0);
+
+        const spendFaith     = val("spendFaith");
+        const spendCulture   = val("spendCulture");
+        const spendDiplomacy = val("spendDiplomacy");
+        const skillBonus     = val("skillBonus");
+        const note           = form.querySelector("[name='note']")?.value || "";
+
+        try {
+          const newState = await this.ritual.step({
+            spendFaith,
+            spendCulture,
+            spendDiplomacy,
+            skillBonus,
+            note
+          });
+          this._ritualState = newState;
+        } catch (e) {
+          console.error(TAG_RITCON, "ritual.step failed", e);
+          ui.notifications?.error?.("Ritual step failed — see console.");
+        }
+
+        // Clear numeric inputs for next round
+        form.querySelectorAll("input[type='number']").forEach(i => { i.value = ""; });
+        const noteEl = form.querySelector("[name='note']");
+        if (noteEl) noteEl.value = "";
+      } finally {
+        this._advancing = false;
+        try { btn.disabled = false; } catch {}
+      }
 
       this.render();
     });
@@ -246,8 +253,15 @@ function bindRitualConsoleAPI() {
         ui.notifications?.warn?.("Final Ritual: Faction not found.");
         return null;
       }
+      // One window id — reuse the open console for the same faction (keeps its
+      // in-progress ritual handle); a different faction closes it first.
+      const open = foundry?.applications?.instances?.get?.("bbttcc-ritual-console");
+      if (open) {
+        if (open.factionId === f.id) { open.render({ force: true }); try { open.bringToFront?.(); } catch {} return open; }
+        try { open.close(); } catch {}
+      }
       const inst = new RitualClass({ factionId: f.id, label });
-      inst.render(true, { focus: true });
+      inst.render({ force: true });
       return inst;
     };
   }

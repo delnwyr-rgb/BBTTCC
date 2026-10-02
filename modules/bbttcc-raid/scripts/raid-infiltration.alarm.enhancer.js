@@ -287,6 +287,16 @@
           _resolveOutcome();
           if (state.outcome !== "ongoing") {
             await _onOutcomeResolved(state.outcome);
+            // Same alarm broadcast + persistence the normal path does — player HUDs otherwise keep
+            // the stale alarm/'ongoing' until the GM resets the scenario.
+            try {
+              if (state.alarm !== _stepBeforeAlarm) {
+                const payload = { before: _stepBeforeAlarm, after: state.alarm, delta: state.alarm - _stepBeforeAlarm, attackerId: A.id, defenderId: D.id };
+                Hooks.callAll("bbttcc:infiltration:alarmChanged", { scenario: getState(), ...payload });
+                _emitInfilHookRelay("bbttcc:infiltration:alarmChanged", payload);
+              }
+            } catch (_e) {}
+            await persistState();
             return { ...state };
           }
         }

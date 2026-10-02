@@ -26,6 +26,14 @@ function _rcIsGMUser(){
     return role >= gmRole;
   } catch(_e){ return false; }
 }
+// Exactly one client answers player→GM relays: the active GM (any GM if Foundry can't say).
+function _rcIsActiveGM(){
+  try {
+    const ag = game.users?.activeGM;
+    if (ag) return !!ag.isSelf;
+  } catch(_e) {}
+  return _rcIsGMUser();
+}
 
 const TAG = "[bbttcc-raid v1.3.24 rigs-targeting]";
 
@@ -566,10 +574,18 @@ function _rcSyncManeuverSelectionsFromDOM(app, idx, round){
       // Player seats render no defender boxes — only the GM seat is authoritative for def picks.
       if (_rcIsGMUser()) round.mansSelectedDef = def;
     }
-    // Support is keyed independently per faction; only overwrite when this
-    // render actually exposed support checkboxes (guard against scenario wipe).
-    if (Object.keys(support).length) {
-      round.mansSelectedSupport = support;
+    // Support is keyed independently per faction; only overwrite the factions whose
+    // pickers this render actually exposed (player seats render only their own
+    // factions — replacing the whole map erased the other supporters' picks).
+    const renderedSupport = new Set();
+    host.querySelectorAll('.mans-wrap input[type="checkbox"][data-maneuver][data-side="support"]').forEach((cb)=>{
+      const fid = String(cb.getAttribute("data-faction-id") || "").trim();
+      if (fid) renderedSupport.add(fid);
+    });
+    if (renderedSupport.size) {
+      const cur = (round.mansSelectedSupport && typeof round.mansSelectedSupport === "object") ? round.mansSelectedSupport : {};
+      for (const fid of renderedSupport) cur[fid] = support[fid] || [];
+      round.mansSelectedSupport = cur;
     }
     if (att.length || def.length || Object.keys(support).length) {
       return true;
@@ -733,7 +749,8 @@ function _rcFactionStewards(faction) {
 function _rcEchoesManifestingBlock(faction) {
   try {
     if (!faction) return "";
-    const rosterApi = game.fourththing?.api?.echoAssets?.roster;
+    // The system publishes this at game.fourththing.echoAssets (not .api.echoAssets).
+    const rosterApi = game.fourththing?.echoAssets?.roster ?? game.fourththing?.api?.echoAssets?.roster;
     if (!rosterApi?.list) return "";
     const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
     const rows = [];
@@ -1664,7 +1681,14 @@ function _rcMergeRoundGates(dst, src) {
       const di = (dst.meta.intents ||= {});
       const sA = si.applied?.roundEffects, sP = si.pending?.worldEffects;
       if (Array.isArray(sA) && sA.length > (di.applied?.roundEffects?.length || 0)) { di.applied ||= {}; di.applied.roundEffects = foundry.utils.duplicate(sA); }
-      if (Array.isArray(sP) && sP.length > (di.pending?.worldEffects?.length || 0)) { di.pending ||= {}; di.pending.worldEffects = foundry.utils.duplicate(sP); }
+      // Once the GM applied (and cleared) the pending world effects, a stale copy must not re-pend them.
+      const sAt = si.pending?.worldEffectsAppliedAt;
+      if (sAt && !di.pending?.worldEffectsAppliedAt) {
+        di.pending ||= {};
+        di.pending.worldEffects = Array.isArray(sP) ? foundry.utils.duplicate(sP) : [];
+        di.pending.worldEffectsAppliedAt = sAt;
+        di.pending.worldEffectsAppliedCount = si.pending.worldEffectsAppliedCount;
+      } else if (Array.isArray(sP) && !di.pending?.worldEffectsAppliedAt && sP.length > (di.pending?.worldEffects?.length || 0)) { di.pending ||= {}; di.pending.worldEffects = foundry.utils.duplicate(sP); }
     }
   } catch (_e) {}
 }
@@ -1682,6 +1706,64 @@ function _rcMergeSessionRounds(incoming, base, { keepDef = false } = {}) {
     _rcMergeRoundGates(inc, old);
   }
   return incoming;
+}
+// Player seat: copy the staging buckets this seat authors from `prev` into `adopted`
+// (open rounds only, matched by roundId). Defender staging is GM-only and never carried.
+function _rcCarryLocalStaging(adopted, prev, attackerId) {
+  try {
+    const att = attackerId ? game.actors?.get?.(String(attackerId)) : null;
+    const ownsAtt = !!att?.isOwner;
+    for (const inc of adopted || []) {
+      if (!inc || inc.committed || inc.cancelled) continue;
+      const old = (prev || []).find(o => o && String(o.roundId || "") && String(o.roundId) === String(inc.roundId || ""));
+      if (!old?.localStaged) continue;
+      inc.localStaged ||= { att:{}, def:{}, support:{} };
+      if (ownsAtt) inc.localStaged.att = foundry.utils.duplicate(old.localStaged.att || {});
+      const fids = new Set([...Object.keys(old.localStaged.support || {}), ...Object.keys(inc.localStaged.support || {})]);
+      for (const fid of fids) {
+        if (!game.actors?.get?.(fid)?.isOwner) continue;
+        inc.localStaged.support ||= {};
+        if (old.localStaged.support?.[fid]) inc.localStaged.support[fid] = foundry.utils.duplicate(old.localStaged.support[fid]);
+        else delete inc.localStaged.support[fid];
+      }
+    }
+  } catch (_e) {}
+}
+// GM relay: fold a player-seat session payload onto the stored session. Committed /
+// cancelled rounds are never re-opened. A stale payload (built from an older rev than
+// the flag holds) only contributes the fields a player seat authors, per open round.
+function _rcMergeRelayedSession(payload, stored, { ownsAtt = true, ownsFid = () => true } = {}) {
+  if (!stored || !Array.isArray(stored.rounds) || !Array.isArray(payload?.rounds)) return payload;
+  const storedRev = Number(stored.rev || 0);
+  const baseRev = Number(payload.baseRev);
+  const stale = Number.isFinite(baseRev) && baseRev < storedRev;
+  const byId = (arr, rid) => arr.find(x => x && String(x.roundId || "") === rid);
+  if (!stale) {
+    payload.rounds = payload.rounds.map(inc => {
+      const old = byId(stored.rounds, String(inc?.roundId || ""));
+      return (old && (old.committed || old.cancelled)) ? foundry.utils.duplicate(old) : inc;
+    });
+    return payload;
+  }
+  const out = foundry.utils.duplicate(stored);
+  for (const r of out.rounds) {
+    if (!r || r.committed || r.cancelled) continue;
+    const inc = byId(payload.rounds, String(r.roundId || ""));
+    if (!inc) continue;
+    if (inc.localStaged) {
+      r.localStaged ||= { att:{}, def:{}, support:{} };
+      if (ownsAtt && inc.localStaged.att) r.localStaged.att = inc.localStaged.att;
+      for (const [fid, b] of Object.entries(inc.localStaged.support || {})) if (ownsFid(fid)) (r.localStaged.support ||= {})[fid] = b;
+    }
+    if (ownsAtt && Array.isArray(inc.mansSelected)) r.mansSelected = inc.mansSelected;
+    for (const [fid, keys] of Object.entries(inc.mansSelectedSupport || {})) if (ownsFid(fid)) (r.mansSelectedSupport ||= {})[fid] = keys;
+    if (inc.meta?.stewardChips) { r.meta ||= {}; r.meta.stewardChips = Object.assign({}, r.meta.stewardChips || {}, inc.meta.stewardChips); }
+    _rcMergeRoundGates(r, inc);
+  }
+  out.rev = Math.max(storedRev, Number(payload.rev || 0)) + 1;
+  out.ts = Date.now();
+  out.by = payload.by;
+  return out;
 }
 
 const _RC_FM_FIRE_STYLES = {
@@ -1829,8 +1911,10 @@ async function _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender)
     // For support, `attacker` carries the support faction actor — its effects
     // attribute to that supporter while offensive/target effects still land on
     // the defender/target (DEFENDER-tagged effects keep defenderId).
-    const attackerId = attacker?.id || null;
-    const defenderId = defender?.id || null;
+    // A side-relative body fired by the defender swaps ids (att(ctx) = the firer).
+    const _ids = _b2FiringIds(side, key, attacker?.id || null, defender?.id || null);
+    const attackerId = _ids.attackerId;
+    const defenderId = _ids.defenderId;
     // Fire Now happens before outcome is known; treat as success so anytime
     // maneuvers' outcome-gated previews emit a bundle. B2 will still apply
     // proper tier-aware effects to the remaining (unfired) maneuvers later.
@@ -1893,7 +1977,7 @@ async function _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender)
           await app.__infilScenario.applyEffects(scenarioEffects);
           appliedScenario = true;
         } else if (_isCourtlyKey(mode) && app?.__courtlyScenario?.applyEffects) {
-          await app.__courtlyScenario.applyEffects(scenarioEffects);
+          await app.__courtlyScenario.applyEffects(scenarioEffects, { side: String(side) === "def" ? "D" : "A" });
           appliedScenario = true;
         }
       }
@@ -2567,7 +2651,14 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       this.vm.includeDefender = (s.includeDefender !== undefined) ? !!s.includeDefender : this.vm.includeDefender;
 
       // Never let a sync re-open a once-per-round fire gate this seat already holds.
-      this.vm.rounds = Array.isArray(s.rounds) ? _rcMergeSessionRounds(foundry.utils.duplicate(s.rounds), this.vm.rounds || []) : (this.vm.rounds || []);
+      const prevRounds = this.vm.rounds || [];
+      this.vm.rounds = Array.isArray(s.rounds) ? _rcMergeSessionRounds(foundry.utils.duplicate(s.rounds), prevRounds) : prevRounds;
+      // A player's uncommitted local staging (held until "Commit Staging to GM") must
+      // survive another seat's save — carry the buckets this seat authors (lead attacker
+      // if owned, owned supporters) into the adopted rounds, matched by roundId.
+      if (!_rcIsGMUser() && this.__stagingDirty && this.vm.rounds !== prevRounds) {
+        _rcCarryLocalStaging(this.vm.rounds, prevRounds, this.vm.attackerId);
+      }
       return true;
     } finally {
       this.__sessionApplying = false;
@@ -2597,11 +2688,18 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
     const attackerId = String(this.vm.attackerId || "");
     if (!attackerId) return;
 
-    // Increment revision for every local-authoritative change
-    this.__sessionRev = Number(this.__sessionRev || 0) + 1;
+    // Increment revision for every local-authoritative change. Derive it from the stored
+    // flag too — per-seat counters let two seats both write rev N+1 and each ignore the
+    // other. baseRev = the rev this seat's state was built from (the GM relay uses it to
+    // spot a stale player payload).
+    const baseRev = Number(this.__sessionRev || 0);
+    let storedRev = 0;
+    try { storedRev = Number((await this._loadSessionFromActor(attackerId))?.rev || 0); } catch(_eR) {}
+    this.__sessionRev = Math.max(baseRev, Number.isFinite(storedRev) ? storedRev : 0) + 1;
 
     const payload = this._sessionPayload();
     payload.rev = Number(this.__sessionRev || 0);
+    payload.baseRev = baseRev;
 
     if (_rcIsGMUser()) {
       try {
@@ -3567,7 +3665,16 @@ _renderScenarioHUD(host, round){
                     source: "raid_console_worldfx_button"
                   };
 
-                  await wm.applyWorldEffects({ worldEffects: pend }, ctx);
+                  const res = await wm.applyWorldEffects({ worldEffects: pend }, ctx);
+
+                  // WME reads named sections (territoryOutcome / factionEffects / ...), not the
+                  // typed maneuver list (restoreHex / purifySpark / permanentCapDelta), so it
+                  // may apply nothing. Clearing anyway dropped the effects for good — keep them
+                  // pending for GM adjudication unless WME reports it actually changed something.
+                  if (!res || !res.applied) {
+                    ui.notifications?.warn?.(`World Mutation Engine applied none of these (${t2.join(", ") || "untyped"}) — no handler for these effect types. Left pending; adjudicate by hand.`);
+                    return;
+                  }
 
                   // Mark applied + clear pending
                   r2.meta ||= {};
@@ -3680,7 +3787,8 @@ _renderScenarioHUD(host, round){
         host.querySelectorAll('.mans-wrap input[type="checkbox"][data-side="def"]:checked')
           .forEach(cb => { const k = String(cb.dataset.maneuver||"").toLowerCase(); defBonusDC += Number(DEFENDER_DC_MAP[k]||0); });
 
-        const baseDC = Number(round.DC || 0);
+        // Contested: round.DC is the preview defender TOTAL — the base is round.baseDC.
+        const baseDC = round.contested ? Number(round.baseDC ?? round.DC ?? 0) : Number(round.DC || 0);
         const stagedBonus = stagedOpBonus(stagedD);
         const diffAdj = Number(round.diffOffset || 0);
         const facDef = Number(round.view?.facDef || 0);
@@ -3857,7 +3965,7 @@ _renderScenarioHUD(host, round){
     }
 
     // Top projected DC
-    let baseTop = null, projTop = null, bonusTop = 0, diffTop = 0, facDefTop = 0, nextBTop = 0, holdingsTop = 0, holdingsBreak = null;
+    let baseTop = null, projTop = null, bonusTop = 0, diffTop = 0, facDefTop = 0, nextBTop = 0, holdingsTop = 0, holdingsBreak = null, atkNextTop = 0;
     diffTop = Number(diffOffsetTop || 0);
 
     if (defender) {
@@ -3907,7 +4015,7 @@ _renderScenarioHUD(host, round){
         facDefTop += rigDefBonus;
       }
 
-      const atkNextTop = _rcAttackerNextBonus(attacker?.flags?.[FCT_ID]);   // attacker-side shift (2026-09-12)
+      atkNextTop = Number(_rcAttackerNextBonus(attacker?.flags?.[FCT_ID])) || 0;   // attacker-side shift (2026-09-12)
       projTop = Math.max(0, baseTop + bonusTop + diffTop + facDefTop + nextBTop + atkNextTop);
     }
 
@@ -4032,7 +4140,10 @@ _renderScenarioHUD(host, round){
 // Contested preview projection:
 // - attackerProjected = (Value+Roster) + ceil((stagedA + stagedSupport)/2)
 // - defenderProjected = (Value+Roster) + baseDefense + facDefTotal + nextB + diff + ceil(stagedD/2)
-const baseDefense = Number(r.DC || 10);
+// Contested rounds: r.DC is the Add-Round PREVIEW defender total (preview dice + base +
+// bonuses) — the base is r.baseDC, exactly what the commit feeds computeContested.
+// Single-roll rounds: r.DC (base + difficulty) is what the commit uses.
+const baseDefense = r.contested ? Number(r.baseDC ?? r.DC ?? 10) : Number(r.DC || 10);
 
 const coalitionRound = _rcCoalitionBonus(att, r.supportFactionIds || [], cat);
 const attBaseRoll = Number(coalitionRound.total || 0);
@@ -4597,7 +4708,18 @@ r.view = {
 
       if (act === "manage") { const r=this.vm.rounds[idx]; r.open=!r.open; this.render(); return; }
       if (act === "post")   { return this._postRoundCard(idx); }
-      if (act === "del")    { this.vm.rounds.splice(idx,1); this.render(); return; }
+      if (act === "del")    { this.vm.rounds.splice(idx,1); this._queueSaveSession(); this.render(); return; }
+      if (act === "copy")   {
+        // Copy a plain-text summary of the round (the template's Copy button had no handler).
+        const r = this.vm.rounds[idx]; if (!r) return;
+        const txt = `${r.activityLabel || r.activityKey || "Raid"} — ${r.attackerName || "?"} vs ${r.targetName || "?"}: ${r.total ?? "—"} vs ${r.defTotal ?? r.dcFinal ?? r.DC ?? "—"} → ${r.outcome || (r.committed ? "Resolved" : "Draft")}`;
+        try {
+          if (game.clipboard?.copyPlainText) await game.clipboard.copyPlainText(txt);
+          else await navigator.clipboard.writeText(txt);
+          ui.notifications?.info?.("Round summary copied.");
+        } catch (_eC) { ui.notifications?.warn?.("Clipboard unavailable."); }
+        return;
+      }
       if (act === "commit") { return this._commitRound(idx); }
 
     });
@@ -4618,8 +4740,8 @@ r.view = {
 
       const act = btn.dataset.manageAct;
       if (act === "close")  { r.open = false; return this.render(); }
-      if (act === "cancel") { r.cancelled = true; r.open = false; r.mansSelected=[]; r.mansSelectedDef=[]; r.mansSelectedSupport={}; return this.render(); }
-      if (act === "diff")   { const d=Number(btn.dataset.delta||0); r.diffOffset = clamp(Number(r.diffOffset||0)+d,-50,50); return this.render(); }
+      if (act === "cancel") { r.cancelled = true; r.open = false; r.mansSelected=[]; r.mansSelectedDef=[]; r.mansSelectedSupport={}; this._queueSaveSession(); return this.render(); }
+      if (act === "diff")   { const d=Number(btn.dataset.delta||0); r.diffOffset = clamp(Number(r.diffOffset||0)+d,-50,50); this._queueSaveSession(); return this.render(); }
       if (act === "stage")  { return this._stageOP(idx, btn.dataset); }
       if (act === "commit") { return this._commitRound(idx); }
 
@@ -4790,10 +4912,11 @@ async _postRoundCard(idx){
 
   const contested = !!r.contested || (r.defTotal != null) || (r.defRoll != null) || (r.dcLabel === "DEF");
   const tgtLabel = (r.targetType === "rig") ? "Target Rig" : (r.targetType === "creature" ? "Target Creature" : "Target Hex");
-  const mansA = (r.mansSelected?.length) ? `<br/><i>Maneuvers (Att):</i> ${r.mansSelected.join(", ")}` : "";
-  const mansD = (r.mansSelectedDef?.length) ? `<br/><i>Maneuvers (Def):</i> ${r.mansSelectedDef.join(", ")}` : "";
+  const _escJ = (arr) => arr.map(n => foundry.utils.escapeHTML(String(n))).join(", ");
+  const mansA = (r.mansSelected?.length) ? `<br/><i>Maneuvers (Att):</i> ${_escJ(r.mansSelected)}` : "";
+  const mansD = (r.mansSelectedDef?.length) ? `<br/><i>Maneuvers (Def):</i> ${_escJ(r.mansSelectedDef)}` : "";
   const supportNames = Array.isArray(r.supportFactionNames) ? r.supportFactionNames.filter(Boolean) : [];
-  const coalitionLine = supportNames.length ? `<br/><i>Support:</i> ${supportNames.join(", ")}` : "";
+  const coalitionLine = supportNames.length ? `<br/><i>Support:</i> ${_escJ(supportNames)}` : "";
 
   const aTotal = Number(r.total ?? 0) || 0;
   const dTotal = Number((contested ? (r.defTotal ?? r.dcFinal) : (r.dcFinal ?? r.DC)) ?? 0) || 0;
@@ -4914,6 +5037,9 @@ async _postRoundCard(idx){
     }
 
     const r = this.vm.rounds[idx]; if (!r) return;
+    // FX anchor for the raid_outcome / boss_phase_change / rig_damage plays below (was never declared).
+    let __fxPanel = null;
+    try { __fxPanel = _bbttccFxPanelForRound(this, idx); } catch (_eFxP) {}
 
     const attacker = await getActorByIdOrUuid(r.attackerId);
     if (!attacker) return ui.notifications?.warn?.("Attacker not found.");
@@ -4927,7 +5053,8 @@ async _postRoundCard(idx){
     let __bankDefBefore = null;
 
 // B3: consume one-shot roll modifiers that were granted by prior roundEffects (nextRoll).
-const __b3Pending = await _b3ConsumePendingRollMods(attacker);
+// Peek only — cleared below once the standard path is past its early returns.
+const __b3Pending = await _b3ConsumePendingRollMods(attacker, { peek: true });
 const __b3AttExtra = Number(__b3Pending?.nextRoll?.att?.bonus || 0) || 0;
 const __b3DefExtra = Number(__b3Pending?.nextRoll?.def?.bonus || 0) || 0;
 const __b3AttMode  = String(__b3Pending?.nextRoll?.att?.mode || "normal");
@@ -4971,6 +5098,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         }
       } catch {}
       if (!defender) return ui.notifications?.warn?.("Scenario modes require a defender faction (hex/facility/rig target).");
+      r.defenderId = defender.id || r.defenderId || "";
 
       const raidApi = game.bbttcc?.api?.raid || {};
 
@@ -5150,6 +5278,8 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         await appendWarLog(attacker, { ts, date:dateStr, type:"scenario", scenario:"courtly", side:"att", opponent:defender.name, summary });
         if (this.vm.includeDefender) await appendWarLog(defender, { ts, date:dateStr, type:"scenario", scenario:"courtly", side:"def", opponent:attacker.name, summary });
 
+        // Persist the committed round like the infiltration/standard paths do.
+        try { await this._saveSessionNow(); } catch(_eSS) {}
         return this.render();
       }
 
@@ -5162,7 +5292,10 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           return;
         }
 
-        if (!this.__infilScenario || this.__infilScenarioAtt !== attacker.id || this.__infilScenarioDef !== defender.id) {
+        // Re-initialise when the held scenario has RESOLVED too (mirrors the courtly guard) —
+        // otherwise a rematch reused the finished board and committed a round that never rolled.
+        const __prevInfilSt = this.__infilScenario?.getState?.() || null;
+        if (!this.__infilScenario || !__prevInfilSt || __prevInfilSt.outcome !== "ongoing" || this.__infilScenarioAtt !== attacker.id || this.__infilScenarioDef !== defender.id) {
           // S3a.4.3 — DialogV2 with inline-styled rows (legacy Dialog form-groups
           // didn't render in V13). Adds the progressMax field for the S3a
           // objective meter.
@@ -5324,6 +5457,8 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         let st = null;
         try { st = await this.__infilScenario.step({ spendIntrigue: stepArgs.spendIntrigue, spendNonlethal: stepArgs.spendNonlethal, note: stepArgs.note, stewardBonus, exposedCount, atkOpBonus, defOpBonus }); }
         catch (e) { warn("infiltration step failed", e); ui.notifications?.error?.("Infiltration step failed — see console."); return; }
+        // Backstop: a resolved board rolls nothing — never commit (and charge) a phantom round.
+        if (st?.note === "scenario already resolved") { ui.notifications?.warn?.("Infiltration already resolved — nothing rolled; round left open."); return; }
 
         const last = (st?.history && st.history.length) ? st.history[st.history.length-1] : null;
         r.roll = { result: String((last?.atkTotal ?? 0)) + " vs " + String((last?.defTotal ?? 0)) };
@@ -5550,6 +5685,9 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
 
     // Snapshot defender bank once the defender is resolved.
     if (defender) __bankDefBefore = getOPBank(defender);
+    // The casualty card's "Apply to roster" reads r.defenderId (was only set for rigs).
+    r.defenderId = defender?.id || r.defenderId || "";
+
 
     const baseBonus = Number(__coalition.total || 0);
 
@@ -5662,6 +5800,36 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
         addInto(dst, op);
       }
     }
+    // Affordability gate: _applyOPDeltaDual floors each bucket at 0 rather than refusing,
+    // so a faction short of marks got its maneuvers' effects for free. Refuse the commit
+    // (nothing rolled or charged yet) and name the shortfall. Amounts are in marks.
+    try {
+      const short = [];
+      const check = (actor, need, label, alreadyFrom) => {
+        if (!actor) return;
+        const cur = getOPBank(actor);
+        for (const [k, v] of Object.entries(need || {})) {
+          let n = Number(v || 0);
+          if (!(n > 0)) continue;
+          if (alreadyFrom) n = Math.max(0, n - Math.max(0, Number(alreadyFrom[k] || 0) - Number(cur[k] || 0)));
+          if (n > Number(cur[k] || 0)) short.push(`${label}: ${k} ${_rcOP(n)} needed, ${_rcOP(cur[k] || 0)} in bank`);
+        }
+      };
+      check(attacker, manOpA, attacker.name, __bankAttBefore);
+      if (defender) check(defender, manOpD, defender.name, __bankDefBefore);
+      for (const [sfid, spend] of Object.entries(manOpSupport)) {
+        const sf = await getActorByIdOrUuid(sfid);
+        check(sf, spend, sf?.name || "Support", null);
+      }
+      if (short.length) {
+        ui.notifications?.warn?.(`Cannot commit — not enough marks for the selected maneuvers/staging. ${short.join(" • ")}. Deselect maneuvers or reduce staging.`);
+        return;
+      }
+    } catch (eAff) { warn("affordability check failed (non-fatal)", eAff); }
+
+    // Past the early returns — this round WILL roll: consume the one-shot nextRoll mods now.
+    try { if (attacker.getFlag(RAID_ID, "raidRollMods")) await attacker.unsetFlag(RAID_ID, "raidRollMods"); } catch (_eRM) {}
+
     // Apply OP spend (maneuvers + staged).
     // We compare current banks to the snapshot taken at commit start to avoid double-spend
     // in case another resolver already debited OP.
@@ -5715,6 +5883,9 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
       warn("apply OP spend failed", e);
     }
     // Final roll / contested roll parity (A2)
+// Backstop: r.outcome may still hold the Add-Round PREVIEW string; every branch below
+// sets the real one (the "if (!r.outcome)" fallback must not see the preview).
+r.outcome = null;
 let totalFinal, dcFinal, rollUsed;
 
 // If a resolver produced final numbers, honor it (back-compat).
@@ -5754,6 +5925,11 @@ if (res && res.totalFinal!=null && res.dcFinal!=null) {
       totalFinal = cont.attTotal;
       dcFinal = cont.defTotal;
       rollUsed = cont.attRoll;
+      // The real contested result (the round kept the Add-Round preview outcome before).
+      r.defTotal = Number(cont.defTotal || 0);
+      r.margin = (cont.margin != null && Number.isFinite(Number(cont.margin))) ? Number(cont.margin) : (Number(cont.attTotal || 0) - Number(cont.defTotal || 0));
+      { const m = r.margin, mTxt = `${m>=0?"+":""}${m}`;
+        r.outcome = (m >= 5) ? `Great Success (${mTxt})` : (m >= 0) ? `Success (${mTxt})` : `Fail (${mTxt})`; }
     } else {
       const sBonus = stagedOpBonus(Number(stagedA || 0) + Number(stagedSupport || 0));
 	const dBonus = stagedOpBonus(stagedD);
@@ -6034,11 +6210,13 @@ try {
   }
 } catch(e) { /* non-fatal */ }
 
-    r.defTotal = cont.defTotal;
-    r.margin = cont.margin;
+    // Use the FINAL totals — Suppressive Fire / Chrono-Loop rerolls (and Sephirotic) move
+    // totalFinal/dcFinal after `cont` was computed; reading cont.* here undid them.
+    r.defTotal = Number(dcFinal || 0);
+    r.margin = Number(totalFinal || 0) - Number(dcFinal || 0);
 
     // Outcome string includes margin for UI readability.
-    const m = cont.margin;
+    const m = r.margin;
     const mTxt = `${m>=0?"+":""}${m}`;
     r.outcome = (m >= 5) ? `Great Success (${mTxt})` : (m >= 0) ? `Success (${mTxt})` : `Fail (${mTxt})`;
   }
@@ -6139,7 +6317,10 @@ try {
 // Legacy fields: keep a Roll object for non-contested raids; contested raids store a friendly string in r.roll.result.
     if (!r.contested) {
       r.roll = rollUsed;
-      r.outcome = (totalFinal >= dcFinal + 5) ? "Great Success" : (totalFinal >= dcFinal ? "Success" : "Fail");
+      // Flank Attack / Battlefield Harmony: tier on the margin-adjusted effective total
+      // (the B3.2 block above set it; recomputing from the raw total undid the maneuver).
+      const __effTotal = Number(totalFinal || 0) + (Number(__b3ThisRound?.attackerMarginDelta || 0) || 0);
+      r.outcome = (__effTotal >= dcFinal + 5) ? "Great Success" : (__effTotal >= dcFinal ? "Success" : "Fail");
     } else {
       // Ensure the roll summary exists even if some upstream path didn't set it.
       if (!r.roll || !r.roll.result) {
@@ -6311,7 +6492,7 @@ try {
           try {
             _bbttccFxPlay("boss_phase_change", {
               root: __fxPanel,
-              outcome: `${round?.targetName || bossDef?.label || bossKey}: ${String(bossMeta.damageState || "changed").toUpperCase()}`
+              outcome: `${r?.targetName || bossDef?.label || bossKey}: ${String(bossMeta.damageState || "changed").toUpperCase()}`
             }, { phase: "resolve" });
           } catch(_eFxBoss) {}
         }
@@ -6456,6 +6637,9 @@ try {
             }).catch(()=>{});
           } catch {}
           try {
+            // fromS/toS above are scoped to the whisper block — recompute here.
+            const fromS = (oldStep===0) ? "intact" : String((prof.hitTrack||[])[oldStep-1] || "damaged");
+            const toS   = (newStep===0) ? "intact" : String((prof.hitTrack||[])[newStep-1] || "damaged");
             _bbttccFxPlay("rig_damage", {
               root: __fxPanel,
               outcome: `${defender?.name || "Defender"} — ${prof?.rigName || "Rig"}: ${fromS} → ${toS}`
@@ -6481,8 +6665,9 @@ try {
     // the chat-card buttons (or macro). Combat-target rounds only — skip
     // for hex with no integrity target.
     try {
-      const rawMargin = Number(r.margin);
-      const m = Number.isFinite(rawMargin) ? rawMargin : (Number(r.total||0) - Number(r.dcFinal||0));
+      // r.margin is null on single-roll rounds — Number(null) is 0, which read every
+      // such round as a 0-margin attacker win. Fall back to total − DC.
+      const m = (r.margin != null && Number.isFinite(Number(r.margin))) ? Number(r.margin) : (Number(r.total||0) - Number(r.dcFinal||0));
       const absM = Math.abs(m);
       const loserCas  = Math.max(1, Math.floor(absM / 3));
       const winnerCas = Math.max(0, Math.floor(absM / 5));
@@ -6735,6 +6920,7 @@ async function _findActiveRaidForFaction(factionId) {
       if (!s || typeof s !== "object") continue;
       const attackerId = String(s.attackerId || a.id || "");
       if (!attackerId) continue;
+      if (s.practice === true || s.tourStaged) continue;   // practice / tour-staged sessions are never a live raid
       const supports = Array.isArray(s.supportFactionIds) ? s.supportFactionIds.map(String) : [];
       const isAttacker = attackerId === fid;
       const isSupport  = supports.some(id => String(id) === fid);
@@ -6783,6 +6969,7 @@ async function _findActiveRaidForUser() {
       if (!s || typeof s !== "object") continue;
       const attackerId = String(s.attackerId || a.id || "");
       if (!attackerId) continue;
+      if (s.practice === true || s.tourStaged) continue;   // practice / tour-staged sessions are never a live raid
       const supports = Array.isArray(s.supportFactionIds) ? s.supportFactionIds.map(String) : [];
       const isAttacker = myFactionIds.has(attackerId);
       const isSupport  = supports.some(id => myFactionIds.has(String(id)));
@@ -6894,16 +7081,33 @@ function bindAPI() {
         try {
           if (!msg) return;
           if (msg.t === "raidSession") {
-            if (!_rcIsGMUser()) return; // only GM persists session writes
+            if (!_rcIsActiveGM()) return; // exactly one GM persists session writes
             const attackerId = String(msg.attackerId || "");
-            const payload = msg.payload;
-            if (!attackerId || !payload) return;
+            let payload = msg.payload;
+            if (!attackerId || !payload || typeof payload !== "object") return;
             const a = await getActorByIdOrUuid(attackerId);
             if (!a) return;
+            // Trusted-table check: the sending seat (payload.by — socket messages carry no
+            // authenticated sender) must own the lead attacker or a supporter the STORED
+            // session already lists. Stops a stray seat overwriting another faction's raid.
+            let __relayOwns = null;
+            try {
+              const stored0 = a.getFlag(RAID_ID, "raidSession");
+              const sender = game.users?.get?.(String(payload.by || "")) || null;
+              const sup = Array.isArray(stored0?.supportFactionIds) ? stored0.supportFactionIds.map(String) : [];
+              const owns = (act) => !!act && !!sender && act.testUserPermission(sender, "OWNER");
+              __relayOwns = { ownsAtt: owns(a), ownsFid: (fid) => owns(game.actors?.get?.(String(fid))) };
+              if (!sender || !(owns(a) || sup.some(id => owns(game.actors?.get?.(id))))) {
+                console.warn(TAG, `raidSession relay DENIED — ${sender?.name || "unknown seat"} is not in ${a.name}'s raid`);
+                return;
+              }
+            } catch (_eAuth) { return; }
             // Relayed payloads come from player seats: the stored defender picks stand, and
             // fire gates only ever accumulate (stored ∪ incoming).
             try {
               const stored = a.getFlag(RAID_ID, "raidSession");
+              // Committed rounds never re-open; a stale payload only adds what players author.
+              payload = _rcMergeRelayedSession(payload, stored, __relayOwns || undefined);
               if (Array.isArray(payload.rounds) && Array.isArray(stored?.rounds)) _rcMergeSessionRounds(payload.rounds, stored.rounds, { keepDef: true });
               // A player's Fire Now must reach the GM's open console even if rev doesn't advance here.
               for (const app of Array.from(globalThis.__bbttccRaidOpenConsoles || [])) {
@@ -7028,7 +7232,9 @@ function bindAPI() {
             // authority (joinSiege / musterToScene / recallMuster / fireManeuver are all
             // GM-only at the write layer). Outcome echoes back via siegeRequestResult so
             // the requesting player sees the success/refusal, not just the GM.
-            if (!_rcIsGMUser()) return;
+            // Exactly one GM executes it (two GM seats charged the OP twice). msg.userId is
+            // self-reported (socket messages carry no authenticated sender) — trusted-table only.
+            if (!_rcIsActiveGM()) return;
             try {
               const action    = String(msg.action || "");
               const hexUuid   = String(msg.hexUuid || "");
@@ -8232,12 +8438,18 @@ async function _b2ComputeAndApplyManeuverIntents({ app, round, attacker, defende
 const __tier = (__tier0 !== "unknown") ? __tier0
   : ((round && round.meta && round.meta.scenarioOutcomeTier) ? String(round.meta.scenarioOutcomeTier).toLowerCase() : __tier0);
 
-  function ctxForSide(side){
+  function ctxForSide(side, maneuverKey){
+    const ids = _b2FiringIds(side, maneuverKey, attackerId, defenderId);
     return Object.assign({}, ctxBase, {
       outcomeTier: (side === "def")
         ? (__tier === "fail" ? "success" : "fail")
         : __tier
-    });
+    }, ids.swapped ? {
+      // side-relative body fired by the defender: att(ctx) = the defender
+      attackerFactionId: ids.attackerId,
+      defenderFactionId: ids.defenderId,
+      meta: Object.assign({}, ctxBase.meta, { attackerId: ids.attackerId, defenderId: ids.defenderId, firingSide: "def" })
+    } : {});
   }
 
 
@@ -8266,7 +8478,7 @@ const __tier = (__tier0 !== "unknown") ? __tier0
 
   async function addOne(maneuverKey, side){
     try {
-      const res = await simFn(Object.assign({}, ctxForSide(side), { maneuverKey })) || {};
+      const res = await simFn(Object.assign({}, ctxForSide(side, maneuverKey), { maneuverKey })) || {};
       let bundle = res.previewWorldEffects || null;
 
       // Batch C: Defender’s Reversal reflects the *attempt* even when the attacker failed.
@@ -8275,7 +8487,7 @@ const __tier = (__tier0 !== "unknown") ? __tier0
       if (!bundle) {
         try {
           if (side === "att" && String(__tier||"") === "fail" && __hasDefReversal) {
-            const res2 = await simFn(Object.assign({}, Object.assign({}, ctxForSide(side), { outcomeTier: "success" }), { maneuverKey })) || {};
+            const res2 = await simFn(Object.assign({}, Object.assign({}, ctxForSide(side, maneuverKey), { outcomeTier: "success" }), { maneuverKey })) || {};
             bundle = res2.previewWorldEffects || null;
           }
         } catch(_eReSim) {}
@@ -8283,7 +8495,7 @@ const __tier = (__tier0 !== "unknown") ? __tier0
 
       if (!bundle) return;
 
-      const fx = _b2FixFactionIds(bundle.factionEffects || [], { attackerId, defenderId });
+      const fx = _b2FixFactionIds(bundle.factionEffects || [], _b2FiringIds(side, maneuverKey, attackerId, defenderId));
       merged.factionEffects.push(...fx);
 
       merged.scenarioEffects.push(...(bundle.scenarioEffects || []));
@@ -8297,7 +8509,7 @@ const __tier = (__tier0 !== "unknown") ? __tier0
         maneuverKey: maneuverKey,
         meta: bundle.meta || null,
         bundle: {
-          factionEffects: foundry.utils.duplicate(bundle.factionEffects || []),
+          factionEffects: foundry.utils.duplicate(fx),   // resolved ids — the cancel/nullify/reflect rebuilds read the bundle back
           scenarioEffects: foundry.utils.duplicate(bundle.scenarioEffects || []),
           roundEffects: foundry.utils.duplicate(bundle.roundEffects || []),
           worldEffects: foundry.utils.duplicate(bundle.worldEffects || [])
@@ -8341,7 +8553,7 @@ const __tier = (__tier0 !== "unknown") ? __tier0
         maneuverKey: maneuverKey,
         meta: bundle.meta || null,
         bundle: {
-          factionEffects: foundry.utils.duplicate(bundle.factionEffects || []),
+          factionEffects: foundry.utils.duplicate(fx),   // resolved ids — the cancel/nullify/reflect rebuilds read the bundle back
           scenarioEffects: foundry.utils.duplicate(bundle.scenarioEffects || []),
           roundEffects: foundry.utils.duplicate(bundle.roundEffects || []),
           worldEffects: foundry.utils.duplicate(bundle.worldEffects || [])
@@ -8524,8 +8736,14 @@ const __tier = (__tier0 !== "unknown") ? __tier0
         appliedScenario = true;
       }
       // Courtly Intrigue (if you later expose applyEffects)
+      // Courtly resolves "self"/"opp" against the firing side: defender-fired rows go in as D.
       if (_isCourtlyKey(mode) && app && app.__courtlyScenario && typeof app.__courtlyScenario.applyEffects === "function") {
-        await app.__courtlyScenario.applyEffects(merged.scenarioEffects);
+        const rows = merged.byManeuver || [];
+        const defFx = _b2DedupByJSON(rows.filter(r0 => r0?.side === "def").flatMap(r0 => r0?.bundle?.scenarioEffects || []));
+        const defKeys = new Set(defFx.map(e => JSON.stringify(e)));
+        const attFx = merged.scenarioEffects.filter(e => !defKeys.has(JSON.stringify(e)));
+        if (attFx.length) await app.__courtlyScenario.applyEffects(attFx, { side: "A" });
+        if (defFx.length) await app.__courtlyScenario.applyEffects(defFx, { side: "D" });
         appliedScenario = true;
       }
       // Otherwise: no engine; effects remain recorded on round meta for future implementation.
@@ -8601,13 +8819,45 @@ function _b3PickSideFromScope(scope, fallbackSide){
   if (s.includes("defender") || s.includes("enemy") || s.includes("opponent")) return "def";
   return fallbackSide || "att";
 }
+// Bundles are authored from the attacker's seat ("attacker"/"ally" = the firer,
+// "enemy"/"opponent" = the other side), but most are defender-selectable. When
+// the DEFENDER fires one, mirror: attacker/ally/self → def, enemy/opponent → att.
+// A literal "defender" scope (Containment Protocol, Make Do and Hold) stays on
+// the defender — those were written for the defending side.
+function _b3PickSideForFiring(scope, firingSide){
+  if (firingSide !== "def") return _b3PickSideFromScope(scope, firingSide);
+  const s = String(scope||"").toLowerCase();
+  if (s.includes("enemy") || s.includes("opponent")) return "att";
+  return "def";
+}
+// Maneuvers whose throughput bodies use att(ctx) to mean "the firing faction"
+// (maneuvers-audit-wiring.enhancer.js WIRED + the 18 opt_* L1 bodies). For a
+// defender-fired one the commit / Fire Now ctx swaps attacker↔defender ids so
+// self-effects land on the defender and target effects on the attacker.
+// Defender-native bodies (Shore the Gate, Sortie en Masse …) address
+// ctx.defenderFactionId directly and are NOT in this set.
+const _B2_SIDE_RELATIVE_KEYS = new Set([
+  "ghost_slip_infiltration","sympathetic_stabilization","gradient_surge","supply_surge","command_overdrive",
+  "echo_strike_protocol","overclock_the_golems","radiant_retaliation","temporal_armistice","ego_dragon_echo",
+  "diplomatic_channel","prayer_in_the_smoke","signal_hijack",
+  ...["shock_command","liturgical_rally","bureaucratic_override","prepared_insight","inherited_deference",
+      "coordinated_advance","hardened_advance","containment_protocol","silent_entry","psychological_pressure",
+      "formal_parley","make_do_and_hold","sight_of_the_tree","rapid_transmutation","turn_the_card",
+      "pierce_the_veil","infernal_bargain","veiled_access"].map(k => `opt_${k}`)
+]);
+function _b2FiringIds(side, key, attackerId, defenderId){
+  const swap = String(side) === "def" && _B2_SIDE_RELATIVE_KEYS.has(String(key||"").toLowerCase().trim());
+  return swap ? { attackerId: defenderId, defenderId: attackerId, swapped: true } : { attackerId, defenderId, swapped: false };
+}
 
-async function _b3ConsumePendingRollMods(attackerActor){
+async function _b3ConsumePendingRollMods(attackerActor, { peek = false } = {}){
   try {
     if (!attackerActor || typeof attackerActor.getFlag !== "function") return _b3EmptyMods();
     const cur = attackerActor.getFlag(RAID_ID, "raidRollMods") || null;
-    // Clear no matter what (one-shot).
-    await attackerActor.unsetFlag(RAID_ID, "raidRollMods").catch(()=>{});
+    // Clear no matter what (one-shot) — unless peeking: _commitRound reads first and clears
+    // only once a standard round is past its early returns (an aborted/cancelled commit or
+    // a scenario round must not eat the earned bonus).
+    if (!peek) await attackerActor.unsetFlag(RAID_ID, "raidRollMods").catch(()=>{});
     if (!cur || typeof cur !== "object") return _b3EmptyMods();
     // Normalize shape
     const out = _b3EmptyMods();
@@ -8723,7 +8973,7 @@ async function _b3GenericPreRollMods(round, mansAtt, mansDef, attacker, defender
           const when = String(e?.when || e?.window || "thisRound").toLowerCase();
           if (when === "nextroll") continue;                       // stored post-commit by _b3ApplyEffectToMods
           if (t !== "rollBonus" && t !== "advantage" && t !== "disadvantage") continue;
-          const tgt = _b3PickSideFromScope(e.scope, side);
+          const tgt = _b3PickSideForFiring(e.scope, side);   // defender-fired → mirrored (buff self, debuff the attacker)
           if (t === "rollBonus") { const amt = Number(e.amount || 0) || 0; if (!amt) continue; if (tgt === "def") out.defBonus += amt; else out.attBonus += amt; out.notes.push(`${key}: ${tgt} roll ${amt > 0 ? "+" : ""}${amt}`); }
           else if (t === "advantage") { if (tgt === "def") out.defMode = "adv"; else out.attMode = "adv"; out.notes.push(`${key}: ${tgt} advantage`); }
           else { if (tgt === "def") out.defMode = "dis"; else out.attMode = "dis"; out.notes.push(`${key}: ${tgt} disadvantage`); }
@@ -9316,8 +9566,10 @@ Hooks.once("ready", () => {
       const defenderId = String(btn.dataset.defenderId || "");
       if (attCount <= 0 && defCount <= 0) { ui.notifications?.info("No casualties on this round to apply."); return; }
 
-      let go = false, per = 3, npcOnly = true;
-      await new foundry.applications.api.DialogV2({
+      // DialogV2.wait — .render() resolves when the dialog is DRAWN, so the old code
+      // checked `go` before the GM could click Apply and never wounded anyone.
+      const picked = await foundry.applications.api.DialogV2.wait({
+        rejectClose: false,
         window: { title: "Apply Casualties to Roster" },
         position: { width: 420 },
         content: `<form style="display:flex;flex-direction:column;gap:.5rem;">
@@ -9328,16 +9580,18 @@ Hooks.once("ready", () => {
         </form>`,
         buttons: [
           { action: "apply", label: "Apply", default: true, callback: (event, button, dialog) => {
-            const root = dialog.element ?? dialog;
-            per = Math.max(1, Number(root.querySelector("[name='per']")?.value) || 3);
-            npcOnly = !!root.querySelector("[name='npcOnly']")?.checked;
-            go = true;
+            const root = button?.form ?? dialog?.element ?? dialog;
+            return {
+              per: Math.max(1, Number(root?.querySelector?.("[name='per']")?.value) || 3),
+              npcOnly: !!root?.querySelector?.("[name='npcOnly']")?.checked
+            };
           }},
           { action: "cancel", label: "Cancel" }
         ]
-      }).render({ force: true });
+      });
 
-      if (!go) return;
+      if (!picked || typeof picked !== "object") return;
+      const per = picked.per, npcOnly = picked.npcOnly;
       await _rcApplyCasualtiesToRoster({ attackerId, defenderId, attCount, defCount, perCasualty: per, npcOnly });
     } catch (e) { console.warn("[bbttcc-raid] casualty apply-to-roster handler", e); }
   });

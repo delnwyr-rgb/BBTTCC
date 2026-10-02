@@ -37,7 +37,8 @@ import {
   getClarityMaxBonus,
   getUpkeepScale,
   getConcurrencyBonus,
-  summarizeDiscipline
+  summarizeDiscipline,
+  setMode
 } from "./manifestation-discipline.js";
 
 import {
@@ -1013,6 +1014,23 @@ function ftLabelFromMap(map, key, fallback = "") {
 // written back — must read through here. Display-only reads may keep using
 // actor.system. (Actor#toObject() is a real Document method, so this is the
 // one reliable source read; `actor._source.system` is equivalent but uncloned.)
+// applyRerollGrants (ft-progression) rebuilds the total as base dice + the
+// first term's explosions + bonusDelta, which is wrong when (a) the first term
+// keeps 2 of 3 (adv/dis — the discarded die gets summed) or (b) the formula
+// carries extra dice terms (Surge wrath-cascade / bonus dice, Dreamwalker
+// d6/d4 — dropped from the total). 2026-10-01: pass bonusDelta = everything
+// outside the first term (so only the rerolled die changes the total), and
+// skip keep-highest/lowest pools the helper can't recompute.
+async function _ftApplyRerollsSafe(roll, grants) {
+  const term = roll?.terms?.[0];
+  const res  = Array.isArray(term?.results) ? term.results : [];
+  if (!grants?.length || !res.length) return { applied: [], adjustedTotal: roll?.total };
+  const keeps = (term.modifiers ?? []).some(m => /^k[hl]?\d*$/i.test(String(m)));
+  if (keeps || res.some(r => r.discarded || r.active === false)) return { applied: [], adjustedTotal: roll.total };
+  const termSum = res.reduce((sum, r) => sum + (Number(r.result) || 0), 0);
+  return applyRerollGrants(roll, grants, (Number(roll.total) || 0) - termSum);
+}
+
 function ftSourceSystem(actor) {
   const root = actor?.toObject?.()?.system ?? actor?._source?.system ?? {};
   return root?.system ?? root;
@@ -1622,9 +1640,20 @@ Hooks.on("bbttcc:rig:damaged", ({ rig, amount } = {}) => {
 // the killing blow (rig destruction adds tier×2 ejection damage on top).
 // GM-only: avoids permission churn on player clients that don't own
 // crew, and prevents duplicate chat cards on multi-client tables.
+// 2026-10-01 — the hook fires only on the client that APPLIED the damage, so
+// a player who owns the rig (direct write, no relay) used to skip the bleed
+// entirely. A player seat now relays it (`ft-rigBleed`) to the active GM; a
+// GM-relayed apply fires the hook on the GM only, so nothing doubles.
 Hooks.on("bbttcc:rig:damaged", async ({ rig, amount } = {}) => {
   if (!rig || !(amount > 0)) return;
-  if (!game.user?.isGM) return;
+  if (!game.user?.isGM) {
+    if (game.users?.some?.(u => u.isGM && u.active)) _ftRelayEmit({ t: "ft-rigBleed", rigUuid: rig.uuid, amount: Number(amount) });
+    return;
+  }
+  return _ftRigCrewBleed(rig, amount);
+});
+async function _ftRigCrewBleed(rig, amount) {
+  if (!rig || !(amount > 0)) return;
   const bleed = Math.floor(Number(amount) / 2);
   if (bleed <= 0) return;
   const slots = rig.system?.crew?.slots ?? [];
@@ -1650,7 +1679,7 @@ Hooks.on("bbttcc:rig:damaged", async ({ rig, amount } = {}) => {
         summaries.push(`${member.name}: <em>held on — no damage</em>`);
       }
       if (holdingOn) {
-        try { await member.update({ "flags.fourththing.combat.-=holdingOn": null }); }
+        try { await member.unsetFlag("fourththing", "combat.holdingOn"); }   // v14: no "-=key"
         catch (_) { /* round commit will clear */ }
       }
     } catch (e) {
@@ -1665,7 +1694,7 @@ Hooks.on("bbttcc:rig:damaged", async ({ rig, amount } = {}) => {
       <ul style="margin:0.25rem 0;padding-left:1.2rem;font-size:0.78rem">${summaries.map(s => `<li>${s}</li>`).join("")}</ul>
     </div>`
   });
-});
+}
 
 Hooks.on("bbttcc:rig:destroyed", ({ rig } = {}) => {
   if (!rig) return;
@@ -1996,7 +2025,7 @@ async function _ftRollDefenseCheck(actor, which = "guard") {
   } else {
     try {
       const grants = collectRerolls(actor, { context: "defense", defense: which });
-      const res    = await applyRerollGrants(roll, grants, bonus);
+      const res    = await _ftApplyRerollsSafe(roll, grants);
       await consumeAidReroll(actor, res.applied);
       for (const a of res.applied) notes.push(`<span style="color:#a0d4ff">${a.mode === "reroll-lowest" ? "↑" : "↓"} rerolled ${a.before} → ${a.after} (${ftEscapeHtml(a.source)})</span>`);
     } catch (_e) { console.warn("Roll for Initiation | defense reroll grants failed", _e); }
@@ -2180,6 +2209,10 @@ async function _ftFireManifestationChain(caster, primary, item, mf, dr, { castDc
   if (chain.carryConditions && mf?.appliedStates?.states?.length) carryMf.appliedStates = mf.appliedStates;
   if (chain.carryEffects && mf?.appliedEffects && (mf.appliedEffects.modifiers?.length || mf.appliedEffects.resists?.length || mf.appliedEffects.immunes?.length)) {
     carryMf.appliedEffects = mf.appliedEffects;
+  } else if (carryMf.appliedStates) {
+    // carryEffects off: an explicit empty block, or the applier's `??` fallback
+    // to the item's own appliedEffects carries the wards anyway.
+    carryMf.appliedEffects = { modifiers: [], resists: [], immunes: [] };
   }
 
   const summaries = [];
@@ -2202,9 +2235,11 @@ async function _ftFireManifestationChain(caster, primary, item, mf, dr, { castDc
           damageFlavor: damageFlav,
           perTargetMultiplier: 1
         });
+        // Non-owner seats relay through the chokepoint and get "— sent to GM" back.
         if (apply) dmgDesc = apply;
       } catch (e) {
         console.warn("Roll for Initiation | chain _applyDamageToActor failed", secActor.name, e);
+        dmgDesc = `${secActor.name}: ${rawTotal} ${damageType} — apply failed (see console)`;
       }
     }
     summaries.push({ name: secActor.name, formula, total: rawTotal, desc: dmgDesc, roll: rolled });
@@ -2677,6 +2712,29 @@ function _ftCtxExpired(ctx, btn, label = "Action") {
   return false;
 }
 
+// 2026-10-01 — one resolution per card, across seats and re-renders. The old
+// guard was only the clicking client's DOM button state, so the GM (or the
+// owner after F5) could resolve the same save / AoE / misfire card again.
+// The stamp lives at flags.fourththing.<ctxKey>.resolvedBy = {user, at, label};
+// a clicker who can't write the message relays it to the active GM.
+const _FT_RESOLVABLE_CARD_KEYS = new Set(["savePromptContext", "aoeSavePromptContext", "aoeApplyAllContext", "misfireConvertContext"]);
+function _ftCardAlreadyResolved(message, ctxKey, btn) {
+  const done = message?.getFlag?.("fourththing", ctxKey)?.resolvedBy;
+  if (!done) return false;
+  ui.notifications?.warn("That card has already been resolved.");
+  if (btn) { btn.disabled = true; btn.style.opacity = "0.5"; }
+  return true;
+}
+async function _ftMarkCardResolved(message, ctxKey, label = "") {
+  if (!message || !_FT_RESOLVABLE_CARD_KEYS.has(ctxKey)) return;
+  const stamp = { user: game.user.id, at: Date.now(), label: String(label ?? "") };
+  if (message.isOwner) {
+    try { await message.setFlag("fourththing", `${ctxKey}.resolvedBy`, stamp); } catch (e) { console.warn("[fourththing] card resolve stamp failed", e); }
+  } else if (game.users?.some?.(u => u.isGM && u.active)) {
+    _ftRelayEmit({ t: "ft-cardResolved", messageId: message.id, ctxKey, label: stamp.label, user: game.user.id });
+  }
+}
+
 // Phase C 2026-05-07 — Misfire conversion follow-up card. Posted by
 // castManifestation after a misfire when the actor is eligible:
 //   • Wyrdlens Adept tier 4+ → Tikkun Sight (1/Soma Break, refunds 1 Surge → Clarity)
@@ -2728,6 +2786,7 @@ async function _ftHandleMisfireConvertClick(btn, message) {
     return;
   }
   if (_ftCtxExpired(ctx, btn, "Misfire conversion")) return;
+  if (_ftCardAlreadyResolved(message, "misfireConvertContext", btn)) return;
   const caster = await fromUuid(ctx.casterUuid).catch(() => null);
   if (!caster) { ui.notifications?.warn("Caster not found."); btn.disabled = true; return; }
   if (!caster.testUserPermission?.(game.user, "OWNER") && !game.user.isGM) {
@@ -2789,6 +2848,7 @@ async function _ftHandleMisfireConvertClick(btn, message) {
     });
   }
   btn.closest(".ft-misfire-convert-card")?.querySelectorAll("button").forEach(b => { b.disabled = true; b.style.opacity = "0.4"; b.style.cursor = "default"; });
+  await _ftMarkCardResolved(message, "misfireConvertContext", gate === "pkRenegotiate" ? "§ Renegotiated" : "🔭 Converted");
 }
 
 // AoE Save-prompt card (Phase D 2026-05-08). One card per affected token in
@@ -2838,6 +2898,7 @@ async function _ftHandleAoeSavePromptClick(btn, message) {
     return;
   }
   if (_ftCtxExpired(ctx, btn, "AoE save prompt")) return;
+  if (_ftCardAlreadyResolved(message, "aoeSavePromptContext", btn)) return;
   const caster = await fromUuid(ctx.casterUuid).catch(() => null);
   const target = await fromUuid(ctx.targetUuid).catch(() => null);
   const item   = await fromUuid(ctx.itemUuid).catch(() => null);
@@ -2872,7 +2933,14 @@ async function _ftHandleAoeSavePromptClick(btn, message) {
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">⚔ ${ftEscapeHtml(item.name)} — ${ftEscapeHtml(target.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem">${ftEscapeHtml(desc)}</p></div>`
       });
     }
-    if (mult > 0 && Array.isArray(ctx.appliedStates?.states) && ctx.appliedStates.states.length) {
+    // Same gate as the single-target save prompt (2026-08-21 fix, ported
+    // 2026-10-01): wards-only workings and object-of-booleans states apply too.
+    const _wardsEff = item?.system?.manifestation?.appliedEffects;
+    const _hasWards = !!(_wardsEff && ((_wardsEff.modifiers?.length) || (_wardsEff.resists?.length) || (_wardsEff.immunes?.length)));
+    const _sts = ctx.appliedStates?.states;
+    const _hasStates = Array.isArray(_sts) ? _sts.length > 0
+      : !!(_sts && typeof _sts === "object" && Object.values(_sts).some(Boolean));
+    if (mult > 0 && (_hasStates || _hasWards)) {
       try {
         await game.fourththing.applyManifestationStates(caster, target, item, { appliedStates: ctx.appliedStates }, { castDc: ctx.castDc, channel: ctx.channel || null });
       } catch (e) {
@@ -2881,6 +2949,7 @@ async function _ftHandleAoeSavePromptClick(btn, message) {
     }
     btn.style.opacity = "0.5";
     btn.textContent = sav?.saved ? `✓ Saved (${sav.onSave === "negate" ? "no" : "half"} damage)` : "✗ Failed";
+    await _ftMarkCardResolved(message, "aoeSavePromptContext", btn.textContent);
   } catch (e) {
     console.error("AoE save prompt resolve failed", e);
     btn.disabled = false;
@@ -2900,6 +2969,7 @@ async function _ftHandleAoeApplyAllClick(btn, message) {
     return;
   }
   if (_ftCtxExpired(ctx, btn, "AoE apply-all")) return;
+  if (_ftCardAlreadyResolved(message, "aoeApplyAllContext", btn)) return;
   const caster = await fromUuid(ctx.casterUuid).catch(() => null);
   if (!caster) { ui.notifications?.warn("Caster not found."); btn.disabled = true; return; }
   if (!caster.testUserPermission?.(game.user, "OWNER") && !game.user.isGM) {
@@ -2934,6 +3004,7 @@ async function _ftHandleAoeApplyAllClick(btn, message) {
   });
   btn.style.opacity = "0.5";
   btn.textContent = "✓ Applied";
+  await _ftMarkCardResolved(message, "aoeApplyAllContext", "✓ Applied");
 }
 
 async function _ftPostSavePromptCard(actor, target, item, mf, dr, { castDc, intent, channel, rollOverride = null } = {}) {
@@ -2980,6 +3051,7 @@ async function _ftHandleSavePromptClick(btn, message) {
     return;
   }
   if (_ftCtxExpired(ctx, btn, "Save prompt")) return;
+  if (_ftCardAlreadyResolved(message, "savePromptContext", btn)) return;
   const caster = await fromUuid(ctx.casterUuid).catch(() => null);
   const target = await fromUuid(ctx.targetUuid).catch(() => null);
   const item   = await fromUuid(ctx.itemUuid).catch(() => null);
@@ -3034,6 +3106,7 @@ async function _ftHandleSavePromptClick(btn, message) {
     }
     btn.textContent   = sav?.saved ? `Saved (${sav.onSave === "negate" ? "negated" : "halved"})` : `Failed save`;
     btn.style.opacity = "0.5";
+    await _ftMarkCardResolved(message, "savePromptContext", btn.textContent);
   } catch (err) {
     console.warn("Roll for Initiation | savePrompt click failed", err);
     btn.disabled = false;
@@ -3045,6 +3118,14 @@ async function _ftHandleSavePromptClick(btn, message) {
 // Auto-succeed if DC ≤ 20, else +10 to the total. On a resulting hit, rolls the
 // stashed damage and posts an Apply card (the .ft-apply-dmg-btn auto-binds via
 // the renderChatMessage hook). Skill-scoped per scene via legendaryUsed/marked.
+// 2026-10-01 — the 1/scene Legendary use, persisted as
+// flags.fourththing.legendaryUsed.<skill> = <scene id it was spent in>, so the
+// GM's seat and a reloaded owner both see it (ft-progression's tracker is an
+// in-memory per-client Map). A stamp from a different scene is stale.
+function _ftLegendaryUsedPersisted(actor, skill) {
+  const at = actor?.getFlag?.("fourththing", `legendaryUsed.${skill}`);
+  return !!at && at === (canvas?.scene?.id ?? "none");
+}
 async function _ftHandleLegendaryStrikeInvoke(btn, message) {
   if (btn.disabled) return;
   const ctx = message?.getFlag?.("fourththing", "legendaryStrikeContext");
@@ -3057,7 +3138,7 @@ async function _ftHandleLegendaryStrikeInvoke(btn, message) {
     ui.notifications?.warn(`Only ${actor.name}'s owner (or the GM) can invoke Legendary.`);
     return;
   }
-  if (legendaryUsed(actor.id, ctx.skill)) {
+  if (legendaryUsed(actor.id, ctx.skill) || _ftLegendaryUsedPersisted(actor, ctx.skill)) {
     btn.disabled = true; btn.style.opacity = "0.5"; btn.textContent = "✨ Legendary — already used this scene";
     ui.notifications?.warn(`${actor.name} has already invoked Legendary ${ftCap(ctx.skill)} this scene.`);
     return;
@@ -3068,6 +3149,9 @@ async function _ftHandleLegendaryStrikeInvoke(btn, message) {
   if (dc <= 20) { hit = true;  newTotal = Number(ctx.total); mode = `auto-succeed (DC ${dc} ≤ 20)`; }
   else          { newTotal = Number(ctx.total) + 10; hit = newTotal >= dc; mode = `+10 → ${newTotal}`; }
   markLegendaryUsed(actor.id, ctx.skill);
+  // Persist on the actor too (owner or GM — both pass the gate above): the
+  // in-memory tracker is per-client and lost on F5.
+  try { await actor.setFlag("fourththing", `legendaryUsed.${ctx.skill}`, canvas?.scene?.id ?? "none"); } catch (e) { console.warn("[fourththing] legendary stamp failed", e); }
   btn.style.opacity = "0.6";
   btn.textContent = `✨ Legendary invoked — ${hit ? "HIT" : "still misses"}`;
 
@@ -3908,7 +3992,7 @@ async function _ftBankSurge(actor, n, { fromHarvest = false } = {}) {
   const next = Math.min(cap, cur + n);
   if (next === cur) return 0;
   try { await actor.update({ "system.resources.surge.value": next }); }
-  catch (e) { /* actor lacks surge resource — silent */ }
+  catch (e) { return 0; }   // not writable / no surge resource — nothing banked
   return next - cur;
 }
 
@@ -4233,7 +4317,7 @@ const _FT_SURGE_MENU = [
     fiction: "Whatever was done can be unmade — and made into a shield.",
     wired: true },
   { cost: 3, key: "share-furnace", tier: 3, bucket: "heal", classFilter: ["soul-smith"],
-    label: "Furnace of Renewal — heal allies within 30 ft + share poison/necrotic resist",
+    label: "Furnace of Renewal — heal allies within 30 ft + share poison/qliphothic resist",
     fiction: "Stand near the forge. Let it burn the rot out of you.",
     wired: true },
   { cost: 5, key: "relic-rebirth", tier: 4, bucket: "heal", classFilter: ["soul-smith"],
@@ -4288,7 +4372,7 @@ const _FT_SURGE_MENU = [
     fiction: "From ancient ruin, something disproportionate to the effort.", wired: true },
   // Forge of Bound Light (Sparks from containment → protection/support):
   { cost: 2, key: "bl-vessel", tier: 2, bucket: "def", forge: "bound-light",
-    label: "Bound Vessel (Spark) — ward an ally: DR + poison/necrotic resist (3 rds)",
+    label: "Bound Vessel (Spark) — ward an ally: DR + poison/qliphothic resist (3 rds)",
     fiction: "Containment is the first virtue.", wired: true },
   { cost: 3, key: "bl-sealed", tier: 3, bucket: "def", forge: "bound-light",
     label: "The Sealed Work (Spark) — ward an ally: DR + hold the next lethal hit at 1",
@@ -5052,7 +5136,7 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     // Echo Strike also grants a free action so the bonus Strike costs nothing.
     if (effectKey === "echo-strike") {
       try {
-        await actor.setFlag("fourththing", "bonusActionAvailable", true);
+        await _ftSetFlagSeatSafe(actor, "bonusActionAvailable", true);
         await actor.update({ "system.actions.bonusUsed": false });
       } catch (e) { /* non-owner — GM grants manually */ }
     }
@@ -5128,6 +5212,20 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     catch (e) { /* silent */ }
   }
 }
+
+// 2026-10-01 — "GM clears on raid end" had no code behind it, so Phoenix was
+// once per CHARACTER. Clear the stamp on the combatants (incl. unlinked token
+// actors) when their encounter ends. Active GM only; unsetFlag (v14 dropped
+// the "-=key" form).
+Hooks.on("deleteCombat", async (combat) => {
+  if (!game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
+  const actors = new Set();
+  for (const c of combat?.combatants ?? []) if (c?.actor) actors.add(c.actor);
+  for (const a of actors) {
+    if (!a?.getFlag?.("fourththing", "surge.phoenixUsedInRaid")) continue;
+    try { await a.unsetFlag("fourththing", "surge.phoenixUsedInRaid"); } catch (e) { console.warn("[fourththing] phoenix reset failed", a?.name, e); }
+  }
+});
 
 // Reposition (Surge 3✦, narr) — "Step out of the moment. Re-enter where you
 // choose." Pays its own cost (the special-case caller skips the shared
@@ -5349,7 +5447,7 @@ async function _ftTranceSurge(actor, effectKey, tier) {
   const tname  = target?.name ?? "the ally";
   const needTarget = (l) => `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ ${l} needs a target. Surge spent — GM may refund.</p>`;
   const needToken  = (l) => `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ ${l} needs your token on the scene. Surge spent — GM may refund.</p>`;
-  const bankReroll = async (a, src) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: src }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const bankReroll = async (a, src) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: src }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const drAE = (name) => ({ name, img: "icons/svg/aura.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const myTok = () => actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
   const alliesInAura = (ft) => { const m = myTok(); if (!m) return null; return (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && _ftDistanceBetweenTokens(m, t) <= ft); };
@@ -5365,7 +5463,7 @@ async function _ftTranceSurge(actor, effectKey, tier) {
     }
     case "qs-peace": {
       if (!target) return needTarget("Somnolent Peace");
-      try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {}
+      try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {}
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8d8a0">☀ Somnolent Peace — the next lethal blow against <b>${tname}</b> drops them to 1 Integrity (unconscious), not dead.</p>`;
     }
     case "qs-pause": {
@@ -5379,14 +5477,14 @@ async function _ftTranceSurge(actor, effectKey, tier) {
     case "sg-touched": {
       if (!target) return needTarget("Gate-Touched");
       await _ftCreateAllyAE(target, drAE(`Gate-Touched (DR ${tier})`));
-      try { await target.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+      try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {}
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Gate-Touched — carried <b>${tname}</b> through to safety: DR ${tier} and a freed reaction.</p>`;
     }
     case "sg-step": {
       if (!target) return needTarget("Sapphire Step");
       await bankReroll(actor, "sapphire-gate"); await bankReroll(target, "sapphire-gate");
-      try { await actor.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
-      try { await target.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+      try { await _ftSetFlagSeatSafe(actor, "bonusActionAvailable", true); } catch (e) {}
+      try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {}
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Sapphire Step — you and <b>${tname}</b> step through a threshold: each banks a reroll and a freed reaction (reposition).</p>`;
     }
     case "sg-held": {
@@ -5404,7 +5502,7 @@ async function _ftTranceSurge(actor, effectKey, tier) {
     }
     case "tf-mirror": {
       if (!target) return needTarget("Mirror Read");
-      try { await target.setFlag("fourththing", "aurablade.disAttackOnce", true); } catch (e) {}
+      try { await _ftSetFlagSeatSafe(target, "aurablade.disAttackOnce", true); } catch (e) {}
       await bankReroll(actor, "thousand-faces");
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0ff">🎭 Mirror Read — you wear <b>${tname}</b>'s tell back at them: it rolls its next attack at disadvantage, and you bank a reroll.</p>`;
     }
@@ -5427,14 +5525,22 @@ async function _ftDreamwalkerSurge(actor, effectKey, tier) {
   const bankReroll = async (a, src) => {
     const b = a.getFlag?.("fourththing", "aidBanked") ?? [];
     b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: src });
-    try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+    try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {}
   };
   const grantClarity = async (a, n) => {
     const s = a.system?.system ?? a.system ?? {};
     const cur = Number(s?.magic?.clarity?.value ?? 0);
     const max = Number(s?.magic?.clarity?.max ?? 0);
     const next = max > 0 ? Math.min(max, cur + n) : cur + n;
-    if (next !== cur) { try { await a.update({ "system.magic.clarity.value": next }); } catch (e) {} }
+    if (next === cur) return 0;
+    // Not ours to write (another player's PC / GM-owned ally) → ft-grantClarity
+    // relay; the GM re-reads and caps at the ally's max (2026-10-01).
+    if (!game.user?.isGM && !a.isOwner) {
+      if (!game.users?.some?.(u => u.isGM && u.active)) return 0;
+      _ftRelayEmit({ t: "ft-grantClarity", actorId: a.id, targetUuid: a.uuid, amount: n });
+      return next - cur;
+    }
+    try { await a.update({ "system.magic.clarity.value": next }); } catch (e) { return 0; }
     return next - cur;
   };
   const alliesInAura = (ft) => {
@@ -5466,7 +5572,7 @@ async function _ftDreamwalkerSurge(actor, effectKey, tier) {
     case "dw-reality": {
       const allies = alliesInAura(30);
       for (const t of (allies ?? [])) await bankReroll(t.actor, "dreamwalker-reality");
-      if (target) { try { await target.setFlag("fourththing", "aurablade.disAttackOnce", true); } catch (e) {} }
+      if (target) { try { await _ftSetFlagSeatSafe(target, "aurablade.disAttackOnce", true); } catch (e) {} }
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0ff;font-weight:600">✶ Reality Hack — the dream rewrites the moment: allies within 30 ft bank a reroll${target ? `, and <b>${tname}</b> rolls its next attack at disadvantage` : ""}.</p>`;
     }
   }
@@ -5480,7 +5586,7 @@ async function _ftMandateSurge(actor, effectKey, tier) {
   const bankReroll = async (a, src) => {
     const b = a.getFlag?.("fourththing", "aidBanked") ?? [];
     b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: src });
-    try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+    try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {}
   };
   const drAE = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const alliesInAura = (ft) => {
@@ -5497,7 +5603,7 @@ async function _ftMandateSurge(actor, effectKey, tier) {
     case "acc-breath": {
       if (!target) return needTarget;
       await bankReroll(actor, "accord"); await bankReroll(target, "accord");
-      try { await target.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+      try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {}
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#b8d896">🤝 Shared Breath — you and <b>${tname}</b> each bank a reroll-lowest; ${tname} may take a reaction now (Accord Partner).</p>`;
     }
     case "acc-sync": {
@@ -5511,7 +5617,7 @@ async function _ftMandateSurge(actor, effectKey, tier) {
       const allies = alliesInAura(30);
       if (!allies) return needToken;
       let n = 0;
-      for (const t of allies) { try { await t.actor.setFlag("fourththing", "bonusActionAvailable", true); n++; } catch (e) {} }
+      for (const t of allies) { try { await _ftSetFlagSeatSafe(t.actor, "bonusActionAvailable", true); n++; } catch (e) {} }
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🤝 Group Turn — ${n} ${n === 1 ? "ally" : "allies"} within 30 ft each gain a freed bonus action.</p>`;
     }
     // ── Mandate of Overwatch (defensive/reactive) ──
@@ -5547,7 +5653,7 @@ async function _ftMandateSurge(actor, effectKey, tier) {
     }
     case "res-secondwind": {
       if (!target) return needTarget;
-      try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {}
+      try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {}
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">⚔ Second Wind — <b>${tname}</b> won't fall: the next hit that would drop them is held at 1 Integrity.</p>`;
     }
     case "res-nonelost": {
@@ -5562,7 +5668,7 @@ async function _ftMandateSurge(actor, effectKey, tier) {
       const cur = Number(ts?.derived?.integrity?.value ?? ts?.integrity?.value ?? 0);
       const _h = await _ftHealTarget(target, Math.max(0, half - cur));
       const next = _h.next;
-      try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {}
+      try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {}
       try { await actor.setFlag("fourththing", "harmonyMarshal.noneLostCombat", combatId); } catch (e) {}
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">⚔ None Lost — <b>${tname}</b> refuses to fall: restored to ${next}/${max} Integrity and warded against the next drop. <span style="opacity:0.7;font-weight:400">(1/fight)</span>${_h.tag}</p>`;
     }
@@ -5669,11 +5775,11 @@ async function _ftForgeSurge(actor, effectKey, tier) {
     }
     // ── Forge of Bound Light ──
     case "bl-vessel": {
-      if (target) { await _ftCreateAllyAE(target, drAE(`Bound Vessel (DR ${tier})`)); for (const rt of ["poison", "necrotic"]) await _ftCreateAllyAE(target, resAE(rt)); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Bound Vessel — <b>${tname}</b> is warded: DR ${tier} + poison/necrotic resist (3 rds).${tail}</p>`;
+      if (target) { await _ftCreateAllyAE(target, drAE(`Bound Vessel (DR ${tier})`)); for (const rt of ["poison", "qliphothic"]) await _ftCreateAllyAE(target, resAE(rt)); }   // RFI type (necrotic → qliphothic)
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Bound Vessel — <b>${tname}</b> is warded: DR ${tier} + poison/qliphothic resist (3 rds).${tail}</p>`;
     }
     case "bl-sealed": {
-      if (target) { await _ftCreateAllyAE(target, drAE(`Sealed Work (DR ${tier})`)); try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+      if (target) { await _ftCreateAllyAE(target, drAE(`Sealed Work (DR ${tier})`)); try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {} }
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 The Sealed Work — <b>${tname}</b>: DR ${tier}, and the next hit that would drop them is held at 1.${tail}</p>`;
     }
     case "bl-blessed": {
@@ -5760,7 +5866,7 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
       const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate(); _ftSurgeRoll(roll);
       const amt  = Math.max(0, Math.round((Number(roll.total) || 0) * mult));
       const next = (await _ftHealTarget(a, amt)).next;   // owner-or-GM-relay
-      for (const rt of ["poison", "necrotic"]) {
+      for (const rt of ["poison", "qliphothic"]) {   // RFI type — "necrotic" never matched a hit
         try { await _ftCreateAllyAE(a, {
           name: `Furnace: resist ${rt}`, img: "icons/svg/fire-shield.svg", origin: actor.uuid,
           duration: { rounds: 3 }, changes: [],
@@ -5770,7 +5876,7 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
       if (next > cur) lines.push(`<b>${a.name}</b> +${next - cur}`);
     }
     const healTxt = lines.length ? `healed ${lines.join(", ")} and ` : "";
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🔥 Furnace of Renewal — ${healTxt}warded allies within 30 ft vs poison/necrotic (3 rds). <span style="opacity:0.6">[${heatTag}]</span></p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🔥 Furnace of Renewal — ${healTxt}warded allies within 30 ft vs poison/qliphothic (3 rds). <span style="opacity:0.6">[${heatTag}]</span></p>`;
   }
 
   // ── T4: Relic of Rebirth — Overheated: reforge a fallen ally to half; else forge a ward ──
@@ -5778,7 +5884,9 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
     if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Relic of Rebirth needs a target ally. Surge spent — GM may refund.</p>`;
     if (overheated) {
       const combatId = String(game.combat?.id ?? "none");
-      if (actor.flags?.fourththing?.soulSmith?.reforgeCombat === combatId) {
+      // 1/fight applies only IN a fight — out of combat every reforge keyed to
+      // "none" and the first one locked out all later ones (2026-10-01).
+      if (game.combat?.id && actor.flags?.fourththing?.soulSmith?.reforgeCombat === combatId) {
         return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Relic already reforged this fight.</p>`;
       }
       const tsys = target.system?.system ?? target.system ?? {};
@@ -5790,7 +5898,7 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
       try { await actor.setFlag("fourththing", "soulSmith.reforgeCombat", combatId); } catch (e) {}
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#e8c84a;font-weight:600">⟁ Relic of Rebirth — reforged <b>${target.name}</b> to half Integrity: ${cur} → ${next}/${max}. <span style="opacity:0.7;font-weight:400">(Overheated · 1/fight)</span>${_h.tag}</p>`;
     }
-    try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {}
+    try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {}
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">⟁ Relic of Rebirth — forged a ward on <b>${target.name}</b>: the next hit that would drop them is held at 1 Integrity. <span style="opacity:0.6">(Run Overheated to reforge a fallen ally instead.)</span></p>`;
   }
 
@@ -6085,8 +6193,8 @@ async function _ftCourierSurge(actor, effectKey, tier) {
   const rawSys  = actor.system?.system ?? actor.system;
   const drAE    = (name) => ({ name, img: "icons/svg/wingfoot.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
-  const freeReaction = async (a) => { try { await a.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {} };
-  const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "courier" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const freeReaction = async (a) => { try { await _ftSetFlagSeatSafe(a, "bonusActionAvailable", true); } catch (e) {} };
+  const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "courier" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const selfMove = async () => {
     const speed = Number(rawSys?.derived?.speed?.value ?? rawSys?.attributes?.speed?.value ?? rawSys?.attributes?.speed ?? 30) || 30;
     const half  = Math.max(5, Math.round(speed / 2 / 5) * 5);
@@ -6130,9 +6238,9 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
   const tname  = target?.name ?? "the ally";
   const drAE   = (name) => ({ name, img: "icons/svg/wingfoot.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
-  const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "courier-route" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
-  const freeReaction = async (a) => { try { await a.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {} };
-  const disAdv  = async (foe) => { try { await foe.setFlag("fourththing", "aurablade.disAttackOnce", true); } catch (e) {} };
+  const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "courier-route" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
+  const freeReaction = async (a) => { try { await _ftSetFlagSeatSafe(a, "bonusActionAvailable", true); } catch (e) {} };
+  const disAdv  = async (foe) => { try { await _ftSetFlagSeatSafe(foe, "aurablade.disAttackOnce", true); } catch (e) {} };
   const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
   const healAlly = async (a, formula) => {
     const r = new Roll(formula); await r.evaluate(); _ftSurgeRoll(r);
@@ -6172,7 +6280,7 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
     case "bs-stairtrap": {
       await oneShot("crowning-blow");
       if (target) await setCond(target, "prone");
-      try { await actor.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+      try { await _ftSetFlagSeatSafe(actor, "bonusActionAvailable", true); } catch (e) {}
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">🌀 Stair-Trap — your next Strike lands as a max-die crit${target ? `; <b>${tname}</b> is knocked Prone` : ""}; if it drops them, you regain a freed action.</p>`;
     }
     // ── Last Mile — carry the burden / anti-death ──
@@ -6186,7 +6294,7 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🤲 Shoulder the Weight — carried <b>${tname}</b>'s pain: +${r.banked} integrity to them, ${cost} Stress to you; they bank a reroll.</p>`;
     }
     case "lm-quiet": {
-      if (target) { await _ftCreateAllyAE(target, drAE(`Quiet Voyage (DR ${tier})`)); try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+      if (target) { await _ftCreateAllyAE(target, drAE(`Quiet Voyage (DR ${tier})`)); try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {} }
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🕯 Quiet Voyage — <b>${tname}</b> gains DR ${tier}, and the next hit that would drop them is held at 1.</p>`;
     }
     case "lm-delivered": {
@@ -6264,8 +6372,8 @@ async function _ftPactkeeperSurge(actor, effectKey, tier) {
   if (effectKey === "pk-shelter") {
     const names = [];
     try { await actor.createEmbeddedDocuments("ActiveEffect", [drAE(`Shelter the Bound (DR ${tier})`)]); names.push(actor.name); } catch (e) {}
-    if (target && target.id !== actor.id) { if (await _ftCreateAllyAE(target, drAE(`Shelter the Bound (DR ${tier})`))) names.push(target.name); try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
-    else { try { await actor.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+    if (target && target.id !== actor.id) { if (await _ftCreateAllyAE(target, drAE(`Shelter the Bound (DR ${tier})`))) names.push(target.name); try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {} }
+    else { try { await _ftSetFlagSeatSafe(actor, "soulSmith.relicWard", true); } catch (e) {} }
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Shelter the Bound — ${names.map(n => `<b>${n}</b>`).join(" + ")} gain DR ${tier}; the next hit that would drop ${target && target.id !== actor.id ? `<b>${tname}</b>` : "you"} holds at 1.</p>`;
   }
   if (effectKey === "pk-sovereign") {
@@ -6283,8 +6391,8 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
   const grid    = canvas.grid?.size ?? 100;
   const drAE    = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
-  const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "pactkeeper" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
-  const freeReaction = async (a) => { try { await a.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {} };
+  const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "pactkeeper" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
+  const freeReaction = async (a) => { try { await _ftSetFlagSeatSafe(a, "bonusActionAvailable", true); } catch (e) {} };
   const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
   const healAlly = async (a, formula) => {
     const r = new Roll(formula); await r.evaluate(); _ftSurgeRoll(r);
@@ -6328,7 +6436,7 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
     }
     case "st-bound": {
       let h = 0;
-      if (target) { h = await healAlly(target, `1d8 + ${tier}`); try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+      if (target) { h = await healAlly(target, `1d8 + ${tier}`); try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {} }
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🤝 Keep the Agreement — healed <b>${tname}</b> +${h}; the next hit that would drop them holds at 1.</p>`;
     }
     case "st-sanctuary": {
@@ -6378,7 +6486,7 @@ async function _ftWyrdlensSurge(actor, effectKey, tier) {
   const tname  = target?.name ?? "the target";
   const grid   = canvas.grid?.size ?? 100;
   const drAE   = (name) => ({ name, img: "icons/svg/eye.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
-  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "wyrdlens" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "wyrdlens" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
   const dist  = (a, b) => { const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2, bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2; return Math.hypot(ax - bx, ay - by); };
 
@@ -6392,7 +6500,7 @@ async function _ftWyrdlensSurge(actor, effectKey, tier) {
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">🔍 Expose — <b>${tname}</b>'s next attack and its saves are at disadvantage (you read the seam).</p>`;
   }
   if (effectKey === "wl-refract") {
-    if (target) { await _ftCreateAllyAE(target, drAE(`Refracted (DR ${tier})`)); try { await target.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {} }
+    if (target) { await _ftCreateAllyAE(target, drAE(`Refracted (DR ${tier})`)); try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {} }
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🪞 Refract — <b>${tname}</b> gains DR ${tier} and a freed reaction (harm bends aside).</p>`;
   }
   if (effectKey === "wl-revelation") {
@@ -6411,8 +6519,8 @@ async function _ftWlRefractionSurge(actor, effectKey, tier) {
   const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
   const tname  = target?.name ?? "the ally";
   const drAE   = (name) => ({ name, img: "icons/svg/eye.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
-  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "wyrdlens-refraction" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
-  const freeReaction = async (a) => { try { await a.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {} };
+  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "wyrdlens-refraction" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
+  const freeReaction = async (a) => { try { await _ftSetFlagSeatSafe(a, "bonusActionAvailable", true); } catch (e) {} };
   const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
 
   switch (effectKey) {
@@ -6436,7 +6544,7 @@ async function _ftWlRefractionSurge(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🕊 The Prevented Blow — <b>${tname}</b> gains DR ${tier} (you stepped between).</p>`;
     }
     case "mc-redirect": {
-      if (target) { await _ftCreateAllyAE(target, drAE(`Redirected Harm (DR ${tier})`)); try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+      if (target) { await _ftCreateAllyAE(target, drAE(`Redirected Harm (DR ${tier})`)); try { await _ftSetFlagSeatSafe(target, "soulSmith.relicWard", true); } catch (e) {} }
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🕊 Redirected Harm — <b>${tname}</b> gains DR ${tier}, and the next hit that would drop them is held at 1.</p>`;
     }
     case "mc-openhand": {
@@ -6494,7 +6602,7 @@ async function _ftCosmicLinguistSurge(actor, effectKey, tier) {
   const grid   = canvas.grid?.size ?? 100;
   const drAE   = (name) => ({ name, img: "icons/svg/book.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
-  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "cosmic-linguist" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "cosmic-linguist" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
   const dist  = (a, b) => { const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2, bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2; return Math.hypot(ax - bx, ay - by); };
 
@@ -6527,7 +6635,7 @@ async function _ftClDoctrineSurge(actor, effectKey, tier) {
   const tname  = target?.name ?? "the ally";
   const grid   = canvas.grid?.size ?? 100;
   const drAE   = (name) => ({ name, img: "icons/svg/book.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
-  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "cl-doctrine" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "cl-doctrine" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
   const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
   const dist  = (a, b) => { const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2, bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2; return Math.hypot(ax - bx, ay - by); };
@@ -6592,7 +6700,7 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
     if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Rallying Words needs a target ally. Surge spent — GM may refund.</p>`;
     const banked = target.getFlag?.("fourththing", "aidBanked") ?? [];
     banked.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "surge-rallying-words" });
-    try { await target.setFlag("fourththing", "aidBanked", banked); } catch (e) { /* silent */ }
+    try { await _ftSetFlagSeatSafe(target, "aidBanked", banked); } catch (e) { /* silent */ }
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#b8d896">📣 <b>${target.name}</b> banks reroll-lowest on their next roll this scene.</p>`;
   }
 
@@ -6600,7 +6708,7 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
   const bankReroll = async (a, src) => {
     const b = a.getFlag?.("fourththing", "aidBanked") ?? [];
     b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: src });
-    try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+    try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {}
   };
   const alliesInAura = (ft) => {
     const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
@@ -6629,7 +6737,7 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
   if (effectKey === "rally-to-me") {
     if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Rally to Me needs a target ally. Surge spent — GM may refund.</p>`;
     await bankReroll(target, "rally-to-me");
-    try { await target.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+    try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {}
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🤝 Rally to Me — <b>${target.name}</b> banks a reroll-lowest and may immediately take a reaction (bonus action freed).</p>`;
   }
 
@@ -6672,8 +6780,6 @@ async function _ftHarmonyHarvest(explodingActor, n) {
   const isMarshal = (a) => !!a?.items?.find?.(it => it.type === "class" &&
     (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
   const exDisp = exTok.document?.disposition ?? 0;
-  const inCombat = !!game.combat?.started; // round caps only apply in combat (playtest #9)
-  const round  = Number(game.combat?.round ?? 0);
   for (const tok of (canvas?.tokens?.placeables ?? [])) {
     const a = tok?.actor;
     if (!a || a.id === explodingActor.id) continue;
@@ -6682,14 +6788,27 @@ async function _ftHarmonyHarvest(explodingActor, n) {
     const sameSide = (exDisp >= 0 && tDisp >= 0) || (exDisp < 0 && tDisp < 0);
     if (!sameSide) continue;
     if (_ftDistanceBetweenTokens(exTok, tok) > 30) continue;
-    try {
-      const f = a.flags?.fourththing?.harmonyMarshal?.harvest ?? {};
-      const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
-      if (count >= 2) continue; // +2 Surge/round cap from the harvest hook
-      const got = await _ftBankSurge(a, 1, { fromHarvest: true });
-      if (got > 0) await a.setFlag("fourththing", "harmonyMarshal.harvest", { round, count: count + 1 });
-    } catch (e) { console.warn("[ft] harmony harvest bank failed for", a?.name, e); }
+    // Another player's Marshal isn't ours to write (2026-10-01): the active GM
+    // banks it (and the round counter) via the ft-harmonyHarvest relay.
+    if (!game.user?.isGM && !a.isOwner) {
+      if (game.users?.some?.(u => u.isGM && u.active)) _ftRelayEmit({ t: "ft-harmonyHarvest", marshalUuid: a.uuid });
+      continue;
+    }
+    await _ftHarmonyHarvestBank(a);
   }
+}
+// One Marshal's +1 harvest, with the +2/round cap (in combat only — out of
+// combat round is always 0, so the cap used to stop harvesting for good).
+async function _ftHarmonyHarvestBank(a) {
+  const inCombat = !!game.combat?.started;
+  const round  = Number(game.combat?.round ?? 0);
+  try {
+    const f = a.flags?.fourththing?.harmonyMarshal?.harvest ?? {};
+    const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
+    if (inCombat && count >= 2) return; // +2 Surge/round cap from the harvest hook
+    const got = await _ftBankSurge(a, 1, { fromHarvest: true });
+    if (got > 0 && inCombat) await a.setFlag("fourththing", "harmonyMarshal.harvest", { round, count: count + 1 });
+  } catch (e) { console.warn("[ft] harmony harvest bank failed for", a?.name, e); }
 }
 
 // Damage-type picker used by Steel Veil + Sanctum spends. Returns the chosen
@@ -6800,7 +6919,9 @@ async function _ftCreateAllyAE(ally, aeData) {
     catch (e) { /* fall through to relay */ }
   }
   if (game.users?.some?.(u => u.isGM && u.active)) {
-    game.socket?.emit?.("system.fourththing", { t: "ft-applySurgeAE", actorId: ally.id, aeData });
+    // targetUuid (2026-10-01): an unlinked token's synthetic actor shares the
+    // base actor's id, so an id-only relay landed the AE on the sidebar actor.
+    _ftRelayEmit({ t: "ft-applySurgeAE", actorId: ally.id, targetUuid: ally.uuid, aeData });
     return true;
   }
   ui.notifications?.warn(`No GM online — couldn't buff ${ally.name}.`);
@@ -6835,7 +6956,7 @@ async function _ftHealTarget(target, amount) {
     return out;
   }
   if (game.users?.some?.(u => u.isGM && u.active)) {
-    game.socket?.emit?.("system.fourththing", {
+    _ftRelayEmit({
       t: "ft-applyDamage", actorId: target.id, targetUuid: target.uuid,
       baseDmg: raw, op: "heal", track: "integrity", damageType: "", damageFlavor: ""
     });
@@ -6864,7 +6985,15 @@ const _FT_RELAY_FLAG_PATHS = new Set([
   "aurablade.disAttackOnce",
   "aurablade.reduceNextDamageByTier",
   "aurablade.preventDropOnce",
-  "aurablade.autoPassLastStand"
+  "aurablade.autoPassLastStand",
+  "bonusActionAvailable",
+  "soulSmith.relicWard",
+  // crew actions (2026-10-01): signal / suppression on targets, cycle-power
+  // re-arming a crewmate's per-round gates (false only — see the handler).
+  "combat.signalBonus",
+  "combat.suppressed",
+  "combat.pilotActionUsedThisRound",
+  "combat.engineerRepairedThisRound"
 ]);
 async function _ftApplyEffectsToTarget(target, aeList = [], conditionKeys = [], { flags = null } = {}) {
   const aes  = (Array.isArray(aeList) ? aeList : []).filter(Boolean);
@@ -6885,13 +7014,40 @@ async function _ftApplyEffectsToTarget(target, aeList = [], conditionKeys = [], 
     } catch (e) { /* fall through to relay */ console.warn("[fourththing] direct effect apply failed; relaying", e); }
   }
   if (game.users?.some?.(u => u.isGM && u.active)) {
-    game.socket?.emit?.("system.fourththing", {
+    _ftRelayEmit({
       t: "ft-applyEffects", targetUuid: target.uuid, aeList: aes, conditionKeys: conds, flags: flagMap
     });
     return "relay";
   }
   ui.notifications?.warn(`No GM online — couldn't apply effects to ${target?.name ?? "target"}.`);
   return "none";
+}
+
+// Seat-safe flag write for the Surge / Aid ally-and-foe stamps (2026-10-01).
+// The spend handlers used to `target.setFlag(...)` inside a silent try, so
+// from a player seat every write on an actor they don't own (another PC, a
+// GM-owned ally, any foe) was dropped while the card claimed it. Owner/GM →
+// direct setFlag; otherwise the active GM writes it: `aidBanked` (an array the
+// GM must APPEND to, never overwrite) via ft-bankReroll, the allowlisted
+// one-shot paths via ft-applyEffects. Throws when nothing could be written, so
+// the callers' existing try/catch still sees the failure.
+async function _ftSetFlagSeatSafe(target, path, value) {
+  if (!target) throw new Error("no target");
+  if (game.user?.isGM || target.isOwner) return target.setFlag("fourththing", path, value);
+  if (path === "aidBanked") {
+    const entry = Array.isArray(value) ? value[value.length - 1] : null;
+    if (!entry || typeof entry !== "object") return;
+    if (!game.users?.some?.(u => u.isGM && u.active)) {
+      ui.notifications?.warn(`No GM online — couldn't bank a reroll for ${target.name}.`);
+      throw new Error("no GM online");
+    }
+    _ftRelayEmit({ t: "ft-bankReroll", targetUuid: target.uuid, entry });
+    return "relay";
+  }
+  if (!_FT_RELAY_FLAG_PATHS.has(path)) throw new Error(`flag path not relayable: ${path}`);
+  const mode = await _ftApplyEffectsToTarget(target, [], [], { flags: { [path]: value } });
+  if (mode === "none") throw new Error("no GM online");
+  return mode;
 }
 
 // Aurablade Fury — "Deny Reactions": true while the actor carries a live
@@ -7022,7 +7178,9 @@ async function _ftSurgeApplyAllyAE(caster, effectKey, tier) {
       const changes = [];
       for (const k of ["guard", "evasion", "resolve"]) {
         const delta = Math.max(0, mine[k] - theirs[k]);
-        if (delta > 0) changes.push({ key: `system.derived.${k}.value`, mode: 2, value: String(delta), priority: 20 });
+        // .aeBonus, not .value (2026-10-01) — prepareDerivedData rebuilds .value
+        // after AEs apply, so a .value change never landed (same fix as Brace).
+        if (delta > 0) changes.push({ key: `system.derived.${k}.aeBonus`, mode: 2, value: String(delta), priority: 20 });
       }
       if (!changes.length) continue;  // ally already as good or better
       const ok = await _ftCreateAllyAE(t.actor, {
@@ -7058,7 +7216,7 @@ async function _ftSurgeApplyAllyAE(caster, effectKey, tier) {
         origin: caster.uuid,
         duration: { rounds: 1 },
         changes: ["guard", "evasion", "resolve"].map(k =>
-          ({ key: `system.derived.${k}.value`, mode: 2, value: String(tier), priority: 20 })),
+          ({ key: `system.derived.${k}.aeBonus`, mode: 2, value: String(tier), priority: 20 })),
         flags: { fourththing: { surge: { kind: "mass-aegis" } } }
       });
       if (ok) buffed.push(t.actor.name);
@@ -7874,10 +8032,18 @@ async function castManifestation(actor, item, {
   }
 
   // Apply resource changes now that the roll is committed.
+  // 2026-10-01 — re-read NOW, from SOURCE: magicTest itself may have moved
+  // Noise/Clarity during this cast (Qliphothic Echo misfire, terrain +1), and
+  // the start-of-cast snapshot overwrote that; the derived value would also
+  // bake any Noise/Clarity AE into the stored pool.
+  const _liveSrc = ftSourceSystem(actor);
   const updates = {};
-  if (clarityCost > 0) updates[casterPool.writePath] = Math.max(0, curClarity - clarityCost);
+  if (clarityCost > 0) {
+    const liveClarity = Number(_liveSrc?.magic?.clarity?.value ?? _ftCasterPool(actor).current) || 0;
+    updates[casterPool.writePath] = Math.max(0, liveClarity - clarityCost);
+  }
   if (noiseGain > 0) {
-    const curNoise = Number(rawSys?.magic?.noise?.value) || 0;
+    const curNoise = Number(_liveSrc?.magic?.noise?.value) || 0;
     const maxNoise = Number(rawSys?.magic?.noise?.max) || 10;
     updates["system.magic.noise.value"] = Math.min(maxNoise, curNoise + noiseGain);
   }
@@ -8599,7 +8765,11 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       // Phase E — Conditional damage rows. Empty rows / unknown vsType filtered.
       conditionalDamage: ftNormalizeConditionalDamage(values.conditionalDamage ?? []),
       // Phase F1 — Structured range (engine check). Clamp + non-negative.
-      rangeFt: Math.max(0, Math.min(999, Math.floor(Number(values.rangeFt) || 0)))
+      rangeFt: Math.max(0, Math.min(999, Math.floor(Number(values.rangeFt) || 0))),
+      // 2026-10-01 — edit mode: blocks the wizard has no step for ride through
+      // from the overlay instead of resetting to defaults on save.
+      ...(values.opCost && typeof values.opCost === "object" ? { opCost: foundry.utils.deepClone(values.opCost) } : {}),
+      ...(values.save   && typeof values.save   === "object" ? { save:   foundry.utils.deepClone(values.save) }   : {})
     },
     { inplace: false }
   );
@@ -8615,13 +8785,13 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
         skill: values.skill || "melee",
         damage: {
           formula: values.damageFormula || "2d6",
-          attribute: values.intent || "violence",
+          attribute: values.damageAttribute || values.intent || "violence",
           type: values.damageType || "kinetic",
           track: values.damageTrack || "integrity"
         },
         range: {
-          short: Number(values.rangeShort ?? 1) || 1,
-          long: Number(values.rangeLong ?? 1) || 1
+          short: Number.isFinite(Number(values.rangeShort)) ? Number(values.rangeShort) : 1,
+          long: Number.isFinite(Number(values.rangeLong)) ? Number(values.rangeLong) : 1
         },
         damageParts: ftNormalizeDamageParts(values.damageParts ?? []),
         tags,
@@ -8650,7 +8820,12 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       mode: values.mode || "hermetic",
       clarityRequired,
       noiseGain,
-      activation: values.activation || "action",
+      // Legacy STRING field. Wizard V2 state inherits manifestation.activation
+      // (an object) under `activation` from the defaults — never write that
+      // here; fall back to the structured block's type (2026-10-01).
+      activation: (typeof values.activation === "string" && values.activation)
+        ? values.activation
+        : (["action", "bonus", "reaction", "ritual"].includes(values.activation_block?.type) ? values.activation_block.type : "action"),
       target: values.target || "single",
       range: values.range || "near",
       damage: values.damage || "",
@@ -9789,6 +9964,14 @@ function _ftWizV2OverlayFromItem(state, item, kind) {
   if (mf.area)       state.area = foundry.utils.deepClone(mf.area);
   if (mf.activation) state.activation_block = foundry.utils.deepClone(mf.activation);
   if (mf.resolution) state.resolution = foundry.utils.deepClone(mf.resolution);
+  // 2026-10-01 — chain / OP cost / save / conditional damage were never copied,
+  // so saving an edit wrote the defaults over them.
+  if (mf.chain)  state.chain  = foundry.utils.deepClone(mf.chain);
+  if (mf.opCost) state.opCost = foundry.utils.deepClone(mf.opCost);
+  if (mf.save)   state.save   = foundry.utils.deepClone(mf.save);
+  const cdArr = Array.isArray(mf.conditionalDamage) ? mf.conditionalDamage
+    : (mf.conditionalDamage && typeof mf.conditionalDamage === "object" ? Object.values(mf.conditionalDamage) : []);
+  state.conditionalDamage = Object.fromEntries(cdArr.map((r, i) => [`c${i}`, { vsType: r?.vsType ?? "", bonusFormula: r?.bonusFormula ?? "" }]));
   state.tags   = Array.isArray(sys.tags) ? [...sys.tags] : (state.tags ?? []);
   state.effect = sys.effect ?? state.effect ?? "";
   state.flavor = sys.flavor ?? state.flavor ?? "";
@@ -9822,6 +10005,7 @@ function _ftWizV2OverlayFromItem(state, item, kind) {
     state.damageFormula= sys.damage?.formula ?? "";
     state.damageType   = sys.damage?.type ?? "kinetic";
     state.damageTrack  = sys.damage?.track ?? "integrity";
+    if (sys.damage?.attribute) state.damageAttribute = sys.damage.attribute;
     state.rangeShort   = sys.range?.short ?? 1;
     state.rangeLong    = sys.range?.long ?? 1;
   } else {
@@ -10674,8 +10858,11 @@ FT.COMBAT_ACTIONS = {
       }
       const banked = ally.getFlag("fourththing", "aidBanked") ?? [];
       banked.push({ from: actor.name, kind: "reroll-lowest", set: Date.now() });
-      await ally.setFlag("fourththing", "aidBanked", banked);
-      return `${actor.name} aids ${ally.name} — reroll-lowest banked for ${ally.name}'s next roll this scene.`;
+      // Seat-safe (2026-10-01): another player's PC relays through the GM.
+      let mode;
+      try { mode = await _ftSetFlagSeatSafe(ally, "aidBanked", banked); }
+      catch (e) { ui.notifications?.warn(`Couldn't bank Aid on ${ally.name} — ${e?.message ?? e}.`); return null; }
+      return `${actor.name} aids ${ally.name} — reroll-lowest banked for ${ally.name}'s next roll this scene.${mode === "relay" ? " (relayed to GM)" : ""}`;
     }
   },
   hide: {
@@ -11148,7 +11335,15 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
     }
   }
 
-  if (Object.keys(updates).length) await recipient.update(updates);
+  // 2026-10-01 — seat-safe: a thrown grenade / apply-to-ally salve targets
+  // actors the user rarely owns. Those writes go to the active GM (track paths
+  // are allowlisted GM-side); toggleCondition relays on its own.
+  const _relay = !game.user?.isGM && !recipient.isOwner;
+  if (Object.keys(updates).length) {
+    if (!_relay) await recipient.update(updates);
+    else if (game.users?.some?.(u => u.isGM && u.active)) { _ftRelayEmit({ t: "ft-trackUpdate", targetUuid: recipient.uuid, updates }); summary.push(`<li><i>relayed to GM</i></li>`); }
+    else summary.push(`<li><i>no GM online — track changes not applied</i></li>`);
+  }
 
   // Conditions → native status AEs via the canonical toggle. Force to the desired
   // state (skip if already there). toggleCondition handles the boolean, the status
@@ -11175,7 +11370,8 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
       foundry.utils.setProperty(o, "flags.fourththing.applyOnUse", false); // applied copy isn't a template
       return o;
     });
-    await recipient.createEmbeddedDocuments("ActiveEffect", aeData);
+    if (!_relay) await recipient.createEmbeddedDocuments("ActiveEffect", aeData);
+    else if ((await _ftApplyEffectsToTarget(recipient, aeData)) === "none") return [...summary, `<li><i>no GM online — effects not applied</i></li>`];
     for (const e of onUseAEs) {
       const d = e.duration ?? {};
       const dtag = d.rounds ? ` (${d.rounds} rd)` : d.seconds ? ` (${Math.round(d.seconds / 60)} min)` : "";
@@ -11208,7 +11404,9 @@ async function runConsumeEffects(actor, item, consume, { targets = null } = {}) 
 
   const perRec = [];
   for (const rec of recipients) {
-    perRec.push({ rec, summary: await _ftApplyConsumeToRecipient(rec, item, consume) });
+    // One bad recipient must not lose the card or the charge for the rest.
+    try { perRec.push({ rec, summary: await _ftApplyConsumeToRecipient(rec, item, consume) }); }
+    catch (e) { console.warn("[fourththing] consume effect failed for", rec?.name, e); perRec.push({ rec, summary: [`<li>failed — see console</li>`] }); }
   }
 
   // Charge bookkeeping — decrement and delete-at-0. Once, on the user's item.
@@ -11400,7 +11598,10 @@ async function openGatherDialog(actor) {
             : (docType === "Drawing") ? scene.drawings.get(docId) : null;   // hex nodes (2026-09-20)
           if (!sourceDoc) return;
           btn.disabled = true;
-          await RfiHarvest.attempt(actor, sourceDoc);
+          // Charges now relay via gmExec (rfi-harvest); still never leave the
+          // dialog wedged on an error — report it and refresh (2026-10-01).
+          try { await RfiHarvest.attempt(actor, sourceDoc); }
+          catch (e) { console.error("[fourththing] gather failed", e); ui.notifications?.error(`Gather failed — ${e?.message ?? e}`); }
           dlg.close();
           openGatherDialog(actor);
         });
@@ -13885,7 +14086,15 @@ Hooks.once("init", function () {
   Handlebars.registerHelper("times", (n) => Array.from({length: Math.max(0, n ?? 0)}, (_, i) => i));
   Handlebars.registerHelper("add",  (a, b) => (a ?? 0) + (b ?? 0));
   Handlebars.registerHelper("sub",  (a, b) => (a ?? 0) - (b ?? 0));
-  Handlebars.registerHelper("or",   (a, b) => a ?? b);
+  // 2026-10-01 — was registered as "or", silently replacing Foundry v14's
+  // variadic BOOLEAN `or` for every template in the world (core HUDs, palette,
+  // camera views, module management…). The system's own templates use this
+  // nullish-coalesce default ("first argument that isn't null/undefined", so a
+  // real 0 or "" is kept) under its own name; core `or` is left alone.
+  Handlebars.registerHelper("ftOr", (...args) => {
+    args.pop();   // Handlebars options hash
+    return args.find(v => v !== undefined && v !== null);
+  });
 
   // Fix sheet title bar — "TYPES.Actor.character" → readable label
   game.i18n.translations["TYPES.Actor.character"] = "Steward";
@@ -14021,8 +14230,11 @@ Hooks.once("init", function () {
       if (mode === "gm-opt" && !optIn) return null;
     }
 
-    const noiseCur = Number(sys?.magic?.noise?.value)     || 0;
-    const claCur   = Number(sys?.magic?.clarity?.value)   || 0;
+    // Pools written back below — read SOURCE so an AE on Noise/Clarity isn't
+    // baked into the stored value (2026-10-01).
+    const _ovSrc   = ftSourceSystem(actor);
+    const noiseCur = Number(_ovSrc?.magic?.noise?.value)   || 0;
+    const claCur   = Number(_ovSrc?.magic?.clarity?.value) || 0;
     const surgeCur = Number(sys?.resources?.surge?.value) || 0;
     const debtCur  = Number(sys?.bloodDebt?.value)        || 0;
 
@@ -14229,7 +14441,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // resolved at this point); the original explosion bookkeeping above stands.
     const rerollGrants = collectRerolls(actor, { context: "check", skill, attribute });
     if (_dw.advantage) rerollGrants.push({ sourceItemName: "Fractal Self", mode: "reroll-lowest" });
-    const rerollResult = await applyRerollGrants(roll, rerollGrants, totalBonus);
+    const rerollResult = await _ftApplyRerollsSafe(roll, rerollGrants);
     await consumeAnnotationReroll(actor, rerollResult.applied);
     await consumeAidReroll(actor, rerollResult.applied);
     await consumePaceReroll(actor, rerollResult.applied);
@@ -14239,16 +14451,17 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (_dw.sources.length) await _ftConsumeDwOneShots(actor, _dw);
     if (_framePushBonus > 0) await actor.update({ "flags.fourththing.bulwark.frameOneShot.-=push": null });
 
-    // Restraint: pull the punch on this roll, bank +1d4 vs. target for next.
-    let pulled = 0;
-    if (target && Number(restraintReduction) > 0) {
-      pulled = await game.fourththing.rolls.bankRestraint(actor, target, restraintReduction);
-    }
-    // Consume any prior banked restraint vs. this target as a bonus to *this* roll.
+    // Restraint: CONSUME any prior banked die vs. this target first, THEN bank
+    // this roll's pull for the next one (2026-10-01 — banking first meant the
+    // same roll immediately consumed the die it had just banked).
     let bonus = 0;
     if (target) {
       const r = await game.fourththing.rolls.consumeRestraint(actor, target);
       bonus = r.bonus || 0;
+    }
+    let pulled = 0;
+    if (target && Number(restraintReduction) > 0) {
+      pulled = await game.fourththing.rolls.bankRestraint(actor, target, restraintReduction);
     }
     const adjustedTotal = roll.total - pulled + bonus;
 
@@ -14380,10 +14593,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (!label || label === "Manifestation") label = item.name ?? label;
     }
     const sys      = actor.system?.system ?? actor.system;
-    const attrI    = sys.attributes?.[intent]?.value  ?? 0;
-    const attrC    = sys.attributes?.[channel]?.value ?? 0;
-    const clarity  = sys.magic?.clarity?.value ?? 3;
-    const noise    = sys.magic?.noise?.value   ?? 0;
+    // ⚠ SOURCE reads (2026-10-01, the attributeTest/attackTest 2026-08-15 fix
+    // carried here): actor.system is AE-applied and the appliedEffects sweep
+    // below adds the same passives again. Base values from source; the sweep
+    // is the single application of the AE bonus (and the Noise writes below
+    // no longer bake a Noise AE into the stored pool).
+    const srcSys   = ftSourceSystem(actor);
+    const attrI    = srcSys?.attributes?.[intent]?.value  ?? 0;
+    const attrC    = srcSys?.attributes?.[channel]?.value ?? 0;
+    const clarity  = srcSys?.magic?.clarity?.value ?? 3;
+    const noise    = srcSys?.magic?.noise?.value   ?? 0;
     const alignMod = ftAlignmentMod(sephirah, intent, channel);
 
     // Passive AE bonuses on intent/channel attributes, magic.clarity, magic.noise.
@@ -14498,19 +14717,20 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (useOverlay) {
       rerollGrants.push({ sourceItemName: "Wyrdlens — Probability Overlay", mode: "reroll-lowest" });
     }
-    const rerollResult = await applyRerollGrants(roll, rerollGrants, posTotal - totalNoise);
+    const rerollResult = await _ftApplyRerollsSafe(roll, rerollGrants);
     await consumeAnnotationReroll(actor, rerollResult.applied);
     await consumeAidReroll(actor, rerollResult.applied);
 
-    // Restraint pass — bank pull-the-punch, then consume any prior banked die.
-    let pulled = 0;
-    if (target && Number(restraintReduction) > 0) {
-      pulled = await game.fourththing.rolls.bankRestraint(actor, target, restraintReduction);
-    }
+    // Restraint pass — consume any prior banked die FIRST, then bank this
+    // roll's pull-the-punch for the next roll (2026-10-01 order fix).
     let bonus = 0;
     if (target) {
       const r = await game.fourththing.rolls.consumeRestraint(actor, target);
       bonus = r.bonus || 0;
+    }
+    let pulled = 0;
+    if (target && Number(restraintReduction) > 0) {
+      pulled = await game.fourththing.rolls.bankRestraint(actor, target, restraintReduction);
     }
     const total   = roll.total - pulled + bonus;
     const success = total >= difficulty;
@@ -14598,8 +14818,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const attackVs = ["guard", "evasion", "resolve"].includes(resolution.attackVs) ? resolution.attackVs : "evasion";
     const defenseValue = Number(tSys?.derived?.[attackVs]?.value) || 10;
 
-    const intentVal  = Number(sys?.attributes?.[intent]?.value)  || 0;
-    const channelVal = Number(sys?.attributes?.[channel]?.value) || 0;
+    // Base from SOURCE (2026-10-01) — the AE sweep below is the single
+    // application of passives; AE-applied actor.system counted them twice.
+    const _src       = ftSourceSystem(actor);
+    const intentVal  = Number(_src?.attributes?.[intent]?.value)  || 0;
+    const channelVal = Number(_src?.attributes?.[channel]?.value) || 0;
 
     // AE adds on intent + channel attributes (v14 change.type === "add").
     const aeContribs = [];
@@ -14697,7 +14920,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const dc         = dcMode === "fixed" ? (Number(resolution.saveDcFixed) || 15) : ftFormulaSaveDC(actor, _mfTier, channel);
     const onSave     = ["negate", "half"].includes(resolution.onSave) ? resolution.onSave : "half";
 
-    const attrVal = Number(sys?.attributes?.[saveAttr]?.value) || 0;
+    // Base from the target's SOURCE (2026-10-01) — the AE sweep below adds
+    // the passives exactly once.
+    const attrVal = Number(ftSourceSystem(target)?.attributes?.[saveAttr]?.value) || 0;
 
     // AE adds on the SAVE attribute (target side, since target is rolling).
     const aeContribs = [];
@@ -14764,7 +14989,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (effOverride !== "3d10kl2") {
       try {
         const _defGrants = collectRerolls(target, { context: "defense", attribute: saveAttr });
-        const _defRes    = await applyRerollGrants(roll, _defGrants, totalBonusEff);
+        const _defRes    = await _ftApplyRerollsSafe(roll, _defGrants);
         await consumeAidReroll(target, _defRes.applied);
         if (_defRes.applied.length) {
           _defRerollNote = `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">${_defRes.applied.map(a => `${a.mode === "reroll-lowest" ? "↑" : "↓"} rerolled ${a.before} → ${a.after} (${ftEscapeHtml(a.source)})`).join(", ")}</p>`;
@@ -14890,7 +15115,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const onContestLoss = ["negate", "half"].includes(resolution.onContestLoss) ? resolution.onContestLoss : "negate";
 
     // ─ Caster's roll ────────────────────────────────────────────────────────
-    const cBaseAttr = cKeys.reduce((sum, k) => sum + (Number(cSys?.attributes?.[k]?.value) || 0), 0);
+    // Bases from SOURCE on both sides (2026-10-01) — the AE sweeps add passives once.
+    const _cSrc = ftSourceSystem(actor);
+    const cBaseAttr = cKeys.reduce((sum, k) => sum + (Number(_cSrc?.attributes?.[k]?.value) || 0), 0);
     const cAEContribs = [];
     let cAE = 0;
     for (const effect of actor.appliedEffects ?? []) {
@@ -14919,7 +15146,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const cTotal = cRoll.total;
 
     // ─ Target's roll ────────────────────────────────────────────────────────
-    const tBaseAttr = Number(tSys?.attributes?.[tKey]?.value) || 0;
+    const tBaseAttr = Number(ftSourceSystem(target)?.attributes?.[tKey]?.value) || 0;
     const tAEContribs = [];
     let tAE = 0;
     for (const effect of target.appliedEffects ?? []) {
@@ -15235,15 +15462,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       _rankPoolNote = `${poolLabel}: ${baseN}d10 keep ${keepBest ? "best 2" : "worst 2"}${droppedVals.length ? ` (dropped ${droppedVals.join(", ")})` : ""}`;
     }
 
-    // Restraint pass — bank pull-the-punch, then consume any prior banked die.
-    let pulled = 0;
-    if (target && Number(restraintReduction) > 0) {
-      pulled = await game.fourththing.rolls.bankRestraint(actor, target, restraintReduction);
-    }
+    // Restraint pass — consume any prior banked die FIRST, then bank this
+    // roll's pull-the-punch for the next roll (2026-10-01 order fix).
     let bonus = 0;
     if (target) {
       const r = await game.fourththing.rolls.consumeRestraint(actor, target);
       bonus = r.bonus || 0;
+    }
+    let pulled = 0;
+    if (target && Number(restraintReduction) > 0) {
+      pulled = await game.fourththing.rolls.bankRestraint(actor, target, restraintReduction);
     }
     const total   = roll.total - pulled + bonus;
     // Furrykin Predator Patience — "treat a failed attack as a hit" (1/SB one-shot,
@@ -15392,7 +15620,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // the one roll path where it can self-evaluate.
     const _legendaryCanSave = (_rankData.mechanic === "legendary") && !success
       && (Number(defenseValue) <= 20 || (total + 10) >= Number(defenseValue))
-      && !legendaryUsed(actor.id, skill);
+      && !legendaryUsed(actor.id, skill) && !_ftLegendaryUsedPersisted(actor, skill);
     const _legendaryCtx = _legendaryCanSave ? {
       actorId:   actor.id,
       tokenUuid: actor.token?.uuid ?? "",
@@ -15585,6 +15813,27 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     _skipInterceptors = false, _noEnvArc = false
   } = {}) {
     if (!actor) return null;
+
+    // 2026-10-01 — seat-safe chokepoint. A player seat can't write an actor it
+    // doesn't own (foes, GM-owned allies, other players' PCs); callers such as
+    // chain secondaries, AoE Apply All / save prompts, consumables and class
+    // heals used to throw here and swallow it while their cards claimed the
+    // number. Non-owner seats now hand the (pre-scaled) amount to the active GM
+    // via the ft-applyDamage relay (by UUID — unlinked tokens resolve to their
+    // synthetic actor), and the returned description says so.
+    if (!game.user?.isGM && !actor.isOwner) {
+      const _m = (Number.isFinite(perTargetMultiplier) && perTargetMultiplier >= 0) ? perTargetMultiplier : 1;
+      const _amt = Math.max(0, Math.floor((Number(baseDmg) || 0) * _m));
+      if (!game.users?.some?.(u => u.isGM && u.active)) {
+        ui.notifications?.warn?.(`No GM online — couldn't apply ${op === "heal" ? "healing" : "damage"} to ${actor.name}.`);
+        return null;
+      }
+      _ftRelayEmit({
+        t: "ft-applyDamage", actorId: actor.id, targetUuid: actor.uuid,
+        baseDmg: _amt, op, track, damageType, damageFlavor, ignoreResists, nonlethal
+      });
+      return `${actor.name}: ${op === "heal" ? "+" : ""}${_amt}${damageType ? ` ${damageType}` : ""} ${op === "heal" ? "healing" : "damage"} — sent to GM`;
+    }
 
     // Retire legacy broad "energy" → energy-family type+flavor at the universal
     // apply chokepoint, so even callers that read a stored damageType:"energy"
@@ -16060,26 +16309,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const actor = token.actor;
       if (!actor) continue;
       if (!firstTarget) firstTarget = actor;
-      // 2026-05-19 — Players don't own enemy rigs/bosses, so a direct
-      // actor.update() inside _applyDamageToActor would silently fail.
-      // Relay to an active GM via the existing system.fourththing socket
-      // (same pattern as ftBoardRig / ftDisembarkSteward). GM-side
-      // handler re-enters _applyDamageToActor with full perms.
-      if (!game.user.isGM && !actor.isOwner) {
-        if (!game.users?.some?.(u => u.isGM && u.active)) {
-          ui.notifications.warn(`No GM online — cannot apply damage to ${actor.name}.`);
-          continue;
-        }
-        game.socket?.emit?.("system.fourththing", {
-          t: "ft-applyDamage",
-          actorId: actor.id,
-          // uuid of the token's own actor — for an unlinked token this is the
-          // synthetic actor (Scene.x.Token.y.Actor.z), which actorId can't name.
-          targetUuid: actor.uuid,
-          baseDmg, op, track, damageType, damageFlavor, ignoreResists, nonlethal,
-          parts: extraParts
-        });
-        ui.notifications.info(`${actor.name}: damage relayed to GM.`);
+      // 2026-05-19 — Players don't own enemy rigs/bosses. 2026-10-01 — the
+      // per-call GM relay now lives in _applyDamageToActor itself (by uuid),
+      // so this button no longer short-circuits: a player's click relays the
+      // primary hit, each part AND the conditional-damage rows, and the weapon
+      // states below go through applyManifestationStates' own effects relay
+      // (the old early `continue` silently dropped those riders).
+      if (!game.user.isGM && !actor.isOwner && !game.users?.some?.(u => u.isGM && u.active)) {
+        ui.notifications.warn(`No GM online — cannot apply damage to ${actor.name}.`);
         continue;
       }
       const desc = await game.fourththing.rolls._applyDamageToActor(actor, baseDmg, {
@@ -16339,26 +16576,29 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     try {
       const burnFlag = actor.flags?.fourththing?.aptitudeBurn;
       if (Array.isArray(burnFlag) && burnFlag.length) {
+        // 2026-10-01 — base from SOURCE (the derived rank folds AE bonuses in,
+        // which used to get baked into the stored rank) and ACCUMULATE per key
+        // (two burns of the same aptitude each overwrote the other: one rank lost).
+        const _srcSkills = ftSourceSystem(actor)?.skills ?? {};
         for (const entry of burnFlag) {
           if (!entry?.key) continue;
           const path = `system.skills.${entry.key}.value`;
-          const cur  = Number(foundry.utils.getProperty(actor, path) ?? 0) || 0;
-          updates[path] = cur + Math.max(0, Number(entry.ranks) || 0);
+          const base = updates[path] ?? (Number(_srcSkills?.[entry.key]?.value) || 0);
+          updates[path] = base + Math.max(0, Number(entry.ranks) || 0);
         }
       }
     } catch (_e) {}
 
-    // Clear manifestation lockout flag (Blood Debt refit 2026-05-09).
-    if (Number(actor.flags?.fourththing?.manifestationLockout) > 0) {
-      updates["flags.fourththing.-=manifestationLockout"] = null;
-    }
-
-    // Refresh the Enlightenment "minor miracle" charge (bbttcc) on Soma Break.
-    if (actor.flags?.["bbttcc-character-options"]?.miracleUsed) {
-      updates["flags.bbttcc-character-options.-=miracleUsed"] = null;
-    }
-
     await actor.update(updates);
+    // Clear manifestation lockout flag (Blood Debt refit 2026-05-09) and refresh
+    // the Enlightenment "minor miracle" charge (bbttcc). unsetFlag, not the
+    // legacy "-=key" update syntax v14 deprecated (2026-10-01).
+    if (Number(actor.flags?.fourththing?.manifestationLockout) > 0) {
+      try { await actor.unsetFlag("fourththing", "manifestationLockout"); } catch (e) { console.warn("[fourththing] lockout clear failed", e); }
+    }
+    if (actor.flags?.["bbttcc-character-options"]?.miracleUsed) {
+      try { await actor.unsetFlag("bbttcc-character-options", "miracleUsed"); } catch (e) { console.warn("[fourththing] miracle refresh failed", e); }
+    }
     if (itemUpdates.length) await actor.updateEmbeddedDocuments("Item", itemUpdates);
     if (sceneId) await actor.setFlag("fourththing", "lastSomaBreakScene", sceneId);
     // Marker effects follow the stores written above (Strain level chip, Imposed icon).
@@ -16750,6 +16990,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         if (!quiet) ui.notifications?.info?.(`${actor.name} already holds ${cur} temp Integrity (${source || "grant"} would give ${want} — the higher pool stands).`);
         return cur;
       }
+      // Seat-safe (2026-10-01): a beneficiary the user doesn't own (another
+      // player's steward) is granted by the active GM via ft-tempIntegrity.
+      if (!game.user?.isGM && !actor.isOwner) {
+        if (!game.users?.some?.(u => u.isGM && u.active)) {
+          ui.notifications?.warn?.(`No GM online — couldn't grant temp Integrity to ${actor.name}.`);
+          return cur;
+        }
+        _ftRelayEmit({ t: "ft-tempIntegrity", targetUuid: actor.uuid, amount: want, source: String(source ?? ""), quiet: !!quiet });
+        return want;
+      }
       await actor.update({ "system.derived.integrity.temp": want });
       if (!quiet) ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor }),
@@ -16812,6 +17062,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     },
     async clear(target, why = "") {
       if (!this.isImposed(target)) return false;
+      // Seat-safe (2026-10-01): a player's cast/attack consuming a foe's Imposed
+      // used to swallow the failed update and leave it on. Relay to the GM.
+      if (!game.user?.isGM && !target.isOwner) {
+        if (!game.users?.some?.(u => u.isGM && u.active)) return false;
+        _ftRelayEmit({ t: "ft-imposeClear", targetUuid: target.uuid, why: String(why ?? "") });
+        return true;
+      }
       try { await target.update({ "system.conditions.imposed": false }); } catch (_e) {}
       try { await _ftSyncConditionAE(target, "imposed", false); } catch (_e) {}
       try { await target.unsetFlag("fourththing", "imposedAt"); } catch (_e) {}
@@ -16918,16 +17175,21 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // +1 to the traveling steward, once per hex per world turn. Runs on the
   // seat that executed the leg (usually the GM console); unwritable stewards
   // are skipped rather than relayed — the pilgrim pays, the cargo doesn't.
+  // 2026-10-01 — fixed against the REAL payload: hex-travel emits ctx.to as
+  // the Drawing PLACEABLE (doc at .document), the console re-emit as
+  // {uuid, obj}; and ctx.actor is the FACTION actor, not a steward. Darkness
+  // now lands on the stewards linked to the travelling faction.
   Hooks.on("bbttcc:afterTravel", async (ctx) => {
     try {
       if (!ctx?.success) return;
-      const steward = ctx.actor;
-      if (!steward?.isOwner) return;
-      if (steward.type !== "character" && steward.type !== "npc") return;
-      // Resolve the destination hex Drawing from ctx.to (doc, uuid, or name).
+      // Resolve the destination hex Drawing from ctx.to (placeable, {uuid,obj}, doc, uuid, or name).
       let hex = null;
       const to = ctx.to;
-      if (to?.flags?.["bbttcc-territory"]) hex = to;
+      const _isHexDoc = (d) => !!d?.flags?.["bbttcc-territory"];
+      if (_isHexDoc(to?.document)) hex = to.document;
+      else if (_isHexDoc(to?.obj?.document ?? to?.obj)) hex = to.obj.document ?? to.obj;
+      else if (_isHexDoc(to)) hex = to;
+      else if (typeof to?.uuid === "string") { try { const d = await fromUuid(to.uuid); if (_isHexDoc(d)) hex = d; } catch (_e) {} }
       else if (typeof to === "string" && to.includes("Drawing")) { try { hex = await fromUuid(to); } catch (_e) {} }
       if (!hex && to != null) {
         const norm = (s) => String(s || "").replace(/ /g, " ").replace(/^[\s✦]+/, "").replace(/\s+/g, " ").trim().toLowerCase();
@@ -16948,13 +17210,26 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const faction = fid ? game.actors?.get(fid) : null;
       const hexDark = Number(faction?.getFlag?.("bbttcc-factions", "darkness")?.[hex.id] ?? 0) || 0;
       if (hexDark < 5) return;
+      // The travellers: stewards linked to the travelling faction (ctx.factionId,
+      // or ctx.actor when that is the faction), plus ctx.actor itself when a
+      // steward was passed directly. Only seats that can write them act.
+      const _kind = (a) => { try { return actorKind(a); } catch (_e) { return ""; } };
+      const travFid = ctx.factionId || (_kind(ctx.actor) === "faction" ? ctx.actor?.id : "") || "";
+      const stewards = new Set();
+      if (_kind(ctx.actor) === "steward") stewards.add(ctx.actor);
+      if (travFid) for (const a of game.actors ?? []) {
+        if (_kind(a) === "steward" && getLinkedFaction(a)?.id === travFid) stewards.add(a);
+      }
       // Once per hex per world turn (canonical spine: bbttcc-world).
       const turn = Number(game.bbttcc?.api?.world?.getState?.()?.turn?.number ?? 0) || 0;
-      const seen = foundry.utils.deepClone(steward.getFlag("fourththing", "darkHexLog") ?? {});
-      if (seen[hex.id] === turn) return;
-      seen[hex.id] = turn;
-      await steward.setFlag("fourththing", "darkHexLog", seen);
-      await game.fourththing.darkness?.gain?.(steward, 1, "dark-hex-travel");
+      for (const steward of stewards) {
+        if (!steward?.isOwner) continue;
+        const seen = foundry.utils.deepClone(steward.getFlag("fourththing", "darkHexLog") ?? {});
+        if (seen[hex.id] === turn) continue;
+        seen[hex.id] = turn;
+        await steward.setFlag("fourththing", "darkHexLog", seen);
+        await game.fourththing.darkness?.gain?.(steward, 1, "dark-hex-travel");
+      }
     } catch (_e) {}
   });
 
@@ -17014,6 +17289,19 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ui.notifications?.info?.(`${actor.name} is immune to ${FT.CONDITIONS?.[condKey]?.label ?? condKey}.`);
         return current;
       }
+    }
+    // 2026-10-01 — seat-safe: a player toggling a condition on an actor they
+    // don't own (Surge Staggered/Calmed on foes, clearing an ally's Shaken,
+    // Breach Prone…) relays to the active GM, who sets it to `want` (no-op if
+    // it's already there, so a stale read can't flip it back). Throws when no
+    // GM is online, so callers' try/catch still sees the failure.
+    if (!game.user?.isGM && !actor.isOwner) {
+      if (!game.users?.some?.(u => u.isGM && u.active)) {
+        ui.notifications?.warn?.(`No GM online — couldn't change ${actor.name}'s conditions.`);
+        throw new Error("no GM online");
+      }
+      _ftRelayEmit({ t: "ft-setCondition", targetUuid: actor.uuid, condKey, want: newVal });
+      return newVal;
     }
     await actor.update({ [`system.conditions.${condKey}`]: newVal });
     await _ftSyncConditionAE(actor, condKey, newVal);
@@ -17454,6 +17742,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (!actor || n <= 0) return;
     const sys = actor.system?.system ?? actor.system;
     if (!sys?.conditions?.dying) return;
+    // Already crossed (crossThreshold leaves dying on but ends the Last Stand):
+    // further hits must not re-cross — that re-added Blood Debt and posted a
+    // fresh Redeem/Reincarnate card per hit (2026-10-01).
+    if ((Number(sys.lastStand?.failures) || 0) >= 3) return;
     const failures = (sys.lastStand?.failures ?? 0) + n;
     await actor.update({ "system.lastStand.failures": failures });
     if (failures >= 3) await game.fourththing.deathMech.crossThreshold(actor);
@@ -17668,15 +17960,17 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       note:   `Integrity collapse during combat, Tier ${tier}.`
     });
 
-    const cost  = tier * 5;
+    // MARKS — the same price redeem() charges (tier × 50 marks); this card used
+    // to quote and pass tier × 5, a tenth of it (2026-10-01).
+    const cost  = tier * 50;
     const probe = game.fourththing.bloodDebt.probe(actor, { cost, category: "violence" });
     const factionName = probe.faction?.name ?? "—";
 
     // Pull together the status block + action buttons.
     const statusLine = probe.canCover
-      ? `<span style="color:#4a90d9">Redemption possible</span> — ${factionName} holds ${probe.available} violence OP.`
+      ? `<span style="color:#4a90d9">Redemption possible</span> — ${factionName} holds ${probe.available} violence marks.`
       : probe.faction
-        ? `<span style="color:#ff8a8a">Redemption blocked</span> — ${factionName} only has ${probe.available} violence OP. Reincarnation required.`
+        ? `<span style="color:#ff8a8a">Redemption blocked</span> — ${factionName} only has ${probe.available} violence marks. Reincarnation required.`
         : `<span style="color:#ff8a8a">No linked faction</span> — Redemption unavailable. Reincarnation required.`;
 
     const redeemBtn = probe.canCover
@@ -18779,9 +19073,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
   // Harmony Marshal strategic-turn rollover hooks.
   //  · T2 Attrition Easer: clear `attritionEaserUsedThisTurn` so the once-per-turn cap refreshes.
-  //  · T4 Unity Conductor: for each PC at tier 4+ with HM class, post a chat reminder for +2 Soft Power OP.
-  Hooks.on("bbttcc:advanceTurn:end", async () => {
-    if (!game.user?.isGM) return;
+  //  · T4 Unity Conductor: for each PC at tier 4+ with HM class, post a chat reminder for +20 Soft Power marks.
+  // 2026-10-01 — dry-run previews (apply:false) must not mutate or post, and
+  // only the ACTIVE GM runs it (two GM seats posted every card twice).
+  Hooks.on("bbttcc:advanceTurn:end", async ({ apply } = {}) => {
+    if (!apply || !game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
     for (const actor of game.actors?.contents ?? []) {
       const hasHM = actor.items?.some?.(it => it.type === "class" && (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
       if (!hasHM) continue;
@@ -18795,7 +19091,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const fName = actor.getFlag?.("bbttcc-factions", "factionName") ?? actor.system?.system?.faction?.name ?? actor.system?.faction?.name ?? "(faction)";
         ChatMessage.create({
           speaker: ChatMessage.getSpeaker({ actor }),
-          content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Unity Conductor — strategic turn rolled over</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${foundry.utils.escapeHTML(actor.name)}</b> (Tier ${tier}, Harmony Marshal): grant <b>+2 Soft Power OP</b> to <b>${foundry.utils.escapeHTML(String(fName))}</b> this turn (canon: T4 passive).</p><p style="margin:0.2rem 0 0;font-size:0.7rem;opacity:0.6">Use the Unity Conductor button on the sheet to apply directly.</p></div>`
+          content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Unity Conductor — strategic turn rolled over</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${foundry.utils.escapeHTML(actor.name)}</b> (Tier ${tier}, Harmony Marshal): grant <b>+20 Soft Power marks</b> to <b>${foundry.utils.escapeHTML(String(fName))}</b> this turn (canon: T4 passive).</p><p style="margin:0.2rem 0 0;font-size:0.7rem;opacity:0.6">Use the Unity Conductor button on the sheet to apply directly.</p></div>`
         });
       }
     }
@@ -20208,7 +20504,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       }
     }
 
-    _onRender(context, options) {
+    async _onRender(context, options) {
+      // 2026-10-01 — call core: DocumentSheetV2 disables the form for seats
+      // that can't edit (Observer), ActorSheetV2 binds its DragDrop (its drop
+      // lands on the same _onDrop as ours — _onDrop dedupes per event).
+      await super._onRender(context, options);
       this._bindTabClicks();
       this._applyActiveTab();
       this._bindInlineEditors();
@@ -20240,7 +20540,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           ".ft-edit-only input, .ft-edit-only select, .ft-edit-only textarea, " +
           "input.ft-edit-only, select.ft-edit-only, textarea.ft-edit-only"
         );
-        for (const el of fields) el.disabled = !editMode;
+        // Never re-enable on a seat that can't edit (core disabled the form).
+        for (const el of fields) el.disabled = !editMode || !this.isEditable;
       } catch (e) { console.warn("[fourththing] _ftSyncEditOnlyInputs failed", e); }
     }
 
@@ -20249,11 +20550,18 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     _bindDragDrop() {
       try {
         const el = this.element;
-        if (!el || el.dataset.ftDropBound === "1") return;
-        el.dataset.ftDropBound = "1";
-        el.addEventListener("dragover", this._onDragOver.bind(this));
-        el.addEventListener("drop",      this._onDrop.bind(this));
+        if (!el) return;
+        // Root listeners once (the AppV2 root persists across renders)…
+        if (el.dataset.ftDropBound !== "1") {
+          el.dataset.ftDropBound = "1";
+          el.addEventListener("dragover", this._onDragOver.bind(this));
+          el.addEventListener("drop",      this._onDrop.bind(this));
+        }
+        // …but the rows are NEW elements after every re-render (2026-10-01:
+        // the old root guard left re-rendered rows undraggable).
         for (const row of el.querySelectorAll("[data-item-id]")) {
+          if (row.dataset.ftDragBound === "1") continue;
+          row.dataset.ftDragBound = "1";
           row.setAttribute("draggable", "true");
           row.addEventListener("dragstart", this._onDragStart.bind(this));
         }
@@ -21042,6 +21350,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
     async _onDrop(event) {
       event.preventDefault();
+      // Core's DragDrop (super._onRender) and our root listener both deliver
+      // the SAME drop event — handle it once (2026-10-01).
+      if (event._ftDropHandled) return;
+      event._ftDropHandled = true;
       try {
         const raw = event.dataTransfer?.getData("text/plain");
         if (!raw) return;
@@ -21192,6 +21504,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         // handlers retired 2026-05-22 (game-development residue with no canon backing).
         pactkeeper_bind_subject:             (a) => mod.openPactkeeperBindSubject(a),
         pactkeeper_renegotiate:              (a) => mod.openPactkeeperRenegotiate(a),
+        // Signature-mode stance pills (header chips, "click to drop") — these
+        // keys had no DISPATCH entry, so the click only warned "No handler"
+        // and the stance kept charging upkeep (2026-10-01). Drop directly.
+        cl_mode_sentence:     (a) => setMode(a, "clSentence",    false, { label: "Cosmic Linguist — The Sentence" }),
+        wl_mode_refraction:   (a) => setMode(a, "wlRefraction",  false, { label: "Wyrdlens Adept — Refraction" }),
+        dw_mode_walking_lane: (a) => setMode(a, "dwWalkingLane", false, { label: "Dreamwalker — The Walking Lane" }),
+        pk_mode_sealed_pact:  (a) => setMode(a, "pkSealedPact",  false, { label: "Pactkeeper — Sealed Pact" }),
         pactkeeper_pick_l1_skills:           (a) => mod.openPactkeeperPickL1Skills(a),
         // Ledger Day uses the pk_ledger_day key on all 3 sheet buttons (char x2 + NPC);
         // it lived only in the ft-class-automation dispatcher before, so the sheet's
@@ -21815,18 +22134,30 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       });
     }
 
-    _onRender(context, options) {
-      // V2 doesn't auto-bind compendium drops; mirror the character sheet path.
+    async _onRender(context, options) {
+      // 2026-10-01 — core first (Observer seats get a disabled form; DragDrop
+      // is bound — _onDrop dedupes per event), then restore edit mode and
+      // sync the edit-only inputs like the character sheet (both were missing,
+      // so edit mode dropped on every re-render and hidden rank inputs submitted).
+      await super._onRender(context, options);
       this._bindDragDrop();
+      this._restoreEditMode();
+      this._ftSyncEditOnlyInputs();
     }
+    _restoreEditMode() { return FourthThingCharacterSheet.prototype._restoreEditMode.call(this); }
+    _ftSyncEditOnlyInputs() { return FourthThingCharacterSheet.prototype._ftSyncEditOnlyInputs.call(this); }
     _bindDragDrop() {
       try {
         const el = this.element;
-        if (!el || el.dataset.ftNpcDropBound === "1") return;
-        el.dataset.ftNpcDropBound = "1";
-        el.addEventListener("dragover", (ev) => ev.preventDefault());
-        el.addEventListener("drop", this._onDrop.bind(this));
+        if (!el) return;
+        if (el.dataset.ftNpcDropBound !== "1") {
+          el.dataset.ftNpcDropBound = "1";
+          el.addEventListener("dragover", (ev) => ev.preventDefault());
+          el.addEventListener("drop", this._onDrop.bind(this));
+        }
         for (const row of el.querySelectorAll("[data-item-id]")) {
+          if (row.dataset.ftDragBound === "1") continue;   // rows are new each render
+          row.dataset.ftDragBound = "1";
           row.setAttribute("draggable", "true");
           row.addEventListener("dragstart", (ev) => {
             const itemId = row?.dataset?.itemId;
@@ -21877,6 +22208,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     async _onDrop(event) {
       event.preventDefault();
+      if (event._ftDropHandled) return;   // core DragDrop + our listener share the event
+      event._ftDropHandled = true;
       try {
         const raw = event.dataTransfer?.getData("text/plain");
         if (!raw) return;
@@ -22800,12 +23133,18 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     _bindRigDragDrop() {
       const el = this.element;
-      if (!el || el.dataset.ftRigDropBound === "1") return;
-      el.dataset.ftRigDropBound = "1";
-      el.addEventListener("dragover", (ev) => ev.preventDefault());
-      el.addEventListener("drop",     (ev) => this._onDrop(ev));
+      if (!el) return;
+      if (el.dataset.ftRigDropBound !== "1") {
+        el.dataset.ftRigDropBound = "1";
+        el.addEventListener("dragover", (ev) => ev.preventDefault());
+        // super._onRender binds core DragDrop to _onDrop too — _onDrop handles
+        // each event once (2026-10-01: every rig drop used to run twice).
+        el.addEventListener("drop",     (ev) => this._onDrop(ev));
+      }
       // Make embedded item rows draggable so users can drag gear back off
       for (const row of el.querySelectorAll("[data-item-id]")) {
+        if (row.dataset.ftDragBound === "1") continue;   // rows are new each render
+        row.dataset.ftDragBound = "1";
         row.setAttribute("draggable", "true");
         row.addEventListener("dragstart", (ev) => {
           const itemId = row.dataset.itemId;
@@ -22836,6 +23175,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     async _onDrop(event) {
       event.preventDefault();
+      // Core's DragDrop (super._onRender) and our root listener both deliver
+      // the SAME drop event — handle it once (2026-10-01).
+      if (event._ftDropHandled) return;
+      event._ftDropHandled = true;
       try {
         const raw = event.dataTransfer?.getData("text/plain");
         if (!raw) return;
@@ -23840,18 +24183,35 @@ Hooks.once("ready", async () => {
         ...(Array.isArray(legacyModel?.ledger) ? legacyModel.ledger : [])
       ];
       if (legacyVal === 0 && legacyLedger.length === 0) continue;
+      // Idempotence guard (2026-10-01): the legacy deletes below used the
+      // "-=key" syntax v14 deprecated; if a delete ever failed the same debt
+      // was re-added on every GM reload. Fold each actor ONCE (stamp), and
+      // delete with the ForcedDeletion operator. NOTE: the live bbttcc-core
+      // bridge model (flags.bbttcc-core.bloodDebtModel, value + locks) is NOT
+      // legacy and is never folded here — only the old `bbttcc-bridge` scope
+      // (no longer a package, so unsetFlag would throw) and bbttcc.identity.
+      if (actor.getFlag?.("fourththing", "legacyBloodDebtFolded")) continue;
 
-      const nativeBD = actor.system?.bloodDebt ?? actor.system?.system?.bloodDebt ?? { value: 0, ledger: [] };
+      // SOURCE read — the native value is written back below.
+      const nativeBD = ftSourceSystem(actor)?.bloodDebt ?? { value: 0, ledger: [] };
       const merged   = {
         value:  (Number(nativeBD.value) || 0) + legacyVal,
         ledger: [...(nativeBD.ledger ?? []), ...legacyLedger.map(e => ({ ...e, source: e.source ?? "legacy" }))]
       };
-      await actor.update({
-        "system.bloodDebt.value":               merged.value,
-        "system.bloodDebt.ledger":              merged.ledger,
-        "flags.bbttcc.identity.-=bloodDebt":    null,
-        "flags.bbttcc-bridge.-=bloodDebtModel": null
-      });
+      const FD = foundry?.data?.operators?.ForcedDeletion;
+      const upd = {
+        "system.bloodDebt.value":  merged.value,
+        "system.bloodDebt.ledger": merged.ledger,
+        "flags.fourththing.legacyBloodDebtFolded": true
+      };
+      if (FD) {
+        if (legacyIdent != null) upd["flags.bbttcc.identity.bloodDebt"] = new FD();
+        if (legacyModel != null) upd["flags.bbttcc-bridge.bloodDebtModel"] = new FD();
+      } else {
+        upd["flags.bbttcc.identity.-=bloodDebt"] = null;
+        upd["flags.bbttcc-bridge.-=bloodDebtModel"] = null;
+      }
+      await actor.update(upd);
       count++;
     }
     if (count > 0) ui.notifications?.info(`Blood Debt: migrated ${count} character(s) from legacy flag ledger.`);
@@ -23988,6 +24348,18 @@ Hooks.on(_chatHook, (message, html) => {
   root.querySelectorAll(".ft-aoe-apply-all-btn").forEach(btn => {
     btn.addEventListener("click", () => _ftHandleAoeApplyAllClick(btn, message));
   });
+
+  // 2026-10-01 — cards resolved on ANY seat (persisted resolvedBy stamp) render
+  // with their buttons spent, so a re-render / second seat can't resolve twice.
+  for (const [sel, key] of [[".ft-save-prompt-btn", "savePromptContext"], [".ft-aoe-save-prompt-btn", "aoeSavePromptContext"],
+                            [".ft-aoe-apply-all-btn", "aoeApplyAllContext"], [".ft-misfire-convert-btn", "misfireConvertContext"]]) {
+    const done = message?.getFlag?.("fourththing", key)?.resolvedBy;
+    if (!done) continue;
+    root.querySelectorAll(sel).forEach(btn => {
+      btn.disabled = true; btn.style.opacity = "0.5";
+      if (done.label) btn.textContent = String(done.label);
+    });
+  }
 
   // Echo Spotlight spend buttons — player clicks Spend +2 or Spend reroll on
   // their own spotlight chat card to consume the once-per-scene benefit. The
@@ -24401,7 +24773,7 @@ async function ftBoardRig(steward, rig, role = null, { initiatorUserId = game.us
       ui.notifications?.warn("No GM is online to confirm boarding.");
       return;
     }
-    game.socket?.emit?.("system.fourththing", { t: "ft-boardRig", stewardId: steward.id, rigId: rig.id, role, initiatorUserId });
+    _ftRelayEmit({ t: "ft-boardRig", stewardId: steward.id, rigId: rig.id, role, initiatorUserId });
     ui.notifications?.info(`Boarding request sent — ${steward.name} → ${rig.name}.`);
     return;
   }
@@ -24427,9 +24799,16 @@ async function ftBoardRig(steward, rig, role = null, { initiatorUserId = game.us
 
   // Pick a slot — prefer requested role, else first empty, else push new
   const slots = foundry.utils.deepClone(rig.system?.crew?.slots ?? []);
+  // Re-seating on THIS rig (allowed above): vacate the steward's current slot
+  // first, or they'd hold two seats (2026-10-01; other rigs were cleared above).
+  // With no role asked for, an already-seated steward keeps their seat.
+  const _prevIdx = slots.findIndex(sl => sl?.actorId === steward.id);
+  for (const sl of slots) {
+    if (sl?.actorId === steward.id) { sl.actorId = ""; if (sl.label === steward.name) sl.label = ""; }
+  }
   const cap   = rig.system?.crew?.capacity ?? {};
   const tryRole = (r) => slots.findIndex(s => s.role === r && !s.actorId);
-  let idx = role ? tryRole(role) : -1;
+  let idx = role ? tryRole(role) : _prevIdx;
   if (idx < 0) {
     // Try roles in order of demand
     for (const r of ["pilot", "gunner", "engineer", "crew"]) {
@@ -24634,7 +25013,7 @@ async function ftDisembarkSteward(steward, { rigId: explicitRigId, initiatorUser
       ui.notifications?.warn(`No GM online — ${steward.name} disembarked locally; ask the GM to clear the rig's crew slot later.`);
     } else {
       for (const rigId of relayIds) {
-        game.socket?.emit?.("system.fourththing", {
+        _ftRelayEmit({
           t: "ft-disembarkSteward",
           stewardId: steward.id,
           rigId,
@@ -24929,7 +25308,36 @@ async function _ftSetRigHeat(rig, next) {
 //
 // Action economy is real here: steer/hold/evasive/ram/repair consume
 // the steward's `system.actions.actionUsed`; brace consumes bonusUsed.
-async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetIds = null } = {}) {
+// 2026-10-01 relay refinements:
+//  · targets travel as token UUIDs (targetUuids) — unlinked tokens resolve to
+//    THEIR synthetic actor and the reach gate measures to THAT token;
+//  · actions with a picker (Enhance System / Reload / Cycle Power / Operate
+//    Module) show it on the INITIATING seat and relay the choice (pickedId),
+//    instead of popping it on the GM's screen; opportunity-fire never relays
+//    (it only writes the player's own steward, and the shot itself goes through
+//    ftRigWeaponFire on the gunner's seat);
+//  · initiatorUserId rides along so the GM-side contact gate (ram/stomp) only
+//    honours the "GM's call" override for actions a GM started.
+const _FT_CREW_LOCAL_ACTIONS = new Set(["opportunity-fire"]);
+const _FT_CREW_PICK_ACTIONS  = new Set(["boost-system", "reload", "cycle-power", "operate-module"]);
+async function _ftCrewSelect(title, prompt, options, okLabel) {
+  return new Promise(resolve => {
+    const esc = (v) => foundry.utils.escapeHTML?.(String(v)) ?? String(v);
+    const opts = options.map(o => `<option value="${esc(o.id)}">${esc(o.label)}</option>`).join("");
+    new Dialog({
+      title,
+      content: `<p style="font-size:0.85rem">${prompt}</p>
+        <select name="pickId" style="width:100%;margin-top:.5rem;">${opts}</select>`,
+      buttons: {
+        ok:     { label: okLabel, callback: (html) => resolve(html.find("[name=pickId]").val()) },
+        cancel: { label: "Cancel", callback: () => resolve(null) }
+      },
+      default: "ok",
+      close: () => resolve(null)
+    }).render(true);
+  });
+}
+async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetIds = null, targetUuids = null, pickedId = null, initiatorUserId = null, _pickThenRelay = null } = {}) {
   if (!steward || !rig) return;
   if (rig.system?.identity?.state === "destroyed") {
     ui.notifications?.warn(`${rig.name} is destroyed.`);
@@ -24940,29 +25348,56 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
   // which requires OWNER on the rig — players have OBSERVER from the
   // boarding grant. Without this relay, all rig-state changes silently
   // failed for player-driven crews. Same pattern as ftBoardRig.
-  if (!game.user?.isGM && !rig.isOwner) {
+  if (!game.user?.isGM && !rig.isOwner && !_pickThenRelay && !_FT_CREW_LOCAL_ACTIONS.has(actionId)) {
     if (!game.users?.some?.(u => u.isGM && u.active)) {
       ui.notifications?.warn(`No GM online — ${steward.name}'s action couldn't be executed.`);
       return;
     }
-    game.socket?.emit?.("system.fourththing", {
+    const payload = {
       t: "ft-crewAction",
       stewardId: steward.id,
       rigId: rig.id,
       actionId,
       frameItemId: frameItem?.id ?? null,
-      targetIds: targetIds ?? Array.from(game.user?.targets ?? []).map(t => t?.actor?.id).filter(Boolean)
-    });
+      targetIds: targetIds ?? Array.from(game.user?.targets ?? []).map(t => t?.actor?.id).filter(Boolean),
+      targetUuids: targetUuids ?? Array.from(game.user?.targets ?? []).map(t => t?.document?.uuid).filter(Boolean),
+      initiatorUserId: game.user?.id ?? null
+    };
+    if (_FT_CREW_PICK_ACTIONS.has(actionId)) {
+      // Run the action's own gates + picker HERE; it hands back the choice.
+      return _ftHandleCrewAction(steward, rig, actionId, frameItem, {
+        targetIds, targetUuids, _pickThenRelay: (id) => _ftRelayEmit({ ...payload, pickedId: id })
+      });
+    }
+    _ftRelayEmit(payload);
     return;
   }
-  // Resolve target actors: prefer explicit ids (from player-side capture
-  // or relay) over the local user.targets set (which would be the GM's
-  // selection on the relay path).
-  const _resolveTargetActors = () => {
-    if (Array.isArray(targetIds) && targetIds.length) {
-      return targetIds.map(id => game.actors?.get(id)).filter(Boolean);
+  // Resolve targets: prefer explicit token uuids, then ids (player-side
+  // capture or relay), over the local user.targets set (which would be the
+  // GM's selection on the relay path).
+  const _resolveTargetTokens = () => {
+    if (Array.isArray(targetUuids) && targetUuids.length) {
+      return targetUuids.map(u => { try { return fromUuidSync(u); } catch (_e) { return null; } })
+        .filter(d => d?.actor).map(d => ({ actor: d.actor, token: d.object ?? null }));
     }
-    return Array.from(game.user?.targets ?? []).map(t => t?.actor).filter(Boolean);
+    if (Array.isArray(targetIds) && targetIds.length) {
+      return targetIds.map(id => game.actors?.get(id)).filter(Boolean)
+        .map(a => ({ actor: a, token: a.getActiveTokens?.()?.[0] ?? null }));
+    }
+    return Array.from(game.user?.targets ?? []).filter(t => t?.actor).map(t => ({ actor: t.actor, token: t }));
+  };
+  const _resolveTargetActors = () => _resolveTargetTokens().map(e => e.actor);
+  // The contact-gate override is for GMs who STARTED the action, not for a
+  // GM seat executing a player's relay.
+  const _initiatorIsGM = initiatorUserId ? !!game.users?.get?.(initiatorUserId)?.isGM : !!game.user?.isGM;
+  // Picker → either relay the choice (initiating player seat) or carry on.
+  const _pick = async (options, title, prompt, okLabel) => {
+    let id = (pickedId && options.some(o => o.id === pickedId)) ? pickedId : null;
+    if (!id && pickedId) return null;   // relayed choice no longer valid
+    if (!id) id = options.length > 1 ? await _ftCrewSelect(title, prompt, options, okLabel) : options[0]?.id ?? null;
+    if (!id) return null;
+    if (_pickThenRelay) { _pickThenRelay(id); return null; }
+    return id;
   };
   // 2026-05-19 — Read role from crew.slots when the actor's boardedRig
   // flag is missing or pointing at a different rig (orphan-state recovery
@@ -25001,7 +25436,10 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
   const requirePilotGate = () => !_econActive || !stCmb.pilotActionUsedThisRound || warn(`${steward.name}: pilot action already taken this round.`);
   const requireAction    = () => !_econActive || !sysActs.actionUsed              || warn(`${steward.name}: action already used this turn.`);
   const requireBonus     = () => !_econActive || !sysActs.bonusUsed               || warn(`${steward.name}: bonus action already used this turn.`);
-  const setRigCombat = (patch) => rig.setFlag("fourththing", "combat", { ...cmb, ...patch });
+  // Patch ONLY the changed keys (2026-10-01): re-writing the entry-time spread
+  // reverted any heat / hexesMoved / operatedModules change made while a
+  // picker dialog was open.
+  const setRigCombat = (patch) => rig.update(Object.fromEntries(Object.entries(patch).map(([k, v]) => [`flags.fourththing.combat.${k}`, v])));
   const setPilotGate = () => steward.setFlag("fourththing", "combat", { ...stCmb, pilotActionUsedThisRound: true });
   const setEngGate   = () => steward.setFlag("fourththing", "combat", { ...stCmb, engineerRepairedThisRound: true });
   const consumeAction = () => steward.update({ "system.actions.actionUsed": true });
@@ -25111,21 +25549,8 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       // Pick a rig-system item to enhance for this round.
       const systems = (rig.items ?? []).filter(it => it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-system");
       if (!systems.length) { warn(`${rig.name} has no rig-systems to enhance.`); return; }
-      const esc = (s) => foundry.utils.escapeHTML?.(String(s)) ?? String(s);
-      const opts = systems.map(s => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join("");
-      const picked = await new Promise(resolve => {
-        new Dialog({
-          title: "Enhance System",
-          content: `<p style="font-size:0.85rem">Pick a rig-system to enhance for this round (treated as +1 tier for any check / effect).</p>
-            <select name="systemId" style="width:100%;margin-top:.5rem;">${opts}</select>`,
-          buttons: {
-            ok: { label: "Enhance", callback: (html) => resolve(html.find("[name=systemId]").val()) },
-            cancel: { label: "Cancel", callback: () => resolve(null) }
-          },
-          default: "ok",
-          close: () => resolve(null)
-        }).render(true);
-      });
+      const picked = await _pick(systems.map(s => ({ id: s.id, label: s.name })), "Enhance System",
+        "Pick a rig-system to enhance for this round (treated as +1 tier for any check / effect).", "Enhance");
       if (!picked) return;
       const sysItem = rig.items.get(picked);
       if (!sysItem) return;
@@ -25167,7 +25592,9 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const target = _resolveTargetActors()[0];
       if (!target) { warn(`${steward.name}: target an ally token first.`); return; }
       if (target.id === steward.id) { warn(`${steward.name}: pick someone other than yourself.`); return; }
-      await target.update({ "flags.fourththing.combat.signalBonus": 1 });
+      // Owner-or-GM-relay (2026-10-01): a rig-owning player signalling another
+      // player's steward used to reject and abort mid-action.
+      if ((await _ftApplyEffectsToTarget(target, [], [], { flags: { "combat.signalBonus": 1 } })) === "none") return;
       await consumeBonus();
       try { ftPlayCombatVfx(target, "signal"); } catch (e) { console.warn("[fourththing] signal VFX", e); }
       ChatMessage.create({
@@ -25186,22 +25613,19 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const target = _resolveTargetActors()[0];
       if (!target) { warn(`${steward.name}: target a token first.`); return; }
       if (target.id === steward.id) { warn(`${steward.name}: cannot suppress yourself.`); return; }
-      await target.update({ "flags.fourththing.combat.suppressed": 2 });
-      // Visible AE on the target so the table sees the −2 looming.
-      try {
-        const existing = (target.effects ?? []).find(e => e.getFlag?.("fourththing", "rigState") === "suppressed");
-        if (!existing && target.createEmbeddedDocuments) {
-          await target.createEmbeddedDocuments("ActiveEffect", [{
-            name: "Suppressed",
-            img: "icons/svg/down.svg",
-            icon: "icons/svg/down.svg",
-            description: `−2 to next attack (suppressed by ${steward.name}).`,
-            origin: steward.uuid,
-            duration: { rounds: 1 },
-            flags: { fourththing: { rigState: "suppressed" } }
-          }]);
-        }
-      } catch (e) { console.warn("[fourththing] suppression AE create failed", e); }
+      // Flag + visible AE (so the table sees the −2 looming), owner-or-GM-relay
+      // (2026-10-01): suppression targets are foes the player never owns.
+      const existing = (target.effects ?? []).find(e => e.getFlag?.("fourththing", "rigState") === "suppressed");
+      const supAE = existing ? [] : [{
+        name: "Suppressed",
+        img: "icons/svg/down.svg",
+        icon: "icons/svg/down.svg",
+        description: `−2 to next attack (suppressed by ${steward.name}).`,
+        origin: steward.uuid,
+        duration: { rounds: 1 },
+        flags: { fourththing: { rigState: "suppressed" } }
+      }];
+      if ((await _ftApplyEffectsToTarget(target, supAE, [], { flags: { "combat.suppressed": 2 } })) === "none") return;
       await consumeBonus();
       try { ftPlayCombatVfx(target, "suppress"); } catch (e) { console.warn("[fourththing] suppression VFX", e); }
       ChatMessage.create({
@@ -25237,8 +25661,8 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       // Relay-safe: use the targetIds captured at click time (the binding
       // captures them for ram explicitly) so a player pilot's target survives
       // the GM round-trip instead of resolving to the GM's own selection.
-      const _ramTargets = _resolveTargetActors();
-      const targetActor = _ramTargets[0];
+      const _ramTargets = _resolveTargetTokens();
+      const targetActor = _ramTargets[0]?.actor;
       if (!targetActor) { ui.notifications?.warn("Target a token first (the ram needs an objective)."); return; }
 
       // 2026-08-17 — Ram is a COLLISION: it has to reach. Ungated, a rig could ram
@@ -25247,7 +25671,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       // (never block on missing data), and the GM keeps the system's usual
       // "Proceeding (GM's call)" override that the weapon range check uses.
       const _ramRigTok = rig?.getActiveTokens?.()?.[0] ?? null;
-      const _ramTgtTok = targetActor?.getActiveTokens?.()?.[0] ?? null;
+      const _ramTgtTok = _ramTargets[0]?.token ?? targetActor?.getActiveTokens?.()?.[0] ?? null;
       if (_ramRigTok && _ramTgtTok) {
         const gapFt   = _ftTokenEdgeGapFt(_ramRigTok, _ramTgtTok);
         // Tacking (sail frames) buys one extra square of reach for this round's
@@ -25255,7 +25679,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
         const reachFt = Number(canvas?.grid?.distance ?? 5) * (cmb.tacking ? 2 : 1);
         if (Number.isFinite(gapFt) && gapFt > reachFt + 0.5) {
           const msg = `${rig.name} is ~${Math.round(gapFt)} ft from ${targetActor.name} — a ram needs contact (within ${reachFt} ft). Drive closer first.`;
-          if (!game.user?.isGM) { ui.notifications?.warn(msg); return; }
+          if (!_initiatorIsGM) { ui.notifications?.warn(msg); return; }
           ui.notifications?.warn(`${msg} Proceeding (GM's call).`);
         }
       }
@@ -25323,14 +25747,14 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       if (!requirePilot() || !requirePilotGate() || !requireAction()) return;
       // Same relay-safe target capture Ram uses, so a player pilot's target
       // survives the GM round-trip instead of resolving to the GM's selection.
-      const _stompTargets = _resolveTargetActors();
-      const stompTarget = _stompTargets[0];
+      const _stompTargets = _resolveTargetTokens();
+      const stompTarget = _stompTargets[0]?.actor;
       if (!stompTarget) { ui.notifications?.warn("Target a token first — a stomp needs something underfoot."); return; }
 
       // Contact, measured EDGE-to-edge: centre-to-centre lies the moment either
       // token is bigger than 1×1 (same gate, same reason, as Ram).
       const _stRigTok = rig?.getActiveTokens?.()?.[0] ?? null;
-      const _stTgtTok = stompTarget?.getActiveTokens?.()?.[0] ?? null;
+      const _stTgtTok = _stompTargets[0]?.token ?? stompTarget?.getActiveTokens?.()?.[0] ?? null;
       if (_stRigTok && _stTgtTok) {
         const gapFt   = _ftTokenEdgeGapFt(_stRigTok, _stTgtTok);
         // Tacking (sail frames) buys one extra square of reach for this round's
@@ -25338,7 +25762,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
         const reachFt = Number(canvas?.grid?.distance ?? 5) * (cmb.tacking ? 2 : 1);
         if (Number.isFinite(gapFt) && gapFt > reachFt + 0.5) {
           const msg = `${rig.name} is ~${Math.round(gapFt)} ft from ${stompTarget.name} — a stomp needs contact (within ${reachFt} ft). Step closer first.`;
-          if (!game.user?.isGM) { ui.notifications?.warn(msg); return; }
+          if (!_initiatorIsGM) { ui.notifications?.warn(msg); return; }
           ui.notifications?.warn(`${msg} Proceeding (GM's call).`);
         }
       }
@@ -25471,32 +25895,16 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const spent = (rig.items ?? []).filter(it =>
         it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-weapon" && firedMap[it.id]);
       if (!spent.length) { warn(`Nothing to reload — no weapon on ${rig.name} has fired this round.`); return; }
-      const esc = (v) => foundry.utils.escapeHTML?.(String(v)) ?? String(v);
-      let pickedId = spent[0].id;
-      if (spent.length > 1) {
-        const opts = spent.map(w => `<option value="${esc(w.id)}">${esc(w.name)}</option>`).join("");
-        pickedId = await new Promise(resolve => {
-          new Dialog({
-            title: "Reload",
-            content: `<p style="font-size:0.85rem">Which weapon are you bringing back online?</p>
-              <select name="weaponId" style="width:100%;margin-top:.5rem;">${opts}</select>`,
-            buttons: {
-              ok:     { label: "Reload", callback: (html) => resolve(html.find("[name=weaponId]").val()) },
-              cancel: { label: "Cancel", callback: () => resolve(null) }
-            },
-            default: "ok",
-            close: () => resolve(null)
-          }).render(true);
-        });
-        if (!pickedId) return;
-      }
-      const weapon = rig.items.get(pickedId);
+      const reloadId = await _pick(spent.map(w => ({ id: w.id, label: w.name })), "Reload",
+        "Which weapon are you bringing back online?", "Reload");
+      if (!reloadId) return;
+      const weapon = rig.items.get(reloadId);
       if (!weapon) return;
       // Write FALSE rather than deleting the key: flag objects merge on update,
       // so a delete would be a silent no-op (the burn the per-round sweep warns
       // about). The fire gate is a truthiness test, so false re-arms it cleanly.
       await steward.update({
-        [`flags.fourththing.combat.rigWeaponsFiredThisRound.${pickedId}`]: false
+        [`flags.fourththing.combat.rigWeaponsFiredThisRound.${reloadId}`]: false
       });
       await consumeAction();
       try { ftPlayCombatVfx(rig, "surge"); } catch (e) { console.warn("[fourththing] reload VFX", e); }
@@ -25565,25 +25973,9 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
         return c.pilotActionUsedThisRound || c.engineerRepairedThisRound;
       });
       if (!resettable.length) { warn(`No one aboard ${rig.name} has a spent gate to cycle.`); return; }
-      const esc3 = (v) => foundry.utils.escapeHTML?.(String(v)) ?? String(v);
-      let targetId = resettable[0].actor.id;
-      if (resettable.length > 1) {
-        const opts = resettable.map(e => `<option value="${esc3(e.actor.id)}">${esc3(e.actor.name)} (${esc3(e.slot.role ?? "crew")})</option>`).join("");
-        targetId = await new Promise(resolve => {
-          new Dialog({
-            title: "Cycle Power",
-            content: `<p style="font-size:0.85rem">Whose console are you rebooting?</p>
-              <select name="crewId" style="width:100%;margin-top:.5rem;">${opts}</select>`,
-            buttons: {
-              ok:     { label: "Cycle", callback: (html) => resolve(html.find("[name=crewId]").val()) },
-              cancel: { label: "Cancel", callback: () => resolve(null) }
-            },
-            default: "ok",
-            close: () => resolve(null)
-          }).render(true);
-        });
-        if (!targetId) return;
-      }
+      const targetId = await _pick(resettable.map(e => ({ id: e.actor.id, label: `${e.actor.name} (${e.slot.role ?? "crew"})` })),
+        "Cycle Power", "Whose console are you rebooting?", "Cycle");
+      if (!targetId) return;
       const mate = game.actors?.get(targetId);
       if (!mate) return;
       const mc = mate.flags?.fourththing?.combat ?? {};
@@ -25594,7 +25986,15 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const upd = {};
       if (mc.pilotActionUsedThisRound)  { upd["flags.fourththing.combat.pilotActionUsedThisRound"]  = false; cleared.push("pilot action"); }
       if (mc.engineerRepairedThisRound) { upd["flags.fourththing.combat.engineerRepairedThisRound"] = false; cleared.push("repair"); }
-      await mate.update(upd);
+      // A rig-owning player cycling ANOTHER player's console can't write it —
+      // owner-or-GM-relay (2026-10-01; the rejection used to abort mid-action).
+      if (game.user?.isGM || mate.isOwner) await mate.update(upd);
+      else {
+        const fl = {};
+        if ("flags.fourththing.combat.pilotActionUsedThisRound" in upd)  fl["combat.pilotActionUsedThisRound"]  = false;
+        if ("flags.fourththing.combat.engineerRepairedThisRound" in upd) fl["combat.engineerRepairedThisRound"] = false;
+        if ((await _ftApplyEffectsToTarget(mate, [], [], { flags: fl })) === "none") return;
+      }
       await steward.update({ "flags.fourththing.combat.cycledThisRound": true });
       await consumeBonus();
       try { ftPlayCombatVfx(rig, "surge"); } catch (e) { console.warn("[fourththing] cycle-power VFX", e); }
@@ -25637,34 +26037,17 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const operated = cmb.operatedModules ?? {};
       const available = modules.filter(m => !(_econActive && operated[m.id]));
       if (!available.length) { warn(`Every module on ${rig.name} has already been run this round.`); return; }
-      const esc4 = (v) => foundry.utils.escapeHTML?.(String(v)) ?? String(v);
-      let modId = available[0].id;
-      if (available.length > 1) {
-        const opts = available.map(m => {
-          const sub = m.getFlag?.("fourththing", "rigGear")?.subtype === "output-module" ? "output" : "system";
-          return `<option value="${esc4(m.id)}">${esc4(m.name)} (${sub})</option>`;
-        }).join("");
-        modId = await new Promise(resolve => {
-          new Dialog({
-            title: "Operate Module",
-            content: `<p style="font-size:0.85rem">Which module are you running?</p>
-              <select name="modId" style="width:100%;margin-top:.5rem;">${opts}</select>`,
-            buttons: {
-              ok:     { label: "Operate", callback: (html) => resolve(html.find("[name=modId]").val()) },
-              cancel: { label: "Cancel", callback: () => resolve(null) }
-            },
-            default: "ok",
-            close: () => resolve(null)
-          }).render(true);
-        });
-        if (!modId) return;
-      }
+      const modId = await _pick(available.map(m => ({
+        id: m.id,
+        label: `${m.name} (${m.getFlag?.("fourththing", "rigGear")?.subtype === "output-module" ? "output" : "system"})`
+      })), "Operate Module", "Which module are you running?", "Operate");
+      if (!modId) return;
       const mod = rig.items.get(modId);
       if (!mod) return;
       // A boosted system runs at +1 effective tier — say so on the card, since
       // that's the whole point of the engineer having spent a bonus on it.
       const boosted = cmb.boostedSystemId === mod.id;
-      await setRigCombat({ operatedModules: { ...operated, [mod.id]: true } });
+      await setRigCombat({ [`operatedModules.${mod.id}`]: true });
       await consumeAction();
       try { ftPlayCombatVfx(rig, "surge"); } catch (e) { console.warn("[fourththing] operate-module VFX", e); }
       const modDesc = String(mod.system?.description?.value ?? "").trim();
@@ -25943,8 +26326,14 @@ function _ftBindCrewControls(rootEl, actor, ctx, { onDisembark } = {}) {
       const targetIds = Array.from(game.user?.targets ?? [])
         .map(t => t?.actor?.id)
         .filter(Boolean);
+      // 2026-10-01 — token UUIDs too: an unlinked token's actor id is the BASE
+      // actor's, so ids alone hit the sidebar actor and measured reach to an
+      // arbitrary token of it.
+      const targetUuids = Array.from(game.user?.targets ?? [])
+        .map(t => t?.document?.uuid)
+        .filter(Boolean);
       if (typeof _ftHandleCrewAction === "function") {
-        _ftHandleCrewAction(actor, rig, actionId, frameItem, { targetIds });
+        _ftHandleCrewAction(actor, rig, actionId, frameItem, { targetIds, targetUuids });
       } else {
         const desc = _FT_CREW_ACTION_DESC[actionId] ?? "";
         ChatMessage.create({
@@ -26215,6 +26604,11 @@ function _ftMakeHudDraggable(el, opts = {}) {
     if (saved.width  != null) el.style.width  = saved.width  + "px";
     if (saved.height != null) el.style.height = saved.height + "px";
   }
+
+  // Re-render of an already-wired HUD that's collapsed: the innerHTML swap
+  // brought the full content back and destroyed the chip while the class stuck
+  // — re-hide and re-chip (2026-10-01).
+  if (el.dataset.ftHudInit === "1" && isCollapsed()) setCollapsed(true);
 
   // 3) One-time wire-up: collapse-state restore + drag listeners.
   if (el.dataset.ftHudInit !== "1") {
@@ -27195,6 +27589,9 @@ Hooks.on("renderApplicationV2", (app, html) => {
 
 let __ftRaidHudEl = null;
 let __ftRaidHudDismissed = false;
+// Consoles open when the HUD was dismissed (2026-10-01): only a NEW console
+// (or a raid-session/round change, see the updateActor hook) un-dismisses.
+let __ftRaidHudDismissedConsoles = new Set();
 let __ftRaidHudRenderTimer = null;
 
 // HUD palette — three-faculty simplification (2026-05-12). Three canonical
@@ -27440,6 +27837,7 @@ function _ftRenderRaidHud() {
       __ftRaidHudEl.querySelector(".ft-raid-hud-dismiss")?.addEventListener("click", (ev) => {
         ev.preventDefault();
         __ftRaidHudDismissed = true;
+        __ftRaidHudDismissedConsoles = new Set(globalThis.__bbttccRaidOpenConsoles ?? []);
         if (__ftRaidHudEl) {
           __ftRaidHudEl.remove();
           __ftRaidHudEl = null;
@@ -27458,8 +27856,11 @@ function _ftRenderRaidHud() {
 // just on a class-name string match (the raid console's class name may
 // differ from "raid" so the strict match silently failed to clear
 // dismissal).
+// 2026-10-01 — not on EVERY AppV2 render (any sheet refresh brought the HUD
+// straight back): only when a console that wasn't open at dismissal appears.
 Hooks.on("renderApplicationV2", () => {
-  if (globalThis.__bbttccRaidOpenConsoles?.size > 0) {
+  const open = globalThis.__bbttccRaidOpenConsoles;
+  if (__ftRaidHudDismissed && open?.size > 0 && Array.from(open).some(a => !__ftRaidHudDismissedConsoles.has(a))) {
     __ftRaidHudDismissed = false;
   }
   _ftRenderRaidHud();
@@ -27863,14 +28264,105 @@ function _ftFindHexDrawingById(hexId) {
 // declares `"socket": true` which is required by Foundry V13+ for
 // cross-client delivery (without it the server silently drops emits).
 // Also still listens on `module.bbttcc-raid` for any legacy emits.
-// Per-message dedupe so multi-GM tables don't double-mutate.
+// 2026-10-01 — the dedupe map is per-client, so it can NOT stop two GM seats
+// both executing a relay: the handler now runs on the ACTIVE GM only (single
+// executor). Emitters stamp a unique `nonce` (see _ftRelayEmit) and the
+// dedupe keys on it, so legitimate repeats with identical payloads (two equal
+// hits, three unlinked tokens of one base actor) are no longer swallowed;
+// payload keys remain the fallback for nonce-less emits from older code.
 const __ftRelaySeen = new Map();
+let __ftRelayNonce = null;   // nonce of the message currently being handled
 function _ftRelaySeenRecently(key, windowMs = 3000) {
+  if (__ftRelayNonce) key = `nonce:${__ftRelayNonce}`;
   const now = Date.now();
   for (const [k, t] of __ftRelaySeen) if (now - t > windowMs) __ftRelaySeen.delete(k);
   if (__ftRelaySeen.has(key)) return true;
   __ftRelaySeen.set(key, now);
   return false;
+}
+// Resolve a relayed `targetUuid` (token or actor uuid) to a writable Actor.
+async function _ftRelayActor(uuid) {
+  if (typeof uuid !== "string" || !uuid) return null;
+  try {
+    const doc = await fromUuid(uuid);
+    const a = doc?.actor ?? doc ?? null;
+    return (a?.documentName === "Actor") ? a : null;
+  } catch (_e) { return null; }
+}
+// 2026-10-01 relay types (runs on the active GM only — see _ftRelayHandler).
+// Each validates its payload: only known flag/condition keys are written.
+function _ftRelayHandlerExtra(msg) {
+  if (msg?.t === "ft-cardResolved") {
+    // Persist a chat card's one-time resolution for a clicker who can't write
+    // the message (see _ftMarkCardResolved).
+    if (!_FT_RESOLVABLE_CARD_KEYS.has(msg.ctxKey)) return;
+    if (_ftRelaySeenRecently(`cardResolved:${msg.messageId}:${msg.ctxKey}`)) return;
+    const m = game.messages?.get(msg.messageId);
+    const ctx = m?.getFlag?.("fourththing", msg.ctxKey);
+    if (!ctx || ctx.resolvedBy) return;
+    m.setFlag("fourththing", `${msg.ctxKey}.resolvedBy`, { user: String(msg.user ?? ""), at: Date.now(), label: String(msg.label ?? "").slice(0, 80) })
+      .catch(e => console.warn("[fourththing] GM-relay card resolve failed", e));
+  } else if (msg?.t === "ft-bankReroll") {
+    // Append one banked reroll to an actor's aidBanked list (never overwrite).
+    if (_ftRelaySeenRecently(`bankReroll:${msg.targetUuid}:${msg.entry?.set ?? ""}`)) return;
+    const e = msg.entry;
+    if (!e || typeof e !== "object" || typeof e.kind !== "string") return;
+    const entry = { from: String(e.from ?? ""), kind: e.kind, set: Number(e.set) || Date.now() };
+    if (e.source != null) entry.source = String(e.source);
+    _ftRelayActor(msg.targetUuid).then(async a => {
+      if (!a) return;
+      const cur = a.getFlag("fourththing", "aidBanked");
+      await a.setFlag("fourththing", "aidBanked", [...(Array.isArray(cur) ? cur : []), entry]);
+    }).catch(err => console.warn("[fourththing] GM-relay bankReroll failed", err));
+  } else if (msg?.t === "ft-harmonyHarvest") {
+    // +1 harvest Surge on a Marshal the exploding roller doesn't own.
+    if (_ftRelaySeenRecently(`harmonyHarvest:${msg.marshalUuid}`)) return;
+    _ftRelayActor(msg.marshalUuid).then(a => {
+      const isMarshal = !!a?.items?.find?.(it => it.type === "class" &&
+        (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
+      if (isMarshal) return _ftHarmonyHarvestBank(a);
+    }).catch(err => console.warn("[fourththing] GM-relay harmony harvest failed", err));
+  } else if (msg?.t === "ft-trackUpdate") {
+    // Consumable track writes on a recipient the user doesn't own. Only the
+    // FT_TRACK_PATHS value paths, finite non-negative numbers.
+    const allowed = new Set(Object.values(FT_TRACK_PATHS).map(sp => sp.path));
+    const upd = {};
+    for (const [k, v] of Object.entries(msg.updates ?? {})) {
+      const n = Number(v);
+      if (allowed.has(k) && Number.isFinite(n) && n >= 0) upd[k] = n;
+    }
+    if (!Object.keys(upd).length) return;
+    if (_ftRelaySeenRecently(`trackUpdate:${msg.targetUuid}:${JSON.stringify(upd)}`)) return;
+    _ftRelayActor(msg.targetUuid).then(a => a?.update(upd))
+      .catch(err => console.warn("[fourththing] GM-relay track update failed", err));
+  } else if (msg?.t === "ft-tempIntegrity") {
+    // Temp Integrity grant on a beneficiary the granting seat doesn't own.
+    const amount = Math.max(0, Math.floor(Number(msg.amount) || 0));
+    if (!amount) return;
+    if (_ftRelaySeenRecently(`tempIntegrity:${msg.targetUuid}:${amount}`)) return;
+    _ftRelayActor(msg.targetUuid).then(a => a && game.fourththing.tempIntegrity.grant(a, amount, String(msg.source ?? "").slice(0, 80), { quiet: !!msg.quiet }))
+      .catch(err => console.warn("[fourththing] GM-relay temp Integrity failed", err));
+  } else if (msg?.t === "ft-imposeClear") {
+    // Consume/expire Imposed on a target the consuming seat doesn't own.
+    if (_ftRelaySeenRecently(`imposeClear:${msg.targetUuid}`)) return;
+    _ftRelayActor(msg.targetUuid).then(a => a && game.fourththing.impose.clear(a, String(msg.why ?? "").slice(0, 40)))
+      .catch(err => console.warn("[fourththing] GM-relay impose clear failed", err));
+  } else if (msg?.t === "ft-setCondition") {
+    // Set a condition to `want` on behalf of a non-owner (toggleCondition).
+    if (!FT.CONDITIONS?.[msg.condKey]) return;
+    if (_ftRelaySeenRecently(`setCondition:${msg.targetUuid}:${msg.condKey}:${!!msg.want}`)) return;
+    _ftRelayActor(msg.targetUuid).then(async a => {
+      if (!a) return;
+      const cur = !!(a.system?.system ?? a.system)?.conditions?.[msg.condKey];
+      if (cur === !!msg.want) return;
+      await game.fourththing.toggleCondition(a, msg.condKey);
+    }).catch(err => console.warn("[fourththing] GM-relay setCondition failed", err));
+  }
+}
+// Emit a GM relay message on the system socket with a unique nonce.
+function _ftRelayEmit(payload) {
+  try { game.socket?.emit?.("system.fourththing", { ...payload, nonce: foundry.utils.randomID() }); }
+  catch (e) { console.warn("[fourththing] relay emit failed", e); }
 }
 function _ftRelayHandler(msg) {
   try {
@@ -27881,6 +28373,8 @@ function _ftRelayHandler(msg) {
       return;
     }
     if (!game.user?.isGM) return;
+    if (game.users?.activeGM && game.users.activeGM !== game.user) return;   // one executor
+    __ftRelayNonce = (typeof msg?.nonce === "string" && msg.nonce) ? msg.nonce : null;
     if (msg?.t === "ft-activateBattleScene") {
       if (_ftRelaySeenRecently(`activate:${msg.sceneId}:${msg.idx}`)) return;
       const scene = game.scenes?.get(msg.sceneId);
@@ -27908,7 +28402,12 @@ function _ftRelayHandler(msg) {
       const rig     = game.actors?.get(msg.rigId);
       if (!steward || !rig) return;
       const frameItem = msg.frameItemId ? rig.items?.get(msg.frameItemId) : null;
-      _ftHandleCrewAction(steward, rig, msg.actionId, frameItem, { targetIds: Array.isArray(msg.targetIds) ? msg.targetIds : null });
+      _ftHandleCrewAction(steward, rig, msg.actionId, frameItem, {
+        targetIds:   Array.isArray(msg.targetIds) ? msg.targetIds : null,
+        targetUuids: Array.isArray(msg.targetUuids) ? msg.targetUuids.filter(u => typeof u === "string") : null,
+        pickedId:    typeof msg.pickedId === "string" ? msg.pickedId : null,
+        initiatorUserId: typeof msg.initiatorUserId === "string" ? msg.initiatorUserId : null
+      });
     } else if (msg?.t === "ft-applyDamage") {
       // 2026-05-19 — Players can't write to enemy rigs/bosses they don't
       // own. The chat-card Apply Damage button emits this message so the
@@ -27956,11 +28455,19 @@ function _ftRelayHandler(msg) {
       // 2026-05-23 — Players can't write AEs to GM-owned NPC allies. Surge
       // ally-buffs (Aegis / Anchor / Bulwark Stance / Mass Aegis) relay here
       // so the GM applies the Active Effect on their behalf.
-      if (_ftRelaySeenRecently(`surgeAE:${msg.actorId}:${msg.aeData?.name ?? ""}`)) return;
-      const actor = game.actors?.get(msg.actorId);
-      if (!actor || !msg.aeData) return;
-      actor.createEmbeddedDocuments("ActiveEffect", [msg.aeData])
-        .catch(e => console.warn("[fourththing] GM-relay Surge AE apply failed", e));
+      // 2026-10-01 — resolve by targetUuid (unlinked tokens), actorId fallback.
+      if (_ftRelaySeenRecently(`surgeAE:${msg.targetUuid ?? msg.actorId}:${msg.aeData?.name ?? ""}`)) return;
+      if (!msg.aeData || typeof msg.aeData !== "object") return;
+      (async () => {
+        let actor = null;
+        if (typeof msg.targetUuid === "string") {
+          try { const doc = await fromUuid(msg.targetUuid); actor = doc?.actor ?? doc ?? null; } catch (_e) {}
+          if (actor && typeof actor.createEmbeddedDocuments !== "function") actor = null;
+        }
+        actor ??= game.actors?.get(msg.actorId);
+        if (!actor) return;
+        await actor.createEmbeddedDocuments("ActiveEffect", [msg.aeData]);
+      })().catch(e => console.warn("[fourththing] GM-relay Surge AE apply failed", e));
     } else if (msg?.t === "ft-applyEffects") {
       // 2026-05-25 — generic effect/condition relay. Players can't write AEs or
       // condition flags to tokens they don't own (enemies, GM-owned allies).
@@ -27996,20 +28503,35 @@ function _ftRelayHandler(msg) {
       // invoking player may not own. GM applies, capped at the ally's max
       // (allies with no clarity track get nothing). GM-only to avoid dupes.
       if (!game.user?.isGM) return;
-      if (_ftRelaySeenRecently(`grantClarity:${msg.actorId}:${msg.amount}`)) return;
-      const ally = game.actors?.get(msg.actorId);
-      if (!ally) return;
-      const asys = ally.system?.system ?? ally.system ?? {};
-      const cur  = Number(asys?.magic?.clarity?.value) || 0;
-      const max  = Number(asys?.magic?.clarity?.max) || cur;
-      const amt  = Math.max(0, Number(msg.amount) || 0);
-      if (max > cur && amt > 0) {
-        ally.update({ "system.magic.clarity.value": Math.min(max, cur + amt) })
-          .catch(e => console.warn("[fourththing] GM-relay Clarity grant failed", e));
-      }
+      if (_ftRelaySeenRecently(`grantClarity:${msg.targetUuid ?? msg.actorId}:${msg.amount}`)) return;
+      (async () => {
+        // 2026-10-01 — targetUuid first (unlinked tokens), actorId fallback.
+        const ally = (await _ftRelayActor(msg.targetUuid)) ?? game.actors?.get(msg.actorId);
+        if (!ally) return;
+        const asys = ally.system?.system ?? ally.system ?? {};
+        const cur  = Number(asys?.magic?.clarity?.value) || 0;
+        const max  = Number(asys?.magic?.clarity?.max) || cur;
+        const amt  = Math.max(0, Number(msg.amount) || 0);
+        if (max > cur && amt > 0) await ally.update({ "system.magic.clarity.value": Math.min(max, cur + amt) });
+      })().catch(e => console.warn("[fourththing] GM-relay Clarity grant failed", e));
+    } else if (msg?.t === "ft-rigBleed") {
+      // 2026-10-01 — crew bleed-through for a hit a rig-owning player applied
+      // directly (the damaged hook only fired on their seat).
+      if (_ftRelaySeenRecently(`rigBleed:${msg.rigUuid}:${msg.amount}`)) return;
+      const amount = Math.max(0, Math.floor(Number(msg.amount) || 0));
+      if (!amount || typeof msg.rigUuid !== "string") return;
+      fromUuid(msg.rigUuid).then(doc => {
+        const rig = doc?.actor ?? doc;
+        if (rig?.type !== "rig") return;
+        return _ftRigCrewBleed(rig, amount);
+      }).catch(e => console.warn("[fourththing] GM-relay rig bleed failed", e));
+    } else {
+      _ftRelayHandlerExtra(msg);
     }
   } catch (e) {
     console.error("[ft:relay] handler threw", e);
+  } finally {
+    __ftRelayNonce = null;
   }
 }
 Hooks.once("ready", () => {
@@ -28409,6 +28931,17 @@ async function _ftCommitRoundTactical(consoleApp, roundIdx, outcomeKind) {
       });
     }
   } catch (e) { console.warn("[fourththing] tactical commit: post-round failed", e); }
+
+  // Same hook the console's own _commitRound emits (2026-10-01) — the per-round
+  // crew/rig flag clear (fired-weapon gates, pilot action, holding/evading/
+  // brace + their AEs) listens for it and never ran for tactical rounds.
+  try {
+    Hooks.callAll("bbttcc:raid:roundCommit", {
+      round: r, idx: roundIdx, attackerId: attackerId || null, defenderId: defenderId || null,
+      activityKey: r?.activityKey || consoleApp?.vm?.activityKey || null,
+      outcome: r?.outcome || null, via: "tactical"
+    });
+  } catch (_eHook) {}
 
   // Persist + re-render the console.
   try { await consoleApp._saveSessionNow?.(); } catch (_) {}

@@ -83,13 +83,15 @@ async function _promptPickRig(){
       title: "Repair Rig — Pick Faction",
       content: `
         <select name="faction">
-          ${factions.map(f=>`<option value="${f.id}">${f.name}</option>`).join("")}
+          ${factions.map(f=>`<option value="${f.id}">${foundry.utils.escapeHTML(String(f.name ?? ""))}</option>`).join("")}
         </select>
       `,
       buttons: {
         ok: { label:"Next", callback: html=>resolve(html.find("select").val()) },
         cancel: { label:"Cancel", callback: ()=>resolve(null) }
-      }
+      },
+      default: "ok",
+      close: () => resolve(null)   // X / Esc must settle the promise — this runs mid-Advance-Turn
     }).render(true);
   });
   if (!factionId) return null;
@@ -107,14 +109,16 @@ async function _promptPickRig(){
       content: `
         <select name="rig">
           ${rigs.map(r=>`<option value="${r.rigId}">
-            ${r.name} (${_rigStateFromStep(r, r.damageStep||0)})
+            ${foundry.utils.escapeHTML(String(r.name ?? ""))} (${_rigStateFromStep(r, r.damageStep||0)})
           </option>`).join("")}
         </select>
       `,
       buttons: {
         ok: { label:"Repair", callback: html=>resolve(html.find("select").val()) },
         cancel: { label:"Cancel", callback: ()=>resolve(null) }
-      }
+      },
+      default: "ok",
+      close: () => resolve(null)
     }).render(true);
   });
 
@@ -298,6 +302,7 @@ function getPartyOptionStrategics(){
 }
 
 async function queueHexTag({ targetUuid, tag }) {
+  if (!tag) return "";
   if (!targetUuid) return "No target";
   const ref = await fromUuid(targetUuid);
   const doc = ref?.document ?? ref;
@@ -357,7 +362,9 @@ function buildOptionStrategicDef(key, meta){
     storyOnly,
     // Tooltip prose (2026-09-08): these rows had none. Honest about the engine.
     text: OPTION_L2_TEXT[key] || `Character option (L2): ${pretty}.`,
-    apply: storyOnly ? baseApply : mechApply
+    // No L2 row defines mechTag — the fallback apply (used only if the optact_* throughput
+    // handler throws) must not queue a literal null hex tag.
+    apply: (storyOnly || !mechTag) ? baseApply : mechApply
   };
 }
 
@@ -610,8 +617,15 @@ divine_favor: {
     kind: "strategic",
     label: "Repair Rig",
     cost: { economy: 20 },
-    apply: async ({ actor }) => {
-      const pick = await _promptPickRig();
+    apply: async ({ actor, entry }) => {
+      // The planner already chose the rig (entry.defenderId + entry.rigId) — only prompt when
+      // the queued row lacks it (legacy rows). Prompting mid-Advance-Turn stalls the pipeline.
+      let pick = null;
+      if (entry?.rigId) {
+        const owner = game.actors.get(_stripActorId(String(entry.defenderId || ""))) || actor;
+        if (owner) pick = { faction: owner, rigId: entry.rigId };
+      }
+      if (!pick) pick = await _promptPickRig();
       if (!pick) return "Repair cancelled.";
 
       const { faction, rigId } = pick;
@@ -673,11 +687,22 @@ function _applyFxMetadata(){
   }
 }
 
-function publishCompat(){
-  game.bbttcc ??= { api:{} };
-  game.bbttcc.api ??= {};
-  game.bbttcc.api.raid ??= {};
-
+/* ============================================================
+   SLICES 2 + 3 — OPTION ROW INJECTION (re-runnable)
+   ============================================================ */
+// Runs at publish, retries while bbttcc-character-options has not yet published `refined`
+// (both inject in a ready hook — load order is not guaranteed), and re-runs when a character
+// gains an option mid-session. Adds only missing keys; returns how many it added.
+let _optionRetryTries = 0;
+let _compatPublished = false;
+function injectOptionRows(){
+  const refined = game?.bbttcc?.api?.characterOptions?.refined;
+  if (!refined?.getUnlocksForActor) {
+    if (_optionRetryTries++ < 40) setTimeout(injectOptionRows, 250);
+    else warn("characterOptions.refined never published — no option maneuvers/strategics injected this session.");
+    return 0;
+  }
+  let added = 0;
   // Slice 2: inject option maneuvers (opt_<maneuverKey>)
   try {
     const optionMans = getPartyOptionManeuvers();
@@ -685,6 +710,7 @@ function publishCompat(){
       const effKey = `opt_${key}`;
       if (!EFFECTS[effKey]) {
         EFFECTS[effKey] = buildOptionManeuverDef(key, meta);
+        added++;
         log("Injected option maneuver:", effKey, meta);
       }
     }
@@ -699,12 +725,32 @@ function publishCompat(){
       const effKey = `optact_${key}`;
       if (!EFFECTS[effKey]) {
         EFFECTS[effKey] = buildOptionStrategicDef(key, meta);
+        added++;
         log("Injected option strategic activity:", effKey, meta);
       }
     }
   } catch (e) {
     warn("Option strategic injection failed", e);
   }
+  // A LATE injection (after publish) must get the same normalize / fire-mode / audit-wiring
+  // passes the boot rows got — every bbttcc:raid:maneuversLoaded listener is an idempotent re-pass.
+  if (added && _compatPublished) { try { Hooks.callAll("bbttcc:raid:maneuversLoaded", { added, source: "option-rows" }); } catch (_e) {} }
+  return added;
+}
+Hooks.on("updateActor", (a, d) => {
+  try {
+    if (!_compatPublished || a?.type !== "character") return;
+    if (foundry.utils.hasProperty(d, "flags.bbttcc-character-options")) injectOptionRows();
+  } catch (_e) {}
+});
+
+function publishCompat(){
+  game.bbttcc ??= { api:{} };
+  game.bbttcc.api ??= {};
+  game.bbttcc.api.raid ??= {};
+
+  // Slices 2 + 3: option maneuvers / strategics (retries if character-options is late).
+  injectOptionRows();
 
   // ------------------------------------------------------------
   // EFFECTS NORMALIZATION (docs parity)
@@ -810,6 +856,7 @@ function publishCompat(){
   mod.api ??= {};
   mod.api.raid = game.bbttcc.api.raid;
 
+  _compatPublished = true;
   log("Compat bridge published (polished option metadata for Planner + Raid Console).");
 }
 

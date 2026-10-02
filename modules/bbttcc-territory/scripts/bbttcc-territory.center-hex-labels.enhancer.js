@@ -173,8 +173,10 @@
   function draw() {
     clear();
     if (!canvas?.ready || !canvas.scene) return;
-    const parent = canvas.drawings || canvas.stage;
-    _cont = new PIXI.Container(); _cont.eventMode = "passive"; _cont.zIndex = 9000; parent.addChild(_cont);
+    // canvas.interface, not canvas.drawings (2026-10-01): the Drawings layer goes non-interactive
+    // whenever it is not the active layer, so hover/click never fired on the Token layer.
+    const parent = canvas.interface || canvas.drawings || canvas.stage;
+    _cont = new PIXI.Container(); _cont.eventMode = "passive"; _cont.interactiveChildren = true; _cont.zIndex = 9000; parent.addChild(_cont);
     try { drawBridges(); } catch (e) { console.warn(TAG, "bridge markers failed", e); }
     const m = mode(); if (m === "off") return;
     const api = game.bbttcc?.api?.territory?.questMarkers; if (!api?.list) return;

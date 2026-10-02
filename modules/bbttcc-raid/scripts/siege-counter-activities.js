@@ -22,14 +22,17 @@
   const MOD_F = "bbttcc-factions";
   const TAG = "[bbttcc/siege-counter]";
 
-  function whenRaidReady(cb, tries = 0){
+  // Retry `go` itself — re-entering whenRaidReady after ready re-registered Hooks.once("ready"),
+  // which never fires again, so the retry loop was dead.
+  function whenRaidReady(cb){
+    let tries = 0;
     const go = () => {
       const api = game?.bbttcc?.api?.raid || game?.modules?.get?.(MOD_R)?.api?.raid;
       if (api?.EFFECTS && api?.STRATEGIC_THROUGHPUT) return cb(api);
-      if (tries > 80) return console.warn(TAG, "raid API not ready");
-      setTimeout(() => whenRaidReady(cb, tries + 1), 250);
+      if (tries++ > 80) return console.warn(TAG, "raid API not ready");
+      setTimeout(go, 250);
     };
-    if (globalThis.Hooks) Hooks.once("ready", go); else go();
+    if (globalThis.game?.ready || !globalThis.Hooks) go(); else Hooks.once("ready", go);
   }
   function whenSiegeStateReady(cb, tries = 0){
     if (globalThis.__bbttccSiegeState) return cb(globalThis.__bbttccSiegeState);
@@ -303,7 +306,15 @@
     // the player relay path passes its factionId. Cost stays on the SHARED buffer (the
     // supporter co-funded it on Join). Default = the lead, exactly as before.
     let actingFactionId = st.attackerFactionId;
-    if (factionId && factionId !== st.attackerFactionId) {
+    const isDefenderMan = def.siegeSide === "defender";
+    if (isDefenderMan) {
+      // Defender clash maneuvers are the GARRISON's — run as the hex owner, never the besieger.
+      let hexDoc = null;
+      try { const ref = await fromUuid(uuid); hexDoc = ref?.document ?? ref ?? null; } catch (_e) {}
+      const ownerId = hexDoc ? S.hexOwner(hexDoc) : null;
+      if (!ownerId) return { ok: false, reason: "the besieged hex has no owning faction to fire a defender maneuver" };
+      actingFactionId = ownerId;
+    } else if (factionId && factionId !== st.attackerFactionId) {
       if (!(st.participants?.[factionId]?.joined)) {
         return { ok: false, reason: `${game.actors.get(factionId)?.name || "that faction"} hasn't joined this siege — Join Siege first` };
       }
@@ -315,7 +326,22 @@
     const costTotal = Number.isFinite(def.clashCost)
       ? def.clashCost
       : Object.values(def.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0);
-    if (costTotal > 0) {
+    if (costTotal > 0 && isDefenderMan) {
+      // The Buffer is the BESIEGER's pool — a defender maneuver bills the defender's own bank:
+      // the clash cost split across the maneuver's channels in proportion to its strategic cost.
+      const opApi = game.bbttcc?.api?.op;
+      const chans = Object.entries(def.cost || {}).map(([k, v]) => [String(k).toLowerCase(), Number(v) || 0]).filter(([, v]) => v > 0);
+      const full = chans.reduce((a, [, v]) => a + v, 0);
+      const deltas = {};
+      let left = costTotal;
+      chans.forEach(([k, v], i) => { const part = (i === chans.length - 1) ? left : Math.round(costTotal * v / full); deltas[k] = (deltas[k] || 0) - part; left -= part; });
+      if (!opApi?.commit || !full) return { ok: false, reason: "no defender OP path (op.commit unavailable)" };
+      const bank = game.actors.get(actingFactionId)?.getFlag?.(MOD_F, "opBank") || {};
+      const short = Object.entries(deltas).find(([k, d]) => (Number(bank[k]) || 0) < -d);
+      if (short) return { ok: false, reason: `${game.actors.get(actingFactionId)?.name || "the garrison"} can't afford ${def.label} now (${short[0]} needs ${-short[1]} marks, has ${Number(bank[short[0]]) || 0} marks)` };
+      const res = await opApi.commit(actingFactionId, deltas, { source: "siege-clash", label: `${def.label} (in the moment)` });
+      if (res && (res.ok === false || res.committed === false)) return { ok: false, reason: res.error || `couldn't pay for ${def.label}` };
+    } else if (costTotal > 0) {
       const have = S.bufferTotal(st.buffer);
       if (have < costTotal) return { ok: false, reason: `not enough Buffer to fire ${def.label} now (need ${costTotal} marks, have ${have} marks)` };
       const dup = foundry.utils.duplicate(st);
@@ -330,7 +356,7 @@
     catch (err) { console.error(TAG, `fireManeuver ${key} failed`, err); return { ok: false, reason: err.message }; }
 
     try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}
-    if (r?.ok !== false) ui.notifications?.info?.(`${def.label} (in the moment)${costTotal ? ` — Buffer −${costTotal} marks` : ""}: ${r?.summary || "done"}.`);
+    if (r?.ok !== false) ui.notifications?.info?.(`${def.label} (in the moment)${costTotal ? (isDefenderMan ? ` — garrison −${costTotal} marks` : ` — Buffer −${costTotal} marks`) : ""}: ${r?.summary || "done"}.`);
     else ui.notifications?.warn?.(`${def.label}: ${r?.reason || "failed"}.`);
     return Object.assign({ ok: r?.ok !== false, key, cost: costTotal }, r || {});
   }
@@ -396,7 +422,8 @@
   }
   const _platesStr = (wall) => { const a = game.bbttcc?.api?.structures?.readState?.(wall); return a?.plates ? `${a.plates.current}/${a.plates.max}` : "?"; };
   const _roll = async (f, fb) => { try { const r = new Roll(f); await r.evaluate(); return Math.max(1, Math.floor(Number(r.total) || 0)); } catch (_e) { return fb; } };
-  async function _bumpMorale(factionId, delta, why){ try { const fn = game.bbttcc?.api?.factions?.bumpMorale; if (typeof fn === "function") await fn(factionId, delta, why); } catch (e) { console.warn(TAG, "bumpMorale failed", e); } }
+  // factions.bumpMorale takes ONE object ({ factionId, delta }) — positional args threw and every morale +1 here was lost.
+  async function _bumpMorale(factionId, delta, why){ try { const fn = game.bbttcc?.api?.factions?.bumpMorale; if (typeof fn === "function") await fn({ factionId, delta }); } catch (e) { console.warn(TAG, "bumpMorale failed", why, e); } }
 
   async function _attackerWallManeuver({ factionId, targetUuid, S }, { key, title, formula, fallback, damageType, flavor, garrisonStagger = false }){
     const actor = game.actors.get(factionId);

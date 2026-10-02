@@ -33,6 +33,64 @@
     return Number(get(actor, "system.attributes.prof", 2)) || 2;
   }
 
+  // ── GM relay for other-actor writes ───────────────────────────────────────
+  // A player can't update an actor they don't own (Field Patch / Aegis /
+  // Rallying Cry / Phoenix on someone else). Owned → write directly; otherwise
+  // emit on module.surge-powers and the active GM applies it (validated there).
+  const SOCKET = `module.${MOD}`;
+  const RELAY_OPS = new Set(["heal", "phoenix", "tempHP", "addAE"]);
+  async function applyOp(targetActor, op, args = {}) {
+    if (op === "heal") {
+      const amount = Math.max(0, Math.min(999, Math.round(Number(args.amount) || 0)));
+      const hp = Number(get(targetActor, "system.attributes.hp.value", 0)) || 0;
+      const max = Number(get(targetActor, "system.attributes.hp.max", 0)) || 0;
+      return targetActor.update({ "system.attributes.hp.value": Math.min(max, hp + amount) });
+    }
+    if (op === "phoenix") {
+      const max = Number(get(targetActor, "system.attributes.hp.max", 0)) || 0;
+      const hp = Number(get(targetActor, "system.attributes.hp.value", 0)) || 0;
+      const half = Math.floor(max / 2);
+      if (hp < half) return targetActor.update({ "system.attributes.hp.value": half, "system.attributes.death.failure": 0, "system.attributes.death.success": 0 });
+      return null;
+    }
+    if (op === "tempHP") {
+      const n = Math.max(0, Math.min(99, Math.round(Number(args.n) || 0)));
+      const cur = Number(get(targetActor, "system.attributes.hp.temp", 0)) || 0;
+      if (n > cur) return targetActor.update({ "system.attributes.hp.temp": n });
+      return null;
+    }
+    if (op === "addAE") {
+      const ae = args.ae;
+      // Only Surge-made effects cross the relay.
+      if (!ae || typeof ae !== "object" || !ae.flags?.[MOD]) throw new Error("not a Surge effect");
+      return targetActor.createEmbeddedDocuments("ActiveEffect", [ae]);
+    }
+    throw new Error(`unknown op ${op}`);
+  }
+  async function writeActor(targetActor, op, args = {}) {
+    if (!targetActor) return false;
+    if (targetActor.isOwner) { await applyOp(targetActor, op, args); return true; }
+    if (!game.users?.activeGM) {
+      ui.notifications?.warn?.(`${targetActor.name}: no GM online to apply that — nothing changed.`);
+      return false;
+    }
+    game.socket.emit(SOCKET, { type: "apply", actorUuid: targetActor.uuid, op, args, userId: game.user.id });
+    return true;
+  }
+  Hooks.once("ready", () => {
+    if (game.system?.id !== "dnd5e") return;
+    game.socket.on(SOCKET, async (msg) => {
+      try {
+        if (msg?.type !== "apply" || !game.users.activeGM?.isSelf) return;
+        if (!RELAY_OPS.has(msg.op) || !game.users.get(msg.userId)) return;
+        const t = await fromUuid(String(msg.actorUuid || ""));
+        const actor = t instanceof Actor ? t : t?.actor;
+        if (!actor) return;
+        await applyOp(actor, msg.op, msg.args || {});
+      } catch (e) { console.warn(TAG, "GM relay apply failed", msg?.op, e); }
+    });
+  });
+
   // ── Shared appliers ────────────────────────────────────────────────────────
   async function cue(actor, title, lines) {
     try {
@@ -63,8 +121,8 @@
     return out;
   }
   async function addAE(targetActor, ae) {
-    try { await targetActor.createEmbeddedDocuments("ActiveEffect", [ae]); }
-    catch (e) { console.warn(TAG, "AE apply failed", targetActor?.name, e); }
+    try { return await writeActor(targetActor, "addAE", { ae }); }
+    catch (e) { console.warn(TAG, "AE apply failed", targetActor?.name, e); return false; }
   }
   const drAE = (n, origin) => ({
     name: `DR ${n} (Surge)`, img: "icons/magic/defensive/shield-barrier-glowing-blue.webp", origin,
@@ -72,19 +130,14 @@
     flags: { [MOD]: { surgeDR: n, cue: `reduce each incoming hit by ${n} this round (GM applies; temp HP granted as the floor)` } }
   });
   async function grantTempHP(targetActor, n) {
-    try {
-      const cur = Number(get(targetActor, "system.attributes.hp.temp", 0)) || 0;
-      if (n > cur) await targetActor.update({ "system.attributes.hp.temp": n });
-    } catch (e) { /* best-effort */ }
+    try { await writeActor(targetActor, "tempHP", { n }); } catch (e) { /* best-effort */ }
   }
   async function healActor(targetActor, formula, flavor) {
     try {
       const r = await new Roll(String(formula)).evaluate();
       const amount = Math.max(1, Math.round(r.total));
       await r.toMessage({ speaker: ChatMessage.getSpeaker({ actor: targetActor }), flavor });
-      const hp = Number(get(targetActor, "system.attributes.hp.value", 0)) || 0;
-      const max = Number(get(targetActor, "system.attributes.hp.max", 0)) || 0;
-      await targetActor.update({ "system.attributes.hp.value": Math.min(max, hp + amount) });
+      if (!(await writeActor(targetActor, "heal", { amount }))) return 0;
       return amount;
     } catch (e) { console.warn(TAG, "heal failed", e); return 0; }
   }
@@ -176,6 +229,13 @@
       if (!targets.length) targets = [actor];
     }
 
+    // Someone else's character needs the GM relay — bail (and refund) up front if no GM is online.
+    const writes = fx.heal || fx.phoenix || fx.dr || fx.acBonus || fx.advAttack1;
+    if (writes && !game.users?.activeGM && targets.some(t => t && !t.isOwner)) {
+      ui.notifications?.warn?.(`${entry.label}: no GM online to apply it to another character.`);
+      return false;
+    }
+
     for (const t of targets) {
       if (!t) continue;
       if (fx.heal) {
@@ -183,11 +243,9 @@
         lines.push(`${t.name} heals ${healed}.`);
       }
       if (fx.phoenix) {
-        const max = Number(get(t, "system.attributes.hp.max", 0)) || 0;
-        const hp = Number(get(t, "system.attributes.hp.value", 0)) || 0;
-        const half = Math.floor(max / 2);
-        if (hp < half) await t.update({ "system.attributes.hp.value": half, "system.attributes.death.failure": 0, "system.attributes.death.success": 0 });
-        lines.push(`${t.name} is restored to ${half} HP.`);
+        const half = Math.floor((Number(get(t, "system.attributes.hp.max", 0)) || 0) / 2);
+        if (!(await writeActor(t, "phoenix"))) return false;
+        lines.push(t.isOwner ? `${t.name} is restored to ${half} HP.` : `${t.name} is restored to half HP.`);
       }
       if (fx.dr) { const n = resolveN(fx.dr); await addAE(t, drAE(n, origin)); await grantTempHP(t, n); lines.push(`${t.name}: DR ${n} this round (temp HP floor granted).`); }
       if (fx.acBonus) {
@@ -277,10 +335,20 @@
       btn.addEventListener("click", async () => {
         const entry = MENU.find(e => e.key === btn.dataset.surgeKey);
         if (!entry) return;
+        // Validate the target BEFORE debiting — an ally power with no target
+        // used to burn the Surge and do nothing.
+        if (entry.fx?.tgt === "ally" && !firstTarget()) {
+          return ui.notifications?.warn?.(`${entry.label}: target a token first.`);
+        }
         const ok = await surge.spend(actor, entry.cost);
         if (!ok) return ui.notifications?.warn?.(`Not enough Surge (${surge.get(actor)}/${entry.cost}).`);
-        try { await applyEntry(actor, entry); }
+        let applied = false;
+        try { applied = (await applyEntry(actor, entry)) !== false; }
         catch (e) { console.error(TAG, "apply failed", entry.key, e); }
+        if (!applied) {
+          await surge.set(actor, surge.get(actor) + entry.cost);   // refund
+          ui.notifications?.info?.(`${entry.label.split("—")[0].trim()}: nothing applied — ${entry.cost} Surge refunded.`);
+        }
         dlg.close();
       });
     });

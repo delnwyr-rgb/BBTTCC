@@ -41,16 +41,18 @@ function ensureStyles() {
 #bbttcc-fx-root[data-raid-tone="siege"] { --fx-accent: #ff8c42; --fx-accent-soft: rgba(255,140,66,.18); --fx-accent-strong: rgba(255,140,66,.50); }
 #bbttcc-fx-root[data-raid-tone="boss"] { --fx-accent: #8b1e3f; --fx-accent-soft: rgba(139,30,63,.20); --fx-accent-strong: rgba(139,30,63,.58); }
 
-.bbttcc-fx-banner {
-  border: 1px solid var(--fx-accent-strong);
-  box-shadow: 0 0 22px var(--fx-accent-soft), inset 0 0 18px rgba(255,255,255,.05);
+/* Banners/floats live inside #bbttcc-fx-root (tone vars); var() fallbacks keep the
+   rule valid if one is ever rendered outside it. warn/good keep their fx.css colours. */
+.bbttcc-fx-banner:not(.bbttcc-fx-warn):not(.bbttcc-fx-good) {
+  border-color: var(--fx-accent-strong, rgba(209,213,219,.55));
+  box-shadow: 0 0 22px var(--fx-accent-soft, rgba(209,213,219,.18)), inset 0 0 18px rgba(255,255,255,.05);
 }
 .bbttcc-fx-roll-chip {
-  border: 1px solid var(--fx-accent-strong);
-  box-shadow: 0 0 14px var(--fx-accent-soft);
+  border: 1px solid var(--fx-accent-strong, rgba(209,213,219,.55));
+  box-shadow: 0 0 14px var(--fx-accent-soft, rgba(209,213,219,.18));
 }
 .bbttcc-fx-float {
-  text-shadow: 0 0 10px var(--fx-accent-strong);
+  text-shadow: 0 0 10px var(--fx-accent-strong, rgba(209,213,219,.55));
 }
 .bbttcc-fx-overlay {
   position: fixed;
@@ -223,7 +225,7 @@ function ensureStyles() {
 }
 
 .bbttcc-fx-panel-martial, .bbttcc-fx-panel-faith, .bbttcc-fx-panel-void, .bbttcc-fx-panel-temporal, .bbttcc-fx-panel-industrial, .bbttcc-fx-panel-political {
-  box-shadow: 0 0 0 1px var(--fx-accent-strong), 0 0 24px var(--fx-accent-soft);
+  box-shadow: 0 0 0 1px var(--fx-accent-strong, rgba(209,213,219,.55)), 0 0 24px var(--fx-accent-soft, rgba(209,213,219,.18));
 }
 `;
   document.head.appendChild(style);

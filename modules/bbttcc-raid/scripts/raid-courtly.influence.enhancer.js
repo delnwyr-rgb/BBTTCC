@@ -470,7 +470,7 @@
         const flags = actor.flags?.[MODF] || {};
         const bank  = flags.opBank || {};
         const v = Number(bank.violence || 0);
-        return Math.min(4, Math.floor(v / 5));
+        return Math.min(4, Math.floor(v / 50));   // the bank is MARKS: +1 per 5 OP = 50 marks, cap +4
       }
 
       async function step({
@@ -643,7 +643,7 @@
           }
 
           // Defender intimidated and failed badly → backlash
-          if (defAct === "intimidate" && margin <= -5) {
+          if (defAct === "intimidate" && margin >= 5) {   // attacker won by 5+ → defender failed by 5+
             damageToD += 2;
             extraNotes.push("Intimidate backlash: defender loses 2 extra Influence.");
           }
@@ -655,7 +655,7 @@
             nextScandalOnA = true;
             extraNotes.push("Expose: Scandal applied to attacker (–2 next exchange).");
           }
-          if (atkAct === "intimidate" && margin >= 5) {
+          if (atkAct === "intimidate" && -margin >= 5) {   // defender won by 5+ → attacker failed by 5+
             damageToA += 2;
             extraNotes.push("Intimidate backlash: attacker loses 2 extra Influence.");
           }
@@ -956,7 +956,19 @@
           else if (state.influenceD <= 0) state.outcome = "attackerWin";
           else if (state.influenceA <= 0) state.outcome = "defenderWin";
           if (state.outcome !== "ongoing") {
-            try { await applyRelDeltas(A, D, state.outcome, label); } catch (e) { console.warn(TAG, e); }
+            // Same once-only outcome transition step() runs (kind → rel deltas → marks → VFX).
+            if (!state.outcomeKind) state.outcomeKind = detectOutcomeKind(state);
+            try { await applyRelDeltas(A, D, state.outcomeKind, outcomeWinner(state), label); } catch (e) { console.warn(TAG, e); }
+            try { await _applyOutcomeMarks(); } catch (e) { console.warn(TAG, "_applyOutcomeMarks failed", e); }
+            try {
+              _emitCourtlyVfx("outcome", {
+                outcome: state.outcome,
+                outcomeKind: state.outcomeKind,
+                winnerSide: outcomeWinner(state),
+                attackerName: A.name,
+                defenderName: D.name
+              });
+            } catch (_e) {}
           }
         }
         try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
@@ -1389,7 +1401,7 @@
       const _stepRaw = step;
       const _applyEffectsRaw = applyEffects;
       async function _stepPersist(args) { const r = await _stepRaw(args); await _persistCourtlyMirror(); return r; }
-      async function _applyEffectsPersist(fx) { const r = await _applyEffectsRaw(fx); await _persistCourtlyMirror(); return r; }
+      async function _applyEffectsPersist(fx, opts) { const r = await _applyEffectsRaw(fx, opts); await _persistCourtlyMirror(); return r; }   // keep opts ({side}) — a defender-fired bundle must resolve as D
 
       const apiObj = { step: _stepPersist, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, converseSecret, spendFavorAndBoost, applyEffects: _applyEffectsPersist, burnScandalScar, armLastWord };
 

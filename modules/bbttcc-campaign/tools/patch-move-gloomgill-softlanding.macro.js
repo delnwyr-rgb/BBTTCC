@@ -11,7 +11,7 @@
  * Idempotent. Backs up the campaigns setting before writing.
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = true;                  // <-- set false to apply
   const NS = "bbttcc-campaign", TERR = "bbttcc-territory";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   const MOVES = [
@@ -32,13 +32,13 @@
     if (b.hexName === mv.to) { say(`· ok ${mv.beat} already at ${mv.to}`); continue; }
     b.hexName = mv.to; if (b.targetHexUuid) b.targetHexUuid = mv.toUuid; changes++; say(`✎ ${mv.beat}: hexName ${mv.from} → ${mv.to}`);
   }
-  // 2. hex on-enter wiring
+  // 2. hex on-enter wiring (the old hex's key is removed with unsetFlag — v14 dropped the "-=key" update form; review 2026-10-01)
   const hexWrites = [];
   for (const mv of MOVES) {
     const oldHex = hexByName(mv.from), newHex = await fromUuid(mv.toUuid);
-    if (oldHex && oldHex.flags?.[TERR]?.campaign?.onEnterBeatId === mv.beat) { hexWrites.push([oldHex, { [`flags.${TERR}.campaign.-=onEnterBeatId`]: null }]); changes++; say(`✎ ${mv.from}: onEnter ${mv.beat} cleared`); }
+    if (oldHex && oldHex.flags?.[TERR]?.campaign?.onEnterBeatId === mv.beat) { hexWrites.push(() => oldHex.unsetFlag(TERR, "campaign.onEnterBeatId")); changes++; say(`✎ ${mv.from}: onEnter ${mv.beat} cleared`); }
     if (!newHex) { say(`✗ ${mv.to}: drawing ${mv.toUuid} not found`); continue; }
-    if (newHex.flags?.[TERR]?.campaign?.onEnterBeatId !== mv.beat) { hexWrites.push([newHex, { [`flags.${TERR}.campaign.onEnterBeatId`]: mv.beat }]); changes++; say(`✎ ${mv.to}: onEnter → ${mv.beat}`); }
+    if (newHex.flags?.[TERR]?.campaign?.onEnterBeatId !== mv.beat) { hexWrites.push(() => newHex.update({ [`flags.${TERR}.campaign.onEnterBeatId`]: mv.beat })); changes++; say(`✎ ${mv.to}: onEnter → ${mv.beat}`); }
     else say(`· ok ${mv.to} onEnter already ${mv.beat}`);
   }
   // 3. story data quest defs (live before F5; the code QUEST_MAP has moved in the repo)
@@ -58,7 +58,7 @@
   try { const save = foundry.utils.saveDataToFile ?? saveDataToFile; save(wasStr ? campsRaw : JSON.stringify(campsRaw), "text/json", `backup-campaigns-before-move-${Date.now()}.json`); }
   catch (e) { return ui.notifications.error("Backup failed — aborting. " + (e?.message || e)); }
   await game.settings.set(NS, "campaigns", wasStr ? JSON.stringify(camps) : camps);
-  for (const [doc, upd] of hexWrites) await doc.update(upd);
+  for (const write of hexWrites) await write();
   for (const [key, quest] of questWrites) await storyApi.saveQuest(cid, key, { quest });
   try { game.bbttcc?.api?.territory?.questMarkers?.refresh?.(); } catch (_e) {}
   ui.notifications.info(`Moved: Gloomgill → Lake Suspicious, Soft Landing → Ynnermire.b (${changes} change(s)). F5.`);

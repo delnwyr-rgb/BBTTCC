@@ -51,6 +51,11 @@ async function _requireScene(ctx, key, label) {
  * this run's LANE. Canvas coordinates include the scene padding — `scene.width * frac`
  * lands shifted into the top-left dead zone (owner playtest 2026-08-13: vehicles spawned
  * off-track). The lane shift keeps concurrent players' scaffolding off each other. */
+// Art-anchored sites (painted sigils, the reef relic, the great circle and what
+// spawns inside it) must sit ON the painting: lane-shifting them 17% of scene
+// height (wrapping southern points to the top edge) put them off the art. They
+// use ART_LANE; only free-placed scaffolding takes the run's lane.
+const ART_LANE = 0;
 function _scenePoint(scene, fx, fy, lane = 0) {
   const laneFrac = _stage()?.laneFrac;
   const y = typeof laneFrac === "function" ? laneFrac(fy, lane) : fy;
@@ -722,6 +727,10 @@ const crewOccult = {
     // the moment the roster stops being text and starts being someone.
     const onMint = (actor) => {
       if (actor?.type !== "npc") return;
+      // Only an echo minted off THIS steward's roster — not any npc anyone
+      // creates (other runs' dummies, foes, founded factions).
+      const echo = actor.flags?.["bbttcc-auto-link"]?.echo;
+      if (!echo || !ctx.steward?.uuid || echo.stewardUuid !== ctx.steward.uuid) return;
       const co = _crewOccultOf(ctx.steward);
       if (!co.crew && !co.occult) return;
       ctx.speak?.(`${actor.name} just became a real person on the board. That's your crew — findable, killable, and yours to call.`);
@@ -1232,12 +1241,12 @@ const combatSim = {
         whisper: game.users.filter(u => u.isGM).map(u => u.id),
         speaker: { alias: "◇ OPERATOR" },
         content:
-          `<p><b>Onboarding combat simulator — ${ctx.steward?.name || "a student"} is on the Proving Ground.</b></p>` +
+          `<p><b>Onboarding combat simulator — ${foundry.utils.escapeHTML(ctx.steward?.name || "a student")} is on the Proving Ground.</b></p>` +
           `<p>Three waves, spawned one at a time as each clears: <b>3 hollow</b> (qliphothic — one starts on a gantry at elevation 20)` +
           ` → <b>2 scavengers</b> (sentient) → <b>1 gun-truck</b> (rig).</p>` +
           `<p>Nothing runs them but you — take their turns if you want a real fight. The beat watches integrity itself:` +
           ` a sentient dropped to 40% or less <b>surrenders</b> (Calmed, track floored); killed outright, it adds <b>+1 Darkness</b>` +
-          ` to ${ctx.steward?.name || "the student"}. Both outcomes are legal — please don't talk them out of either one.</p>`
+          ` to ${foundry.utils.escapeHTML(ctx.steward?.name || "the student")}. Both outcomes are legal — please don't talk them out of either one.</p>`
       });
     } catch (e) { console.warn(TAG, "combat sim GM briefing failed", e); }
 
@@ -1392,7 +1401,7 @@ const combatSim = {
       rec.resolved = true;
       if (how === "saved") {
         sim.tally.saved += 1;
-        try { await stage.foeSurrender?.(rec.actorId); } catch (_) {}
+        try { await stage.foeSurrender?.(rec.actorId, 1, { sceneId: sim.scene?.id, tokenId: rec.tokenId }); } catch (_) {}
         await ctx.speak?.(`${rec.name} drops their weapon — hands up, still breathing. That's a save.`);
       } else if (how === "killed" && rec.foeClass === "sentient") {
         sim.tally.killed += 1;
@@ -1807,7 +1816,7 @@ const provingTrials = {
       const held = new Set(_pgRelics(ctx.steward));
       for (const t of PG_TRIALS) {
         if (held.has(t.key)) { ctx._pg.done.add(t.key); continue; }
-        const pt = _scenePoint(scene, t.xFrac, t.yFrac, ctx.lane);
+        const pt = _scenePoint(scene, t.xFrac, t.yFrac, ART_LANE);
         const sp = await stage.spawnMarker?.(scene, { name: t.name, img: t.img, ...pt });
         if (sp) { ctx._spawned.push(sp); ctx._pg.markers.set(t.key, { ...t, pt, tokenId: sp.token?.id ?? null, actorId: sp.actor?.id ?? null }); }
       }
@@ -1935,7 +1944,7 @@ const provingTrials = {
             }
           } catch (e) { console.warn(TAG, "dive: level view switch failed (token IS on the dive level)", e); }
           await _pause(900);
-          const pt = _scenePoint(sim.scene, PG_REEF_RELIC.xFrac, PG_REEF_RELIC.yFrac, ctx.lane);
+          const pt = _scenePoint(sim.scene, PG_REEF_RELIC.xFrac, PG_REEF_RELIC.yFrac, ART_LANE);
           const shard = await stage.spawnMarker?.(sim.scene, { name: t.name, img: t.img, elevation: lvl.depth, levelId: lvl.id, ...pt });
           if (shard) ctx._spawned.push(shard);
           await ctx.speak?.(`${lvl.name} — ${Math.abs(lvl.depth)} feet down. The shard is out in the magenta coral, dead centre. Between you and it: a wreck, a lot of legs, and something pink I'd rather not name. Swim.`);
@@ -1971,9 +1980,9 @@ const provingTrials = {
         await ctx.speak?.("Down you go. Hold your breath — the system will tell you when that stops being a metaphor.");
         await _enterScene(reef, "The Reef", ctx.lane);
         await _pause(900);
-        const st = await stage.ensureTokenOnScene(ctx.steward, reef, _scenePoint(reef, PG_REEF_ENTRY.xFrac, PG_REEF_ENTRY.yFrac, ctx.lane));
+        const st = await stage.ensureTokenOnScene(ctx.steward, reef, _scenePoint(reef, PG_REEF_ENTRY.xFrac, PG_REEF_ENTRY.yFrac, ART_LANE));
         if (st?.created) ctx._spawned.push({ token: st.doc });
-        const pt = _scenePoint(reef, PG_REEF_RELIC.xFrac, PG_REEF_RELIC.yFrac, ctx.lane);
+        const pt = _scenePoint(reef, PG_REEF_RELIC.xFrac, PG_REEF_RELIC.yFrac, ART_LANE);
         const shard = await stage.spawnMarker?.(reef, { name: t.name, img: t.img, ...pt });
         if (shard) ctx._spawned.push(shard);
         await ctx.speak?.("Reef floor. You're in open rock at the shallow end — the shard is out in the magenta coral, dead centre. Swim.");
@@ -2205,15 +2214,15 @@ const finalShowdown = {
       // closes behind you" was silently a no-op for tokens already standing
       // elsewhere on the map from the trials (owner playtest 2026-08-22).
       const st = await stage.ensureTokenOnScene(ctx.steward, scene,
-        { ..._scenePoint(scene, PG_ARENA.xFrac - 0.06, PG_ARENA.yFrac + 0.04, ctx.lane), move: true });
+        { ..._scenePoint(scene, PG_ARENA.xFrac - 0.06, PG_ARENA.yFrac + 0.04, ART_LANE), move: true });
       if (st?.created) ctx._spawned.push({ token: st.doc });
       if (ctx.rig) {
         const rt = await stage.ensureTokenOnScene(ctx.rig, scene,
-          { ..._scenePoint(scene, PG_ARENA.xFrac - 0.11, PG_ARENA.yFrac + 0.08, ctx.lane), move: true });
+          { ..._scenePoint(scene, PG_ARENA.xFrac - 0.11, PG_ARENA.yFrac + 0.08, ART_LANE), move: true });
         if (rt?.created) ctx._spawned.push({ token: rt.doc });
       }
       for (const f of approach.foes) {
-        const sp = await _spawnFoeSmart(stage, scene, f, ctx.lane);
+        const sp = await _spawnFoeSmart(stage, scene, f, ART_LANE);
         if (!sp?.actor) continue;
         ctx._spawned.push(sp);
         ctx._fs.foes.set(sp.actor.id, { actorId: sp.actor.id, name: sp.actor.name, boss: (f.body ?? 0) >= 8, down: false });
@@ -2223,7 +2232,7 @@ const finalShowdown = {
       // sight-transparent wall segments on the painted circle — the parley
       // breaks it, and the beat's exit unseals no matter how this ends.
       const d = scene.dimensions ?? {};
-      const centre = _scenePoint(scene, PG_ARENA.xFrac, PG_ARENA.yFrac, ctx.lane);
+      const centre = _scenePoint(scene, PG_ARENA.xFrac, PG_ARENA.yFrac, ART_LANE);
       const radius = Math.round((d.sceneWidth ?? scene.width ?? 4400) * PG_CIRCLE_RADIUS_FRAC);
       const sealed = await stage.sealCircle?.(scene, { cx: centre.x, cy: centre.y, radius });
       if (sealed?.ok) {
@@ -2295,7 +2304,7 @@ const finalShowdown = {
         messenger = await stage.spawnFoe?.(stageScene, {
           name: "A Messenger, Sent In Haste", img: OBSTACLE_ART("courtier-messenger.webp"), foeClass: "sentient", body: 2,
           ...(court ? _scenePoint(court, 0.58, 0.56, ctx.lane)
-                    : _scenePoint(stageScene, PG_ARENA.xFrac + 0.10, PG_ARENA.yFrac - 0.09, ctx.lane))
+                    : _scenePoint(stageScene, PG_ARENA.xFrac + 0.10, PG_ARENA.yFrac - 0.09, ART_LANE))
         });
         if (messenger) ctx._spawned.push(messenger);
       }
@@ -2505,7 +2514,8 @@ const travel = {
 // session flag on the player's REAL faction (the same flag the console persists) so it
 // opens already pointed at the hostile hold + the right raid type; the player runs the
 // rounds. Advance is a player-driven "Conclude" prompt (un-trappable), coloured by the
-// real `bbttcc:raid:roundCommit` hook as they commit rounds.
+// committed rounds appearing on the shared raidSession flag (the roundCommit hook is
+// GM-client-local, so a student seat never hears it).
 function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey = "", delegation = [] }) {
   return {
     id, title, scope: "shared",
@@ -2585,14 +2595,25 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey
     detect: (ctx, done) => {
       const fid = ctx.faction?.id;
       let rounds = 0;
-      const onCommit = (data = {}) => {
-        if (fid && String(data.attackerId || "") !== String(fid)) return;
-        rounds++;
-        ctx.riff?.({ beat: id, line: `Player committed round ${rounds} of the ${activityKey} raid (outcome: ${data.outcome || "?"}).`, intent: "React to the round outcome. One short line." });
+      // bbttcc:raid:roundCommit is a client-local Hooks.callAll on the seat that
+      // commits (the GM's), so a student never hears it. Watch the shared
+      // raidSession flag instead — updateActor reaches every client.
+      const committedOf = (sess) => (Array.isArray(sess?.rounds) ? sess.rounds : []).filter(r => r?.committed);
+      let seen = committedOf(ctx.faction?.getFlag?.("bbttcc-raid", "raidSession")).length;
+      const onUpd = (actor, changes) => {
+        if (!fid || actor?.id !== fid) return;
+        if (!foundry.utils.hasProperty(changes, "flags.bbttcc-raid.raidSession")) return;
+        const done_ = committedOf(actor.getFlag?.("bbttcc-raid", "raidSession"));
+        if (done_.length < seen) { seen = done_.length; return; }   // session reset/cleared
+        for (const r of done_.slice(seen)) {
+          rounds++;
+          ctx.riff?.({ beat: id, line: `Player committed round ${rounds} of the ${activityKey} raid (outcome: ${r?.outcome || "?"}).`, intent: "React to the round outcome. One short line." });
+        }
+        seen = done_.length;
       };
-      Hooks.on("bbttcc:raid:roundCommit", onCommit);
+      Hooks.on("updateActor", onUpd);
       ctx.prompt({ title: "◇ OPERATOR", content: instruct, label: "Conclude this raid" }).then(() => done());
-      return () => Hooks.off("bbttcc:raid:roundCommit", onCommit);
+      return () => Hooks.off("updateActor", onUpd);
     },
 
     exit: async (ctx) => {
@@ -2726,13 +2747,13 @@ const graduation = {
           .filter(u => u.id !== globalThis.game.user.id && u.getFlag?.(MODULE_ID, "campaignClass"))
           .map(u => u.name);
         const gmIds = ChatMessage.getWhisperRecipients("GM").map(u => u.id);
-        const who = ctx.steward?.name || ctx.user?.name || "A Steward";
+        const who = foundry.utils.escapeHTML(ctx.steward?.name || ctx.user?.name || "A Steward");
         if (stillOut.length) {
           await ChatMessage.create({
             whisper: gmIds,
             content: `<div class="bbttcc-onb-handoff">` +
               `<h3>🎓 ${who} graduated</h3>` +
-              `<p>Still in training: <b>${stillOut.join(", ")}</b>. The orientation film unlocks when the whole class is out — or run the beat early from the Campaign Builder if the table can't wait.</p></div>`
+              `<p>Still in training: <b>${foundry.utils.escapeHTML(stillOut.join(", "))}</b>. The orientation film unlocks when the whole class is out — or run the beat early from the Campaign Builder if the table can't wait.</p></div>`
           });
         } else {
           await ChatMessage.create({

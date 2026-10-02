@@ -82,6 +82,10 @@
   }
 
   async function applyExposure(ctx) {
+    // The encounter re-emits (travel console + GM arbitration relay) carry ctx.encounter and are a second
+    // hook for the SAME leg — expose once. The hook is local to the seat that ran the leg; radApi.add relays
+    // to the GM when this seat cannot write the faction.
+    if (ctx?.encounter || ctx?.relayed) return;   // relayed = a GM-side re-fire of a leg this listener already handled on its seat
     const actor = ctx.actor; // traveling faction actor
     if (!actor) return;
 
@@ -92,12 +96,12 @@
     if (amount <= 0) return;
 
     try {
-      await radApi.add(actor.id, amount);
+      await radApi.add(actor, amount);
 
       // GM whisper
       const lines = [
         `<b>Radiation Exposure</b> — ${foundry.utils.escapeHTML(actor.name)}`,
-        `Travel into hex: <i>${ctx.toHexName || ctx.to?.doc?.name || ctx.to?.document?.name || ctx.to?.id}</i>`,
+        `Travel into hex: <i>${foundry.utils.escapeHTML(String(ctx.toHexName || ctx.to?.doc?.name || ctx.to?.document?.name || ctx.to?.id || ""))}</i>`,
         `Gained <b>${amount} RP</b>`,
         `<small>${reasons.join(", ")}</small>`
       ].join("<br/>");

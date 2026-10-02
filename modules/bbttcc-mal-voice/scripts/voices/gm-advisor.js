@@ -87,11 +87,14 @@ async function gmAdvisorContextBuilder(voice, triggerArgs) {
   } catch (e) { warn("snapshot fetch failed:", e?.message); }
 
   // Resolve factionId
-  let factionId = triggerArgs.args?.factionId || null;
+  // roundCommit payloads carry attackerId, not factionId.
+  let factionId = triggerArgs.args?.factionId || triggerArgs.args?.attackerId || null;
   if (!factionId) {
     try {
       const r = await agent.invoke("gm.inferFactionId", {});
-      if (r && r.factionId) factionId = r.factionId;
+      // Verb may return a bare id string or { factionId } depending on version.
+      if (typeof r === "string" && r) factionId = r;
+      else if (r && r.factionId) factionId = r.factionId;
     } catch (_) { /* non-fatal */ }
   }
 
@@ -109,11 +112,14 @@ async function gmAdvisorContextBuilder(voice, triggerArgs) {
   // cap so a verbose engine output can't blow the budget.
   let beats = null, tables = null, worldSignals = null;
   if (observation) {
+    // Drop {ok:false,error} results — never hand an error to the LLM as "ground truth".
     try {
-      beats = await agent.invoke("gm.suggestCampaignBeats", { observation });
+      const b = await agent.invoke("gm.suggestCampaignBeats", { observation });
+      if (b && b.ok !== false) beats = b;
     } catch (e) { warn("gm.suggestCampaignBeats failed:", e?.message); }
     try {
-      tables = await agent.invoke("gm.suggestCampaignTables", { observation });
+      const t = await agent.invoke("gm.suggestCampaignTables", { observation });
+      if (t && t.ok !== false) tables = t;
     } catch (e) { warn("gm.suggestCampaignTables failed:", e?.message); }
   }
   try {

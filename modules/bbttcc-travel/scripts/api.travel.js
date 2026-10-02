@@ -402,6 +402,9 @@
 
       setTimeout(() => {
         try { game.socket.off("module.bbttcc-travel", onResponse); } catch (_e) {}
+        // Tell the GM seat the request expired, so a late Launch on the stale
+        // dialog does not fire the encounter for a leg the ride already passed.
+        try { game.socket.emit("module.bbttcc-travel", { action: "encounter-arbitrate-cancel", requestId }); } catch (_e) {}
         resolve("decline");
       }, 60000);
     });
@@ -415,8 +418,10 @@
     if (!game.socket || globalThis.__bbttccTravelArbitrationBound) return;
     globalThis.__bbttccTravelArbitrationBound = true;
 
+    const expired = new Set();   // requestIds the player seat timed out on
     game.socket.on("module.bbttcc-travel", async (payload) => {
       try {
+        if (payload?.action === "encounter-arbitrate-cancel") { if (payload.requestId) expired.add(String(payload.requestId)); return; }
         if (!payload || payload.action !== "encounter-arbitrate-request") return;
         if (!game.user?.isGM) return;
         // Edge-case: if multiple GMs are online, only the FIRST connected GM
@@ -433,7 +438,12 @@
             <b>${String(payload.requestingUserName || "Player").replace(/[<>&]/g, c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]))}</b>
             triggered this encounter while traveling.
           </div>`;
-        const choice = await _showLocalEncounterDialog(payload.enc, headerExtra);
+        let choice = await _showLocalEncounterDialog(payload.enc, headerExtra);
+        if (expired.has(String(payload.requestId))) {
+          expired.delete(String(payload.requestId));
+          if (choice === "launch" || choice === "reroll") ui.notifications?.warn?.("That encounter request expired (the player's ride moved on after 60s) — not launched.");
+          return;
+        }
 
         // On Launch, fire bbttcc:afterTravel on THIS (GM) client so scene-activation
         // listeners run with GM permissions. Player skips its own emit when it sees
@@ -820,8 +830,9 @@
       const hexUuid0 = (to0 && to0.document && to0.document.uuid) || (to0 && to0.uuid) || null;
       const campaignId0 = await getActiveCampaignIdStarred();
       const campaign0 = campaignId0 ? getCampaignById(campaignId0) : null;
+      // Same reader the real arrival uses (per-act onEnterBeatIds lists included).
       const beatId0 = (campaign0 && hexUuid0)
-        ? (readCampaignOverrideOnEnterBeatId(campaign0, hexUuid0) || readHexOnEnterBeatIdFromDrawing(to0) || null)
+        ? ((readOnEnterBeatIds(campaign0, hexUuid0, to0) || [])[0] || null)
         : null;
       if (beatId0) {
         game.bbttcc = game.bbttcc || {};
@@ -948,7 +959,11 @@
           (opts.travelUnits != null ? opts.travelUnits : opts.time)))) || 0;
 
       const tp = Number(tpRaw || 0);
-      if (ok && world && typeof world.addTime === "function" && tp > 0) {
+      // One travel-time authority (2026-10-01): when the campaign's Turn Ledger is loaded, its
+      // bbttcc:afterTravel listener charges the leg (days by terrain tier) inside the core call — a second
+      // addTime here raced it on the same world setting (lost update or double charge).
+      const ledgerOwnsTravelTime = !!game.settings?.settings?.has?.("bbttcc-campaign.ledger.travelDaysPerTier");
+      if (ok && !ledgerOwnsTravelTime && world && typeof world.addTime === "function" && tp > 0) {
         const note = `Travel ${String(opts.hexFrom || "")}→${String(opts.hexTo || "")}`;
         await world.addTime(tp, { source: "travel", note: note });
       }
@@ -1366,6 +1381,9 @@
     api.travel.whereIs = whereIs;
     api.travel.arriveAt = arriveAt;
     api.travel.setPosition = setPosition;
+    // The canonical phase- and once-aware travel table picker (tier cascade) — the encounters
+    // trigger manager's Reroll uses it instead of a duplicate.
+    api.travel.pickEncounter = pickEncounterWithFallback;
 
     // RideSession (Phase 2): the ride as a persisted, seat-safe object.
     api.travel.rideSession = {

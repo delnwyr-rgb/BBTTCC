@@ -40,7 +40,14 @@
   for (const [k, P] of Object.entries(PERSONAS)) {
     let a = (game.actors?.contents || []).find(x => x.name === P.name);
     if (!a) { say(`✚ CREATE actor "${P.name}"`); changes++; if (!DRY_RUN) a = await Actor.create({ name: P.name, type: "npc" }); }
-    if (a) { actorIds[k] = a.id; const cur = a.getFlag(MAL, "persona") || {}; if (!String(cur.notes || "").includes(MARKER)) { changes++; say(`✚ persona ${P.name} +${P.secrets.length} secret(s)`); if (!DRY_RUN) await a.setFlag(MAL, "persona", { ...cur, topics: [String(cur.topics || "").trim(), P.topics].filter(Boolean).join(", "), notes: [String(cur.notes || "").trim(), P.notes].filter(Boolean).join("\n\n"), secrets: [...(cur.secrets || []), ...P.secrets] }); } else say(`· ok persona ${P.name}`); }
+    if (!a) continue;
+    actorIds[k] = a.id; const cur = a.getFlag(MAL, "persona") || {};
+    // REVIEW 2026-10-01 (MEDIUM): mal-voice reads ONLY `persona.secretsRaw` (one "label :: effect :: condition :: truth" per line); the first
+    // version wrote a `secrets` array nobody reads, so Sklar's turn never armed. Idempotent on label: a re-run over the old shape adds the lines.
+    const raw = String(cur.secretsRaw || ""), fresh = P.secrets.filter(l => !raw.includes(l.split("::")[0].trim()));
+    if (!String(cur.notes || "").includes(MARKER)) { changes++; say(`✚ persona ${P.name} +${fresh.length} secret(s)`); if (!DRY_RUN) await a.setFlag(MAL, "persona", { ...cur, topics: [String(cur.topics || "").trim(), P.topics].filter(Boolean).join(", "), notes: [String(cur.notes || "").trim(), P.notes].filter(Boolean).join("\n\n"), secretsRaw: [raw.trim(), ...fresh].filter(Boolean).join("\n") }); }
+    else if (fresh.length) { changes++; say(`✚ persona ${P.name}: ${fresh.length} secret(s) → secretsRaw (were in the unread persona.secrets)`); if (!DRY_RUN) await a.setFlag(MAL, "persona", { ...cur, secretsRaw: [raw.trim(), ...fresh].filter(Boolean).join("\n") }); }
+    else say(`· ok persona ${P.name}`);
   }
   const find = (n) => (game.actors?.contents || []).find(a => a.name === n)?.id || null;
   const SK = actorIds.sklar || null, PU = actorIds.purser || null, WICK = find("Pilgrim Wick"), ROBOT = find("Captain Robot");
@@ -73,6 +80,25 @@
   const GATE_TURN = [P5, { beatMark: "finale_sklars_arithmetic" }];
   const FINALE_GATES = { finale_the_crates: GATE_CRATES, finale_sklars_arithmetic: GATE_ARITH, finale_sklar_turns: GATE_TURN, finale_sklar_unmoved: GATE_TURN };
   const FINALE_NO_OFFER = ["finale_sklar_turns", "finale_sklar_unmoved"];
+  // REVIEW 2026-10-01 (MEDIUM): the outcomes + rewards are gated on the beats that route to them too, so NOW (and the replay that follows it)
+  // offers the outcome the table actually reached — not the first unplayed sibling — and the Director cannot play a closer cold.
+  // Keep in sync with tools/patch-template-review-fixes-b-2026-10-01.macro.js.
+  const RT = (s) => `raid_thatwards_${s}`;
+  const OUTCOME_GATES = {
+    [RT("outcome_friends")]: [P5, { beatMark: "finale_sklar_turns" }],
+    [RT("outcome_neutral_spark")]: [P5, { anyOf: [RT("infiltration_success"), "finale_the_crates", "finale_sklars_arithmetic", "finale_sklar_unmoved"].map(beatMark => ({ beatMark })) }],
+    [RT("outcome_neutral_fail")]: [P5, { anyOf: [RT("courtly_fail"), RT("siege_fail"), "finale_sklar_unmoved"].map(beatMark => ({ beatMark })) }],
+    [RT("outcome_hostile_fail")]: [P5, { beatMark: RT("assault_fail") }],
+    [RT("rewards_major")]: [P5, { beatMark: RT("outcome_friends") }],
+    [RT("rewards_standard")]: [P5, { beatMark: RT("outcome_neutral_spark") }, { anyOf: [{ beatMark: RT("assault_success") }, { beatMark: RT("siege_success") }] }],
+    [RT("rewards_intel_only")]: [P5, { beatMark: RT("outcome_neutral_spark") }]
+  };
+  // the script's middle steps are skippable: a later branch beat counts them done (a fail branch skips the crates, a courtly success skips them too)
+  const OUTCOMES = [RT("outcome_friends"), RT("outcome_neutral_spark"), RT("outcome_neutral_fail"), RT("outcome_hostile_fail")];
+  const FAILS = [RT("assault_fail"), RT("courtly_fail"), RT("siege_fail")];
+  // (the two CLOSER outcomes are left out of the done-lists: every path to them passes a fail branch or Sklar unmoved first, and listing a
+  //  closer in a middle step reads to lint SC06 as completing the quest mid-script)
+  const AFTER_TURN = [...FAILS, RT("outcome_friends"), RT("outcome_neutral_spark")], AFTER_ARITH = ["finale_sklar_turns", "finale_sklar_unmoved", ...AFTER_TURN], AFTER_CRATES = ["finale_sklars_arithmetic", ...AFTER_ARITH];
   const NUMBERS = { label: "The Paymaster's Numbers", effectKey: "favorShift", acquisition: "earned", source: { name: "crate nine, under the good rope" }, truth: "A burned invoice stub from a Valhaulan fuel crate: an account number, a shipping seal, a signature nobody initials twice, and a figure. The figure is what the island costs, and it is not what Sklar is being paid. Show it to her and she does the arithmetic out loud." };
 
   const NEW = [
@@ -161,6 +187,7 @@
   // REVIEW FIXES 2026-10-01 — reconcile already-seeded beats (adds missing conditions, never removes one) + the offer opt-out
   const ensureReq = (b, conds) => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; };
   for (const [id, gate] of Object.entries(FINALE_GATES)) edit(id, b => { ensureReq(b, gate); if (FINALE_NO_OFFER.includes(id) && b.dialogueOffer !== false) b.dialogueOffer = false; }, `gated on the beats that route here${FINALE_NO_OFFER.includes(id) ? "; routing-only" : ""}`);
+  for (const [id, gate] of Object.entries(OUTCOME_GATES)) edit(id, b => ensureReq(b, gate), "outcome/reward gated on the beats that route here");
   // the count as a door off the entry
   edit("raid_thatwards_ho_finale_entry", b => { if (!(b.choices || []).some(c => c.next === "finale_count_the_coalition")) b.choices = [ch("Count your Operations first.", "finale_count_the_coalition"), ...(b.choices || [])]; }, "the count");
   // routes from every branch
@@ -176,7 +203,8 @@
   edit("raid_thatwards_outcome_friends", b => addChoices(b, [ch("Take what they shouldn't give.", "raid_thatwards_rewards_major")]), "→ rewards major");
   edit("raid_thatwards_outcome_neutral_spark", b => addChoices(b, [
     ch("Count the plunder too.", "raid_thatwards_rewards_standard", { requires: { beatMark: "raid_thatwards_assault_success" } }),
-    ch("Count the plunder too.", "raid_thatwards_rewards_standard", { requires: { beatMark: "raid_thatwards_siege_success" }, description: "Respect leaves useful wreckage." }),
+    // distinct label (review 2026-10-01): addChoices de-duplicates by label, so the siege route used to be silently dropped
+    ch("Count the plunder too — respect leaves wreckage.", "raid_thatwards_rewards_standard", { requires: { beatMark: "raid_thatwards_siege_success" }, description: "Respect leaves useful wreckage." }),
     ch("Count it.", "raid_thatwards_rewards_intel_only")
   ]), "→ rewards standard / intel-only");
   // voices
@@ -200,13 +228,15 @@
     const old = Object.fromEntries(SCRIPT.steps.map(s => [s.id, s]));
     SCRIPT.steps = [
       { ...old.entry, line: "They don't hide the bunker. They orbit it. Somebody is singing badly. Four ways in; the Riders help with the quiet one and the long one." },
-      { id: "count", label: "Count Your Operations", line: "Before you commit, count who came. Lady Maccio's four hundred souls are souls, not fighters, and she'll tell you so.", beats: ["finale_count_the_coalition"] },
+      { id: "count", label: "Count Your Operations", line: "Before you commit, count who came. Lady Maccio's four hundred souls are souls, not fighters, and she'll tell you so.", beats: ["finale_count_the_coalition"], done: { anyOf: Array.from(new Set(["finale_count_the_coalition", ...(old.approach?.beats || []), ...(old.approach?.done?.anyOf || []), "finale_leygate_arrival", "finale_the_crates", ...AFTER_CRATES])) } },
       { ...old.approach, line: "Commit." },
-      { id: "crates", label: "Crate Nine, Under the Good Rope", line: "Ask the purser what the fuel costs. Watch her not know.", beats: ["finale_the_crates"], done: { mark: "finale_the_crates" } },
-      { id: "arithmetic", label: "Sklar's Arithmetic", line: "Show her what the island costs. She has never once been shown.", beats: ["finale_sklars_arithmetic"] },
-      { id: "turn", label: "Not Enough For An Island", line: "She does the sum out loud. The ships stop singing.", beats: ["finale_sklar_turns", "finale_sklar_unmoved"], done: { anyOf: ["finale_sklar_turns", "finale_sklar_unmoved"] } },
-      // outcomes + rewards as ONE last step: the outcome closers otherwise sit before the rewards step and lint SC06 fires (pre-existing)
-      { id: "outcome", label: "Count It", line: "Whatever you got, you got. Count it. Sklar's people give gifts they shouldn't; take them.", beats: [...(old.outcome?.beats || []), ...(old.rewards?.beats || [])], done: { quest: KEY } }
+      { id: "crates", label: "Crate Nine, Under the Good Rope", line: "Ask the purser what the fuel costs. Watch her not know.", beats: ["finale_the_crates"], done: { anyOf: ["finale_the_crates", ...AFTER_CRATES] } },
+      { id: "arithmetic", label: "Sklar's Arithmetic", line: "Show her what the island costs. She has never once been shown.", beats: ["finale_sklars_arithmetic"], done: { anyOf: ["finale_sklars_arithmetic", ...AFTER_ARITH] } },
+      { id: "turn", label: "Not Enough For An Island", line: "She does the sum out loud. The ships stop singing.", beats: ["finale_sklar_turns", "finale_sklar_unmoved"], done: { anyOf: ["finale_sklar_turns", "finale_sklar_unmoved", ...AFTER_TURN] } },
+      // outcome + rewards are TWO steps again, in one any-order group `spoils` (lint SC06 reads the last group as the last step). Merged, NOW
+      // pointed at a contradictory sibling outcome after the table had already reached one (review 2026-10-01).
+      { ...old.outcome, group: "spoils", line: "Whatever you got, you got. Count it." },
+      { ...old.rewards, group: "spoils", line: "Sklar's people give gifts they shouldn't. Take them." }
     ].filter(Boolean);
     SCRIPT.doors = [
       { id: "leygate", label: "The Fourth Way In", line: "The Legansus fold was a gate order with a heading, and the heading was theirs. Arrive early. Nobody is early.", beats: ["finale_leygate_arrival"] },
@@ -216,7 +246,11 @@
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script finale → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-finale-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

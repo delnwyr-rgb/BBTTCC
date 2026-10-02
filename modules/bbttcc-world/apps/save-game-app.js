@@ -91,6 +91,10 @@
         this._run("Prune", async () => { const r = await api().prune({ keep: KEEP }); this._setStatus(`🧹 pruned ${r.removed} save(s); ${r.kept} kept`); ui.notifications?.info?.(`Pruned ${r.removed} save(s).`); });
       });
 
+      // `root` is the persistent window element, so bind the delegated slot listener once
+      // per element — per render it stacked (N confirm dialogs / N downloads per click).
+      if (this._slotDelegateRoot !== root) {
+      this._slotDelegateRoot = root;
       root.addEventListener("click", (ev) => {
         const btn = ev.target?.closest?.("[data-slot-act]");
         if (!btn) return;
@@ -102,6 +106,7 @@
         else if (act === "export") api().exportSlot(id);
         else if (act === "delete") this._delete(id);
       });
+      }
 
       root.querySelector("[data-action='import']")?.addEventListener("change", (ev) => {
         const file = ev.target?.files?.[0];

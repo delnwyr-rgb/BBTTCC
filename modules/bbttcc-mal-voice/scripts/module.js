@@ -46,7 +46,9 @@ Hooks.once("init", () => {
 
   game.settings.register(MODULE_ID, "apiKey", {
     name:    "API key",
-    hint:    "Your provider API key. Stored locally in your world settings. Never transmitted anywhere except directly to the chosen provider.",
+    // ⚠ World scope = synced to EVERY connected client (players included); player NPC
+    // dialogue reads it there. Moving calls behind a GM relay is an owner ruling (review 2026-09-30).
+    hint:    "Your provider API key. WARNING: this is a world setting — every connected client, players included, receives it and can read it from the browser console or network tab. Player NPC conversations call the provider directly with it. Use a key with a low spend limit.",
     scope:   "world",
     config:  true,
     type:    String,
@@ -99,7 +101,9 @@ Hooks.once("init", () => {
     scope:   "world",
     config:  false,
     type:    Object,
-    default: {}
+    default: {},
+    // Push voices.setEnabled() to every client's in-memory registry.
+    onChange: (v) => { try { game.bbttcc?.mal?.voices?._syncEnabled?.(v); } catch (_e) {} }
   });
 
   // Internal: audit log of recent calls (capped, ring buffer).

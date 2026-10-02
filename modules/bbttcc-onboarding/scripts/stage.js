@@ -126,7 +126,7 @@ function _registerOps() {
     const actor = await Actor.create({
       name, type: "npc", folder: folder?.id, img: "icons/svg/target.svg",
       prototypeToken: { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name },
-      system: { details: { level: 1 }, attributes: { violence: 1, intrigue: 1, presence: 1, body: 10, mind: 10, soul: 10 } },
+      system: { details: { level: 1 }, attributes: { violence: { value: 1 }, intrigue: { value: 1 }, presence: { value: 1 }, body: { value: 10 }, mind: { value: 10 }, soul: { value: 10 } } },
       flags: { [MODULE_ID]: { spawned: true, kind: "dummy", ownerUserId } }
     });
     try {
@@ -240,13 +240,26 @@ function _registerOps() {
              tokenIds: docs.map(t => t.id) };
   });
 
-  // Darkness is a MANUAL track (system.darkness.value, 0–10 on the sheet) — no
-  // engine writes it, so the simulator has to. Killing a sentient is allowed;
-  // this is what it costs. Clamped, and reports what actually landed so the
-  // Operator never announces a point that didn't stick.
+  // Darkness (system.darkness.value, 0–10). Killing a sentient is allowed;
+  // this is what it costs. Routed through game.fourththing.darkness.gain — the
+  // system's only sanctioned write path (fires fourththing.darknessChanged, so
+  // the Descent band icon, darknessSpikes and overflow-to-taint all apply).
+  // Reports what actually landed so the Operator never announces a point that
+  // didn't stick.
   reg("raiseDarkness", async ({ actorId, amount = 1, reason = "" }) => {
     const actor = game.actors?.get?.(String(actorId || ""));
     if (!actor) return { ok: false, before: 0, after: 0 };
+    const dk = game.fourththing?.darkness;
+    if (typeof dk?.gain === "function") {
+      try {
+        const before = Number(dk.get(actor)?.value) || 0;
+        const b = await dk.gain(actor, Number(amount) || 0, reason || "onboarding");
+        const after = Number(b?.value) || before;
+        console.log(TAG, `Darkness ${before} → ${after} on ${actor.name}${reason ? ` (${reason})` : ""}`);
+        return { ok: true, before, after, capped: after === before };
+      } catch (e) { console.warn(TAG, "raiseDarkness (darkness.gain) failed", e); return { ok: false, before: 0, after: 0 }; }
+    }
+    // Fallback only when the system API is missing: direct clamped write.
     const sys = actor.system?.system ?? actor.system;
     const before = Number(sys?.darkness?.value) || 0;
     const after = Math.min(10, Math.max(0, before + (Number(amount) || 0)));
@@ -262,8 +275,12 @@ function _registerOps() {
   // toggleCondition so the condition AE + chat card fire exactly as they would
   // in a real fight — but read first, because toggle would UNSET an already-set
   // Calmed on a replayed beat.
-  reg("foeSurrender", async ({ actorId, holdAt = 1 }) => {
-    const actor = game.actors?.get?.(String(actorId || ""));
+  // Foes are UNLINKED tokens: their damage lives in the token's actor delta, so
+  // act on the token's synthetic actor when sceneId/tokenId are given (the
+  // token must belong to actorId — that's what the relay authorized).
+  reg("foeSurrender", async ({ actorId, holdAt = 1, sceneId = "", tokenId = "" }) => {
+    const tok = game.scenes?.get?.(String(sceneId || ""))?.tokens?.get?.(String(tokenId || ""));
+    const actor = (tok && tok.actorId === String(actorId || "") && tok.actor) || game.actors?.get?.(String(actorId || ""));
     if (!actor) return { ok: false };
     const sys = actor.system?.system ?? actor.system;
     if (sys?.conditions?.calmed !== true) {
@@ -287,8 +304,11 @@ function _registerOps() {
   reg("shoveOffPerch", async ({ sceneId, tokenId, actorId, formula = "2d6" }) => {
     const scene = game.scenes?.get?.(String(sceneId || ""));
     const tokenDoc = scene?.tokens?.get?.(String(tokenId || ""));
-    const actor = game.actors?.get?.(String(actorId || ""));
-    if (!tokenDoc || !actor) return { ok: false, damage: 0 };
+    // The token must belong to the authorized actorId; damage + Prone land on
+    // its synthetic actor (unlinked foe — the base actor is never on the map).
+    if (!tokenDoc || tokenDoc.actorId !== String(actorId || "")) return { ok: false, damage: 0 };
+    const actor = tokenDoc.actor ?? game.actors?.get?.(String(actorId || ""));
+    if (!actor) return { ok: false, damage: 0 };
     try { await tokenDoc.update({ elevation: 0 }); }
     catch (e) { console.warn(TAG, "shoveOffPerch elevation drop failed", e); }
     let total = 0;
@@ -410,7 +430,9 @@ function _registerOps() {
     const scene = game.scenes?.get?.(String(sceneId || ""));
     if (!scene) return { ok: false };
     try {
-      const old = scene.walls?.filter?.(w => w.flags?.[MODULE_ID]?.kind === "circleWall") ?? [];
+      // Only THIS run's ring — concurrent showdowns must not tear down each other's.
+      const old = scene.walls?.filter?.(w => w.flags?.[MODULE_ID]?.kind === "circleWall"
+        && String(w.flags?.[MODULE_ID]?.ownerUserId || "") === String(ownerUserId || "")) ?? [];
       if (old.length) await scene.deleteEmbeddedDocuments("Wall", old.map(w => w.id));
       const MOVE = CONST.WALL_MOVEMENT_TYPES?.NORMAL ?? 20;
       const NONE = CONST.WALL_SENSE_TYPES?.NONE ?? 0;
@@ -429,11 +451,12 @@ function _registerOps() {
     } catch (e) { console.warn(TAG, "sealCircle failed", e); return { ok: false }; }
   });
 
-  reg("unsealCircle", async ({ sceneId }) => {
+  reg("unsealCircle", async ({ sceneId, ownerUserId = "" }) => {
     const scene = game.scenes?.get?.(String(sceneId || ""));
     if (!scene) return { ok: false, removed: 0 };
     try {
-      const ring = scene.walls?.filter?.(w => w.flags?.[MODULE_ID]?.kind === "circleWall") ?? [];
+      const ring = scene.walls?.filter?.(w => w.flags?.[MODULE_ID]?.kind === "circleWall"
+        && String(w.flags?.[MODULE_ID]?.ownerUserId || "") === String(ownerUserId || "")) ?? [];
       if (ring.length) await scene.deleteEmbeddedDocuments("Wall", ring.map(w => w.id));
       return { ok: true, removed: ring.length };
     } catch (e) { console.warn(TAG, "unsealCircle failed", e); return { ok: false, removed: 0 }; }
@@ -458,7 +481,7 @@ function _registerOps() {
       await ChatMessage.create({
         whisper: game.users.filter(u => u.isGM).map(u => u.id),
         speaker: { alias: "◇ OPERATOR" },
-        content: `<p><b>The circle is live — you're the table.</b> ${playerName || "The student"} has stepped into the` +
+        content: `<p><b>The circle is live — you're the table.</b> ${foundry.utils.escapeHTML(playerName || "The student")} has stepped into the` +
                  ` great circle and the hostiles are spawned.</p>` +
                  `<p>I've loaded the tracker (${tokens.length} combatants). Roll initiative and press <b>Begin Combat</b> —` +
                  ` you run the foes. When the big one starts losing, a <b>messenger</b> will interrupt with a parley.</p>`
@@ -641,6 +664,19 @@ function _registerOps() {
         const oh = (existing.effects ?? []).find(e => e.getFlag?.("fourththing", "rigState") === "overheat");
         if (oh) await existing.deleteEmbeddedDocuments("ActiveEffect", [oh.id]);
       } catch (e) { console.warn(TAG, "mintRig: pre-flight heat vent failed", e); }
+      // Founding ceremony: applyStartingPackage already minted the picked chassis,
+      // so dress it ONCE with the player's chosen name + starter art (a later
+      // replay passes no name and never re-dresses a rig the player renamed).
+      const dressName = String(name || "").trim();
+      if (dressName && !existing.getFlag?.(MODULE_ID, "starterDressed")) {
+        try {
+          const patch = { name: dressName, "prototypeToken.name": dressName, [`flags.${MODULE_ID}.starterDressed`]: true };
+          const art = STARTER_RIG_ART[chassis];
+          if (art) Object.assign(patch, { img: art.img, "prototypeToken.texture.src": art.img,
+                                          "prototypeToken.width": art.size, "prototypeToken.height": art.size });
+          await existing.update(patch);
+        } catch (e) { console.warn(TAG, "mintRig: starter rig dressing failed", e); }
+      }
       return { rigId: existing.id, existed: true };
     }
 
@@ -1008,11 +1044,11 @@ function _registerOps() {
       await ChatMessage.create({
         whisper: game.users.filter(u => u.isGM).map(u => u.id),
         speaker: { alias: "◇ OPERATOR" },
-        content: `<p><b>Onboarding raid — you're the table.</b> ${playerName || "A student"} has reached the` +
-                 ` <b>${activityKey || "raid"}</b> stage against the Rust Syndicate, attacking as <b>${faction.name}</b>.</p>` +
+        content: `<p><b>Onboarding raid — you're the table.</b> ${foundry.utils.escapeHTML(playerName || "A student")} has reached the` +
+                 ` <b>${activityKey || "raid"}</b> stage against the Rust Syndicate, attacking as <b>${foundry.utils.escapeHTML(faction.name)}</b>.</p>` +
                  `<p>Their console is staging-only; round setup and commits are GM-side. I've opened yours on their faction —` +
                  ` run a round or two, then they'll conclude the beat themselves.</p>` +
-                 (court ? `<p><b>Stay on "${court.name}" while you run it</b> — the Courtly engine only engages while` +
+                 (court ? `<p><b>Stay on "${foundry.utils.escapeHTML(court.name)}" while you run it</b> — the Courtly engine only engages while` +
                           ` the tableau scene is the one you're viewing.</p>` : "")
       });
       return { ok: true };
@@ -1240,7 +1276,7 @@ async function sealCircle(scene, { cx = 0, cy = 0, radius = 700, segments = 24 }
 /** Remove the sealed circle's wall ring (parley, beat exit). */
 async function unsealCircle(scene) {
   if (!scene?.id) return { ok: false, removed: 0 };
-  return (await _runAsGM("unsealCircle", { sceneId: scene.id })) ?? { ok: false, removed: 0 };
+  return (await _runAsGM("unsealCircle", { sceneId: scene.id, ownerUserId: _run.userId })) ?? { ok: false, removed: 0 };
 }
 
 /** Load the GM's combat tracker with the showdown participants + whisper why. */
@@ -1304,9 +1340,9 @@ async function raiseDarkness(actorId, amount = 1, reason = "") {
 }
 
 /** A sentient foe folds: Calmed + integrity floored so a stray hit can't finish them. */
-async function foeSurrender(actorId, holdAt = 1) {
+async function foeSurrender(actorId, holdAt = 1, { sceneId = "", tokenId = "" } = {}) {
   if (!actorId) return { ok: false };
-  return (await _runAsGM("foeSurrender", { actorId, holdAt })) ?? { ok: false };
+  return (await _runAsGM("foeSurrender", { actorId, holdAt, sceneId, tokenId })) ?? { ok: false };
 }
 
 /** Knock an elevated foe off its perch: token to ground + impact damage + Prone. */

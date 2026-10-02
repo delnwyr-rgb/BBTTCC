@@ -712,6 +712,133 @@ function discoverEngineTables() {
 // App
 // ---------------------------------------------------------------------------
 
+// Beat Editor saves persist HERE, once per client, whether or not a Builder
+// window is open (the per-instance listener used to be the only writer, so a
+// save with no Builder open was silently dropped and two Builders saved twice).
+export async function persistBeatUpdate(payload) {
+  try {
+    const { campaignId, beat, prevBeatId } = payload || {};
+    if (!campaignId || !beat) return false;
+
+    const api = game.bbttcc?.api?.campaign;
+    if (!api?.getCampaign || !api?.saveCampaign) return false;
+
+    const campaign = foundry.utils.deepClone(api.getCampaign(campaignId));
+    if (!campaign) return false;
+
+    const norm = s => String(s || "").trim();
+    const nextId = norm(beat.id);
+    const prevId = norm(prevBeatId);
+
+    const beats = Array.isArray(campaign.beats) ? foundry.utils.deepClone(campaign.beats) : [];
+
+    const rewriteRefs = (b) => {
+      if (!prevId || !nextId || prevId === nextId) return;
+      if (!b || typeof b !== "object") return;
+
+      if (b.outcomes) {
+        if (norm(b.outcomes.success) === prevId) b.outcomes.success = nextId;
+        if (norm(b.outcomes.failure) === prevId) b.outcomes.failure = nextId;
+      }
+
+      if (Array.isArray(b.choices)) {
+        for (const ch of b.choices) {
+          if (!ch) continue;
+          if (norm(ch.next) === prevId) ch.next = nextId;
+          if (norm(ch.failNext) === prevId) ch.failNext = nextId;
+        }
+      }
+    };
+
+    let applied = false;
+    if (prevId && prevId !== nextId) {
+      const prevIdx = beats.findIndex(b => norm(b?.id) === prevId);
+      const nextIdx = beats.findIndex(b => norm(b?.id) === nextId);
+
+      for (const b of beats) rewriteRefs(b);
+
+      if (nextIdx >= 0 && prevIdx >= 0 && nextIdx !== prevIdx) {
+        beats[nextIdx] = foundry.utils.deepClone(beat);
+        beats.splice(prevIdx, 1);
+        applied = true;
+      } else if (prevIdx >= 0) {
+        beats[prevIdx] = foundry.utils.deepClone(beat);
+        applied = true;
+      }
+    }
+
+    if (!applied) {
+      const idx = beats.findIndex(b => norm(b?.id) === nextId);
+      if (idx >= 0) beats[idx] = foundry.utils.deepClone(beat);
+      else beats.push(foundry.utils.deepClone(beat));
+    }
+
+    // Dedupe by id (preserve order)
+    const out = [];
+    const seen = new Set();
+    for (const b of beats) {
+      const id = norm(b?.id);
+      if (!id) { out.push(b); continue; }
+      if (seen.has(id)) continue;
+      seen.add(id);
+      out.push(b);
+    }
+
+    campaign.beats = out;
+
+    // Rename reconciliation beyond beat routing: opening beat + data-layer story scripts.
+    if (prevId && nextId && prevId !== nextId) {
+      if (norm(campaign.openingBeatId) === prevId) campaign.openingBeatId = nextId;
+      const swap = (v) => {
+        if (Array.isArray(v)) return v.map(x => (typeof x === "string" && norm(x) === prevId) ? nextId : swap(x));
+        if (v && typeof v === "object") { for (const k of Object.keys(v)) v[k] = (typeof v[k] === "string" && norm(v[k]) === prevId) ? nextId : swap(v[k]); }
+        return v;
+      };
+      if (campaign.story && typeof campaign.story === "object") swap(campaign.story);
+    }
+
+    await api.saveCampaign(campaignId, campaign);
+
+    if (prevId && nextId && prevId !== nextId) {
+      // Encounter-table entries pointing at (campaignId, oldId).
+      try {
+        const tApi = api.tables;
+        for (const t of (tApi?.listTables?.() || [])) {
+          const entries = Array.isArray(t?.entries) ? t.entries : [];
+          if (!entries.some(e => norm(e?.campaignId) === campaignId && norm(e?.beatId) === prevId)) continue;
+          const nt = foundry.utils.deepClone(t);
+          for (const e of nt.entries) if (norm(e?.campaignId) === campaignId && norm(e?.beatId) === prevId) e.beatId = nextId;
+          await tApi.saveTable(t.id, nt);
+        }
+      } catch (eT) { console.warn(TAG, "rename: table entry rewrite failed", eT); }
+      // References this save cannot rewrite: hex on-enter beats + code-layer scripts.
+      try {
+        const dangling = [];
+        for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) {
+          if (norm(d.flags?.["bbttcc-territory"]?.campaign?.onEnterBeatId) === prevId) dangling.push(`hex ${d.flags?.["bbttcc-territory"]?.name || d.id} (${sc.name})`);
+        }
+        if (dangling.length) ui.notifications?.warn?.(`Beat renamed ${prevId} → ${nextId}; still pointing at the old id: ${dangling.join(", ")}`, { permanent: true });
+      } catch (_eD) {}
+    }
+    return true;
+  } catch (err) {
+    console.error(TAG, "Error handling beat update:", err);
+    ui.notifications?.error?.("Beat save failed — see console.");
+    return false;
+  }
+}
+
+if (!globalThis.__bbttccCampaignBeatPersistHook) {
+  globalThis.__bbttccCampaignBeatPersistHook = true;
+  Hooks.on("bbttcc-campaign:updateBeat", async (payload) => {
+    const ok = await persistBeatUpdate(payload);
+    if (!ok) return;
+    for (const w of Object.values(ui.windows || {})) {
+      try { if (w instanceof BBTTCCCampaignBuilderApp) w._afterBeatPersisted(payload); } catch (_e) {}
+    }
+  });
+}
+
 export class BBTTCCCampaignBuilderApp extends Application {
 
   static get defaultOptions() {
@@ -771,8 +898,6 @@ export class BBTTCCCampaignBuilderApp extends Application {
     this.travelTier = Number(options.travelTier ?? 1) || 1;
     this.travelPreview = options.travelPreview ?? null; // { key, label, category, source }
 
-    this._boundOnBeatUpdated = this._onBeatUpdated.bind(this);
-    Hooks.on("bbttcc-campaign:updateBeat", this._boundOnBeatUpdated);
     this._boundOnStoryUpdated ??= () => { try { this.render(false); } catch (_e) {} };
     Hooks.on("bbttcc-campaign:storyUpdated", this._boundOnStoryUpdated);
     // Live truth layer (2026-08-24): re-render when ANY beat resolves, so the
@@ -796,7 +921,8 @@ export class BBTTCCCampaignBuilderApp extends Application {
   }
 
   close(options = {}) {
-    Hooks.off("bbttcc-campaign:updateBeat", this._boundOnBeatUpdated);
+    if (this._onResize) { window.removeEventListener("resize", this._onResize); this._onResize = null; }
+    try { this._questLinkDisarm?.(); } catch (_e) {}
     if (this._boundOnStoryUpdated) Hooks.off("bbttcc-campaign:storyUpdated", this._boundOnStoryUpdated);
     if (this._boundOnBeatResolved) Hooks.off("bbttcc:beat:resolved", this._boundOnBeatResolved);
     this._cleanupPortalLayer();
@@ -1004,86 +1130,12 @@ const activeCampaignId = _getActiveCampaignId();
     };
   }
 
-  async _onBeatUpdated(payload) {
-    try {
-      const { campaignId, beat, prevBeatId } = payload || {};
-      if (!campaignId || !beat) return;
-
-      const api = game.bbttcc?.api?.campaign;
-      if (!api?.getCampaign || !api?.saveCampaign) return;
-
-      const campaign = foundry.utils.deepClone(api.getCampaign(campaignId));
-      if (!campaign) return;
-
-      const norm = s => String(s || "").trim();
-      const nextId = norm(beat.id);
-      const prevId = norm(prevBeatId);
-
-      const beats = Array.isArray(campaign.beats) ? foundry.utils.deepClone(campaign.beats) : [];
-
-      const rewriteRefs = (b) => {
-        if (!prevId || !nextId || prevId === nextId) return;
-        if (!b || typeof b !== "object") return;
-
-        if (b.outcomes) {
-          if (norm(b.outcomes.success) === prevId) b.outcomes.success = nextId;
-          if (norm(b.outcomes.failure) === prevId) b.outcomes.failure = nextId;
-        }
-
-        if (Array.isArray(b.choices)) {
-          for (const ch of b.choices) {
-            if (!ch) continue;
-            if (norm(ch.next) === prevId) ch.next = nextId;
-            if (norm(ch.failNext) === prevId) ch.failNext = nextId;
-          }
-        }
-      };
-
-      let applied = false;
-      if (prevId && prevId !== nextId) {
-        const prevIdx = beats.findIndex(b => norm(b?.id) === prevId);
-        const nextIdx = beats.findIndex(b => norm(b?.id) === nextId);
-
-        for (const b of beats) rewriteRefs(b);
-
-        if (nextIdx >= 0 && prevIdx >= 0 && nextIdx !== prevIdx) {
-          beats[nextIdx] = foundry.utils.deepClone(beat);
-          beats.splice(prevIdx, 1);
-          applied = true;
-        } else if (prevIdx >= 0) {
-          beats[prevIdx] = foundry.utils.deepClone(beat);
-          applied = true;
-        }
-      }
-
-      if (!applied) {
-        const idx = beats.findIndex(b => norm(b?.id) === nextId);
-        if (idx >= 0) beats[idx] = foundry.utils.deepClone(beat);
-        else beats.push(foundry.utils.deepClone(beat));
-      }
-
-      // Dedupe by id (preserve order)
-      const out = [];
-      const seen = new Set();
-      for (const b of beats) {
-        const id = norm(b?.id);
-        if (!id) { out.push(b); continue; }
-        if (seen.has(id)) continue;
-        seen.add(id);
-        out.push(b);
-      }
-
-      campaign.beats = out;
-      await api.saveCampaign(campaignId, campaign);
-
-      if (this.campaignId === campaignId) {
-        try { this._scrollState ||= {}; this._scrollState.lastBeatId = String(beat.id || prevBeatId || ""); } catch (e) {}
-        try { this._captureScrollStateFromDom(); } catch (e) {}
-        this.render(false);
-      }
-    } catch (err) {
-      console.error(TAG, "Error handling beat update:", err);
-    }
+  /** Re-render after a beat save was persisted (module-level updateBeat listener). */
+  _afterBeatPersisted({ campaignId, beat, prevBeatId } = {}) {
+    if (this.campaignId !== campaignId || !this.rendered) return;
+    try { this._scrollState ||= {}; this._scrollState.lastBeatId = String(beat?.id || prevBeatId || ""); } catch (e) {}
+    try { this._captureScrollStateFromDom(); } catch (e) {}
+    this.render(false);
   }
 
   _loadCurrentCampaignClone() {
@@ -3385,7 +3437,8 @@ try {
           const c = e.conditions || (e.conditions = {});
           // Only correct an entry that explicitly names a DIFFERENT terrain.
           // Leave (Any)/blank entries alone — those are intentionally wildcard.
-          if (c.terrain && norm(c.terrain) !== wantTerr) { c.terrain = parsed.terrain; count++; }
+          // The generic fallback table (travel_generic_tN) legitimately filters by real terrains.
+          if (wantTerr !== "generic" && c.terrain && norm(c.terrain) !== wantTerr) { c.terrain = parsed.terrain; count++; }
           if (c.tier && String(c.tier) !== wantTier) { c.tier = wantTier; count++; }
         }
         if (count) entryFixes.push({ id, terrain: parsed.terrain, tier: parsed.tier, count });
@@ -4183,10 +4236,25 @@ try {
       if (!qid || !ql) { ui.notifications?.warn?.("Quest links API not ready."); return; }
       // Two-pass: dialog asks the GM to click a hex on the active scene.
       ui.notifications?.info?.("Click a Bad Eden hex on the canvas to link it to this quest. (Esc to cancel)");
+      // One armed pick per app; re-clicking the button re-arms (never stacks), Esc disarms.
+      try { this._questLinkDisarm?.(); } catch (_e) {}
+      const _isHexDoc = (d) => {
+        const f = d?.flags?.["bbttcc-territory"]; if (!f) return false;
+        return (f.isHex === true) || (f.kind === "territory-hex")
+          || (d.shape?.type === "p" && Array.isArray(d.shape?.points) && d.shape.points.length === 12);
+      };
+      const onKey = (e) => { if (e.key === "Escape") { disarm(); ui.notifications?.info?.("Hex link cancelled."); } };
+      const disarm = () => {
+        canvas.stage?.off("pointerdown", onClick);
+        document.removeEventListener("keydown", onKey, true);
+        if (this._questLinkDisarm === disarm) this._questLinkDisarm = null;
+      };
       const onClick = async (event) => {
+        disarm();
         try {
           const t = event?.target;
-          const dr = (t && t.parent) ? canvas.drawings?.placeables?.find(p => p?.children?.includes?.(t) || p === t || p?.controlIcon === t) : null;
+          const dr0 = (t && t.parent) ? canvas.drawings?.placeables?.find(p => p?.children?.includes?.(t) || p === t || p?.controlIcon === t) : null;
+          const dr = (dr0 && _isHexDoc(dr0.document)) ? dr0 : null;
           // Fallback: hit-test by world coordinates against drawing bounds.
           let pick = dr;
           if (!pick) {
@@ -4194,10 +4262,7 @@ try {
             if (local) {
               for (const p of (canvas.drawings?.placeables || [])) {
                 const d = p?.document; if (!d) continue;
-                const f = d.flags?.["bbttcc-territory"]; if (!f) continue;
-                const isHex = (f.isHex === true) || (f.kind === "territory-hex")
-                  || (d.shape?.type === "p" && Array.isArray(d.shape?.points) && d.shape.points.length === 12);
-                if (!isHex) continue;
+                if (!_isHexDoc(d)) continue;
                 const b = { minX: d.x, minY: d.y, maxX: d.x + (d.shape?.width || 0), maxY: d.y + (d.shape?.height || 0) };
                 if (local.x >= b.minX && local.x <= b.maxX && local.y >= b.minY && local.y <= b.maxY) { pick = p; break; }
               }
@@ -4209,10 +4274,10 @@ try {
           this.render(false);
         } catch (e) {
           console.warn("[bbttcc-campaign] quest-link click failed", e);
-        } finally {
-          canvas.stage?.off("pointerdown", onClick);
         }
       };
+      this._questLinkDisarm = disarm;
+      document.addEventListener("keydown", onKey, true);
       canvas.stage?.once("pointerdown", onClick);
     });
 
@@ -4884,11 +4949,24 @@ html.find("[data-action='reindex-beats']").on("click", async ev => {
       });
 
       const reposition = () => { if (d.open) portalOpen(d); };
-      window.addEventListener("resize", reposition);
+      // window resize: ONE listener per app (below), not one per row per render.
       // rootEl may not be scroll container, but harmless; helps some Foundry builds
       rootEl.addEventListener("scroll", reposition, { passive: true });
     });
 
+
+    // One window resize listener per app instance; repositions whichever menu is open now.
+    this._portalOpen = portalOpen;
+    if (!this._onResize) {
+      this._onResize = () => {
+        try {
+          const r = this.element?.[0];
+          if (!r) return;
+          r.querySelectorAll("details.bbttcc-actions-menu[open]").forEach(d => { try { this._portalOpen?.(d); } catch (_e) {} });
+        } catch (_e) {}
+      };
+      window.addEventListener("resize", this._onResize);
+    }
 
     // Mount Flow Visualizer when Flow tab is active
     try {
@@ -4898,6 +4976,13 @@ html.find("[data-action='reindex-beats']").on("click", async ev => {
 }
 
   static open(options = {}) {
+    // Reuse an open Builder (bring to front) instead of stacking instances.
+    const existing = Object.values(ui.windows || {}).find(w => w instanceof this && w.rendered);
+    if (existing) {
+      if (options.campaignId && existing.campaignId !== options.campaignId) { existing.campaignId = options.campaignId; existing.render(false); }
+      try { existing.bringToTop?.(); } catch (_e) {}
+      return existing;
+    }
     const app = new this(options);
     app.render(true);
     return app;

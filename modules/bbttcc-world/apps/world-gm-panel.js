@@ -60,7 +60,7 @@
     patch.time = {
       epoch: toInt(get("time.epoch"), 0),
       turnLength: toInt(get("time.turnLength"), 1),
-      progress: toInt(get("time.progress"), 0)
+      progress: clampNumber(get("time.progress"), 0, 1e9, 0)   // fractional (half-day site visits) — never truncate
     };
 
     patch.locks = {
@@ -173,8 +173,9 @@
       return this._state;
     }
 
-    _prepareContext(options){
-      var ctx = (super._prepareContext) ? super._prepareContext(options) : {};
+    async _prepareContext(options){
+      // The base _prepareContext is async — un-awaited, every field below was set on a Promise.
+      var ctx = (super._prepareContext) ? ((await super._prepareContext(options)) || {}) : {};
       this._load();
       ctx.state = this._state || {};
       ctx.draft = this._draft || ctx.state;

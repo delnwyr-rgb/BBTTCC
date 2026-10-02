@@ -1,5 +1,5 @@
 // v1.0.0 — Cultural Festival (mechanical)
-// Adds "Cultural Festival" to the target hex and queues +2 Morale, +5 Trade Yield.
+// Adds "Cultural Festival" to the target hex and queues +2 Morale (the trade-yield write is retired).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.cultural_festival_std.
 
 (() => {
@@ -39,7 +39,7 @@
     // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader; the tag/route is the bonus
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pending });
-    return `Queued: add "Cultural Festival" • +${morale} Morale • +${trade} Trade`;
+    return `Queued: add "Cultural Festival" • +${morale} Morale`;
   }
 
   whenRaidReady((api)=>{
@@ -61,6 +61,6 @@
       }
     });
 
-    console.log(TAG, "installed (Cultural Festival tag, +2 Morale, +5 Trade).");
+    console.log(TAG, "installed (Cultural Festival tag, +2 Morale).");
   });
 })();

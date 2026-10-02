@@ -160,6 +160,14 @@ async function effHexWithAll(dr) {
 
   for (const k of Object.keys(eff)) eff[k] = Math.round(eff[k]);
 
+  // Yields come from the engine fact (2026-10-01): flags.resources already stores the effective
+  // totals, so re-applying size / modifiers / sephirot here double-counted them and disagreed
+  // with what income reads. The local tables still drive the defense/loyalty/diplomacy columns.
+  try {
+    const factRes = game.bbttcc?.facts?.hex?.resources?.(dr);
+    if (factRes) for (const k of ["food","materials","trade","military","knowledge"]) eff[k] = Number(factRes[k] || 0);
+  } catch (_e) {}
+
   return {
     ...eff,
     defenseBonus: Number(defense || 0),

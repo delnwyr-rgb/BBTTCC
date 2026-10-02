@@ -12,14 +12,17 @@
   const MOD_S = "bbttcc-structures";
   const TAG = "[bbttcc/siege-throughput]";
 
-  function whenRaidReady(cb, tries = 0){
+  // Retry `go` itself — re-entering whenRaidReady after ready re-registered Hooks.once("ready"),
+  // which never fires again, so the retry loop was dead.
+  function whenRaidReady(cb){
+    let tries = 0;
     const go = () => {
       const api = game?.bbttcc?.api?.raid || game?.modules?.get?.(MOD_R)?.api?.raid;
       if (api?.EFFECTS && api?.STRATEGIC_THROUGHPUT) return cb(api);
-      if (tries > 80) return console.warn(TAG, "raid API not ready after timeout");
-      setTimeout(() => whenRaidReady(cb, tries + 1), 250);
+      if (tries++ > 80) return console.warn(TAG, "raid API not ready after timeout");
+      setTimeout(go, 250);
     };
-    if (globalThis.Hooks) Hooks.once("ready", go); else go();
+    if (globalThis.game?.ready || !globalThis.Hooks) go(); else Hooks.once("ready", go);
   }
 
   function whenSiegeStateReady(cb, tries = 0){
@@ -84,13 +87,17 @@
     await hexDoc.update({ [`flags.${MOD_T}.improvements`]: tf.improvements }, { parent: hexDoc.parent });
   }
 
-  async function _consumeBulwarkSiegeDiscount(attackerFactionActor){
+  // Read the one-shot discount WITHOUT consuming it — a Begin Siege refused for a short bank
+  // must not burn it. _consumeBulwarkSiegeDiscount runs only after the buffer commit succeeds.
+  function _peekBulwarkSiegeDiscount(attackerFactionActor){
     if (!attackerFactionActor) return { applied: false };
     const flag = attackerFactionActor.getFlag(MOD_S, "siegeCostDiscount");
     if (!flag?.armed) return { applied: false };
-    // Consume TTL
-    await attackerFactionActor.update({ [`flags.${MOD_S}.-=siegeCostDiscount`]: null });
     return { applied: true, grantedBy: flag.grantedBy, ts: flag.ts };
+  }
+  async function _consumeBulwarkSiegeDiscount(attackerFactionActor){
+    // Consume TTL — unsetFlag (v14 dropped the "-=key" deletion syntax, so the old write never removed it).
+    try { await attackerFactionActor?.unsetFlag?.(MOD_S, "siegeCostDiscount"); } catch (e) { console.warn("[bbttcc/siege-throughput] discount consume failed", e); }
   }
 
   function _computeBufferCommit({ sizeProfile, override }){
@@ -142,6 +149,21 @@
 
     const attackerId = attackerFactionActor.id;
 
+    // One siege per hex — setSiegeState MERGES, so a second Begin Siege would overwrite the
+    // first besieger's buffer/ids and leave a hybrid state (its committed marks lost).
+    {
+      let cur = null;
+      try { cur = await S.getSiegeState(hexUuid); } catch (_e) { cur = null; }
+      if (cur && cur.status === "active") {
+        const msg = `Begin Siege rejected: ${hexDoc.name || "that hex"} is already under siege.`;
+        await _pushWarLog(attackerFactionActor, msg, { activityKey: "begin_siege", hexUuid });
+        return { ok: false, reason: msg };
+      }
+      // A RESOLVED siege whose flag was never cleared (pre-2026-10-01 bug) would merge its old
+      // participants/champion locks into the new state — clear it first.
+      if (cur) { try { await S.clearSiegeState(hexUuid); } catch (e) { console.warn("[bbttcc/siege-throughput] stale siege clear failed", e); } }
+    }
+
     // Enforce: attacker MUST be a real Faction actor (not a Steward/PC).
     // Discriminator per module.raid-planner.js:400-401.
     if (!S.isFactionActor(attackerFactionActor)) {
@@ -173,13 +195,20 @@
       return { ok: false, reason: msg };
     }
 
+    // Naval supply detection (before the BFS — the tick passes navalAllowed for the same siege,
+    // so declaration must accept the same sea-crossing chain).
+    const terrainKey = S.hexTerrainKey(hexDoc);
+    const isNavalSupply = (terrainKey === "sea" || terrainKey === "coast")
+      || (depotDoc && (S.hexTerrainKey(depotDoc) === "sea" || S.hexTerrainKey(depotDoc) === "coast" || (S.hexModifiers(depotDoc) || []).includes("Beached Camp")));
+
     // BFS supply path (Phase A stub)
     const supportingFactionIds = Array.isArray(noteCfg.supportingFactionIds) ? noteCfg.supportingFactionIds : [];
     const allowedFactionIds = [attackerId, ...supportingFactionIds];
     const pathResult = await S.bfsSupplyPath({
       siegeTargetHexUuid: hexUuid,
       depotHexUuid,
-      allowedFactionIds
+      allowedFactionIds,
+      navalAllowed: isNavalSupply
     });
     if (!pathResult.ok) {
       const msg = `Begin Siege: supply path failed — ${pathResult.reason}`;
@@ -187,8 +216,8 @@
       return { ok: false, reason: msg };
     }
 
-    // Consume Bulwark discount (dormant TTL flag from bbttcc-structures)
-    const bulwark = await _consumeBulwarkSiegeDiscount(attackerFactionActor);
+    // Bulwark discount (dormant TTL flag from bbttcc-structures) — read now, consumed after the commit.
+    const bulwark = _peekBulwarkSiegeDiscount(attackerFactionActor);
 
     // Snapshot champions
     const attackerChampions = S.snapshotChampions(attackerFactionActor);
@@ -204,15 +233,10 @@
     const eventDeckId = S.pickEventDeck(hexDoc);
 
     // Terrain → grace period default (GM can override via noteCfg.gracePeriodTurns)
-    const terrainKey = S.hexTerrainKey(hexDoc);
     const terrainMod = S.terrainModifier(terrainKey);
     const gracePeriodTurns = Number.isFinite(noteCfg.gracePeriodTurns)
       ? Number(noteCfg.gracePeriodTurns)
       : terrainMod.grace;
-
-    // Naval supply detection
-    const isNavalSupply = (terrainKey === "sea" || terrainKey === "coast")
-      || (depotDoc && (S.hexTerrainKey(depotDoc) === "sea" || S.hexTerrainKey(depotDoc) === "coast" || (S.hexModifiers(depotDoc) || []).includes("Beached Camp")));
 
     // Buffer commit
     const { buffer, bufferStartingTotal } = _computeBufferCommit({
@@ -259,6 +283,8 @@
         console.warn("[bbttcc/siege-throughput] OP API unavailable — buffer committed WITHOUT debiting the bank (faucet).");
       }
     }
+    // The buffer is paid — NOW the one-shot discount is spent.
+    if (bulwark.applied) await _consumeBulwarkSiegeDiscount(attackerFactionActor);
 
     // Build state
     const state = S.makeSiegeState({

@@ -304,12 +304,25 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     return map;
   }
 
-  async function markSparkPhase({ actorId, sparkKey, phase, note = "" }) {
+  // opts.create — seed the record from the sparks pack when the actor doesn't hold
+  //   it yet (identify is the FIRST lifecycle step, so nothing else created it).
+  // opts.corrupted + phase "integrated" — a misaligned integrate: integrated and
+  //   corrupted land in ONE write, and only the corrupted hook fires, so the
+  //   Enlightenment ladder (never lowers) never steps up on a corrupted spark.
+  async function markSparkPhase({ actorId, sparkKey, phase, note = "", create = false, corrupted = false, corruptionReason = "" }) {
     const actor = _asActor(actorId);
     if (!actor) throw new Error("markSparkPhase: actor not found");
     const key = sparkKey;
     const map = _getSparkMap(actor);
-    const s   = map[key] || Object.values(map).find((sp) => sp.key === key);
+    let s     = map[key] || Object.values(map).find((sp) => sp.key === key);
+    if (!s && create) {
+      const item = await _resolveSparkItem(key);
+      const identifier = item?.flags?.["bbttcc-tikkun"]?.identifier ?? key;
+      s = _ensureSpark(map, identifier, item ? {
+        name: item.name, kind: item.system?.kind ?? null, sephirah: item.system?.sephirah ?? null
+      } : {});
+      if (item) { s.sparkUuid = item.uuid; s.img = item.img; }
+    }
     if (!s) throw new Error("markSparkPhase: spark not found");
 
     switch (String(phase || "").toLowerCase()) {
@@ -324,6 +337,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
       case "integrated":
         s.integrated = true;
         s.status     = "integrated";
+        if (corrupted) { s.corrupted = true; s.status = "corrupted"; }
         break;
       case "corrupted":
         s.corrupted = true;
@@ -334,22 +348,25 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     }
 
     _pushHistory(s, { phase, note });
+    const _ph = String(phase || "").toLowerCase();
+    const corruptIntegrate = _ph === "integrated" && !!corrupted;
+    if (corruptIntegrate) _pushHistory(s, { phase: "corrupted", note: corruptionReason || "Misaligned method on integrate" });
     await _setSparkMap(actor, map);
     // Re-marking a spark corrupted (e.g. the beat-listener integrate path) must also
     // propagate to the faction corruption gate. (Gauntlet finding #1.)
-    if (String(phase || "").toLowerCase() === "corrupted") {
+    if (_ph === "corrupted" || corruptIntegrate) {
       try { Hooks.callAll("bbttcc:spark:corrupted", { actor, sparkKey: s.key || key, sparkItem: null, sephirah: s.sephirah ?? null, spark: s }); } catch (_e) {}
     }
     // Owner ruling 2026-09-21: Sparks step the Enlightenment ladder. The system
     // (fourththing) listens and raises the Steward's level from the Constellation.
-    if (String(phase || "").toLowerCase() === "integrated") {
+    if (_ph === "integrated" && !corruptIntegrate) {
       try { Hooks.callAll("bbttcc:spark:integrated", { actor, sparkKey: s.key || key, sephirah: s.sephirah ?? null, spark: s, sparks: map }); } catch (_e) {}
     }
     return s;
   }
 
   // Simple phase helpers — these will get richer in later passes (costs/DCs).
-  async function identifySpark(opts)           { return markSparkPhase({ ...opts, phase: "identified" }); }
+  async function identifySpark(opts)           { return markSparkPhase({ create: true, ...opts, phase: "identified" }); }
   async function acquireSpark(opts)            { return markSparkPhase({ ...opts, phase: "acquired"   }); }
   async function integrateSparkCharacter(opts) { return markSparkPhase({ ...opts, phase: "integrated"  }); }
 

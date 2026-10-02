@@ -51,7 +51,7 @@ const MOD_DESCRIPTIONS = {
   "contaminated":            "−50% production; radiation flag set",
   "damaged infrastructure":  "−25% production",
   "hostile population":      "−25% production, −2 loyalty",
-  "supply line vulnerable":  "−10% production; supply chain at risk",
+  "supply line vulnerable":  "−15% production; supply chain at risk",
   "difficult terrain":       "−10% production, +1 defense",
   "radiation zone":          "−75% production; radiation hazard zone",
   // snake_case canon (resolution outcomes)
@@ -217,25 +217,11 @@ async function recordHexModifierTransition(hexDoc, modifier, transition, source 
  * structured list of suggestion groups for the dossier "What's next" panel.
  * No flag writes, no side effects. */
 
-const DOSSIER_TYPE_BASE = {
-  // mirrors bbttcc-factions calcBaseByType — kept local so the dossier can
-  // reason about hex production without depending on the factions module.
-  farm:       { food:20, trade:5,  materials:0,  military:0,  knowledge:0  },
-  mine:       { food:0,  trade:5,  materials:20, military:0,  knowledge:0  },
-  settlement: { food:0,  trade:10, materials:0,  military:5,  knowledge:0  },
-  fortress:   { food:0,  trade:0,  materials:0,  military:20, knowledge:0  },
-  port:       { food:5,  trade:15, materials:0,  military:0,  knowledge:0  },
-  factory:    { food:0,  trade:0,  materials:15, military:5,  knowledge:0  },
-  research:   { food:0,  trade:0,  materials:0,  military:0,  knowledge:20 },
-  temple:     { food:0,  trade:5,  materials:0,  military:0,  knowledge:10 },
-  ruins:      { food:0,  trade:0,  materials:5,  military:0,  knowledge:0  },
-  wilderness: { food:0,  trade:0,  materials:0,  military:0,  knowledge:0  }
-};
+// (DOSSIER_TYPE_BASE — a private table ~4× the real ladder — retired 2026-10-01; the dossier now
+// reads TYPE_BASE / SIZE_MULT from economy.constants and the facts helpers, like income does.)
 
 const DOSSIER_SIZE_LADDER = ["none", "outpost", "village", "town", "city", "metropolis", "megalopolis"];
-const DOSSIER_SIZE_MULT = {
-  none: 0, outpost: 0.5, village: 0.75, town: 1.0, city: 1.5, metropolis: 2.0, megalopolis: 3.0
-};
+const DOSSIER_SIZE_MULT = SIZE_MULT;
 
 const _SEPH_HINT_NAMES = ["Keter","Chokhmah","Binah","Chesed","Gevurah","Tiferet","Netzach","Hod","Yesod","Malkuth"];
 const _fmtBonus = (b) => Object.entries(b).filter(([,v]) => v).map(([k,v]) => `+${v} ${k.charAt(0).toUpperCase()+k.slice(1)}`).join(", ") || "no bonus";
@@ -308,7 +294,12 @@ function computeHexNextSteps(dr) {
       out.typeSize.push({
         priority: 1,
         label: "Type is wilderness — converting unlocks production.",
-        detail: "Suggested: farm (Food 20), mine (Materials 20), fortress (Military 20), settlement (Trade 10 + Mil 5), research (Knowledge 20).",
+        // Generated from the real ladder (TYPE_BASE × town size) — was a hand-written 4× table.
+        detail: "Suggested (at town size): " + ["farm","mine","fortress","settlement","research"].map(t => {
+          const b = TYPE_BASE[t] || {}, m = SIZE_MULT.town ?? 1;
+          const parts = Object.entries(b).filter(([,v]) => Math.round(v * m) > 0).map(([k,v]) => `${k.charAt(0).toUpperCase()+k.slice(1)} ${Math.round(v * m)}`);
+          return `${t} (${parts.join(", ") || "—"})`;
+        }).join(", ") + ".",
         activityKeys: ["establish_outpost"]
       });
     }
@@ -385,26 +376,26 @@ function computeHexNextSteps(dr) {
  */
 function traceHexProduction(dr) {
   try {
+    // Built from the facts (2026-10-01): base = the real Type ladder, sized = facts.hex.baseVector
+    // (manual base or Type × Size), final = facts.hex.resources (sephirah + modifiers — what income
+    // reads) × the integration stage multiplier.
     const f = dr?.flags?.[MOD] ?? {};
-    const type = String(f.type || "").toLowerCase();
-    const size = String(f.size || "none").toLowerCase();
-    const sizeMult = DOSSIER_SIZE_MULT[size] ?? 0;
-    const base = DOSSIER_TYPE_BASE[type] ?? DOSSIER_TYPE_BASE.wilderness;
-    const sized = {
-      food:      Math.round(Number(base.food      || 0) * sizeMult),
-      materials: Math.round(Number(base.materials || 0) * sizeMult),
-      trade:     Math.round(Number(base.trade     || 0) * sizeMult),
-      military:  Math.round(Number(base.military  || 0) * sizeMult),
-      knowledge: Math.round(Number(base.knowledge || 0) * sizeMult)
-    };
+    const type = hexType(f);
+    const size = hexSize(f);
+    const sizeMult = SIZE_MULT[size] ?? 0;
+    const zero = { food:0, materials:0, trade:0, military:0, knowledge:0 };
+    const base = Object.assign({}, zero, TYPE_BASE[type] || TYPE_BASE.settlement);
+    const sized = Object.assign({}, zero, hexBaseVector(f));
+    const effective = Object.assign({}, zero, hexResources(f));
     const progress = Math.max(0, Math.min(6, Math.round(Number(f.integration?.progress ?? 0) || 0)));
     const integMult = progress >= 6 ? 1.20 : progress === 5 ? 1.10 : progress >= 3 ? 1.05 : 1.00;
     const final = {};
-    for (const k of Object.keys(sized)) final[k] = Math.round(sized[k] * integMult);
+    for (const k of Object.keys(zero)) final[k] = Math.round(Number(effective[k] || 0) * integMult);
     return {
       type, size, sizeMult,
       base,
       sized,
+      effective,
       integMult,
       final,
       manualOverride: !!f.manualOverride,
@@ -1375,6 +1366,9 @@ function bbttccBuildCapitalOverlayForDrawing(doc) {
 
 async function bbttccRefreshCapitalOverlayForDrawing(doc) {
   try {
+    // Only for a hex on the scene being viewed, and only on the hex map (2026-10-01) —
+    // updateDrawing fires for every scene, which drew ghost crests on town hubs / dioramas.
+    if (!doc || doc.parent?.id !== canvas?.scene?.id || !bbttccIsHexMapScene(canvas?.scene)) return;
     const host = bbttccGetCapitalOverlayHost();
     if (!host || !doc) return;
     const label = "bbttcc-capital-overlay:" + String(doc.id || "");
@@ -1811,6 +1805,11 @@ async function recomputeHexResources(hexDocOrUuid, { source = "recompute", dryRu
   const report = { ok:true, changed:!same, manual, resources, before: tf.resources || {}, base: vector, multipliers: calc.multipliers, storedMultipliers: tf.calc?.multipliers || null, type: typeKey, size: sizeKey, sephirot: selName || null };
   if (same) return Object.assign(report, { changed:false });
   if (dryRun) return report;   // audit-hex-resources.macro.js: compute only, write nothing
+  // Update MERGES: a multiplier key the new calc dropped (e.g. mRes after a modifier lifts)
+  // would survive and the hex would never converge (2026-10-01) — clear the old object first.
+  if (Object.keys(tf.calc?.multipliers || {}).some(k => !(k in (calc.multipliers || {})))) {
+    try { await doc.unsetFlag(MOD, "calc.multipliers"); } catch (_e) {}
+  }
   await doc.update({
     [`flags.${MOD}.resources`]: resources,
     [`flags.${MOD}.sephirotBonus`]: calc.added,
@@ -2463,6 +2462,17 @@ async function openHexEditorByUuid(uuid){
               }
             }
             if (!fd.has("capital")) data.capital = false;
+            // Fallback layout (template failed) shows only name/status/type/notes — write ONLY
+            // those (2026-10-01); the full writer would reset owner, size, modifiers, alignment.
+            if (usedFallback) {
+              const nm = String(data.name || f.name || "Hex").trim();
+              await dr.setFlag(MOD, "name", nm);
+              await dr.setFlag(MOD, "notes", data.notes ?? "");
+              if (data.status && data.status !== f.status) await dr.setFlag(MOD, "status", data.status);
+              if (data.type && data.type !== f.type) await dr.setFlag(MOD, "type", data.type);
+              await dr.update({ text: nm }).catch(()=>{});
+              return;
+            }
             // Resource manual override checkbox (affects resource persistence only)
             const manualResourceOverride = (fd.get("manualOverride") === "on");
 
@@ -2596,7 +2606,9 @@ async function openHexEditorByUuid(uuid){
               fd.get("leylines.gate.targetHexUuid") ??
               null;
 
-            g.linkHexUuid = String(gateTarget || g.linkHexUuid || "").trim();
+            // A present-but-empty field ("— none —") clears the link (2026-10-01); only a missing
+            // field keeps the stored one.
+            if (gateTarget !== null) g.linkHexUuid = String(gateTarget).trim();
 
             g.strength = clamp(fd.get("leylines.gate.strength") ?? g.strength ?? 0.5, 0, 1);
 
@@ -2700,6 +2712,9 @@ async function openHexEditorByUuid(uuid){
 
             // Write per-key to avoid any scene/permission quirk
             for (const [k,v] of Object.entries(flagsPatch)) {
+              // calc is replaced, not merged — stale multiplier keys (mRes) otherwise survive (2026-10-01).
+              // eslint-disable-next-line no-await-in-loop
+              if (k === "calc") await dr.unsetFlag(MOD, "calc").catch(()=>{});
               // eslint-disable-next-line no-await-in-loop
               await dr.setFlag(MOD, k, v);
             }
@@ -3215,15 +3230,10 @@ async function gmSetHex(args){
     const v = patch.development.locked;
     const beforeLocked = !!((f.development && f.development.locked) || (f.integration && f.integration.locked));
     if (v === null) {
-      // Clear ONLY the lock, keep stage/progress intact
-      const curDev = (await dr.getFlag(MOD, "development")) || {};
-      const curIn  = (await dr.getFlag(MOD, "integration")) || {};
-
-      delete curDev.locked;
-      delete curIn.locked;
-
-      await dr.setFlag(MOD, "development", curDev);
-      await dr.setFlag(MOD, "integration", curIn);
+      // Clear ONLY the lock, keep stage/progress intact. unsetFlag (2026-10-01) — deleting from
+      // a getFlag copy and setFlag-merging it back removed nothing.
+      try { await dr.unsetFlag(MOD, "development.locked"); } catch (e) {}
+      try { await dr.unsetFlag(MOD, "integration.locked"); } catch (e) {}
       try { await dr.unsetFlag(MOD, "integrationLocked"); } catch (e) {}
       if (beforeLocked) _ledgerBatch.push({ kind:"owner_action", label:"Development unlocked", description:"Development progress no longer locked.", before:{locked:true}, after:{locked:false} });
     } else {
@@ -3298,6 +3308,9 @@ Hooks.once("ready", ()=>{
 // Safe for Alpha: runs once on ready; only writes if changes are detected.
 (async () => {
   try {
+    // Active GM only (2026-10-01) — a world write on every client threw on player seats and
+    // raced read-modify-writes of the shared warLogs array.
+    if (!game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
     const MOD = "bbttcc-factions";
     const actors = game?.actors?.contents || [];
     for (const a of actors) {

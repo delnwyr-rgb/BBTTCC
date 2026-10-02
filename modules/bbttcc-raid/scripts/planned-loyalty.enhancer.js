@@ -64,7 +64,18 @@
     return 0;
   }
 
+  // RETIRED 2026-10-01. The wrappers below re-wrapped raid.consumePlanned on EVERY canvasReady
+  // (no once-guard) and read `r.activity || r.key` while the real rows carry `activityKey`, so
+  // every layer was inert. Fixing the read would DOUBLE the loyalty change: the throughput
+  // handlers (strategic-throughput ration_distribution +1 / psych_ops_broadcast −2) already
+  // apply it directly. So nothing is wrapped any more; the helpers stay for reference.
   function installOnce(){
+    if (globalThis.__bbttccPlannedLoyaltyRetiredLogged) return;
+    globalThis.__bbttccPlannedLoyaltyRetiredLogged = true;
+    console.log(TAG, "retired — loyalty for ration_distribution / psych_ops_broadcast is applied by strategic-throughput.");
+  }
+  // eslint-disable-next-line no-unused-vars
+  function _legacyInstall(){
     const raid = game.bbttcc?.api?.raid || game.modules.get("bbttcc-raid")?.api?.raid;
     if (!raid){ console.warn(TAG, "raid API not ready"); return; }
     const EFFECTS = raid?.EFFECTS || {};
@@ -115,7 +126,5 @@
     console.log(TAG, "installed (queues loyalty deltas to compat pending).");
   }
 
-  Hooks.once("ready", installOnce);
-  if (game?.ready) installOnce();
-  Hooks.on("canvasReady", installOnce);
+  if (game?.ready) installOnce(); else Hooks.once("ready", installOnce);
 })();

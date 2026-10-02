@@ -32,19 +32,22 @@
       const f = dup(A.flags?.[MOD_FACTIONS] || {});
       let turn = dup(f.turn?.pending || {});
       let post = dup(f.post?.pending || {});
+      const hadPost = Object.keys(post).length > 0;
+      const hadTurnNR = !!turn.nextRound;
       // migrate nextRound → nextTurn on both shapes
       if (post.nextRound) { turn.nextTurn = mergeObj(turn.nextTurn||{}, post.nextRound); delete post.nextRound; }
       if (turn.nextRound) { turn.nextTurn = mergeObj(turn.nextTurn||{}, turn.nextRound); delete turn.nextRound; }
       // migrate whole POST payload → TURN, then clear POST
       if (Object.keys(post).length) turn = mergeObj(turn, post), post = {};
-      // if nothing to write, bail quickly
-      if (!Object.keys(turn).length && !Object.keys(post).length) return false;
+      // Only write when something actually migrates (rewriting turn.pending onto itself every sweep was noise).
+      if (!hadPost && !hadTurnNR) return false;
 
       SELF.add(A);
-      await A.update({
-        [`flags.${MOD_FACTIONS}.turn.pending`]: turn,
-        [`flags.${MOD_FACTIONS}.post.pending`]: post
-      });
+      await A.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: turn });
+      // A merge-write of {} never clears keys (each sweep re-merged POST and concatenated its
+      // arrays again) — remove the migrated keys outright.
+      if (hadTurnNR) await A.unsetFlag(MOD_FACTIONS, "turn.pending.nextRound");
+      if (hadPost) await A.unsetFlag(MOD_FACTIONS, "post.pending");
       return true;
     } catch (e) { warn("normalizeFaction failed", e); return false; }
   }
@@ -55,16 +58,17 @@
       const tf = dup(D.flags?.[MOD_TERRITORY] || {});
       let turn = dup(tf.turn?.pending || {});
       let post = dup(tf.post?.pending || {});
+      const hadPost = Object.keys(post).length > 0;
+      const hadTurnNR = !!turn.nextRound;
       if (post.nextRound) { turn.nextTurn = mergeObj(turn.nextTurn||{}, post.nextRound); delete post.nextRound; }
       if (turn.nextRound) { turn.nextTurn = mergeObj(turn.nextTurn||{}, turn.nextRound); delete turn.nextRound; }
       if (Object.keys(post).length) turn = mergeObj(turn, post), post = {};
-      if (!Object.keys(turn).length && !Object.keys(post).length) return false;
+      if (!hadPost && !hadTurnNR) return false;
 
       SELF.add(D);
-      await D.update({
-        [`flags.${MOD_TERRITORY}.turn.pending`]: turn,
-        [`flags.${MOD_TERRITORY}.post.pending`]: post
-      }, { parent: D.parent ?? canvas?.scene });
+      await D.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: turn }, { parent: D.parent ?? canvas?.scene });
+      if (hadTurnNR) await D.unsetFlag(MOD_TERRITORY, "turn.pending.nextRound");
+      if (hadPost) await D.unsetFlag(MOD_TERRITORY, "post.pending");
       return true;
     } catch (e) { warn("normalizeHex failed", e); return false; }
   }
@@ -97,15 +101,21 @@
     return true;
   }
 
+  const _isActiveGM = () => !!game.user?.isGM && (!game.users?.activeGM || game.users.activeGM === game.user);
+
   function start(){
+    // Once per session — it used to re-run on every canvasReady, stacking watchers/intervals/sweeps.
+    if (globalThis.__bbttccPost2TurnStarted) return;
+    globalThis.__bbttccPost2TurnStarted = true;
     // Try immediately; if compat not ready (older builds), retry briefly.
     if (!tryWrapCompat()) {
       let tries=0;
       const t = setInterval(()=>{ tries++; if (tryWrapCompat() || tries>60) clearInterval(t); }, 500);
     }
 
-    // One-time sweep (in case anything was already queued)
-    (async ()=>{
+    // One-time sweep (in case anything was already queued) — GM writes only (players can't
+    // update documents they don't own; that was a stream of permission warnings).
+    if (_isActiveGM()) (async ()=>{
       let n=0;
       for (const A of (game.actors?.contents || [])) if (A.getFlag?.(MOD_FACTIONS,"isFaction")) n += (await normalizeFaction(A))?1:0;
       for (const sc of (game.scenes || [])) for (const D of (sc.drawings || [])) if (D.flags?.[MOD_TERRITORY]) n += (await normalizeHex(D))?1:0;
@@ -115,6 +125,7 @@
     // Reactive watchers: if *any* code writes POST/nextRound later, fix it immediately.
     Hooks.on("updateActor", (actor, changed)=>{
       try {
+        if (!_isActiveGM()) return;
         if (!actor?.getFlag?.(MOD_FACTIONS,"isFaction")) return;
         if (SELF.has(actor)) { SELF.delete(actor); return; }
         const wrotePost = foundry.utils.getProperty(changed, `flags.${MOD_FACTIONS}.post.pending`);
@@ -125,6 +136,7 @@
 
     Hooks.on("updateDrawing", (drawing, changed)=>{
       try {
+        if (!_isActiveGM()) return;
         if (game.bbttcc?.restoring) return;   // restore mode (2026-09-12)
         if (!drawing?.flags?.[MOD_TERRITORY]) return;
         if (SELF.has(drawing)) { SELF.delete(drawing); return; }
@@ -135,7 +147,5 @@
     });
   }
 
-  if (game?.ready) start();
-  Hooks.once("ready", start);
-  Hooks.on("canvasReady", start);
+  if (game?.ready) start(); else Hooks.once("ready", start);
 })();

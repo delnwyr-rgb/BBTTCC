@@ -126,7 +126,8 @@
     const d = tf ? tf.development : null;
     if (typeof d === "number") return { n: clamp(d, 0, 10), shape: "number" };
     if (d && typeof d === "object") {
-      const n = (d.tier != null) ? num(d.tier, 0) : (d.value != null) ? num(d.value, 0) : num(d.level, 0);
+      // canonical field = development.stage (territory); tier/value/level are legacy fallbacks
+      const n = (d.stage != null) ? num(d.stage, 0) : (d.tier != null) ? num(d.tier, 0) : (d.value != null) ? num(d.value, 0) : num(d.level, 0);
       return { n: clamp(n, 0, 10), shape: "object", raw: d };
     }
     return { n: 0, shape: "none" };
@@ -135,7 +136,7 @@
   function _writeDevTier(tf, nextTier, devMeta) {
     nextTier = clamp(nextTier, 0, 10);
     if (!devMeta || devMeta.shape === "none") {
-      tf.development = nextTier;
+      tf.development = { stage: nextTier };   // every reader expects an object
       return;
     }
     if (devMeta.shape === "number") {
@@ -143,9 +144,10 @@
       return;
     }
     const raw = clone(devMeta.raw || {});
-    if (raw.tier != null) raw.tier = nextTier;
+    if (raw.stage != null) raw.stage = nextTier;
+    else if (raw.tier != null) raw.tier = nextTier;
     else if (raw.value != null) raw.value = nextTier;
-    else raw.tier = nextTier;
+    else raw.stage = nextTier;
     tf.development = raw;
   }
 
@@ -154,7 +156,8 @@
     const v = tf ? tf.integration : null;
     if (typeof v === "number") return clamp(v, 0, 10);
     if (v && typeof v === "object") {
-      const n = (v.value != null) ? num(v.value, 0) : (v.tier != null) ? num(v.tier, 0) : num(v.level, 0);
+      // canonical field = integration.progress (territory); value/tier/level are legacy fallbacks
+      const n = (v.progress != null) ? num(v.progress, 0) : (v.value != null) ? num(v.value, 0) : (v.tier != null) ? num(v.tier, 0) : num(v.level, 0);
       return clamp(n, 0, 10);
     }
     return 0;
@@ -164,12 +167,14 @@
     // Preserve common shapes when possible
     const cur = tf ? tf.integration : null;
     next = clamp(next, 0, 10);
-    if (typeof cur === "number" || cur == null) { tf.integration = next; return; }
+    if (typeof cur === "number") { tf.integration = next; return; }
+    if (cur == null) { tf.integration = { progress: next }; return; }   // every reader expects an object
     if (cur && typeof cur === "object") {
       const raw = clone(cur);
-      if (raw.value != null) raw.value = next;
+      if (raw.progress != null) raw.progress = next;
+      else if (raw.value != null) raw.value = next;
       else if (raw.tier != null) raw.tier = next;
-      else raw.value = next;
+      else raw.progress = next;
       tf.integration = raw;
     } else {
       tf.integration = next;

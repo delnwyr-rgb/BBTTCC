@@ -2051,12 +2051,13 @@
 
       const label = String(c?.label || c?.key || c?.activityKey || "").toLowerCase();
       const costTotal = sumOP(c?.cost || c?.projectedCost || c?.expectedCost || {});
-      factors.opEfficiency = costTotal === 0 ? 2 : costTotal <= 1 ? 1 : costTotal <= 3 ? 0 : -1;
+      // Costs are MARKS (every non-free row is ≥ 10) — banded mark thresholds, not the old OP 1/3/5.
+      factors.opEfficiency = costTotal === 0 ? 2 : costTotal <= 10 ? 1 : costTotal <= 30 ? 0 : -1;
 
       const riskBand = c?.riskBand || c?.historicalRisk?.riskBand || 'unknown';
       factors.risk = riskBand === 'low' ? 2 : riskBand === 'medium' ? 0 : riskBand === 'high' ? -2 : -1;
-      if (costTotal >= 5) factors.opEfficiency -= 1;
-      else if (costTotal >= 3) factors.opEfficiency -= 0.5;
+      if (costTotal >= 50) factors.opEfficiency -= 1;
+      else if (costTotal >= 30) factors.opEfficiency -= 0.5;
 
       if (darkGlobal > 0) {
         if (/tikkun|sephirotic|purif|radiant|mercy|harmony|faith|charity/.test(label)) {
@@ -2313,8 +2314,8 @@
     const logistics = pressure?.logistics || {};
     const ratio = Number(logistics?.ratio || 0) || 0;
     let need = 0;
-    if ((bank.economy || 0) <= 1) need += 1;
-    if ((bank.logistics || 0) <= 1) need += 1;
+    if ((bank.economy || 0) <= 10) need += 1;     // banks are marks — "thin" = under one activity
+    if ((bank.logistics || 0) <= 10) need += 1;
     if (ratio >= 0.8) need += 2;
     else if (ratio >= 0.65) need += 1;
     return need;
@@ -2324,7 +2325,8 @@
     const pressure = summarizePressure(observation) || {};
     const morale = Number(pressure?.morale || 0) || 0;
     const loyalty = Number(pressure?.loyalty || 0) || 0;
-    return (morale > 0 ? 1 : 0) + (loyalty > 0 ? 1 : 0);
+    // Morale/loyalty are 0–100 tracks where HIGHER is better — the need is when they run low.
+    return (morale < 40 ? 1 : 0) + (loyalty < 40 ? 1 : 0);
   }
 
   function getTravelTraceFrequency(observation) {
@@ -2946,8 +2948,9 @@
     const globalDark = Number(dark.global || 0) || 0;
     let score = 0;
     const signals = [];
-    if (morale >= 20 || loyalty >= 20) { score += 2; signals.push("faction strain is elevated"); }
-    else if (morale >= 10 || loyalty >= 10) { score += 1; signals.push("faction strain is noticeable"); }
+    // Morale/loyalty are 0–100 tracks where HIGHER is better (unrest at loyalty < 30).
+    if (morale <= 20 || loyalty <= 20) { score += 2; signals.push("faction strain is elevated"); }
+    else if (morale <= 40 || loyalty <= 40) { score += 1; signals.push("faction strain is noticeable"); }
     if (globalDark >= 10) { score += 2; signals.push("darkness is materially rising"); }
     else if (globalDark >= 5) { score += 1; signals.push("darkness pressure is present"); }
     let band = "stable";
@@ -2967,8 +2970,8 @@
     const signals = [];
     if (ratio >= 0.85) { score += 3; signals.push("logistics ratio is near cap"); }
     else if (ratio >= 0.65) { score += 2; signals.push("logistics ratio is running hot"); }
-    if ((bank.logistics || 0) <= 1) { score += 1; signals.push("logistics bank is thin"); }
-    if ((bank.economy || 0) <= 1) { score += 1; signals.push("economy bank is thin"); }
+    if ((bank.logistics || 0) <= 10) { score += 1; signals.push("logistics bank is thin"); }   // marks
+    if ((bank.economy || 0) <= 10) { score += 1; signals.push("economy bank is thin"); }
     if (ownedHexCount >= 6) { score += 1; signals.push("territory footprint is broadening"); }
     if (travelTraceCount >= 3) { score += 1; signals.push("travel activity suggests expansion tempo"); }
     let band = "contained";

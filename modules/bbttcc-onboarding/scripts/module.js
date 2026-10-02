@@ -180,7 +180,9 @@ Hooks.once("ready", () => {
 function resolveSteward(user = game.user) {
   if (!user) return null;
   let a = user.character || null;
-  if (!a) {
+  // A GM owns EVERY actor, so the ownership scan would hand them some player's PC
+  // (Soma Breaks it, damages it, hands it relics). GMs must assign a character.
+  if (!a && !user.isGM) {
     a = (game.actors?.contents ?? []).find(
       x => x.type === "character" && x.testUserPermission?.(user, "OWNER")
     ) || null;
@@ -198,6 +200,7 @@ function resolveFaction(user = game.user, steward = null) {
       if (byId) return byId;
       try { const byUuid = (typeof fromUuidSync === "function") ? fromUuidSync(fid) : null; if (byUuid) return byUuid; } catch (_) {}
     }
+    if (user?.isGM) return null;   // same trap: a GM "owns" every faction in the world
     return (game.actors?.contents ?? []).find(
       x => (x.getFlag?.(FMOD, "isFaction") || x.flags?.[FMOD]?.isFaction) && x.testUserPermission?.(user, "OWNER")
     ) || null;

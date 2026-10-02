@@ -159,6 +159,9 @@ function _hydrate() {
 function register(spec) {
   const norm = _normalize(spec);
   const existed = REGISTRY.has(norm.id);
+  // A GM's setEnabled(id,false) is persisted; built-in voices re-register at
+  // ready with enabled:true — keep the hydrated "off" so it survives reload.
+  if (REGISTRY.get(norm.id)?.enabled === false) norm.enabled = false;
   REGISTRY.set(norm.id, norm);
   log(`Registered '${norm.id}' (${existed ? "overwrote" : "new"}, triggers=${norm.triggers.length})`);
   _persist();  // fire and forget
@@ -186,6 +189,15 @@ function setEnabled(id, on) {
   spec.enabled = !!on;
   _persist();
   return true;
+}
+
+// registeredVoices onChange (every client): mirror the GM's enabled flags into
+// this client's in-memory registry, so a disable reaches player seats live.
+function _syncEnabled(stored) {
+  for (const [id, spec] of Object.entries(stored || {})) {
+    const cur = REGISTRY.get(id);
+    if (cur) cur.enabled = spec?.enabled !== false;
+  }
 }
 
 function onRegister(cb)   { if (_isFn(cb)) CALLBACKS.onRegister.push(cb); }
@@ -220,7 +232,7 @@ function _install() {
     globalThis.game.bbttcc.mal ??= {};
     globalThis.game.bbttcc.mal.voices = Object.assign(globalThis.game.bbttcc.mal.voices || {}, {
       register, unregister, get, list, enabled, setEnabled,
-      onRegister, onUnregister, schema,
+      onRegister, onUnregister, schema, _syncEnabled,
       _size: () => REGISTRY.size
     });
 

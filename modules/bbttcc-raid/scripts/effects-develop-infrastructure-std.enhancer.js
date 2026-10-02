@@ -1,5 +1,5 @@
 // v1.0.0 — Develop Infrastructure (standard, light)
-// Queues +1 Defense and +5 Trade Yield on the target hex drawing.
+// Queues +1 Defense on the target hex drawing (the trade-yield write is retired).
 // No new tag; this is the lighter cousin of Infrastructure Expansion.
 
 (() => {
@@ -30,7 +30,7 @@
     // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader; the tag/route is the bonus
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pending });
-    return `Queued: +${def} Defense • +${trade} Trade Yield`;
+    return `Queued: +${def} Defense`;
   }
 
   whenRaidReady((api)=>{
@@ -52,6 +52,6 @@
       }
     });
 
-    console.log(TAG, "installed (+1 Def, +5 Trade; no new tag).");
+    console.log(TAG, "installed (+1 Def; no new tag).");
   });
 })();

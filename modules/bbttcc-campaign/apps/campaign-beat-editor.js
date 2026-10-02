@@ -1063,7 +1063,6 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       { key: "op.softpower",   label: "OP: Soft Power" },
       { key: "op.diplomacy",   label: "OP: Diplomacy" },
       { key: "op.logistics",   label: "OP: Logistics" },
-      { key: "op.cult",        label: "OP: Cult" },
       { key: "op.culture",     label: "OP: Culture" },
       { key: "op.faith",       label: "OP: Faith" }
     ];
@@ -1409,9 +1408,12 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       p1.renderList();
       p2.renderList();
 
+      // curM/curS are the LIVE selection (seeded with every stored key, including
+      // ones absent from the catalog) — the filter re-renders only a subset of rows,
+      // so the checkbox DOM is never the source of truth.
       const syncHidden = () => {
-        const nextM = _setFromChecks(wrap, "maneuvers");
-        const nextS = _setFromChecks(wrap, "strategics");
+        const nextM = Array.from(curM);
+        const nextS = Array.from(curS);
         hidM.value = JSON.stringify(nextM);
         hidS.value = JSON.stringify(nextS);
         this.beat.unlocks = { maneuvers: nextM, strategics: nextS };
@@ -1421,6 +1423,9 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
         const t = ev.target;
         if (!t || t.tagName !== "INPUT") return;
         if (!t.matches('input[type="checkbox"][data-unlock-kind][data-unlock-key]')) return;
+        const set = (t.getAttribute("data-unlock-kind") === "maneuvers") ? curM : curS;
+        const k = String(t.getAttribute("data-unlock-key") || "").trim();
+        if (k) { if (t.checked) set.add(k); else set.delete(k); }
         syncHidden();
       });
 
@@ -3041,6 +3046,20 @@ _ensureWorldModifiersUI(html) {
       this.render(false);
     });
 
+    // Reorder choices (▲/▼) — swap whole objects so every field rides along.
+    html.find("[data-action='move-choice-up'],[data-action='move-choice-down']").on("click", ev => {
+      ev.preventDefault();
+      const idx = Number(ev.currentTarget?.dataset?.index);
+      if (!Number.isFinite(idx)) return;
+      const dir = (ev.currentTarget?.dataset?.action === "move-choice-up") ? -1 : 1;
+      this._syncFormToBeat();
+      const arr = Array.isArray(this.beat.choices) ? this.beat.choices : [];
+      const j = idx + dir;
+      if (idx < 0 || idx >= arr.length || j < 0 || j >= arr.length) return;
+      [arr[idx], arr[j]] = [arr[j], arr[idx]];
+      this.render(false);
+    });
+
     // World Effects
     html.find("[data-action='add-faction-effect']").on("click", ev => {
       ev.preventDefault();
@@ -3269,7 +3288,8 @@ _syncCoreFromForm() {
 
     // Cinematic (injected)
     this.beat.cinematic = this.beat.cinematic || { enabled: false, startSceneId: null, durationMs: 8000, nextSceneId: null };
-    this.beat.cinematic.enabled = !!_checked("input[name='cinematic-enabled']");
+    // Only when the cinematic block is rendered (type "cinematic") — otherwise keep the stored flag.
+    if ($el.find("input[name='cinematic-enabled']").length) this.beat.cinematic.enabled = !!_checked("input[name='cinematic-enabled']");
 
     const cinStart = _val("input[name='cinematic-start-scene-id']");
     if (cinStart != null) this.beat.cinematic.startSceneId = String(cinStart || "").trim() || null;
@@ -3309,6 +3329,7 @@ _syncCoreFromForm() {
     // Story declaration (Layer 2b, 2026-09-21)
     if (_val("[name='storyQuest']") != null) {
       const d = _storyFromFields({ quest: _val("[name='storyQuest']"), chapter: _val("[name='storyChapter']"), role: _val("[name='storyRole']"), ending: _val("[name='storyEnding']"), alsoStarts: _val("[name='alsoStarts']"), alsoEnds: _val("[name='alsoEnds']") });
+      if (d && this.beat.story?.__hand) d.__hand = true; // keep the hand-authored marker (migration/lint honour it)
       if (d) this.beat.story = d; else delete this.beat.story;
     }
 
@@ -3334,6 +3355,19 @@ _syncCoreFromForm() {
 
     const pt = _val("textarea[name='politicalTags'], input[name='politicalTags']");
     if (pt != null) this.beat.politicalTags = _normalizeTags(_tagArray(String(pt || "")).map(_canonPoliticalTag).filter(Boolean).join(" "));
+
+    // Digest headline + Injection gating (same parsing as _saveFromForm)
+    const dg = _val("input[name='digest']");
+    if (dg != null) this.beat.digest = String(dg || "").trim() || null;
+    const injOnce = _val("select[name='inject-once-per-hex']");
+    const injCd = _val("input[name='inject-cooldown-turns']");
+    const injRep = _val("select[name='inject-repeatable']");
+    if (injOnce != null || injCd != null || injRep != null) {
+      this.beat.inject ??= {};
+      if (injOnce != null) this.beat.inject.oncePerHex = _boolFromSelect(injOnce, false);
+      if (injCd != null) this.beat.inject.cooldownTurns = Math.max(0, _safeNum(injCd, 0));
+      if (injRep != null) this.beat.inject.repeatable = _boolFromSelect(injRep, true);
+    }
   } catch (e) {
     console.warn(TAG, "syncCoreFromForm failed:", e);
   }
@@ -3735,6 +3769,7 @@ _syncCoreFromForm() {
       // Story declaration (Layer 2b, 2026-09-21)
       if (fd.has && fd.has("storyQuest")) {
         const d = _storyFromFields({ quest: fd.get("storyQuest"), chapter: fd.get("storyChapter"), role: fd.get("storyRole"), ending: fd.get("storyEnding"), alsoStarts: fd.get("alsoStarts"), alsoEnds: fd.get("alsoEnds") });
+        if (d && this.beat.story?.__hand) d.__hand = true; // keep the hand-authored marker
         if (d) this.beat.story = d; else delete this.beat.story;
       }
     } catch (_eQ) {}
@@ -3767,10 +3802,14 @@ _syncCoreFromForm() {
 
     // Cinematic (timed scene chain)
     this.beat.cinematic ??= { enabled: false, startSceneId: null, durationMs: 8000, nextSceneId: null };
-    this.beat.cinematic.enabled = !!fd.get("cinematic-enabled");
-    this.beat.cinematic.startSceneId = String(fd.get("cinematic-start-scene-id") || this.beat.cinematic.startSceneId || "").trim() || null;
-    this.beat.cinematic.nextSceneId  = String(fd.get("cinematic-next-scene-id")  || this.beat.cinematic.nextSceneId  || "").trim() || null;
-    this.beat.cinematic.durationMs = Math.max(0, Math.floor(_safeNum(fd.get("cinematic-duration-ms"), this.beat.cinematic.durationMs || 0)));
+    // The cinematic block renders only for type "cinematic"; a beat that is cinematic
+    // via cinematic.enabled under another type must keep its stored chain untouched.
+    if (fd.has("cinematic-duration-ms")) {
+      this.beat.cinematic.enabled = !!fd.get("cinematic-enabled");
+      this.beat.cinematic.startSceneId = String(fd.get("cinematic-start-scene-id") || this.beat.cinematic.startSceneId || "").trim() || null;
+      this.beat.cinematic.nextSceneId  = String(fd.get("cinematic-next-scene-id")  || this.beat.cinematic.nextSceneId  || "").trim() || null;
+      this.beat.cinematic.durationMs = Math.max(0, Math.floor(_safeNum(fd.get("cinematic-duration-ms"), this.beat.cinematic.durationMs || 0)));
+    }
 
     // Cinematic beats should NOT use beat.sceneId (Linked Scene). Leaving it populated causes
     // the beat description/dialog to appear before the cinematic chain launches.
@@ -3795,10 +3834,11 @@ _syncCoreFromForm() {
     this.beat.politicalTags = _normalizeTags(_tagArray(fd.get("politicalTags") || this.beat.politicalTags || "").map(_canonPoliticalTag).filter(Boolean).join(" "));
 
     // Unlock rewards (checklist fields)
+    // this.beat.unlocks is kept live by the checklist panel (_ensureUnlocksUI); the
+    // checkbox DOM holds only the rows matching the current filter, so never harvest it.
     try {
-      const mans = fd.getAll("unlock-maneuver").map(v => String(v||"").trim()).filter(Boolean);
-      const strs = fd.getAll("unlock-strategic").map(v => String(v||"").trim()).filter(Boolean);
-      this.beat.unlocks = { maneuvers: mans, strategics: strs };
+      const u = this.beat.unlocks || {};
+      this.beat.unlocks = { maneuvers: Array.from(_normKeySet(u.maneuvers)), strategics: Array.from(_normKeySet(u.strategics)) };
     } catch (e) {
       this.beat.unlocks = this.beat.unlocks || { maneuvers: [], strategics: [] };
     }

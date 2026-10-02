@@ -2083,6 +2083,8 @@ function _bbttccInstallBurnTimerHookOnce() {
   Hooks.on("updateCombat", async (combat, changed) => {
     try {
       if (!combat || !("round" in changed || "turn" in changed)) return;
+      // Single writer: only the active GM applies scheduled Burn deltas.
+      if (game.users.activeGM?.id !== game.user.id) return;
       // Only relevant in an active combat
       const r = Number(combat.round || 0) || 0;
       const t = Number(combat.turn || 0) || 0;
@@ -4628,7 +4630,9 @@ Hooks.on("renderActorSheet", enhanceBBTTCCSheet);
  * Ready hook: inspectIdentity debug helper
  * ------------------------------------ */
 
-Hooks.once("ready", () => {
+// This file is dynamically imported from module.js's own ready handler, so a
+// Hooks.once("ready") registered here would never fire — install directly then.
+function _installInspectIdentityApi() {
   try {
     game.bbttcc = game.bbttcc ?? { api: {} };
     game.bbttcc.api = game.bbttcc.api ?? {};
@@ -4646,4 +4650,6 @@ Hooks.once("ready", () => {
   } catch (err) {
     WARN("Failed to expose inspectIdentity API", err);
   }
-});
+}
+if (game.ready) _installInspectIdentityApi();
+else Hooks.once("ready", _installInspectIdentityApi);

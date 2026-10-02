@@ -54,7 +54,10 @@
   }
 
   function _anchorFor(scope, ctx) {
-    if (scope === "per-round") return String(game.combat?.round ?? 0);
+    // Per-round: a running Combat scopes it to THAT combat's round (two combats' round 1 no
+    // longer collide); with no Combat the raid round is the round — one "raid-round" bucket,
+    // cleared on every bbttcc:raid:roundCommit below.
+    if (scope === "per-round") return game.combat ? `${game.combat.id}:${game.combat.round ?? 0}` : "raid-round";
     if (scope === "per-scene") return String(ctx?.sceneId || canvas?.scene?.id || "no-scene");
     return String(ctx?.raidId || "default-raid");
   }
@@ -167,7 +170,8 @@
       if (cutoff <= 0) return;
       for (const f of _state.fired.values()) {
         for (const roundKey of [...f.perRound.keys()]) {
-          if (Number(roundKey) < cutoff) f.perRound.delete(roundKey);
+          const [cid, rnd] = String(roundKey).split(":");
+          if (cid === combat?.id && Number(rnd) < cutoff) f.perRound.delete(roundKey);
         }
       }
     } catch (_e) {}
@@ -178,7 +182,8 @@
   Hooks.on("bbttcc:raid:maneuver:fired", ({ round, side, key, fireMode, attacker, defender }) => {
     try {
       if (fireMode !== "anytime") return;
-      const factionId = (String(side) === "att" ? attacker?.id : defender?.id) || null;
+      // Support fires carry the SUPPORT actor as `attacker` — it spends its own budget.
+      const factionId = (String(side) === "att" || String(side) === "support" ? attacker?.id : defender?.id) || null;
       consume(key, {
         factionId,
         attackerFactionId: attacker?.id,
@@ -187,6 +192,16 @@
         raidId: round?.raidId || "default-raid"
       });
     } catch (_e) {}
+  });
+
+  // Resets (rounds never carried a raidId, so these buckets otherwise lived until reload):
+  // a committed raid round ends the no-Combat "raid-round" bucket; closing the Raid Console
+  // ends the raid (per-raid T4 budget) and any per-round leftovers.
+  Hooks.on("bbttcc:raid:roundCommit", () => {
+    try { for (const f of _state.fired.values()) f.perRound.delete("raid-round"); } catch (_e) {}
+  });
+  Hooks.on("closeBBTTCC_RaidConsole", () => {
+    try { reset({ scope: "per-raid" }); reset({ scope: "per-round" }); } catch (_e) {}
   });
 
   console.log(TAG, "loaded; tier→scope: T1=per-round · T2-3=per-scene · T4=per-raid");

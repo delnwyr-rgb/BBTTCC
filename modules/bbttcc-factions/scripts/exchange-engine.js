@@ -169,7 +169,7 @@ function _aggregateDeltas(transfers) {
   return byActor;
 }
 
-async function _applyDeltas(actor, delta, contextLabel) {
+async function _applyDeltas(actor, delta, contextLabel, matApplied = null) {
   const opApi = game?.bbttcc?.api?.op;
 
   // Marks via op-engine (one commit per actor, all buckets at once).
@@ -198,6 +198,8 @@ async function _applyDeltas(actor, delta, contextLabel) {
       if (!dq) continue;
       const res = await stock.adjust(actor, matKey, dq, { reason: contextLabel });
       if (!res?.ok) throw new Error(`stockpile adjust refused for ${actor.name} / ${matKey}: ${res?.error || "unknown"}`);
+      // Recorded per key as it lands, so a later key's failure still rolls this one back.
+      if (matApplied) matApplied.push({ actor, materialKey: matKey, dq });
     }
   }
 }
@@ -228,10 +230,7 @@ async function _applyDeltasAtomic(deltas, contextLabel) {
     for (const [actorId, delta] of entries) {
       const actor = game.actors.get(actorId);
       if (!actor) throw new Error(`actor ${actorId} not found`);
-      await _applyDeltas(actor, delta, contextLabel);
-      for (const [matKey, dq] of Object.entries(delta.materials || {})) {
-        if (dq) matApplied.push({ actor, materialKey: matKey, dq });
-      }
+      await _applyDeltas(actor, delta, contextLabel, matApplied);
     }
   } catch (e) {
     console.warn(TAG, "atomic apply failed — rolling back", e);

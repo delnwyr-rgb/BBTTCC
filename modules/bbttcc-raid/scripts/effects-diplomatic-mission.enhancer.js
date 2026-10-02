@@ -1,5 +1,5 @@
 // v1.0.0 — Diplomatic Mission (mechanical)
-// Adds "Diplomatic Ties" tag to the target hex and queues +10 Trade Yield, +1 Loyalty.
+// Adds "Diplomatic Ties" tag to the target hex and queues +1 Loyalty (the trade-yield write is retired).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.diplomatic_mission_std.
 
 (() => {
@@ -39,7 +39,7 @@
     pending.loyaltyDelta    = Number(pending.loyaltyDelta    || 0) + Number(loyalty || 0);
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pending });
-    return `Queued: add "Diplomatic Ties" • +${trade} Trade • +${loyalty} Loyalty`;
+    return `Queued: add "Diplomatic Ties" • +${loyalty} Loyalty`;
   }
 
   whenRaidReady((api)=>{
@@ -61,6 +61,6 @@
       }
     });
 
-    console.log(TAG, 'installed ("Diplomatic Ties" tag, +10 Trade, +1 Loyalty).');
+    console.log(TAG, 'installed ("Diplomatic Ties" tag, +1 Loyalty).');
   });
 })();

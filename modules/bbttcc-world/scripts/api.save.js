@@ -165,7 +165,9 @@
     const cur = coll.map(d => d.toObject());
     if (sameJson(cur, savedArr)) return 0;
     const ids = coll.map(d => d.id);
-    if (ids.length) await parent.deleteEmbeddedDocuments(type, ids);
+    // bbttccRestore on the DELETE too: deleteToken listeners (raid muster refunds, crew
+    // release) must stand down, or they credit the just-restored faction pools.
+    if (ids.length) await parent.deleteEmbeddedDocuments(type, ids, { bbttccRestore: true });
     if (savedArr?.length) await parent.createEmbeddedDocuments(type, savedArr, { keepId: true, bbttccRestore: true });   // restore mode: creation hooks stand down (2026-09-12)
     return 1;
   }

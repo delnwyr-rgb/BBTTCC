@@ -1,171 +1,19 @@
-// v1.0.7 — Bad Eden TURN consumer extender for hex DRAWINGS
-// Applies queued effects on hex DRAWINGS and clears pending reliably.
-// Handles numeric deltas, repairs (new + legacy), and request/status keys.
-// Safe boot (runs if ready already fired). Idempotent wrapper (unwraps older).
+// v1.0.8 — Bad Eden TURN consumer extender for hex DRAWINGS — RETIRED (2026-10-01).
+//
+// This shim used to wrap raid.consumeQueuedTurnEffects with its own hex-drawing sweep.
+// That sweep called helpers (dup/get/set) that were never defined, so once the base
+// pass-through existed it threw a ReferenceError for EVERY faction on EVERY applied
+// Advance Turn (losing the inner chain's result and any wrapper's post-step). Fixing the
+// helpers would have been worse: its sweep knows fewer pending keys (no routes, no
+// darknessDelta, no resource recompute) than bbttcc-territory turn-driver's
+// applyHexPendingSweep — which already runs right after consumeQueuedTurnEffects and is
+// the one authority for hex turn.pending. So the shim installs nothing now.
+//
+// Kept in module.json (no manifest edit → no restart/cache-bust needed); safe to drop
+// from esmodules on the next manifest pass.
 
 (() => {
-  const MOD_R = "bbttcc-raid";
-  const MODF  = "bbttcc-factions";
-  const MODT  = "bbttcc-territory";
-  const TAG   = "[bbttcc/consumePlanned]";
-
-  // Resilient raid-API gate — the same retry helper every sibling enhancer defines
-  // locally. This file historically RELIED ON a global `whenRaidReady` that no file
-  // actually exports (each defines its own IIFE-local copy), so it threw an UNCAUGHT
-  // ReferenceError whenever load order shifted — which could cascade and starve later
-  // init (HUD/canvas/VFX). Gated on the exact method this shim wraps.
-  function whenRaidReady(cb, tries = 0) {
-    const go = () => {
-      const api = game?.bbttcc?.api?.raid || game?.modules?.get?.(MOD_R)?.api?.raid;
-      if (typeof api?.consumeQueuedTurnEffects === "function") return cb(api);
-      if (tries > 60) return console.warn(TAG, "raid API (consumeQueuedTurnEffects) not ready after timeout");
-      setTimeout(() => whenRaidReady(cb, tries + 1), 250);
-    };
-    if (globalThis.Hooks) Hooks.once("ready", go); else go();
-  }
-
-  whenRaidReady((api)=>{
-    // unwrap any prior wrappers
-    let orig = api.consumeQueuedTurnEffects;
-    while (orig && orig._bbttccWrapped && typeof orig._orig === "function") orig = orig._orig;
-
-    const isHex = (dr) => { const f=dr?.flags?.[MODT] ?? {}; return f.isHex===true || f.kind==="territory-hex"; };
-    const inc = (o,k,d=1)=>{ o[k] = Number(o[k]||0) + Number(d||0); };
-
-    function normalizeApplied(f){
-      let ap = get(f, "turn.applied");
-      if (Array.isArray(ap)) return ap;
-      ap = ap && typeof ap === "object" ? [dup(ap)] : [];
-      set(f, "turn.applied", ap);
-      return ap;
-    }
-
-    function buildPatchFor(drw){
-      const flags = drw.flags?.[MODT]; if (!flags) return null;
-      const f   = dup(flags);
-      const pend= dup(get(f, "turn.pending") || {});
-      if (!Object.keys(pend).length) return null;
-
-      // Track if anything actionable exists (repairs-only must still apply)
-      const hasRepairs =
-        (pend.repairs && (
-          Array.isArray(pend.repairs.addModifiers) ||
-          Array.isArray(pend.repairs.removeModifiers) ||
-          Array.isArray(pend.repairs.requests)
-        ));
-
-      const hasNumeric =
-        pend.defenseDelta || pend.tradeYieldDelta || pend.loyaltyDelta ||
-        pend.enemyLoyaltyDelta || pend.moraleDelta || pend.radiationRisk;
-
-      const hasRequests = pend.statusSet || pend.cleanseCorruption || pend.destroyHex;
-
-      // Apply numeric deltas -> mods
-      const mods = get(f, "mods") ?? set(f, "mods", {});
-      if (pend.defenseDelta)      inc(mods, "defense",      pend.defenseDelta);
-      if (pend.tradeYieldDelta)   inc(mods, "tradeYield",   pend.tradeYieldDelta);
-      if (pend.loyaltyDelta)      inc(mods, "loyalty",      pend.loyaltyDelta);
-      if (pend.enemyLoyaltyDelta) inc(mods, "enemyLoyalty", pend.enemyLoyaltyDelta);
-      if (pend.moraleDelta)       inc(mods, "morale",       pend.moraleDelta);
-      if (pend.radiationRisk)     inc(mods, "radiation",    pend.radiationRisk);
-
-      // Requests/status
-      const req = get(f, "requests") ?? set(f, "requests", {});
-      if (pend.statusSet)         req.statusSet = pend.statusSet;
-      if (pend.cleanseCorruption) req.cleanseCorruption = true;
-      if (pend.destroyHex)        req.destroyHex = true;
-
-      // Repairs (new + legacy)
-      f.modifiers = Array.isArray(f.modifiers) ? f.modifiers : [];
-      if (Array.isArray(pend.repairs?.removeModifiers)) {
-        const rm = new Set(pend.repairs.removeModifiers);
-        f.modifiers = f.modifiers.filter(m => !rm.has(m));
-      }
-      if (Array.isArray(pend.repairs?.addModifiers)) {
-        for (const m of pend.repairs.addModifiers) if (!f.modifiers.includes(m)) f.modifiers.push(m);
-      }
-      if (Array.isArray(pend.repairs?.requests)) {
-        // legacy: [{tag:"Damaged Infrastructure"}, ...]
-        const rmLegacy = new Set(pend.repairs.requests
-          .map(x => typeof x === "string" ? x : x?.tag)
-          .filter(Boolean));
-        if (rmLegacy.size) f.modifiers = f.modifiers.filter(m => !rmLegacy.has(m));
-      }
-
-      const actionable = hasRepairs || hasNumeric || hasRequests;
-      if (!actionable) return null;
-
-      const prevApplied = normalizeApplied(f);
-      const newApplied  = prevApplied.concat([{ ts: Date.now(), data: pend }]);
-
-      // Build patch with UNSET to hard-clear pending
-      return {
-        _id: drw.id,
-        [`flags.${MODT}.mods`]: mods,
-        [`flags.${MODT}.requests`]: req,
-        [`flags.${MODT}.modifiers`]: f.modifiers,
-        [`flags.${MODT}.turn.applied`]: newApplied,
-        [`flags.${MODT}.turn.-=pending`]: null
-      };
-    }
-
-    async function wrappedConsume({ factionId } = {}){
-      // 1) original pipeline (factions + any hex-actors)
-      const base = await orig({ factionId });
-
-      // 2) sweep drawings
-      const batches = [];
-      for (const scene of game.scenes ?? []) {
-        const patches = [];
-        for (const dr of scene.drawings ?? []) {
-          if (!isHex(dr)) continue;
-
-          // one-time sanitize: force applied to array
-          const f = dr.flags?.[MODT];
-          if (f?.turn?.applied && !Array.isArray(f.turn.applied)) {
-            const nf = dup(f); set(nf, "turn.applied", [dup(f.turn.applied)]);
-            patches.push({ _id: dr.id, [`flags.${MODT}`]: nf });
-            continue;
-          }
-
-          const patch = buildPatchFor(dr);
-          if (patch) patches.push(patch);
-        }
-        if (patches.length) batches.push({ scene, patches });
-      }
-
-      // 3) apply patches scene-by-scene
-      let changed = !!(base && base.changed);
-      for (const { scene, patches } of batches) {
-        await scene.updateEmbeddedDocuments("Drawing", patches);
-        changed = true;
-      }
-
-      // 4) lightweight war log
-      if (changed && factionId) {
-        const A = game.actors.get(String(factionId).replace(/^Actor\./,""));
-        if (A) {
-          const F = dup(A.flags?.[MODF] || {});
-          const logs = Array.isArray(F.warLogs) ? F.warLogs.slice() : [];
-          logs.push({
-            ts: Date.now(),
-            date: new Date().toLocaleString(),
-            type: "turn",
-            activity: "applyHexQueues",
-            summary: `Applied queued Strategic effects to ${batches.reduce((n,s)=>n+s.patches.length,0)} hex drawing(s).`
-          });
-          await A.update({ [`flags.${MODF}.warLogs`]: logs }, { diff:true, recursive:true });
-        }
-      }
-
-      console.log(TAG, "complete.");
-      return Object.assign({}, base, { changed });
-    }
-
-    wrappedConsume._bbttccWrapped = true;
-    wrappedConsume._orig = orig;
-    api.consumeQueuedTurnEffects = wrappedConsume;
-
-    console.log(TAG, "installed (safe boot, repairs-only & morale/radiation supported).");
-  });
+  const TAG = "[bbttcc/consumePlanned]";
+  const note = () => console.log(TAG, "retired — hex turn.pending is applied by turn-driver applyHexPendingSweep.");
+  if (globalThis.game?.ready) note(); else if (globalThis.Hooks) Hooks.once("ready", note);
 })();

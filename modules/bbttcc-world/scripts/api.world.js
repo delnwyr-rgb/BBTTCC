@@ -270,10 +270,39 @@
       .then(function(){ return { ok: true, snapshot: snap, count: getSnapshots().length }; });
   }
 
-  function _restoreFactionFlags(payload){
-    var restored = 0;
+  // Replace one flag namespace EXACTLY (2026-10-01): update() MERGES, so keys added
+  // after the snapshot used to survive a rollback (a hybrid of old and new state).
+  // Force-delete every live key, then write the saved namespace.
+  function _replaceFlagNamespace(doc, ns, saved){
+    var live = (doc && doc.flags && doc.flags[ns]) || {};
+    var keys = Object.keys(live);
+    var FD = (foundry && foundry.data && foundry.data.operators) ? foundry.data.operators.ForcedDeletion : null;
+    var del;
+    if (!keys.length) del = Promise.resolve();
+    else if (FD) {
+      var upd = {};
+      keys.forEach(function(k){ upd["flags." + ns + "." + k] = new FD(); });
+      del = doc.update(upd);
+    } else {
+      del = keys.reduce(function(p, k){ return p.then(function(){ return doc.unsetFlag(ns, k); }); }, Promise.resolve());
+    }
+    return del.then(function(){
+      var f = {}; f[ns] = deepClone(saved);
+      return doc.update({ flags: f });
+    });
+  }
+
+  async function _settleCount(promises, label){
+    var res = await Promise.allSettled(promises);
+    var ok = 0;
+    res.forEach(function(r){ if (r.status === "fulfilled") ok++; else warn(label + " restore failed", r.reason); });
+    return ok;
+  }
+
+  async function _restoreFactionFlags(payload){
+    var jobs = [];
     try {
-      if (!payload || !Array.isArray(payload)) return restored;
+      if (!payload || !Array.isArray(payload)) return 0;
       payload.forEach(function(row){
         try {
           if (!row || !row.id || !row.flags) return;
@@ -281,18 +310,17 @@
           if (!actor) return;
           var bf = row.flags["bbttcc-factions"];
           if (!bf) return;
-          actor.update({ flags: { "bbttcc-factions": deepClone(bf) } });
-          restored++;
+          jobs.push(_replaceFlagNamespace(actor, "bbttcc-factions", bf));
         } catch(_e2){}
       });
     } catch(e){ warn("_restoreFactionFlags failed", e); }
-    return restored;
+    return _settleCount(jobs, "faction");
   }
 
-  function _restoreHexFlags(payload){
-    var restored = 0;
+  async function _restoreHexFlags(payload){
+    var jobs = [];
     try {
-      if (!payload || !Array.isArray(payload)) return restored;
+      if (!payload || !Array.isArray(payload)) return 0;
       payload.forEach(function(row){
         try {
           if (!row || !row.sceneId || !row.drawingId || !row.flags) return;
@@ -302,12 +330,11 @@
           if (!d) return;
           var bt = row.flags["bbttcc-territory"];
           if (!bt) return;
-          d.update({ flags: { "bbttcc-territory": deepClone(bt) } });
-          restored++;
+          jobs.push(_replaceFlagNamespace(d, "bbttcc-territory", bt));
         } catch(_e2){}
       });
     } catch(e){ warn("_restoreHexFlags failed", e); }
-    return restored;
+    return _settleCount(jobs, "hex");
   }
 
   function rollbackSnapshot(snapshotId, opts){
@@ -321,10 +348,6 @@
     }
     if (!snap) return Promise.resolve({ ok:false, reason:"not_found" });
 
-    var p = Promise.resolve(setRawState(ensureSchemaV1(snap.state)));
-    var factionRestored = _restoreFactionFlags(snap.factions);
-    var hexRestored = _restoreHexFlags(snap.hexes);
-
     var entry = {
       type: "gm_world_rollback",
       at: nowMs(),
@@ -332,10 +355,14 @@
       note: note,
       snapshotId: snap.id,
       label: snap.label,
-      restored: { factions: factionRestored, hexes: hexRestored }
+      restored: { factions: 0, hexes: 0 }
     };
 
-    return p
+    // Awaited, and counted by SUCCESSES — the old fire-and-forget updates reported
+    // attempts and resolved before the writes landed.
+    return Promise.resolve(setRawState(ensureSchemaV1(snap.state)))
+      .then(function(){ return Promise.all([_restoreFactionFlags(snap.factions), _restoreHexFlags(snap.hexes)]); })
+      .then(function(n){ entry.restored = { factions: n[0], hexes: n[1] }; })
       .then(function(){ return pushWorldLog(entry); })
       .then(function(){
         log("rollbackSnapshot", { snapshotId: snap.id, label: snap.label, restored: entry.restored });
@@ -525,7 +552,23 @@
     return setRawState(next);
   }
 
+  // Every read-modify-write of the worldState setting (applyGMEdit, bumpTurn,
+  // addTime) runs through this one promise queue: two un-awaited callers (the
+  // ledger's travel debit + the travel wrapper's addTime) used to read the same
+  // stale state and the second write lost the first. Queued bodies must never
+  // await another queued call (that would deadlock).
+  var _stateQueue = Promise.resolve();
+  function _queueState(fn){
+    var run = _stateQueue.then(fn, fn);
+    _stateQueue = run.then(function(){}, function(){});
+    return run;
+  }
+
   function applyGMEdit(patch, opts){
+    return _queueState(function(){ return _applyGMEditNow(patch, opts); });
+  }
+
+  function _applyGMEditNow(patch, opts){
     opts = opts || {};
 
     var prev = getState();
@@ -568,8 +611,10 @@
 
   function bumpTurn(delta, opts){
     delta = toInt(delta, 1);
-    var s = getState();
-    return applyGMEdit({ turn: s.turn + delta }, opts);
+    return _queueState(function(){
+      var s = getState();   // read inside the queue, not before it
+      return _applyGMEditNow({ turn: s.turn + delta }, opts);
+    });
   }
 
   function setDarkness(value, opts){
@@ -605,7 +650,10 @@
     var p = Number(points);
     if (!isFinite(p) || p === 0) return Promise.resolve({ ok:false, reason:"no_points" });
     if (!game.user || !game.user.isGM) return Promise.resolve({ ok:false, reason:"not_gm" });
+    return _queueState(function(){ return _addTimeNow(p, opts); });
+  }
 
+  function _addTimeNow(p, opts){
     var s = getState();
     var next = deepClone(s);
     next.time.progress = Math.round((s.time.progress + p) * 100) / 100;

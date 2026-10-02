@@ -97,7 +97,10 @@
 
   function _matchScope(scope, intent, ctx, actorFactionId) {
     const friendlyId = String(intent?.factionId || ctx?.attackerFactionId || "");
-    const enemyId    = String(ctx?.defenderFactionId || "");
+    // "Enemy" is relative to the ACTING faction — a defender-fired intent's enemy is the attacker.
+    const enemyId    = (friendlyId && friendlyId === String(ctx?.defenderFactionId || ""))
+      ? String(ctx?.attackerFactionId || "")
+      : String(ctx?.defenderFactionId || "");
     const af = String(actorFactionId || "");
     if (scope === "all" || !scope) return true;
     if (scope === "allies")  return af && (af === friendlyId);
@@ -270,7 +273,8 @@
         note: intent.note || null,
         ctx
       });
-      return { applied: true, via: "hook:bbttcc:raid:canvasVfx" };
+      // Nothing subscribes to bbttcc:raid:canvasVfx (and the hook is local-only) — say so honestly.
+      return { applied: false, note: "no-vfx-consumer", via: "hook:bbttcc:raid:canvasVfx" };
     } catch (e) {
       return { applied: false, note: "vfx-hook-failed", error: String(e) };
     }
@@ -321,6 +325,7 @@
     for (const eff of list) {
       const type = String(eff?.type || "");
       if (!NEW_VERBS.has(type)) continue;
+      if (eff?._sceneDispatched) continue;   // already landed at fire time — never twice
       const handler = HANDLERS[type];
       if (!handler) continue;
       try {
@@ -363,8 +368,9 @@
       if (fireMode !== "anytime") return; // pre-roll/post-commit apply at commit (future sprint)
       const stashed = round?.meta?.intents?.applied?.roundEffects || [];
       if (!stashed.length) return;
-      // Filter to the new verbs (cheap pre-check).
-      const sceneEffs = stashed.filter((e) => NEW_VERBS.has(String(e?.type || "")));
+      // Filter to the new verbs not yet dispatched — the stash is CUMULATIVE across the round's
+      // fires, so without the stamp every later fire re-applied every earlier fire's verbs.
+      const sceneEffs = stashed.filter((e) => NEW_VERBS.has(String(e?.type || "")) && !e?._sceneDispatched);
       if (!sceneEffs.length) return;
       const ctx = {
         attackerFactionId: attacker?.id || null,
@@ -373,6 +379,7 @@
         round, side, key, fireMode, app
       };
       await applySceneIntents(sceneEffs, ctx);
+      for (const e of sceneEffs) { try { e._sceneDispatched = true; } catch (_e) {} }
     } catch (e) {
       console.warn(TAG, "auto-apply on maneuver:fired failed", e);
     }

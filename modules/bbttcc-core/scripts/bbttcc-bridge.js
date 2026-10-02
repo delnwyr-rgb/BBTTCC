@@ -4,7 +4,9 @@
 /* v13-safe UI injection: uses BOTH getActorSheetHeaderButtons and render hook */
 /* ========================================================================== */
 (function () {
-  var FLAG_SCOPE = "bbttcc-bridge";
+  // Must be a real package id: v14 getFlag/setFlag THROW on an unknown scope, so the
+  // old "bbttcc-bridge" scope silently dropped every lock/ledger write (fixed 2026-10-01).
+  var FLAG_SCOPE = "bbttcc-core";
 
   function warn() { try { console.warn("[bbttcc-bridge]", ...arguments); } catch (_) {} }
   function num(x, d){ var n=Number(x); return isFinite(n)?n:(d!=null?d:0); }
@@ -76,6 +78,9 @@ async function _writeCanonicalBloodDebt(actor, model){
 async function _syncCanonicalFromBridge(actor, bridgeModel){
   try {
     if (!actor) return;
+    // Native system.bloodDebt is canonical when fourththing is loaded; the identity
+    // flag is legacy (the system folds it into native on GM ready) — don't re-seed it.
+    if (game.fourththing && game.fourththing.bloodDebt && typeof game.fourththing.bloodDebt.add === "function") return;
     bridgeModel = bridgeModel && typeof bridgeModel === "object" ? bridgeModel : {};
     var value = Math.max(0, num(bridgeModel.value, 0));
     // Mirror value into canonical; do not try to merge ledgers (GM ledger is canonical).
@@ -278,7 +283,10 @@ async function _clearBridgeDebtAndLocks(actor){
 
   function _readSkillRank(pc, key){
     try {
-      var sys = pc?.system?.system ?? pc?.system;
+      // SOURCE rank, not the derived (AE-applied) value — this feeds a write-back,
+      // and baking an Active Effect bonus into source would corrupt the rank.
+      var src = (typeof pc?.toObject === "function") ? pc.toObject() : null;
+      var sys = src ? (src.system?.system ?? src.system) : (pc?.system?.system ?? pc?.system);
       return num(sys?.skills?.[key]?.value, 0);
     } catch(_e){ return 0; }
   }
@@ -468,7 +476,7 @@ async function _clearBridgeDebtAndLocks(actor){
     try{
       var gmIds = (game.users||[]).filter(function(u){ return u && u.isGM; }).map(function(u){ return u.id; });
       if(gmIds.length){
-        var line = '<div><b>Manifestation</b>: '+pc.name+' → <b>+'+(opAmount * _mpo())+' '+opLabel(opKey)+' marks</b> for '+faction.name+'</div>';
+        var line = '<div><b>Manifestation</b>: '+foundry.utils.escapeHTML(String(pc.name))+' → <b>+'+(opAmount * _mpo())+' '+opLabel(opKey)+' marks</b> for '+foundry.utils.escapeHTML(String(faction.name))+'</div>';
         line += '<div class="bbttcc-muted">Sacrifice: <b>'+sacType+'</b> • Blood Debt +<b>'+bloodDebtDelta+'</b></div>';
         if(note) line += '<div class="bbttcc-muted">Note: '+foundry.utils.escapeHTML(note)+'</div>';
         await ChatMessage.create({ whisper: gmIds, speaker:{alias:"Bad Eden Bridge"}, content: line });
@@ -509,6 +517,10 @@ async function _clearBridgeDebtAndLocks(actor){
     if(!actor) throw new Error("Actor not found");
     if(!opKey) throw new Error("Missing OP key");
     if(spend<=0) throw new Error("Spend must be > 0");
+    // Whole rule units only (per 10 marks) — a fractional spend built an invalid
+    // dice formula ("1.5d6") AFTER the marks were committed.
+    spend = Math.floor(spend + 1e-9);
+    if(spend<=0) throw new Error("Spend must be at least "+_mpo()+" marks");
 
     // Bank values are MARKS (1 OP = 10 marks). User input "spend" is OP units.
     var bank = readFactionOpBank(faction);
@@ -522,6 +534,8 @@ async function _clearBridgeDebtAndLocks(actor){
       throw new Error("Faction OP spend refused"+((commitRes && commitRes.error) ? ": "+commitRes.error : "")+" — no roll fired.");
     }
 
+    // Anything that throws from here on refunds the spend (Manifestation has the same claw-back).
+    try {
     // Fire the steward's REAL RFI roll. The old dnd5e paths (actor.rollSkill /
     // rollAbilitySave / rollAbilityTest) never existed on fourththing actors, so
     // every backing roll silently fell through to a bare 1d20 — fixed 2026-07-06.
@@ -548,6 +562,7 @@ async function _clearBridgeDebtAndLocks(actor){
 
     if(mode==="dice"){
       var expr = "";
+      var escB = function(t){ return foundry.utils.escapeHTML(String(t==null?"":t)); };
       var m = /^(\d+)d(\d+)$/i.exec(String(dicePerOp||"1d6").trim());
       if(m){
         expr = (num(m[1],1)*spend)+"d"+num(m[2],6);
@@ -558,8 +573,8 @@ async function _clearBridgeDebtAndLocks(actor){
       var br = await (new Roll(expr)).evaluate();
       finalTotal = baseTotal + num(br.total,0);
       await ChatMessage.create({ content:
-        '<div class="bbttcc-muted"><b>Faction Backing</b>: '+faction.name+' spent <b>'+spendMarks+' '+opLabel(opKey)+' marks</b> for '+actor.name+'.</div>'+
-        '<div>'+baseDesc+': <b>'+baseTotal+'</b> +<b>'+expr+'</b> = <b>'+finalTotal+'</b></div>'+
+        '<div class="bbttcc-muted"><b>Faction Backing</b>: '+escB(faction.name)+' spent <b>'+spendMarks+' '+opLabel(opKey)+' marks</b> for '+escB(actor.name)+'.</div>'+
+        '<div>'+escB(baseDesc)+': <b>'+baseTotal+'</b> +<b>'+escB(expr)+'</b> = <b>'+finalTotal+'</b></div>'+
         '<div class="bbttcc-muted">Bonus dice total: <b>'+br.total+'</b></div>'
       });
       return { ok:true, baseTotal:baseTotal, finalTotal:finalTotal, mode:mode, diceExpr:expr, spend:spend, opKey:opKey, roll:baseRoll };
@@ -568,10 +583,17 @@ async function _clearBridgeDebtAndLocks(actor){
     var bonus = flatPerOp * spend;
     finalTotal = baseTotal + bonus;
     await ChatMessage.create({ content:
-      '<div class="bbttcc-muted"><b>Faction Backing</b>: '+faction.name+' spent <b>'+spendMarks+' '+opLabel(opKey)+' marks</b> for '+actor.name+'.</div>'+
-      '<div>'+baseDesc+': <b>'+baseTotal+'</b> +<b>'+bonus+'</b> = <b>'+finalTotal+'</b></div>'
+      '<div class="bbttcc-muted"><b>Faction Backing</b>: '+foundry.utils.escapeHTML(String(faction.name))+' spent <b>'+spendMarks+' '+opLabel(opKey)+' marks</b> for '+foundry.utils.escapeHTML(String(actor.name))+'.</div>'+
+      '<div>'+foundry.utils.escapeHTML(baseDesc)+': <b>'+baseTotal+'</b> +<b>'+bonus+'</b> = <b>'+finalTotal+'</b></div>'
     });
     return { ok:true, baseTotal:baseTotal, finalTotal:finalTotal, mode:mode, flatBonus:bonus, spend:spend, opKey:opKey, roll:baseRoll };
+    } catch (eRoll) {
+      try {
+        var refundB = {}; refundB[opKey] = +Math.abs(spendMarks);
+        await opCommit(faction.id, refundB, { source: "bridge", label: "Backing refund: roll failed for "+actor.name, allowOvercap: true });   // restores a pre-spend balance — never refused at cap
+      } catch (_eRefB) { warn("backing refund ALSO failed — manual GM fix needed", _eRefB); }
+      throw eRoll;
+    }
   }
 
   // ── Hover-help (2026-07-06) ──────────────────────────────────────────────
@@ -626,7 +648,7 @@ async function _clearBridgeDebtAndLocks(actor){
     });
 
     var factionOptions = factions.map(function(f){
-      return '<option value="'+f.id+'" '+(String(f.id)===String(boundFactionId)?"selected":"")+'>'+f.name+'</option>';
+      return '<option value="'+f.id+'" '+(String(f.id)===String(boundFactionId)?"selected":"")+'>'+foundry.utils.escapeHTML(String(f.name))+'</option>';
     }).join("");
 
     var keys=["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
@@ -657,7 +679,7 @@ async function _clearBridgeDebtAndLocks(actor){
       return k ? k === "steward" : a.type==="character";
     });
     var actorOptions = actors.map(function(a){
-      return '<option value="'+a.id+'" '+(actor && a.id===actor.id ? "selected":"")+'>'+a.name+'</option>';
+      return '<option value="'+a.id+'" '+(actor && a.id===actor.id ? "selected":"")+'>'+foundry.utils.escapeHTML(String(a.name))+'</option>';
     }).join("");
 
     var html =
@@ -769,7 +791,7 @@ async function _clearBridgeDebtAndLocks(actor){
             if (!sel.length) return;
             var cur = sel.val() || "";
             var opts = list.map(function(a){
-              return '<option value="'+a.id+'" '+(String(a.id)===String(cur)?"selected":"")+'>'+a.name+'</option>';
+              return '<option value="'+a.id+'" '+(String(a.id)===String(cur)?"selected":"")+'>'+foundry.utils.escapeHTML(String(a.name))+'</option>';
             }).join("");
             sel.html(opts);
           }catch(_e){}
@@ -798,7 +820,7 @@ async function _clearBridgeDebtAndLocks(actor){
             var opts = Object.keys(src).map(function(k){
               var e = src[k] || {};
               var lbl = e.label ? String(e.label) : opLabel(k);
-              return '<option value="'+k+'" '+(k===cur?"selected":"")+'>'+lbl+' ('+num(e.value,0)+')</option>';
+              return '<option value="'+k+'" '+(k===cur?"selected":"")+'>'+foundry.utils.escapeHTML(lbl)+' ('+num(e.value,0)+')</option>';
             }).join("");
             sel.html(opts || '<option value="">—</option>');
           }catch(_e){}

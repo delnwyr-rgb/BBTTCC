@@ -388,7 +388,9 @@
         const reg = readRegistry();
         const qname = qName(reg, qid);
 
-        const track = readTrack(faction);
+        // `let`: the dialog callbacks below re-read it just before saving, so a beat that
+        // resolved while a dialog was open is not overwritten by this click-time snapshot.
+        let track = readTrack(faction);
 
         const ensureRow = () => {
           if (track.active[qid]) return track.active[qid];
@@ -433,6 +435,8 @@
         };
 
         if (act === "note") {
+          // Notes write the faction actor directly — a seat that doesn't own it can't save.
+          if (!game.user?.isGM && !faction.isOwner) return ui.notifications?.warn?.("Quest Log: only the faction's owner or the GM can edit notes.");
           const row0 = ensureRow();
           const prev = String(row0.notes || "");
           const content = `
@@ -448,6 +452,7 @@
                 label: "Save",
                 callback: async (html2) => {
                   const val = String(html2.find("textarea[name='qnote']").val() || "").trim();
+                  track = readTrack(faction);
                   const row = ensureRow();
                   row.notes = val;
                   row.lastTouchedTs = Date.now();
@@ -487,6 +492,7 @@
                 label: "Save",
                 callback: async (html2) => {
                   const val = String(html2.find("textarea[name='qnext']").val() || "").trim();
+                  track = readTrack(faction);
                   const row = ensureRow();
                   if (!val || val === authored) { delete row.nextLine; drop(`${bucketOf()}.${qid}.nextLine`); }
                   else row.nextLine = { text: val, stepKey: authoredKey, ts: Date.now(), by: game.user?.name || "GM" };
@@ -498,6 +504,7 @@
               restore: {
                 label: "Restore authored",
                 callback: async () => {
+                  track = readTrack(faction);
                   const row = ensureRow();
                   delete row.nextLine; drop(`${bucketOf()}.${qid}.nextLine`);
                   row.lastTouchedTs = Date.now();
@@ -636,6 +643,15 @@
     game.bbttcc.api.quests.openQuestLog = async ({ factionId, factionActor } = {}) => {
       const a = await resolveActorRef(factionActor || factionId);
       if (!a) return ui.notifications?.error?.("Quest Log: faction not found.");
+      // Reuse the open window: a second instance with the same fixed id replaced the first
+      // one's element without closing it, orphaning its updateActor/updateSetting hooks.
+      const existing = foundry.applications.instances?.get?.("bbttcc-quest-log");
+      if (existing) {
+        if (existing.factionId !== a.id && existing.__state) existing.__state.selected = "";
+        existing.factionId = a.id;
+        existing.render({ force: true, focus: true });
+        return existing;
+      }
       const app = new BBTTCCQuestLogApp({ factionId: a.id });
       app.render(true, { focus: true });
       return app;

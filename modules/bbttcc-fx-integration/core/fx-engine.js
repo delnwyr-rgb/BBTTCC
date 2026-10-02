@@ -49,7 +49,8 @@ function banner(text, kind = "info", timeout = 1400) {
   const el = document.createElement("div");
   el.className = `bbttcc-fx-banner bbttcc-fx-${kind}`;
   el.textContent = String(text || "");
-  document.body.appendChild(el);
+  // Inside #bbttcc-fx-root so the --fx-accent* tone vars + fx.css tone rules apply.
+  (resolveFXRoot() || document.body).appendChild(el);
   requestAnimationFrame(() => el.classList.add("show"));
   setTimeout(() => {
     el.classList.remove("show");
@@ -103,7 +104,7 @@ function showFloatingTextNear(el, text, kind = "info") {
   node.textContent = String(text || "");
   node.style.left = `${rect.left + rect.width / 2}px`;
   node.style.top = `${rect.top + window.scrollY - 6}px`;
-  document.body.appendChild(node);
+  (resolveFXRoot() || document.body).appendChild(node);
   requestAnimationFrame(() => node.classList.add("show"));
   setTimeout(() => {
     node.classList.remove("show");
@@ -451,7 +452,7 @@ function canvasPulse(position, opts = {}) {
 function playTurnCard(evt) {
   if (!isEnabled() || !turnEnabled()) return;
   const label = evt?.label || evt?.key || "Turn Event";
-  const kind = evt?.kind || "info";
+  const kind = evt?.kind || evt?.tone || "info"; // turn driver emits `tone`
   banner(label, kind, 1100);
 }
 

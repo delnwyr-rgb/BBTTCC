@@ -19,13 +19,6 @@ function readSelected(round) {
   };
 }
 
-function outcomeKind(outcome) {
-  const s = String(outcome || "").toLowerCase();
-  if (s.includes("great") || s.includes("success") || s.includes("win")) return "good";
-  if (s.includes("fail") || s.includes("loss") || s.includes("lockdown")) return "bad";
-  return "info";
-}
-
 function roundRaidType(app, round) {
   return round?.raidType || app?.vm?.raidType || app?.raidType || app?.options?.raidType || "";
 }
@@ -51,17 +44,9 @@ function bindUIDelegates(api, app, root) {
   if (!root || root.__bbttccFXBound) return;
   root.__bbttccFXBound = true;
 
-  root.addEventListener("change", (ev) => {
-    const input = ev.target?.closest?.('input[type="checkbox"][data-maneuver]');
-    if (!input) return;
-    const round = extractRound(app, Number(input.dataset.roundIndex || 0));
-    api.playKey(input.dataset.maneuver, {
-      checkbox: input,
-      root,
-      label: input.closest("label")?.innerText?.trim() || input.dataset.maneuver,
-      raidType: roundRaidType(app, round)
-    }, { phase: "invoke", banner: false });
-  }, true);
+  // No checkbox "change" listener: the raid console's own change delegate
+  // already plays the invoke FX (checked only); a second one here doubled it
+  // and also fired on untick.
 
   root.addEventListener("click", (ev) => {
     const btn = ev.target?.closest?.("button[data-act], [data-manage-act], [data-id]");
@@ -97,20 +82,19 @@ function patchConsoleClass(api, ConsoleClass) {
   const origCommit = proto._commitRound;
   proto._commitRound = async function (idx, ...rest) {
     const roundBefore = extractRound(this, idx);
+    const wasCommitted = !!roundBefore?.committed;
     const selected = readSelected(roundBefore);
     const root = normalizeRoot(this);
     const raidType = roundRaidType(this, roundBefore);
 
-    for (const key of selected.att) {
-      await api.playKey(key, { root, label: key.replace(/_/g, " "), raidType }, { phase: "invoke", banner: false, raidType });
-    }
-    for (const key of selected.def) {
-      await api.playKey(key, { root, label: key.replace(/_/g, " "), raidType }, { phase: "invoke", banner: false, raidType });
-    }
-
     const result = await origCommit.apply(this, [idx, ...rest]);
 
-    const roundAfter = extractRound(this, idx) || roundBefore;
+    // Only play commit FX when the round actually committed just now. Native
+    // _commitRound bails without committing on a cancelled confirm(), a player
+    // seat ("Waiting for GM"), or a failed gate — no phantom "resolved" raid.
+    const roundAfter = extractRound(this, idx);
+    if (!game.user?.isGM || !roundAfter || wasCommitted || !roundAfter.committed) return result;
+
     const target = findCanvasTarget(roundAfter);
     const allKeys = [...selected.att, ...selected.def];
     const margin = Number(roundAfter?.margin ?? ((roundAfter?.total || 0) - (roundAfter?.dcFinal || 0)));
@@ -127,6 +111,9 @@ function patchConsoleClass(api, ConsoleClass) {
       targetToken: target
     }, { raidType, label: roundAfter?.raidType || raidType || "Raid Clash" });
 
+    // Per-maneuver impact/resolve ladder (native commit doesn't play these).
+    // raid_outcome / rig_damage / boss_phase_change are owned by native
+    // _commitRound — replaying them here doubled every banner + broadcast.
     for (const key of allKeys) {
       await api.playKey(key, {
         root,
@@ -147,15 +134,7 @@ function patchConsoleClass(api, ConsoleClass) {
       }, { phase: "resolve", banner: false, raidType });
     }
 
-    await api.playKey("raid_outcome", {
-      root,
-      outcome: roundAfter?.outcome || "Resolved",
-      outcomeLabel: `Raid ${roundAfter?.outcome || "Resolved"}`,
-      kind: outcomeKind(roundAfter?.outcome),
-      raidType,
-      targetToken: target
-    }, { phase: "resolve", raidType });
-
+    // facility_damage is NOT played by native _commitRound (rig/boss are) — keep it here.
     if (roundAfter?.targetType === "facility") {
       await api.playKey("facility_damage", {
         root,
@@ -163,22 +142,6 @@ function patchConsoleClass(api, ConsoleClass) {
         raidType,
         targetToken: target
       }, { phase: "resolve", banner: false, raidType });
-    }
-    if (roundAfter?.targetType === "rig") {
-      await api.playKey("rig_damage", {
-        root,
-        outcome: roundAfter?.outcome || "Rig Effect",
-        raidType,
-        targetToken: target
-      }, { phase: "resolve", banner: false, raidType });
-    }
-    if (roundAfter?.targetType === "creature" && roundAfter?.meta?.boss?.damageState) {
-      await api.playKey("boss_phase_change", {
-        root,
-        outcomeLabel: `Boss ${roundAfter.meta.boss.damageState}`,
-        raidType: "boss",
-        targetToken: target
-      }, { phase: "resolve", raidType: "boss" });
     }
 
     return result;

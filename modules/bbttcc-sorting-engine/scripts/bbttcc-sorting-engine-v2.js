@@ -394,7 +394,10 @@ export function assembleWizardInputs(confirmedBuild) {
 // ============================================================================
 
 /**
- * Write the pillar tally to actor flags (AAE drift seed).
+ * Write the pillar tally to actor flags.
+ * 🟡 DORMANT (write-only): intended as the AAE political-drift seed, but nothing
+ * reads flags.bbttcc-sorting-engine.pillarTally yet — the quiz's Mercy/Severity
+ * lean has no mechanical effect until a reader lands (owner ruling owed).
  * Identity flags + item imports are NOT written here — the wizard owns those.
  */
 export async function writePillarTally(actor, tally) {

@@ -1338,10 +1338,13 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
           ev.preventDefault();
         });
       });
-      if (this._currentStep === 9 && !this._yesodBloomShown) {
-        setTimeout(() => {
+      // Arm once: every render at step 9 used to stack another timer, and a
+      // force-render after close reopened the wizard by itself.
+      if (this._currentStep === 9 && !this._yesodBloomShown && !this._bloomTimer) {
+        this._bloomTimer = setTimeout(() => {
+          this._bloomTimer = null;
           this._yesodBloomShown = true;
-          this.render({ force: true });
+          if (this.rendered) this.render();
         }, 1100);
       }
     } else if (this._phase === "review") {
@@ -1357,6 +1360,10 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
           // Path changed → any doctrine override belonged to the old Path. Drop it;
           // the suggested doctrine returns only if the suggested Path does.
           if (cat === "path") delete this._overrides.doctrine;
+          // Ancestry changed → a heritage from the old ancestry is no longer valid.
+          if (cat === "ancestry" && this._heritage && !this._heritageOptionsFor(this._effective("ancestry")).includes(this._heritage)) {
+            this._heritage = null;
+          }
           // Update focus to the changed thing
           this._focusedCategory = cat;
           this._focusedOptionName = val;
@@ -1449,7 +1456,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     if (!btn) return;
 
     const facultiesValid = this._areFacultiesValid();
-    const heritageOk = !!this._heritage;
+    const heritageOk = this._heritageValid();
     const aptitudePicks = (this._chargenAptitudes || []).filter(s => !!s).length;
     const aptitudesOk = aptitudePicks >= 3;
     // Every build line must actually be picked. Quiz mode auto-passes (the
@@ -1462,7 +1469,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const missingCats = Object.keys(CAT_LABELS).filter(c => !this._effective(c));
     const buildOk = missingCats.length === 0;
 
-    const ready = buildOk && facultiesValid && heritageOk && aptitudesOk;
+    const ready = buildOk && facultiesValid && heritageOk && aptitudesOk && !this._finalizing;
     btn.disabled = !ready;
     btn.classList.toggle("is-disabled", !ready);
 
@@ -1653,6 +1660,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       return;
     }
     this._suggestion = BBTTCCSortingEngineV2.runFullDescent(this._answers);
+    this._mode = "sorting";          // the engine resolved this build, even after a manual detour
     this._faculties = this._defaultFacultyDistribution();
     this._heritage = null;
     this._overrides = {};
@@ -1669,14 +1677,40 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     await this.render({ force: true });
   }
 
+  /** A heritage counts only if it belongs to the effective ancestry. */
+  _heritageValid() {
+    return !!this._heritage && this._heritageOptionsFor(this._effective("ancestry")).includes(this._heritage);
+  }
+
+  _onClose(options) {
+    if (this._bloomTimer) { clearTimeout(this._bloomTimer); this._bloomTimer = null; }
+    return super._onClose?.(options);
+  }
+
+  // In-flight guard: the pipeline runs for seconds with no visual change, and a
+  // second click used to create a second full actor.
   async _onFinalize() {
+    if (this._finalizing) return;
+    this._finalizing = true;
+    try { this.element?.querySelector('[data-action="finalize"]')?.setAttribute("disabled", ""); } catch (_) {}
+    let done = false;
+    try { done = await this._runFinalize(); }
+    finally {
+      if (!done) {
+        this._finalizing = false;
+        try { this._updateFinalizeGate(this.element); } catch (_) {}
+      }
+    }
+  }
+
+  async _runFinalize() {
     const root = this.element;
     const valid = this._validateFaculties(root);
     if (!valid) {
       ui.notifications?.warn("Faculty allocation is invalid. Use each value of [5,4,3,3,2,2] exactly once.");
       return;
     }
-    if (!this._heritage) {
+    if (!this._heritageValid()) {
       ui.notifications?.warn("Heritage is required — pick one from the dropdown.");
       this._scrollToFinalizeSection(root, "heritage");
       return;
@@ -1795,6 +1829,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       ui.notifications?.info(headline);
       LOG("finalize via pipeline complete", { actor: created?.name, mode: this._mode });
       this.close();
+      return true;
     } catch (e) {
       WARN("pipeline finalize failed", e);
       ui.notifications?.error(`Finalize failed: ${e.message}`);

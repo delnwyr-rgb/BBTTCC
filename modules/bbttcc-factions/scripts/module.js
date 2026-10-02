@@ -521,6 +521,11 @@ const _BBTTCC_STANDARD_START_STRATEGICS = [
 // - Safe to call repeatedly (grant checks for duplicates).
 async function _bbttccEnsureBaselineDoctrine(actor){
   try {
+    // Reached from createActor/updateActor/ready on EVERY client: only the primary active
+    // GM seeds, or two seats each grant the same 24 items (duplicates). 2026-10-01.
+    const gx = game.bbttcc?.api?.gmExec;
+    const primary = (typeof gx?.primaryGmId === "function") ? gx.primaryGmId() : game.users?.activeGM?.id;
+    if (!game.user?.isGM || (primary && primary !== game.user.id)) return false;
     const a = resolveFactionActor(actor) || actor;
     if (!a || !isFactionActor(a)) return false;
 
@@ -816,18 +821,9 @@ function _installRigTravelBridge() {
 
 
 // === Sprint: Tier + Assets + Pressure UI/Flags (enhancer-only) ===
-try {
-  // If you prefer static imports, move these to top-level.
-  await import(`./faction-pressure.enhancer.js`);
-  await import(`./faction-tier-victorygate.enhancer.js`);
-  await import(`./faction-tier-assets-ui.enhancer.js`);
-  await import(`./faction-tier-stability.enhancer.js`);
-  await import(`./faction-tier-advance-button.enhancer.js`);
-  await import(`./faction-tier-advancement-api.enhancer.js`);
-  console.log("[bbttcc-factions] Tier/Assets/Pressure enhancers loaded.");
-} catch (e) {
-  console.warn("[bbttcc-factions] Failed to load Tier/Assets/Pressure enhancers:", e);
-}
+// These enhancers are loaded by module.json ("scripts" / "esmodules"). They were ALSO
+// dynamically imported here, which ran every classic-script IIFE twice and doubled its
+// hooks (two stability/pressure writers per turn) — removed 2026-10-01.
 
 
 
@@ -2382,7 +2378,7 @@ class BBTTCCFactionSheet extends ActorSheet {
     });
   }
 
-  async _canUserView(u) { return (await super._canUserView(u)) && isFactionActor(this.actor); }
+  _canUserView(u) { return super._canUserView(u) && isFactionActor(this.actor); }   // core calls this SYNCHRONOUSLY — an async override returned an always-truthy Promise
 
   // Header toggle for GM Manual Edit Mode. Flips the world setting
   // `bbttcc-core.gmEditMode` (registered in bbttcc-core) and re-renders all
@@ -3687,6 +3683,7 @@ try {
 
       const updates = {};
       updates[`flags.${MODULE_ID}.opBank`] = newOpBank;
+      updates[`flags.${MODULE_ID}.opBankMarksMigrated`] = true;   // GM typed MARKS — never let the ×10 migration touch this bank
       updates[`flags.${MODULE_ID}.morale`] = morale;
       updates[`flags.${MODULE_ID}.loyalty`] = loyalty;
       updates[`flags.${MODULE_ID}.darkness`] = newDarkness;
@@ -4764,11 +4761,16 @@ factionApi.assignStartingTerritory ??= (async ({
   const opBank = foundry.utils.duplicate(fFlags.opBank ?? {});
   const warLogs = Array.isArray(fFlags.warLogs) ? [...fFlags.warLogs] : [];
 
-  if (hasTemple) {
-    opCaps.faith = (Number(opCaps.faith ?? 0) || 0) + 1;
-    opCaps.culture = (Number(opCaps.culture ?? 0) || 0) + 1;
-    opBank.faith = (Number(opBank.faith ?? 0) || 0) + 1;
-    opBank.culture = (Number(opBank.culture ?? 0) || 0) + 1;
+  // Banks/caps are MARKS: the "+1 OP" overlay is one OP's worth of marks (ratio from the
+  // one authority). Seed caps from the effective caps first — writing a partial opCaps
+  // object would zero every other channel's cap (explicit opCaps wins over the band).
+  const templeBonus = Number(game.bbttcc?.api?.op?.OP_TO_MARKS) || 0;
+  if (hasTemple && templeBonus > 0) {
+    if (!Object.keys(opCaps).length) Object.assign(opCaps, game.bbttcc?.facts?.faction?.caps?.(actor) || {});
+    opCaps.faith = (Number(opCaps.faith ?? 0) || 0) + templeBonus;
+    opCaps.culture = (Number(opCaps.culture ?? 0) || 0) + templeBonus;
+    opBank.faith = (Number(opBank.faith ?? 0) || 0) + templeBonus;
+    opBank.culture = (Number(opBank.culture ?? 0) || 0) + templeBonus;
   }
 
   // Clamp bank to caps (if caps exist)
@@ -4783,7 +4785,7 @@ factionApi.assignStartingTerritory ??= (async ({
   warLogs.push({ type: "commit", ts, date: new Date(ts).toLocaleString(), summary: `Starting cluster claimed: base=${picks[0].type} (4/6), gens=${picks[1].type} (2/6), ${picks[2].type} (2/6).` });
   if (hasTemple) {
     const ts2 = Date.now();
-    warLogs.push({ type: "commit", ts: ts2, date: new Date(ts2).toLocaleString(), summary: "Temple start detected: Faith/Culture caps+seed applied (+1 each)." });
+    warLogs.push({ type: "commit", ts: ts2, date: new Date(ts2).toLocaleString(), summary: `Temple start detected: Faith/Culture caps+seed applied (+${templeBonus} marks each).` });
   }
 
   const territoryPatches = picks.map(p => {
@@ -4850,10 +4852,11 @@ factionApi.assignStartingTerritory ??= (async ({
   const factionPatch = {
     homeHexUuid: picks[0].uuid,
     startHexes: picks.map(p => p.uuid),
-    opCaps,
     opBank,
     warLogs
   };
+  // Only write opCaps when there is one: an empty {} reads as "explicit caps, all 0".
+  if (Object.keys(opCaps).length) factionPatch.opCaps = opCaps;
 
   await actor.update({ [`flags.${FAC_MOD}`]: foundry.utils.mergeObject(foundry.utils.duplicate(actor.flags?.[FAC_MOD] ?? {}), factionPatch, { inplace:false, overwrite:true }) });
 

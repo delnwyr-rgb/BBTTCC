@@ -126,7 +126,7 @@
       const war = get(A, `flags.${MOD}.warLogs`, []);
       war.push({ type:"turn", date:(new Date()).toLocaleString(), summary:`${key.charAt(0).toUpperCase()+key.slice(1)} set to ${v}%` });
       await A.update({ [`flags.${MOD}.warLogs`]: war });
-      A.sheet?.render(true);
+      if (A.sheet?.rendered) A.sheet.render(false);   // refresh an OPEN sheet only — never pop a closed one on programmatic morale/loyalty changes
       return v;
     };
     const bumpVal = async (A, key, delta) => {

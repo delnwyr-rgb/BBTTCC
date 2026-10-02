@@ -93,12 +93,36 @@ function _relay(kind, payload) {
   });
 }
 
+// GM-side re-check of a relayed request — never trust the client's UI gates.
+async function _validateRelayed(kind, payload, fromUserId) {
+  const user = game.users?.get(fromUserId);
+  if (!user) return "Unknown requesting user.";
+  const tokenDoc = payload?.tokenUuid ? await fromUuid(payload.tokenUuid) : null;
+  if (!tokenDoc || tokenDoc.documentName !== "Token") return "Loot source is missing.";
+  const fl = _lootFlag(tokenDoc);
+  if (!fl.lootable) return "That isn't a lootable container.";
+  if (kind === "crack") {
+    // The skill roll happens on the requesting seat; at minimum the container must be gated.
+    if (!fl.gate) return "That container has no lock.";
+    return null;
+  }
+  if (fl.gate && !fl.cracked) return "That container is still secured.";
+  const item = tokenDoc.actor?.items?.get(payload?.itemId);
+  if (!item || !_isLootableItem(item)) return "That item can't be looted.";
+  const recipient = game.actors?.get(payload?.recipientId);
+  if (!recipient || !recipient.testUserPermission(user, "OWNER")) return "You don't own that recipient.";
+  return null;
+}
+
 function _onSocket(msg) {
   if (!msg) return;
   if (msg.t === "take" || msg.t === "crack") {
     // Only the designated active GM executes, to avoid double-application.
     if (!game.user.isGM || game.users?.activeGM?.id !== game.user.id) return;
-    const exec = msg.t === "take" ? _execTake(msg.payload) : _execCrack(msg.payload);
+    const exec = _validateRelayed(msg.t, msg.payload, msg.fromUserId).then(err => err
+      ? { ok: false, error: err }
+      : (msg.t === "take" ? _execTake(msg.payload) : _execCrack(msg.payload)))
+      .catch(e => ({ ok: false, error: String(e?.message || e) }));
     exec.then(result => game.socket.emit(SOCKET, { t: "res", reqId: msg.reqId, result, toUserId: msg.fromUserId }));
   } else if (msg.t === "res") {
     if (msg.toUserId !== game.user.id) return;

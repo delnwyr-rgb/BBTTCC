@@ -13,8 +13,10 @@
 
   // Engine helpers from hex-travel.js (if present)
   const H = () => game?.bbttcc?.api || {};
-  const TERRAIN_TABLE     = H()?._hexTravel?.TERRAIN_TABLE || {};
-  const getHexTerrainSpec = H()?._hexTravel?.getHexTerrainSpec;
+  // Resolved LAZILY: hex-travel.js publishes _hexTravel in its ready hook, after this script parses
+  // (a parse-time capture was permanently empty — every hex forecast as "unknown", 10 Economy, tier 1).
+  const TT                = () => H()?._hexTravel?.TERRAIN_TABLE || {};
+  const getHexTerrainSpec = (d) => H()?._hexTravel?.getHexTerrainSpec?.(d);
 
   // ---------- Robust hit-test (polygon/rect) ----------
   const toPixiPoint = (x,y)=> new PIXI.Point(x,y);
@@ -61,9 +63,12 @@
     const c = Number(intel.confidence ?? 0);
     return isNaN(c) ? 0 : Math.max(0, Math.min(1, c));
   }
+  // The engine rolls 2d10 + mod vs DC (hex-travel.js) — exact 2d10 odds, not d20 math.
   function successChance(dc, mod) {
-    const p = (21 - (dc - mod)) / 20;
-    return Math.max(0, Math.min(1, p));
+    const need = Number(dc) - Number(mod || 0);
+    let hits = 0;
+    for (let a = 1; a <= 10; a++) for (let b = 1; b <= 10; b++) if (a + b >= need) hits++;
+    return hits / 100;
   }
   function labelOP(k) {
     const L = { economy:"Economy", logistics:"Logistics", intrigue:"Intrigue",
@@ -268,7 +273,7 @@
     const center = hexDrawing.center;
     const hasFlags = !!hexDrawing?.document?.flags?.[MOD_TERR];   // getFlag(scope) w/o key returns undefined — read flags directly
     // use engine helper if flags exist; else safe defaults
-    const specFull = hasFlags && getHexTerrainSpec ? getHexTerrainSpec(hexDrawing)
+    const specFull = hasFlags && H()?._hexTravel?.getHexTerrainSpec ? getHexTerrainSpec(hexDrawing)
       : { key:"unknown", spec: { cost: { economy:10 }, tier: 1 }, flags: { terrainType: "Unknown" } };
 
     ACTIVE.path.push({ hex: hexDrawing, center, spec: specFull });
@@ -305,7 +310,7 @@
 
     const terrKey = curr.spec?.key || "";
     // Marks units (1 OP = 10 marks); fallback floor of 1 OP = 10 marks.
-    const terrainSpec = TERRAIN_TABLE[terrKey] || curr.spec?.spec || { cost:{ economy:10 }, tier:1 };
+    const terrainSpec = TT()[terrKey] || curr.spec?.spec || { cost:{ economy:10 }, tier:1 };
     const baseCost = foundry.utils.duplicate(terrainSpec.cost || { economy:10 });
     const tier = Number(terrainSpec.tier || 1);
 
@@ -364,7 +369,7 @@
     for (let i=0;i<hexes.length-1;i++) {
       const hexFrom = hexes[i], hexTo = hexes[i+1];
       try {
-        const r = await H().travelHex({ factionId: actor.id, hexFrom, hexTo, tokenId: token.id });
+        const r = await H().travelHex({ factionId: actor.id, hexFrom, hexTo, tokenId: token.id, finalLeg: i === hexes.length - 2 });
         // Honor a refusal from the engine — the movement-domain hard gate (and
         // Scout-Sign aborts) return { ok:false } WITHOUT throwing, so we must
         // check the result or the token moves anyway. Don't move; stop the route.

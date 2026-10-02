@@ -344,13 +344,13 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
 
         // Hex-level penalties → queue into turn.pending
         const hexPendBase = clone(tf.turn?.pending || {});
-        const hexPendDelta = {
-          loyaltyDelta: N(hexPendBase.loyaltyDelta || 0) - 1
-        };
+        // Plain deltas — mergePending adds them to the base (folding the base in here
+        // double-counted anything already queued; 2026-10-01).
+        const hexPendDelta = { loyaltyDelta: -1 };
 
         // If outcome is particularly harsh, nudge darkness
         if (outcomeKey === "retribution_subjugation") {
-          hexPendDelta.darknessDelta = N(hexPendBase.darknessDelta || 0) + 1;
+          hexPendDelta.darknessDelta = 1;
         }
 
         const newHexPend = mergePending(hexPendBase, hexPendDelta);
@@ -491,13 +491,20 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
     }
 
     // Apply hex updates
-    const scene = hexes[0]?.parent;
-    if (scene && hexUpdates.length) {
-      const drawingUpdates = hexUpdates.map(u => ({
-        _id: u.id,
-        ...u.data
-      }));
-      await scene.updateEmbeddedDocuments("Drawing", drawingUpdates);
+    // Grouped by each hex's OWN scene (2026-10-01) — hexes are collected across every scene,
+    // and sending them all to the first hex's scene threw on the foreign ids.
+    if (hexUpdates.length) {
+      const byScene = new Map();
+      for (const u of hexUpdates) {
+        const sc = hexes.find(h => h.id === u.id)?.parent;
+        if (!sc) continue;
+        if (!byScene.has(sc)) byScene.set(sc, []);
+        byScene.get(sc).push({ _id: u.id, ...u.data });
+      }
+      for (const [sc, drawingUpdates] of byScene) {
+        try { await sc.updateEmbeddedDocuments("Drawing", drawingUpdates); }
+        catch (eS) { console.warn(TAG, `hex upkeep updates failed on scene ${sc?.name}`, eS); }
+      }
     }
 
     // War log + GM card
@@ -576,7 +583,9 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
       for (const [fid, hexes] of Object.entries(byFaction)) {
         const A = actors.get(fid);
         if (!A) continue;
-        await runGarrisonUpkeepForFaction(A, hexes);
+        // Per-faction isolation — one failure no longer skips every remaining faction.
+        try { await runGarrisonUpkeepForFaction(A, hexes); }
+        catch (eF) { console.warn(TAG, `garrison upkeep failed for ${A.name}`, eF); }
       }
     } catch (e) {
       console.warn(TAG, "runGarrisonUpkeep failed:", e);

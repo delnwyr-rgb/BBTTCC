@@ -73,8 +73,10 @@ Hooks.once("ready", () => {
  * When a CLASS item on a character is updated and its levels change,
  * explicitly resync tiers. This is how we catch D&D5e level-ups.
  */
-Hooks.on("updateItem", (item, changes) => {
+Hooks.on("updateItem", (item, changes, _opts, userId) => {
   try {
+    // Single writer: only the client that made the change resyncs.
+    if (userId !== game.user.id) return;
     const actor = item?.parent;
     if (!actor || (actor.type ?? "").toLowerCase() !== "character") return;
 
@@ -96,6 +98,21 @@ Hooks.on("updateItem", (item, changes) => {
     game.bbttcc?.api?.identity?.syncOptionTiers?.(actor, { silent: false });
   } catch (e) {
     warn("updateItem hook (Tier Engine) failed", e);
+  }
+});
+
+/**
+ * fourththing level-ups write actor.system.details.level (no class item
+ * levels), so resync tiers on that too. Single writer: the changing client.
+ */
+Hooks.on("updateActor", (actor, changes, _opts, userId) => {
+  try {
+    if (userId !== game.user.id) return;
+    if ((actor?.type ?? "").toLowerCase() !== "character") return;
+    if (!foundry.utils.hasProperty(changes, "system.details.level")) return;
+    game.bbttcc?.api?.identity?.syncOptionTiers?.(actor, { silent: false });
+  } catch (e) {
+    warn("updateActor hook (Tier Engine) failed", e);
   }
 });
 
@@ -213,12 +230,17 @@ function scanAEForOps(effects = []) {
       if (!Number.isFinite(val) || val === 0) continue;
 
       const low = key.toLowerCase();
+      // Each change counts once per bucket — the alias lists can repeat the
+      // canonical bucket name the OP_KEYS pass already matched.
+      const hit = new Set();
       for (const bucket of OP_KEYS) {
-        if (low.endsWith(`.${bucket}`)) out[bucket] = N(out[bucket]) + val;
+        if (low.endsWith(`.${bucket}`)) { out[bucket] = N(out[bucket]) + val; hit.add(bucket); }
       }
       for (const [bucket, alist] of Object.entries(ALIASES)) {
+        if (hit.has(bucket)) continue;
         if (alist.some(a => low.endsWith(`.${a.toLowerCase()}`))) {
           out[bucket] = N(out[bucket]) + val;
+          hit.add(bucket);
         }
       }
     }
@@ -276,7 +298,14 @@ async function recalcActor(actorOrId) {
       hit.flags += sum(opsFast) + sum(bonFast);
     }
 
-    const fopsDeep = scanForOps(it.flags ?? {});
+    // Deep scan minus flags[MOD].ops/bonuses — the fast path above already
+    // counted those (counting them twice doubled the item's OPs).
+    const { [MOD]: _ownFlags, ...otherFlags } = it.flags ?? {};
+    if (isPlain(_ownFlags)) {
+      const { ops: _o, bonuses: _b, ...ownRest } = _ownFlags;
+      otherFlags[MOD] = ownRest;
+    }
+    const fopsDeep = scanForOps(otherFlags);
     if (sum(fopsDeep)) { addInto(itemOpsTotal, fopsDeep); hit.flags += sum(fopsDeep); }
 
     const sops = scanForOps(it.system ?? {});

@@ -180,9 +180,17 @@
       return void console.warn(TAG, "advanceOPRegen not found; Unity bonus will not auto-apply.");
     }
 
+    // Idempotent (2026-10-01): this runs on ready AND every canvasReady; without the guard each
+    // scene view stacked one more wrapper and the bonus was banked once per stacked install.
+    // The marker lives on terr (not the function) because other wrappers (enlightenment +10%)
+    // may sit on top of ours.
+    if (terr.__bbttccUnityWrapped) return;
+    terr.__bbttccUnityWrapped = true;
+
     const orig = terr.advanceOPRegen;
-    terr.advanceOPRegen = async function wrappedAdvanceOPRegen({ apply=false, factionId=null } = {}) {
-      const res = await orig({ apply, factionId });
+    terr.advanceOPRegen = async function wrappedAdvanceOPRegen(opts = {}) {
+      const { apply=false, factionId=null, deferCapClamp=false } = opts || {};
+      const res = (await orig(opts)) || { changed:false, rows:[] };   // forward ALL opts (deferCapClamp)
 
       try {
         const targets = factionId ? [game.actors.get(String(factionId))].filter(Boolean)
@@ -199,6 +207,16 @@
             if (report.delta && Object.values(report.delta).some(v=>v>0)) {
               const bank = clone(get(A, `flags.${MOD_FACTIONS}.opBank`, {}));
               const newBank = addOps(bank, report.delta);
+              // Bank cap (2026-10-01): under the driver's deferCapClamp the post-spend
+              // clampBanksToCaps applies the caps (same as regen income); otherwise clamp here
+              // against the OP engine's effective caps — never raise a bucket already over cap.
+              if (!deferCapClamp) {
+                const caps = game.bbttcc?.facts?.faction?.caps?.(A) || A.getFlag?.(MOD_FACTIONS, "opCaps") || {};
+                for (const k of OP_KEYS) {
+                  const c = Number(caps[k] ?? 0);
+                  if (c > 0 && (report.delta[k]||0) > 0) newBank[k] = Math.max(Number(bank[k]||0), Math.min(newBank[k], c));
+                }
+              }
               await setActorFlag(A, `${MOD_FACTIONS}.opBank`, newBank);
             }
             if (report.caps?.all) {
@@ -208,7 +226,7 @@
             }
             const war = clone(get(A, `flags.${MOD_FACTIONS}.warLogs`, [])) || [];
             const deltaStr = fmtOpsRow(report.delta);
-            war.push({ type:"turn", date:(new Date()).toLocaleString(), summary: `${note}: ${deltaStr}` });
+            war.push({ ts: Date.now(), type:"turn", date:(new Date()).toLocaleString(), summary: `${note}: ${deltaStr}` });
             await setActorFlag(A, `${MOD_FACTIONS}.warLogs`, war);
           } else {
             const deltaStr = fmtOpsRow(report.delta);

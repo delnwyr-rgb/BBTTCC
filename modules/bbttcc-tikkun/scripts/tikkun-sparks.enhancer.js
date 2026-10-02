@@ -121,11 +121,12 @@
 
         // map form decrement. NOTE: Foundry's update() MERGES objects — writing a
         // key-pruned object does NOT remove the key (the array shape replaces wholesale,
-        // so it cleared while the map lingered). Must delete via `-=`. (Gauntlet #2.)
+        // so it cleared while the map lingered). Must delete via unsetFlag (v14 dropped
+        // the legacy `-=key` syntax). (Gauntlet #2.)
         const map = clone(get(A, `flags.${MOD_FACTIONS}.sparks`, {})) || {};
         if (map[k]) {
           const next = Math.max(0, Number(map[k]) - Number(count || 1));
-          if (next === 0) { delete map[k]; await A.update({ [`flags.${MOD_FACTIONS}.sparks.-=${k}`]: null }); }
+          if (next === 0) { delete map[k]; await A.unsetFlag(MOD_FACTIONS, `sparks.${k}`); }
           else { map[k] = next; await setFlag(A, `${MOD_FACTIONS}.sparks`, map); }
         }
 
@@ -137,8 +138,8 @@
         const stillInMap = Object.prototype.hasOwnProperty.call(map, k);
 
         if (!stillInArray && !stillInMap && integ[k]) {
-          // `-=` delete — merge-update would leave the key behind (Gauntlet #2).
-          await A.update({ [`flags.${MOD_FACTIONS}.tikkun.integrated.-=${k}`]: null });
+          // unsetFlag — merge-update would leave the key behind (Gauntlet #2).
+          await A.unsetFlag(MOD_FACTIONS, `tikkun.integrated.${k}`);
         }
 
         const war = clone(get(A, `flags.${MOD_FACTIONS}.warLogs`, [])) || [];
@@ -202,7 +203,8 @@
     if (!faction || !sparkKey) return;
     const k = String(sparkKey).toLowerCase();
     if (_anyMemberHasCorrupted(faction, k)) return; // another member still holds a corrupted copy
-    await faction.update({ [`flags.${MOD_FACTIONS}.tikkun.corrupted.-=${k}`]: null });
+    if (get(faction, `flags.${MOD_FACTIONS}.tikkun.corrupted.${k}`) === undefined) return;
+    await faction.unsetFlag(MOD_FACTIONS, `tikkun.corrupted.${k}`);
   };
 
   Hooks.on("bbttcc:spark:corrupted", async ({ actor, sparkKey } = {}) => {

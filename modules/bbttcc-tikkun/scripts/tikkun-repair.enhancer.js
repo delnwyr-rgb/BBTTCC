@@ -99,11 +99,20 @@ console.log("[bbttcc-tikkun/repair] LOADED");
   }
 
   // ── Material inventory scan ────────────────────────────────────────────
-  // Returns { available: number, holders: [{ actor, item, charges }] }.
+  // Returns { available: number, stockpile: number, holders: [{ actor, item, charges }] }.
   // Charges represent stack size on individual items (per RFI item schema).
+  // The faction material STOCKPILE counts too — harvest delivers there by
+  // default since 2026-09-21, so scanning only member pockets read "have 0".
+  function _stockApi() { return game.bbttcc?.api?.factions?.stockpile ?? null; }
   function _scanMaterialAcrossFaction(factionId, materialKey) {
-    const out = { available: 0, holders: [] };
+    const out = { available: 0, stockpile: 0, holders: [] };
     if (!materialKey) return out;
+    try {
+      const st = _stockApi();
+      const F = factionId ? game.actors?.get(factionId) : null;
+      if (st?.qty && F) out.stockpile = Math.max(0, Number(st.qty(F, materialKey)) || 0);
+    } catch (_e) { out.stockpile = 0; }
+    out.available += out.stockpile;
     for (const a of _getFactionMembers(factionId)) {
       for (const it of a.items ?? []) {
         const mk = it.flags?.fourththing?.rfi?.item?.materialKey;
@@ -124,10 +133,19 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     if (scan.available < amount) {
       throw new Error(`Insufficient ${materialKey}: have ${scan.available}, need ${amount}.`);
     }
-    // Largest stacks first to minimize item deletions
-    scan.holders.sort((a, b) => b.charges - a.charges);
     let remaining = amount;
     const drained = [];
+    // Faction stockpile first (where harvest delivers), then member pockets.
+    if (scan.stockpile > 0) {
+      const take = Math.min(scan.stockpile, remaining);
+      const F = game.actors?.get(factionId);
+      const r = await _stockApi()?.adjust?.(F, materialKey, -take);
+      if (r?.ok === false) throw new Error(`stockpile withdraw failed: ${r.error ?? "unknown"}`);
+      drained.push({ actor: F?.name ?? "faction stockpile", item: materialKey, took: take, stockpile: true });
+      remaining -= take;
+    }
+    // Largest stacks first to minimize item deletions
+    scan.holders.sort((a, b) => b.charges - a.charges);
     for (const h of scan.holders) {
       if (remaining <= 0) break;
       const take = Math.min(h.charges, remaining);
@@ -145,6 +163,11 @@ console.log("[bbttcc-tikkun/repair] LOADED");
   }
 
   // ── Faction OP balance ─────────────────────────────────────────────────
+  // Canon OP↔marks ratio from the op engine (never a literal). 0 = unavailable.
+  function _marksPerOp() {
+    const v = Number(game.bbttcc?.api?.op?.marksPerOp?.() ?? game.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.constants?.MARKS_PER_OP);
+    return Number.isFinite(v) && v > 0 ? v : 0;
+  }
   function _opBank(factionActor) {
     return foundry.utils.duplicate(factionActor?.flags?.["bbttcc-factions"]?.opBank ?? {});
   }
@@ -197,7 +220,12 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     const matKey   = String(recipe.materialKey ?? "").trim();
     const matNeed  = Number(recipe.materialAmount) || 0;
     const opPool   = String(recipe.opCost?.pool ?? "").trim();
-    const opNeed   = Number(recipe.opCost?.amount) || 0;
+    const opNeed   = Number(recipe.opCost?.amount) || 0;   // authored in OP (roll bonus scale)
+    // The opBank is denominated in MARKS — convert the authored OP cost at the
+    // canon ratio before comparing / debiting (was debiting raw OP as marks).
+    const mpo = _marksPerOp();
+    if (!mpo) { ui.notifications?.error?.("Repair: OP↔marks ratio unavailable (bbttcc-factions op engine not ready)."); return; }
+    const opNeedMarks = opNeed * mpo;
     const baseDC   = Number(recipe.ritualDC) || 15;
     const attempts = Number(spark.repair?.attempts) || 0;
     const dc       = Math.max(8, baseDC - 2 * attempts);
@@ -206,7 +234,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     const opAvail = _factionOpAvailable(factionActor, opPool);
     const matOK   = !matKey  || matScan.available >= matNeed;
     const opPoolBad = !!opPool && opNeed > 0 && !_isOpChannel(opPool);
-    const opOK    = !opPool || (!opPoolBad && opAvail >= opNeed);
+    const opOK    = !opPool || (!opPoolBad && opAvail >= opNeedMarks);
 
     // Contributor picker — any faction member.
     const members = _getFactionMembers(factionActor.id);
@@ -217,11 +245,11 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       : "";
 
     const matLine = matKey
-      ? `<li>Material: <b>${matNeed}× ${matKey}</b> &nbsp; <span style="color:${matOK ? "#6fcf97" : "#c03030"}">${matOK ? "✓ available" : `✗ have ${matScan.available}`}</span></li>`
+      ? `<li>Material: <b>${matNeed}× ${matKey}</b> &nbsp; <span style="color:${matOK ? "#6fcf97" : "#c03030"}">${matOK ? "✓ available" : `✗ have ${matScan.available}`}</span>${matScan.stockpile ? ` <span style="opacity:0.6">(${matScan.stockpile} in faction stockpile)</span>` : ""}</li>`
       : `<li>Material: <i>(none required)</i></li>`;
     const opLine = opPool
-      ? `<li>OP: <b>${opNeed} ${opPool}</b> &nbsp; <span style="color:${opOK ? "#6fcf97" : "#c03030"}">${opOK ? `✓ have ${opAvail}` : (opPoolBad ? `✗ "${opPool}" is not a faction OP channel — recipe cannot be paid` : `✗ have ${opAvail}`)}</span></li>`
-      : `<li>OP: <i>(none required)</i></li>`;
+      ? `<li>Cost: <b>${opNeedMarks} ${opPool} marks</b> &nbsp; <span style="color:${opOK ? "#6fcf97" : "#c03030"}">${opOK ? `✓ have ${opAvail}` : (opPoolBad ? `✗ "${opPool}" is not a faction OP channel — recipe cannot be paid` : `✗ have ${opAvail}`)}</span></li>`
+      : `<li>Cost: <i>(no marks required)</i></li>`;
 
     const content = `<div style="font-size:0.86rem">
       <h3 style="margin:0.2rem 0 0.4rem">⚒ Repair: ${sparkItem.name}${sephLabel ? ` <span style="opacity:0.6">(${sephLabel})</span>` : ""}</h3>
@@ -233,10 +261,10 @@ console.log("[bbttcc-tikkun/repair] LOADED");
         <select name="contributor">${memberOpts || `<option value="">— no faction members —</option>`}</select>
       </div>
       <div class="form-group" style="margin:0.4rem 0">
-        <label>Extra OP spend (+1 to roll per OP, 0–3)</label>
+        <label>Extra ${opPool ? `${opPool} ` : ""}spend — steps of ${mpo} marks, +1 to roll each (0–3)</label>
         <input type="number" name="extraOp" value="0" min="0" max="3" />
       </div>
-      <p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.7">Roll: <code>2d10 + ritual + soul + extraOp</code> vs DC ${dc}. Margin ≥0 → success; -1 to -3 → partial (DC drops 2 next try); -4 or worse → failure (ritual debt).</p>
+      <p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.7">Roll: <code>2d10 + ritual + soul + cost steps + extra steps</code> vs DC ${dc}. Margin ≥0 → success; -1 to -3 → partial (DC drops 2 next try); -4 or worse → failure (ritual debt).</p>
     </div>`;
 
     new Dialog({
@@ -253,12 +281,18 @@ console.log("[bbttcc-tikkun/repair] LOADED");
             if (!matOK || !opOK) {
               const missing = [];
               if (!matOK) missing.push(`materials: need ${matNeed}× ${matKey}, have ${matScan.available}`);
-              if (!opOK)  missing.push(`OP: need ${opNeed} ${opPool}, have ${opAvail}`);
+              if (!opOK)  missing.push(`marks: need ${opNeedMarks} ${opPool}, have ${opAvail}`);
               ui.notifications?.warn?.(`Cannot proceed — ${missing.join(" · ")}.`);
               return;
             }
             const contribId = html.find("[name='contributor']").val();
-            const extraOp   = Math.max(0, Math.min(3, Number(html.find("[name='extraOp']").val()) || 0));
+            let extraOp   = Math.max(0, Math.min(3, Math.floor(Number(html.find("[name='extraOp']").val()) || 0)));
+            // Extra steps are SPENT from the recipe pool (they were free before).
+            if (extraOp && (!opPool || opPoolBad)) extraOp = 0;
+            if (extraOp && opAvail < (opNeed + extraOp) * mpo) {
+              ui.notifications?.warn?.(`Cannot proceed — extra spend needs ${(opNeed + extraOp) * mpo} ${opPool} marks in total, have ${opAvail}.`);
+              return;
+            }
             const contributor = game.actors?.get(contribId);
             if (!contributor) {
               ui.notifications?.warn?.("No contributor selected.");
@@ -266,7 +300,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
             }
             await _executeRepairRoll({
               ownerActor, contributor, sparkKey, spark, sparkItem,
-              factionActor, matKey, matNeed, opPool, opNeed, extraOp, dc, baseDC
+              factionActor, matKey, matNeed, opPool, opNeed, extraOp, dc, baseDC, mpo
             });
           }
         },
@@ -279,7 +313,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
   // ── Ritual roll engine ─────────────────────────────────────────────────
   async function _executeRepairRoll({
     ownerActor, contributor, sparkKey, spark, sparkItem,
-    factionActor, matKey, matNeed, opPool, opNeed, extraOp, dc, baseDC
+    factionActor, matKey, matNeed, opPool, opNeed, extraOp, dc, baseDC, mpo
   }) {
     // Skill bonus: ritual rank + soul attribute. Both pulled from contributor's
     // system.skills/system.attributes (post-AE applied by Foundry prepareData).
@@ -287,7 +321,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     const ritRank  = Number(sys.skills?.ritual?.value ?? 0);
     const soulAttr = Number(sys.attributes?.soul?.value ?? 2);
     const totalBonus = ritRank + soulAttr + extraOp + opNeed; // OP cost itself contributes too
-    const formula  = `2d10 + ${totalBonus}`;
+    const formula  = `${game.fourththing?.rolls?.checkFormula?.() || "2d10x10"} + ${totalBonus}`;   // canon check die
     const roll = await new Roll(formula).roll();
     const total = roll.total;
     const margin = total - dc;
@@ -299,7 +333,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       if (matKey  && matNeed) await _consumeMaterial(factionActor.id, matKey, matNeed);
     } catch (e) { debitErrors.push(`material: ${e.message}`); }
     try {
-      if (opPool && opNeed)   await _debitOp(factionActor, opPool, opNeed);
+      if (opPool && (opNeed || extraOp)) await _debitOp(factionActor, opPool, (opNeed + extraOp) * mpo);
     } catch (e) { debitErrors.push(`op: ${e.message}`); }
     if (debitErrors.length) {
       ui.notifications?.error?.(`Repair commit had errors: ${debitErrors.join("; ")}`);
@@ -368,8 +402,8 @@ console.log("[bbttcc-tikkun/repair] LOADED");
           <span class="ft-fp" title="2d10">${(roll.terms[0]?.results ?? []).map(r => r.result).join(" + ")}</span>
           <span class="ft-fp" title="ritual">+${ritRank}</span>
           <span class="ft-fp" title="soul">+${soulAttr}</span>
-          ${extraOp ? `<span class="ft-fp" title="extra OP">+${extraOp}</span>` : ""}
-          <span class="ft-fp" title="${opPool} marks cost">+${opNeed}</span>
+          ${extraOp ? `<span class="ft-fp" title="extra ${opPool} spend (${extraOp * mpo} marks)">+${extraOp}</span>` : ""}
+          <span class="ft-fp" title="${opPool} cost (${opNeed * mpo} marks)">+${opNeed}</span>
         </div>
         <div class="ft-roll-result"><span class="ft-total">${total}</span> <span style="opacity:0.7;font-size:0.78rem">vs DC ${dc}</span></div>
         ${outcomeLine}
@@ -426,13 +460,14 @@ console.log("[bbttcc-tikkun/repair] LOADED");
         ? _factionOpAvailable(faction, opPool)
         : Infinity;
       const opPoolBad = opPool !== "—" && opNeed > 0 && !_isOpChannel(opPool);
-      const ready = matAvail >= matNeed && opAvail >= opNeed && !opPoolBad;
+      const opNeedMarks = opNeed * (_marksPerOp() || 0);
+      const ready = matAvail >= matNeed && opAvail >= opNeedMarks && !opPoolBad && (!opNeed || opNeedMarks > 0);
       return `
         <tr>
           <td>${item?.name ?? sparkKey} ${sephLabel ? `<span style="opacity:0.6;font-size:0.74rem">(${sephLabel})</span>` : ""}</td>
           <td>${actor.name}</td>
           <td style="text-align:center">${matNeed ? `${matNeed}× ${matKey} <span style="opacity:0.7">(have ${matAvail === Infinity ? "—" : matAvail})</span>` : "—"}</td>
-          <td style="text-align:center">${opNeed ? `${opNeed} ${opPool} <span style="opacity:0.7">(${opPoolBad ? "⚠ not an OP channel — unpayable" : `have ${opAvail === Infinity ? "—" : opAvail}`})</span>` : "—"}</td>
+          <td style="text-align:center">${opNeed ? `${opNeedMarks} ${opPool} marks <span style="opacity:0.7">(${opPoolBad ? "⚠ not an OP channel — unpayable" : `have ${opAvail === Infinity ? "—" : opAvail}`})</span>` : "—"}</td>
           <td style="text-align:center">${dc}${attempts ? ` <span style="opacity:0.6">(-${2*attempts})</span>` : ""}</td>
           <td style="text-align:right"><button type="button" class="bbttcc-tk-repair-begin" data-actor-id="${actor.id}" data-spark-key="${sparkKey}" ${ready ? "" : "disabled style=\"opacity:0.5\""}>Begin Repair</button></td>
         </tr>`;
@@ -445,7 +480,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
           <th style="padding:0.3rem">Spark</th>
           <th style="padding:0.3rem">Owner</th>
           <th style="padding:0.3rem;text-align:center">Mat</th>
-          <th style="padding:0.3rem;text-align:center">OP</th>
+          <th style="padding:0.3rem;text-align:center">Marks</th>
           <th style="padding:0.3rem;text-align:center">DC</th>
           <th style="padding:0.3rem;text-align:right"></th>
         </tr></thead>

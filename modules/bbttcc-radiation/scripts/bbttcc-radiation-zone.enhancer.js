@@ -160,6 +160,8 @@
       const radApi = game.bbttcc?.api?.radiation;
       if (!radApi || typeof radApi.add !== "function") return;
 
+      // Encounter re-emits (ctx.encounter) are a second hook for the same leg — expose once.
+      if (ctx?.encounter || ctx?.relayed) return;   // relayed = GM-side re-fire of a leg already handled
       const actor = ctx.actor;
       if (!actor) return;
 
@@ -180,7 +182,7 @@
 
       if (amt <= 0) return;
 
-      await radApi.add(actor.id, amt);
+      await radApi.add(actor, amt);
 
       // GM whisper
       const name = actor.name ?? "Unknown Faction";

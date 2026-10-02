@@ -471,13 +471,15 @@
         const fid    = String(factionId);
         return linked === fid || source === fid;
       };
+      // A steward's token rides for its faction too (the table rides on a steward's token, not a faction token).
+      const member = (t) => {
+        if (!t || !factionId) return false;
+        const f = t?.actor?.flags?.["bbttcc-factions"];
+        return String(f?.factionId || "").replace(/^Actor\./, "") === String(factionId);
+      };
       const controlled = canvas?.tokens?.controlled || [];
-      if (controlled.length) {
-        const t = controlled.find(matches);
-        if (t) return t;
-      }
       const all = canvas?.tokens?.placeables || [];
-      return all.find(matches) || null;
+      return controlled.find(matches) || all.find(matches) || controlled.find(member) || all.find(member) || null;
     } catch (e) {
       console.warn(TAG, "pickTokenForFaction failed:", e);
       return null;
@@ -1133,6 +1135,7 @@
       // Tracked with `_facManuallyChanged` so we don't keep yanking the dropdown
       // away from the GM if they pick a different faction by hand.
       let _facManuallyChanged = false;
+      let _facAutoSetting = false;   // our own dispatch below is not a manual change
       const _detectFactionIdFromCanvas = () => {
         try {
           const tok = canvas?.tokens?.controlled?.[0];
@@ -1149,11 +1152,13 @@
         const fid = _detectFactionIdFromCanvas();
         if (fid && $fac.value !== fid) {
           $fac.value = fid;
-          $fac.dispatchEvent(new Event("change", { bubbles: true }));
+          _facAutoSetting = true;
+          try { $fac.dispatchEvent(new Event("change", { bubbles: true })); }
+          finally { _facAutoSetting = false; }
         }
       };
       $fac.addEventListener("change", () => {
-        _facManuallyChanged = true;
+        if (!_facAutoSetting) _facManuallyChanged = true;
         // Phase E1: changing the lead invalidates the joining-faction stack
         // (relationships are pair-keyed). Clear + rebuild the picker.
         // Phase E2: rehydrate the new lead's persistent stack if one exists,
@@ -1458,7 +1463,7 @@
               shortfalls.push(`${opLabel(k)}: need ${Math.round(marks)}, have ${Math.round(have)} marks`);
               anyUnaffordable = true;
             }
-            parts.push(`${(Number.isInteger(op) ? op : op.toFixed(1))} ${opLabel(k)}`);
+            parts.push(`${(Number.isInteger(marks) ? marks : marks.toFixed(1))} ${opLabel(k)}`);
           }
           const summary = parts.length ? parts.join(" · ") : "—";
           const cls = shortfalls.length ? "bad" : "";
@@ -2012,7 +2017,12 @@
         } catch (e) { console.warn(TAG, "resume failed", e); }
       };
 
-      content.querySelector('[data-action="rp-exec"]').onclick = async () => {
+      const $execBtn = content.querySelector('[data-action="rp-exec"]');
+      $execBtn.onclick = async () => {
+        // In-flight guard (on the app, so a re-render mid-ride cannot arm a second loop over the same legs).
+        if (this._execBusy) { ui.notifications?.info?.("The route is already executing."); return; }
+        this._execBusy = true;
+        try { $execBtn.disabled = true; } catch (_eD) {}
         try {
           const factionId = $fac.value;
           if (!factionId) { $rout.textContent = "Pick a faction first."; return; }
@@ -2238,6 +2248,14 @@
               return;
             }
 
+            // RideSession progress: api.travel.whereIs reads `executed` to place the party at the end of the
+            // last EXECUTED leg mid-ride (it was never written, so the ride's origin was reported throughout).
+            try {
+              rideSession.executed = i + 1;
+              rideSession.updatedTs = Date.now();
+              await rideApi?.save?.(factionId, { ...rideSession });
+            } catch (_eRSx) {}
+
             // ── Phase E1: passenger OP debits ────────────────────────────────
             // Per-leg passenger debits. After the lead pays through travelHex,
             // each joining faction pays its own debit equal to (leg's terrain+
@@ -2314,11 +2332,16 @@
                       await opApi.commit(s.fid, refund, { source: "travel-stack-rollback", label: `Leg ${i + 1}: rollback (passenger underflow)` });
                     } catch (e) { console.warn(TAG, `passenger refund failed for ${s.name}`, e); }
                   }
-                  // Refund lead the per-leg cost (lead's debit happened inside
-                  // travelHex; cost shape mirrors legCost before multipliers).
+                  // Refund the lead what travelHex ACTUALLY charged (r.cost) — not a local recompute,
+                  // which minted marks when the lead rode free (dev-6) or paid a hook-adjusted amount.
+                  // A bridge toll already credited to the bridge holder stays paid (not reversed here).
                   const leadRefund = {};
-                  for (const [k, v] of Object.entries(legCost)) {
-                    const n = Math.max(0, Math.round(Number(v || 0)));
+                  const charged = (r?.devSixFreePassage || r?.context?.devSixFreePassage) ? {} : (r?.cost || r?.context?.cost || {});
+                  const toll = Number(r?.context?.crossing?.toll || 0);
+                  const tollPaid = toll > 0 && !!r?.context?.crossing?.tollTo;
+                  for (const [k, v] of Object.entries(charged)) {
+                    let n = Math.max(0, Math.round(Number(v || 0)));
+                    if (tollPaid && String(k).toLowerCase() === "economy") n = Math.max(0, n - toll);
                     if (n > 0) leadRefund[String(k).toLowerCase()] = n;
                   }
                   if (Object.keys(leadRefund).length) {
@@ -2413,6 +2436,9 @@ if (game.bbttcc?.runVisuals) {
         } catch (e) {
           console.error(TAG, e);
           $rout.textContent = e?.message || "Error";
+        } finally {
+          this._execBusy = false;
+          try { $execBtn.disabled = false; } catch (_eD) {}
         }
       };
 

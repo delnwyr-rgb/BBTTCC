@@ -1,5 +1,5 @@
 // v1.0.0 — Supply Depot (mechanical):
-// Adds "Logistics Hub" to the target hex drawing and queues +1 Defense, +5 Trade Yield.
+// Adds "Logistics Hub" to the target hex drawing and queues +1 Defense (the trade-yield write is retired).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.supply_depot.
 
 (() => {
@@ -39,7 +39,7 @@
     // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
-    return `Queued: add "Logistics Hub" • +${defenseDelta} Defense • +${tradeYieldDelta} Trade Yield`;
+    return `Queued: add "Logistics Hub" • +${defenseDelta} Defense`;
   }
 
   whenRaidReady((api) => {
@@ -61,6 +61,6 @@
       }
     });
 
-    console.log(TAG, "installed (Logistics Hub tag, +1 Def, +5 Trade).");
+    console.log(TAG, "installed (Logistics Hub tag, +1 Def).");
   });
 })();

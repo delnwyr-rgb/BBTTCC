@@ -145,14 +145,22 @@
 
   // --- queued turn effects → conditions --------------------------------------
 
-  async function syncQueuedTurnEffectsToConditions(){
+  // Snapshot of every hex's turn.pending, taken BEFORE the consumer runs (2026-10-01): the
+  // consumer chain deletes turn.pending, so reading it afterwards found nothing to sync.
+  function snapshotPending(){
+    const snap = [];
+    for (const d of listAllHexDocsOnAllScenes()) {
+      const doc = d.document ?? d;
+      const pending = get(doc.flags?.[MOD_T] || {}, "turn.pending", null);
+      if (pending && typeof pending === "object" && Object.keys(pending).length) snap.push({ doc, pending: foundry.utils.duplicate(pending) });
+    }
+    return snap;
+  }
+
+  async function syncQueuedTurnEffectsToConditions(snap = null){
     try {
-      const docs = listAllHexDocsOnAllScenes();
-      for (const d of docs) {
-        const doc = d.document ?? d;
-        const tf  = doc.flags?.[MOD_T];
-        if (!tf) continue;
-        const pending = get(tf, "turn.pending", {});
+      const rows = snap || snapshotPending();
+      for (const { doc, pending } of rows) {
         if (!pending) continue;
 
         if (Number(pending.radiationRisk || 0) > 0) {
@@ -181,12 +189,20 @@
 
     const orig = raid.consumeQueuedTurnEffects.bind(raid);
     raid.consumeQueuedTurnEffects = async function wrappedConsumeQueuedTurnEffects(args = {}){
+      const snap = snapshotPending();
       const res = await orig(args);
-      await syncQueuedTurnEffectsToConditions();
+      await syncQueuedTurnEffectsToConditions(snap);
       return res;
     };
 
     log("Wrapped raid.consumeQueuedTurnEffects for hex condition auto-sync");
+    return true;
+  }
+  // whenRaidReady-style retry (2026-10-01): if the raid consumer is not defined yet at this
+  // script's ready hook the wrapper used to stay uninstalled for the session.
+  function installQueuedEffectsWrapperWithRetry(tries = 0){
+    if (installQueuedEffectsWrapper() || game.bbttcc?.api?.raid?._bbttccHexConditionsWrapped) return;
+    if (tries < 20) setTimeout(() => installQueuedEffectsWrapperWithRetry(tries + 1), 500);
   }
 
   // --- publish API -----------------------------------------------------------
@@ -209,7 +225,7 @@
 
   function install(){
     publishAPIs();
-    installQueuedEffectsWrapper();
+    installQueuedEffectsWrapperWithRetry();
     log("ready");
   }
 

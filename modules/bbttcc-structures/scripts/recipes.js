@@ -257,7 +257,8 @@ export async function harden(targetActor, additions, factionActor) {
   const oldPlates = targetActor.getFlag(FLAG_SCOPE, "plates") ?? { current: 0, max: 0 };
   const newCurrent = Math.min(derived.platesMax, (Number(oldPlates.current) || 0) + addedPlateValue);
 
-  // Write
+  // Write (resists/vulns are re-derived maps; a merging update would keep stale keys)
+  await api.clearDerivedMaps?.(targetActor);
   await targetActor.update({
     [`flags.${FLAG_SCOPE}.materialBOM`]:    normalized,
     [`flags.${FLAG_SCOPE}.plates.current`]: newCurrent,
@@ -348,6 +349,7 @@ export async function repair(targetActor, factionActor, opts = {}) {
   const oldPlates = targetActor.getFlag(FLAG_SCOPE, "plates") ?? { current: 0, max: derived.platesMax };
   const newCurrent = Math.min(derived.platesMax, (Number(oldPlates.current) || 0) + addedPlateValue);
 
+  await api.clearDerivedMaps?.(targetActor);
   await targetActor.update({
     [`flags.${FLAG_SCOPE}.materialBOM`]:    newBom,
     [`flags.${FLAG_SCOPE}.plates.current`]: newCurrent,

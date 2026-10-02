@@ -515,7 +515,8 @@ const _opts = (list, sel, labelFn = (v) => v.charAt(0).toUpperCase() + v.slice(1
   list.map(v => `<option value="${v}"${String(v) === String(sel) ? " selected" : ""}>${labelFn(v)}</option>`).join("");
 
 export async function openMonsterBuilder() {
-  const index = await loadExemplarIndex();
+  // Re-scan each open so world actors flagged/created/deleted mid-session show up.
+  const index = await loadExemplarIndex({ force: true });
   const factionOpts = _factionOptions();
 
   const facultyGrid = FACULTY_KEYS.map(k => `

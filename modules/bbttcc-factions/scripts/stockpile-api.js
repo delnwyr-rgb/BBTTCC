@@ -1,4 +1,5 @@
 import { MATERIAL_MARKET } from "/modules/bbttcc-core/scripts/economy.constants.js";
+import { factionCaps } from "./op-engine.js";
 // modules/bbttcc-factions/scripts/stockpile-api.js
 // Bad Eden — Faction Material Stockpile API v0.1
 //
@@ -56,11 +57,28 @@ async function _writeMap(faction, map) {
       lastUuid: v.lastUuid || null
     };
   }
-  // Replace wholesale (delete-then-set semantics) — a plain merge-write never
-  // drops a key that hit zero [[reference_foundry_update_merges_use_minus_eq]].
-  // (Backported from the dnd5e build 2026-06-12.)
-  await faction.update({ [`flags.${MOD_ID}.-=${FLAG_KEY}`]: null });
-  await faction.update({ [`flags.${MOD_ID}.${FLAG_KEY}`]: clean });
+  // ONE update (2026-10-01): per-key sets, plus a ForcedDeletion for each key that hit
+  // zero (a plain merge never drops a key). The old delete-then-set pair used the legacy
+  // "-=" syntax and left a window where an overlapping adjust read an EMPTY stockpile.
+  const live = faction.getFlag(MOD_ID, FLAG_KEY) || {};
+  const FD = foundry.data?.operators?.ForcedDeletion || null;
+  const upd = {};
+  const gone = Object.keys(live).filter(k => !(k in clean));
+  for (const k of Object.keys(clean)) upd[`flags.${MOD_ID}.${FLAG_KEY}.${k}`] = clean[k];
+  if (FD) for (const k of gone) upd[`flags.${MOD_ID}.${FLAG_KEY}.${k}`] = new FD();
+  if (Object.keys(upd).length) await faction.update(upd);
+  if (!FD) for (const k of gone) await faction.unsetFlag(MOD_ID, `${FLAG_KEY}.${k}`);
+}
+
+// Per-faction serialisation: adjust() is a read-modify-write of the whole map, so two
+// overlapping adjusts (two relayed harvests, a deposit during a sell) dropped a delta.
+const _adjustChains = new Map();   // factionId → tail promise (never rejects)
+function _serial(key, fn) {
+  const run = (_adjustChains.get(key) || Promise.resolve()).then(fn, fn);
+  const tail = run.catch(() => {});
+  _adjustChains.set(key, tail);
+  tail.then(() => { if (_adjustChains.get(key) === tail) _adjustChains.delete(key); });
+  return run;
 }
 
 function _safeQty(v) {
@@ -127,10 +145,12 @@ async function adjust(faction, matKey, delta, opts = {}) {
     if (!gx?.call) return { ok: false, error: "no permission to write the faction stockpile and no GM relay available" };
     return gx.call(RELAY_TYPE, { factionId: F.id, matKey: String(matKey), delta: Math.floor(Number(delta) || 0), opts: { name: opts?.name, img: opts?.img, lastUuid: opts?.lastUuid } });
   }
-  const d = _safeQty(delta) - 0; // signed int via _safeQty floor
   const signedDelta = Math.floor(Number(delta) || 0);
   if (!signedDelta) return { ok: true, before: qty(F, matKey), after: qty(F, matKey), delta: 0 };
+  return _serial(F.id, () => _adjustNow(F, matKey, signedDelta, opts));
+}
 
+async function _adjustNow(F, matKey, signedDelta, opts = {}) {
   const map = _readMap(F);
   const cur = map[matKey] || { qty: 0, name: opts?.name || matKey, img: opts?.img || "icons/svg/mystery-man.svg", lastUuid: opts?.lastUuid || null };
   const before = _safeQty(cur.qty);
@@ -286,8 +306,8 @@ function headroom(faction, channel) {
   const F = _resolveActor(faction); if (!F) return 0;
   const ff = F.flags?.[MOD_ID] || {}; const k = String(channel || "").toLowerCase();
   const bank = Number(ff.opBank?.[k] || 0);
-  let cap = Number(ff.opCaps?.[k]);
-  if (!Number.isFinite(cap) || cap <= 0) { const band = [50, 70, 90, 110, 130]; const t = Math.max(0, Math.min(4, Math.floor(Number(ff.tier ?? F.system?.tier ?? 0) || 0))); cap = band[t]; }
+  // The cap the OP engine actually enforces (one authority — no local tier-band copy).
+  const cap = Number(factionCaps(F)?.[k] ?? 0) || 0;
   return Math.max(0, Math.floor(cap - bank));
 }
 

@@ -15,7 +15,7 @@
  *     id, title,
  *     audience: "player" | "gm",          // gm tours refuse to start for players
  *     intro?: string, outro?: string,      // Operator chat lines (whispered to self)
- *     open:  async (ctx) => root Element | Application | null,
+ *     open:  async (ctx) => root Element | Application | null | false,  // false = could not open → abort
  *     close?: async (ctx) => {},
  *     steps: [{
  *       id?, title, text?,                 // card body (HTML-escaped, \n → <br>)
@@ -35,7 +35,8 @@ const MODULE_ID = "bbttcc-onboarding";
 const TAG = "[onboarding/tours]";
 
 const _tours = new Map();
-let _active = null; // { def, ctx, root, idx, hl, card, follow, keyHandler }
+let _active = null; // { def, ctx, root, idx, hl, card, follow, keyHandler, seq, resolved }
+let _starting = false; // true while start() is opening the app (before _active exists)
 
 function _ns() { return globalThis.game?.bbttcc?.onboarding; }
 function _help() { return globalThis.game?.bbttcc?.help; }
@@ -111,36 +112,48 @@ function _placeAround(target, hl, card) {
 async function _showStep() {
   const a = _active;
   if (!a) return;
+  // Sequence token: overlapping navigations (double Next, held arrow) must not
+  // let a slower, older chain overwrite the card or move the index.
+  const seq = ++a.seq;
+  const stale = () => a.seq !== seq || _active !== a;
   const total = a.def.steps.length;
   if (a.idx >= total) return _finish(true);
   if (a.idx < 0) a.idx = 0;
-  const step = a.def.steps[a.idx];
+  const idx = a.idx;
+  const step = a.def.steps[idx];
 
   try { await step.onEnter?.(a.ctx, a.root); } catch (e) { console.warn(TAG, "onEnter failed", e); }
+  if (stale()) return;
   if (step.pre) {
     const preEl = a.root?.querySelector?.(step.pre) || document.querySelector(step.pre);
     try { preEl?.click(); } catch (_) {}
     await new Promise(r => setTimeout(r, 200)); // let the tab/panel settle
+    if (stale()) return;
   }
 
   const target = await _waitFor(step.selector, a.root, { timeout: step.optional ? 900 : 4000 });
+  if (stale()) return;
   if (!target) {
     console.warn(TAG, `step "${step.id || step.title}" — selector not found: ${step.selector}${step.optional ? " (optional, skipping)" : ""}`);
-    a.idx += a.dir >= 0 ? 1 : -1;                 // keep moving in the direction of travel
+    // Keep moving in the direction of travel — but Back onto a missing step 0
+    // has nowhere to go, so turn around instead of retrying it forever.
+    if (a.dir < 0 && idx <= 0) { a.dir = 1; a.idx = idx + 1; }
+    else a.idx = idx + (a.dir >= 0 ? 1 : -1);
     return _showStep();
   }
 
   try { target.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (_) {}
 
+  a.resolved += 1;
   let text = step.text;
   if (!text && Array.isArray(step.help)) text = _help()?.tip?.(step.help[0], step.help[1]) || "";
-  a.card.innerHTML = _cardHTML(step, a.idx, total, text || "");
+  a.card.innerHTML = _cardHTML(step, idx, total, text || "");
   a.hl.style.display = a.card.style.display = "block";
   _placeAround(target, a.hl, a.card);
   a.target = target;
 
-  if (step.speak && !a.spoken.has(a.idx)) {
-    a.spoken.add(a.idx);
+  if (step.speak && !a.spoken.has(idx)) {
+    a.spoken.add(idx);
     try { await a.ctx.speak(step.speak, { audience: "self" }); } catch (_) {}
   }
 }
@@ -149,6 +162,8 @@ function _finish(completed) {
   const a = _active;
   if (!a) return;
   _active = null;
+  // A tour whose every step found nothing toured nothing — never report it done.
+  if (completed && !a.resolved) completed = false;
   clearInterval(a.follow);
   window.removeEventListener("keydown", a.keyHandler, true);
   a.hl.remove(); a.card.remove();
@@ -166,7 +181,11 @@ async function start(id) {
     ui.notifications?.warn?.("That tour covers GM-only controls."); return;
   }
   if (_active) _finish(false);
+  _starting = true;
+  try { return await _start(def); } finally { _starting = false; }
+}
 
+async function _start(def) {
   const ns = _ns();
   const user = game.user;
   const steward = ns?.resolve?.steward?.(user) || null;
@@ -177,8 +196,14 @@ async function start(id) {
     riff:  (args, opts) => (ns?.riff ? ns.riff(args, opts) : Promise.resolve(null))
   };
 
-  let root = null;
-  try { root = _rootEl(await def.open?.(ctx)); } catch (e) { console.warn(TAG, "tour open() failed", e); }
+  let root = null, opened = null, failed = false;
+  try { opened = await def.open?.(ctx); root = _rootEl(opened); }
+  catch (e) { console.warn(TAG, "tour open() failed", e); failed = true; }
+  if (failed || opened === false) {
+    // open() already toasted why; don't run every step against nothing.
+    Hooks.callAll("bbttcc:tour:ended", { id: def.id, completed: false, aborted: true, atStep: 0 });
+    return;
+  }
   await new Promise(r => setTimeout(r, 350)); // let the app finish rendering
 
   const hl = document.createElement("div");
@@ -200,6 +225,8 @@ async function start(id) {
 
   const keyHandler = (ev) => {
     const a = _active; if (!a) return;
+    // Arrow keys inside a field move the caret — never the tour.
+    if (ev.target?.closest?.("input, textarea, select, [contenteditable]")) return;
     if (ev.key === "Escape") { ev.stopPropagation(); return _finish(false); }
     if (ev.key === "ArrowRight") { a.dir = 1; a.idx += 1; _showStep(); }
     if (ev.key === "ArrowLeft" && a.idx > 0) { a.dir = -1; a.idx -= 1; _showStep(); }
@@ -207,7 +234,7 @@ async function start(id) {
   window.addEventListener("keydown", keyHandler, true);
 
   _active = {
-    def, ctx, root, idx: 0, dir: 1, hl, card, keyHandler, target: null, spoken: new Set(),
+    def, ctx, root, idx: 0, dir: 1, hl, card, keyHandler, target: null, spoken: new Set(), seq: 0, resolved: 0,
     follow: setInterval(() => {                    // track moving/resizing windows
       const a = _active;
       if (a?.target?.isConnected) _placeAround(a.target, a.hl, a.card);
@@ -252,6 +279,6 @@ async function menu() {
 Hooks.once("ready", () => {
   const ns = _ns();
   if (!ns) return console.warn(TAG, "onboarding namespace missing — tours not exposed.");
-  ns.tours = { register, list, get, start, stop, menu, active: () => !!_active };
+  ns.tours = { register, list, get, start, stop, menu, active: () => !!_active || _starting };
   console.log(TAG, `tour engine ready — ${_tours.size} tour(s) registered.`);
 });

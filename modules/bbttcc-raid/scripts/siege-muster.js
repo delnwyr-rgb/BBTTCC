@@ -174,8 +174,12 @@
   }
   // Re-evaluate which structure (if any) a contingent crews, releasing the old + joining the
   // new. Single-token, sequential — safe for one-at-a-time user drags. Skips when unchanged.
-  async function _reconcileCrew(tokDoc) {
+  // Save-load (restore mode) deletes/recreates tokens wholesale — it must not refund pools or
+  // re-crew walls (the restored world already carries those values).
+  const _restoring = (options) => !!(game.bbttcc?.restoring || options?.bbttccRestore);
+  async function _reconcileCrew(tokDoc, options) {
     if (!game.user?.isGM) return;
+    if (_restoring(options)) return;
     const md = tokDoc?.flags?.[MOD_R]?.musterDeployment;
     if (!md) return;                                   // only muster contingents
     const crew = _api()?.structures?.crew; if (!crew) return;
@@ -199,8 +203,9 @@
     }
     try { await tokDoc.update({ [`flags.${MOD_R}.crewingStructureId`]: newId }); } catch (_e) {}
   }
-  async function _releaseCrewOnDelete(tokDoc) {
+  async function _releaseCrewOnDelete(tokDoc, options) {
     if (!game.user?.isGM) return;
+    if (_restoring(options)) return;
     const prevId = tokDoc?.flags?.[MOD_R]?.crewingStructureId || null;
     if (!prevId) return;
     const crew = _api()?.structures?.crew; const a = game.actors.get(prevId);
@@ -213,8 +218,9 @@
   // nothing double-refunds. Routed contingents (strength 0) and clash casualties (strength
   // already depleted on the token) refund exactly what survived. NOTE: deleting a whole
   // SCENE skips deleteToken hooks — recall the muster before tearing a battle scene down.
-  async function _refundPoolOnDelete(tokDoc) {
+  async function _refundPoolOnDelete(tokDoc, options) {
     if (!game.user?.isGM) return;
+    if (_restoring(options)) return;
     if (game.users?.activeGM && game.users.activeGM !== game.user) return;   // one writer — two GM seats must not both refund
     const md = tokDoc?.flags?.[MOD_R]?.musterDeployment;
     if (!md?.factionId) return;
@@ -992,9 +998,9 @@
     // released when dragged off / deleted). garrisonWalls' own drops pre-tag crewingStructureId
     // so the create-hook no-ops on them (it assigns them itself, race-free).
     if (!globalThis.__bbttcc_siege_muster_crew_hooks) {
-      Hooks.on("createToken", (doc) => { _reconcileCrew(doc).catch(() => {}); });
-      Hooks.on("updateToken", (doc, changes) => { if (changes?.x !== undefined || changes?.y !== undefined) _reconcileCrew(doc).catch(() => {}); });
-      Hooks.on("deleteToken", (doc) => { _releaseCrewOnDelete(doc).catch(() => {}); _refundPoolOnDelete(doc).catch(() => {}); });
+      Hooks.on("createToken", (doc, options) => { _reconcileCrew(doc, options).catch(() => {}); });
+      Hooks.on("updateToken", (doc, changes, options) => { if (changes?.x !== undefined || changes?.y !== undefined) _reconcileCrew(doc, options).catch(() => {}); });
+      Hooks.on("deleteToken", (doc, options) => { _releaseCrewOnDelete(doc, options).catch(() => {}); _refundPoolOnDelete(doc, options).catch(() => {}); });
       globalThis.__bbttcc_siege_muster_crew_hooks = true;
     }
     console.log(TAG, "ready — game.bbttcc.api.siege.{musterToScene,recallMuster,musterSize,resolveClash,garrisonWalls,formUpBoth,musterReport}");

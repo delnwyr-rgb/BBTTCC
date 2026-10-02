@@ -89,7 +89,7 @@
   }
 
   // ── GM verbs ──────────────────────────────────────────────────────────────
-  async function seat(hexUuid, key, { state = "dormant" } = {}) {
+  async function seat(hexUuid, key, { state = "dormant", force = false } = {}) {
     if (!game.user?.isGM) throw new Error("GM only");
     const parsed = parseKey(key);
     if (!parsed) throw new Error(`Bad spark key: ${key} (expected spark_<sephirah>_<kind>)`);
@@ -99,6 +99,12 @@
     if (existing && canonicalKey(existing.key) !== key) {
       warn(`hex already holds ${existing.key}; unseat first`, hexUuid);
       return { ok: false, error: "occupied", existing };
+    }
+    // Re-seating the SAME spark (replayed / forced beat) must not demote an
+    // integrated temple or wash a corrupted one back to dormant. { force:true }
+    // is the explicit overwrite.
+    if (existing && !force) {
+      return { ok: true, already: true, key, state: existing.state };
     }
     const st = state === "integrated" ? "integrated" : "dormant";
     await doc.update({ [`flags.${TER}.spark`]: { key, state: st, at: Date.now() } });

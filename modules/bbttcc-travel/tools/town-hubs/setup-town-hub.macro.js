@@ -17,7 +17,7 @@
  * Config shape (towns.json → towns[TOWN]):
  *   town, hexAliases[], hubs{key:{sceneName,label,refWidth,refHeight}}, doors[], cross[], beatMap[],
  *   hubBeats{hubKey:[beatIds]}, overrideLiveBeats[], replaceSceneNames[], removeBeats[], removeDoors[],
- *   leave{beatId:note}, notes[]. Door: {hub,key,label,x,y,w,h,color,exterior,interior,extra[],beatId,
+ *   leave{beatId:note}, notes[]. Door (x,y = the rectangle's CENTRE in ref px): {hub,key,label,x,y,w,h,color,exterior,interior,extra[],beatId,
  *   intro,blurb,direct,floor?,gate?}. Scenes are named by name or "Scene.<id>". beatMap rows: [prefix, doorKey,
  *   WALK-IN (2026-09-30): town `walkIn: true` also lays a Region over every door (token-move-in → doors.enter → the same
  *   opener; `gate` {beatMark|anyOf, fallback, message} plays the fallback beat until the mark is played). `floor` = a
@@ -31,7 +31,7 @@
  */
 (async () => {
   const TOWN_KEY = "chuckle";              // <-- fixit | ag | lyrenn | kt | chuckle | softlanding | stillwater | crownmall | maneuvervault | gloomgill  (keys of towns.json)
-  const DRY_RUN = false;                  // <-- set false to apply
+  const DRY_RUN = true;                   // <-- set false to apply
   const CONFIG_URL = "modules/bbttcc-travel/tools/town-hubs/towns.json";
   const SCOPE = "bbttcc-travel", NS = "bbttcc-campaign", TERR = "bbttcc-territory";
   const DUR_MS = 24000;
@@ -180,12 +180,18 @@
       const upd = {};
       if (JSON.stringify(cur.flags[SCOPE].locationLink) !== JSON.stringify(link)) upd[`flags.${SCOPE}.locationLink`] = link;
       if (lvl && (JSON.stringify(Array.from(cur.levels || [])) !== JSON.stringify(onLevel.levels) || cur.elevation !== onLevel.elevation)) { upd.levels = onLevel.levels; upd.elevation = onLevel.elevation; }
-      if (Object.keys(upd).length) { changes.push(`door relink ${desc}`); if (!DRY_RUN) await cur.update(upd); }
+      // the config is the source of truth for WHERE a door sits too (review 2026-10-01: the Soft Landing / Stillwater / Chuckle
+      // rectangles were converted from top-left to centres — a re-run must move the live Drawings, not only their Regions)
+      const moved = Math.round(cur.x) !== X || Math.round(cur.y) !== Y || Math.round(cur.shape?.width ?? 0) !== W || Math.round(cur.shape?.height ?? 0) !== Hh;
+      if (moved) { upd.x = X; upd.y = Y; upd.shape = { width: W, height: Hh }; }
+      if (Object.keys(upd).length) { changes.push(`door ${moved ? "move" : "relink"} ${desc}`); if (!DRY_RUN) await cur.update(upd); }
     }
     if (!walkIn) return;
     // the walk-in Region: same rectangle, same level band, executeScript → doors.enter on the mover's client
     const rlink = { ...link, doorKey: key, ...(gate ? { gate } : {}) };
-    const band = lvl ? { bottom: Number(lvl.elevation?.bottom ?? 0), top: Number(lvl.elevation?.top ?? 0) } : { bottom: null, top: null };
+    // a v14 Level's null bound means unbounded (an upper floor with no ceiling has top: null) — pass nulls through, never as 0
+    const nb = (v) => (v == null || !Number.isFinite(Number(v)) ? null : Number(v));   // ±Infinity reads as unbounded too
+    const band = lvl ? { bottom: nb(lvl.elevation?.bottom), top: nb(lvl.elevation?.top) } : { bottom: null, top: null };
     const source = `// bbttcc walk-in door "${key}" — fires on the mover's client only\nif (!event.user.isSelf) return;\nawait game.bbttcc?.api?.travel?.doors?.enter?.(region.uuid, { tokenUuid: event.data?.token?.uuid });`;
     const rdata = { name: `Door · ${label}`, color, visibility: CONST.REGION_VISIBILITY?.GAMEMASTER ?? 1,
       shapes: [{ type: "rectangle", x: X, y: Y, width: W, height: Hh, rotation: 0, hole: false }], elevation: band, ...(lvl ? { levels: onLevel.levels } : {}),
@@ -196,7 +202,10 @@
     else {
       const sh = rcur.shapes?.[0] || {}; const moved = Math.round(sh.x) !== X || Math.round(sh.y) !== Y || Math.round(sh.width) !== W || Math.round(sh.height) !== Hh;
       const relinked = JSON.stringify(rcur.flags[SCOPE].locationLink) !== JSON.stringify(rlink);
-      if (moved || relinked) { changes.push(`region resync ${H.label} · ${label}`); if (!DRY_RUN) await rcur.update({ shapes: rdata.shapes, elevation: band, ...(lvl ? { levels: onLevel.levels } : {}), [`flags.${SCOPE}.locationLink`]: rlink }); }
+      // a changed `floor` must move the Region too (level + elevation band), not only the Drawing (review 2026-10-01)
+      const rb = { bottom: nb(rcur.elevation?.bottom), top: nb(rcur.elevation?.top) };
+      const releveled = (lvl && JSON.stringify(Array.from(rcur.levels || [])) !== JSON.stringify(onLevel.levels)) || rb.bottom !== band.bottom || rb.top !== band.top;
+      if (moved || relinked || releveled) { changes.push(`region resync ${H.label} · ${label}${releveled ? " (level/elevation)" : ""}`); if (!DRY_RUN) await rcur.update({ shapes: rdata.shapes, elevation: band, ...(lvl ? { levels: onLevel.levels } : {}), [`flags.${SCOPE}.locationLink`]: rlink }); }
     }
   };
   // escalators / stairs: a native changeLevel Region spanning two levels (the token is prompted to change floor)
@@ -205,14 +214,26 @@
     const offX = sc.dimensions?.sceneX || 0, offY = sc.dimensions?.sceneY || 0;
     const W = Math.round(e.w * k), Hh = Math.round(e.h * ky), X = Math.round(offX + e.x * k - W / 2), Y = Math.round(offY + e.y * ky - Hh / 2);
     const lv = (e.floors || []).map(f => levelFor(e.hub, f)).filter(Boolean); if (lv.length < 2) { warns.push(`escalator ${e.key}: needs two resolvable floors`); return; }
-    const bottom = Math.min(...lv.map(l => Number(l.elevation?.bottom ?? 0))), top = Math.max(...lv.map(l => Number(l.elevation?.top ?? 0)));
+    // null = unbounded (v14): any floor with no ceiling/floor makes the span unbounded on that side
+    const bs = lv.map(l => l.elevation?.bottom), ts = lv.map(l => l.elevation?.top);
+    const unb = (v) => v == null || !Number.isFinite(Number(v)); const bottom = bs.some(unb) ? null : Math.min(...bs.map(Number)), top = ts.some(unb) ? null : Math.max(...ts.map(Number));
     const rdata = { name: `Escalator · ${e.label}`, color: e.color || "#ffd54f", visibility: CONST.REGION_VISIBILITY?.ALWAYS ?? 2,
       shapes: [{ type: "rectangle", x: X, y: Y, width: W, height: Hh, rotation: 0, hole: false }], elevation: { bottom, top }, levels: lv.map(l => l.id ?? l._id),
       behaviors: [{ name: `change level ${e.key}`, type: "changeLevel", system: {} }], flags: { [SCOPE]: { escalator: e.key } } };
     const cur = (sc.regions?.contents || []).find(r => r.flags?.[SCOPE]?.escalator === e.key);
     if (!cur) { changes.push(`escalator ${H.label} · ${e.label} [${lv.map(l => l.name).join(" ↔ ")}] @ (${X + W / 2},${Y + Hh / 2}) ${W}×${Hh}`); if (!DRY_RUN) await sc.createEmbeddedDocuments("Region", [rdata]); }
-    else changes.push(`· ok escalator ${e.label}`);
+    else {
+      const sh = cur.shapes?.[0] || {}; const moved = Math.round(sh.x) !== X || Math.round(sh.y) !== Y || Math.round(sh.width) !== W || Math.round(sh.height) !== Hh;
+      const rebanded = (unb(cur.elevation?.bottom) ? null : Number(cur.elevation.bottom)) !== bottom || (unb(cur.elevation?.top) ? null : Number(cur.elevation.top)) !== top || JSON.stringify(Array.from(cur.levels || [])) !== JSON.stringify(rdata.levels);
+      if (moved || rebanded) { changes.push(`escalator resync ${H.label} · ${e.label}`); if (!DRY_RUN) await cur.update({ shapes: rdata.shapes, elevation: rdata.elevation, levels: rdata.levels }); }
+      else changes.push(`· ok escalator ${e.label}`);
+    }
   };
+  // two walk-in rectangles on one hub + level that intersect fire BOTH doors on a single step (review 2026-10-01) — warn, never guess
+  { const box = (d) => [d.x - d.w / 2, d.y - d.h / 2, d.x + d.w / 2, d.y + d.h / 2]; const walk = DOORS.filter(d => (d.walkIn ?? WALK_IN));
+    for (let i = 0; i < walk.length; i++) for (let j = i + 1; j < walk.length; j++) { const a = walk[i], b = walk[j]; if (a.hub !== b.hub || String(a.floor ?? "") !== String(b.floor ?? "")) continue;
+      const [a0, a1, a2, a3] = box(a), [b0, b1, b2, b3] = box(b); const ox = Math.min(a2, b2) - Math.max(a0, b0), oy = Math.min(a3, b3) - Math.max(a1, b1);
+      if (ox > 0 && oy > 0) warns.push(`walk-in doors "${a.key}" and "${b.key}" overlap by ${ox}×${oy} ref px on the same level — a token in the overlap opens both; shrink one in towns.json`); } }
   for (const d of DOORS) {
     if (!d.sc.exterior) continue;
     await placeDoor(d.hub, d.key, d.label, d.color || "#ffffff", d.x, d.y, d.w, d.h, { key: d.key, label: d.label, targetSceneUuid: d.sc.exterior.uuid, sceneUuids: d.allScenes.map(s => s.uuid), beatId: d.beatId || null }, "e", { floor: d.floor ?? null, gate: d.gate || null, walkIn: d.walkIn ?? WALK_IN });
@@ -225,6 +246,8 @@
   for (const key of REMOVE_DOORS) for (const H of Object.values(HUBS)) {
     const cur = H.scene.drawings.contents.find(d => d.flags?.[SCOPE]?.locationLink?.key === key);
     if (cur) { changes.push(`door REMOVE ${key} on "${H.scene.name}"`); if (!DRY_RUN) await cur.delete(); }
+    // …and its walk-in Region, which would otherwise keep firing (and playing the gate's fallback) for a door that is gone
+    for (const r of (H.scene.regions?.contents || []).filter(r => r.flags?.[SCOPE]?.locationLink?.doorKey === key)) { changes.push(`region REMOVE ${key} on "${H.scene.name}"`); if (!DRY_RUN) await r.delete(); }
   }
   for (const c of CROSS) await placeDoor(c.hub, c.key, c.label, c.color || "#ffffff", c.x, c.y, c.w, c.h, { key: c.key, label: c.label, targetSceneUuid: HUBS[c.to].scene.uuid, sceneUuids: [], beatId: null }, "r");
   for (const e of ESCALATORS) await placeEscalator(e);

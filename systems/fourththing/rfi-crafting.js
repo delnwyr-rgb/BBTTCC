@@ -57,6 +57,39 @@ function _receiptKey(item) {
   const sec = item?.flags?.["bbttcc-raid"]?.secret; if (!sec) return null;
   return String(sec.ingredientKey || slugOf(item.name) || "").trim() || null;
 }
+// A Receipt lives on the FACTION actor, which a player steward usually doesn't
+// own — spending one relays to the GM seat (bbttcc-core gmExec). The GM side
+// re-checks that the sender owns the steward, the steward belongs to that
+// faction, and the item really is a Receipt for that ingredient key.
+const RECEIPT_RELAY = "fourththing.forge.spendReceipt";
+async function _deleteReceipt(actor, item, key) {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (game.user?.isGM || item.isOwner || !gx?.call) { await item.delete(); return; }
+  await gx.call(RECEIPT_RELAY, { stewardUuid: actor.uuid, factionId: item.parent?.id, itemId: item.id, key });
+}
+Hooks.once("ready", () => {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.register) return;
+  gx.register(RECEIPT_RELAY, async (p, meta) => {
+    const steward = await fromUuid(String(p?.stewardUuid || ""));
+    const user = game.users?.get?.(meta?.fromUserId);
+    if (!steward || !user || !steward.testUserPermission?.(user, "OWNER")) throw new Error("sender does not own that steward");
+    const F = RfiCrafting.factionOf(steward);
+    if (!F || F.id !== p?.factionId) throw new Error("steward does not belong to that faction");
+    const it = F.items?.get?.(String(p?.itemId || ""));
+    const k = it ? _receiptKey(it) : null;
+    if (!it || !k || canonKey(k) !== canonKey(p?.key)) throw new Error("not a Receipt for that ingredient");
+    await it.delete();
+    console.log("Roll for Initiation | forge spent a Receipt (relay):", it.name, "as", p.key, `(for ${meta?.fromUserName || "?"})`);
+    return { ok: true };
+  });
+});
+// Source-side read (never the AE-applied derived data): the forge/gather
+// checks add every passive AE themselves, so the base must exclude them.
+function _srcSys(actor) {
+  const root = actor?.toObject?.()?.system ?? actor?._source?.system ?? {};
+  return root?.system ?? root;
+}
 function _bookEmpty(b) { return !b.common.length && !Object.values(b.factions).some(a => Array.isArray(a) && a.length) && !Object.values(b.stewards).some(a => Array.isArray(a) && a.length); }
 
 function _normalizeRecipe(materialOfArr) {
@@ -263,8 +296,9 @@ export const RfiCrafting = {
 
     // Compendium items — only packs that are visible to the user.
     for (const pack of (game.packs ?? [])) {
-      if (pack.documentName !== "Item") continue;
-      const docs = await pack.getDocuments();
+      if (pack.documentName !== "Item" || !pack.visible) continue;
+      let docs = [];
+      try { docs = await pack.getDocuments(); } catch (eP) { console.warn("Roll for Initiation | recipe scan skipped pack", pack.collection, eP); continue; }
       for (const item of docs) {
         if (item?.getFlag?.("fourththing", "rfi.item.frame") === "material") continue;
         const r = RfiCrafting.recipeFor(item);
@@ -329,7 +363,8 @@ export const RfiCrafting = {
         for (const [k0, v] of Object.entries(stock.get(F) || {})) {
           if (need <= 0) break; if (canonKey(k0) !== key) continue;
           const have = Number(v?.qty || 0); const take = Math.min(have, need); if (take <= 0) continue;
-          await stock.adjust(F, k0, -take, {}); need -= take;
+          // only count what the stockpile (or its GM relay) actually took
+          const res = await stock.adjust(F, k0, -take, {}); if (res?.ok) need -= take;
         }
         remaining[key] = need;
       }
@@ -339,14 +374,15 @@ export const RfiCrafting = {
       const rec = RfiCrafting.receiptIngredients(actor);
       for (const [key, need0] of Object.entries(remaining)) {
         let need = need0; const items = rec[key] || [];
-        while (need > 0 && items.length) { const it = items.shift(); try { await it.delete(); need -= 1; console.log("Roll for Initiation | forge spent a Receipt:", it.name, "as", key); } catch (eD) { console.warn("Roll for Initiation | receipt spend failed", eD); break; } }
+        while (need > 0 && items.length) { const it = items.shift(); try { await _deleteReceipt(actor, it, key); need -= 1; console.log("Roll for Initiation | forge spent a Receipt:", it.name, "as", key); } catch (eD) { console.warn("Roll for Initiation | receipt spend failed", eD); break; } }
         remaining[key] = need;
       }
     } catch (eR) { console.warn("Roll for Initiation | forge receipt spend failed", eR); }
+    return remaining;
   },
 
   /**
-   * Attempt to craft. Rolls 2d10 + (skill attribute). On success, drains
+   * Attempt to craft. Rolls the canon check die (rolls.checkFormula) + (skill attribute). On success, drains
    * materials and creates a fresh copy of the recipe item on the actor with
    * origin="crafted" + originator=actor.uuid. On failure, drains half the
    * materials (rounded up) and produces nothing. Posts a chat receipt.
@@ -395,7 +431,7 @@ export const RfiCrafting = {
     }
 
     const { dc, skill } = check.difficulty;
-    const sys  = actor.system?.system ?? actor.system;
+    const sys  = _srcSys(actor);   // source — the AE sweep below is the one application of passives
     const baseAttr = Number(sys?.attributes?.[skill]?.value ?? 0);
 
     // Passive AE bonuses (mode 2 = ADD) on the attribute being used.
@@ -413,7 +449,7 @@ export const RfiCrafting = {
       }
     }
     const attr = baseAttr + aeAttr;
-    const formula = `2d10 + ${attr}`;
+    const formula = `${game.fourththing?.rolls?.checkFormula?.() || "2d10x10"} + ${attr}`;
     const roll = new Roll(formula);
     await roll.evaluate();
     const total = roll.total;
@@ -431,8 +467,17 @@ export const RfiCrafting = {
     const recipeFlag = recipeItem.getFlag?.("fourththing", "rfi.item") ?? {};
     const requiresHarm = !!recipeFlag.requiresHarmonization;
 
+    let spendShort = null;
     if (success) {
-      await RfiCrafting._spend(actor, check.recipe);
+      const left = await RfiCrafting._spend(actor, check.recipe);
+      const short = Object.entries(left || {}).filter(([, v]) => v > 0);
+      if (short.length) {
+        // A write that failed (no GM online, permission) must not forge an item for free.
+        spendShort = short.map(([k, v]) => `${k} ×${v}`).join(", ");
+        ui.notifications?.warn(`${recipeItem.name} not forged — couldn't spend: ${spendShort}. Is a GM connected?`);
+      }
+    }
+    if (success && !spendShort) {
       const data = recipeItem.toObject();
       delete data._id;
       // Stamp crafted origin + originator (Phase 2 schema).
@@ -444,7 +489,7 @@ export const RfiCrafting = {
         foundry.utils.setProperty(data, "flags.fourththing.rfi.item.harmonized", greatSuccess);
       }
       await actor.createEmbeddedDocuments("Item", [data]);
-    } else {
+    } else if (!success) {
       const halfRecipe = check.recipe.map(r => ({ key: r.key, qty: Math.ceil(r.qty / 2) }));
       await RfiCrafting._spend(actor, halfRecipe);
     }
@@ -454,6 +499,7 @@ export const RfiCrafting = {
       ? (greatSuccess
           ? (requiresHarm ? "✦ <b>Great Success</b> — Harmonized." : "✦ <b>Great Success</b> — exceptional craft.")
           : "✓ <b>Success</b> — added to inventory.")
+      + (spendShort ? ` <b>…but not forged</b> — couldn't spend ${foundry.utils.escapeHTML(spendShort)}.` : "")
       : (criticalFailure
           ? "✗ <b>Critical Failure</b> — slag and dream-fracture; half materials gone."
           : "✗ <b>Failed</b> — half materials wasted.");
@@ -479,7 +525,8 @@ export const RfiCrafting = {
       success, greatSuccess, criticalFailure,
       total, dc, margin,
       harmonized: success && requiresHarm && greatSuccess,
-      item: success ? recipeItem.uuid : null,
+      item: (success && !spendShort) ? recipeItem.uuid : null,
+      spendShort,
       cost,            // { tier, tierFee, materialsCost, total, factionId }
       feeReceipt       // { committed, factionId } or null
     };

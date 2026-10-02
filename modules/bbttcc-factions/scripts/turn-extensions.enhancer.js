@@ -27,6 +27,10 @@
         const tf = obj.flags?.[MODT]; if (!tf) continue;
         const owner = tf.factionId || tf.ownerId || "";
         if (String(owner)!==String(fid)) continue;
+        // ⚠ OWNER RULING OWED (review 2026-10-01): alignment is stored as sephirotKey/Name/Uuid,
+        // so this legacy read never matches and this Mercy-gated Unity path is DORMANT. Reading
+        // the real keys would switch on a SECOND per-turn Unity payout beside the canonical
+        // territory-unitybonus (advanceOPRegen) — a balance call, deliberately not made here.
         const k = normKey(tf.sephirahKey||tf.sephirah||"");
         if (!k) continue; out[k]=(out[k]||0)+1;
       }
@@ -74,8 +78,16 @@ if (UR?.any && hasMercy) {
   // per-turn OP regen in the engine is this Unity/Mercy path, so the bonus rides it).
   const enlightened = String(get(A, `flags.${MODF}.enlightenmentLevel`, "")).toLowerCase();
   const opMult = (enlightened === "enlightened" || enlightened === "transcendent") ? 1.10 : 1;
+  // Respect the bank caps the OP engine enforces (one authority: facts.faction.caps);
+  // never lowers a bank that is already over cap.
+  const caps = game.bbttcc?.facts?.faction?.caps?.(A) || null;
   for (const [k, v] of Object.entries(UR.ops || {})) {
-    if (v > 0) nb[k] = Number(nb[k] || 0) + Math.round(Number(v) * opMult);
+    if (!(v > 0)) continue;
+    const cur = Number(nb[k] || 0);
+    let next = cur + Math.round(Number(v) * opMult);
+    const cap = caps ? Number(caps[k]) : NaN;
+    if (Number.isFinite(cap)) next = Math.max(cur, Math.min(cap, next));
+    nb[k] = next;
   }
   updates["opBank"] = nb; any = true;
   war.push({

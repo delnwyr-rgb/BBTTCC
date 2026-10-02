@@ -36,11 +36,14 @@
     try {
       const E = resolveEffects();
       if (!E) return false;
+      // Idempotent: install runs on ready AND canvasReady (and on republish) — never wrap our own wrapper.
+      if (E[EFFECT_KEY]?.__ftFortifyWrapped) return true;
       const original = E[EFFECT_KEY]?.apply;
       E[EFFECT_KEY] = Object.assign({}, E[EFFECT_KEY], {
         kind:  E[EFFECT_KEY]?.kind  || "strategic",
         band:  E[EFFECT_KEY]?.band  || "standard",
         label: E[EFFECT_KEY]?.label || "Fortify Hex",
+        __ftFortifyWrapped: true,
         cost:  E[EFFECT_KEY]?.cost  || { economy: 20, logistics: 20, violence: 10 },
         async apply({ actor, entry }) {
           const targetUuid = entry?.targetUuid ?? null;

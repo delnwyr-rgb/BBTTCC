@@ -728,6 +728,10 @@ export function rigSeedFromActor(actor) {
     speed: Number(travel.speed ?? 3),
     range: Number(travel.range ?? 10),
     hazardResist: Number(travel.hazardResist ?? 0),
+    // Movement domains / depth are not form fields — carried on the seed so a
+    // duplicated Submersible/Skiff keeps its water/air domain (see _commit).
+    domains: Array.isArray(travel.domains) ? [...travel.domains] : undefined,
+    depthRating: Number(travel.depthRating ?? 0),
     resistances: (defs.resistances ?? []).join(", "),
     immunities: (defs.immunities ?? []).join(", "),
     vulnerabilities: (defs.vulnerabilities ?? []).join(", "),
@@ -1035,6 +1039,8 @@ function _applySeed(html, seed) {
       if (maxEl && c.max != null) maxEl.value = Number(c.max) || 0;
     }
   }
+  if (Array.isArray(seed.domains)) root.dataset.bbttccSeedDomains = JSON.stringify(seed.domains);
+  if (seed.depthRating != null) root.dataset.bbttccSeedDepth = String(Number(seed.depthRating) || 0);
 }
 
 /* Recompute + render the live fabrication-cost readout in #bbttcc-rb-cost.
@@ -1359,10 +1365,13 @@ const CHASSIS_BRACKET_BOM = {
   heavy:    [{ materialKey: "scribed-steel", qty: 8 }, { materialKey: "heart-iron", qty: 4 }, { materialKey: "cold-iron", qty: 3 }, { materialKey: "mountain-stone", qty: 2 }],
   siege:    [{ materialKey: "scribed-steel", qty: 10 }, { materialKey: "heart-iron", qty: 5 }, { materialKey: "cold-iron", qty: 4 }, { materialKey: "mountain-stone", qty: 4 }, { materialKey: "yesodium", qty: 1 }]
 };
-function _rigBracketBOM(bracket) {
+// Giant Fighting Robots (mecha bracket, tiers 0–5) borrow the envelope that
+// matches their tier: T0 personal, T1 light, T2 medium, T3–4 heavy, T5 siege.
+const MECHA_TIER_BOM_BRACKET = ["personal", "light", "medium", "heavy", "heavy", "siege"];
+function _rigBracketBOM(bracket, tier = 1) {
   const b = String(bracket || "").toLowerCase();
   if (CHASSIS_BRACKET_BOM[b]) return CHASSIS_BRACKET_BOM[b];
-  if (b === "hybrid") return CHASSIS_BRACKET_BOM.medium;   // hybrid envelope ≈ medium
+  if (MECHA_BRACKETS.has(b)) return CHASSIS_BRACKET_BOM[MECHA_TIER_BOM_BRACKET[_rigCostClampTier(tier, b)]];
   return CHASSIS_BRACKET_BOM.light;                        // safe default for unknown brackets
 }
 
@@ -1391,7 +1400,8 @@ async function _commit(root) {
 
   const bracket = String(read("bracket") || "medium");
   const bracketDef = BRACKETS.find(b => b.key === bracket) ?? BRACKETS[2];
-  const tier = Math.max(1, Math.min(4, readNum("tier", 1)));
+  // Same 0–5 (mecha) / 1–4 ladder the live cost readout + mintFromChassis use.
+  const tier = _rigCostClampTier(read("tier"), bracket);
   const integrityMax = Math.max(1, readNum("integrity", bracketDef.base));
   // Facilities are stationary by definition; the form value is a hint at best.
   const mobility = (category === "facility") ? "stationary" : String(read("mobility") || "mobile");
@@ -1432,6 +1442,11 @@ async function _commit(root) {
   // track the debited amount and refund it if Actor.create later throws.
   const selectedKey = String(read("_starterKey") || root.dataset.bbttccSelectedStarter || "");
   const chosen = CHASSIS_STARTERS.find(s => s.key === selectedKey);
+  // Duplicate flow: domains/depth stashed on the root by _applySeed.
+  let seedDomains;
+  try { seedDomains = root.dataset.bbttccSeedDomains ? JSON.parse(root.dataset.bbttccSeedDomains) : undefined; }
+  catch (_e) { seedDomains = undefined; }
+  const seedDepth = root.dataset.bbttccSeedDepth != null ? Number(root.dataset.bbttccSeedDepth) : undefined;
   const bypassCost = !!root.querySelector('[data-bbttcc-field="bypassCost"]')?.checked;
   const rigCost = computeRigCost({
     bracket, tier,
@@ -1494,11 +1509,12 @@ async function _commit(root) {
       defenses: { resistances, immunities, vulnerabilities },
       output: { modules: [], basePerTurn: {} },
       // Movement domains are not yet a form field — carry them from the selected
-      // starter chassis so a Submersible/Skiff build keeps its water domain.
+      // starter chassis, else from a duplicate seed, so a Submersible/Skiff
+      // build (or its copy) keeps its water/air domain.
       travel: {
         speed, range, hazardResist,
-        domains: _normalizeDomains(chosen?.defaults?.travel?.domains),
-        depthRating: Math.max(0, Math.min(3, Number(chosen?.defaults?.travel?.depthRating ?? 0) || 0))
+        domains: _normalizeDomains(chosen?.defaults?.travel?.domains ?? seedDomains),
+        depthRating: Math.max(0, Math.min(3, Number(chosen?.defaults?.travel?.depthRating ?? seedDepth ?? 0) || 0))
       },
       tags
     },
@@ -1568,7 +1584,7 @@ async function _commit(root) {
   try {
     const structApi = game.bbttcc?.api?.structures;
     if (structApi?.stampBOM && !actor.flags?.["bbttcc-structures"]?.hasStructure) {
-      const bom = _rigBracketBOM(bracket);
+      const bom = _rigBracketBOM(bracket, tier);
       await structApi.stampBOM(actor, bom, { facilityMode: mobility === "stationary", resetCurrentPlates: true });
       console.log("[bbttcc-auto-link/rig-builder] auto-stamped structural BOM", { bracket, materials: bom.length });
     }
@@ -1832,7 +1848,7 @@ export async function mintFromChassis(chassisKey, { factionOwnerId = "", free = 
   try {
     const structApi = game.bbttcc?.api?.structures;
     if (structApi?.stampBOM && !actor.flags?.["bbttcc-structures"]?.hasStructure) {
-      await structApi.stampBOM(actor, _rigBracketBOM(bracket),
+      await structApi.stampBOM(actor, _rigBracketBOM(bracket, tier),
         { facilityMode: mobility === "stationary", resetCurrentPlates: true });
     }
   } catch (e) { console.warn("[bbttcc-auto-link/rig-builder] mintFromChassis BOM stamp failed (non-fatal):", e); }

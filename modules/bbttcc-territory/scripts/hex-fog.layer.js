@@ -113,6 +113,16 @@
     parent.addChild(g);
     parent.sortableChildren = true;
     g.zIndex = 999;
+    // canvas.primary sorts by elevation → sortLayer → sort → zIndex (2026-10-01): zIndex alone left
+    // the fog in the SCENE band under every tile. Pin it just above ground-level TILES (map art,
+    // landmarks) and below DRAWINGS / TOKENS — whether fog should also hide tokens is a ruling.
+    try {
+      const SL = foundry.canvas?.groups?.PrimaryCanvasGroup?.SORT_LAYERS ?? globalThis.PrimaryCanvasGroup?.SORT_LAYERS;
+      g.elevation = 0;
+      g.sortLayer = (Number(SL?.TILES) || 500) + 50;
+      if (Number(SL?.DRAWINGS) && g.sortLayer >= SL.DRAWINGS) g.sortLayer = SL.DRAWINGS - 1;
+      parent.sortDirty = true;
+    } catch (_e) {}
     log("fog layer attached", { parent: parent?.constructor?.name, primaryChildren: canvas.primary?.children?.length });
 
     _fogGfx = g;

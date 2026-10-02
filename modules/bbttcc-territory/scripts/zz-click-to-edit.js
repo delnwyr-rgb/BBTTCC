@@ -74,9 +74,22 @@
 
   function worldPointFrom(evt){
     // Prefer FederatedPointerEvent global, else Foundry's mousePosition, else (0,0)
+    // Returns GLOBAL (screen) coords — hexUnderWorldPoint feeds them to toLocal(). DOM events
+    // (the dblclick fallback) used world-space canvas.mousePosition, which applied the stage
+    // transform twice when panned/zoomed (2026-10-01).
     const fed = evt?.data ?? evt;
     if (fed?.global) return { x: fed.global.x, y: fed.global.y };
-    return canvas.mousePosition ?? { x: 0, y: 0 };
+    try {
+      if (Number.isFinite(evt?.clientX) && canvas?.app?.view) {
+        const r = canvas.app.view.getBoundingClientRect();
+        return { x: evt.clientX - r.left, y: evt.clientY - r.top };
+      }
+      if (canvas.mousePosition && canvas.stage) {
+        const g = canvas.stage.toGlobal(new PIXI.Point(canvas.mousePosition.x, canvas.mousePosition.y));
+        return { x: g.x, y: g.y };
+      }
+    } catch (_e) {}
+    return { x: 0, y: 0 };
   }
 
   function hexUnderWorldPoint(pt){

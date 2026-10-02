@@ -198,12 +198,11 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
           break;
         }
         case "integrate": {
-          await api.integrateSparkCharacter({ actorId: actor.id, sparkKey, note });
-          // Mark corrupted AFTER integrate so the integration phase still records,
-          // but the flag is set for any downstream "is corrupted?" check.
-          if (corrupted && typeof api.markSparkPhase === "function") {
-            try { await api.markSparkPhase({ actorId: actor.id, sparkKey, phase: "corrupted", note: corruptionReason }); } catch (_e) {}
-          }
+          // A misaligned integrate writes integrated + corrupted in ONE update and
+          // fires only the corrupted hook — marking it integrated first fired
+          // bbttcc:spark:integrated, and the Enlightenment ladder (never lowers)
+          // stepped up on a spark the tally is meant to exclude.
+          await api.integrateSparkCharacter({ actorId: actor.id, sparkKey, note, corrupted, corruptionReason });
           break;
         }
         case "deposit": {
@@ -255,7 +254,7 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
         ? `<p style="margin:0.3rem 0 0;font-size:0.82rem;font-style:italic;border-left:2px solid #c03030;padding-left:0.5rem">${flavor}</p>`
         : "";
       const repairHint  = corrupted
-        ? `<p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.65">Repair (Phase D): ${sparkItem?.system?.repair?.materialAmount ?? 1}× ${sparkItem?.system?.repair?.materialKey ?? "—"} + ${sparkItem?.system?.repair?.opCost?.amount ?? 0} ${sparkItem?.system?.repair?.opCost?.pool ?? "—"} marks, ritual DC ${sparkItem?.system?.repair?.ritualDC ?? 15}.</p>`
+        ? `<p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.65">Repair (Phase D): ${sparkItem?.system?.repair?.materialAmount ?? 1}× ${sparkItem?.system?.repair?.materialKey ?? "—"} + ${(Number(sparkItem?.system?.repair?.opCost?.amount) || 0) * (Number(game.bbttcc?.api?.op?.marksPerOp?.()) || 0)} ${sparkItem?.system?.repair?.opCost?.pool ?? "—"} marks, ritual DC ${sparkItem?.system?.repair?.ritualDC ?? 15}.</p>`
         : "";
       ChatMessage.create({
         speaker: ChatMessage.getSpeaker?.({ actor }) ?? {},

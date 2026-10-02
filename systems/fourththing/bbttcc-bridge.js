@@ -4,6 +4,9 @@
 // All functions are defensive — every call is guarded by bbttccActive().
 // Roll For Initiation works fully standalone when bbttcc-auto-link is not loaded.
 
+import { MARKS_PER_OP as FT_MARKS_PER_OP } from "./rfi-pricing.js";   // the one OP↔marks authority
+import { actorKind } from "./actor-kind.js";
+
 // ─── Guard ───────────────────────────────────────────────────────────────────
 
 function bbttccActive() {
@@ -431,7 +434,8 @@ const FT_STARTING_GRANTS_PAID_FLAG = "startingGrantsPaid";
 const FT_STARTING_GRANT_POOL = {
   "violence-op":"violence","intrigue-op":"intrigue","soft-power-op":"softpower",
   "diplomacy-op":"diplomacy","economy-op":"economy","non-lethal-op":"nonlethal",
-  "faith-op":"faith","logistics-op":"logistics","siege-op":"siege","body-op":"body","soul-op":"soul"
+  "faith-op":"faith","logistics-op":"logistics"
+  // siege/body/soul are not OP channels — no bank key for them.
 };
 
 function _ftGrantNameKey(name) {
@@ -458,7 +462,12 @@ async function _ftLoadPaidStartingGrants(actor) {
 }
 
 // Pay one item's per-campaign-start OP grants unless the ledger says they were
-// already paid. Mutates `paid`; returns the entry to persist (or null).
+// already paid. Mutates `paid`; returns the entry to persist (or null) and sets
+// `item.__ftGrantFailed` when a grant could not be committed (so the caller
+// doesn't stamp it fired — it stays owed and pays on a later swap/run).
+// Grants are authored in OP; the bank holds MARKS — converted with the one
+// ratio and committed through the factions OP authority (caps; a player seat
+// that doesn't own the faction relays to the GM through op.commit).
 async function _ftPayCampaignStartOnce(actor, item, paid) {
   const grants = item?.flags?.fourththing?.resourceGrants;
   if (!Array.isArray(grants)) return null;
@@ -477,12 +486,16 @@ async function _ftPayCampaignStartOnce(actor, item, paid) {
       if (!faction) continue;
       const pool = FT_STARTING_GRANT_POOL[g.resource];
       if (!pool) continue;
-      const bank = foundry.utils.duplicate(faction.flags?.["bbttcc-factions"]?.opBank ?? {});
-      bank[pool] = (Number(bank[pool]) || 0) + Number(g.amount);
-      await faction.update({ "flags.bbttcc-factions.opBank": bank });
+      const opApi = game.bbttcc?.api?.op;
+      const marks = Math.round((Number(g.amount) || 0) * (opApi?.OP_TO_MARKS ?? FT_MARKS_PER_OP));
+      if (!opApi?.commit || !marks) { if (marks) item.__ftGrantFailed = true; continue; }
+      const res = await opApi.commit(faction.id, { [pool]: marks }, {
+        source: "starting-grant", label: `${item.name} — starting ${pool}`
+      });
+      if (!res?.committed) { item.__ftGrantFailed = true; continue; }
       resources[g.resource] = (Number(resources[g.resource]) || 0) + Number(g.amount);
       changed = true;
-    } catch (_e) { /* skip per-grant errors so the swap completes */ }
+    } catch (_e) { item.__ftGrantFailed = true; /* skip per-grant errors so the swap completes */ }
   }
   if (!changed) return null;
   paid[key] = { itemName: item.name, paidAt: Date.now(), resources };
@@ -503,6 +516,7 @@ async function _ftFireCampaignStartFor(actor, createdItems) {
     if (!starts.length) continue;
     const entry = await _ftPayCampaignStartOnce(actor, item, paid);
     if (entry) paidNew[_ftGrantNameKey(item.name)] = entry;
+    if (item.__ftGrantFailed) continue;   // still owed — never stamp a grant that didn't land
     firedClean[item.id] = { firedAt: Date.now(), itemName: item.name, viaSwap: true };
     dirty = true;
   }
@@ -518,12 +532,17 @@ async function _ftAtomicSwap(actor, cfg, newKey) {
   const typeSet = new Set(Array.isArray(types) ? types : [types]);
   const nextKey = String(newKey ?? "").trim();
 
-  // Resolve NEW name first so cleanup can filter by it.
+  // Resolve the NEW doc first so cleanup can filter by it — and refuse BEFORE
+  // deleting anything when it can't be loaded (pack missing / stale key),
+  // or the steward would be left with no class/ancestry items at all.
   let newName = "";
+  let doc = null;
   if (nextKey) {
-    const previewPack = game.packs?.get(packKey);
-    const previewDoc  = previewPack ? await previewPack.getDocument(nextKey) : null;
-    newName  = String(previewDoc?.name ?? "");
+    const pack = game.packs?.get(packKey);
+    if (!pack) { ui.notifications?.error(`Missing pack: ${packKey}`); return null; }
+    try { doc = await pack.getDocument(nextKey); } catch (_e) { doc = null; }
+    if (!doc) { ui.notifications?.error(`Could not resolve ${label} ${nextKey} in ${packKey}`); return null; }
+    newName  = String(doc.name ?? "");
   }
   const newLower = newName.toLowerCase();
 
@@ -565,12 +584,7 @@ async function _ftAtomicSwap(actor, cfg, newKey) {
     return null;
   }
 
-  // Import new doc + advancement grants (level ≤ 1)
-  const pack = game.packs?.get(packKey);
-  if (!pack) { ui.notifications?.error(`Missing pack: ${packKey}`); return null; }
-  const doc = await pack.getDocument(nextKey);
-  if (!doc) { ui.notifications?.error(`Could not resolve ${label} ${nextKey} in ${packKey}`); return null; }
-
+  // Import new doc (resolved above) + advancement grants (level ≤ 1)
   const toCreate = [doc.toObject()];
   const advRaw = doc.system?.advancement ?? {};
   const advRows = Array.isArray(advRaw) ? advRaw : Object.values(advRaw);
@@ -768,11 +782,16 @@ export async function applyActorHeritageChange(actor, newKey) {
   //     named like "Sephirotic Scion (Cherubic): The Gate Knows You" — the
   //     parenthetical lineage is what the cleanup pass uses to identify
   //     same-lineage items, so we extract that.
+  // Refuse BEFORE the cleanup pass when the new doc can't be loaded, so a
+  // missing pack / stale key never strips the steward's current heritage.
   let newHeritageShort = "";
+  let doc = null;
   if (nextKey) {
-    const previewPack = game.packs?.get(packKey);
-    const previewDoc  = previewPack ? await previewPack.getDocument(nextKey) : null;
-    const rawName     = String(previewDoc?.name ?? "");
+    const pack = game.packs?.get(packKey);
+    if (!pack) { ui.notifications?.error(`Missing pack: ${packKey}`); return null; }
+    try { doc = await pack.getDocument(nextKey); } catch (_e) { doc = null; }
+    if (!doc) { ui.notifications?.error(`Could not resolve heritage ${nextKey} in ${packKey}`); return null; }
+    const rawName     = String(doc.name ?? "");
     const parenMatch  = rawName.match(/\(([^)]+)\)/);
     if (parenMatch) {
       newHeritageShort = parenMatch[1].trim();
@@ -848,11 +867,7 @@ export async function applyActorHeritageChange(actor, newKey) {
   }
 
   // ── Resolve & import the new heritage + tier ≤1 grants ─────────────────────
-  const pack = game.packs?.get(packKey);
-  if (!pack) { ui.notifications?.error(`Missing pack: ${packKey}`); return null; }
-  const doc = await pack.getDocument(nextKey);
-  if (!doc) { ui.notifications?.error(`Could not resolve heritage ${nextKey} in ${packKey}`); return null; }
-  // newHeritageShort already resolved above (used for cleanup filtering)
+  // doc + newHeritageShort already resolved above (before the cleanup)
 
   const toCreate = [doc.toObject()];
   const advRaw = doc.system?.advancement ?? {};
@@ -901,6 +916,7 @@ export async function applyActorHeritageChange(actor, newKey) {
     // source name, so Empyrean → None → Empyrean does not mint OP again.
     const entry = await _ftPayCampaignStartOnce(actor, item, paidGrants);
     if (entry) paidNew[_ftGrantNameKey(item.name)] = entry;
+    if (item.__ftGrantFailed) continue;   // still owed — never stamp a grant that didn't land
     firedClean[newId] = { firedAt: Date.now(), itemName: item.name, viaSwap: true };
     firedDirty = true;
   }
@@ -1012,7 +1028,14 @@ async function ftSyncLegacyIdentityMirror(actor, slotKey, slotData) {
 // dialog both see auto-populated values on first render.
 export async function ftEnsureEchoAssetsBootstrap(faction, actor) {
   if (!faction || !actor || !bbttccActive()) return;
+  // Only the faction's own steward seeds its roster: an NPC sheet (no crews)
+  // or a second steward rendering must never overwrite the faction-wide lists.
+  // A seat that can't write the faction skips quietly (no warning per render).
+  if (actorKind(actor) !== "steward") return;
+  if (!game.user?.isGM && !faction.isOwner) return;
   try {
+    const stored0 = faction.getFlag?.("fourththing", "echoAssets") ?? {};
+    if (stored0.stewardId && stored0.stewardId !== actor.id) return;
     const detectedCrew   = ftScanActorForAssetNames(actor, "crew");
     const detectedOccult = ftScanActorForAssetNames(actor, "occult");
 
@@ -1339,6 +1362,14 @@ const TERRAIN_SEPHIRAH = {
   wasteland:    "malkuth"
 };
 
+// Territory's hex terrain keys (economy TERRAIN_TABLE) → the keys above. Pure
+// spelling aliases only (plural / synonym); terrains with no row get no bonus.
+const TERRAIN_KEY_ALIAS = {
+  plains: "grassland", grasslands: "grassland", jungle: "forest",
+  mountains: "mountain", highlands: "mountain", swamp: "wetlands", mire: "wetlands",
+  lake: "river", sea: "ocean", ashWastes: "desert", urbanWreckage: "ruins"
+};
+
 // ─── Terrain bonus ────────────────────────────────────────────────────────────
 
 /**
@@ -1355,29 +1386,28 @@ export function getTerrainMagicModifiers(actor) {
     const token = actor.getActiveTokens(true, true)[0];
     if (!token) return result;
 
-    // Read terrain from the hex the token occupies.
-    // Bad Eden stores terrain on scene flags keyed by hex ID.
-    const scene   = token.scene ?? game.scenes.active;
-    const hexData = scene?.getFlag("bbttcc-territory", "hexes") ?? {};
-
-    // Find which hex contains this token (Bad Eden stores hex center coords)
-    const tx = token.x + (token.width  * scene?.grid?.size ?? 100) / 2;
-    const ty = token.y + (token.height * scene?.grid?.size ?? 100) / 2;
-
+    // Read terrain from the hex the token occupies. Territory stores hexes as
+    // DRAWINGS (flags["bbttcc-territory"].terrain), not in a scene flag — hit-
+    // test the token's centre against the hex drawings of the viewed scene.
+    const scene = token.parent ?? token.scene ?? game.scenes.active;
+    if (!scene || canvas?.scene?.id !== scene.id || !canvas?.drawings?.placeables) return result;
+    const gs = scene.grid?.size ?? 100;
+    const tx = token.x + ((token.width  ?? 1) * gs) / 2;
+    const ty = token.y + ((token.height ?? 1) * gs) / 2;
+    const pt = new PIXI.Point(tx, ty);
     let bestHex = null;
-    let bestDist = Infinity;
-    for (const [hexId, hexInfo] of Object.entries(hexData)) {
-      if (!hexInfo?.center) continue;
-      const dx = hexInfo.center.x - tx;
-      const dy = hexInfo.center.y - ty;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < bestDist) { bestDist = dist; bestHex = hexInfo; }
+    for (const d of canvas.drawings.placeables) {
+      const f = d.document?.flags?.["bbttcc-territory"];
+      if (!f) continue;
+      // shape test first — a hex's bounding box overlaps its neighbours
+      const hit = (typeof d.containsPoint === "function") ? d.containsPoint(pt) : d.bounds?.contains?.(tx, ty);
+      if (hit) { bestHex = f; break; }
     }
-
-    if (!bestHex?.terrain?.key) return result;
-    const terrainKey = bestHex.terrain.key;
+    const rawTerrain = bestHex?.terrain?.key ?? bestHex?.terrainKey ?? (typeof bestHex?.terrain === "string" ? bestHex.terrain : "");
+    const terrainKey = TERRAIN_KEY_ALIAS[String(rawTerrain)] ?? String(rawTerrain);
+    if (!terrainKey) return result;
     result.terrainKey   = terrainKey;
-    result.terrainLabel = bestHex.terrain.label ?? terrainKey;
+    result.terrainLabel = bestHex?.terrain?.label ?? rawTerrain;
 
     // Check resonance
     const sephirahResonance = TERRAIN_SEPHIRAH[terrainKey];
@@ -1409,8 +1439,12 @@ export function getTikkunData(actor) {
 
   try {
     const flags = actor.getFlag("bbttcc-tikkun", "data") ?? {};
+    // Sparks live at flags.bbttcc-tikkun.sparks (tikkun-repair writes there);
+    // the legacy `.data` bag is read only as a fallback. Nothing in the repo
+    // writes tikkunActions / qliphothicTaint — those stay empty.
+    const sparks = actor.getFlag("bbttcc-tikkun", "sparks");
     return {
-      sparks:              flags.sparks              ?? {},
+      sparks:              (sparks && typeof sparks === "object") ? sparks : (flags.sparks ?? {}),
       enlightenmentPoints: flags.enlightenmentPoints ?? 0,
       tikkunActions:       flags.tikkunActions       ?? [],
       qliphothicTaint:     flags.qliphothicTaint     ?? 0,

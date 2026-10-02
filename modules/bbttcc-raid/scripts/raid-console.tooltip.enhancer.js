@@ -28,9 +28,11 @@
     return tip;
   };
 
-  Hooks.on("renderApplication", (app, html) => {
-    const rootEl = (html?.[0] || html);
-    if (!rootEl?.querySelector?.(".bbttcc-raid-console")) return;
+  // The Raid Console is an ApplicationV2 — the V1 renderApplication hook never fires for it.
+  // Bind on both (V2 passes an HTMLElement; V1 a jQuery); the root flag keeps it once-only.
+  const bind = (app, html) => {
+    const rootEl = (html?.[0] || html || app?.element);
+    if (!rootEl?.querySelector?.(".bbttcc-raid-console") && !rootEl?.matches?.(".bbttcc-raid-console")) return;
 
     if (rootEl.__bbttccTipBound) return;
     Object.defineProperty(rootEl, "__bbttccTipBound", {value:true, enumerable:false});
@@ -73,5 +75,7 @@
       };
       document.addEventListener("mousedown", closer, true);
     }, true);
-  });
+  };
+  Hooks.on("renderApplication", bind);
+  Hooks.on("renderApplicationV2", bind);
 })();

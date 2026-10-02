@@ -150,11 +150,13 @@
         },
         returns: S_STD_RETURN,
         permissions: ["gm"],
-        sideEffects: { audit: true, hooks: ["bbttcc:faction:stockpileChanged"] },
+        sideEffects: { audit: true, hooks: ["bbttcc:stockpile:changed"] },
+        // There is no stockpile.deposit — the real API is stockpile.adjust(faction, matKey, delta).
         handler: async (args) => {
-          const fn = _resolveFn("game.bbttcc.api.factions.stockpile.deposit");
-          if (!fn) return _unavailable("game.bbttcc.api.factions.stockpile.deposit not installed");
-          return await fn(args);
+          const fn = _resolveFn("game.bbttcc.api.factions.stockpile.adjust");
+          if (!fn) return _unavailable("game.bbttcc.api.factions.stockpile.adjust not installed");
+          if (args.category !== "materials") return { ok: false, error: "UNSUPPORTED_CATEGORY", message: "only materials have a stockpile" };
+          return await fn(args.factionId, String(args.key), +Math.floor(Number(args.qty) || 0));
         }
       },
       {
@@ -173,11 +175,13 @@
         },
         returns: S_STD_RETURN,
         permissions: ["gm"],
-        sideEffects: { audit: true, hooks: ["bbttcc:faction:stockpileChanged"] },
+        sideEffects: { audit: true, hooks: ["bbttcc:stockpile:changed"] },
+        // There is no stockpile.withdraw — the real API is stockpile.adjust(faction, matKey, delta).
         handler: async (args) => {
-          const fn = _resolveFn("game.bbttcc.api.factions.stockpile.withdraw");
-          if (!fn) return _unavailable("game.bbttcc.api.factions.stockpile.withdraw not installed");
-          return await fn(args);
+          const fn = _resolveFn("game.bbttcc.api.factions.stockpile.adjust");
+          if (!fn) return _unavailable("game.bbttcc.api.factions.stockpile.adjust not installed");
+          if (args.category !== "materials") return { ok: false, error: "UNSUPPORTED_CATEGORY", message: "only materials have a stockpile" };
+          return await fn(args.factionId, String(args.key), -Math.floor(Number(args.qty) || 0));
         }
       },
       {
@@ -197,11 +201,22 @@
         },
         returns: S_STD_RETURN,
         permissions: ["gm"],
-        sideEffects: { audit: true, hooks: ["bbttcc:faction:stockpileChanged"] },
+        sideEffects: { audit: true, hooks: ["bbttcc:stockpile:changed"] },
+        // Transfer = withdraw what the sender actually holds, then deposit exactly that.
         handler: async (args) => {
-          const fn = _resolveFn("game.bbttcc.api.factions.stockpile.transfer");
-          if (!fn) return _unavailable("game.bbttcc.api.factions.stockpile.transfer not installed");
-          return await fn(args);
+          const sp = globalThis.game?.bbttcc?.api?.factions?.stockpile;
+          if (typeof sp?.adjust !== "function" || typeof sp?.qty !== "function") return _unavailable("game.bbttcc.api.factions.stockpile.adjust not installed");
+          if (args.category !== "materials") return { ok: false, error: "UNSUPPORTED_CATEGORY", message: "only materials have a stockpile" };
+          const key = String(args.key);
+          const from = game.actors?.get?.(String(args.fromFactionId).replace(/^Actor\./, ""));
+          const to = game.actors?.get?.(String(args.toFactionId).replace(/^Actor\./, ""));
+          if (!from || !to) return { ok: false, error: "FACTION_NOT_FOUND" };
+          const n = Math.min(Math.floor(Number(args.qty) || 0), Number(sp.qty(from, key)) || 0);
+          if (n <= 0) return { ok: false, error: "INSUFFICIENT_STOCK" };
+          const out = await sp.adjust(from, key, -n);
+          if (!out?.ok) return out;
+          const inn = await sp.adjust(to, key, +n);
+          return { ok: !!inn?.ok, moved: n, from: out, to: inn };
         }
       },
 
@@ -266,7 +281,12 @@
         handler: async (args) => {
           const fn = _resolveFn("game.bbttcc.api.territory.holdings.deployToScene");
           if (!fn) return _unavailable("game.bbttcc.api.territory.holdings.deployToScene not installed");
-          return await fn(args);
+          // The holdings API takes the hex Drawing DOCUMENT (and acts on all of its holdings;
+          // actorId/kind are informational) — resolve the uuid first.
+          const ref = await fromUuid(String(args.hexUuid || ""));
+          const hexDoc = ref?.document ?? ref ?? null;
+          if (!hexDoc) return { ok: false, error: "HEX_NOT_FOUND" };
+          return await fn(hexDoc, {});
         }
       },
       {
@@ -288,7 +308,12 @@
         handler: async (args) => {
           const fn = _resolveFn("game.bbttcc.api.territory.holdings.recallFromScene");
           if (!fn) return _unavailable("game.bbttcc.api.territory.holdings.recallFromScene not installed");
-          return await fn(args);
+          // The holdings API takes the hex Drawing DOCUMENT (and acts on all of its holdings;
+          // actorId/kind are informational) — resolve the uuid first.
+          const ref = await fromUuid(String(args.hexUuid || ""));
+          const hexDoc = ref?.document ?? ref ?? null;
+          if (!hexDoc) return { ok: false, error: "HEX_NOT_FOUND" };
+          return await fn(hexDoc, {});
         }
       }
     ];

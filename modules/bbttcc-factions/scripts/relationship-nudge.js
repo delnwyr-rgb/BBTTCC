@@ -63,11 +63,20 @@ function _safeNum(v, dflt = 0) {
   return Number.isFinite(n) ? n : dflt;
 }
 
-function _resourceValue(r) {
+// Materials count too (2026-10-01): valued at the stockpile's retail unit price, read
+// from the RECEIVING faction (it holds the units — and their last-seen tier — after the trade).
+async function _resourceValue(r, receiver = null) {
   if (!r) return 0;
   let v = 0;
   for (const q of Object.values(r.marks || {})) v += _safeNum(q, 0);
   v += _safeNum(r.buildUnits, 0) * BU_VALUE;
+  const stock = game.bbttcc?.api?.factions?.stockpile;
+  for (const [key, q] of Object.entries(r.materials || {})) {
+    const n = _safeNum(q, 0); if (n <= 0) continue;
+    let unit = 0;
+    try { unit = _safeNum((await stock?.unitPrice?.(receiver, key))?.retail, 0); } catch (_e) {}
+    v += n * unit;
+  }
   return v;
 }
 
@@ -104,8 +113,8 @@ async function _onExchange(payload) {
   const B = game.actors?.get(toId);
   if (!A || !B) return;
 
-  const aValue = _resourceValue(offer);
-  const bValue = _resourceValue(ask);
+  const aValue = await _resourceValue(offer, B);
+  const bValue = await _resourceValue(ask, A);
 
   // One-way grant or empty — not a "trade" for fairness purposes.
   if (aValue <= 0 || bValue <= 0) return;

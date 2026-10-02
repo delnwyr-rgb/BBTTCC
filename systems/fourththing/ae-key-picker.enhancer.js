@@ -64,11 +64,11 @@ function enhanceRoot(root) {
   root._ftAEKeyPickerBound = true;
 
   const doc = root.ownerDocument || document;
-  // Inject (or refresh) the datalist into the same document.
-  let dl = doc.getElementById(DATALIST_ID);
-  if (dl) dl.remove();
-  dl = buildDatalist(doc);
-  root.appendChild(dl);
+  // Inject (or refresh) ONE shared datalist on document.body — never inside a
+  // config root, or closing that window would take the typeahead away from
+  // every other open AE config (they all reference it by id).
+  const dl = buildDatalist(doc);
+  (doc.body || doc.documentElement).appendChild(dl);
 
   // Attach to every change-key input. Foundry's AE config uses
   // name="changes.<n>.key" or name="changes[n].key". Match either.

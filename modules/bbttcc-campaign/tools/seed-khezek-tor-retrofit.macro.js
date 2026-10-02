@@ -127,6 +127,7 @@
   const GATE_THIN = [...ACTIVE, { beatMark: "kt_official_word" }];
   const GATE_GIVEN = [...GATE_THIN, { beatMark: "kt_dropped_manifest" }, { beatMark: "kt_back_room_roster" }];
   const NO_OFFER = ["kt_official_word_open_fail", "kt_brennig_desk_fail", "kt_cage_shaft_fail", "kt_good_room_fail", "kt_official_word_given", "kt_official_word_thin"];
+  const AG_HEX = "Allesh-Gilliam", KT_GOOD_ROOM = ["kt_good_room", "kt_good_room_fail", "kt_back_room_roster"];
   const COALITION = ["6H5Grt3HybAs1rSq", "eIXghZ73hKSXmP3x"];
   const fx = (morale = 0, loyalty = 0) => COALITION.map(factionId => ({ factionId, moraleDelta: morale, loyaltyDelta: loyalty, unityDelta: 0, darknessDelta: 0, opDeltas: {}, allowOvercap: false }));
 
@@ -229,6 +230,9 @@
   edit("kt_official_word_given", b => ensureReq(b, GATE_GIVEN), "gated on the cookline scene + both receipts");
   edit("kt_official_word_thin", b => ensureReq(b, GATE_THIN), "gated on the cookline scene");
   for (const id of NO_OFFER) edit(id, b => { if (b.dialogueOffer !== false) b.dialogueOffer = false; }, "dialogueOffer:false (routing-only)");
+  // REVIEW 2026-10-01 (MEDIUM): the Good Room is Doc Greeley's Waiting Room in ALLESH-GILLIAM — with no `where`, placeOf put these three on the
+  // KT quest hex, so NOW said "at Khezek-Tor" and the location guard refused them in AG. (patch-template-review-fixes-b-2026-10-01 does the same live.)
+  for (const id of KT_GOOD_ROOM) edit(id, b => { if (!b.where) b.where = AG_HEX; }, `where: ${AG_HEX}`);
   const voice = (ids, name) => { for (const id of ids) edit(id, b => { if (!b.speakerActorId && sp(name)) b.speakerActorId = sp(name); }, `speaker ${name}`); };
   voice(["khezek_tor_the_lift_hall", "khezek_tor_darkness_shipment_quest_acceptance"], "Brennig Tamsin");
   voice(["khezek_tor_the_brace", "khezek_tor_drax_calder_convo_1", "khezek_tor_drax_calder_convo_2", "khezek_tor_drax_calder_convo_3", "khezek_tor_drax_calder_convo_echo", "khezek_tor_mine_that_answered_back_quest_acceptance", "khezek_brace_groans"], "Drax Calder");
@@ -268,7 +272,11 @@
   // keep `after` entries other seeders appended to the live data script (Maneuver Vault adds kt_pulled_files_filed) — re-runs must not drop them
   if (SCRIPT && Array.isArray(haveData.scripts?.[KEY]?.after)) SCRIPT.after = Array.from(new Set([...(SCRIPT.after || []), ...haveData.scripts[KEY].after]));
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script khezek_tor → campaign.story (${SCRIPT.steps.length} steps, chapters: ${Object.keys(QUEST.chapters).join("/")}, after +tape)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-khezek-tor-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

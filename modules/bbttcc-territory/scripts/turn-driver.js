@@ -938,7 +938,7 @@ async function clampBanksToCaps(){
   for (const A of allFactions()) {
     try {
       const bank = clone(getFlag(A, `${MOD_FACTIONS}.opBank`, zeroOps()));
-      const caps = A.getFlag(MOD_FACTIONS, "opCaps") || {};
+      const caps = effectiveCapsFor(A);
       const lost = {}; let dirty = false;
       for (const k of Object.keys(bank)) {
         const cap = Number(caps[k] ?? 0) + (Number(caps[k] ?? 0) > 0 ? capBumpFor(A, k) : 0);
@@ -1149,7 +1149,7 @@ async function advanceOPRegen({ apply=false, factionId=null, deferCapClamp=false
         // under the new order). driverAdvanceTurn passes deferCapClamp and calls
         // clampBanksToCaps() after plannedRaidsStep; dry runs / legacy callers clamp here.
         if (!deferCapClamp) try {
-          const caps = A.getFlag("bbttcc-factions", "opCaps") || {};
+          const caps = effectiveCapsFor(A);
           const keys = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
 
           for (const k of keys) {
@@ -1509,7 +1509,10 @@ async function applyHexPendingSweep(){
         [`flags.${MOD_TERRITORY}.routes`]: f.routes,
         [`flags.${MOD_TERRITORY}.mods`]: mods,
         [`flags.${MOD_TERRITORY}.turn.applied`]: applied,
-        [`flags.${MOD_TERRITORY}.turn.-=pending`]: null
+        // v14 dropped "-=key" deletion (2026-10-01) — ForcedDeletion where the core provides it.
+        ...(foundry.data?.operators?.ForcedDeletion
+          ? { [`flags.${MOD_TERRITORY}.turn.pending`]: new foundry.data.operators.ForcedDeletion() }
+          : { [`flags.${MOD_TERRITORY}.turn.-=pending`]: null })
       });
     }
     if (patches.length) {
@@ -1561,6 +1564,12 @@ async function applyQueuedPostEffects(){
  * Blessed Ground). tickFactionBonuses() runs once per applied Advance and is
  * the only thing that expires them — hardCleanupQueued never touches bonuses.
  */
+// Effective caps (2026-10-01): the OP engine's fallback chain (explicit opCaps → opCapPer →
+// tier band) via facts.faction.caps — the raw opCaps flag alone left band-sized factions uncapped.
+function effectiveCapsFor(F){
+  try { const c = game.bbttcc?.facts?.faction?.caps?.(F); if (c && typeof c === "object") return c; } catch {}
+  return F?.getFlag?.(MOD_FACTIONS, "opCaps") || {};
+}
 function capBumpFor(F, k){
   try { const b = F.getFlag(MOD_FACTIONS, "bonuses")?.capBump?.[k]; return (b && safeNum(b.turns) > 0) ? safeNum(b.add) : 0; } catch { return 0; }
 }
@@ -1660,10 +1669,11 @@ async function applyScheduledOPBonuses(){
         if (t <= 0) matured.push(s);
         else remaining.push(Object.assign({}, s, { turnOffset: t }));
       }
-      if (!matured.length && remaining.length === sched.length) continue;
+      // Always write the ticked offsets back (2026-10-01): skipping the write when nothing
+      // matured froze turnOffset ≥ 2 entries forever.
 
       let bank = dup(F.getFlag(MOD_FACTIONS, "opBank") || {});
-      const caps = dup(F.getFlag(MOD_FACTIONS, "opCaps") || {});
+      const caps = dup(effectiveCapsFor(F));
       const gained = {};
       const lost = {};   // marks that hit the tier cap (owner ruling 2026-09-09: caps stay hard — but say so)
       for (const s of matured) {
@@ -1795,7 +1805,9 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     }
 
     let regen = { changed:false, rows:[] };
-    if (apply) regen = await advanceOPRegen({ apply:true, deferCapClamp:true });
+    // Through the API (2026-10-01) so the wrappers installed on it (Unity Bonus, Enlightened
+    // +10% regen) run; both forward opts, so deferCapClamp still reaches the base.
+    if (apply) regen = await (game.bbttcc?.api?.territory?.advanceOPRegen || advanceOPRegen)({ apply:true, deferCapClamp:true });
 
     // REGEN BEFORE SPEND (owner ruling 2026-09-12, sim OP_ECONOMY_SIM_2026_09_11.md set C):
     // planned activities are paid from the bank AFTER this turn's income lands, so a
@@ -1891,18 +1903,22 @@ async function enqueueTurnRequest({
   // Requests and the Minor Repair activity. Module-scope consts cover this.
   // Fixed 2026-07-08.)
 
-  const hexTarget =
-    hexUuid ||
-    v.hexUuid ||
-    v.target ||
-    target ||
-    null;
-
   const facTarget =
     factionId ||
     v.factionId ||
     v.actorId ||
     null;
+
+  // A faction-scoped repair carries the hex in value.hexUuid — that is the repair's TARGET,
+  // not the queue's home (2026-10-01): routing it to the hex parked Minor Repair requests on
+  // flags.bbttcc-territory.requests.repairs, which nothing consumes.
+  const factionRepair = key === "repairs" && !!facTarget && !!v.hexUuid;
+  const hexTarget = factionRepair ? null : (
+    hexUuid ||
+    v.hexUuid ||
+    v.target ||
+    target ||
+    null);
 
   // -----------------------------------------------------------------------
   // HEX-LEVEL REQUESTS
@@ -1974,16 +1990,14 @@ async function enqueueTurnRequest({
 
     existing.push({
       target: v.hexUuid,
-      tag: v.tag || key || "Damaged Infrastructure",
+      tag: v.tag || (key !== "repairs" ? key : "") || "Damaged Infrastructure",
       source: source || "campaign",
       campaignId: campaignId || null,
       beatId: beatId || null
     });
 
-    flags.requests          = flags.requests || {};
-    flags.requests.repairs  = { ...(flags.requests.repairs || {}), requests: existing };
-
-    await A.update({ [`flags.${MOD_FACTIONS}`]: flags });
+    // Write only the queue (not the whole namespace — a snapshot write reverts concurrent changes).
+    await A.update({ [`flags.${MOD_FACTIONS}.requests.repairs.requests`]: existing });
 
     log("enqueueTurnRequest REPAIR", {
       key,

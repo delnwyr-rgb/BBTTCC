@@ -2,6 +2,7 @@
 // Foundation progression pass: initiation, aptitude ranks, active effects
 
 import { isMonster } from "./actor-kind.js";
+import { MARKS_PER_OP } from "./rfi-pricing.js";   // the one OP↔marks authority
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -674,10 +675,8 @@ const _OP_POOL_MAP = {
   "economy-op":    "economy",
   "non-lethal-op": "nonlethal",
   "faith-op":      "faith",
-  "logistics-op":  "logistics",
-  "siege-op":      "siege",
-  "body-op":       "body",
-  "soul-op":       "soul"
+  "logistics-op":  "logistics"
+  // siege/body/soul are NOT among the nine OP channels — no bank key for them.
 };
 const _SELF_RESOURCE_PATH = {
   "frame-die":      "system.resources.frameDice.current",
@@ -717,18 +716,25 @@ async function _applyOneGrant(actor, grant) {
   const { resource, amount } = grant;
   const target = grant.target ?? (_OP_POOL_MAP[resource] ? "faction" : "self");
 
-  // FACTION OP grants — resolve to faction document, mutate opBank
+  // FACTION OP grants — authored in OP ("+1 Intrigue OP"), the bank holds
+  // MARKS. Commit through the factions OP authority: it converts nothing, so
+  // convert here with the one ratio; it enforces the caps and relays to the GM
+  // when this seat doesn't own the faction actor.
   if (target === "faction" && _OP_POOL_MAP[resource]) {
     const factionId = actor.getFlag?.("bbttcc-factions", "factionId");
     if (!factionId) return { ok: false, reason: "no faction linked", resource, amount };
     const faction = game.actors?.get(factionId);
     if (!faction) return { ok: false, reason: `faction ${factionId} not found`, resource, amount };
-    const bank = foundry.utils.duplicate(faction.flags?.["bbttcc-factions"]?.opBank ?? {});
+    const opApi = game.bbttcc?.api?.op;
+    if (!opApi?.commit) return { ok: false, reason: "OP API unavailable", resource, amount };
     const pool = _OP_POOL_MAP[resource];
-    const before = Number(bank[pool]) || 0;
-    bank[pool] = before + Number(amount);
-    await faction.update({ "flags.bbttcc-factions.opBank": bank });
-    return { ok: true, target: `faction:${faction.name}`, resource, pool, amount, before, after: bank[pool] };
+    const marks = Math.round((Number(amount) || 0) * (opApi.OP_TO_MARKS ?? MARKS_PER_OP));
+    if (!marks) return { ok: false, reason: `no amount for ${resource}`, resource, amount };
+    const res = await opApi.commit(faction.id, { [pool]: marks }, {
+      source: "resource-grant", label: `${grant.sourceItemName ?? "Resource grant"} — ${pool}`
+    });
+    if (!res?.committed) return { ok: false, reason: res?.error || "OP commit refused (cap?)", resource, amount, marks };
+    return { ok: true, target: `faction:${faction.name}`, resource, pool, amount, marks };
   }
 
   // SELF grants — direct path update (with refill semantics for "amount: refill")
@@ -879,29 +885,23 @@ async function _checkAndConsumeLimit(actor, sourceItemId, triggerIndex, limit) {
   return { allowed: true };
 }
 
+// "(GM resolves)" prompts must reach the GMs, not just the seat that fired them.
+function _gmAndMe() {
+  const gms = ChatMessage.getWhisperRecipients?.("GM")?.map(u => u.id) ?? [];
+  return [...new Set([...gms, game.user.id])];
+}
+
 async function _dispatchEffect(actor, effect, source, payload) {
   const kind = effect?.kind;
   const args = effect?.args ?? {};
   switch (kind) {
     case "grant-resource": {
-      // Reuse Chunk 5 single-grant logic by synthesizing a per-campaign-start grant
-      // and calling _applyOneGrant indirectly via fireResourceGrants. Simpler:
-      // do an inline OP-bank bump for now; structured to extend later.
-      const POOL = {
-        "violence-op":"violence","intrigue-op":"intrigue","soft-power-op":"softpower",
-        "diplomacy-op":"diplomacy","economy-op":"economy","non-lethal-op":"nonlethal",
-        "faith-op":"faith","logistics-op":"logistics","siege-op":"siege","body-op":"body","soul-op":"soul"
-      };
-      const target = args.target ?? (POOL[args.resource] ? "faction" : "self");
-      if (target === "faction" && POOL[args.resource]) {
-        const factionId = actor.getFlag?.("bbttcc-factions", "factionId");
-        const faction = factionId ? game.actors?.get(factionId) : null;
-        if (!faction) return { ok:false, reason:"no faction linked" };
-        const bank = foundry.utils.duplicate(faction.flags?.["bbttcc-factions"]?.opBank ?? {});
-        const pool = POOL[args.resource];
-        bank[pool] = (Number(bank[pool]) || 0) + Number(args.amount);
-        await faction.update({ "flags.bbttcc-factions.opBank": bank });
-        return { ok:true, summary:`+${args.amount} ${args.resource} → ${faction.name}` };
+      // Faction OP grants share _applyOneGrant (marks conversion, caps, GM relay).
+      const target = args.target ?? (_OP_POOL_MAP[args.resource] ? "faction" : "self");
+      if (target === "faction" && _OP_POOL_MAP[args.resource]) {
+        const r = await _applyOneGrant(actor, { resource: args.resource, amount: args.amount, target: "faction", sourceItemName: source });
+        if (!r.ok) return { ok:false, reason: r.reason };
+        return { ok:true, summary:`+${r.marks} ${r.pool} marks → ${r.target.replace(/^faction:/, "")}` };
       }
       if (target === "self") {
         const SELF_PATH = {
@@ -942,7 +942,7 @@ async function _dispatchEffect(actor, effect, source, payload) {
         user: game.user.id,
         speaker: ChatMessage.getSpeaker({ actor }),
         content: `<p style="font-size:0.78rem"><b>${source}</b> triggered: ${desc} <span style="opacity:0.6">(GM resolves)</span></p>`,
-        whisper: [game.user.id]
+        whisper: _gmAndMe()
       });
       return { ok:true, summary:`${kind} → GM prompted` };
     }
@@ -951,7 +951,7 @@ async function _dispatchEffect(actor, effect, source, payload) {
         user: game.user.id,
         speaker: ChatMessage.getSpeaker({ actor }),
         content: `<p style="font-size:0.78rem"><b>${source}</b> triggered. ${args.body ?? "GM resolves."}</p>`,
-        whisper: [game.user.id]
+        whisper: _gmAndMe()
       });
       return { ok:true, summary:`chat-prompt fired` };
     }
@@ -1584,11 +1584,15 @@ export async function levelDown(actor) {
   const fromUnspent = Math.min(unspent, ptsGranted);
   let shortfall = ptsGranted - fromUnspent;
   const revertSpends = [];
+  // Running rank per skill — two spends on one skill must revert two ranks,
+  // not both compute "source − 1" (which collapsed them into one).
+  const runRank = {};
   for (let i = spendsAll.length - 1; i >= 0 && shortfall > 0; i--) {
     const sp = spendsAll[i];
-    const curRank = Number(src?.skills?.[sp.skill]?.value) || 0;
+    const curRank = runRank[sp.skill] ?? (Number(src?.skills?.[sp.skill]?.value) || 0);
     if (curRank <= 0) continue;
-    revertSpends.push({ idx: i, skill: sp.skill, from: curRank, to: Math.max(0, curRank - 1) });
+    runRank[sp.skill] = curRank - 1;
+    revertSpends.push({ idx: i, skill: sp.skill, from: curRank, to: curRank - 1 });
     shortfall--;
   }
   let ptsHtml = "";

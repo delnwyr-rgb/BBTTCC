@@ -127,15 +127,24 @@
     return (Number(raw.turn) === turn) ? { turn, used: { ...(raw.used || {}) } } : { turn, used: {} }; // lazy turn reset
   }
   const _hasUse = (led, key) => Number(led.used[key] || 0) < USES_PER_TURN;
+  const CONSUME_RELAY = "travel.mitigation.consume";   // gmExec type: player-driven legs record their spent uses
   async function _consumeUses(faction, keys) {
-    if (!keys?.length || !game.user?.isGM) return;   // GM owns the ledger write (travelHex executes GM-side)
+    if (!keys?.length) return;
+    // travelHex runs on whichever seat drives the leg. A seat that cannot write the faction relays to the
+    // primary GM — otherwise player-driven rides never recorded a use and the once-per-turn limit never bit.
+    if (!game.user?.isGM && !faction.isOwner) {
+      const gx = game.bbttcc?.api?.gmExec;
+      if (gx?.call) { try { await gx.call(CONSUME_RELAY, { factionId: faction.id, keys }); } catch (e) { console.warn(TAG, "use-consume relay failed", e); } }
+      return;
+    }
     const led = _readLedger(faction);                // logically fresh (lazy turn-reset)
     for (const k of keys) led.used[k] = Number(led.used[k] || 0) + 1;
     try {
       // Delete-then-set: Foundry update() MERGES objects, so a turn-reset `used:{}` (or fewer keys)
-      // would merge-resurrect stale keys from a previous turn. Delete the flag first for a clean write.
-      await faction.update({ [`flags.${MOD_TRV}.-=mitigationUses`]: null });
-      await faction.update({ [`flags.${MOD_TRV}.mitigationUses`]: led });
+      // would merge-resurrect stale keys from a previous turn. Delete the flag first for a clean write
+      // (unsetFlag — v14 dropped the "-=key" deletion syntax).
+      await faction.unsetFlag(MOD_TRV, "mitigationUses");
+      await faction.setFlag(MOD_TRV, "mitigationUses", led);
     } catch (e) { console.warn(TAG, "use-consume write failed", e); }
   }
   function usesFor(factionId) {
@@ -221,6 +230,7 @@
   // the forecast's simulateBeforeTravelHooks does NOT), so the planner never drains the ledger.
   Hooks.on("bbttcc:afterTravel", async (ctx) => {
     try {
+      if (ctx?.encounter || ctx?.relayed) return;   // encounter re-emit / GM-side re-fire = a second hook for the same leg
       const faction = _factionFromCtx(ctx);
       if (!faction) return;
       const keys = new Set(ctx.__mitConsumeWT || []);
@@ -232,6 +242,16 @@
   function _install() {
     game.bbttcc ??= {}; game.bbttcc.api ??= {}; game.bbttcc.api.travel ??= {};
     game.bbttcc.api.travel.mitigation = { rosterAbilities, coverageFor, coversWeather, filterByWeather, usesFor, getMode, setMode };
+    try {
+      game.bbttcc.api.gmExec?.register?.(CONSUME_RELAY, async (p, meta) => {
+        const f = game.actors?.get(String(p?.factionId || "").replace(/^Actor\./, ""));
+        if (!f) throw new Error("faction not found");
+        const keys = (Array.isArray(p?.keys) ? p.keys : []).map(k => String(k || "")).filter(Boolean).slice(0, 20);
+        // Recording a spent use only ever restricts the faction, so any seat may report it.
+        if (keys.length) await _consumeUses(f, keys);
+        return { ok: true, n: keys.length, via: meta?.fromUserName || "gm" };
+      });
+    } catch (eR) { console.warn(TAG, "consume relay register failed", eR); }
     console.log(TAG, "weather/terrain mitigation bridge ready (passive coverage v1)");
   }
   Hooks.once("ready", _install);

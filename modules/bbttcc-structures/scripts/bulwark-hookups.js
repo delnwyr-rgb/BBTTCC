@@ -80,21 +80,34 @@ const ACTION_MAP = {
   "ruin to renewal":    "renewal"
 };
 
+// The Surge-spend route (system bw-cat-entry, no target) posts a "✦ <name> spends
+// N Surge" card instead of the Breaker header, carrying this line when it arms
+// the structure breach (Ruin cost 0 — the Surge already paid for it).
+const SURGE_ENTRY_RX = /⚒\s*Catastrophic Entry\s*—\s*structure breach armed/i;
+
 function _parseRuinCard(message) {
   const content = String(message?.content ?? "");
-  const m = content.match(RUIN_HEADER_RX);
-  if (!m) return null;
-  const labelLower = String(m[1] ?? "").toLowerCase().trim();
-  const action = ACTION_MAP[labelLower];
-  if (!action) return null;
   const actorId = message.speaker?.actor;
   const actor = actorId ? game.actors?.get(actorId) : null;
   if (!actor) return null;
+  const m = content.match(RUIN_HEADER_RX);
+  if (!m) {
+    if (SURGE_ENTRY_RX.test(content)) return { action: "entry", label: "Catastrophic Entry", actor };
+    return null;
+  }
+  const labelLower = String(m[1] ?? "").toLowerCase().trim();
+  const action = ACTION_MAP[labelLower];
+  if (!action) return null;
+  // Catastrophic Entry vs a TARGETED foe is the armor-sunder variant (Ruin paid
+  // now, nothing deferred) — it must not also arm a free structure breach. Only
+  // the no-target card ("armed — N Ruin spent on hit") arms it.
+  if (action === "entry" && (/Armor sundered/i.test(content) || !/armed\s*—/i.test(content))) return null;
   return { action, label: m[1], actor };
 }
 
 async function _onRuinCard(message) {
-  if (!game.user?.isGM) return; // GM-side application (other clients see chat card too)
+  // Exactly one seat applies (two GM seats would double every Ruin effect).
+  if (!game.user?.isGM || (game.users?.activeGM && game.users.activeGM.id !== game.user.id)) return;
   const parsed = _parseRuinCard(message);
   if (!parsed) return;
   const { action, actor } = parsed;
@@ -252,10 +265,11 @@ async function _onShockwave(actor) {
     });
     if (!sorted.length) continue;
     const pick = sorted[0];
+    // Depleted rows stay at qty 0 (with originalQty) so repair can refill them.
     const newBom = bom.map(r => r.materialKey === pick.materialKey && r.tier === pick.tier && r.qty === pick.qty
       ? { ...r, qty: Math.max(0, r.qty - 1) }
       : r
-    ).filter(r => Number(r.qty) > 0);
+    ).filter(r => Number(r.qty) > 0 || Number(r.originalQty) > 0);
     await tgt.setFlag(FLAG_SCOPE, "materialBOM", newBom);
     chipped.push({ structName: tgt.name, mat: pick.name ?? pick.materialKey, family: pick.family });
   }
@@ -344,10 +358,10 @@ async function _onRenewal(actor) {
           <select name="factionId">${factionOptions}</select>
         </label>
         <label style="display:flex; flex-direction:column; gap:0.2rem;">
-          <span style="font-size:0.72rem; opacity:0.7">Roll attribute</span>
+          <span style="font-size:0.72rem; opacity:0.7">Roll</span>
           <select name="attribute">
-            <option value="faith">Faith</option>
-            <option value="economy">Economy</option>
+            <option value="faith">Faith (Faith skill + Soul)</option>
+            <option value="economy">Economy (Streetwise skill + Intrigue)</option>
           </select>
         </label>
         <p style="margin:0; font-size:0.7rem; opacity:0.55; font-style:italic">
@@ -366,18 +380,27 @@ async function _onRenewal(actor) {
           const faction = game.actors.get(factionId);
           if (!target || !faction) return ui.notifications?.warn?.("Pick a target and a faction.");
 
-          // Attribute value lookup — fourththing stores attrs at system.attributes.<key>.value
-          const rawSys = actor.system?.system ?? actor.system;
-          const attrVal = Number(rawSys?.attributes?.[attrKey]?.value) || 0;
-          const roll = new Roll(`${(game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${attrVal}`);   // canon die: 2d10, tens explode
-          await roll.evaluate();
-          const total = Number(roll.total) || 0;
+          // There is no faith/economy ATTRIBUTE (attrs are violence/intrigue/presence/
+          // body/mind/soul) — the old lookup always rolled +0. Roll the system skill
+          // check instead: Faith = faith skill (soul); Economy = streetwise (intrigue).
+          const skillKey = attrKey === "economy" ? "streetwise" : "faith";
+          let total = 0;
+          if (game.fourththing?.rolls?.skillCheck) {
+            const res = await game.fourththing.rolls.skillCheck(actor, { skill: skillKey, label: `Ruin to Renewal — ${attrKey === "economy" ? "Economy" : "Faith"} vs DC 15` });
+            total = res?.isFumble ? 0 : (Number(res?.total) || 0);
+          } else {
+            const rawSys = actor.system?.system ?? actor.system;
+            const sk = rawSys?.skills?.[skillKey] ?? {};
+            const attrVal = (Number(rawSys?.attributes?.[sk.attribute || "soul"]?.value) || 0) + (Number(sk.value) || 0);
+            const roll = new Roll(`${(game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${attrVal}`);   // canon die: 2d10, tens explode
+            await roll.evaluate();
+            total = Number(roll.total) || 0;
+            await roll.toMessage({
+              flavor: `${actor.name} — Ruin to Renewal (${skillKey} ${attrVal >= 0 ? "+" : ""}${attrVal}) vs DC 15`,
+              speaker: ChatMessage.getSpeaker({ actor })
+            });
+          }
           const success = total >= 15;
-
-          await roll.toMessage({
-            flavor: `${actor.name} — Ruin to Renewal (${attrKey} ${attrVal >= 0 ? "+" : ""}${attrVal}) vs DC 15`,
-            speaker: ChatMessage.getSpeaker({ actor })
-          });
 
           if (!success) {
             await ChatMessage.create({

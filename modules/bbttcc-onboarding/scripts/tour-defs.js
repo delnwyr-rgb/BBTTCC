@@ -29,7 +29,7 @@ const stewardSheetTour = {
     const sheet = ctx.steward?.sheet;
     if (!sheet) {
       ui.notifications?.warn?.("No Steward assigned — set your character (player config → Select Character) and rerun the tour.");
-      return null;
+      return false;
     }
     await sheet.render(true);
     return sheet;
@@ -122,7 +122,7 @@ const bridgeTour = {
     const bridge = game.bbttcc?.api?.bridge;
     if (!bridge?.open) {
       ui.notifications?.warn?.("Bridge not loaded — is bbttcc-core enabled?");
-      return null;
+      return false;
     }
     bridge.open(ctx.steward?.id);
     return null; // dialog mounts on document.body; steps find it by data-tour anchors
@@ -163,7 +163,7 @@ async function _openFactionSheet(ctx) {
   const faction = _resolveFactionForTour(ctx);
   if (!faction) {
     ui.notifications?.warn?.("No faction found — found one first (or link your Steward to a faction), then rerun the tour.");
-    return null;
+    return false;
   }
   await faction.sheet?.render(true);
   return faction.sheet;
@@ -369,9 +369,9 @@ const hexSheetTour = {
 
   open: async (ctx) => {
     const open = game.bbttcc?.api?.territory?.openHexSheet;
-    if (!open) { ui.notifications?.warn?.("Hex sheet API not loaded — is bbttcc-territory enabled?"); return null; }
+    if (!open) { ui.notifications?.warn?.("Hex sheet API not loaded — is bbttcc-territory enabled?"); return false; }
     const uuid = _findHexUuidForTour(ctx);
-    if (!uuid) { ui.notifications?.warn?.("No territory hexes found on any scene — claim or create one first."); return null; }
+    if (!uuid) { ui.notifications?.warn?.("No territory hexes found on any scene — claim or create one first."); return false; }
     await open(uuid);
     return null; // app mounts on document.body; steps find it by data-tour anchors
   },
@@ -409,7 +409,7 @@ const travelConsoleTour = {
 
   open: async () => {
     const tc = game.bbttcc?.ui?.travelConsole;
-    if (!tc) { ui.notifications?.warn?.("Travel Console not loaded — is bbttcc-travel enabled?"); return null; }
+    if (!tc) { ui.notifications?.warn?.("Travel Console not loaded — is bbttcc-travel enabled?"); return false; }
     await tc.render(true);
     return tc;
   },
@@ -492,9 +492,9 @@ const plannerTour = {
 
   open: async (ctx) => {
     const openPlanner = game.bbttcc?.api?.raid?.openActivityPlanner;
-    if (!openPlanner) { ui.notifications?.warn?.("Activity Planner not loaded — is bbttcc-raid enabled?"); return null; }
+    if (!openPlanner) { ui.notifications?.warn?.("Activity Planner not loaded — is bbttcc-raid enabled?"); return false; }
     const faction = _resolveFactionForTour(ctx);
-    if (!faction) { ui.notifications?.warn?.("No faction found — the planner needs one."); return null; }
+    if (!faction) { ui.notifications?.warn?.("No faction found — the planner needs one."); return false; }
     openPlanner({ factionId: faction.id, lockFaction: true });
     return null; // window mounts at #bbttcc-activity-planner
   },
@@ -531,7 +531,9 @@ const plannerTour = {
     },
     {
       id: "showlocked", title: "Show Locked (GM)",
-      selector: 'input[type="checkbox"]',
+      // Scoped to the planner window — the bare selector rang the first checkbox
+      // anywhere in the document (open() returns no root for this tour).
+      selector: '#bbttcc-activity-planner input[type="checkbox"]',
       optional: true,
       text: "GM-only: reveals tier-locked activities with their LOCKED badges and bypasses target filtering — for planning what a faction grows INTO, not what it can do today."
     },
@@ -556,6 +558,24 @@ const plannerTour = {
 // and clear it again when the tour ends.
 
 let _raidTourStagedFactionId = null;
+let _raidTourStagedToken = null;   // the staged session carries tourStaged:<token>
+const RAID_TOUR_STALE_MS = 60 * 60 * 1000;
+
+// A client that reloads/disconnects mid-tour never runs close(), leaving the
+// practice session on the faction (and raid code treats any targeted session
+// as a live raid). The active GM sweeps stale tour-staged sessions on ready.
+Hooks.once("ready", async () => {
+  try {
+    if (!game.users?.activeGM?.isSelf) return;
+    for (const f of game.actors?.contents ?? []) {
+      const sess = f.getFlag?.("bbttcc-raid", "raidSession");
+      if (!sess?.tourStaged) continue;
+      if (Date.now() - (Number(sess.ts) || 0) < RAID_TOUR_STALE_MS) continue;
+      await f.unsetFlag("bbttcc-raid", "raidSession");
+      console.log("[onboarding/tour-defs] cleared a stale tour-staged raid session on", f.name);
+    }
+  } catch (e) { console.warn("[onboarding/tour-defs] stale tour-session sweep failed", e); }
+});
 
 const raidConsoleTour = {
   id: "raid-console",
@@ -566,17 +586,20 @@ const raidConsoleTour = {
 
   open: async (ctx) => {
     const raidApi = game.bbttcc?.api?.raid;
-    if (!raidApi?.openConsole) { ui.notifications?.warn?.("Raid Console not loaded — is bbttcc-raid enabled?"); return null; }
+    if (!raidApi?.openConsole) { ui.notifications?.warn?.("Raid Console not loaded — is bbttcc-raid enabled?"); return false; }
     const faction = _resolveFactionForTour(ctx);
-    if (!faction) { ui.notifications?.warn?.("No faction found — the raid console needs one."); return null; }
+    if (!faction) { ui.notifications?.warn?.("No faction found — the raid console needs one."); return false; }
 
     _raidTourStagedFactionId = null;
+    _raidTourStagedToken = null;
     try {
       const existing = faction.getFlag("bbttcc-raid", "raidSession");
-      const live = existing && (existing.targetUuid || (existing.rounds || []).length);
+      // A previous tour's leftover practice session is not a live raid.
+      const live = existing && !existing.tourStaged && (existing.targetUuid || (existing.rounds || []).length);
       if (!live) {
         const targetUuid = _findHexUuidForTour({ faction: null }); // any hex — practice dummy
         if (targetUuid) {
+          const token = foundry.utils.randomID();
           const hexDoc = await fromUuid(targetUuid).catch(() => null);
           const hexOwner = String(hexDoc?.flags?.["bbttcc-territory"]?.factionId || hexDoc?.flags?.["bbttcc-territory"]?.ownerId || "").trim();
           const defenderId = (hexOwner && hexOwner !== faction.id) ? hexOwner : null;
@@ -586,9 +609,11 @@ const raidConsoleTour = {
             activityKey: "violence", difficulty: "normal",
             targetType: "hex", targetUuid,
             targetName: (hexDoc?.text || hexDoc?.flags?.["bbttcc-territory"]?.name || "Practice Target"),
-            defenderId, rounds: [], logWar: false, includeDefender: !!defenderId
+            defenderId, rounds: [], logWar: false, includeDefender: !!defenderId,
+            practice: true, tourStaged: token
           });
           _raidTourStagedFactionId = faction.id;
+          _raidTourStagedToken = token;
         }
       }
     } catch (e) { console.warn("[onboarding/tour-defs] raid tour staging skipped:", e); }
@@ -599,11 +624,15 @@ const raidConsoleTour = {
 
   close: async () => {
     if (!_raidTourStagedFactionId) return;
+    const fid = _raidTourStagedFactionId, token = _raidTourStagedToken;
+    _raidTourStagedFactionId = null; _raidTourStagedToken = null;
     try {
-      const f = game.actors.get(_raidTourStagedFactionId);
-      await f?.unsetFlag("bbttcc-raid", "raidSession");
+      const f = game.actors.get(fid);
+      // Only clear OUR practice session: once the console saves it (rounds added,
+      // a real raid staged) the payload no longer carries our token — leave it.
+      if (token && f?.getFlag("bbttcc-raid", "raidSession")?.tourStaged === token)
+        await f.unsetFlag("bbttcc-raid", "raidSession");
     } catch (_) {}
-    _raidTourStagedFactionId = null;
   },
 
   steps: [
@@ -691,7 +720,7 @@ const rigSheetTour = {
 
   open: async (ctx) => {
     const rig = _resolveRigForTour(ctx);
-    if (!rig) { ui.notifications?.warn?.("No rig actor found — mint one from the Rig Builder first."); return null; }
+    if (!rig) { ui.notifications?.warn?.("No rig actor found — mint one from the Rig Builder first."); return false; }
     await rig.sheet?.render(true);
     return rig.sheet;
   },
@@ -769,7 +798,7 @@ const marketTour = {
 
   open: async () => {
     const openMarket = game.bbttcc?.api?.market?.openMarket;
-    if (!openMarket) { ui.notifications?.warn?.("Market not loaded — is bbttcc-market enabled?"); return null; }
+    if (!openMarket) { ui.notifications?.warn?.("Market not loaded — is bbttcc-market enabled?"); return false; }
     openMarket();
     return null; // singleton mounts at #bbttcc-market
   },
@@ -809,9 +838,9 @@ const banksTour = {
 
   open: async (ctx) => {
     const banks = game.bbttcc?.api?.banks;
-    if (!banks?.openPersonalBank) { ui.notifications?.warn?.("Banks not loaded — is bbttcc-banks enabled?"); return null; }
+    if (!banks?.openPersonalBank) { ui.notifications?.warn?.("Banks not loaded — is bbttcc-banks enabled?"); return false; }
     const steward = _resolveStewardForBankTour(ctx);
-    if (!steward) { ui.notifications?.warn?.("No character found for the personal bank."); return null; }
+    if (!steward) { ui.notifications?.warn?.("No character found for the personal bank."); return false; }
     banks.openPersonalBank(steward);
     return null;
   },
@@ -880,7 +909,7 @@ const facilitiesTour = {
 
   open: async (ctx) => {
     const Ctor = game.bbttcc?.apps?.FacilityConsole;
-    if (!Ctor) { ui.notifications?.warn?.("Facility Console not loaded — is bbttcc-facility-console enabled?"); return null; }
+    if (!Ctor) { ui.notifications?.warn?.("Facility Console not loaded — is bbttcc-facility-console enabled?"); return false; }
     const hexUuid = _findHexUuidForTour(ctx) || "";
     const appInst = new Ctor({ hexUuid });
     await appInst.render(true, { focus: true });
@@ -913,7 +942,7 @@ const hexCraftTour = {
 
   open: async (ctx) => {
     const api = game.bbttcc?.api?.territory;
-    if (!api?.openHexConfig) { ui.notifications?.warn?.("Territory module not loaded."); return null; }
+    if (!api?.openHexConfig) { ui.notifications?.warn?.("Territory module not loaded."); return false; }
     const uuid = _findHexUuidForTour(ctx);
     if (uuid) await api.openHexConfig(uuid);
     else ui.notifications?.warn?.("No hexes exist yet — the tour will cover creation first.");
@@ -1038,7 +1067,7 @@ const dashboardTour = {
 
   open: async () => {
     const opener = globalThis.BBTTCC_OpenTerritoryDashboard;
-    if (typeof opener !== "function") { ui.notifications?.warn?.("Dashboard not available — is bbttcc-territory enabled?"); return null; }
+    if (typeof opener !== "function") { ui.notifications?.warn?.("Dashboard not available — is bbttcc-territory enabled?"); return false; }
     return opener() || null; // window: #bbttcc-territory-dashboard
   },
 
@@ -1070,7 +1099,7 @@ const overviewTour = {
 
   open: async () => {
     const openOverview = game.bbttcc?.api?.territory?.openCampaignOverview;
-    if (!openOverview) { ui.notifications?.warn?.("Overview not available — is bbttcc-territory enabled?"); return null; }
+    if (!openOverview) { ui.notifications?.warn?.("Overview not available — is bbttcc-territory enabled?"); return false; }
     return openOverview() || null; // window: #bbttcc-campaign-overview
   },
 
@@ -1102,7 +1131,7 @@ const campaignEngineTour = {
 
   open: async () => {
     const openBuilder = game.bbttcc?.api?.campaign?.openBuilder;
-    if (!openBuilder) { ui.notifications?.warn?.("Campaign Engine not loaded — is bbttcc-campaign enabled?"); return null; }
+    if (!openBuilder) { ui.notifications?.warn?.("Campaign Engine not loaded — is bbttcc-campaign enabled?"); return false; }
     await openBuilder();
     return null; // window: #bbttcc-campaign-builder
   },
@@ -1201,12 +1230,12 @@ const beatEditorTour = {
 
   open: async () => {
     const api = game.bbttcc?.api?.campaign;
-    if (!api) { ui.notifications?.warn?.("Campaign module not loaded."); return null; }
+    if (!api) { ui.notifications?.warn?.("Campaign module not loaded."); return false; }
     const campaignId = api.getActiveCampaignId?.() || null;
     const beat = campaignId ? (api.getCampaign?.(campaignId)?.beats?.[0] || null) : null;
     if (!campaignId || !beat) {
       ui.notifications?.warn?.("No active campaign with beats — set a campaign Active in the Campaign Engine, then rerun this tour.");
-      return null;
+      return false;
     }
     try {
       const mod = await import("/modules/bbttcc-campaign/apps/campaign-beat-editor.js");

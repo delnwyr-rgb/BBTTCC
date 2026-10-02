@@ -477,10 +477,20 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
           knowledge:  Number(key === "knowledge" ? value : f.resources?.knowledge ?? 0),
         };
         delete update[`flags.${MOD}.resources.${key}`];
+        // Income reads Type × Size unless manualOverride is set (facts.hex.resources) — without
+        // it a typed pip changed nothing (2026-10-01). The typed vector becomes the manual base.
+        update[`flags.${MOD}.manualOverride`] = true;
+        update[`flags.${MOD}.calc.base`] = { ...update[`flags.${MOD}.resources`] };
       }
 
       try {
         await scene.updateEmbeddedDocuments("Drawing", [update]);
+        // Type / size / resource edits change the yield — recompute so the row and income agree.
+        if (/^(type|size|resources\.)/.test(path)) {
+          try { await game.bbttcc?.api?.territory?.recomputeHexResources?.(scene.drawings.get(id), { source: "dashboard-inline" }); } catch (eR) { warn("recompute failed", eR); }
+          this._rememberScroll(root);
+          this.render({ force: false, focus: false });
+        }
         this._showSavedToast(root);
       } catch (e) { warn("Inline edit failed", e); }
     }, { capture:true, signal:sig });
@@ -549,7 +559,9 @@ Hooks.once("ready", () => {
   Hooks.on("bbttcc:territory:hexUpdated", (_payload) => {
     try {
       const app = game?.bbttcc?.apps?.territoryDashboard;
-      if (app && typeof app.render === "function") app.render({ force: true, focus: false });
+      // Only refresh an OPEN dashboard (2026-10-01) — force-rendering the cached closed
+      // instance popped it back open on every hex update.
+      if (app?.rendered && typeof app.render === "function") app.render({ force: false, focus: false });
     } catch (e) {}
   });
 

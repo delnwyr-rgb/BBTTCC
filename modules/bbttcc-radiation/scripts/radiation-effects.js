@@ -73,7 +73,7 @@
 
   function currentRP(A) {
     const api = game.bbttcc?.api?.radiation;
-    if (api?.get) return Number(api.get(A.id) || 0);
+    if (api?.get) return Number(api.get(A) || 0);   // the instance: an unlinked token's synthetic actor, not its base
     return Number(foundry.utils.getProperty(A, "system.radiation.rp") || 0);
   }
 
@@ -84,8 +84,11 @@
     return tierForRP(currentRP(A));
   }
 
-  // Highest-RP-seen tracker (primary-GM client only) for mutation band-crossing.
+  // Highest-RP-seen tracker (primary-GM client only) for mutation band-crossing, keyed by actor uuid.
   const _lastRP = new Map();
+  // Per-actor in-flight sync (canvasReady + ready reconciles, quick RP edits): a call that lands while one
+  // runs re-queues ONE follow-up pass instead of racing it on stale condition state.
+  const _inflight = new Map();
 
   // Mutation bands — escalating into one rolls a mutation (tier derived from RP).
   const MUT_BANDS = [100, 80, 60, 50];
@@ -101,6 +104,19 @@
     if (!game.user?.isGM) return;
     if (game.users?.activeGM && game.users.activeGM !== game.user) return;
     if (typeof game.fourththing?.toggleCondition !== "function") return;
+    const k = A.uuid;
+    const cur = _inflight.get(k);
+    if (cur) { cur.again = true; return cur.p; }
+    const rec = { again: false, p: null };
+    rec.p = (async () => {
+      try { do { rec.again = false; await _syncOnce(A); } while (rec.again); }
+      finally { _inflight.delete(k); }
+    })();
+    _inflight.set(k, rec);
+    return rec.p;
+  }
+
+  async function _syncOnce(A) {
 
     const rp   = currentRP(A);
     const want = tierForRP(rp).key; // null (Clean) or a tier key
@@ -122,8 +138,9 @@
     // consumables. Primary-GM-only (above), so it fires exactly once. Seed-on-
     // first-sight: a newly seen actor (or a post-reload reconcile pass) records
     // its RP without firing, so only genuine upward crossings roll a mutation.
-    const prevRP = _lastRP.has(A.id) ? _lastRP.get(A.id) : rp;
-    _lastRP.set(A.id, rp);
+    // A WATERMARK, not the last value: hovering across a band (49 → 50 → 49 → 50) rolls once, not per crossing.
+    const prevRP = _lastRP.has(A.uuid) ? _lastRP.get(A.uuid) : rp;
+    _lastRP.set(A.uuid, Math.max(prevRP, rp));
     if (MUT_BANDS.some(t => prevRP < t && rp >= t)) {
       Hooks.callAll("bbttcc.mutationRoll", A, rp);
     }

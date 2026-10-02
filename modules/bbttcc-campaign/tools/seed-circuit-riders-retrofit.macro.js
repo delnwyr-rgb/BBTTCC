@@ -94,6 +94,26 @@
   edit(E("witness_request"), b => { b.inject = b.inject || {}; const req = Array.isArray(b.inject.requires) ? b.inject.requires : (b.inject.requires ? [b.inject.requires] : []); if (!req.some(r => r && r.beatMark === E("pressure_witness"))) b.inject.requires = [...req, { beatMark: E("pressure_witness") }]; b.speakerActorId = b.speakerActorId || sp("Captain Robot") || null; }, "gated on the witness pressure step");
   addChoice(E("pressure_witness"), ch("\"Show us what you see.\"", E("witness_request"), { description: "Now. Now you may look." }), "the turn, offered late");
   addChoice(E("parley_resolution"), ch("File something first.", E("file_it")), "→ file it");
+  // REVIEW 2026-10-01 (MEDIUM): every filing is SINGLE-USE. A filing choice routes to its OWN outcome beat (`enc_circuit_riders_filed_<receipt
+  // mark>`: the Filed narration, repeatable:false, routing-only) which carries the +1 crVerify, and the choice hides once that beat has played.
+  // The shared `enc_circuit_riders_filed` landing is retired (no meter, no conversation offer) — it was a repeatable Captain Robot beat any
+  // talk could enact, and one receipt could be filed again and again. The same helper lives in seed-circuit-riders / seed-flooded-towns /
+  // seed-balcones and tools/patch-template-review-fixes-b-2026-10-01 (whichever runs last converts every filing it finds).
+  const singleUseFilings = () => {
+    const TPL = "enc_circuit_riders_filed", tpl = byId.get(TPL), fi = byId.get("enc_circuit_riders_file_it"); if (!tpl || !fi) return;
+    const meters = (Array.isArray(tpl.worldEffects?.meters) && tpl.worldEffects.meters.length) ? tpl.worldEffects.meters : [{ key: "crVerify", delta: 1, max: 4 }];
+    for (const c of fi.choices || []) {
+      const req = Array.isArray(c.requires) ? c.requires : (c.requires && typeof c.requires === "object" ? [c.requires] : []);
+      const mark = req.find(x => x && x.beatMark && x.not !== true)?.beatMark; if (c.next !== TPL || !mark) continue;
+      const id = `${TPL}_${mark}`;
+      if (!byId.get(id)) { const nb = JSON.parse(JSON.stringify(tpl)); Object.assign(nb, { id, dialogueOffer: false }); nb.inject = { ...(nb.inject || {}), repeatable: false, requires: [{ flag: "storyPhase", gte: 2 }, { beatMark: mark }] }; nb.worldEffects = { ...(nb.worldEffects || {}), meters: JSON.parse(JSON.stringify(meters)) }; camp.beats.push(nb); byId.set(id, nb); changes++; say(`✚ beat ${id} (single-use filing)`); }
+      c.next = id; c.requires = [...req, { beatMark: id, not: true }]; changes++; say(`✎ enc_circuit_riders_file_it: "${c.label}" → ${id} (single-use)`);
+    }
+    const before = JSON.stringify(tpl);
+    if (tpl.worldEffects?.meters) delete tpl.worldEffects.meters; if (tpl.dialogueOffer !== false) tpl.dialogueOffer = false; tpl.inject = { ...(tpl.inject || {}), repeatable: false };
+    if (JSON.stringify(tpl) !== before) { changes++; say(`✎ ${TPL}: retired (no meter, routing-only)`); }
+  };
+  singleUseFilings();
   // ending names on the closers
   for (const [id, ending] of [[E("parley_alliance"), "alliance"], [E("parley_neutral"), "neutral"], [E("parley_flagged"), "flagged"]]) edit(id, b => { b.story = { quest: KEY, role: "closer", ending }; }, `closer · ending ${ending}`);
   // voices
@@ -121,7 +141,11 @@
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script circuit_riders → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors, after +the Riders answer)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-circuit-riders-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

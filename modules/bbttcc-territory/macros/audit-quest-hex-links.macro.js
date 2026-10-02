@@ -55,10 +55,10 @@
       const sc = game.scenes.get(r.sceneId);
       const dr = sc?.drawings?.get(r.drawingId);
       if (!dr) continue;
-      const map = foundry.utils.deepClone(dr.flags?.["bbttcc-territory"]?.quests || {});
+      const map = dr.flags?.["bbttcc-territory"]?.quests || {};
       if (map[r.questId]) {
-        delete map[r.questId];
-        await dr.setFlag("bbttcc-territory", "quests", map);
+        // unsetFlag — setFlag of a pruned copy MERGES and removed nothing (2026-10-01).
+        await dr.unsetFlag("bbttcc-territory", `quests.${r.questId}`);
         fixed++;
       }
     } catch (e) { console.warn("audit cleanup hex→missing failed", e); }

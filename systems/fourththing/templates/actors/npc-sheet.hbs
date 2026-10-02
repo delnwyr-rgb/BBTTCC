@@ -358,7 +358,7 @@
 
     {{!-- Access Dice (pip track + counter) --}}
     <span class="ft-chip ft-chip-access" data-tooltip="Access Dice — Shadowjack signature pool. Spent on tier-scaled break-in / forge-identity / unblock effects. Refills on Soma Break." style="background:rgba(58,90,138,0.08);border:1px solid rgba(160,192,232,0.5);color:#c8d8ff;padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;display:inline-flex;align-items:center;gap:0.25rem;">
-      <span style="display:inline-flex; gap:1px; letter-spacing:-0.05em;">{{#each (times (or resources.accessDice.max 3)) as |n|}}<span style="color:{{#if (lte (add n 1) (or ../resources.accessDice.current 0))}}#c8d8ff{{else}}rgba(255,255,255,0.18){{/if}};">◈</span>{{/each}}</span>
+      <span style="display:inline-flex; gap:1px; letter-spacing:-0.05em;">{{#each (times (ftOr resources.accessDice.max 3)) as |n|}}<span style="color:{{#if (lte (add n 1) (ftOr ../resources.accessDice.current 0))}}#c8d8ff{{else}}rgba(255,255,255,0.18){{/if}};">◈</span>{{/each}}</span>
       <input type="number" name="system.resources.accessDice.current" value="{{resources.accessDice.current}}" min="0" max="{{resources.accessDice.max}}" style="width:26px;background:transparent;color:inherit;border:1px solid #3a5b8a;border-radius:2px;text-align:center;font-size:0.76rem;padding:0;"/>
       / {{resources.accessDice.max}}
     </span>
@@ -439,7 +439,7 @@
     {{!-- Burn track --}}
     <span class="ft-chip ft-chip-burn" data-tooltip="Burn — 0-8 escalation track. 0-3 Controlled (stable), 4-6 Heated (penalties scale), 7-8 Critical (one missed beat from burnout). Cooled by Stabilize. Aurablade signature mechanic." style="background:rgba(232,138,74,0.08);border:1px solid {{burnBand.color}}88;padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;display:inline-flex;align-items:center;gap:0.25rem;color:{{burnBand.color}};">
       <span class="ft-burn-track" style="display:inline-flex; gap:1px; letter-spacing:-0.05em;">
-        {{#each (times 8) as |n|}}<span style="color:{{#if (lte (add n 1) (or ../resources.burn.current 0))}}{{../burnBand.color}}{{else}}rgba(255,255,255,0.15){{/if}};">▰</span>{{/each}}
+        {{#each (times 8) as |n|}}<span style="color:{{#if (lte (add n 1) (ftOr ../resources.burn.current 0))}}{{../burnBand.color}}{{else}}rgba(255,255,255,0.15){{/if}};">▰</span>{{/each}}
       </span>
       <input type="number" name="system.resources.burn.current" value="{{resources.burn.current}}" min="0" max="8" style="width:26px;background:transparent;color:inherit;border:1px solid {{burnBand.color}}55;border-radius:2px;text-align:center;font-size:0.76rem;padding:0;"/>
       /8 {{burnBand.label}}

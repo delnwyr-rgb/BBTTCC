@@ -503,14 +503,19 @@ function stampCompendiumSource(obj, uuid) {
 // whose name starts with a different route's prefix than the picked
 // subclass identifier.
 //
-// `pickedSubclassUuid` arrives as the doctrine compendium UUID; we map it
-// to the route prefix that should be allowed through.
-function _ftRouteAllowedForSubclass(subclassUuid) {
-  const sId = String(subclassUuid || "");
-  if (/wayfarer-tongue/.test(sId)) return "Wayfarer";
-  if (/black-stair/.test(sId))     return "Black Stair";
-  if (/last-mile/.test(sId))       return "Last Mile";
+// `pickedSubclassUuid` arrives as the doctrine compendium UUID, whose id is
+// random — so we match on the resolved doc's name / identifier (the uuid is
+// kept in the haystack for legacy slug-style ids) to pick the route prefix.
+function _ftRouteFromText(text) {
+  const s = String(text || "");
+  if (/wayfarer/i.test(s))          return "Wayfarer";
+  if (/black[\s_-]*stair/i.test(s)) return "Black Stair";
+  if (/last[\s_-]*mile/i.test(s))   return "Last Mile";
   return null;  // not a Shadow Courier path — no filtering
+}
+function _ftRouteAllowedForSubclass(subclassUuid, subclassDoc = null) {
+  const d = subclassDoc;
+  return _ftRouteFromText([subclassUuid, d?.name, d?.system?.identifier].filter(Boolean).join(" "));
 }
 
 const _SC_ROUTE_PREFIXES = ["Wayfarer", "Black Stair", "Last Mile"];
@@ -579,17 +584,17 @@ async function importClassAncestrySubclass(actor, opts) {
     // Heritage feats themselves are first-class items on the actor (they hold
     // the line-specific traits + tier-I ItemGrant). Push the heritage doc
     // itself AND any additional level-1 grants it carries.
+    // collectLevelOneGrants pushes the top doc itself (principleSource +
+    // compendium source stamped), so no separate heritageTop push.
     if (heritageDoc) {
-      const heritageTop = heritageDoc.toObject();
-      stampCompendiumSource(heritageTop, heritageDoc.uuid);
-      toImport.push(heritageTop);
       toImport.push(...await collectLevelOneGrants(heritageDoc, "ancestry"));
     } else warn("Missing heritage doc for uuid", heritageUuid);
   }
   // 2026-05-20 — Compute Shadow Courier allowed-route ONCE up front so both
   // the class and subclass grant passes can filter out cross-route items.
   // For non-SC characters this is null and the filter no-ops.
-  const allowedRoute = _ftRouteAllowedForSubclass(subclassUuid);
+  if (subclassUuid) subclassDoc = await importByUUID(subclassUuid);
+  const allowedRoute = _ftRouteAllowedForSubclass(subclassUuid, subclassDoc);
 
   if (classUuid) {
     classDoc = await importByUUID(classUuid);
@@ -597,7 +602,6 @@ async function importClassAncestrySubclass(actor, opts) {
     else warn("Missing class doc for uuid", classUuid);
   }
   if (subclassUuid) {
-    subclassDoc = await importByUUID(subclassUuid);
     if (subclassDoc) toImport.push(...await collectLevelOneGrants(subclassDoc, "subclass", { allowedRoute }));
     else warn("Missing subclass doc for uuid", subclassUuid);
   }

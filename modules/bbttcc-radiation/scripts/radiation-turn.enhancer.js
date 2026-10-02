@@ -52,6 +52,7 @@
 
   async function handleAdvanceTurnEnd(ctx = {}) {
     if (!game.user?.isGM) return;   // world-state writes run once, on the GM
+    if (game.users?.activeGM && !game.users.activeGM.isSelf) return; // one GM seat only
     if (ctx?.apply === false) return; // dry-run / preview — never mutate radiation
     try {
       const radApi = game.bbttcc?.api?.radiation;
@@ -75,10 +76,13 @@
 
       const gm = gmIds();
       const lines = [];
+      const seen = new Set();   // actor uuids charged this turn (a linked actor with two tokens pays once)
 
       for (const token of tokens) {
         const actor = token.actor;
         if (!actor) continue;
+        if (seen.has(actor.uuid)) continue;
+        seen.add(actor.uuid);
 
         const isFaction = actor.getFlag?.(MODF, "isFaction") === true;
         const isPCOrNPC = !isFaction && (actor.type === "character" || actor.type === "npc");
@@ -88,7 +92,8 @@
         let zoneAmt = 0;
         if (zBase > 0) {
           if (isFaction) {
-            zoneAmt = zBase;
+            // 'low' (0.5) is a 50% chance of 1 RP, as on the travel path — RP stays an integer.
+            zoneAmt = (zBase === 0.5) ? (Math.random() < 0.5 ? 1 : 0) : zBase;
           } else if (isPCOrNPC) {
             // PCs/NPCs get half the exposure (floored).
             zoneAmt = Math.floor(zBase / 2);
@@ -140,8 +145,9 @@
         const totalDelta = (zoneAmt + hexAmt + decay);
         if (!totalDelta) continue;
 
-        const before = radApi.get(actor.id);
-        const after  = await radApi.add(actor.id, totalDelta);
+        // The Actor instance, not its id: an unlinked token's synthetic actor must not resolve to the sidebar base actor.
+        const before = radApi.get(actor);
+        const after  = await radApi.add(actor, totalDelta);
 
         const dir  = totalDelta > 0 ? "+" : "−";
         const abs  = Math.abs(totalDelta);

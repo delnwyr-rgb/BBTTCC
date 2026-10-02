@@ -141,6 +141,7 @@
   }
 
   // ── back out ─────────────────────────────────────────────────────────────
+  const isPlainObj = (v) => !!v && typeof v === "object" && !Array.isArray(v);
   async function backOut(rec) {
     if (!game.user?.isGM) return { ok: false, reason: "GM only" };
     const report = [];
@@ -149,10 +150,13 @@
       if (!doc) { report.push(`✗ ${h.name}: hex no longer exists`); continue; }
       const upd = {};
       const unset = [];
+      const replace = [];   // object-valued keys: unset first so keys the activity ADDED go too (update merges)
       for (const [k, d] of Object.entries(h.keys || {})) {
-        if (d.hadBefore) upd[`flags.${MOD_T}.${k}`] = clone(d.before); else unset.push(k);
+        if (d.hadBefore) { upd[`flags.${MOD_T}.${k}`] = clone(d.before); if (isPlainObj(d.before)) replace.push(k); }
+        else unset.push(k);
       }
       try {
+        for (const k of replace) await doc.unsetFlag(MOD_T, k);
         if (Object.keys(upd).length) await doc.update(upd);
         for (const k of unset) { try { await doc.unsetFlag(MOD_T, k); } catch (_e) {} }
         report.push(`✓ ${h.name}: ${Object.keys(h.keys).map(k => HEX_KEY_LABELS[k] || k).join(", ")}`);
@@ -162,8 +166,11 @@
       const actor = game.actors.get(id);
       if (!actor) { report.push(`✗ ${a.name}: faction no longer exists`); continue; }
       const upd = {};
-      for (const [k, d] of Object.entries(a.keys || {})) if (d.hadBefore) upd[`flags.${MOD_F}.${k}`] = clone(d.before);
-      try { if (Object.keys(upd).length) await actor.update(upd); report.push(`✓ ${a.name}: ${Object.keys(a.keys).map(k => ACTOR_KEY_LABELS[k] || k).join(", ")} refunded`); }
+      const replace = [];
+      for (const [k, d] of Object.entries(a.keys || {})) if (d.hadBefore) { upd[`flags.${MOD_F}.${k}`] = clone(d.before); if (isPlainObj(d.before)) replace.push(k); }
+      try {
+        for (const k of replace) await actor.unsetFlag(MOD_F, k);
+        if (Object.keys(upd).length) await actor.update(upd); report.push(`✓ ${a.name}: ${Object.keys(a.keys).map(k => ACTOR_KEY_LABELS[k] || k).join(", ")} refunded`); }
       catch (e) { warn("faction restore failed", id, e); report.push(`✗ ${a.name}: ${e?.message || e}`); }
     }
     // stamp every copy of the entry

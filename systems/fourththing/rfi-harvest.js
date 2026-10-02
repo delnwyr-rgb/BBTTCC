@@ -92,9 +92,13 @@ export const RfiHarvest = {
   } = {}) {
     if (!targetDoc) throw new Error("markNode: no target document.");
     if (!materialKey) throw new Error("markNode: materialKey is required.");
+    // _maxCharges = the ceiling regrow() restores to (openMarkDialog writes it
+    // too); a re-mark never lowers a ceiling the node already carries.
+    const prevMax = Number(foundry.utils.getProperty(targetDoc, HARVEST_PATH)?._maxCharges) || 0;
+    const _maxCharges = Math.max(prevMax, Number(charges) || 0);
     return targetDoc.update({
       [HARVEST_PATH]: {
-        materialKey, dc, skill, yieldFormula, charges, ...(Array.isArray(drops) ? { drops } : {}),
+        materialKey, dc, skill, yieldFormula, charges, _maxCharges, ...(Array.isArray(drops) ? { drops } : {}),
         regrowthSomaBreaks, materialName, materialUuid
       }
     });
@@ -106,11 +110,11 @@ export const RfiHarvest = {
    * Break refresh hook; safe to call manually as a GM tool.
    */
   /** Where a gather lands (owner ruling 2026-09-21): the steward's faction stockpile when they have one, else stacked in the pockets. */
-  async _deliver(actor, data, units) {
+  async _deliver(actor, data, units, srcUuid = null) {
     const fid = String(actor?.system?.faction?.id || "").replace(/^Actor\./, "");
     const F = fid ? game.actors?.get(fid) : null; const stock = game.bbttcc?.api?.factions?.stockpile;
     const key = foundry.utils.getProperty(data, "flags.fourththing.rfi.item.materialKey") || data.name;
-    if (F && stock?.adjust) { await stock.adjust(F, key, +units, { name: data.name, img: data.img, lastUuid: data.flags?.core?.sourceId || null }); return { to: "stockpile", faction: F }; }
+    if (F && stock?.adjust) { await stock.adjust(F, key, +units, { name: data.name, img: data.img, lastUuid: srcUuid || data._stats?.compendiumSource || data.flags?.core?.sourceId || undefined }); return { to: "stockpile", faction: F }; }
     const orCreate = game.fourththing?.stack?.orCreate;
     if (orCreate) await orCreate(actor, data); else await actor.createEmbeddedDocuments("Item", [data]);
     return { to: "pockets" };
@@ -229,7 +233,10 @@ export const RfiHarvest = {
 
     const skill = h.skill || "soul";
     const dc    = Number(h.dc ?? 12);
-    const sys   = actor.system?.system ?? actor.system;
+    // SOURCE read — derived actor.system already carries the passive AEs, and
+    // the sweep below adds them; reading derived counted every AE twice.
+    const srcRoot = actor.toObject?.()?.system ?? actor._source?.system ?? {};
+    const sys   = srcRoot?.system ?? srcRoot;
     const baseAttr = Number(sys?.attributes?.[skill]?.value ?? 0);
 
     // Passive AE bonuses (mode 2 = ADD) on the attribute being used.
@@ -247,7 +254,7 @@ export const RfiHarvest = {
       }
     }
     const attr = baseAttr + aeAttr;
-    const formula = `2d10 + ${attr}`;
+    const formula = `${game.fourththing?.rolls?.checkFormula?.() || "2d10x10"} + ${attr}`;
     const roll = new Roll(formula);
     await roll.evaluate();
     const total = roll.total;
@@ -288,7 +295,7 @@ export const RfiHarvest = {
           } } } }
         };
       }
-      var delivered = await RfiHarvest._deliver(actor, materialItemData, yieldUnits);
+      var delivered = await RfiHarvest._deliver(actor, materialItemData, yieldUnits, h.materialUuid || null);
 
       // Decrement node charges — AFTER the yield has landed, and never fatal:
       // the receipt below must still post if the write (or its GM relay) fails.
@@ -326,7 +333,7 @@ export const RfiHarvest = {
           if (d.uuid) { const src = await fromUuid(d.uuid); if (src) { data = src.toObject(); delete data._id; foundry.utils.setProperty(data, "flags.fourththing.rfi.item.charges", units); } }
           if (!data) data = { name: d.name || d.key, type: "gear", img: "icons/svg/mystery-man.svg", system: { slot: "material", tags: ["material", d.key] },
             flags: { fourththing: { rfi: { item: { ...RfiItems.defaults({ type: "gear", system: {}, getFlag: () => null }), tier: d.tier || "I", frame: "material", origin: "found", bound: "free", materialKey: d.key, charges: units, upkeep: { mode: "passive", per: "none" } } } } } };
-          await RfiHarvest._deliver(actor, data, units); dropped.push({ key: d.key, units, name: d.name || d.key });
+          await RfiHarvest._deliver(actor, data, units, d.uuid || null); dropped.push({ key: d.key, units, name: d.name || d.key });
         } catch (eD) { console.warn("Roll for Initiation | harvest drop failed", d, eD); }
       }
       if (dropped.length) { try { await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="ft-harvest-drops">✦ <b>Also found</b> — ${dropped.map(x => `${x.units}× ${x.name}`).join(", ")}</div>` }); } catch (_eM) {} }

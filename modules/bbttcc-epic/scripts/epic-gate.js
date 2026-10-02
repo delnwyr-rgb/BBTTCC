@@ -111,8 +111,8 @@ async function postBeat(actor, path) {
   const keter = path === "keter";
   const title = keter ? "✦ THE MOJO RETURNS ✦" : "† THE FALSE CROWN †";
   const body = keter
-    ? `<strong>${actor.name}</strong> remembers. Across every lifetime the full self floods back at once — the bodhisattva, awake and entire. <em>The Crown is within reach.</em>`
-    : `<strong>${actor.name}</strong> reaches the apex along the broken path — power without redemption. The two contending heads stir. <em>The false crown beckons.</em>`;
+    ? `<strong>${foundry.utils.escapeHTML(actor.name)}</strong> remembers. Across every lifetime the full self floods back at once — the bodhisattva, awake and entire. <em>The Crown is within reach.</em>`
+    : `<strong>${foundry.utils.escapeHTML(actor.name)}</strong> reaches the apex along the broken path — power without redemption. The two contending heads stir. <em>The false crown beckons.</em>`;
   const content = `
     <div class="bbttcc-epic-beat ${keter ? "is-keter" : "is-thaumiel"}">
       <div class="bbttcc-epic-beat-title">${title}</div>

@@ -71,7 +71,11 @@ function _injectAdvisorButton(app, html) {
 }
 
 /* ── Ambient emitters (opt-in) ─────────────────────────────────────────────── */
-let _sceneEnterArmed = false; // skip the initial canvasReady at world load
+// Skip the world-load canvasReady only if it hasn't fired yet. _install runs at
+// `ready`, usually AFTER that first canvasReady — so start armed when the canvas
+// is already up, else the first REAL scene change was swallowed.
+let _sceneEnterArmed = false;
+const _openFactionSheets = new Set(); // ambient sheetOpened fires once per open
 
 function _ambientOn() {
   try { return game.settings.get(MOD, "advisorAmbient") === true; }
@@ -94,6 +98,8 @@ function _install() {
   Hooks.on("renderBBTTCCFactionSheet", _injectAdvisorButton);
   Hooks.on("renderActorSheet", _injectAdvisorButton);
 
+  _sceneEnterArmed = !!globalThis.canvas?.ready;
+
   Hooks.on("canvasReady", () => {
     if (!_sceneEnterArmed) { _sceneEnterArmed = true; return; }
     if (!_ambientOn() || !game.user?.isGM || !_keyConfigured()) return;
@@ -102,11 +108,19 @@ function _install() {
     } catch (_e) {}
   });
 
-  Hooks.on("renderBBTTCCFactionSheet", (app) => {
+  Hooks.on("closeBBTTCCFactionSheet", (app) => { _openFactionSheets.delete(app?.appId ?? app?.id); });
+  Hooks.on("renderBBTTCCFactionSheet", (app, _html, _ctx, options) => {
     if (!_ambientOn() || !_keyConfigured()) return;
+    // An OPEN, not every re-render (actor updates re-render open sheets). The
+    // faction sheet is a v1 ActorSheet (no isFirstRender) — track open app ids.
+    if (options?.isFirstRender === false) return;
+    const appKey = app?.appId ?? app?.id;
+    if (appKey != null) { if (_openFactionSheets.has(appKey)) return; _openFactionSheets.add(appKey); }
     const actor = app?.actor ?? app?.document;
     if (!actor?.getFlag?.("bbttcc-factions", "isFaction")) return;
-    if (!(game.user?.isGM || actor.isOwner)) return;
+    // One billing client: the active GM when present, otherwise an owner.
+    const activeGM = game.users?.activeGM;
+    if (activeGM ? !activeGM.isSelf : !actor.isOwner) return;
     try {
       Hooks.callAll("bbttcc:faction:sheetOpened", { factionId: actor.id });
     } catch (_e) {}

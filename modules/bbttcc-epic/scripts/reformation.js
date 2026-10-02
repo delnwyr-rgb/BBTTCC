@@ -94,9 +94,9 @@ async function postFactionEpilogue(faction, outcome) {
     try { frags = game.fourththing?.darkness?.fragments?.(a) ?? []; } catch (_e) {}
     try { band = game.fourththing?.darkness?.band?.(a) ?? "clear"; } catch (_e) {}
     const faced = frags.filter(x => x?.faced).length;
-    return `<b>${a.name}</b> — ${faced}/${frags.length} fragment${frags.length === 1 ? "" : "s"} faced · ends the Work at <b>${cap(band)}</b>`;
+    return `<b>${foundry.utils.escapeHTML(a.name)}</b> — ${faced}/${frags.length} fragment${frags.length === 1 ? "" : "s"} faced · ends the Work at <b>${cap(band)}</b>`;
   }).join("<br/>");
-  await beatCard(`📖 THE BOOK OF ${String(faction.name).toUpperCase()}`,
+  await beatCard(`📖 THE BOOK OF ${foundry.utils.escapeHTML(String(faction.name).toUpperCase())}`,
     `${warCount} entries in the war log. VP ${Number(V.vp) || 0} · Unity ${Number(V.unity) || 0}.<br/><br/>${lines || "<em>No stewards fly this banner — the record stands alone.</em>"}`,
     `${outcome === "parley" ? "They chose the true answer." : "They chose the answer that works, and paid for it."} · The Great Work`);
 }

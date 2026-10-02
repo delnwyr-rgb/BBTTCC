@@ -1276,9 +1276,11 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
 
     // 1) Apply any pre-existing one-shot mod (e.g., queued by a previous Scout Signs)
     let scoutRollMod = 0;
+    let scoutConsumed = null;   // restored if the leg is refused for OP (the leg never happened)
     {
       const r = await _consumeAndApplyTravelMods(actor, ctx);
       scoutRollMod += r.scoutRollMod;
+      if (r.applied && !r.aborted) scoutConsumed = r.mod;
       if (r.aborted) return r.mod ? { ok: false, aborted: true, reason: "scout-sign", mod: r.mod } : { ok: false, aborted: true };
     }
 
@@ -1320,6 +1322,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
         return `${labelOP(k)} (need ${need}, have ${have} marks)`;
       }).join(", ");
       popupText(b, `❌ Can't afford the leg${short ? ` — ${short}` : ""}`);
+      if (scoutConsumed) { try { await actor.setFlag(MOD_FCT, "travelMods.next", scoutConsumed); } catch (_eS) {} }
       return {
         ok: false, aborted: true, reason: "insufficient_op",
         underflow: uf,
@@ -1452,7 +1455,9 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
           encounter: encounter?.triggered ? encounter : null
         };
 
-    injector.maybeInject("travel_threshold", thresholdCtx);
+    // Not awaited (the leg returns now); a rejection must not surface as an unhandled promise.
+    Promise.resolve(injector.maybeInject("travel_threshold", thresholdCtx))
+      .catch(e => console.warn(TAG, "Travel Threshold injection failed (non-blocking):", e));
   }
 } catch (e) {
   console.warn(TAG, "Travel Threshold injection failed (non-blocking):", e);
@@ -1545,26 +1550,9 @@ const toName =
 }
 
 
-  // Token hook: trigger travel when crossing hexes
-  Hooks.on("updateToken", async (doc, changes, opts) => {
-    if (opts?.bbttccTravelVisuals) return;
-    if (changes.x === undefined && changes.y === undefined) return;
-    const token = canvas.tokens.get(doc.id);
-    const actor = token?.actor;
-    if (!isFactionActor(actor)) return;
-
-    const prevX = doc._source.x ?? doc.x, prevY = doc._source.y ?? doc.y;
-    const fromHex = getHexAtPoint(prevX, prevY);
-    const toHex   = getHexAtPoint(doc.x ?? prevX, doc.y ?? prevY);
-    if (!fromHex || !toHex || fromHex.id === toHex.id) return;
-
-    try {
-      await travelHex({ factionId: actor.id, hexFrom: fromHex.id, hexTo: toHex.id, tokenId: token.id });
-    } catch (err) {
-      console.error(TAG, "travelHex error:", err);
-      ui.notifications?.error?.(`Travel failed: ${err.message}`);
-    }
-  });
+  // (2026-10-01) The old `updateToken` "travel when a faction token crosses hexes" hook is gone: it read the
+  // previous position from doc._source (already the new position in updateToken), so it never fired, and it had
+  // no seat gate. Token-driven travel is owned by hex-travel-mode.js.
 
   
 // ---------------------------------------------------------------------------
@@ -1578,6 +1566,7 @@ const CAMPAIGN_STORE_KEY = "campaigns";
 const INJ_SETTING_NS = "bbttcc-core";
 const INJ_SETTING_KEY = "campaignInjectorState";
 const INJ_ACTIVE_KEY = "campaignInjectorActiveCampaignId";
+const INJ_RELAY = "travel.injector.inject";   // gmExec type: player-seat injections run on the primary GM
 
 function _safeGetSetting(ns, key, fallback) {
   try { return game.settings.get(ns, key); } catch (_e) { return fallback; }
@@ -1654,6 +1643,9 @@ function _getInjectorState() {
 
 async function _setInjectorState(state) {
   _ensureInjectorSettingsRegistered();
+  // World setting = GM work. Player-seat injections relay whole to the GM (maybeInject below);
+  // a stray player-seat write is skipped instead of throwing before the beat runs.
+  if (!game.user?.isGM) { console.warn(TAG, "injector state write skipped on a player seat"); return state; }
   return _safeSetSetting(INJ_SETTING_NS, INJ_SETTING_KEY, state);
 }
 
@@ -2079,6 +2071,14 @@ const CampaignBeatInjector = {
 
   maybeInject: async (triggerType, ctx) => {
     if (_combatActive()) return { ok: false, triggerType, why: "combat active" };
+    // Player-driven legs: the injector writes a world setting and runs the beat, both GM work —
+    // relay the whole injection to the primary GM (same shape as travel.hexEnter).
+    if (!game.user?.isGM) {
+      const gx = game.bbttcc?.api?.gmExec;
+      if (!gx?.call || !gx.primaryGmId?.()) return { ok: false, triggerType, why: "no GM connected" };
+      return gx.call(INJ_RELAY, { triggerType, ctx: ctx || {} })
+        .catch(e => ({ ok: false, triggerType, why: String(e?.message || e) }));
+    }
 
     const campaignId = _getActiveCampaignId();
     if (!campaignId) return { ok: false, triggerType, why: "no active campaign (or campaign has no beats)" };
@@ -2171,6 +2171,22 @@ Hooks.once("ready", () => {
   if (!game.bbttcc.api.campaigns.runBeat && typeof game.bbttcc?.api?.campaign?.runBeat === "function") {
     game.bbttcc.api.campaigns.runBeat = game.bbttcc.api.campaign.runBeat.bind(game.bbttcc.api.campaign);
   }
+
+  // Player-seat injections (travel_threshold) run here, on the primary GM. Fire-and-forget: the beat chain can
+  // run for minutes; the ack is a receipt.
+  try {
+    game.bbttcc.api.gmExec?.register?.(INJ_RELAY, async (p, meta) => {
+      const triggerType = String(p?.triggerType || "");
+      if (triggerType !== "travel_threshold") throw new Error("unsupported trigger: " + triggerType);
+      const ctx = (p?.ctx && typeof p.ctx === "object") ? p.ctx : {};
+      const fid = String(ctx.factionId || "").replace(/^Actor\./, "");
+      const A = fid ? game.actors?.get(fid) : null;
+      const caller = game.users?.get(String(meta?.fromUserId || ""));
+      if (!meta?.local && !(A && caller && A.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${A?.name || fid || "that faction"}`);
+      CampaignBeatInjector.maybeInject(triggerType, ctx).catch(e => console.warn(TAG, "relayed injection failed", e));
+      return { ok: true, started: true, via: meta?.fromUserName || "gm" };
+    });
+  } catch (eReg) { console.warn(TAG, "injector relay register failed", eReg); }
 
   console.log(TAG, "Campaign Beat Injector registered at game.bbttcc.api.campaigns.injector");
 });

@@ -52,7 +52,7 @@
     const fams = api.FAMILIES;
     const tierN = (t) => ({I:1, II:2, III:3, IV:4}[String(t||"I").toUpperCase()] ?? 1);
     let plates = 0, tierWsum = 0, units = 0, lb = false;
-    const resists = new Set();
+    const resists = {};
     const breakdown = {};
     for (const row of bom) {
       const fam = fams[row.family];
@@ -63,21 +63,18 @@
       tierWsum += q * tn * (fam.threshWeight ?? 1);
       units += q;
       if (fam.loadBearing) lb = true;
-      for (const r of (fam.nativeResists ?? [])) {
-        if (r === "typed-from-tags") {
-          for (const t of (row.tagsCache ?? [])) {
-            const lo = String(t).toLowerCase();
-            if (lo.includes("hex-resist") || lo === "warded" || lo === "ward") resists.add("hex-resistant");
-            if (lo.includes("qliph"))   resists.add("qliphothic-resistant");
-            if (lo.includes("curse"))   resists.add("curse-resistant");
-            if (lo.includes("blessed")) resists.add("blessed");
-          }
-        } else if (r === "quirk") {
-          // skip
-        } else if (r === "truth-affecting") {
-          resists.add("truth-affecting");
-        } else {
-          resists.add(r);
+      // Families carry resists as {type, factor} rows (+ tag-driven resistsFromTags);
+      // keep the best (lowest) factor per type — same rule as the API's mergeResist.
+      const addResist = (type, factor) => {
+        const t = String(type || "").toLowerCase(); const f = Number(factor);
+        if (!t || !Number.isFinite(f) || f >= 1) return;
+        if (resists[t] === undefined || f < resists[t]) resists[t] = f;
+      };
+      if (q > 0) {
+        for (const r of (fam.resists ?? [])) addResist(r?.type, r?.factor);
+        for (const rule of (fam.resistsFromTags ?? [])) {
+          const needle = String(rule.tagMatch || "").toLowerCase();
+          if (needle && (row.tagsCache ?? []).some(t => String(t).toLowerCase().includes(needle))) addResist(rule.type, rule.factor);
         }
       }
       breakdown[row.family] = (breakdown[row.family] ?? 0) + q;
@@ -86,7 +83,7 @@
       plates,
       threshold: units > 0 ? Number((tierWsum/units).toFixed(2)) : 0,
       loadBearing: lb,
-      resists: Array.from(resists).sort(),
+      resists,
       breakdown,
       units
     };
@@ -102,7 +99,8 @@
     const platesMatch = apiResult.platesMax === ind.plates;
     const threshMatch = Math.abs(apiResult.threshold - ind.threshold) < 0.01;
     const lbMatch     = apiResult.loadBearing === ind.loadBearing;
-    const resistsMatch = JSON.stringify(apiResult.resists) === JSON.stringify(ind.resists);
+    const sortedJSON = (o) => JSON.stringify(Object.keys(o || {}).sort().map(k => [k, o[k]]));
+    const resistsMatch = sortedJSON(apiResult.resists) === sortedJSON(ind.resists);
     const pass = platesMatch && threshMatch && lbMatch && resistsMatch;
 
     rows.push({
@@ -130,7 +128,7 @@
     Threshold: r.apiResult.threshold,
     LoadBearing: r.apiResult.loadBearing,
     Units: r.ind.units,
-    ResistCount: r.apiResult.resists.length,
+    ResistCount: Object.keys(r.apiResult.resists || {}).length,
     APIvsIndep: r.pass ? "✓ match" : "✗ MISMATCH",
     "ΔPlates_vs_spec": r.platesDeltaVsSpec >= 0 ? `+${r.platesDeltaVsSpec}` : r.platesDeltaVsSpec,
     "ΔThresh_vs_spec": r.thresholdDeltaVsSpec >= 0 ? `+${r.thresholdDeltaVsSpec}` : r.thresholdDeltaVsSpec
@@ -170,8 +168,8 @@
     ? `<span style="color:#d9b96b">⚜ yes</span>`
     : `<span style="opacity:0.5">—</span>`;
 
-  const fmtResists = (resists) => resists.length
-    ? resists.map(r => `<span style="background:rgba(120,100,60,0.18); border:1px solid rgba(217,185,107,0.2); padding:0 4px; border-radius:2px; font-size:0.62rem; margin:0 2px;">${foundry.utils.escapeHTML(r)}</span>`).join("")
+  const fmtResists = (resists) => Object.keys(resists || {}).length
+    ? Object.entries(resists).map(([t, f]) => `${t} ×${f}`).map(r => `<span style="background:rgba(120,100,60,0.18); border:1px solid rgba(217,185,107,0.2); padding:0 4px; border-radius:2px; font-size:0.62rem; margin:0 2px;">${foundry.utils.escapeHTML(r)}</span>`).join("")
     : `<span style="opacity:0.4; font-style:italic">none</span>`;
 
   const allPass = rows.every(r => r.pass);

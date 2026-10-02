@@ -366,6 +366,7 @@
   ];
 
   // ── Registration ───────────────────────────────────────────────────────────
+  const OPTION_OWNED_KEYS = new Set(["opt_coordinated_advance", "opt_infernal_bargain"]);
   function _register() {
     const raid = game.bbttcc?.api?.raid;
     const agent = game.bbttcc?.api?.agent;
@@ -376,6 +377,10 @@
 
     let added = 0;
     for (const m of SPRINT2_MANEUVERS) {
+      // Character-option maneuvers are owned by compat-bridge (OPTION_L1_SPECS: owner-ruled cost,
+      // raid types, option gating) + audit-wiring (text/throughput). Never clobber them here —
+      // and never register the sprint-2 copy as a "standard" maneuver anyone could buy.
+      if (OPTION_OWNED_KEYS.has(m.key) || EFFECTS[m.key]?.source === "character-option") continue;
       // EFFECTS entry: picker uses .raidTypes / .cost / .label; fireMode tag here.
       EFFECTS[m.key] = {
         kind: "maneuver",

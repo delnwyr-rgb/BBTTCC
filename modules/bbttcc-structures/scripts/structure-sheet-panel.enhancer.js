@@ -346,8 +346,10 @@ function _bindActions(root, actor, app) {
         ui.notifications?.warn?.("No BOM to re-stamp.");
         return;
       }
-      const raw = cur.materialBOM.map(r => ({ materialKey: r.materialKey, qty: r.qty }));
-      await api.stampBOM(actor, raw, { facilityMode: cur.facilityMode, resetCurrentPlates: true });
+      // Keep the repair baseline (originalQty) and any recipe collapse override —
+      // without them a re-stamp of a chipped structure made the damage permanent.
+      const raw = cur.materialBOM.map(r => ({ materialKey: r.materialKey, qty: r.qty, originalQty: r.originalQty }));
+      await api.stampBOM(actor, raw, { facilityMode: cur.facilityMode, collapseProfile: cur.collapseProfile ?? undefined, resetCurrentPlates: true });
       ui.notifications?.info?.("BOM re-stamped; Plates reset to max.");
       app?.render?.(false);
     });
@@ -877,7 +879,7 @@ async function _openStampPicker(actor, onDone) {
           }
           const derived = await api.stampBOM(actor, preset.bom, opts);
           ui.notifications?.info?.(
-            `Stamped ${preset.label}: Plates ${derived.plates.max}, Threshold ${derived.threshold}, ${derived.resists.length} resist(s).`
+            `Stamped ${preset.label}: Plates ${derived.plates.max}, Threshold ${derived.threshold}, ${Object.keys(derived.resists || {}).length} resist(s).`
           );
           onDone?.();
         }

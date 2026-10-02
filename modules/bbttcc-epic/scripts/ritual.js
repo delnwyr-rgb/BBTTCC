@@ -99,7 +99,7 @@ function parleyCheck(st) {
   const blockers = [];
   const roster = (st.roster ?? []).map(id => game.actors?.get(id)).filter(Boolean);
   const unfaced = roster.filter(a => openFragments(a).length);
-  if (unfaced.length) blockers.push(`fragments un-faced: ${unfaced.map(a => `${a.name} (${openFragments(a).length})`).join(", ")}`);
+  if (unfaced.length) blockers.push(`fragments un-faced: ${unfaced.map(a => `${foundry.utils.escapeHTML(a.name)} (${openFragments(a).length})`).join(", ")}`);
   if ((st.mercy ?? 0) < MERCY_THRESHOLD) blockers.push(`mercy record ${st.mercy ?? 0}/${MERCY_THRESHOLD} — the Dragon has read the ledger`);
   const attackSpent = Object.values(st.instruments ?? {}).filter(i => i.spent && i.use === "attack").length;
   const nonAttack = (st.lamps?.length ?? 0) - attackSpent;
@@ -115,9 +115,9 @@ async function postStation(st) {
     const roster = (st.roster ?? []).map(id => game.actors?.get(id)).filter(Boolean);
     const rows = roster.map(a => {
       const open = openFragments(a);
-      if (!open.length) return `<b>${a.name}</b> — nothing binds them. The Chain passes over.`;
+      if (!open.length) return `<b>${foundry.utils.escapeHTML(a.name)}</b> — nothing binds them. The Chain passes over.`;
       const heaviest = open[open.length - 1];
-      return `<b>${a.name}</b> — the Dragon speaks: <em>"${heaviest.text || heaviest.qliphoth}"</em> (${open.length} open; Soul save vs DC 15; on fail, stress — and their channel is LOCKED this station).`;
+      return `<b>${foundry.utils.escapeHTML(a.name)}</b> — the Dragon speaks: <em>"${heaviest.text || heaviest.qliphoth}"</em> (${open.length} open; Soul save vs DC 15; on fail, stress — and their channel is LOCKED this station).`;
     }).join("<br/>");
     await beatCard(`🐉 STATION I — ${name}`,
       `Seven shackles' worth of memory, worn as teeth. Each steward is bound with their own heaviest un-faced fragment, verbatim:<br/><br/>${rows}`,
@@ -268,7 +268,7 @@ async function answer(choice) {
     await beatCard("⚔ THE SUNDER",
       `Force answers force, and force wins the way force always wins: completely, and at cost. The Dragon is broken${deadLamp ? `, and as it falls, the lamp of <b>${cap(deadLamp)}</b> goes out — forever; its temples keep their peace but pay no more` : ""}. Every steward carries the scar (taint +2, permanent until faced… and there is now more to face).`,
       `The Great Work completes — LESSER · Ego-Dragon Scale Aegis enters the loot · Reformation follows, dimmer`);
-    await gmCard(`⚔ SUNDER applied: taint +2 on ${roster.map(a => a.name).join(", ")}${deadLamp ? ` · dead lamp: ${deadLamp} (its spark hexes stop yielding)` : ""} · award the Ego-Dragon Scale Aegis (master-content items).`);
+    await gmCard(`⚔ SUNDER applied: taint +2 on ${roster.map(a => foundry.utils.escapeHTML(a.name)).join(", ")}${deadLamp ? ` · dead lamp: ${deadLamp} (its spark hexes stop yielding)` : ""} · award the Ego-Dragon Scale Aegis (master-content items).`);
     Hooks.callAll("bbttcc:dragon:sundered", { factionIds, deadLamp });
     Hooks.callAll("bbttcc:ritual:answered", { outcome: "sunder" });
     return { outcome: "sunder", deadLamp };

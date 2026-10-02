@@ -158,6 +158,12 @@
   const ensureReq = (b, conds) => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; };
   edit("cadence_parade", b => { ensureReq(b, GATE_PARADE); if (b.dialogueOffer !== false) b.dialogueOffer = false; }, "gated on the mound + the permit; routing-only");
 
+  // REVIEW 2026-10-01 (MEDIUM): receipt-exchange / roll-outcome beats carry speakers (or a high priority) and were gated only on the beat
+  // before them, so a conversation or the Director could play them without the receipt or the roll. Routing-only now: the choice's own gate
+  // mirrored into inject.requires (added, never removed) + dialogueOffer:false. A route never consults inject.requires, so every authored
+  // choice still lands. Keep in sync with tools/patch-template-review-fixes-b-2026-10-01.macro.js.
+  const routingOnly = (id, conds, what) => edit(id, b => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; if (b.dialogueOffer !== false) b.dialogueOffer = false; }, what);
+  for (const id of ["cadence_tempo_applause", "cadence_tempo_hm"]) routingOnly(id, [P2, { beatMark: "cadence_tempo_at_the_gate" }], "the presence-13 comeback's outcome: routing-only");
   // ── 3. story script ────────────────────────────────────────────────────────
   const storyApi = game.bbttcc?.api?.campaign?.story?.data;
   const code = storyApi?.code?.() || { quests: {}, scripts: {} };
@@ -169,7 +175,8 @@
     SCRIPT.giver = "Tempo, herald of the Cadence, at the gate at golden hour, in full sequin, unarmed";
     SCRIPT.steps = [
       { id: "card", label: "A Formal Declaration of Rhythm", line: "A courier in sequins is at the gate with a card. The scent is confidence. Talk to him before you decide; everything he says comes out in four beats.", beats: ["cadence_declaration"] },
-      { id: "courier", label: "The Courier", line: "He lettered the card himself. Land a comeback and he applauds twice. Refuse him and he leaves the card anyway; paper is patient.", beats: ["cadence_tempo_at_the_gate", "cadence_tempo_applause", "cadence_tempo_hm"], done: { anyOf: ["cadence_tempo_applause", "cadence_tempo_hm", "cadence_the_terms", "cadence_refuse"] } },
+      // only the ENTRY beat: listing the roll's success/fail outcomes made NOW pre-pick one (review 2026-10-01); cand() falls back to the routed frontier
+      { id: "courier", label: "The Courier", line: "He lettered the card himself. Land a comeback and he applauds twice. Refuse him and he leaves the card anyway; paper is patient.", beats: ["cadence_tempo_at_the_gate"], done: { anyOf: ["cadence_tempo_applause", "cadence_tempo_hm", "cadence_the_terms", "cadence_refuse"] } },
       { id: "terms", label: "The Terms", line: "Let the quartermaster read the card at supper. Culture and Soft Power only. The last line is the frightening one.", beats: ["cadence_the_terms"], done: { anyOf: ["cadence_the_terms", "cadence_refuse", "cadence_battle"] } },
       { id: "floor", label: "The Floor", line: "They build the floor in an hour and arrive exactly on time. Find the pocket of the beat and do not leave it. Nobody draws steel. Nobody.", beats: ["cadence_battle"], done: { anyOf: ["cadence_win_style", "cadence_win_ugly", "cadence_lose", "cadence_parade"] } },
       { id: "rematch", label: "The Rematch", group: "again", line: "Cardstock with the turn, like weather. The tribute stands until you dance.", beats: ["cadence_rematch"], done: { anyOf: ["cadence_win_style", "cadence_win_ugly", "cadence_parade"] } },
@@ -185,7 +192,11 @@
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script cadence → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors, after +drum/cameo)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-cadence-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

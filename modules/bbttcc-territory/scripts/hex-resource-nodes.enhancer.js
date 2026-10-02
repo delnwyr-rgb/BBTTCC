@@ -155,7 +155,7 @@
     }
     const attr = baseAttr + aeAttr;
 
-    const formula = `2d10 + ${attr}`;
+    const formula = `${game.fourththing?.rolls?.checkFormula?.() || "2d10x10"} + ${attr}`;   // canon check die (2026-10-01)
     const roll = new Roll(formula);
     await roll.evaluate();
     const total = roll.total;

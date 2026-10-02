@@ -69,7 +69,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     const c = _normCost(cost);
     const parts = [];
     for (const k of Object.keys(c)){
-      parts.push(_prettyKey(k) + " " + _formatMarks(c[k]) + " OP");
+      parts.push(_prettyKey(k) + " " + _formatMarks(c[k]) + " marks");   // costs are marks (marks-everywhere)
     }
     return parts.length ? parts.join(" • ") : "";
   }
@@ -671,7 +671,7 @@ function listSceneHexes(){
 // - Default: show only hexes controlled by faction + adjacent neighbors.
 // - If leylines remote adjacency resolver exists, include those too.
 // - GM can bypass via "Show Locked" toggle (debug / authoring).
-function bbttccFilterHexTargets(allHexes, factionId){
+async function bbttccFilterHexTargets(allHexes, factionId){
   const fid = String(factionId||"").trim();
   if (!fid) return [];
 
@@ -772,20 +772,14 @@ function bbttccFilterHexTargets(allHexes, factionId){
     const remote = game?.bbttcc?.api?.territory?.leylines?.resolveRemoteAdjacency;
     if (typeof remote === "function") {
       for (const u of ownedUuids) {
-        const res = remote({ hexUuid: u, factionId: fid });
-        // Support both sync and async resolvers (some worlds attach sync wrappers)
-        // by awaiting only if it looks like a Promise.
-        const handle = (r) => {
-          if (!r?.ok || !Array.isArray(r.links)) return;
-          for (const l of r.links) {
-            const to = String(l?.toUuid || "").trim();
-            if (to) allowed.add(to);
-          }
-        };
-        if (res && typeof res.then === "function") {
-          res.then(handle).catch(()=>{});
-        } else {
-          handle(res);
+        // Sync or async resolver — AWAIT it: the filtered list is built right after this
+        // loop, so a .then() callback landed too late and ley-gate links never appeared.
+        let r = null;
+        try { r = await remote({ hexUuid: u, factionId: fid }); } catch (_e) { r = null; }
+        if (!r?.ok || !Array.isArray(r.links)) continue;
+        for (const l of r.links) {
+          const to = String(l?.toUuid || "").trim();
+          if (to) allowed.add(to);
         }
       }
     }
@@ -873,7 +867,8 @@ Hooks.once("init",()=>{
     if (!opCosts || typeof opCosts !== "object") return "";
     const parts = [];
     for (const key of OP_ORDER) {
-      const v = Number(opCosts[key] || 0);
+      // Most strategic rows register lowercase `softpower` / `nonlethal` (or snake_case) — read every spelling.
+      const v = Number(opCosts[key] || opCosts[key.toLowerCase()] || opCosts[key.replace(/[A-Z]/g, m => "_" + m.toLowerCase())] || 0);
       if (!v) continue;
       const icon  = OP_ICONS[key]  || "";
       const label = OP_LABELS[key] || prettifyKey(key);
@@ -1140,6 +1135,8 @@ if (_fid) {
           }
 
           if (!primary) primary = "misc";
+          // One spelling per category (else a separate "Softpower" filter chip appears).
+          { const pl = String(primary).toLowerCase().replace(/_/g, ""); if (pl === "softpower") primary = "softPower"; else if (pl === "nonlethal") primary = "nonLethal"; }
 
           // Preserve legacy behavior: if a non-option activity lacks an explicit tier,
           // we may allow using groupOrder as a legacy stand-in *only when opted in*.
@@ -1295,7 +1292,7 @@ if (_fid) {
       const bypassTargets = (game?.user?.isGM && this._plannerState.showLocked);
       const hexes = bypassTargets
         ? hexesAll
-        : bbttccFilterHexTargets(hexesAll, this._plannerState.factionId);
+        : await bbttccFilterHexTargets(hexesAll, this._plannerState.factionId);
 
 
       // Determine faction + access
@@ -1721,6 +1718,7 @@ wrap.appendChild(top);
 
         const showLocked = document.createElement("input");
         showLocked.type = "checkbox";
+        showLocked.dataset.tour = "planner.showLocked";   // onboarding tour anchor
         showLocked.checked = !!this._plannerState.showLocked;
 
         const showLockedLabel = document.createElement("span");
@@ -2019,23 +2017,32 @@ wrap.appendChild(top);
       }
 
       // --- Event wiring ---
+      // A re-render (or close) mid-pick must not orphan the previous render's canvas listener.
+      if (this._pickHandler) { canvas?.stage?.off?.("pointerdown", this._pickHandler); this._pickHandler = null; }
       let picking = false;
       const endPick = () => {
         picking = false;
         canvas?.stage?.off?.("pointerdown", onPick);
+        if (this._pickHandler === onPick) this._pickHandler = null;
         pickBtn.classList.remove("active");
       };
 
       const onPick = async (ev) => {
         if (!picking) return;
-        const pt = ev.data?.global;
+        // Pointer → WORLD (canvas) coordinates; drawing bounds are world-space, the raw
+        // `global` point is screen pixels (wrong under any pan/zoom).
+        let pt = null;
+        try { pt = ev.getLocalPosition?.(canvas.stage) ?? canvas.stage.worldTransform.applyInverse(ev.global ?? ev.data?.global); } catch (_e) { pt = null; }
         if (!pt) return;
         const cand = listSceneHexes();
         let chosen = null;
         for (const h of cand) {
           const doc = await fromUuid(h.uuid).catch(()=>null);
           const obj = doc?.object;
-          if (obj?.hitArea?.contains?.(pt.x, pt.y) || obj?.bounds?.contains?.(pt.x, pt.y)) {
+          // hitArea is in the drawing's LOCAL space; bounds are world-space.
+          let lp = null; try { lp = obj?.toLocal?.(pt, canvas.stage) ?? null; } catch (_e) { lp = null; }
+          const hit = (obj?.hitArea?.contains && lp) ? obj.hitArea.contains(lp.x, lp.y) : !!obj?.bounds?.contains?.(pt.x, pt.y);
+          if (hit) {
             chosen = h;
             break;
           }
@@ -2071,6 +2078,7 @@ wrap.appendChild(top);
             ui.notifications?.info?.("Click a hex on the canvas");
             pickBtn.classList.add("active");
             canvas.stage.on("pointerdown", onPick);
+            this._pickHandler = onPick;
           } else {
             endPick();
           }
@@ -2190,9 +2198,6 @@ wrap.appendChild(top);
         }
       });
 
-      this.onClose = () => {
-        canvas?.stage?.off?.("pointerdown", onPick);
-      };
       try { if (globalThis.BBTTCC_TooltipManager) globalThis.BBTTCC_TooltipManager.bind(wrap); } catch(e) {}
 
       return wrap;
@@ -2201,6 +2206,12 @@ wrap.appendChild(top);
     async _renderHTML(){
       const html = await this._renderInner();
       return { html, parts:{ body: html } };
+    }
+
+    // ApplicationV2 never calls an `onClose` property — drop the canvas pick listener here.
+    _onClose(options){
+      if (this._pickHandler) { canvas?.stage?.off?.("pointerdown", this._pickHandler); this._pickHandler = null; }
+      return super._onClose?.(options);
     }
 
     async _replaceHTML(result){

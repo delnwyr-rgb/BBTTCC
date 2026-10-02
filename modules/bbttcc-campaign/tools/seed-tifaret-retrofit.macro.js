@@ -107,6 +107,12 @@
   edit("forest_of_tifaret_session_do_ok", b => { addChoice(b, ch("The road, then.", "tifaret_road_open")); }, "the road stays open");
   edit("forest_of_tifaret_harmonious_lite", b => { addChoice(b, ch("The road, then.", "tifaret_road_open"), true); }, "the road stays open");
 
+  // REVIEW 2026-10-01 (MEDIUM): receipt-exchange / roll-outcome beats carry speakers (or a high priority) and were gated only on the beat
+  // before them, so a conversation or the Director could play them without the receipt or the roll. Routing-only now: the choice's own gate
+  // mirrored into inject.requires (added, never removed) + dialogueOffer:false. A route never consults inject.requires, so every authored
+  // choice still lands. Keep in sync with tools/patch-template-review-fixes-b-2026-10-01.macro.js.
+  const routingOnly = (id, conds, what) => edit(id, b => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; if (b.dialogueOffer !== false) b.dialogueOffer = false; }, what);
+  routingOnly("tifaret_heading_confirmed", [P2, { beatMark: "tifaret_the_ring" }, { beatMark: "lyrenn_vault_label" }], "the heading needs the ring + the Vault Label; routing-only");
   // ── 3. story script ────────────────────────────────────────────────────────
   const storyApi = game.bbttcc?.api?.campaign?.story?.data;
   const code = storyApi?.code?.() || { quests: {}, scripts: {} };
@@ -136,7 +142,11 @@
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
-  const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  let scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
+  // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
+  // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
+  { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script tifaret → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors, after +road)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-tifaret-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

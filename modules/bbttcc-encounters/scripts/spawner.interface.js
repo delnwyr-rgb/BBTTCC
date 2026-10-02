@@ -47,10 +47,21 @@
     const tokenData = [];
 
     for (const spec of specs) {
-      const actor = await resolveActor(spec.actor);
+      let actor = await resolveActor(spec.actor);
       if (!actor) {
         warn("spawnTokens: actor not found", spec.actor);
         continue;
+      }
+      // A compendium actor cannot back a token (v14 has no actorData field — the token would have no actor):
+      // import it into the world first and spawn from the world copy.
+      if (actor.pack && !game.actors?.get?.(actor.id)) {
+        try {
+          // Reuse a copy imported earlier (no duplicate world actors per spawn).
+          const prior = game.actors?.find?.(a => a?._stats?.compendiumSource === actor.uuid) || null;
+          const pack = game.packs?.get(actor.pack);
+          const imported = prior || (pack ? await game.actors.importFromCompendium(pack, actor.id) : null);
+          if (imported) actor = imported;
+        } catch (e) { warn("spawnTokens: compendium import failed", spec.actor, e); }
       }
 
       const x = Number(spec.x ?? 0);
@@ -85,18 +96,12 @@
       try { delete tokenObj._id; } catch (_e) {}
       try { delete tokenObj._stats; } catch (_e) {}
 
-      // If the actor is not a World actor (e.g., Compendium actor), we must embed actorData.
-      if (isWorldActor) {
-        tokenObj.actorId = actor.id;
-      } else {
-        // Do NOT set actorId; embed actorData instead.
-        try { delete tokenObj.actorId; } catch (_e) {}
-        try { delete tokenObj.actorLink; } catch (_e) {}
-        tokenObj.actorLink = false;
-        tokenObj.actorData = actor.toObject ? actor.toObject() : foundry.utils.deepClone(actor);
-        // Ensure embedded actor has no _id so Foundry can generate synthetic ids safely.
-        try { delete tokenObj.actorData._id; } catch (_e) {}
+      // Tokens need a World actor (compendium actors were imported above).
+      if (!isWorldActor) {
+        warn("spawnTokens: no world actor to back the token; skipped", spec.actor);
+        continue;
       }
+      tokenObj.actorId = actor.id;
 
       // Placement + overrides
       tokenObj.name = (spec.name ?? tokenObj.name ?? actor.name);
@@ -177,12 +182,14 @@
     const list = Array.isArray(actorIdsOrUuids) ? actorIdsOrUuids.filter(Boolean) : [];
     if (!list.length) return [];
 
-    const width  = scene.width  || 4000;
-    const height = scene.height || 3000;
+    // Centre of the SCENE RECT (padding-aware via scene.dimensions), snapped to the grid.
+    const dims   = scene.dimensions || {};
+    const width  = Number(dims.sceneWidth  ?? scene.width  ?? 4000);
+    const height = Number(dims.sceneHeight ?? scene.height ?? 3000);
     const grid   = scene.grid?.size || 100;
 
-    const cx = Math.floor((width / 2) / grid) * grid;
-    const cy = Math.floor((height / 2) / grid) * grid;
+    const cx = Math.floor((Number(dims.sceneX ?? 0) + width / 2) / grid) * grid;
+    const cy = Math.floor((Number(dims.sceneY ?? 0) + height / 2) / grid) * grid;
 
     const radius = (opts.radius ?? 1.5) * grid;
 
@@ -428,15 +435,19 @@
     // hardcoded PC_IDS list is retired to a testFire-only fallback below).
     const placedPCs = await spawnFactionPCs(scene, ctx, { spawnedBy: spawnedKey });
 
-    const width  = scene.width  || 4000;
-    const height = scene.height || 3000;
+    // Padding-aware: canvas coordinates start at dimensions.sceneX/sceneY.
+    const dims   = scene.dimensions || {};
+    const sx     = Number(dims.sceneX ?? 0);
+    const sy     = Number(dims.sceneY ?? 0);
+    const width  = Number(dims.sceneWidth  ?? scene.width  ?? 4000);
+    const height = Number(dims.sceneHeight ?? scene.height ?? 3000);
     const grid   = scene.grid?.size || 100;
-    const centerX = width / 2;
+    const centerX = sx + width / 2;
 
     if (!placedPCs.length && !_gatherParticipantFactionRefs(ctx).length) {
       // No faction ctx (manual testFire) — legacy fallback so test fires still
       // show a party. Dead actor ids resolve to warn+skip harmlessly.
-      const pcY = height - (3 * grid);
+      const pcY = sy + height - (3 * grid);
       const pcSpecs = PC_IDS.map((id, idx) => ({
         actor: id,
         role: "pc",
@@ -453,7 +464,7 @@
     const hasHostiles = iterTokenDocs(scene).some(t =>
       Number(t?.disposition) === CONST.TOKEN_DISPOSITIONS.HOSTILE);
     if (!hasHostiles) {
-      const banditY = 2 * grid;
+      const banditY = sy + 2 * grid;
       const banditSpecs = BANDIT_IDS.map((id, idx) => ({
         actor: id,
         role: "npc",

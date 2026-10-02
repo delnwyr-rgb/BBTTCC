@@ -66,7 +66,7 @@
   // Some legacy turn pipelines write a fixed "Trend: Morale→1% • Loyalty→1%" summary
   // even when the underlying flags did not change (e.g., due to rounding).
   // This pass rewrites (or appends) a Trend entry based on actual stored deltas.
-  async function reconcileTrendWarLog(A, beforeMorale, beforeLoyalty) {
+  async function reconcileTrendWarLog(A, beforeMorale, beforeLoyalty, minIdx = Infinity) {
     try {
       if (!A) return;
       const afterMorale = Number(A.getFlag(MODF, "morale") ?? 0);
@@ -77,7 +77,10 @@
       const wl = Array.isArray(A.getFlag(MODF, "warLogs")) ? A.getFlag(MODF, "warLogs").slice() : [];
       const now = Date.now();
       const date = (new Date(now)).toLocaleString();
-      const summary = `Trend: Morale→${dm}% • Loyalty→${dl}%`;
+      // Absolute after-values with the track-pass delta labelled (2026-10-01) — the old
+      // "Morale→-1%" replaced turn-extensions' absolute line with a bare delta.
+      const sg = n => (n > 0 ? `+${n}` : `${n}`);
+      const summary = `Trend: Morale→${afterMorale}% (Δ${sg(dm)}) • Loyalty→${afterLoyalty}% (Δ${sg(dl)})`;
 
       // Find most recent Trend entry near "now" and rewrite it; otherwise append a new one.
       let idx = -1;
@@ -87,9 +90,11 @@
         if (!s.includes("Trend:")) continue;
 
         const ts = Number(e.ts || 0);
-        // prefer entries created in the last 5 minutes, otherwise just take the last Trend
-        if (idx === -1) idx = i;
-        if (ts && (now - ts) < 5 * 60 * 1000) { idx = i; break; }
+        // Only rewrite a Trend entry written during THIS turn (2026-10-01) — falling back to
+        // "the last Trend" overwrote an earlier turn's history in place.
+        // (turn-extensions' Trend line carries no ts — minIdx = warLog length before this
+        // Advance marks it as this turn's.)
+        if ((ts && (now - ts) < 5 * 60 * 1000) || i >= minIdx) idx = i;
         break;
       }
 
@@ -114,77 +119,89 @@
   const RAD_SPREAD_CHANCE    = 0.25;
   const RAD_MAX_NEIGHBORS    = 6;
 
-  function neighborsOfDraw(draw, all) {
-    const { x:cx, y:cy } = draw.center;
+  // World-wide, document-based (2026-10-01): these tracks used canvas placeables, so they only
+  // ran on whatever scene the advancing GM was viewing. Hex docs + geometry from the document.
+  function isHexDoc(doc) {
+    const tf = doc?.flags?.[MODT];
+    return !!tf && (tf.isHex === true || tf.kind === "territory-hex");
+  }
+  function docCenter(doc) {
+    const w = Number(doc?.shape?.width || 0), h = Number(doc?.shape?.height || 0);
+    return { x: Number(doc?.x || 0) + w / 2, y: Number(doc?.y || 0) + h / 2 };
+  }
+  // Adjacent hexes only: nearest six within ~1.1 × the hex's bounding size (ring 2 is ≥ 1.5×).
+  function hexNeighborsOf(doc, all) {
+    const c = docCenter(doc);
+    const size = Math.max(Number(doc?.shape?.width || 0), Number(doc?.shape?.height || 0));
+    const limit = size > 0 ? size * 1.1 : Infinity;
     return all
-      .filter(d => d.id !== draw.id)
-      .map(d => ({ d, dist: Math.hypot(d.center.x - cx, d.center.y - cy) }))
+      .filter(o => o.id !== doc.id)
+      .map(o => { const oc = docCenter(o); return { o, dist: Math.hypot(oc.x - c.x, oc.y - c.y) }; })
+      .filter(e => e.dist <= limit)
       .sort((a,b) => a.dist - b.dist)
       .slice(0, RAD_MAX_NEIGHBORS)
-      .map(e => e.d);
+      .map(e => e.o);
+  }
+  function hexDocsByScene() {
+    const out = [];
+    for (const sc of game.scenes ?? []) {
+      const hexes = (sc.drawings?.contents ?? Array.from(sc.drawings ?? [])).filter(isHexDoc);
+      if (hexes.length) out.push({ sc, hexes });
+    }
+    return out;
   }
 
   async function doRadiationDecayAndSpread() {
-    const draws = canvas?.drawings?.placeables ?? [];
-    if (!draws.length) return;
-
-    const neighborMap = new Map();
-    for (const d of draws) neighborMap.set(d.id, neighborsOfDraw(d, draws));
-
     const updates = [];
     const lines   = [];
-    const seeds   = [];
 
-    for (const d of draws) {
-      const tf   = d.document.flags?.[MODT] || {};
-      const mods = (typeof tf.mods === "object" && tf.mods) ? foundry.utils.duplicate(tf.mods) : {};
-      const conds = Array.isArray(tf.conditions) ? tf.conditions.slice() : [];
-      const name  = d.document.name ?? d.document.text ?? d.id;
+    for (const { sc, hexes } of hexDocsByScene()) {
+      // Working state per hex — the spread pass reads the DECAYED values from here (it used to
+      // re-read stale flags while the decay update was still in flight and undo the decay).
+      const state = new Map();
+      const seeds = [];
 
-      let rPrev = Number(mods.radiation || 0);
-      let rNext = rPrev;
+      for (const d of hexes) {
+        const tf   = d.flags?.[MODT] || {};
+        const mods = (typeof tf.mods === "object" && tf.mods) ? foundry.utils.duplicate(tf.mods) : {};
+        const conds = Array.isArray(tf.conditions) ? tf.conditions.slice() : [];
+        const name  = d.name ?? d.text ?? d.id;
+        const st = { d, mods, conds, dirty: false };
+        state.set(d.id, st);
 
-      if (rPrev > 0) {
-        rNext = Math.max(0, rPrev - RAD_DECAY_PER_TURN);
-        mods.radiation = rNext;
+        const rPrev = Number(mods.radiation || 0);
+        let rNext = rPrev;
+        if (rPrev > 0) {
+          rNext = Math.max(0, rPrev - RAD_DECAY_PER_TURN);
+          mods.radiation = rNext;
+          st.dirty = true;
+          if (rNext === 0 && conds.includes("Radiated")) {
+            st.conds = conds.filter(c => c !== "Radiated");
+            lines.push(`• <b>${foundry.utils.escapeHTML(name)}</b>: Radiation cleared`);
+          } else {
+            lines.push(`• <b>${foundry.utils.escapeHTML(name)}</b>: Radiation −${RAD_DECAY_PER_TURN} (now ${rNext})`);
+          }
+        }
+        if (rNext >= RAD_SPREAD_THRESHOLD) seeds.push(d);
+      }
 
-        if (rNext === 0 && conds.includes("Radiated")) {
-          const newConds = conds.filter(c => c !== "Radiated");
-          updates.push(d.document.update({
-            [`flags.${MODT}.mods`]: mods,
-            [`flags.${MODT}.conditions`]: newConds
-          }, { parent: d.document.parent ?? null }));
-          lines.push(`• <b>${foundry.utils.escapeHTML(name)}</b>: Radiation cleared`);
-        } else {
-          updates.push(d.document.update({
-            [`flags.${MODT}.mods`]: mods
-          }, { parent: d.document.parent ?? null }));
-          lines.push(`• <b>${foundry.utils.escapeHTML(name)}</b>: Radiation −${RAD_DECAY_PER_TURN} (now ${rNext})`);
+      for (const src of seeds) {
+        for (const n of hexNeighborsOf(src, hexes)) {
+          if (Math.random() > RAD_SPREAD_CHANCE) continue;
+          const st = state.get(n.id); if (!st) continue;
+          if (!st.conds.includes("Radiated")) st.conds.push("Radiated");
+          st.mods.radiation = Math.max(1, Number(st.mods.radiation || 0));
+          st.dirty = true;
+          lines.push(`• <b>${foundry.utils.escapeHTML(n.name ?? n.text ?? n.id)}</b>: Radiation spread`);
         }
       }
 
-      if (rNext >= RAD_SPREAD_THRESHOLD) seeds.push(d);
-    }
-
-    for (const src of seeds) {
-      const nbrs = neighborMap.get(src.id) || [];
-      for (const n of nbrs) {
-        if (Math.random() > RAD_SPREAD_CHANCE) continue;
-
-        const tfN   = n.document.flags?.[MODT] || {};
-        const modsN = (typeof tfN.mods === "object" && tfN.mods) ? foundry.utils.duplicate(tfN.mods) : {};
-        let condsN  = Array.isArray(tfN.conditions) ? tfN.conditions.slice() : [];
-        const nameN = n.document.name ?? n.document.text ?? n.id;
-
-        if (!condsN.includes("Radiated")) condsN.push("Radiated");
-        modsN.radiation = Math.max(1, Number(modsN.radiation || 0));
-
-        updates.push(n.document.update({
-          [`flags.${MODT}.mods`]: modsN,
-          [`flags.${MODT}.conditions`]: [...new Set(condsN)]
-        }, { parent: n.document.parent ?? null }));
-
-        lines.push(`• <b>${foundry.utils.escapeHTML(nameN)}</b>: Radiation spread`);
+      for (const st of state.values()) {
+        if (!st.dirty) continue;
+        updates.push(st.d.update({
+          [`flags.${MODT}.mods`]: st.mods,
+          [`flags.${MODT}.conditions`]: [...new Set(st.conds)]
+        }, { parent: sc }));
       }
     }
 
@@ -267,38 +284,25 @@
   // CLEANUP AURA: PURIFIED HEX CLEANS NEIGHBORS
   // ===========================================================================
 
-  function neighborsDrawings(draw, all) {
-    const { x:cx, y:cy } = draw.center;
-    return all
-      .filter(d => d.id !== draw.id)
-      .map(d => ({ d, dist: Math.hypot(d.center.x - cx, d.center.y - cy) }))
-      .sort((a,b) => a.dist - b.dist)
-      .slice(0, 6)
-      .map(e => e.d);
-  }
-
   async function doCleanupAura() {
     const gm = gmIds();
     const lines = [];
 
-    for (const sc of game.scenes ?? []) {
-      const draws = sc.drawings ?? [];
-      const placeables = draws.map(d => d.object).filter(Boolean);
-      const sources = placeables.filter(o => {
-        const tf = o?.document?.flags?.[MODT]; if (!tf) return false;
-        const conds = Array.isArray(tf.conditions) ? tf.conditions : [];
-        return conds.includes("Purified");
+    for (const { sc, hexes } of hexDocsByScene()) {
+      const sources = hexes.filter(d => {
+        const conds = d.flags?.[MODT]?.conditions;
+        return Array.isArray(conds) && conds.includes("Purified");
       });
 
       if (!sources.length) continue;
 
       const updates = [];
       for (const src of sources) {
-        const nbrs = neighborsDrawings(src, placeables);
+        const nbrs = hexNeighborsOf(src, hexes);
         const cleaned = [];
 
         for (const n of nbrs) {
-          const tf = n.document.flags?.[MODT] || {};
+          const tf = n.flags?.[MODT] || {};
           const hadConds = Array.isArray(tf.conditions) ? tf.conditions.slice() : [];
           const willClear = hadConds.includes("Contaminated") || hadConds.includes("Radiated");
           if (!willClear) continue;
@@ -307,16 +311,16 @@
           const mods = (typeof tf.mods === "object" && tf.mods) ? foundry.utils.duplicate(tf.mods) : {};
           if (Number(mods.radiation || 0) !== 0) mods.radiation = 0;
 
-          updates.push(n.document.update({
+          updates.push(n.update({
             [`flags.${MODT}.conditions`]: nextConds,
             [`flags.${MODT}.mods`]: mods
-          }, { parent: n.document.parent ?? null }));
+          }, { parent: sc }));
 
-          cleaned.push(n.document.name ?? n.document.text ?? n.id);
+          cleaned.push(n.name ?? n.text ?? n.id);
         }
 
         if (cleaned.length) {
-          const srcName = src.document.name ?? src.document.text ?? src.id;
+          const srcName = src.name ?? src.text ?? src.id;
           lines.push(
             `• <b>${foundry.utils.escapeHTML(srcName)}</b>: Aura cleansed → `
             + cleaned.map(x=>foundry.utils.escapeHTML(x)).join(", ")
@@ -977,7 +981,7 @@
       if (after === before) continue;
       bank.logistics = after;
       const warLogs = Array.isArray(A.getFlag(MODF, "warLogs")) ? A.getFlag(MODF, "warLogs").slice() : [];
-      warLogs.push({ ts: Date.now(), type: "logisticsRoute", summary: `Trade Routes: ${routeCount} → Logistics +${bonus}` });
+      warLogs.push({ ts: Date.now(), type: "logisticsRoute", summary: `Trade Routes: ${routeCount} → Logistics +${after - before} marks` });
       await A.update({ [`flags.${MODF}.opBank`]: bank, [`flags.${MODF}.warLogs`]: warLogs });
       lines.push(`• <b>${foundry.utils.escapeHTML(A.name)}</b>: Trade Routes ${routeCount} → Logistics ${before}→${after} marks`);
     }
@@ -994,13 +998,14 @@
   }
 
   async function doLeylinePurityDrift() {
-    const draws = canvas?.drawings?.placeables ?? [];
+    // World-wide (2026-10-01) — was the viewed scene's placeables only.
+    const draws = [];
+    for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) draws.push(d);
     if (!draws.length) return;
 
     const updates = [];
 
-    for (const o of draws) {
-      const d  = o.document;
+    for (const d of draws) {
       const tf = d.flags?.[MODT];
       if (!tf?.leylines) continue;
 
@@ -1047,12 +1052,18 @@
     const base = terr.advanceTurn.bind(terr);
 
     terr.advanceTurn = async function wrappedAdvanceTurn(args = {}) {
+      const __wlLenBefore = new Map();
+      if (args?.apply) for (const A of facActors()) {
+        try { const wl = A.getFlag(MODF, "warLogs"); __wlLenBefore.set(String(A.id), Array.isArray(wl) ? wl.length : 0); } catch {}
+      }
       const res = await base(args).catch(e => {
         console.warn(TAG, "base advanceTurn error", e);
         return { changed:false, rows:[], error:true };
       });
 
-      if (!args?.apply) return res;
+      // Skip the track pass when the base turn did not run (turn lock → skipped) or threw
+      // (2026-10-01): a second Advance click otherwise ran every track twice.
+      if (!args?.apply || res?.skipped || res?.error) return res;
 
       try {
         // Canonicalize any legacy nested track flags before applying track logic.
@@ -1089,7 +1100,7 @@
         // Reconcile the per-turn Trend warLog entry based on actual deltas
         for (const A of facActors()) {
           const b = __bbttccTrendBefore.get(String(A.id)) || { morale: 0, loyalty: 0 };
-          await reconcileTrendWarLog(A, b.morale, b.loyalty);
+          await reconcileTrendWarLog(A, b.morale, b.loyalty, __wlLenBefore.get(String(A.id)) ?? Infinity);
         }
 
       } catch (e) {

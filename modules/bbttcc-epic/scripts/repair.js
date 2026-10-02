@@ -127,6 +127,7 @@ async function onWorldHealthRecomputed() {
 async function checkMalkuthSeam(wh) {
   try {
     if (!game.user?.isGM) return; // one writer for the world latch + the beat
+    const gm = game.users?.activeGM; if (gm && !gm.isSelf) return; // ...and only the active GM of several
     const already = game.settings.get(MOD, "malkuthAligned");
     if (wh.total > 0 && wh.pct >= 100 && !already) {
       await game.settings.set(MOD, "malkuthAligned", true);

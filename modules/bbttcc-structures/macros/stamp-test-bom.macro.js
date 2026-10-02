@@ -114,8 +114,10 @@
             </tr>`;
           }).join("");
 
-          const resistsHtml = derived.resists.length
-            ? derived.resists.map(r => `<span style="background:rgba(120,100,60,0.18); border:1px solid rgba(217,185,107,0.2); padding:1px 6px; border-radius:2px; font-size:0.7rem; margin-right:3px;">${foundry.utils.escapeHTML(r)}</span>`).join("")
+          // resists is a canonical-type → factor MAP, not an array.
+          const rk = Object.entries(derived.resists || {});
+          const resistsHtml = rk.length
+            ? rk.map(([t, f]) => `<span style="background:rgba(120,100,60,0.18); border:1px solid rgba(217,185,107,0.2); padding:1px 6px; border-radius:2px; font-size:0.7rem; margin-right:3px;">${foundry.utils.escapeHTML(`${t} ×${f}`)}</span>`).join("")
             : `<i style="opacity:0.5">none</i>`;
 
           ChatMessage.create({

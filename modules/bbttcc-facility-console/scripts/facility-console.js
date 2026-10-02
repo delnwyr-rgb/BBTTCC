@@ -826,12 +826,16 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
     const sig = this._abort.signal;
 
     const form = root.querySelector("form.bbttcc-facility-config-form");
+    // The live shim template has no legacy config form: skip the whole legacy
+    // listener block, else the capture-phase Save listener below swallows the
+    // shim's own `.bbttcc-button.primary` (Create New Facility) clicks and the
+    // `_sync*(null)` calls throw, which also stops the render hooks firing.
+    if (!form) return;
 
     root.addEventListener("click", (ev) => {
       const btn = ev.target.closest?.(".bbttcc-button.primary");
       if (!btn) return;
       ev.preventDefault(); ev.stopPropagation();
-      if (!form) return;
       this._handleSave(form);
     }, { capture: true, signal: sig });
 

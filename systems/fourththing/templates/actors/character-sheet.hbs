@@ -537,7 +537,7 @@
         <div class="ft-resource-row">
           <div class="ft-burn-track">
             {{#each (times 8) as |n|}}
-            <span class="ft-burn-pip {{#if (lte (add n 1) (or ../resources.burn.current 0))}}lit {{../burnBand.label}}{{/if}}">▰</span>
+            <span class="ft-burn-pip {{#if (lte (add n 1) (ftOr ../resources.burn.current 0))}}lit {{../burnBand.label}}{{/if}}">▰</span>
             {{/each}}
           </div>
           <span class="ft-resource-count" style="color:{{burnBand.color}}">{{resources.burn.current}}/8 {{burnBand.label}}</span>
@@ -564,8 +564,8 @@
         <h3>🗝 Access Dice <span class="ft-resource-tag">Shadowjack</span></h3>
         <div class="ft-resource-row">
           <div class="ft-die-pips">
-            {{#each (times (or resources.accessDice.max 3)) as |n|}}
-            <span class="ft-die-pip {{#if (lte (add n 1) (or ../resources.accessDice.current 0))}}active{{/if}}">◈</span>
+            {{#each (times (ftOr resources.accessDice.max 3)) as |n|}}
+            <span class="ft-die-pip {{#if (lte (add n 1) (ftOr ../resources.accessDice.current 0))}}active{{/if}}">◈</span>
             {{/each}}
           </div>
           <span class="ft-resource-count">{{resources.accessDice.current}} / {{resources.accessDice.max}}</span>
@@ -651,14 +651,14 @@
               Forge-Weld etc. via the Surge "Spend" button. --}}
         <div class="ft-resource-row" style="margin-top:0.35rem" data-tooltip="Forge heat: rises +1 when you or a nearby ally takes damage. Cool 0–1 / Stoked 2–3 (repairs ×1.5) / Overheated 4+ (repairs ×2, but the furnace bites). Vent via Stabilize.">
           <div class="ft-burn-track" style="display:inline-flex;gap:1px;letter-spacing:-0.05em">
-            {{#each (times 8) as |n|}}<span style="color:{{#if (lte (add n 1) (or ../resources.burn.current 0))}}{{../burnBand.color}}{{else}}rgba(255,255,255,0.15){{/if}}">▰</span>{{/each}}
+            {{#each (times 8) as |n|}}<span style="color:{{#if (lte (add n 1) (ftOr ../resources.burn.current 0))}}{{../burnBand.color}}{{else}}rgba(255,255,255,0.15){{/if}}">▰</span>{{/each}}
           </div>
-          <span class="ft-resource-count" style="color:{{burnBand.color}}">🔥 {{or resources.burn.current 0}}/8 · {{burnBand.label}}</span>
+          <span class="ft-resource-count" style="color:{{burnBand.color}}">🔥 {{ftOr resources.burn.current 0}}/8 · {{burnBand.label}}</span>
           <div class="ft-resource-controls">
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_stabilize" data-tooltip="Vent the forge (cool Burn).">Vent</button>
           </div>
           <div class="ft-edit-only ft-resource-edit">
-            <input type="number" name="system.resources.burn.current" value="{{or resources.burn.current 0}}" min="0" max="8" style="width:40px" data-tooltip="Forge heat (Burn 0–8)"/>
+            <input type="number" name="system.resources.burn.current" value="{{ftOr resources.burn.current 0}}" min="0" max="8" style="width:40px" data-tooltip="Forge heat (Burn 0–8)"/>
           </div>
         </div>
         {{!-- Band readout: what the current forge heat is doing right now. --}}
@@ -1320,7 +1320,7 @@
         <summary class="ft-item-summary">
           <img src="{{feat.img}}" class="ft-item-art" data-tooltip="{{feat.name}}"/>
           <span class="ft-item-name">{{feat.name}}</span>
-          <span class="ft-item-type-pill ft-type-{{feat.type}}">{{or feat.typeLabel feat.type}}</span>
+          <span class="ft-item-type-pill ft-type-{{feat.type}}">{{ftOr feat.typeLabel feat.type}}</span>
           <div class="ft-item-controls">
             {{#if feat.hasActiveAbility}}
             <button type="button" data-action="ftUseFeature" class="ft-use-sm" data-tooltip="Activate">▶</button>
@@ -1504,8 +1504,10 @@
               {{/if}}
             </section>
 
-            {{!-- Threads of the Work (the tikkun actions list) --}}
-            {{#if bbttcc.active}}
+            {{!-- Threads of the Work (the tikkun actions list). 2026-10-01: nothing in
+                 the repo writes tikkun actions yet, so the panel only shows when
+                 there are threads (it used to sit permanently empty). --}}
+            {{#if (and bbttcc.active bbttcc.tikkun.tikkunActions.length)}}
             <section class="ft-work-panel">
               <header class="ft-work-panel-head"><h3>Threads of the Work</h3></header>
               {{#if bbttcc.tikkun.tikkunActions.length}}

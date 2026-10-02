@@ -179,7 +179,7 @@ export function buildPresenceRows(actor) {
     </div>`;
 
   if (game.user?.isGM && party) {
-    const huntedName = party.huntedId ? (game.actors?.get(party.huntedId)?.name ?? "—") : "— none —";
+    const huntedName = foundry.utils.escapeHTML(party.huntedId ? (game.actors?.get(party.huntedId)?.name ?? "—") : "— none —");
     html += `<div class="bbttcc-epic-party">
         <span class="be-pr-label">Party</span>
         <span class="be-pr-val">${party.total}</span>
@@ -221,7 +221,7 @@ function injectFactionChip(app, html) {
     if (!target || !target.length) return;
     $html.find("#bbttcc-epic-faction-presence").remove();
     const bandInfo = presenceFactor(party.total);
-    const huntedName = party.huntedId ? (game.actors?.get(party.huntedId)?.name ?? "—") : "— none —";
+    const huntedName = foundry.utils.escapeHTML(party.huntedId ? (game.actors?.get(party.huntedId)?.name ?? "—") : "— none —");
     const chip = $(`
       <section id="bbttcc-epic-faction-presence" class="bbttcc-epic-faction-presence" style="flex:0 0 auto;align-self:stretch;">
         <span class="be-pr-label">Presence</span>

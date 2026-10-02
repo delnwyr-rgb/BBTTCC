@@ -83,20 +83,19 @@
   }
 
   Hooks.once("ready", () => {
-    Hooks.on("bbttcc:advanceTurn:end", async (ctx) => {
+    // Fired by faction-pressure.enhancer.js AFTER its writes have landed (Apply turns
+    // only, GM only), so this always reads THIS turn's pressure — the old one-tick
+    // deferral off bbttcc:advanceTurn:end raced the pressure writes. 2026-10-01.
+    Hooks.on("bbttcc:pressure:written", async (ctx) => {
       try {
         if (!game.user?.isGM) return;   // world-state writes run once, on the GM
-        // Only advance stability counters on Apply turns if ctx.apply is provided.
-        if (ctx && typeof ctx === "object" && "apply" in ctx && !ctx.apply) return;
-
-        // Defer one tick so pressure/unpaid flags are already written.
-        await new Promise(r => setTimeout(r, 0));
+        if (!ctx?.apply) return;
         await runForAllFactions();
       } catch (e) {
         console.warn(TAG, "stability update failed:", e);
       }
     });
 
-    console.log(TAG, "installed (bbttcc:advanceTurn:end, Apply-only, deferred).");
+    console.log(TAG, "installed (bbttcc:pressure:written, Apply-only).");
   });
 })();

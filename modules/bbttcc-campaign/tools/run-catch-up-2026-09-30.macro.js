@@ -11,7 +11,8 @@
  * downloaded up front; the per-step backup downloads and confirm dialogs inside the sub-macros are suppressed for the run.
  *
  * HOW TO RUN: 1) DRY_RUN = true (default) → every step runs in its own dry-run mode and reports to the console (F12);
- *             2) read the summary table; 3) set DRY_RUN = false, run again; 4) F5. Re-running is safe — every step is idempotent.
+ *             2) read the summary table; 3) set DRY_RUN = false, run again; 4) F5. Re-running is safe — every step is idempotent, and
+ *             since 2026-10-01 a seeder never overwrites a story script edited after seeding (it reports it and skips; the dated patch macros repair seeded worlds).
  * Steps can be switched off with `enabled: false`. A failing step stops the run unless CONTINUE_ON_ERROR = true.
  */
 (async () => {
@@ -59,8 +60,7 @@
   }
 
   // suppress per-step backups + confirm dialogs for the duration of the run
-  const saved = { fu: foundry.utils.saveDataToFile, confirm: globalThis.Dialog?.confirm, log: console.log };
-  if (SUPPRESS_STEP_BACKUPS) { try { foundry.utils.saveDataToFile = () => {}; } catch (_e) {} }   // v13+: the global is a deprecated alias of foundry.utils — patch only the namespace
+  const saved = { confirm: globalThis.Dialog?.confirm, log: console.log };
   if (AUTO_CONFIRM && globalThis.Dialog) { try { Dialog.confirm = async () => true; } catch (_e) {} }
 
   try {
@@ -75,6 +75,9 @@
         let src = await res.text();
         if (!/const DRY_RUN\s*=\s*(true|false)/.test(src)) throw new Error("no DRY_RUN constant in this macro — refusing to run it blind");
         src = src.replace(/const DRY_RUN\s*=\s*(true|false)/, `const DRY_RUN = ${DRY_RUN}`);
+        // one backup up front: the step's own campaigns backup is cut out of its SOURCE (reassigning foundry.utils.saveDataToFile at run time does
+        // not take effect, so every step used to download its own copy; review 2026-10-01)
+        if (SUPPRESS_STEP_BACKUPS) src = src.replace(/foundry\.utils\.saveDataToFile\s*(\?\?|\|\|)\s*saveDataToFile/g, "(() => {})");
         for (const [k, v] of Object.entries(step.vars || {})) {
           const re = new RegExp(`const ${k}\\s*=\\s*("[^"]*"|'[^']*'|[^;]+);`); if (!re.test(src)) throw new Error(`no const ${k} in this macro`);
           src = src.replace(re, `const ${k} = ${JSON.stringify(v)};`);
@@ -94,7 +97,6 @@
       } finally { console.log = saved.log; ui.notifications.error = savedNotifyError; }
     }
   } finally {
-    try { foundry.utils.saveDataToFile = saved.fu; } catch (_e) {}
     if (saved.confirm && globalThis.Dialog) { try { Dialog.confirm = saved.confirm; } catch (_e) {} }
     console.log = saved.log;
   }
