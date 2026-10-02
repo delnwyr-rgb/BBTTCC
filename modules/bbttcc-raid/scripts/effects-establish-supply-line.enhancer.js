@@ -54,7 +54,9 @@
       async apply({ entry }) {
         let msg=""; if (typeof base==="function") try{ msg=String(await base({ entry }))||""; }catch(e){ console.warn(TAG,"base apply error",e); }
         const extra = await queueSupplyLine({ targetUuid: entry?.targetUuid, toHexUuid: entry?.toHexUuid || null, tradeYieldDelta:10 });
-        return [msg, extra].filter(Boolean).join(" • ") || "Supply Line queued.";
+        // Terrain taming (owner ruling 2026-10-02; numbers in effects-wilderness TERRAIN_RULES): both ends of the road.
+        let tame = ""; try { tame = await game.bbttcc?.api?.raid?.terrainTaming?.tameForActivity?.("establish_supply_line", entry) || ""; } catch (e) { console.warn(TAG, "terrain taming failed", e); }
+        return [msg, extra, tame].filter(Boolean).join(" • ") || "Supply Line queued.";
       }
     });
     try { Object.defineProperty(E.establish_supply_line, WRAP, { value: true, enumerable: false }); } catch (_e) {}

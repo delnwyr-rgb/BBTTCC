@@ -6,6 +6,12 @@
  * bypass the layer by default; the GM Player View macro can flip the layer
  * visible to preview what players see.
  *
+ * Tokens (owner ruling 2026-10-02): fog hides tokens from PLAYER seats — a token
+ * the viewer does not own, whose centre is not inside a revealed hex, is hidden
+ * (refreshToken hook). The viewer's own tokens always show; the GM owns every
+ * token, so the GM (preview or not) still sees everything, as with core fog.
+ * The fog graphic itself stays BELOW tokens so owned tokens are never painted over.
+ *
  * Discovery state lives in `document.hidden` (per-Drawing, per-scene). The
  * "Bad Eden Toggle One Hex Visibility" GM macro is the canonical reveal trigger.
  *
@@ -93,6 +99,47 @@
   // ---------- the layer ----------
   let _fogGfx = null;          // PIXI.Graphics
   let _rafScheduled = false;   // debounce via rAF
+  // Revealed (inflated) hex polygons + bbox, as last drawn — the token-hiding test.
+  // _fogActive = fog is drawn for THIS seat on THIS scene; when false, no token is hidden.
+  let _fogActive = false;
+  let _revealed = [];          // [{ pts, minX, minY, maxX, maxY }]
+
+  function _pointInPoly(px, py, pts) {
+    let inside = false;
+    for (let i = 0, k = pts.length - 2; i < pts.length; k = i, i += 2) {
+      const xi = pts[i], yi = pts[i + 1], xk = pts[k], yk = pts[k + 1];
+      if (((yi > py) !== (yk > py)) && (px < (xk - xi) * (py - yi) / ((yk - yi) || 1e-9) + xi)) inside = !inside;
+    }
+    return inside;
+  }
+  function _isFogged(px, py) {
+    if (!_fogActive) return false;
+    for (const r of _revealed) {
+      if (px < r.minX || px > r.maxX || py < r.minY || py > r.maxY) continue;
+      if (_pointInPoly(px, py, r.pts)) return false;
+    }
+    return true;
+  }
+  // Hide a token under the fog for this seat. Only ever turns visibility OFF —
+  // Foundry recomputes it on every refreshVisibility, so a reveal restores it.
+  function _applyFogToToken(token) {
+    try {
+      if (!token) return;
+      const c = token.center;
+      const hide = _fogActive && !token.document?.isOwner && !!c && _isFogged(Number(c.x), Number(c.y));
+      if (!hide) {
+        // walked out of the fog on a position-only refresh: let Foundry recompute visibility once
+        if (token._bbttccFogHidden) { token._bbttccFogHidden = false; token.renderFlags?.set?.({ refreshVisibility: true }); }
+        return;
+      }
+      token._bbttccFogHidden = true;
+      token.visible = false;
+      if (token.mesh) token.mesh.visible = false;
+    } catch (_e) {}
+  }
+  function _refreshAllTokenVisibility() {
+    try { for (const t of canvas?.tokens?.placeables ?? []) t.renderFlags?.set?.({ refreshVisibility: true }); } catch (_e) {}
+  }
 
   function ensureLayer() {
     if (_fogGfx && !_fogGfx.destroyed) return _fogGfx;
@@ -115,7 +162,8 @@
     g.zIndex = 999;
     // canvas.primary sorts by elevation → sortLayer → sort → zIndex (2026-10-01): zIndex alone left
     // the fog in the SCENE band under every tile. Pin it just above ground-level TILES (map art,
-    // landmarks) and below DRAWINGS / TOKENS — whether fog should also hide tokens is a ruling.
+    // landmarks) and below DRAWINGS / TOKENS. Tokens under fog are hidden per seat instead
+    // (owner ruling 2026-10-02, refreshToken hook below), so the viewer's own tokens never vanish.
     try {
       const SL = foundry.canvas?.groups?.PrimaryCanvasGroup?.SORT_LAYERS ?? globalThis.PrimaryCanvasGroup?.SORT_LAYERS;
       g.elevation = 0;
@@ -153,9 +201,12 @@
     try {
       if (!canvas?.ready) return;
 
+      const wasActive = _fogActive;
       const visible = shouldRenderForThisUser();
       if (!visible) {
         if (_fogGfx) _fogGfx.visible = false;
+        _fogActive = false; _revealed = [];
+        if (wasActive) _refreshAllTokenVisibility();
         return;
       }
 
@@ -169,6 +220,8 @@
       }
       if (hexCount === 0) {
         if (_fogGfx) _fogGfx.visible = false;
+        _fogActive = false; _revealed = [];
+        if (wasActive) _refreshAllTokenVisibility();
         return;
       }
 
@@ -207,6 +260,14 @@
         g.endHole();
       }
       g.endFill();
+
+      _revealed = holes.map(pts => {
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        for (let i = 0; i < pts.length; i += 2) { minX = Math.min(minX, pts[i]); maxX = Math.max(maxX, pts[i]); minY = Math.min(minY, pts[i + 1]); maxY = Math.max(maxY, pts[i + 1]); }
+        return { pts, minX, minY, maxX, maxY };
+      });
+      _fogActive = alpha > 0;
+      _refreshAllTokenVisibility();
 
       log(`refresh: ${holes.length} revealed / ${placeables.length} drawings (fog ${visible ? "on" : "off"})`);
     } catch (e) {
@@ -271,10 +332,15 @@
   // ---------- hooks ----------
   Hooks.on("canvasReady", () => {
     destroyLayer(); // canvas reset; old PIXI tree is gone
+    _fogActive = false; _revealed = [];
     scheduleRefresh();
   });
 
-  Hooks.on("canvasTearDown", () => destroyLayer());
+  Hooks.on("canvasTearDown", () => { destroyLayer(); _fogActive = false; _revealed = []; });
+
+  // Fog hides tokens (player seats): runs after every token refresh, incl. each
+  // animation frame's position refresh, so a token walking into a revealed hex appears.
+  Hooks.on("refreshToken", (token) => _applyFogToToken(token));
 
   Hooks.on("createDrawing", (doc) => { if (isHexDoc(doc)) scheduleRefresh(); });
   Hooks.on("deleteDrawing", (doc) => { if (isHexDoc(doc)) scheduleRefresh(); });

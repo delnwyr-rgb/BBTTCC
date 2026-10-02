@@ -1611,6 +1611,17 @@ async function spyReport(F, spy){
     await F.update({ [`flags.${MOD_FACTIONS}.warLogs`]: wl });
   } catch (e) { warn("spyReport failed", e); }
 }
+// flags.bbttcc-factions.victory.tempCapBonus { all?, <opKey>? } (marks; Keter Unity Bonus) — the OP
+// engine's factionCaps adds it; it lives until the next applied Advance, cleared here before regen.
+async function clearTempCapBonuses(){
+  for (const F of allFactions()) {
+    try {
+      const t = F.getFlag(MOD_FACTIONS, "victory")?.tempCapBonus;
+      if (t === undefined) continue;
+      await F.unsetFlag(MOD_FACTIONS, "victory.tempCapBonus");
+    } catch (e) { warn("clearTempCapBonuses failed for", F?.name, e); }
+  }
+}
 async function tickFactionBonuses(){
   for (const F of allFactions()) {
     try {
@@ -1803,6 +1814,10 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
       try { if (typeof director?.reconcileLevels === "function") await director.reconcileLevels({ reason: "pre-regen" }); }
       catch (e) { warn("pre-regen tier reconcile failed (non-fatal)", e); }
     }
+
+    // Keter Unity Bonus cap lift (owner ruling 2026-10-02) lasts until the next Advance: drop it
+    // BEFORE regen; the Unity wrapper on advanceOPRegen re-grants it if the faction still earns it.
+    if (apply) await clearTempCapBonuses();
 
     let regen = { changed:false, rows:[] };
     // Through the API (2026-10-01) so the wrappers installed on it (Unity Bonus, Enlightened

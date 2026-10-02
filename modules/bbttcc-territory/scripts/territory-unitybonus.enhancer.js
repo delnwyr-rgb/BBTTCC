@@ -36,7 +36,7 @@
     hod:     "faith",
     yesod:   "diplomacy",
     malkuth: null,        // territory control → log only
-    keter:   "caps"       // +1 to all caps (temp)
+    keter:   "caps"       // +10 marks to all caps until the next Advance Turn (owner ruling 2026-10-02)
   };
 
   const DEFAULT_MAGNITUDE = {
@@ -49,7 +49,7 @@
     hod:     3,
     yesod:   2,
     malkuth: 0,
-    keter:   1    // +1 to all caps
+    keter:   10   // MARKS added to every channel's cap (victory.tempCapBonus.all, read by the OP engine's factionCaps)
   };
 
   const PILLARS = ["keter","chokmah","binah","chesed","gevurah","tiferet","netzach","hod","yesod","malkuth"];
@@ -108,7 +108,7 @@
       return { ops, caps:null, note:`${cap(key)} (+${mag} all OPs)` };
     }
     if (channel === "caps" && mag > 0) {
-      return { ops, caps: { all:+mag }, note:`${cap(key)} (+${mag} to all caps this turn)` };
+      return { ops, caps: { all:+mag }, note:`${cap(key)} (+${mag} marks to all caps until the next Advance)` };
     }
     if (channel && mag > 0 && OP_KEYS.includes(channel)) {
       ops[channel] += mag;
@@ -220,12 +220,16 @@
               await setActorFlag(A, `${MOD_FACTIONS}.opBank`, newBank);
             }
             if (report.caps?.all) {
+              // SET, not add (2026-10-02): the turn driver unsets victory.tempCapBonus before regen
+              // every applied Advance, so this re-grant is the whole bonus for the coming turn and a
+              // second wrapper pass can never stack it. Read by the OP engine's factionCaps.
               const caps = clone(get(A, `flags.${MOD_FACTIONS}.victory.tempCapBonus`, {}));
-              caps.all = (Number(caps.all||0) + Number(report.caps.all||0));
+              caps.all = Number(report.caps.all||0);
+              caps.turn = Number(game.bbttcc?.api?.world?.getState?.()?.turn || 0) || null;
               await setActorFlag(A, `${MOD_FACTIONS}.victory.tempCapBonus`, caps);
             }
             const war = clone(get(A, `flags.${MOD_FACTIONS}.warLogs`, [])) || [];
-            const deltaStr = fmtOpsRow(report.delta);
+            const deltaStr = report.caps?.all ? `+${report.caps.all} marks to every cap until the next Advance` : fmtOpsRow(report.delta);
             war.push({ ts: Date.now(), type:"turn", date:(new Date()).toLocaleString(), summary: `${note}: ${deltaStr}` });
             await setActorFlag(A, `${MOD_FACTIONS}.warLogs`, war);
           } else {

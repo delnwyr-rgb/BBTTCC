@@ -104,8 +104,9 @@ export function factionTier(faction) {
   return Math.max(0, Math.min(4, Math.floor(tier)));
 }
 export function tierCapBand(tier) { return TIER_CAP_BAND_MARKS[Math.max(0, Math.min(4, Math.floor(Number(tier) || 0)))]; }
-/** Effective per-bucket caps in MARKS: explicit opCaps → opCapPer → tier band. */
-export function factionCaps(faction) {
+/** BASE per-bucket caps in MARKS: explicit opCaps → opCapPer → tier band (no adjustments —
+ *  use this, not factionCaps, when seeding an explicit opCaps flag). */
+export function factionBaseCaps(faction) {
   try {
     const f = faction?.flags?.[MOD_ID] || {};
     const out = {};
@@ -116,6 +117,28 @@ export function factionCaps(faction) {
     for (const k of OP_KEYS) out[k] = derived;
     return out;
   } catch (_e) { const out = {}; for (const k of OP_KEYS) out[k] = 0; return out; }
+}
+/** Effective per-bucket caps in MARKS: base caps + cap adjustments (below). */
+export function factionCaps(faction) {
+  const out = factionBaseCaps(faction);
+  try { return _withCapAdjustments(faction?.flags?.[MOD_ID] || {}, out); } catch (_e) { return out; }
+}
+// Cap adjustments in MARKS (owner rulings 2026-10-02), each `{ all?, <opKey>? }`:
+//   opCapDelta             — PERMANENT (raid world effect permanentCapDelta, e.g. Ego Breaker −30 violence)
+//   victory.tempCapBonus   — until the next Advance Turn (Keter Unity Bonus +10 all; the turn driver
+//                            unsets it before regen and the Unity wrapper re-grants it if still earned)
+// A base cap of 0 means "uncapped" everywhere, so it is left alone, and an adjusted cap never drops
+// below 1 mark (0 would silently flip the channel to uncapped).
+function _withCapAdjustments(f, out) {
+  const adj = [f.opCapDelta, f.victory?.tempCapBonus].filter(a => a && typeof a === "object");
+  if (!adj.length) return out;
+  for (const k of OP_KEYS) {
+    if (!(out[k] > 0)) continue;
+    let d = 0;
+    for (const a of adj) d += _safeNum(a.all, 0) + _safeNum(a[k], 0);
+    if (d) out[k] = Math.max(1, Math.floor(out[k] + d));
+  }
+  return out;
 }
 /** Logistics CAPACITY cap in marks (turn-driver logistics pressure): caps.logistics floored by the tier floor. */
 export function factionLogisticsCapMarks(faction) {
@@ -510,7 +533,7 @@ function _attach() {
     apiRoot.runMarksMigration = _runMarksMigration;
     // Facts layer (2026-09-12): one home per faction fact.
     game.bbttcc.facts ??= {};
-    game.bbttcc.facts.faction = { tier: factionTier, caps: factionCaps, capBand: tierCapBand, logisticsCapMarks: factionLogisticsCapMarks, CAP_BAND: TIER_CAP_BAND_MARKS.slice(), LOGI_CAP_FLOOR: LOGISTICS_CAPACITY_FLOOR_MARKS.slice() };
+    game.bbttcc.facts.faction = { tier: factionTier, caps: factionCaps, baseCaps: factionBaseCaps, capBand: tierCapBand, logisticsCapMarks: factionLogisticsCapMarks, CAP_BAND: TIER_CAP_BAND_MARKS.slice(), LOGI_CAP_FLOOR: LOGISTICS_CAPACITY_FLOOR_MARKS.slice() };
 
     log(`OP Engine API ready (marks unit, 1 OP = ${_marksPerOp()} marks) → game.bbttcc.api.op.{preview, commit, KEYS, OP_TO_MARKS, marksPerOp, fmt, fmtNum} — every quantity is MARKS`);
   } catch (e) {

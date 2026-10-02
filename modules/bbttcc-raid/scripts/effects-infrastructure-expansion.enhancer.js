@@ -57,7 +57,9 @@
           try { msg = String(await base({ entry })) || ""; } catch(e){ console.warn(TAG,"base apply error", e); }
         }
         const m2 = await queueInfrastructureExpansion({ targetUuid: entry?.targetUuid, def: 2, trade: 10 });
-        return [msg, m2].filter(Boolean).join(" • ") || "Infrastructure Expansion queued.";
+        // Terrain taming (owner ruling 2026-10-02; numbers in effects-wilderness TERRAIN_RULES).
+        let m3 = ""; try { m3 = await game.bbttcc?.api?.raid?.terrainTaming?.tameForActivity?.("infrastructure_expansion", entry) || ""; } catch (e) { console.warn(TAG, "terrain taming failed", e); }
+        return [msg, m2, m3].filter(Boolean).join(" • ") || "Infrastructure Expansion queued.";
       }
     });
 

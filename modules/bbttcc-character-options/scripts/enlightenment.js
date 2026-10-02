@@ -464,13 +464,12 @@ async function refreshClarityAuras() {
     // if ANY of its tokens is in range (else the tokens flip it on and off).
     const wanted = new Set();
     for (const t of recipients) if (t.actor) wanted.add(t.actor);
+    // Only actors with a token on the scene being evaluated are reconciled
+    // (owner ruling 2026-10-02): the grant PERSISTS across scenes — an actor
+    // whose token is on another scene (or not on the viewed one) keeps it until
+    // it is next evaluated out of range on a scene it stands on.
     const visit = new Set();
     for (const t of toks) if (t.actor) visit.add(t.actor);
-    // Sweep world actors too, so a linked actor whose token was deleted or is
-    // on another scene doesn't keep the grant forever.
-    for (const a of game.actors?.contents ?? []) {
-      if (a.effects?.some(e => e.getFlag(MOD, AURA_AE_FLAG) === true)) visit.add(a);
-    }
 
     for (const actor of visit) {
       const has = actor.effects?.find(e => e.getFlag(MOD, AURA_AE_FLAG) === true);

@@ -19,7 +19,7 @@
       "materialKey": "vow-resin",
       "materialAmount": 1,
       "opCost": {
-        "pool": "soul",
+        "pool": "culture",
         "amount": 2
       },
       "ritualDC": 18

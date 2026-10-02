@@ -84,8 +84,40 @@
     return tierForRP(currentRP(A));
   }
 
-  // Highest-RP-seen tracker (primary-GM client only) for mutation band-crossing, keyed by actor uuid.
+  // Highest-RP-seen tracker for mutation band-crossing. PERSISTED on the actor at
+  // flags.bbttcc-radiation.rpWatermark (2026-10-02 ruling) so a reload doesn't
+  // change behaviour; the in-memory map (keyed by actor uuid) only seeds actors
+  // whose flag has never been written (ready reconcile records their current RP).
+  const WM_FLAG = "rpWatermark";
   const _lastRP = new Map();
+
+  function _storedWatermark(A) {
+    const f = Number(A?.getFlag?.(MOD, WM_FLAG));
+    return Number.isFinite(f) && A?.getFlag?.(MOD, WM_FLAG) != null ? f : null;
+  }
+  function watermarkFor(actorOrId) {
+    const A = _asActor(actorOrId);
+    if (!A) return null;
+    const f = _storedWatermark(A);
+    return f != null ? f : (_lastRP.has(A.uuid) ? _lastRP.get(A.uuid) : null);
+  }
+  async function _writeWatermark(A, v) {
+    _lastRP.set(A.uuid, v);
+    const stored = _storedWatermark(A);
+    if (stored === v || (stored == null && v <= 0)) return;   // a clean actor needs no flag
+    if (!(game.user?.isGM || A.isOwner)) return;
+    try { await A.setFlag(MOD, WM_FLAG, v); } catch (e) { console.warn(TAG, "watermark write failed", A?.name, e); }
+  }
+  // Ruling 2026-10-02: a CURE resets the watermark to the actor's current RP, so
+  // climbing back into a band rolls again. Called by the mutation Cure / clear
+  // API; an RP clear (RP reaching 0 by any path) resets it in _syncOnce below.
+  async function resetWatermark(actorOrId) {
+    const A = _asActor(actorOrId);
+    if (!A || !isBiteActor(A)) return null;
+    const rp = currentRP(A);
+    await _writeWatermark(A, rp);
+    return rp;
+  }
   // Per-actor in-flight sync (canvasReady + ready reconciles, quick RP edits): a call that lands while one
   // runs re-queues ONE follow-up pass instead of racing it on stale condition state.
   const _inflight = new Map();
@@ -139,8 +171,11 @@
     // first-sight: a newly seen actor (or a post-reload reconcile pass) records
     // its RP without firing, so only genuine upward crossings roll a mutation.
     // A WATERMARK, not the last value: hovering across a band (49 → 50 → 49 → 50) rolls once, not per crossing.
-    const prevRP = _lastRP.has(A.uuid) ? _lastRP.get(A.uuid) : rp;
-    _lastRP.set(A.uuid, Math.max(prevRP, rp));
+    // RP cleared to 0 (Clear button, api set 0, a full purge) is a cure — the watermark drops with it.
+    const wm = watermarkFor(A);
+    const prevRP = rp <= 0 ? 0 : (wm != null ? wm : rp);
+    const nextWM = Math.max(prevRP, rp);
+    if (nextWM !== wm) await _writeWatermark(A, nextWM);
     if (MUT_BANDS.some(t => prevRP < t && rp >= t)) {
       Hooks.callAll("bbttcc.mutationRoll", A, rp);
     }
@@ -171,6 +206,8 @@
     game.bbttcc.api.radiation.tierFor = tierFor;
     game.bbttcc.api.radiation.tiers   = TIERS;
     game.bbttcc.api.radiation.sync    = syncRadiationSickness;
+    game.bbttcc.api.radiation.watermark      = watermarkFor;
+    game.bbttcc.api.radiation.resetWatermark = resetWatermark;
   }
 
   Hooks.once("ready", () => {

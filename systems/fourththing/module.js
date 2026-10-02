@@ -5213,18 +5213,52 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   }
 }
 
-// 2026-10-01 — "GM clears on raid end" had no code behind it, so Phoenix was
-// once per CHARACTER. Clear the stamp on the combatants (incl. unlinked token
-// actors) when their encounter ends. Active GM only; unsetFlag (v14 dropped
-// the "-=key" form).
-Hooks.on("deleteCombat", async (combat) => {
-  if (!game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
-  const actors = new Set();
-  for (const c of combat?.combatants ?? []) if (c?.actor) actors.add(c.actor);
-  for (const a of actors) {
-    if (!a?.getFlag?.("fourththing", "surge.phoenixUsedInRaid")) continue;
+// Phoenix is once per RAID (owner ruling 2026-10-02 — was once per combat).
+// The raid's only GM-observable boundary is the faction's raid-console session
+// (flags.bbttcc-raid.raidSession on the attacker): it is "live" while it has a
+// target, rounds or supporters (the console's own rule; practice / tour-staged
+// sessions never count), and the GM-only End Raid button empties it. When a
+// session goes live → not live (End Raid, or the flag removed), every actor's
+// Phoenix stamp is cleared — the whole table shares the raid boundary. A
+// Phoenix spent in a combat outside any raid stays spent until the next raid
+// ends. Active GM only; unsetFlag (v14 dropped the "-=key" form).
+const _ftRaidLive = new Map();   // faction actor id → was its raidSession live
+function _ftRaidSessionLive(actor) {
+  let s = null;
+  try { s = actor?.getFlag?.("bbttcc-raid", "raidSession"); } catch (_e) { return false; }
+  if (!s || typeof s !== "object") return false;
+  if (s.practice === true || s.tourStaged) return false;
+  const supports = Array.isArray(s.supportFactionIds) ? s.supportFactionIds : [];
+  return !!String(s.targetUuid || "").trim() || (Array.isArray(s.rounds) && s.rounds.length > 0) || supports.length > 0;
+}
+function _ftIsActiveGM() {
+  return !!game.user?.isGM && (!game.users?.activeGM || game.users.activeGM === game.user);
+}
+async function _ftResetPhoenixAll(reason) {
+  const seen = new Set();
+  const targets = [];
+  for (const a of game.actors ?? []) { if (a?.getFlag?.("fourththing", "surge.phoenixUsedInRaid")) { seen.add(a.uuid); targets.push(a); } }
+  for (const sc of game.scenes ?? []) {
+    for (const td of sc.tokens ?? []) {
+      if (td.actorLink) continue;
+      const a = td.actor;
+      if (a && !seen.has(a.uuid) && a.getFlag?.("fourththing", "surge.phoenixUsedInRaid")) { seen.add(a.uuid); targets.push(a); }
+    }
+  }
+  for (const a of targets) {
     try { await a.unsetFlag("fourththing", "surge.phoenixUsedInRaid"); } catch (e) { console.warn("[fourththing] phoenix reset failed", a?.name, e); }
   }
+  if (targets.length) console.log(`[fourththing] Phoenix reset (${reason}) on ${targets.length} actor(s)`);
+}
+Hooks.once("ready", () => {
+  for (const a of game.actors ?? []) if (_ftRaidSessionLive(a)) _ftRaidLive.set(a.id, true);
+});
+Hooks.on("updateActor", (actor, changed) => {
+  if (!changed?.flags || !Object.prototype.hasOwnProperty.call(changed.flags, "bbttcc-raid")) return;
+  const was = _ftRaidLive.get(actor.id) === true;
+  const now = _ftRaidSessionLive(actor);
+  if (now) _ftRaidLive.set(actor.id, true); else _ftRaidLive.delete(actor.id);
+  if (was && !now && _ftIsActiveGM()) _ftResetPhoenixAll(`raid ended on ${actor.name}`);
 });
 
 // Reposition (Surge 3✦, narr) — "Step out of the moment. Re-enter where you
@@ -6029,7 +6063,15 @@ async function _ftBulwarkSurge(actor, effectKey, tier) {
   }
   if (effectKey === "bw-shockwave") {
     try { await actor.setFlag("fourththing", "bulwark.frameOneShot.anchor", { roll: 0, ts: Date.now() }); } catch (e) {}
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">💥 Shockwave Footing — you <b>refuse the next forced movement</b>, and adjacent foes are shoved back. <span style="opacity:0.65;font-style:italic">(GM resolves the push.)</span></p>`;
+    // Ruling 2026-10-02: the Surge Shockwave ripples into Structures like the Breaker
+    // card does (bbttcc-structures chips one fragile unit from each within 10 ft;
+    // runs on the GM seat via its own relay and posts its own card).
+    let structTxt = "";
+    const bw = game.bbttcc?.api?.structures?.bulwark;
+    if (typeof bw?.trigger === "function") {
+      try { if (await bw.trigger(actor, "shockwave")) structTxt = " Structures within 10 ft are chipped."; } catch (e) { console.warn("[fourththing] Shockwave structure ripple failed", e); }
+    }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">💥 Shockwave Footing — you <b>refuse the next forced movement</b>, and adjacent foes are shoved back.${structTxt} <span style="opacity:0.65;font-style:italic">(GM resolves the push.)</span></p>`;
   }
   if (effectKey === "bw-cat-entry") {
     const foes = Array.from(game.user?.targets ?? []).map(t => t.actor).filter(Boolean);
@@ -6047,7 +6089,15 @@ async function _ftBulwarkSurge(actor, effectKey, tier) {
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🏛 Siege Works — <b>−1 Violence OP</b> cost on this Siege. <span style="opacity:0.65;font-style:italic">(GM applies on the siege ledger.)</span></p>`;
   }
   if (effectKey === "bw-renewal") {
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🛠 Ruin to Renewal — attempting to purify / restore a fortification (Faith or Economy DC 15). <span style="opacity:0.65;font-style:italic">(GM adjudicates the check.)</span></p>`;
+    // Ruling 2026-10-02: the Surge Renewal opens the same reclamation as the Breaker
+    // card (bbttcc-structures: pick Structure + faction, Faith/Economy DC 15, BOM →
+    // stockpile). The dialog opens on the GM seat, as the Breaker route's does.
+    const bw = game.bbttcc?.api?.structures?.bulwark;
+    let opened = false;
+    if (typeof bw?.trigger === "function") {
+      try { opened = !!(await bw.trigger(actor, "renewal")); } catch (e) { console.warn("[fourththing] Renewal reclamation failed", e); }
+    }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🛠 Ruin to Renewal — attempting to purify / restore a fortification (Faith or Economy DC 15). <span style="opacity:0.65;font-style:italic">(${opened ? "Reclamation dialog opened on the GM's screen." : "GM adjudicates the check."})</span></p>`;
   }
   return "";
 }

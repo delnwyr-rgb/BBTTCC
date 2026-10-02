@@ -101,7 +101,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     overclock_the_golems: "+3 attack for one construct unit; loses 1 HP.",
     counter_propaganda_wave: "Cancel enemy Soft Power effect this round.",
     sephirotic_intervention: "Auto-win one opposed roll; Darkness −1.",
-    ego_breaker: "Reduce enemy leader’s OP cap by 3 permanently.",
+    ego_breaker: "Reduce the enemy faction’s Violence cap by 30 marks, permanently.",
     reality_hack: "Re-run last round as if it never occurred.",
     unity_surge: "All allies gain +2 to every OP next round.",
     qliphothic_gambit: "+6 to Violence roll; Darkness +2.",
@@ -1541,6 +1541,26 @@ if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
       toSel.addEventListener("change", () => { this._plannerState.toHexUuid = toSel.value || ""; });
       hexSel.addEventListener("change", _fillToSel);
       toRow.appendChild(toLbl); toRow.appendChild(toSel);
+      // ⛰ Terrain surcharge preview (owner ruling 2026-10-02) — same reading planActivity folds into the cost.
+      const surRow = document.createElement("div");
+      surRow.style.cssText = "font-size:0.75rem;opacity:.85;";
+      const _tt = game.bbttcc?.api?.raid?.terrainTaming;
+      const wantsSurcharge = !!(_tt?.RULES?.surchargedActivities || []).includes(String(selectedKey || ""));
+      const _fillSur = () => {
+        if (!wantsSurcharge) return;
+        let sur = null;
+        try {
+          const fid = String(this._plannerState.factionId || this._plannerState.attackerId || facSel?.value || "");
+          const tdoc = hexSel.value ? fromUuidSync(hexSel.value) : null;
+          sur = _tt.planSurcharge({ activityKey: String(selectedKey), actor: game.actors.get(fid), targetDoc: tdoc });
+        } catch (_e) { sur = null; }
+        const parts = Object.entries(sur?.cost || {}).filter(([, v]) => Number(v) > 0).map(([k, v]) => `${v} ${k}`);
+        surRow.textContent = !sur ? "" : parts.length
+          ? `⛰ Terrain surcharge: +${parts.join(", ")} marks (${sur.terrain || "hard ground"}, tier ${sur.tier}${sur.tame ? ` → ${sur.effTier}, tamed ${sur.tame} via ${sur.tamedVia}` : ""})`
+          : `⛰ No terrain surcharge (${sur.terrain || "open ground"}, tier ${sur.tier}${sur.tame ? `, tamed ${sur.tame} via ${sur.tamedVia}` : ""})`;
+      };
+      _fillSur();
+      hexSel.addEventListener("change", _fillSur);
       // ⚗ Fuel row (OP economy ruling B, 2026-09-11): rows with ≥2 recipes let the faction choose
       // HOW it gets done — each recipe is a different cost vector across channels. The choice is
       // stored on the planned entry and billed at resolution (turn-driver payActivityCost).
@@ -1660,6 +1680,7 @@ if (wantsRigTarget) {
   targetWrap.appendChild(hexRow);
   if (wantsRouteTarget) targetWrap.appendChild(toRow);
   if (wantsRecipe) targetWrap.appendChild(recipeRow);
+  if (wantsSurcharge) targetWrap.appendChild(surRow);
 }
 top.appendChild(targetWrap);
 
@@ -2050,6 +2071,7 @@ wrap.appendChild(top);
         if (chosen) {
           hexSel.value = chosen.uuid;
           this._plannerState.selectedHexUuid = chosen.uuid;
+          hexSel.dispatchEvent(new Event("change"));   // refresh the TO list + terrain surcharge line
           ui.notifications?.info?.(`Target: ${chosen.name}`);
           endPick();
         } else {
@@ -2326,6 +2348,22 @@ Hooks.once("init",()=>{
         const r = (recipe && Array.isArray(rs)) ? rs.find(x => x && x.label === String(recipe)) : null;
         if (r) { entry.recipe = { label: r.label, cost: foundry.utils.duplicate(r.cost || {}), note: r.note || "", days: Number(r.days) || 0, fx: r.fx ? foundry.utils.duplicate(r.fx) : null }; entry.summary += ` via ${r.label}`; }
       } catch (_eR) {}
+      // ⛰ Terrain surcharge (owner ruling 2026-10-02; numbers in effects-wilderness TERRAIN_RULES): folded into
+      // the entry's cost vector NOW — entry.recipe.cost is the one vector the turn driver bills and previews.
+      try {
+        const sur = raidAPI.terrainTaming?.planSurcharge?.({ activityKey: String(activityKey), actor: attacker, targetDoc: tdoc });
+        if (sur && Object.values(sur.cost || {}).some(v => Number(v) > 0)) {
+          const eff = (raidAPI.EFFECTS || {})[String(activityKey)] || {};
+          if (!entry.recipe) {
+            const r0 = Array.isArray(eff.recipes) ? eff.recipes[0] : null;   // what the planner preselects
+            entry.recipe = r0 ? { label: r0.label, cost: foundry.utils.duplicate(r0.cost || {}), note: r0.note || "", days: Number(r0.days) || 0, fx: r0.fx ? foundry.utils.duplicate(r0.fx) : null }
+                              : { label: "standard", cost: foundry.utils.duplicate(eff.cost || eff.opCosts || {}), note: "", days: 0, fx: null };
+          }
+          for (const [k, v] of Object.entries(sur.cost)) entry.recipe.cost[k] = (Number(entry.recipe.cost[k]) || 0) + (Number(v) || 0);
+          entry.terrainSurcharge = foundry.utils.duplicate(sur);
+          entry.summary += ` (+${Object.entries(sur.cost).map(([k, v]) => `${v} ${k}`).join(", ")} marks: ${sur.terrain || "hard"} terrain, tier ${sur.effTier}${sur.tame ? ` after taming ${sur.tame}` : ""})`;
+        }
+      } catch (eSur) { console.warn("[bbttcc-raid-planner] terrain surcharge failed (planned at base price)", eSur); }
     }
 
     const prev = deepClone(attacker.getFlag(FCT_ID,"warLogs") || []);

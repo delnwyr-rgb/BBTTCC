@@ -2354,6 +2354,9 @@ export async function openHarmonyMarshalUnityConductor(actor) {
   const faction = _hmGetFaction(actor);
   // Once per strategic turn (cleared by the advanceTurn:end listener below).
   const grantedThisTurn = !!actor.flags?.fourththing?.harmonyMarshal?.unityConductorGrantedThisTurn;
+  // Owner ruling 2026-10-02: the manual grant is GM-only (players see the passive
+  // + reminder; the GM applies the marks from the turn-rollover card / this sheet).
+  const isGM = !!game.user?.isGM;
 
   new Dialog({
     title: "Harmony Marshal · Unity Conductor (T4)",
@@ -2361,12 +2364,16 @@ export async function openHarmonyMarshalUnityConductor(actor) {
       <p style="font-size:0.78rem;margin:0 0 0.4rem">Passive: your faction gains an additional <b>+20 Soft Power marks per strategic turn</b>, as long as you are alive, active, and in communication with Command.</p>
       <p style="font-size:0.78rem;margin:0 0 0.4rem">Faction bound: <b>${_ftEscape(faction?.name ?? "(unbound)")}</b></p>
       <p style="font-size:0.7rem;opacity:0.55;margin:0.4rem 0 0">Reminder chat card fires automatically on <code>bbttcc:advanceTurn:end</code> so the GM doesn't forget the grant.${grantedThisTurn ? " <b>Already granted this strategic turn.</b>" : ""}</p>
+      ${isGM ? "" : `<p style="font-size:0.7rem;opacity:0.7;margin:0.3rem 0 0;font-style:italic">The GM applies this grant — ask them at turn rollover.</p>`}
     </div>`,
     buttons: {
-      ...(faction && !grantedThisTurn ? {
+      ...(faction && !grantedThisTurn && isGM ? {
         grant: {
           label: "Apply +20 Soft Power marks now (manual)",
           callback: async () => {
+            if (!game.user?.isGM) {
+              return ui.notifications?.warn("Unity Conductor: only the GM can apply this grant.");
+            }
             const opApi = game.bbttcc?.api?.op;
             if (!opApi?.commit) {
               return ui.notifications?.warn(`${actor.name}: OP engine not available — cannot grant Soft Power marks.`);
@@ -2375,9 +2382,8 @@ export async function openHarmonyMarshalUnityConductor(actor) {
               return ui.notifications?.warn(`${actor.name}: Unity Conductor already granted this strategic turn.`);
             }
             const marksPerOP = opApi?.OP_TO_MARKS ?? MARKS_PER_OP;
-            // allowOvercap only from a GM seat (a deliberate GM call); a player-
-            // initiated grant respects the bank cap like any other earn.
-            const res = await opApi.commit(faction.id, { softpower: +(2 * marksPerOP) }, { context: "harmony-marshal-unity-conductor", allowOvercap: !!game.user?.isGM });
+            // GM-only grant — a deliberate GM call may exceed the bank cap.
+            const res = await opApi.commit(faction.id, { softpower: +(2 * marksPerOP) }, { context: "harmony-marshal-unity-conductor", allowOvercap: true });
             if (!res?.committed) {
               return ui.notifications?.warn(`${actor.name}: could not grant Soft Power marks (${res?.error || "API error / cap"}).`);
             }

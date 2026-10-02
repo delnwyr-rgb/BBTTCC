@@ -3659,6 +3659,8 @@ _renderScenarioHUD(host, round){
 
                   const ctx = {
                     factionId: (r2 && r2.attackerId) ? r2.attackerId : null,
+                    defenderId: (r2 && r2.defenderId) ? r2.defenderId : null,   // permanentCapDelta (Ego Breaker) target
+                    hexUuid: (r2 && r2.targetUuid) ? r2.targetUuid : null,        // restoreHex / purifySpark target
                     beatId: (r2 && r2.roundId) ? r2.roundId : "raid_round",
                     beatType: "raid_worldfx_apply",
                     beatLabel: `Raid WorldFX Apply (${String(r2 && r2.activityKey || "raid")})`,
@@ -3667,12 +3669,12 @@ _renderScenarioHUD(host, round){
 
                   const res = await wm.applyWorldEffects({ worldEffects: pend }, ctx);
 
-                  // WME reads named sections (territoryOutcome / factionEffects / ...), not the
-                  // typed maneuver list (restoreHex / purifySpark / permanentCapDelta), so it
-                  // may apply nothing. Clearing anyway dropped the effects for good — keep them
-                  // pending for GM adjudication unless WME reports it actually changed something.
+                  // WME handles the typed rows (restoreHex / purifySpark / permanentCapDelta — owner
+                  // ruling 2026-10-02). Keep them pending unless WME reports it actually changed something
+                  // (no target hex / faction, nothing corrupted, …) so the GM can adjudicate by hand.
                   if (!res || !res.applied) {
-                    ui.notifications?.warn?.(`World Mutation Engine applied none of these (${t2.join(", ") || "untyped"}) — no handler for these effect types. Left pending; adjudicate by hand.`);
+                    const why = (res && Array.isArray(res.notes) && res.notes.length) ? ` (${res.notes.join("; ")})` : "";
+                    ui.notifications?.warn?.(`World Mutation Engine applied none of these (${t2.join(", ") || "untyped"})${why}. Left pending; adjudicate by hand.`);
                     return;
                   }
 
@@ -4709,17 +4711,6 @@ r.view = {
       if (act === "manage") { const r=this.vm.rounds[idx]; r.open=!r.open; this.render(); return; }
       if (act === "post")   { return this._postRoundCard(idx); }
       if (act === "del")    { this.vm.rounds.splice(idx,1); this._queueSaveSession(); this.render(); return; }
-      if (act === "copy")   {
-        // Copy a plain-text summary of the round (the template's Copy button had no handler).
-        const r = this.vm.rounds[idx]; if (!r) return;
-        const txt = `${r.activityLabel || r.activityKey || "Raid"} — ${r.attackerName || "?"} vs ${r.targetName || "?"}: ${r.total ?? "—"} vs ${r.defTotal ?? r.dcFinal ?? r.DC ?? "—"} → ${r.outcome || (r.committed ? "Resolved" : "Draft")}`;
-        try {
-          if (game.clipboard?.copyPlainText) await game.clipboard.copyPlainText(txt);
-          else await navigator.clipboard.writeText(txt);
-          ui.notifications?.info?.("Round summary copied.");
-        } catch (_eC) { ui.notifications?.warn?.("Clipboard unavailable."); }
-        return;
-      }
       if (act === "commit") { return this._commitRound(idx); }
 
     });
@@ -9040,24 +9031,28 @@ async function _b3ApplyStateManeuvers(round, attacker, defender){
     const r2 = await setMods([], ["Fortified"]);
     notes.push(r2.removed.length ? `Siege Breaker Volley: ${hexName} loses Fortified` : `Siege Breaker Volley: ${hexName} was not Fortified`);
   }
-  if (wants.includes("engine_of_absolution")) {
-    const r2 = await setMods(["Well-Maintained"], ["Contaminated","Radiation Zone","Damaged Infrastructure","Hostile Population"]);
-    try { if (doc) { const mods = foundry.utils.duplicate(tf.mods || {}); mods.darkness = 0; await doc.update({ "flags.bbttcc-territory.mods": mods }, { parent: doc.parent }); } } catch(_e) {}
-    try { await terr?.setCondition?.(round.targetUuid, "Purified", true); } catch(_e) {}
-    notes.push(`Engine of Absolution: ${hexName} restored — Purified, darkness pips 0${r2.removed.length ? `, removed ${r2.removed.join(", ")}` : ""}`);
-  }
-  if (wants.includes("crown_of_mercy")) {
-    let rr = null; try { rr = await game.bbttcc?.api?.tikkun?.hex?.repair?.(round.targetUuid); } catch(e) { rr = { ok:false, error: e.message }; }
-    notes.push(rr?.ok ? `Crown of Mercy: the ${rr.key} spark at ${hexName} is repaired${rr.already ? " (already clean)" : ""}` : `Crown of Mercy: ${rr?.error || "no spark seated at the target"}`);
-  }
-  if (wants.includes("ego_breaker") && defender) {
+  // Engine of Absolution / Crown of Mercy / Ego Breaker: ONE implementation — the World Mutation
+  // Engine's typed world effects (restoreHex / purifySpark / permanentCapDelta, owner ruling 2026-10-02),
+  // the same handlers the GM "Apply (GM)" button uses for pending rows.
+  const typed = [];
+  if (wants.includes("engine_of_absolution")) typed.push({ type: "restoreHex", target: round.targetUuid || null, label: "Engine of Absolution" });
+  if (wants.includes("crown_of_mercy"))       typed.push({ type: "purifySpark", target: round.targetUuid || null, label: "Crown of Mercy" });
+  if (wants.includes("ego_breaker") && defender) typed.push({ type: "permanentCapDelta", scope: "enemyLeader", factionId: defender.id, key: "violence", deltaMarks: -30, label: "Ego Breaker" });
+  for (const row of typed) {
     try {
-      const b = foundry.utils.duplicate(defender.getFlag("bbttcc-factions", "bonuses") || {}); b.capBump = b.capBump || {};
-      const cur = b.capBump.violence || { add: 0, turns: 0 }; b.capBump.violence = { add: Number(cur.add||0) - 30, turns: 9999 };
-      await defender.update({ "flags.bbttcc-factions.bonuses": b });
-      notes.push(`Ego Breaker: ${defender.name}'s Violence cap −30 marks (permanent)`);
-    } catch(_e) {}
+      const wm = game.bbttcc?.api?.worldMutation;
+      if (typeof wm?.applyWorldEffects !== "function") { notes.push(`${row.label}: World Mutation Engine unavailable — not applied`); continue; }
+      const res = await wm.applyWorldEffects({ worldEffects: [row] }, { factionId: attacker?.id || null, defenderId: defender?.id || null, hexUuid: round.targetUuid || null, beatId: `${round.roundId || "raid"}-${row.type}`, beatType: "raid_state_maneuver", beatLabel: row.label, source: "raid_commit" });
+      const n = (res?.notes || []).find(x => String(x).startsWith(row.type + ":")) || "";
+      notes.push(`${row.label}: ${n.replace(row.type + ":", "").replace(/^skipped:/, "not applied — ") || (res?.applied ? "applied" : "not applied")}`);
+    } catch (e) { notes.push(`${row.label}: failed (${e?.message || e})`); }
   }
+  // The legacy agent bodies may also have queued these as pending typed rows (registration race) —
+  // drop them so "Apply (GM)" cannot apply the same maneuver a second time.
+  try {
+    const done = new Set(typed.map(r => r.type)); const pend = round.meta?.intents?.pending;
+    if (done.size && Array.isArray(pend?.worldEffects)) pend.worldEffects = pend.worldEffects.filter(w => !done.has(String(w?.type || "")));
+  } catch (_eP) {}
   round.meta ||= {}; round.meta.b3 ||= {}; round.meta.b3.stateManeuvers = { applied: notes };
   try { if (attacker && notes.length) { const wl = foundry.utils.duplicate(attacker.getFlag("bbttcc-factions", "warLogs") || []); wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "raid", activity: "maneuver_state", summary: notes.join("; ") + "." }); await attacker.update({ "flags.bbttcc-factions.warLogs": wl }); } } catch(_e) {}
 }

@@ -262,10 +262,10 @@
    * removeTag
    * structureDelta
    *
-   * ---- worldEffects.type (3) ----
-   * permanentCapDelta
-   * purifySpark
-   * restoreHex
+   * ---- worldEffects.type (3) — applied by the World Mutation Engine (2026-10-02) ----
+   * permanentCapDelta  { scope, factionId?, key: opKey|"all", deltaMarks } → opCapDelta (permanent cap, marks)
+   * purifySpark        { target } → tikkun hex.repair, else a faction member's corrupted spark
+   * restoreHex         { target } → un-destroy, strip ruin states, darkness 0, Purified
    *
    * ---- factionEffects keys observed (9) ----
    * factionId (required when applying; optional in preview)
@@ -1125,9 +1125,10 @@
         {
           type: "permanentCapDelta",
           scope: "enemyLeader",
-          stat: "opCap",
-          delta: -3,
-          note: "Ego Breaker (preview): Reduce enemy leader’s OP cap by 3 permanently on success."
+          factionId: ctx.defenderFactionId || null,
+          key: "violence",
+          deltaMarks: -30,   // marks; WME → flags.bbttcc-factions.opCapDelta (read by facts.faction.caps)
+          note: "Ego Breaker (preview): the enemy faction's Violence cap drops 30 marks permanently on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "ego_breaker", preview: true }

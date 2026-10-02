@@ -2223,6 +2223,11 @@
               // fell through and walked the token down the whole route for free.
               const executedUuids = legs.slice(0, i).map(x => x.toUuid).filter(Boolean);
               const executedLegMeta = legs.slice(0, i).map(x => ({ gate: x?.gate ?? null }));
+              // Owner ruling 2026-10-02: the hex the party STOPS on is an arrival. The last
+              // executed leg rode with finalLeg:false (it wasn't the route's end when it ran),
+              // so fire its arrival (beat + "you are here" position) now — once, here. A refused
+              // FIRST leg moved nobody: no arrival. Resume is unaffected (remaining legs start here).
+              const stopHexUuid = i > 0 ? (legs[i - 1]?.toUuid || null) : null;
               const remaining = legs.slice(i);
               legs.length = 0; legs.push(...remaining);
               render();
@@ -2237,6 +2242,10 @@
                 });
               } catch (_eRS4) {}
               $rout.textContent = out.join("\n") + `\n\nRoute stopped at leg ${i + 1} (${destLabel})${r?.reason ? ` — ${r.reason}` : ""}.\n${remaining.length} leg(s) kept in the planner — fix the problem and Execute Route again, or re-plan.`;
+              if (stopHexUuid) {
+                try { await game.bbttcc?.api?.travel?.arriveAt?.(stopHexUuid, { factionId, deferred: true }); }
+                catch (eArr) { console.warn(TAG, "arrival at refused-leg stop hex failed", eArr); }
+              }
               if (executedUuids.length && game.bbttcc?.runVisuals) {
                 try {
                   await new Promise(r2 => setTimeout(r2, 150));

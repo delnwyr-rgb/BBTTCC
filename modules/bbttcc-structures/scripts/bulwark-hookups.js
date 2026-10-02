@@ -545,12 +545,53 @@ function _registerSourceRelay() {
   });
 }
 
+// ── Direct trigger (Surge-spend route) ──────────────────────────────────────
+// Ruling 2026-10-02: the Surge versions of Shockwave Footing and Ruin to Renewal
+// hit structures exactly like the Breaker card does. The system's Surge handler
+// calls bulwark.trigger(actor, "shockwave" | "renewal") instead of us sniffing
+// its card. Runs on a GM seat (gmExec runs locally on a GM, relays to the
+// primary GM from a player seat); the GM side checks the caller owns the actor.
+
+const RUIN_RELAY = "structures.bulwark.ruinAction";
+const TRIGGERABLE = { shockwave: _onShockwave, renewal: _onRenewal };
+
+export async function triggerRuinAction(actor, action) {
+  if (!actor?.uuid || !TRIGGERABLE[action]) return false;
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.call) {
+    if (!game.user?.isGM) { console.warn(TAG, "gmExec unavailable — structure effect not applied"); return false; }
+    await TRIGGERABLE[action](actor);
+    return true;
+  }
+  try { await gx.call(RUIN_RELAY, { actorUuid: actor.uuid, action }, { timeoutMs: 15000 }); return true; }
+  catch (e) { console.warn(TAG, `Ruin action '${action}' relay failed`, e); return false; }
+}
+
+function _registerRuinRelay() {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.register) return;
+  gx.register(RUIN_RELAY, async (p, meta) => {
+    const fn = TRIGGERABLE[String(p?.action || "")];
+    if (!fn) throw new Error("unknown Ruin action");
+    let actor = null;
+    try { const d = await fromUuid(String(p?.actorUuid || "")); actor = d?.actor ?? d ?? null; } catch (_e) {}
+    if (actor?.documentName !== "Actor") throw new Error("actor not found");
+    if (!meta?.local) {
+      const caller = game.users?.get(String(meta?.fromUserId || ""));
+      if (!(caller && actor.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${actor.name}`);
+    }
+    await fn(actor);   // Renewal only opens its dialog here — returns at once
+    return { ok: true };
+  });
+}
+
 // ── Install ─────────────────────────────────────────────────────────────────
 
 Hooks.once("ready", () => {
   Hooks.on("createChatMessage", _onRuinCard);
   installSourceCaptureWedge();
   _registerSourceRelay();
+  _registerRuinRelay();
   console.log(TAG, "Bulwark hookups installed");
 
   // Expose for diagnostic + tests
@@ -558,6 +599,7 @@ Hooks.once("ready", () => {
     game.bbttcc.api.structures.bulwark = {
       getActiveDamageSource,
       consumeCatastrophicEntry,
+      trigger: triggerRuinAction,
       _onCatastrophicEntry,
       _onSiegeCost,
       _onShockwave,

@@ -1339,7 +1339,11 @@
     const ref = await fromUuid(hexUuid).catch(() => null); const doc = ref?.document ?? ref;
     if (!doc) return { ok: false, reason: "hex not resolved" };
     const factionId = opts.factionId || null;
-    await runHexEnterBeatNow({ context: { to: { document: doc }, factionId }, hexUuid: doc.uuid }, { factionId });
+    const result = { context: { to: { document: doc }, factionId }, hexUuid: doc.uuid };
+    // opts.deferred (2026-10-02): go through the same idle-wait a ridden leg's arrival uses, so a road-fired
+    // chain still unwinding from the previous leg finishes before the town opens (refused-leg stop hex).
+    if (opts.deferred) await maybeRunHexEnterBeatDeferred(result, { factionId });
+    else await runHexEnterBeatNow(result, { factionId });
     return { ok: true, hexUuid: doc.uuid };
   }
   async function rideSave(factionId, session) {

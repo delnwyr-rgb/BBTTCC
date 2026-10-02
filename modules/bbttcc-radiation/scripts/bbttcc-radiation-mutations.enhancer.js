@@ -189,6 +189,13 @@
     if (ids.length) await A.deleteEmbeddedDocuments("ActiveEffect", ids).catch(() => {});
   }
 
+  // A cure resets the band watermark to current RP (ruling 2026-10-02), so
+  // climbing back into a band rolls again. Owned by radiation-effects.js.
+  async function _resetWatermark(A) {
+    try { await game.bbttcc?.api?.radiation?.resetWatermark?.(A); }
+    catch (e) { console.warn(TAG, "watermark reset failed:", e); }
+  }
+
   // ----- API object ----------------------------------------------------------
 
   function publishAPI() {
@@ -220,6 +227,7 @@
         await removeMutationEffects(A, id);
         const list = listRaw(A).filter(m => m.id !== id);
         await writeList(A, list);
+        await _resetWatermark(A);
         return true;
       },
 
@@ -228,6 +236,7 @@
         if (!A) throw new Error("Mutations.clear: actor not found");
         await removeAllMutationEffects(A);
         await writeList(A, []);
+        await _resetWatermark(A);
         return true;
       }
     };

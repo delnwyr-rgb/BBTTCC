@@ -90,8 +90,88 @@
     f.integration = integ;
   }
 
+  // =========================================================================
+  // TERRAIN SURCHARGE + TAMING — every number in one place (owner ruling 2026-10-02).
+  // ⚠ PROPOSAL VALUES — Dave tunes these. Units: MARKS (1 OP = 10 marks).
+  //
+  // Hard ground costs more to found on. The target hex's terrain difficulty TIER comes from the
+  // travel terrain table (economy.constants TERRAIN_TABLE `tier`, resolved through
+  // game.bbttcc.api._hexTravel.getHexTerrainSpec — the same reading the Travel Console uses).
+  // The surcharge is folded into the planned entry's cost vector at PLAN time
+  // (raid.planActivity → entry.recipe.cost), so the turn driver bills it, the dry preview shows
+  // it, and the affordability checks include it. It is billed AS WRITTEN — it does NOT go
+  // through the ×0.75 strategic price policy.
+  //
+  // Taming: hex flag flags.bbttcc-territory.terrainTamed = 0..tameMax. Each level knocks one
+  // tier off the surcharge (effective tier = max(1, tier − tame)). The tame level that counts is
+  // the best of the target hex itself and every ADJACENT hex the planning faction HOLDS — the
+  // roads reach out from developed ground, since an outpost always goes on unclaimed land.
+  // =========================================================================
+  const TERRAIN_RULES = {
+    surchargedActivities: ["establish_outpost"],
+    surchargeByTier: {          // terrain tier → extra marks on the planned cost
+      1: {},                    // plains, grasslands, river, lake
+      2: { logistics: 5 },      // forest, jungle, canyons, badlands, desert, ash wastes, ruins, reef, sky
+      3: { logistics: 10 },     // mountains, highlands, swamp, mire, depths, stratosphere
+      4: { logistics: 20 }      // wasteland, radiation, sea, ocean, abyss, orbit
+    },
+    tamedBy: {                  // resolved activity → tame levels added (target hex, and the TO hex of a route)
+      infrastructure_expansion: 1,
+      establish_supply_line: 1
+    },
+    tameMax: 3                  // 3 = even tier-4 ground founds at tier-1 price
+  };
+
+  const _tierOf = (doc) => {
+    try { const r = game.bbttcc?.api?._hexTravel?.getHexTerrainSpec?.(doc); const t = Number(r?.spec?.tier); return { tier: Number.isFinite(t) && t > 0 ? Math.min(4, Math.floor(t)) : 1, terrain: String(r?.raw || r?.key || "") }; }
+    catch (_e) { return { tier: 1, terrain: "" }; }
+  };
+  const _tameOf = (doc) => Math.max(0, Math.min(TERRAIN_RULES.tameMax, Math.floor(Number(doc?.flags?.[MOD_T]?.terrainTamed) || 0)));
+  const _ownerOf = (doc) => String(doc?.flags?.[MOD_T]?.factionId || doc?.flags?.[MOD_T]?.ownerId || "").replace(/^Actor\./, "");
+  // Adjacent = hex centroids within ~1.15 hex widths on the same scene (covers flat- and pointy-top grids).
+  function _adjacentHexes(doc){
+    const sc = doc?.parent; if (!sc) return [];
+    const c = (d) => ({ x: Number(d.x || 0) + Number(d.shape?.width || 0) / 2, y: Number(d.y || 0) + Number(d.shape?.height || 0) / 2 });
+    const c0 = c(doc); const reach = 1.15 * Math.max(Number(doc.shape?.width || 0), Number(doc.shape?.height || 0));
+    if (!(reach > 0)) return [];
+    return (sc.drawings?.contents ?? sc.drawings ?? []).filter(d => d.id !== doc.id && d.flags?.[MOD_T] && (d.flags[MOD_T].isHex === true || d.flags[MOD_T].kind === "territory-hex"))
+      .filter(d => { const p = c(d); return Math.hypot(p.x - c0.x, p.y - c0.y) <= reach; });
+  }
+  /** Plan-time surcharge for `activityKey` on `targetDoc` → { cost, tier, effTier, tame, terrain, tamedVia } or null. */
+  function planSurcharge({ activityKey, actor, targetDoc }){
+    if (!TERRAIN_RULES.surchargedActivities.includes(String(activityKey || "")) || !targetDoc) return null;
+    const { tier, terrain } = _tierOf(targetDoc);
+    let tame = _tameOf(targetDoc), tamedVia = tame ? String(targetDoc.flags?.[MOD_T]?.name || "the hex") : "";
+    const fid = String(actor?.id || "");
+    if (fid) for (const n of _adjacentHexes(targetDoc)) { const t = _tameOf(n); if (t > tame && _ownerOf(n) === fid) { tame = t; tamedVia = String(n.flags?.[MOD_T]?.name || "a neighbouring hex"); } }
+    const effTier = Math.max(1, tier - tame);
+    const cost = copy(TERRAIN_RULES.surchargeByTier[effTier] || {});
+    return { cost, tier, effTier, tame, terrain, tamedVia };
+  }
+  /** Raise a hex's tame level (GM side; called from the taming activities' apply at resolution). */
+  async function tameHex(doc, amount = 1){
+    if (!doc?.update) return null;
+    const before = _tameOf(doc); const after = Math.max(0, Math.min(TERRAIN_RULES.tameMax, before + Math.floor(Number(amount) || 0)));
+    if (after === before) return { before, after };
+    await doc.update({ [`flags.${MOD_T}.terrainTamed`]: after }, doc.parent ? { parent: doc.parent } : {});
+    return { before, after };
+  }
+  /** Activity hook: tame the entry's target (and TO hex) by TERRAIN_RULES.tamedBy[activityKey]; returns a message or "". */
+  async function tameForActivity(activityKey, entry){
+    const amt = Number(TERRAIN_RULES.tamedBy[String(activityKey || "")] || 0);
+    if (!amt || !entry?.targetUuid) return "";
+    const out = [];
+    for (const u of [entry.targetUuid, entry.toHexUuid].filter(Boolean)) {
+      const doc = await getHexDocumentFromEntry({ targetUuid: u }); if (!doc) continue;
+      const r = await tameHex(doc, amt);
+      if (r && r.after !== r.before) out.push(`${doc.flags?.[MOD_T]?.name || "hex"} terrain tamed ${r.before}→${r.after}`);
+    }
+    return out.join(", ");
+  }
+
   whenRaidReady((api)=>{
     const EFFECTS = api.EFFECTS || {};
+    api.terrainTaming = { RULES: TERRAIN_RULES, planSurcharge, tameHex, tameForActivity, tameLevel: _tameOf, terrainTier: _tierOf };
     // -----------------------------------------------------------------------
     // 1) Establish Outpost
     // -----------------------------------------------------------------------
@@ -160,9 +240,8 @@
         // size-none zeros (Bedlam Barrens, Mark 6, 2026-09-12) unless the GM re-saved the hex.
         try { const rc = game.bbttcc?.api?.territory?.recomputeHexResources; if (typeof rc === "function") await rc(doc, { source: "establish_outpost" }); }
         catch (eRc) { console.warn(TAG, "post-founding resource recompute failed (non-fatal)", eRc); }
-        // (A terrain surcharge block lived here — it read api.travel.__terrain and api.raid.spendOP,
-        // neither of which exists, so it never charged anything. Removed 2026-10-01; an outpost
-        // costs its planned price. Wiring a real surcharge is an owner/balance call.)
+        // Terrain surcharge (owner ruling 2026-10-02) is billed with the planned price — it was
+        // folded into entry.recipe.cost at plan time (TERRAIN_RULES above); nothing to charge here.
         const msgParts = [
           "Outpost founded (status: Occupied, size: Outpost).",
           "Integration progress +1 (wilderness foundation)."

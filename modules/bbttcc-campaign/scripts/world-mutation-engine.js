@@ -1076,6 +1076,110 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     } catch (e) { console.warn(TAG, "sweepExpiredWorldModifiers failed", e); }
     return out;
   }
+  // ── Typed raid world effects (owner ruling 2026-10-02) ─────────────────────────────────────────
+  // Engine of Absolution → restoreHex · Crown of Mercy → purifySpark · Ego Breaker → permanentCapDelta.
+  // Row target: row.target (uuid string or { uuid }) → row.targetHexUuid → ctx.hexUuid (the raid target).
+  const TYPED_RUIN_MODIFIERS = ["Contaminated", "Radiation Zone", "Damaged Infrastructure", "Hostile Population", "Devastated", "Scorched Earth", "scorched_earth"];
+  const TYPED_OP_KEYS = ["violence", "nonlethal", "intrigue", "economy", "softpower", "diplomacy", "logistics", "culture", "faith"];
+  function _typedTargetUuid(row, ctx) {
+    const t = row && row.target;
+    const u = (typeof t === "string" ? t : (t && (t.uuid || t.targetUuid))) || (row && row.targetHexUuid) || (ctx && ctx.hexUuid) || "";
+    return String(u || "").trim();
+  }
+  async function _typedWarLog(factionId, summary) {
+    try { if (factionId) await _appendWarLogDirect(factionId, { ts: Date.now(), date: (new Date()).toLocaleString(), type: "raid", activity: "maneuver_world_effect", summary }); } catch (_e) {}
+  }
+  async function _applyTypedWorldEffect(type, row, ctx, beatCtx) {
+    ctx = ctx || {};
+    const MOD_T = "bbttcc-territory", MOD_F = "bbttcc-factions";
+    if (!game.user?.isGM) return { applied: false, note: "GM-only" };
+    const _logA = ctx.source === "raid_commit" ? null : (ctx.factionId || null);   // the raid commit war-logs the acting side itself
+
+    // restoreHex — "Restore 1 destroyed Hex to GenPop status": the destroyed mark comes off, the ruin
+    // states (Contaminated / Radiation Zone / Damaged Infrastructure / Hostile Population / Devastated /
+    // Scorched Earth) are removed, Well-Maintained is added, darkness pips → 0, condition Purified.
+    // Ownership and status are left as they are (a raid does not hand the hex to anyone).
+    if (type === "restoreHex") {
+      const uuid = _typedTargetUuid(row, ctx);
+      const doc = uuid ? await resolveHexDoc(uuid) : null;
+      if (!doc || !doc.update) return { applied: false, note: "no target hex" };
+      const tf = (doc.flags && doc.flags[MOD_T]) || {};
+      const name = String(tf.name || doc.text || "the hex");
+      const parts = [];
+      if (tf.destroyed === true) {
+        await doc.unsetFlag(MOD_T, "destroyed");
+        parts.push("no longer destroyed");
+        try { const rec = get(game, "bbttcc.api.territory.recordHexImprovement", null); if (typeof rec === "function") await rec(doc, { kind: "owner_action", label: "Hex restored", description: `Restored by ${beatCtx.beatLabel || "a raid maneuver"}.`, source: { activity: "restore_hex", factionId: ctx.factionId || "" }, before: { destroyed: true }, after: { destroyed: false }, reversible: false }); } catch (_eRec) {}
+      }
+      const m = await _applyNamedModifiers(doc, ["Well-Maintained"], TYPED_RUIN_MODIFIERS, { beatId: beatCtx.beatId, via: "restoreHex" });
+      if (m.removed.length) parts.push("removed " + m.removed.join(", "));
+      if (m.added.length) parts.push("+" + m.added.join(", "));
+      const mods = clone((doc.flags && doc.flags[MOD_T] && doc.flags[MOD_T].mods) || {});
+      if (Number(mods.darkness || 0) !== 0) { mods.darkness = 0; await doc.update({ ["flags." + MOD_T + ".mods"]: mods }, { parent: doc.parent }); parts.push("darkness pips 0"); }
+      try { const sc = get(game, "bbttcc.api.territory.setCondition", null); if (typeof sc === "function") await sc(doc.uuid, "Purified", true); } catch (_eC) {}
+      const note = `${name} restored${parts.length ? " — " + parts.join("; ") : " (nothing to restore)"}, Purified`;
+      await _typedWarLog(_logA, `Engine of Absolution: ${note}.`);
+      return { applied: true, note };
+    }
+
+    // purifySpark — "Instantly purify a Corrupted Spark": the corrupted spark seated on the target hex is
+    // repaired (tikkun hex.repair → dormant). If the hex has none corrupted, the first corrupted spark
+    // carried by a member of the acting faction is cleansed instead (the Repair Ritual's success outcome,
+    // free and instant) and bbttcc:spark:repaired fires; the faction's tikkun.corrupted mark for that key clears.
+    if (type === "purifySpark") {
+      const uuid = _typedTargetUuid(row, ctx);
+      const hexApi = get(game, "bbttcc.api.tikkun.hex", null);
+      if (uuid && hexApi && typeof hexApi.repair === "function") {
+        let rr = null; try { rr = await hexApi.repair(uuid); } catch (_eR) { rr = null; }
+        if (rr && rr.ok && !rr.already) { const note = `the ${rr.key} spark at the target hex is repaired`; await _typedWarLog(_logA, `Crown of Mercy: ${note}.`); return { applied: true, note }; }
+      }
+      const fid = String(row.factionId || ctx.factionId || "").replace(/^Actor\./, "");
+      const F = fid ? game.actors?.get(fid) : null;
+      if (!F) return { applied: false, note: "no corrupted spark on the hex and no acting faction" };
+      for (const a of (game.actors || [])) {
+        if (a.type !== "character" || a.getFlag?.(MOD_F, "factionId") !== fid) continue;
+        const map = clone(a.getFlag?.("bbttcc-tikkun", "sparks") || {});
+        const k = Object.keys(map).find(x => map[x] && map[x].corrupted);
+        if (!k) continue;
+        const s = map[k];
+        s.corrupted = false;   // same write as the Repair Ritual's success (status untouched)
+        s.repair = Object.assign({}, s.repair || {}, { attempts: 0 });
+        s.history = Array.isArray(s.history) ? s.history : [];
+        s.history.push({ ts: Date.now(), phase: "repair:purified", note: `Purified by ${beatCtx.beatLabel || "Crown of Mercy"}` });
+        if (s.history.length > 30) s.history = s.history.slice(-30);
+        await a.setFlag("bbttcc-tikkun", "sparks", map);
+        try { const fc = F.getFlag(MOD_F, "tikkun")?.corrupted; const ck = s.key || k; if (fc && fc[ck]) await F.unsetFlag(MOD_F, "tikkun.corrupted." + ck); } catch (_eFc) {}
+        try { Hooks.callAll("bbttcc:spark:repaired", { actor: a, sparkKey: k, sparkItem: null, factionId: fid, roll: null, dc: null, source: "purifySpark" }); } catch (_eH) {}
+        const note = `${a.name}'s ${String(s.name || s.key || k)} spark is purified`;
+        await _typedWarLog(_logA ? fid : null, `Crown of Mercy: ${note}.`);
+        return { applied: true, note };
+      }
+      return { applied: false, note: "no corrupted spark found (hex or faction members)" };
+    }
+
+    // permanentCapDelta — "Reduce enemy leader's OP cap permanently": adds deltaMarks (or delta, read as
+    // MARKS) to flags.bbttcc-factions.opCapDelta[key] on the target faction. The OP engine's factionCaps
+    // (game.bbttcc.facts.faction.caps) adds opCapDelta to the base caps forever. key: an OP channel or "all".
+    // Target: row.factionId → scope "enemyLeader"/"defender" → ctx.defenderId; scope "self" → ctx.factionId.
+    if (type === "permanentCapDelta") {
+      const scope = String(row.scope || "enemyLeader");
+      const fid = String(row.factionId || (scope === "self" || scope === "attacker" ? ctx.factionId : ctx.defenderId) || "").replace(/^Actor\./, "");
+      const F = fid ? game.actors?.get(fid) : null;
+      if (!F) return { applied: false, note: "no target faction" };
+      const key = String(row.key || (TYPED_OP_KEYS.includes(String(row.stat || "")) ? row.stat : "violence")).toLowerCase();
+      if (key !== "all" && !TYPED_OP_KEYS.includes(key)) return { applied: false, note: "unknown cap key " + key };
+      const d = Math.trunc(Number(row.deltaMarks ?? row.delta ?? 0) || 0);
+      if (!d) return { applied: false, note: "zero delta" };
+      const cur = Number(F.getFlag(MOD_F, "opCapDelta")?.[key] || 0) || 0;
+      await F.update({ ["flags." + MOD_F + ".opCapDelta." + key]: cur + d });
+      const note = `${F.name}'s ${key === "all" ? "every" : key} cap ${d > 0 ? "+" : "−"}${Math.abs(d)} marks (permanent; total adjustment ${cur + d})`;
+      await _typedWarLog(F.id, `${beatCtx.beatLabel || "Raid maneuver"}: ${note}.`);
+      if (_logA && String(_logA) !== F.id) await _typedWarLog(_logA, `Ego Breaker: ${note}.`);
+      return { applied: true, note };
+    }
+    return { applied: false, note: "unhandled" };
+  }
+
   function _registryModifiers(key) { try { const reg = get(game, "bbttcc.facts.hexStates.unique", null); const e = reg && reg[String(key || "")]; return e && Array.isArray(e.modifiers) ? e.modifiers.slice() : []; } catch (_e) { return []; } }
 
   async function applyWorldEffects(input, ctx) {
@@ -1479,6 +1583,24 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       console.warn(TAG, "hexSpark apply failed", eHS);
     }
 
+    // 2h) TYPED RAID WORLD EFFECTS (owner ruling 2026-10-02): the raid console's "Apply (GM)" passes
+    // round.meta.intents.pending.worldEffects — a LIST of { type, ... } rows — as input.worldEffects, and
+    // the console's commit path routes Engine of Absolution / Crown of Mercy / Ego Breaker through here
+    // too, so there is one implementation. ctx: { factionId (attacker), defenderId?, hexUuid? (raid target) }.
+    try {
+      const typed = Array.isArray(we) ? we : (Array.isArray(we.typedEffects) ? we.typedEffects : []);
+      for (const row of typed) {
+        if (!row || typeof row !== "object") continue;
+        const t = String(row.type || "").trim();
+        if (!["restoreHex", "purifySpark", "permanentCapDelta"].includes(t)) continue;
+        const r = await _applyTypedWorldEffect(t, row, ctx, beatCtx);
+        if (r && r.applied) { changed = true; notes.push(t + ":" + (r.note || "ok")); }
+        else if (r && r.note) notes.push(t + ":skipped:" + r.note);
+      }
+    } catch (eTy) {
+      console.warn(TAG, "typed worldEffects apply failed", eTy);
+    }
+
     // 2i) THE TOWN MILITIA (STORY FLOW D-3, 2026-09-17): worldEffects.militia = { rung: 1|2|3, factionId? } — a beat may
     // raise the militia's rung (the Bandit Accord's absorption makes it STANDING). Never lowers it.
     try {
@@ -1518,6 +1640,34 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         } else if (chr) console.warn(TAG, "charter: faction or carrier not resolved", { fid, from: chr.fromFactionId || chr.fromFactionName });
       }
     } catch (eCh) { console.warn(TAG, "charter apply failed", eCh); }
+
+    // 2k) CROSSINGS (owner ruling 2026-10-02 — "The sigil bridge makes it a real bridge, yes."):
+    // worldEffects.crossing = { hexName?|targetHexUuid?, name?, toll?, factionId? } — a beat BUILDS a bridge on the hex, same
+    // flag shape as the Build Bridge activity (bbttcc-raid effects-wilderness §6): free for the builder + allies, toll for the
+    // neutral, closed to the hostile, cuttable. Defaults: the beat's/ctx hex, the coalition's first faction, toll 5 marks.
+    try {
+      const cr = we.crossing && typeof we.crossing === "object" ? we.crossing : null;
+      if (cr) {
+        const ctxHex = String((ctx && ctx.hexUuid) ? ctx.hexUuid : "").trim();
+        const beatHex = String((beat && beat.targetHexUuid) ? beat.targetHexUuid : "").trim();
+        const doc = cr.hexName ? _findHexByName(cr.hexName) : (cr.targetHexUuid ? await resolveHexDoc(cr.targetHexUuid) : ((ctxHex || beatHex) ? await resolveHexDoc(ctxHex || beatHex) : null));
+        const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
+        const camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null;
+        const fid = String(cr.factionId || (ctx && ctx.factionId) || (camp && camp.factionId) || ((camp && camp.factionIds) || [])[0] || "").replace(/^Actor\./, "");
+        if (!doc || !doc.update || !fid) console.warn(TAG, "crossing: hex or faction not resolved", { hexName: cr.hexName, fid, beatId: beatCtx.beatId });
+        else {
+          const prev = doc.flags?.["bbttcc-territory"]?.crossing;
+          let turn = 0; try { turn = Number(get(game, "bbttcc.api.world", null)?.getState?.()?.turn) || 0; } catch (_eT) {}
+          const crossing = { kind: "bridge", factionId: fid, builtTurn: turn, toll: Number(cr.toll ?? prev?.toll ?? 5), integrity: 1, name: String(cr.name || prev?.name || "").trim().slice(0, 60), cutBy: null, cutTurn: null };
+          const same = prev && prev.kind === "bridge" && Number(prev.integrity) === 1 && String(prev.factionId) === fid && String(prev.name || "") === crossing.name;
+          if (!same) {
+            await doc.update({ "flags.bbttcc-territory.crossing": crossing });
+            try { Hooks.callAll("bbttcc:crossing:changed", { hexUuid: doc.uuid, hexName: doc.flags?.["bbttcc-territory"]?.name || doc.text, factionId: fid, action: prev ? "rebuilt" : "built", crossing, source: "beat" }); } catch (_eH) {}
+            changed = true; notes.push("crossing:" + (crossing.name || "bridge"));
+          }
+        }
+      }
+    } catch (eCr) { console.warn(TAG, "crossing apply failed", eCr); }
 
     // 2g) RECIPE GRANTS (MATERIAL ECONOMY, 2026-09-20 — owner: "dole out the recipes"): worldEffects.recipeGrants =
     // [{ name | slug, to?: "coalition" (default) | "faction" | "common", factionId? }] — the beat teaches the recipe

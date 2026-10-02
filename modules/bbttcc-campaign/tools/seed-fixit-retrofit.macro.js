@@ -7,7 +7,10 @@
  *  3. Wiring: Arc Bay → the stabilizer; the yard → the Gullywasher welcome; Delay → come back; Back Stairs → the Route Board.
  *  4. New beats: the MYSTERY Bin (gag + clue), the Route Board (THE TURN; two versions, before/after the Maneuver Vault),
  *     Load the Crate (hand-off home) + receipt THE CERTIFICATION.
- *  5. Full 10-step script → campaign.story.
+ *  5. Full script → campaign.story (9 steps; the Route Board is not a step — see 2026-10-02).
+ * OWNER RULING 2026-10-02: the Route Board is a REWARD FOR ALIGNMENT — both versions carry the Back Stairs' allied hard gate
+ * (standing with the Jackalopes ALLIED, set by patch-vault-allies), and it is no longer a NOW-card step; the Back Stairs door reaches it.
+ * Seeded worlds: patch-template-review-fixes-c-2026-10-02.macro.js makes the same edits in place.
  * Idempotent; backs up the campaigns setting. F5 after.
  */
 (async () => {
@@ -126,6 +129,7 @@
         ] })
   ];
   const FIXIT_NEW = NEW.map(b => b.id);
+  const BOARD_BEATS = ["fixit_route_board", "fixit_route_board_after"];
   for (const nb of NEW) { if (byId.get(nb.id)) { say(`· ok beat (already) ${nb.id}`); continue; } camp.beats.push(nb); byId.set(nb.id, nb); changes++; say(`✚ beat ${nb.id}`); }
 
   const edit = (id, fn, what) => { const b = byId.get(id); if (!b) return say(`✗ MISSING ${id}`); const before = JSON.stringify(b); fn(b); if (JSON.stringify(b) !== before) { changes++; say(`✎ ${id}: ${what}`); } else say(`· ok ${id}`); };
@@ -146,6 +150,12 @@
   edit("fixit_arc_bay_conversation", b => { if (!String(b.description || "").trim()) b.description = "Amazing machines of war and discounted air filters, and Young Gearbox in the middle of it with his boot on a tarp that has a shape under it. He is delighted to see you. He is delighted to see anyone. \"Browse,\" he says. \"Touch nothing. Ask anything.\""; }, "Arc Bay gets a description");
   // an ungated internal fail beat that gains a voice becomes "offerable" — give it the act gate its neighbours have (lint P07)
   edit("fixit_leyline_trade_fail", b => { b.inject = b.inject || {}; if (!b.inject.requires) b.inject.requires = [P2]; }, "act gate");
+  // OWNER RULING 2026-10-02: the Route Board (both versions) is a reward for alignment — the same allied hard gate the Back Stairs carry
+  // (patch-vault-allies: `{ relation: <Jackalopes>, is: "allied" }`, hardGate = checked on every path). Read off the stairs so both stay one gate.
+  { const reqsOf = (x) => Array.isArray(x) ? x : (x && typeof x === "object" ? [x] : []);
+    const ALLY = reqsOf(byId.get("fixit_backstairs_exterior")?.inject?.requires).find(r => r && r.relation && r.is === "allied") || null;
+    if (!ALLY) say("✗ fixit_backstairs_exterior has no allied gate (run patch-vault-allies first) — the Route Board is NOT gated; re-run after");
+    else for (const id of BOARD_BEATS) edit(id, b => { b.inject = b.inject || {}; const r = reqsOf(b.inject.requires).slice(); if (!r.some(x => JSON.stringify(x) === JSON.stringify(ALLY))) b.inject.requires = [...r, { ...ALLY }]; if (b.inject.hardGate !== true) b.inject.hardGate = true; }, "allies only (the Back Stairs' hard gate)"); }
   // speakers
   const voice = (ids, name) => { for (const id of ids) edit(id, b => { if (!b.speakerActorId && sp(name)) b.speakerActorId = sp(name); }, `speaker ${name}`); };
   voice(["fixit_gullywasher_interior_convo", "fixit_gullywasher_choice_1", "fixit_gullywasher_choice_2", "fixit_gullywasher_choice_3", "fixit_gullywasher_choice_4", "fixit_gullywasher_choice_1_fail", "fixit_gullywasher_choice_2_fail", "fixit_gullywasher_choice_3_fail", "fixit_gullywasher_choice_4_fail", "fixit_gullywasher_welcome", "fixit_gully_answer_name"], "Dougan");
@@ -161,8 +171,11 @@
   if (!codeQuest || !codeScript) say("✗ code story for fixit_farm not readable — story script NOT written (hard-reload and re-run)");
   const QUEST = codeQuest ? JSON.parse(JSON.stringify(codeQuest)) : null;
   const SCRIPT = codeScript ? JSON.parse(JSON.stringify(codeScript)) : null;
+  let PREV_SCRIPT = null;
   if (SCRIPT) {
     const old = Object.fromEntries(SCRIPT.steps.map(s => [s.id, s]));
+    // (2026-10-02: the board step is built, then dropped — PREV_SCRIPT, the pre-ruling output, lets the overwrite guard below recognise it)
+    const BOARD_STEP = { id: "board", label: "The Route Board", line: "Patter keeps a route chalked on the board for a runner who is late. Runners are never late. Ask why nobody's erased it.", beats: ["fixit_route_board", "fixit_route_board_after"], done: { anyOf: ["fixit_route_board", "fixit_route_board_after"] } };
     SCRIPT.steps = [
       { ...old.browsing, line: "Take the lap. Pip or Patter will show you the yard, once, fast. The MYSTERY bin says STOP ASKING." },
       { id: "gully", label: "First Round's Cultural", line: "There's a Chupacabra behind the bar. He's the bartender. First one's on the Farm; the second costs where you're from.", beats: ["fixit_gullywasher_welcome"] },
@@ -170,7 +183,7 @@
       { ...old.arcbay, line: "The Arc Bay is full of things you cannot afford and one thing you came for. Young Gearbox has it under a tarp and Mara has it under a price." },
       old.stabilizer,
       { id: "bin", label: "The MYSTERY Bin", line: "AS IS. NO REFUNDS. STOP ASKING. Reach in anyway.", beats: ["fixit_mystery_bin"] },
-      { id: "board", label: "The Route Board", line: "Patter keeps a route chalked on the board for a runner who is late. Runners are never late. Ask why nobody's erased it.", beats: ["fixit_route_board", "fixit_route_board_after"], done: { anyOf: ["fixit_route_board", "fixit_route_board_after"] } },
+      BOARD_STEP,
       old.prisoner,
       { id: "load", label: "Load the Crate", line: "Gearbox signs the certification with the fitting drawn in the margin. Tell Garren to sign his slowly.", beats: ["fixit_load_the_crate"] },
       { ...old.settles, line: "The Farm has stopped auditioning you. Ride home to Garren before the paint on the sign dries." }
@@ -178,6 +191,9 @@
     const doorLine = { pip: "Pip and Patter move in synch with everything that moves. Ask what's moving near Allesh. Both will answer, at once." };
     for (const d of (SCRIPT.doors || [])) if (doorLine[d.id]) d.line = doorLine[d.id];
     if (!(SCRIPT.doors || []).some(d => d.id === "bin")) SCRIPT.doors = [...(SCRIPT.doors || []), { id: "bin", label: "The MYSTERY Bin", line: "AS IS. NO REFUNDS. STOP ASKING. Pat it first.", beats: ["fixit_mystery_bin"] }];
+    PREV_SCRIPT = JSON.parse(JSON.stringify(SCRIPT));
+    // OWNER RULING 2026-10-02: the Route Board is an allies' reward, not a NOW-card step (the Back Stairs door reaches it)
+    SCRIPT.steps = SCRIPT.steps.filter(s => s.id !== "board");
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
@@ -185,7 +201,7 @@
   // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
   // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
   { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
-    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT) || same(lS, PREV_SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script fixit_farm → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-fixit-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

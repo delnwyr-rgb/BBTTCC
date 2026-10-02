@@ -1359,7 +1359,16 @@ const TERRAIN_SEPHIRAH = {
   // Hazardous
   qliphothic:   null,   // null = adds Noise, not alignment bonus
   irradiated:   null,
-  wasteland:    "malkuth"
+  wasteland:    "malkuth",
+
+  // ── Added 2026-10-02 (owner ruling — Dave may veto any row) ──────────────────
+  // Same logic as above: living land → Netzach, water → Chesed / the Great Sea,
+  // severe relief → Gevurah, bare matter → Malkuth, the heavens → the supernals.
+  canyons:      "binah",    // Shabbathai (Saturn): time laid bare in the strata; the walls are the limit that gave the river its form
+  badlands:     "gevurah",  // Madim (Mars): earth stripped by Din, erosion as severity — kin to desert and mountain
+  reef:         "netzach",  // Nogah (Venus, foam-born): the sea's forest, life by accretion — the forest/grassland rule underwater
+  depths:       "binah",    // Marah, the Great Sea: the dark, bitter, form-giving waters of the Supernal Mother
+  sky:          "chokmah"   // Mazloth: the sphere of the fixed stars / zodiac — the open heaven above every made form
 };
 
 // Territory's hex terrain keys (economy TERRAIN_TABLE) → the keys above. Pure
@@ -1367,7 +1376,8 @@ const TERRAIN_SEPHIRAH = {
 const TERRAIN_KEY_ALIAS = {
   plains: "grassland", grasslands: "grassland", jungle: "forest",
   mountains: "mountain", highlands: "mountain", swamp: "wetlands", mire: "wetlands",
-  lake: "river", sea: "ocean", ashWastes: "desert", urbanWreckage: "ruins"
+  lake: "river", sea: "ocean", ashWastes: "desert", urbanWreckage: "ruins",
+  canyon: "canyons", badland: "badlands", deep: "depths"
 };
 
 // ─── Terrain bonus ────────────────────────────────────────────────────────────
