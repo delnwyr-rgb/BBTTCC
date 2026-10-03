@@ -159,6 +159,7 @@ const GEBURAH_FORCED_BEAT_IDS = new Set([
 const SETTING_CHUCKLE_SEEN   = "chucklecreekSeen";
 const SETTING_STILLWATER_CRACK = "stillwaterCrack";
 const SETTING_SOFTLANDING_GIVE = "softlandingGive";
+const SETTING_HUM_ROOFS = "humRoofs";           // Sarmoung Hum Tier 2 (2026-10-02): roofs like that, noticed (0-9)
 const CADENCE_OUTCOME_FLAGS = {
   cadence_win_style: { respect: 1, tribute: 0, uncontested: 0 },  // cameo opens
   cadence_win_ugly:  { respect: 0, tribute: 0, uncontested: 0 },  // you won the hex, lost the region
@@ -2310,7 +2311,7 @@ async function _storeFactsHtml(campaign, ctx = {}) {
     const mil = []; for (const F of (facs || [])) { const m = api?.militia?.state?.(F); if (m && Number(m.rung) > 0) mil.push(`${esc(F.name)} rung ${esc(m.rung)}`); }
     if (mil.length) rows.push(`<div><b>Militia:</b> ${mil.join(" · ")}</div>`);
   } catch (_eF) {}
-  const meters = []; for (const k of ["wendigoRung", "banditMercy", "banditFear", "geburahEarned", "geburahForced", "cadenceRespect", "cadenceTribute", "cadenceUncontested", "crVerify", "chucklecreekSeen", "stillwaterCrack", "softlandingGive", "tikkunDividend"]) { try { const v = game.settings.get(MOD_ID, k); if (v !== undefined && v !== null && v !== 0 && v !== false && v !== "") meters.push(`${esc(k)} ${esc(typeof v === "object" ? JSON.stringify(v) : v)}`); } catch (_e) {} }
+  const meters = []; for (const k of ["wendigoRung", "banditMercy", "banditFear", "geburahEarned", "geburahForced", "cadenceRespect", "cadenceTribute", "cadenceUncontested", "crVerify", "chucklecreekSeen", "stillwaterCrack", "softlandingGive", "humRoofs", "tikkunDividend"]) { try { const v = game.settings.get(MOD_ID, k); if (v !== undefined && v !== null && v !== 0 && v !== false && v !== "") meters.push(`${esc(k)} ${esc(typeof v === "object" ? JSON.stringify(v) : v)}`); } catch (_e) {} }
   if (meters.length) rows.push(`<div><b>Meters:</b> ${meters.join(" · ")}</div>`);
   if (!rows.length) rows.push("<div>The story has nothing on the ledger yet.</div>");
   return `<details open class="bbttcc-store-facts" style="border-left:3px solid #4db8b0;padding:.35em .6em;margin:0 0 10px 0;background:rgba(77,184,176,.08);font-size:12px;"><summary style="cursor:pointer;"><b>📒 What the story knows</b> <span style="opacity:.7;">(GM only — he's grading energy, you're holding the ledger)</span></summary>${rows.join("")}</details>`;
@@ -4986,6 +4987,7 @@ function _resolveGateValue(name) {
     case "chucklecreekSeen": return _banditMeterGet(SETTING_CHUCKLE_SEEN);       // Chuckle Creek indict rung (0-4)
     case "stillwaterCrack":  return _banditMeterGet(SETTING_STILLWATER_CRACK);   // Stillwater crack rung (0-4)
     case "softlandingGive":  return _banditMeterGet(SETTING_SOFTLANDING_GIVE);   // Soft Landing give rung (0-4)
+    case "humRoofs":         return _banditMeterGet(SETTING_HUM_ROOFS);          // Sarmoung Hum Tier 2: roofs noticed (0-9)
     default: return null;            // unknown source — caller treats as unmet + warns
   }
 }
@@ -8462,7 +8464,7 @@ async function _onBeatResolvedGeburah({ beat } = {}) {
 // resolves — [{ key, delta?, set?, min?, max? }]. Keys = the meters the gate resolver knows
 // (chucklecreekSeen, wendigoRung, crVerify, banditMercy …). GM-only write; clamps; logs. This is
 // what lets a grief town's rungs open from play instead of a GM hand on the setting.
-const STORY_METER_KEYS = new Set(["wendigoRung", "banditMercy", "banditFear", "geburahEarned", "geburahForced", "cadenceRespect", "cadenceTribute", "cadenceUncontested", "crVerify", "chucklecreekSeen", "stillwaterCrack", "softlandingGive", "tikkunDividend"]);
+const STORY_METER_KEYS = new Set(["wendigoRung", "banditMercy", "banditFear", "geburahEarned", "geburahForced", "cadenceRespect", "cadenceTribute", "cadenceUncontested", "crVerify", "chucklecreekSeen", "stillwaterCrack", "softlandingGive", "humRoofs", "tikkunDividend"]);
 async function _onBeatResolvedMeters({ beat } = {}) {
   try {
     if (!game.user?.isGM) return;
@@ -8996,6 +8998,8 @@ Hooks.once("init", () => {
       scope: "world", config: false, type: Number, default: 0
     });
   }
+  // Sarmoung Hum Tier 2 (2026-10-02): roofs like that, noticed on the road (0-9). Gates The Fourth Roof (>= 4).
+  game.settings.register(MOD_ID, SETTING_HUM_ROOFS, { name: "Bad Eden Hum Roofs", hint: "Internal: Sarmoung Hum Tier 2 — low corrugated roofs noticed (0-9). Gates The Fourth Roof.", scope: "world", config: false, type: Number, default: 0 });
 
   // The Circuit Riders' verification tally (STORY FLOW 2026-09-17): +1 per good answer, −1 per bad; alliance needs ≥ 2.
   game.settings.register(MOD_ID, SETTING_AWARDS_LEDGER, { name: "Story awards ledger", scope: "world", config: false, type: Object, default: {} });

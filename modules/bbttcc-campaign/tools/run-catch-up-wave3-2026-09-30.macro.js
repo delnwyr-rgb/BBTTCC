@@ -28,6 +28,7 @@
     { file: T + "seed-cadence-retrofit.macro.js",            label: "The Cadence (Tempo at the gate, the drum, THE MAESTRA'S TERMS)", enabled: true },
     { file: T + "seed-tifaret-retrofit.macro.js",            label: "Forest of Early Tifaret (the ring, the Tree Person)", enabled: true },
     { file: T + "seed-ninth-guest-retrofit.macro.js",        label: "The Ninth Guest (the sign, the hand, the gap, THE TERMS OF THE WATCH)", enabled: true },
+    { file: T + "patch-jeargan-garden-canon-2026-10-02.macro.js", label: "Garden canon 2026-10-02 (Jeargan, ninety-six, the dates, JEARGAN'S LINE)", enabled: true },
     { file: T + "seed-finale-retrofit.macro.js",             label: "Thatwards Ho! Finale (Sklar's arithmetic, THE PAYMASTER'S NUMBERS)", enabled: true },
   ];
 

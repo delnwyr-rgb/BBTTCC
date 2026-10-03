@@ -35,7 +35,9 @@ export const STORY_SCRIPTS = {
     chapters: { opening: { giver: "Mal", line: "Read the briefing. Then the Jackalope leaves for Allesh-Gilliam." } }
   },
 
-  // sarmoung_hum: UNSCRIPTED by ruling (ambient rungs; the tent is pinned into Allesh-Gilliam · Arrival)
+  // sarmoung_hum: UNSCRIPTED in code. Tier 1 (acts 0–5) = six ambient rungs; the tent is pinned into Allesh-Gilliam · Arrival.
+  // 2026-10-02 Dave moved the Hum to TIER 2 from Act 3: its script lives in campaign.story DATA (seed-sarmoung-hum-retrofit),
+  // quest def act 3 + background:true (story-model: a background arc fills idle time, never the NOW headline).
 
   // ═══ ACT 1 + 2 · ALLESH-GILLIAM ══════════════════════════════════════════════
   allesh_gilliam: {

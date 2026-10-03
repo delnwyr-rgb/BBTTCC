@@ -7,6 +7,8 @@
  * for one night), the heading (the Forest's receipt spent against the footprints → mark `ninth_guest_heading` for the Lost Statues), THE
  * MADE ROOM at the Vacancy (Verna), and NOT IN THIS AGE (the closer; the quest closes, the question does not). The plinth stops being the
  * closer. No new actor: the Garden does not speak; Verna gets a third secret. Idempotent; backs up the campaigns setting. F5 after.
+ * ⚠ CANON SUPERSEDED 2026-10-02 (Dave): the Ninth Guest = JEARGAN, the Garden holds 96, the three statues are three of the hundred.
+ *   Run patch-jeargan-garden-canon-2026-10-02.macro.js AFTER this seeder (it is the single source of the new text).
  */
 (async () => {
   const DRY_RUN = true;                       // <-- set false to apply

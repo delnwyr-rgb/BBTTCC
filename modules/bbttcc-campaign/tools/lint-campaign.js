@@ -46,7 +46,8 @@ const GATE_FLAGS = {              // name → [min, max] sanity band (null = unb
   banditMercy: [0, null], banditFear: [0, null],
   cadenceRespect: [0, 1], cadenceTribute: [0, 1], cadenceUncontested: [0, 1], crVerify: [-3, 4],
   geburahEarned: [0, 3], geburahForced: [0, 3],
-  chucklecreekSeen: [0, 4], stillwaterCrack: [0, 4], softlandingGive: [0, 4]
+  chucklecreekSeen: [0, 4], stillwaterCrack: [0, 4], softlandingGive: [0, 4],
+  humRoofs: [0, 9]
 };
 const GM_DRIVEN_FLAGS = new Set(["chucklecreekSeen","stillwaterCrack","softlandingGive"]); // raised by GM today
 const QUEST_BUCKETS = new Set(["active","completed","archived"]);

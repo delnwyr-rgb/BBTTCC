@@ -4,6 +4,8 @@
  * NEW actor Dunmore Kell, the Basin Sexton (Menhirkin) with secrets; Sable 9 +1 secret; THE SEXTON, THE TRUTH OF THE FIRST ONE (the exchange:
  * your true account for THE SEXTON'S TALLY), WHAT THE BLEEDING IS (the turn — Sable seeks you out), THE SEVENTH POINT (the Vault Label spent),
  * THE REPORT GOES WEST (after; mark for the Garden count / Ninth Guest / Finale). The statues still never speak. Idempotent; backs up the setting.
+ * ⚠ CANON SUPERSEDED 2026-10-02 (Dave): the Ninth Guest = JEARGAN, the Garden holds 96, the three statues are three of the hundred.
+ *   Run patch-jeargan-garden-canon-2026-10-02.macro.js AFTER this seeder (it is the single source of the new text).
  */
 (async () => {
   const DRY_RUN = true;                       // <-- set false to apply

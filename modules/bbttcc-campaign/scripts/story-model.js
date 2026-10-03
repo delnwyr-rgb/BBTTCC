@@ -813,7 +813,7 @@ export function deriveSituation(ctx) {
     const firedCount = all.filter(b => fired.has(String(b.id))).length;
     stamp(next, def); for (const c of chapters) stamp(c.next, def);
     if (next && next.hereLine && next.here === true) next.line = next.hereLine;   // "go and see" when already there
-    quests.push({ key, name: def.name, act: def.act, keystone: !!def.keystone, evergreen: !!def.evergreen, hex: def.hex || "", registryId: reg, state, chapters, next, why, currentChapter: chapter, starts: mainStarts, closers: mainEnds, progress: { fired: firedCount, total: all.length }, beats: all, script });
+    quests.push({ key, name: def.name, act: def.act, keystone: !!def.keystone, evergreen: !!def.evergreen, background: !!def.background, hex: def.hex || "", registryId: reg, state, chapters, next, why, currentChapter: chapter, starts: mainStarts, closers: mainEnds, progress: { fired: firedCount, total: all.length }, beats: all, script });
   }
   const qByKey = Object.fromEntries(quests.map(q => [q.key, q]));
   // scripted HANDOFF steps (ride for Fixit → the crate comes from the Fixit Farm's chapter): the beat to run is the
@@ -846,7 +846,13 @@ export function deriveSituation(ctx) {
   // THE TURN (2026-09-14): when nothing fresh is left anywhere this turn — every quest's next is a hub
   // revisit or gated, and no door is open — the story's next is the Turn Driver, not a hub to ping-pong.
   const fresh = (q) => !!(q && q.next && q.next.ready && leadsSomewhere(q.next.beat));
-  const anyFresh = quests.some(q => (q.state === "active") && fresh(q));
+  // BACKGROUND ARCS (2026-10-02, the Sarmoung Hum at Tier 2): its steps play anywhere, so without this it would win every
+  // "elsewhere" pick and stand in front of the act's own quests and open doors. A background quest fills IDLE time only —
+  // NOW offers it when the anchor has nothing fresh and no door is open; it never outranks a foreground quest.
+  const fg = (q) => !q?.background;
+  const anyDoorReady = quests.some(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready);
+  const bgOK = (q) => fg(q) || !anyDoorReady;
+  const anyFresh = quests.some(q => (q.state === "active") && fresh(q) && bgOK(q));
   // ELSEWHERE: when the story's own quest has only a stale hub to offer but another quest in play has
   // something fresh, that is what happens next (the fiddle in Khezek-Tor while you stand at the Crossroads)
   // HERE (2026-09-15): what the party can reach from where it stands comes first — a fresh next in another quest
@@ -855,7 +861,7 @@ export function deriveSituation(ctx) {
   // A DOOR standing at the party's hex counts as reachable too (2026-09-18, live-caught: the party rode to Khezek-Tor on
   // day one and NOW kept offering Allesh-Gilliam's Day's End, a ride away, while the cookline waited right here)
   const doorHere = (q) => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready && q.next.here === true && leadsSomewhere(q.next.beat);
-  const elsewhere = anchorQuest && !reachable(anchorQuest) ? (inPlay.find(reachable) || quests.find(doorHere) || (!fresh(anchorQuest) ? (inPlay.find(fresh) || null) : null)) : null;
+  const elsewhere = anchorQuest && !reachable(anchorQuest) ? (inPlay.find(q => fg(q) && reachable(q)) || quests.find(doorHere) || (!fresh(anchorQuest) ? (inPlay.find(q => fg(q) && fresh(q)) || inPlay.find(q => bgOK(q) && fresh(q)) || null) : null)) : null;
   const elsewhereWhy = elsewhere ? (fresh(anchorQuest) ? "here" : "elsewhere") : null;
   inPlay.sort((a, b) => Number(b.next?.here === true) - Number(a.next?.here === true));
   const now = anchorQuest ? ((!anyFresh && !quests.some(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready))
@@ -1214,6 +1220,7 @@ export function normalizeQuestDef(key, q = {}) {
     name: String(q?.name || key), act: Number.isFinite(Number(q?.act)) ? Number(q.act) : 0,
     keystone: !!q?.keystone, hex: String(q?.hex || ""), registryId: String(q?.registryId || ""),
     ...(q?.evergreen ? { evergreen: true } : {}),
+    ...(q?.background ? { background: true } : {}),   // 2026-10-02: a background arc (the Hum, Tier 2) fills idle time; never the headline
     chapters
   };
 }

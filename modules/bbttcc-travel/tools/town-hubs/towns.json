@@ -2065,7 +2065,7 @@
       [
         "maneuver_vault_foyer",
         "foyer",
-        "interior"
+        "exterior"
       ],
       [
         "maneuver_vault_slippage",
@@ -2101,7 +2101,10 @@
     "notes": [
       "Placed off the REAL scene background the-maneuver-vault-hexchrome-battlemap.webm (1700x3700), bottom = road. Order bottom→top: entrance chevron, cubby corridor (foyer), vortex pool (echo archive), hex-tile floor (slippage), plasma dome (containment loop / Diorama POV).",
       "Single level, walk-in regions, no gates: the door plays regardless.",
-      "The live foyer_of_procedure beat still points at the Diorama scene (the plasma-dome room); the runner leaves live scene ids alone. If the foyer should show Vault Foyer, add maneuver_vault_foyer_of_procedure to overrideLiveBeats."
+      "Owner ruling 2026-10-02: the foyer beat shows the Vault Foyer POV (overrideLiveBeats); the Diorama (plasma dome) belongs to the Containment Loop door."
+    ],
+    "overrideLiveBeats": [
+      "maneuver_vault_foyer_of_procedure"
     ]
   },
   "gloomgill": {
@@ -2243,6 +2246,109 @@
       "Arrival + the fight stay on the battlemap; the stage island (arch + the two eye sigils) is the walk-in door into the POV, and the whole show plays there.",
       "Applause = the long bench on the island's west side (the audience). Scoreboard = the end of the north pier. Both are direct doors; their own requires decide whether they play.",
       "Ungated: the stage is the quest. Single level."
+    ]
+  },
+  "portkudzu": {
+    "town": "Port Kudzu",
+    "hexAliases": [
+      "port kudzu"
+    ],
+    "hubs": {
+      "main": {
+        "sceneName": "port_kudzu_hexchrome_battlemap",
+        "label": "Port Kudzu",
+        "refWidth": 4950,
+        "refHeight": 4950
+      }
+    },
+    "walkIn": true,
+    "townQuestFrom": [
+      "map_port_kudzu_intro"
+    ],
+    "doors": [
+      {
+        "hub": "main",
+        "key": "saloon",
+        "label": "Fewer Dead Fish Smell",
+        "x": 2350,
+        "y": 3550,
+        "w": 450,
+        "h": 500,
+        "color": "#ffd54f",
+        "exterior": "port_kudzu_hexchrome_pov",
+        "beatId": "port_kudzu_saloon_exterior",
+        "intro": "wt_kudzu_saloon"
+      },
+      {
+        "hub": "main",
+        "key": "harbour",
+        "label": "The Harbourmaster's Ledger",
+        "x": 3250,
+        "y": 2400,
+        "w": 450,
+        "h": 350,
+        "color": "#4fc3ff",
+        "exterior": "port_kudzu_wharf_pov",
+        "beatId": "port_kudzu_harbour_exterior",
+        "intro": "map_port_kudzu_testimony"
+      },
+      {
+        "hub": "main",
+        "key": "wagon",
+        "label": "Ride the Wagon",
+        "x": 4200,
+        "y": 3600,
+        "w": 900,
+        "h": 700,
+        "color": "#ffffff",
+        "exterior": "port_kudzu_hexchrome_pov",
+        "beatId": "wt_caravan_ride",
+        "direct": true
+      }
+    ],
+    "cross": [],
+    "beatMap": [
+      [
+        "port_kudzu_saloon_exterior",
+        "saloon",
+        "exterior"
+      ],
+      [
+        "port_kudzu_harbour_exterior",
+        "harbour",
+        "exterior"
+      ],
+      [
+        "map_port_kudzu_intro",
+        "@port_kudzu_hexchrome_battlemap",
+        ""
+      ],
+      [
+        "wt_kudzu_",
+        "saloon",
+        "exterior"
+      ],
+      [
+        "map_port_kudzu_testimony",
+        "harbour",
+        "exterior"
+      ],
+      [
+        "map_port_kudzu_partial",
+        "harbour",
+        "exterior"
+      ],
+      [
+        "wt_caravan_ride",
+        "wagon",
+        "exterior"
+      ]
+    ],
+    "notes": [
+      "Placed off the baked port_kudzu_hexchrome_battlemap.webm (4950x4950; DA export 7500 → -s 66; scene JSON rescaled to 5000x5000, the runner scales per axis).",
+      "IMPORT FIRST: scene JSON ~/files_for_webm_bake/baked/port_kudzu_hexchrome_battlemap.scene.json (background already points at the uploaded webm); create a gridless POV scene named port_kudzu_hexchrome_pov on art/bbttcc/GOTTGAIT/GOTTGAIT Scene files/port_kudzu_hexchrome_pov.webm.",
+      "The DA export carried 79 lights and NO walls — re-export walls from the .dam if the battlemap needs them for fights.",
+      "Saloon = the sigil-signed building inside the boardwalk loop; harbour = the pier hut on the water (the older wharf POV); wagon = the tarped cargo yard east. Ungated; the wagon is a direct door, its own requires decide."
     ]
   }
 }

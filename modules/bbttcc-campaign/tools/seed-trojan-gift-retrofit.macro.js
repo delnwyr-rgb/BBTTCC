@@ -93,6 +93,7 @@
         choices: [
           ch("Search the rest of the crate.", "trojan_compartment", { description: "Whatever rode with the paper has a berth. Find it." }),
           ch("Refuse it after all, and say why.", "trojan_refuse", { description: "\"Better besieged than beholden.\" You quote a dead warden at a gate. It has been done before." }),
+          ch("\"The name-cards.\"", "", { requires: { beatMark: "wendigo_confluence_name_cards" }, description: "You have seen this hand before: at the Long Table, on a card for everyone the region forgot, in the same patient copperplate. Pernelle Oday takes her hands off the table. The Wendigo send gifts. They have always sent gifts. They knock first, and they are very sorry about the berth." }),  // owner ruling 2026-10-02: the Wendigo sent it
           ch("Forward it. With regards.", "trojan_regift", { description: "The clerk signs the card for you. Her hand is very steady." })
         ] })
   ];
