@@ -10,9 +10,10 @@
  *   • a "🕯 Advisor" button on the faction sheet (GM + faction owners)
  *
  *   OPT-IN (world setting "advisorAmbient", DEFAULT OFF — every fire is a real
- *   Anthropic call on the world's key):
+ *   Anthropic call on the GM's key; player seats relay through the GM):
  *   • bbttcc:scene:enter        emitted on scene activation (GM client only)
- *   • bbttcc:faction:sheetOpened emitted when a faction sheet opens (60s voice debounce)
+ *   • bbttcc:faction:sheetOpened emitted on the seat that opened a faction sheet it
+ *     owns (once per open, 60s voice debounce), whispered to that seat + GMs
  *
  * bbttcc:faction:opChanged and bbttcc:raid:initiate stay unemitted for now —
  * opChanged is too noisy to pay for, and raid-initiate belongs to bbttcc-raid
@@ -24,8 +25,10 @@ const TAG = "[mal-voice:advisor-triggers]";
 const log  = (...a) => console.log(TAG, ...a);
 const warn = (...a) => console.warn(TAG, ...a);
 
+// GM seat: a key is set in this browser. Player seat: a GM is connected to
+// relay through (the key lives on the GM's machine — owner ruling 2026-10-02).
 function _keyConfigured() {
-  try { return !!String(game.settings.get(MOD, "apiKey") || "").trim(); }
+  try { return !!game.bbttcc?.mal?.settings?.canCall?.(); }
   catch { return false; }
 }
 
@@ -36,7 +39,8 @@ function _fire(voiceId, hook, args = {}) {
     return null;
   }
   if (!_keyConfigured()) {
-    ui.notifications?.warn?.("No API key configured (module settings → Bad Eden AI Voice).");
+    if (game.user?.isGM) ui.notifications?.warn?.("No API key on this GM machine (Module Settings → AI Faction/GM Advisor → API key).");
+    else ui.notifications?.info?.("The Advisor's line is dead — advisors speak through the GM's seat, and no GM is connected.");
     return null;
   }
   return triggers.fire(voiceId, { hook, args });
@@ -86,7 +90,7 @@ function _install() {
   try {
     game.settings.register(MOD, "advisorAmbient", {
       name: "Ambient advisor triggers",
-      hint: "When on, the GM Advisor fires on scene changes and the Faction Advisor on faction-sheet opens (60s debounce). Every fire is one real API call on this world's key. Manual consults (the 🕯 Advisor button, game.bbttcc.mal.advisors.*) work regardless.",
+      hint: "When on, the GM Advisor fires on scene changes and the Faction Advisor on faction-sheet opens — whispered to whoever opened the sheet (60s debounce). Every fire is one real API call on the GM's key (player seats relay through the connected GM). Manual consults (the 🕯 Advisor button, game.bbttcc.mal.advisors.*) work regardless.",
       scope: "world", config: true, type: Boolean, default: false
     });
   } catch (_e) { /* already registered */ }
@@ -118,11 +122,13 @@ function _install() {
     if (appKey != null) { if (_openFactionSheets.has(appKey)) return; _openFactionSheets.add(appKey); }
     const actor = app?.actor ?? app?.document;
     if (!actor?.getFlag?.("bbttcc-factions", "isFaction")) return;
-    // One billing client: the active GM when present, otherwise an owner.
-    const activeGM = game.users?.activeGM;
-    if (activeGM ? !activeGM.isSelf : !actor.isOwner) return;
+    // Owner ruling 2026-10-02: the advisor speaks to WHOEVER opened the sheet,
+    // on that seat (this render hook only runs on the opening client — once
+    // per open via _openFactionSheets). A player's call relays through the GM's
+    // key. Observers who don't own the faction get no advisor.
+    if (!(game.user?.isGM || actor.isOwner)) return;
     try {
-      Hooks.callAll("bbttcc:faction:sheetOpened", { factionId: actor.id });
+      Hooks.callAll("bbttcc:faction:sheetOpened", { factionId: actor.id, userId: game.user.id });
     } catch (_e) {}
   });
 

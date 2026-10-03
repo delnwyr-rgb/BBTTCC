@@ -3,8 +3,9 @@
  *
  * Browser-side fetch to https://api.anthropic.com/v1/messages with BYO key.
  * Uses the `anthropic-dangerous-direct-browser-access: true` opt-in header
- * (the BYO-key model: key sits in world settings, only ever transmitted
- * directly to Anthropic).
+ * (the BYO-key model). Since 2026-10-02 the key is a CLIENT setting on the
+ * GM's machine only: GM seats fetch directly; player seats relay through the
+ * GM (see GM RELAY below) and never hold the key.
  *
  * v2 additions:
  *   - Prompt caching: `system` may be an array of blocks with per-block
@@ -35,7 +36,8 @@
  *     stream?:      boolean,             // SSE streaming
  *     onDelta?:     (text, delta) => void,
  *     thinking?:    object,              // explicit thinking config override
- *     apiKey?:      string               // override settings
+ *     apiKey?:      string,              // override settings (GM seat only)
+ *     relay?:       { kind, ... }        // player seat: relayed to the GM as this kind
  *   })
  *   -> Promise<{
  *        ok:       boolean,
@@ -252,9 +254,18 @@ async function call(opts = {}) {
   const settings = globalThis.game?.bbttcc?.mal?.settings;
   if (!settings) return _err("MODULE_NOT_READY", "game.bbttcc.mal not installed");
 
+  // Owner ruling 2026-10-02: the key lives ONLY on the GM's machine (client
+  // setting). A player seat never calls the provider — it relays a request of
+  // a registered kind to the active GM, which validates and calls (see the
+  // GM RELAY section below). No relay descriptor = no call.
+  if (!globalThis.game?.user?.isGM) {
+    if (opts.relay && typeof opts.relay === "object") return await relay(opts);
+    return _err("GM_ONLY", "AI calls from a player seat must go through the GM relay (no `relay` descriptor given).");
+  }
+
   const apiKey = opts.apiKey || settings.apiKey();
   if (!apiKey) {
-    return _err("NO_API_KEY", "No Anthropic API key configured. Set one in Module Settings → Bad Eden Mal Voice → API key.");
+    return _err("NO_API_KEY", "No Anthropic API key on this GM machine. Set one in Module Settings → AI Faction/GM Advisor → API key (stored in this browser only).");
   }
 
   const model       = opts.model || settings.model() || DEFAULT_MODEL;
@@ -434,7 +445,238 @@ function _finish(text, model, usage, stopReason, retried, opts, debug, content =
   };
 }
 
+// ============================================================
+// GM RELAY (owner ruling 2026-10-02 — the key never reaches a player browser)
+//
+// Player seat:  call({ ..., relay: { kind, ...kindPayload }, stream, onDelta })
+//   → gmExec "malVoice.provider.call" { kind, reqId, stream, ...kindPayload }
+//   → the PRIMARY GM validates (sender, kind builder, per-user rate limit),
+//     REBUILDS the request from GM-side data (system prompt, model, maxTokens
+//     — the player never supplies those), calls Anthropic with its own key,
+//     and acks the normal result shape.
+//   Streaming: the GM throttles text-so-far onto the bbttcc-core socket
+//   channel ({op:"malVoice.delta", reqId, toUserId, seq, text}; gm-exec's own
+//   listener ignores ops it doesn't know) and the requesting seat feeds its
+//   onDelta. The ack carries the final text, so a lost delta never matters.
+//
+// Kinds are registered per call-site with registerRelayKind(kind, builder):
+//   builder(payload, { user, meta }) -> { ok:true, request:{system, messages|
+//   userMessage, tools?, toolChoice?, maxTokens, temperature?, model?}, logId }
+//   | { ok:false, error, message }.   Unknown kinds are refused.
+// ============================================================
+const RELAY_TYPE       = "malVoice.provider.call";
+const DELTA_CHANNEL    = "module.bbttcc-core";   // bbttcc-core declares socket:true
+const DELTA_OP         = "malVoice.delta";
+const DELTA_THROTTLE   = 150;
+const RELAY_TIMEOUT_MS = 150000;                  // two streamed calls + one retry, worst case
+const RELAY_LIMITS     = { perMinute: 12, perHour: 240, inFlight: 2, maxTokens: 400 };
+
+const RELAY_KINDS     = new Map();   // kind -> builder
+const DELTA_LISTENERS = new Map();   // reqId -> { onDelta, seq }  (requesting seat)
+const RATE            = new Map();   // userId -> { stamps: number[], inFlight }
+let _relaySeq = 0;
+
+function registerRelayKind(kind, builder) {
+  if (typeof kind !== "string" || !kind || typeof builder !== "function") return false;
+  RELAY_KINDS.set(kind, builder);
+  return true;
+}
+
+function _gmExec() { return globalThis.game?.bbttcc?.api?.gmExec || null; }
+
+// Is there a GM seat that could answer a relayed call right now?
+function gmOnline() {
+  try {
+    const g = _gmExec();
+    if (typeof g?.primaryGmId === "function") return !!g.primaryGmId();
+    return !!game.users?.activeGM;
+  } catch (_e) { return false; }
+}
+
+// ----- Requesting (player) seat -----
+async function relay(opts) {
+  const g = _gmExec();
+  if (typeof g?.call !== "function") return _err("RELAY_UNAVAILABLE", "bbttcc-core's GM relay (gmExec) is not loaded.");
+  if (!gmOnline()) return _err("NO_GM", "No GM is connected — AI voices speak through the GM's seat.");
+  const reqId = `${game.user.id}.${Date.now().toString(36)}.${++_relaySeq}`;
+  const streaming = !!opts.stream && typeof opts.onDelta === "function";
+  if (streaming) DELTA_LISTENERS.set(reqId, { onDelta: opts.onDelta, seq: 0 });
+  try {
+    const res = await g.call(RELAY_TYPE, { ...opts.relay, reqId, stream: streaming }, { timeoutMs: RELAY_TIMEOUT_MS });
+    return (res && typeof res === "object") ? res : _err("BAD_RELAY_RESPONSE", "The GM relay returned nothing.");
+  } catch (e) {
+    const msg = String(e?.message || e);
+    return _err(/timed out/i.test(msg) ? "RELAY_TIMEOUT" : "RELAY_FAILED", msg);
+  } finally {
+    DELTA_LISTENERS.delete(reqId);   // late deltas after the ack are ignored
+  }
+}
+
+function _onDeltaMessage(msg) {
+  try {
+    if (msg?.op !== DELTA_OP || msg.toUserId !== game.user?.id) return;
+    const l = DELTA_LISTENERS.get(msg.reqId);
+    if (!l) return;
+    const seq = Number(msg.seq) || 0;
+    if (seq <= l.seq) return;
+    l.seq = seq;
+    l.onDelta(String(msg.text ?? ""), "");
+  } catch (_e) { /* display-only */ }
+}
+
+// ----- GM side -----
+function _rateCheck(userId) {
+  const now = Date.now();
+  const st = RATE.get(userId) || { stamps: [], inFlight: 0 };
+  st.stamps = st.stamps.filter(t => now - t < 3600000);
+  RATE.set(userId, st);
+  if (st.inFlight >= RELAY_LIMITS.inFlight) return _err("RATE_LIMITED", "Too many AI calls in flight from this seat.");
+  if (st.stamps.filter(t => now - t < 60000).length >= RELAY_LIMITS.perMinute) return _err("RATE_LIMITED", `More than ${RELAY_LIMITS.perMinute} AI calls in a minute from this seat.`);
+  if (st.stamps.length >= RELAY_LIMITS.perHour) return _err("RATE_LIMITED", `More than ${RELAY_LIMITS.perHour} AI calls in an hour from this seat.`);
+  st.stamps.push(now);
+  return null;
+}
+
+async function _relayHandler(payload, meta) {
+  const user = game.users?.get?.(meta?.fromUserId) || null;
+  if (!user || meta?.local || user.isGM) return _err("RELAY_REFUSED", "The AI relay serves player seats only (GM seats call directly).");
+  const kind = String(payload?.kind || "");
+  const builder = RELAY_KINDS.get(kind);
+  if (!builder) return _err("RELAY_REFUSED", `Unknown AI relay kind '${kind}'.`);
+  if (!globalThis.game?.bbttcc?.mal?.settings?.apiKey?.()) {
+    return _err("NO_API_KEY", "The GM's machine has no AI key set (Module Settings → AI Faction/GM Advisor → API key).");
+  }
+  const limited = _rateCheck(user.id);
+  if (limited) { warn(`relay refused for ${user.name}: ${limited.message}`); return limited; }
+
+  let built;
+  try { built = await builder(payload, { user, meta }); }
+  catch (e) { return _err("RELAY_REFUSED", `Request rejected: ${e?.message || e}`); }
+  if (!built?.ok || !built.request) {
+    warn(`relay '${kind}' refused for ${user.name}: ${built?.message || "invalid request"}`);
+    return _err(built?.error || "RELAY_REFUSED", built?.message || "Request rejected by the GM relay.");
+  }
+  const req = built.request;
+
+  const st = RATE.get(user.id);
+  st.inFlight++;
+  let timer = null, pending = null, last = 0, seq = 0, closed = false;
+  const emit = (text) => {
+    try { game.socket.emit(DELTA_CHANNEL, { op: DELTA_OP, reqId: String(payload.reqId || ""), toUserId: user.id, seq: ++seq, text }); } catch (_e) {}
+  };
+  const onDelta = payload.stream ? (text) => {
+    if (closed) return;
+    pending = text;
+    const now = Date.now();
+    if (now - last >= DELTA_THROTTLE) { last = now; emit(text); }
+    else if (!timer) timer = setTimeout(() => { timer = null; last = Date.now(); if (!closed && pending != null) emit(pending); }, DELTA_THROTTLE);
+  } : undefined;
+
+  const t0 = Date.now();
+  let res;
+  try {
+    res = await call({
+      system:      req.system,
+      messages:    req.messages,
+      userMessage: req.userMessage,
+      tools:       req.tools,
+      toolChoice:  req.toolChoice,
+      model:       req.model || undefined,
+      maxTokens:   Math.min(RELAY_LIMITS.maxTokens, Math.max(16, Number(req.maxTokens) || 256)),
+      temperature: req.temperature,
+      stream:      !!payload.stream,
+      onDelta
+    });
+  } finally {
+    closed = true;
+    if (timer) { clearTimeout(timer); timer = null; }
+    st.inFlight = Math.max(0, st.inFlight - 1);
+  }
+
+  // Relayed calls bill the GM's key — log them where the budget check reads.
+  try {
+    if (res?.ok) {
+      const entries = (game.settings.get(MODULE_ID, "callLog") || []).slice(-199);
+      entries.push({
+        ts: Date.now(), voiceId: built.logId || kind, hook: `relay:${kind}`, viaUserId: user.id,
+        model: res.model, inputTokens: res.inputTokens, outputTokens: res.outputTokens,
+        cacheReadTokens: res.cacheReadTokens ?? 0, cacheWriteTokens: res.cacheWriteTokens ?? 0,
+        costUSD: res.costEstimateUSD, durationMs: Date.now() - t0
+      });
+      await game.settings.set(MODULE_ID, "callLog", entries);
+    }
+  } catch (_e) { /* non-fatal */ }
+  return res;
+}
+
+// ----- Shared validators for kind builders -----
+function _capStr(v, max) {
+  const s = String(v ?? "");
+  return s.length <= max ? s : null;
+}
+
+// Tool DEFINITIONS a player seat may send: allowlisted names, bounded size,
+// rebuilt to the three API fields (nothing else rides along).
+function _sanitizeTools(tools, allowNames, { maxTools = 6, maxDefChars = 8000 } = {}) {
+  if (tools == null) return undefined;
+  if (!Array.isArray(tools) || tools.length > maxTools) return null;
+  const out = [];
+  for (const t of tools) {
+    if (!t || !allowNames.has(t.name)) return null;
+    const description = _capStr(t.description, 3000);
+    if (description == null) return null;
+    const schema = (t.input_schema && typeof t.input_schema === "object") ? t.input_schema : null;
+    if (!schema) return null;
+    let size = 0;
+    try { size = JSON.stringify(schema).length; } catch (_e) { return null; }
+    if (size + description.length > maxDefChars) return null;
+    out.push({ name: t.name, description, input_schema: schema });
+  }
+  return out.length ? out : undefined;
+}
+
+// Conversation turns a player seat may send: user/assistant strings, plus the
+// one tool round (assistant text/tool_use with allowlisted names; user
+// tool_result). Bounded per turn and in total. Returns null when malformed.
+function _sanitizeMessages(list, { toolNames = new Set(), maxTurns = 48, maxTurnChars = 6000, maxTotalChars = 90000 } = {}) {
+  if (!Array.isArray(list) || !list.length || list.length > maxTurns) return null;
+  let total = 0;
+  const out = [];
+  for (const m of list) {
+    if (!m || (m.role !== "user" && m.role !== "assistant")) return null;
+    if (typeof m.content === "string") {
+      if (m.content.length > maxTurnChars) return null;
+      total += m.content.length;
+      out.push({ role: m.role, content: m.content });
+      continue;
+    }
+    if (!Array.isArray(m.content) || !m.content.length || m.content.length > 8) return null;
+    const blocks = [];
+    for (const b of m.content) {
+      if (b?.type === "text" && m.role === "assistant") {
+        const t = _capStr(b.text, maxTurnChars); if (t == null) return null;
+        total += t.length; blocks.push({ type: "text", text: t });
+      } else if (b?.type === "tool_use" && m.role === "assistant") {
+        if (!toolNames.has(b.name)) return null;
+        let inp = "{}"; try { inp = JSON.stringify(b.input ?? {}); } catch (_e) { return null; }
+        if (inp.length > 2000) return null;
+        total += inp.length;
+        blocks.push({ type: "tool_use", id: String(b.id || "").slice(0, 128), name: b.name, input: b.input ?? {} });
+      } else if (b?.type === "tool_result" && m.role === "user") {
+        const c = _capStr(b.content, 2000); if (c == null) return null;
+        total += c.length;
+        const blk = { type: "tool_result", tool_use_id: String(b.tool_use_id || "").slice(0, 128), content: c };
+        if (b.is_error) blk.is_error = true;
+        blocks.push(blk);
+      } else return null;
+    }
+    out.push({ role: m.role, content: blocks });
+  }
+  return total <= maxTotalChars ? out : null;
+}
+
 // ----- Install at game.bbttcc.mal.providers.anthropic -----
+let _relayArmed = false;
 function _install() {
   try {
     globalThis.game.bbttcc      ??= { api: {} };
@@ -443,11 +685,25 @@ function _install() {
 
     globalThis.game.bbttcc.mal.providers.anthropic = {
       call,
+      relay,
+      gmOnline,
+      registerRelayKind,
+      relayKinds: () => [...RELAY_KINDS.keys()],
+      relayUtil: { capStr: _capStr, sanitizeTools: _sanitizeTools, sanitizeMessages: _sanitizeMessages },
+      RELAY_LIMITS,
       DEFAULT_MODEL,
       COST_TABLE,
       estimateCost: _estimateCost
     };
-    log(`Adapter installed at game.bbttcc.mal.providers.anthropic (v2: caching + structured output + streaming).`);
+
+    if (!_relayArmed) {
+      _relayArmed = true;
+      const g = _gmExec();
+      if (typeof g?.register === "function") g.register(RELAY_TYPE, _relayHandler);
+      else warn("bbttcc-core gmExec missing — player-seat AI calls cannot be relayed.");
+      try { game.socket?.on?.(DELTA_CHANNEL, _onDeltaMessage); } catch (e) { warn("delta listener failed:", e?.message || e); }
+    }
+    log(`Adapter installed at game.bbttcc.mal.providers.anthropic (v2: caching + structured output + streaming; player seats relay via the GM).`);
   } catch (e) {
     warn("Failed to install adapter:", e?.message || e);
   }

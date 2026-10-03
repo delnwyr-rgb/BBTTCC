@@ -3,8 +3,8 @@
 //
 // Provides: game.bbttcc.api.gm
 //   - setWorld({ patch, note, silent })
-//   - setFaction({ factionId, patch, note, silent })
-//   - setActor({ actorId, patch, note, silent })
+//   - setFaction({ factionId, patch, note, silent, allowOvercap })  (routes to the live stores — see setFaction)
+//   - setActor({ actorId, patch, note, silent })  (refuses: no actor path maps to a live store)
 //   - setHex({ hexUuid, patch, note, silent })  (adapter stub; requires territory gm adapter)
 //
 // Design goals:
@@ -306,6 +306,43 @@
     });
   }
 
+  // 2026-10-02 housekeeping: setFaction/setActor used to write a private
+  // `gmState` flag that NOTHING in the game reads — a GM "adjustment" changed
+  // no bank, meter or track. Patches now land in the real stores:
+  //   op.bank.<channel>  → api.op.commit (MARKS; delta = value − current bank;
+  //                        refused over cap unless args.allowOvercap === true)
+  //   tracks.morale/loyalty → api.factions.setMorale / setLoyalty (0–100)
+  //   tracks.unity   → flags.bbttcc-factions.victory.unity  (reset to 0 by
+  //                    turn-extensions each applied turn — a set is transient)
+  //   tracks.victory → flags.bbttcc-factions.victory.vp
+  //   tracks.darkness → flags.bbttcc-factions.darkness.global
+  // `sparks.*` is refused: sparks are phased records owned by api.tikkun
+  // (markSparkPhase / depositSpark), never a free-form patch. Values are
+  // ABSOLUTE (set-to), never deltas; null (clear) is refused for real stores.
+  var MODF = "bbttcc-factions";
+  var FACTION_TRACK_FLAG = {
+    "tracks.unity": "victory.unity",
+    "tracks.victory": "victory.vp",
+    "tracks.darkness": "darkness.global"
+  };
+
+  function getPath(obj, path) {
+    var cur = obj;
+    var parts = path.split(".");
+    for (var i = 0; i < parts.length; i++) {
+      if (cur === null || typeof cur !== "object") return undefined;
+      cur = cur[parts[i]];
+    }
+    return cur;
+  }
+
+  function finiteOrDeny(it) {
+    if (it.value === null || typeof it.value === "undefined" || it.value === "") deny(TAG + " " + it.path + ": a value is required (clearing a live store is not supported)");
+    var n = Number(it.value);
+    if (!isFinite(n)) deny(TAG + " " + it.path + ": not a number: " + fmtVal(it.value));
+    return n;
+  }
+
   function setFaction(args) {
     args = args || {};
     if (!isGM()) deny("GM-only: setFaction");
@@ -319,13 +356,88 @@
     var note = args.note || "";
     var silent = !!args.silent;
 
-    // Work on a clone then update flags in one go.
-    var cur = deepClone(actor.getFlag("bbttcc-factions", "gmState") || {});
+    var api = (game.bbttcc && game.bbttcc.api) || {};
+    var opApi = api.op || null;
+    var fApi = api.factions || {};
     var flat = flattenPatch(patch);
-    var changed = applyToObject(cur, flat, "faction");
 
-    // unset first: setFlag MERGES, so a null-cleared key would otherwise survive.
-    return actor.unsetFlag("bbttcc-factions", "gmState").then(function () { return actor.setFlag("bbttcc-factions", "gmState", cur); }).then(function () {
+    // Validate everything BEFORE any write, so a bad row never half-applies.
+    var opDeltas = {}, opChanged = [], meterOps = [], flagUpd = {}, changed = [];
+    var bank = actor.getFlag(MODF, "opBank") || {};
+    var keys = (opApi && Array.isArray(opApi.KEYS)) ? opApi.KEYS : [];
+    flat.forEach(function (it) {
+      var path = it.path;
+      if (!isAllowed("faction", path)) deny(TAG + " blocked write: faction " + path);
+      if (path.indexOf("sparks") === 0) deny(TAG + " faction " + path + ": sparks are owned by api.tikkun (markSparkPhase / depositSpark) — not patchable here");
+
+      if (path.indexOf("op.bank.") === 0) {
+        var ch = path.slice("op.bank.".length);
+        if (!opApi || typeof opApi.commit !== "function") deny(TAG + " api.op.commit unavailable — cannot set " + path);
+        if (keys.indexOf(ch) < 0) deny(TAG + " unknown OP channel: " + ch);
+        var next = Math.round(finiteOrDeny(it));
+        if (next < 0) deny(TAG + " " + path + " cannot go below 0 marks");
+        var old = Math.round(Number(bank[ch] || 0)) || 0;
+        if (next !== old) {
+          opDeltas[ch] = next - old;
+          opChanged.push({ path: path, old: old, next: next });
+        }
+        return;
+      }
+
+      if (path === "tracks.morale" || path === "tracks.loyalty") {
+        var mkey = path.slice("tracks.".length);
+        var mv = Math.min(100, Math.max(0, finiteOrDeny(it)));
+        var mold = actor.getFlag(MODF, mkey);
+        if (mold !== mv) meterOps.push({ key: mkey, value: mv, old: mold, path: path });
+        return;
+      }
+
+      if (FACTION_TRACK_FLAG[path]) {
+        var fpath = FACTION_TRACK_FLAG[path];
+        var tv = Math.max(0, finiteOrDeny(it));
+        var told = getPath(actor.flags && actor.flags[MODF], fpath);
+        // Legacy flat-number darkness: the sheet tolerates it; the write lands canonical.
+        if (fpath === "darkness.global" && typeof actor.getFlag(MODF, "darkness") === "number") told = actor.getFlag(MODF, "darkness");
+        if (told !== tv) {
+          flagUpd["flags." + MODF + "." + fpath] = tv;
+          changed.push({ path: path, old: told, next: tv });
+        }
+        return;
+      }
+
+      deny(TAG + " faction " + path + ": no live store mapped for this path");
+    });
+
+    // OP first: if the engine refuses (underflow / over cap) nothing else is written.
+    var opStep = Object.keys(opDeltas).length
+      ? Promise.resolve(opApi.commit(actor.id, opDeltas, {
+          source: "gm.setFaction",
+          note: note,
+          allowOvercap: args.allowOvercap === true
+        })).then(function (res) {
+          if (!res || !res.ok || res.committed === false) {
+            var why = (res && (res.error || (res.overcapIncrease ? "over cap (pass allowOvercap:true to override)" : (res.underflow && Object.keys(res.underflow).length ? "underflow" : "")))) || "refused";
+            deny(TAG + " OP commit refused for " + actor.name + ": " + why);
+          }
+          changed = opChanged.concat(changed);
+        })
+      : Promise.resolve();
+
+    return opStep.then(function () {
+      var chain = Promise.resolve();
+      meterOps.forEach(function (m) {
+        chain = chain.then(function () {
+          var fn = (m.key === "morale") ? fApi.setMorale : fApi.setLoyalty;
+          var p = (typeof fn === "function")
+            ? fn({ factionId: actor.id, value: m.value })
+            : actor.setFlag(MODF, m.key, m.value);   // meter enhancer not loaded: same flag, same clamp
+          return Promise.resolve(p).then(function () { changed.push({ path: m.path, old: m.old, next: m.value }); });
+        });
+      });
+      return chain;
+    }).then(function () {
+      return Object.keys(flagUpd).length ? actor.update(flagUpd) : null;
+    }).then(function () {
       var rec = {
         at: nowISO(),
         by: (game.user && game.user.id) || null,
@@ -336,11 +448,14 @@
         changed: changed
       };
       return auditAndWhisper(rec, changed, silent).then(function () {
-        return { ok: true, changed: changed, gmState: cur };
+        return { ok: true, changed: changed };
       });
     });
   }
 
+  // The only actor-scope path was `sparks.*`, which belongs to api.tikkun
+  // (phased spark records + Enlightenment sync). setActor stays for API
+  // compatibility but refuses rather than writing a flag nobody reads.
   function setActor(args) {
     args = args || {};
     if (!isGM()) deny("GM-only: setActor");
@@ -350,29 +465,11 @@
     var actor = game.actors.get(actorId);
     if (!actor) deny("Actor not found: " + actorId);
 
-    var patch = args.patch || {};
-    var note = args.note || "";
-    var silent = !!args.silent;
-
-    var cur = deepClone(actor.getFlag("bbttcc-core", "gmState") || {});
-    var flat = flattenPatch(patch);
-    var changed = applyToObject(cur, flat, "actor");
-
-    // unset first: setFlag MERGES, so a null-cleared key would otherwise survive.
-    return actor.unsetFlag("bbttcc-core", "gmState").then(function () { return actor.setFlag("bbttcc-core", "gmState", cur); }).then(function () {
-      var rec = {
-        at: nowISO(),
-        by: (game.user && game.user.id) || null,
-        targetKind: "actor",
-        targetId: actorId,
-        targetLabel: actor.name,
-        note: note,
-        changed: changed
-      };
-      return auditAndWhisper(rec, changed, silent).then(function () {
-        return { ok: true, changed: changed, gmState: cur };
-      });
+    var flat = flattenPatch(args.patch || {});
+    flat.forEach(function (it) {
+      if (!isAllowed("actor", it.path)) deny(TAG + " blocked write: actor " + it.path);
     });
+    deny(TAG + " setActor: no live store mapped — actor sparks are owned by api.tikkun (markSparkPhase / depositSpark)");
   }
 
   function setHex(args) {

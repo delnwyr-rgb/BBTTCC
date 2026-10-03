@@ -8,8 +8,10 @@
  *   §2A.4 trigger-engine -> game.bbttcc.mal.triggers
  *   §2A.5 output-channel -> game.bbttcc.mal.output
  *
- * BYO-key: the GM (or each user) supplies an Anthropic / OpenAI / Ollama
- * / custom-endpoint API key. We never operate a backend.
+ * BYO-key: the GM supplies an Anthropic API key, stored as a CLIENT setting in
+ * the GM's own browser (owner ruling 2026-10-02). Player seats never hold it —
+ * their AI calls relay through the active GM (providers/anthropic.js). We
+ * never operate a backend.
  *
  * Spec: modules/bbttcc-raid/AGENT_API_SPEC.md §8 (Phase 2)
  */
@@ -44,12 +46,15 @@ Hooks.once("init", () => {
     default: "anthropic"
   });
 
+  // Owner ruling 2026-10-02: CLIENT scope = this browser's localStorage only —
+  // never stored on the server, never sent to other seats. Only GM seats use
+  // it; player seats relay every AI call through the active GM (providers/
+  // anthropic.js GM RELAY). Hidden from players' settings at `setup`. The old
+  // world-scope value is migrated into the GM's browser and deleted at ready.
   game.settings.register(MODULE_ID, "apiKey", {
-    name:    "API key",
-    // ⚠ World scope = synced to EVERY connected client (players included); player NPC
-    // dialogue reads it there. Moving calls behind a GM relay is an owner ruling (review 2026-09-30).
-    hint:    "Your provider API key. WARNING: this is a world setting — every connected client, players included, receives it and can read it from the browser console or network tab. Player NPC conversations call the provider directly with it. Use a key with a low spend limit.",
-    scope:   "world",
+    name:    "API key (GM machine only)",
+    hint:    "Your Anthropic API key. Stored ONLY in this browser on this GM machine — it is never saved to the world or sent to players. Player NPC conversations and advisors are relayed through the connected GM's seat and use this key there (rate-limited per player). Enter it on every machine/browser you GM from; clearing this browser's site data clears it.",
+    scope:   "client",
     config:  true,
     type:    String,
     default: ""
@@ -79,7 +84,7 @@ Hooks.once("init", () => {
 
   game.settings.register(MODULE_ID, "defaultPolicy", {
     name:    "Voice key policy",
-    hint:    "Who pays for broadcast voices vs whispers.",
+    hint:    "Who pays for broadcast voices vs whispers. (Currently informational: since 2026-10-02 every AI call — GM or relayed from a player seat — uses the key on the GM's machine.)",
     scope:   "world",
     config:  true,
     type:    String,
@@ -117,6 +122,44 @@ Hooks.once("init", () => {
   log("Settings registered.");
 });
 
+// Players never see the key field (game.user exists from `setup`).
+Hooks.once("setup", () => {
+  try {
+    const cfg = game.settings.settings.get(`${MODULE_ID}.apiKey`);
+    if (cfg && !game.user?.isGM) cfg.config = false;
+  } catch (_e) {}
+});
+
+// ----- One-time key migration: world setting → this GM's browser -----
+// Before 2026-10-02 the key was a world Setting document (sent to every seat).
+// On a GM seat: copy its value into this browser's client setting (unless one
+// is already set here), then DELETE the world document so no seat receives it
+// again. Idempotent — once the world doc is gone this is a no-op.
+async function _migrateWorldKey() {
+  if (!game.user?.isGM) return;
+  const key = `${MODULE_ID}.apiKey`;
+  let doc = null;
+  try { doc = game.settings.storage.get("world")?.getSetting?.(key, null) || null; } catch (_e) { doc = null; }
+  if (!doc) return;
+  let worldValue = "";
+  try {
+    const raw = doc._source?.value;
+    worldValue = (typeof raw === "string") ? String(JSON.parse(raw) ?? "") : String(raw ?? "");
+  } catch (_e) { worldValue = String(doc._source?.value ?? ""); }
+  worldValue = worldValue.trim();
+  const local = String(game.settings.get(MODULE_ID, "apiKey") || "").trim();
+  try {
+    if (worldValue && !local) await game.settings.set(MODULE_ID, "apiKey", worldValue);
+    await doc.delete();
+    if (worldValue) {
+      ui.notifications?.info(`AI Advisor: the API key moved into THIS browser's client settings and was removed from the world — players can no longer read it. ${local ? "(This browser already had a key; it was kept.) " : ""}Re-enter it on any other machine you GM from.`, { permanent: true });
+    }
+    log(`world-scope apiKey migrated (${worldValue ? (local ? "kept existing local key" : "copied to this GM browser") : "was empty"}) and deleted.`);
+  } catch (e) {
+    warn("world apiKey migration failed (needs a full GM with settings permission):", e?.message || e);
+  }
+}
+
 // ----- Namespace bootstrap + ready check -----
 function _install() {
   try {
@@ -132,7 +175,13 @@ function _install() {
         get: (key) => game.settings.get(MODULE_ID, key),
         set: (key, value) => game.settings.set(MODULE_ID, key, value),
         provider:  () => game.settings.get(MODULE_ID, "apiProvider"),
-        apiKey:    () => game.settings.get(MODULE_ID, "apiKey"),
+        // GM seats only — a player seat never holds (or uses) a key.
+        apiKey:    () => game.user?.isGM ? String(game.settings.get(MODULE_ID, "apiKey") || "").trim() : "",
+        // Can THIS seat get an AI reply right now? GM: a key is set here.
+        // Player: a GM is connected to relay through (the GM's key is checked there).
+        canCall:   () => game.user?.isGM
+          ? !!String(game.settings.get(MODULE_ID, "apiKey") || "").trim()
+          : !!globalThis.game?.bbttcc?.mal?.providers?.anthropic?.gmOnline?.(),
         model:     () => game.settings.get(MODULE_ID, "model"),
         endpoint:  () => "", // custom-endpoint provider removed 2026-08-28; kept so mal.settings shape is stable
         budget:    () => game.settings.get(MODULE_ID, "monthlyBudgetUSD"),
@@ -157,7 +206,8 @@ function _install() {
       log(`Bootstrapped against agent registry v${caps.version} (${caps.verbs.length} verbs).`);
     }
 
-    log(`Installed at game.bbttcc.mal (v${globalThis.game.bbttcc.mal.version}). Provider: ${game.bbttcc.mal.settings.provider()}. Key configured: ${!!game.bbttcc.mal.settings.apiKey()}.`);
+    log(`Installed at game.bbttcc.mal (v${globalThis.game.bbttcc.mal.version}). Provider: ${game.bbttcc.mal.settings.provider()}. ${game.user?.isGM ? `Key on this GM machine: ${!!game.bbttcc.mal.settings.apiKey()}.` : "Player seat — AI calls relay through the GM."}`);
+    _migrateWorldKey().catch(e => warn("key migration threw:", e?.message || e));
   } catch (e) {
     warn("Failed to install game.bbttcc.mal:", e?.message || e);
   }

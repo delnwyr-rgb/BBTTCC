@@ -181,79 +181,10 @@ window.BBTTCC_RESOLUTIONS = {
     }
   },
 
-  // -------------------------------------------------------------
-  // BEST FRIENDS / INTEGRATION
-  // -------------------------------------------------------------
-  "best_friends_integration": {
-    label: "Best Friends / Integration",
-
-    allowedTiers: ["complete", "partial"], // no pyrrhic by default
-    allowedTo: ["attacker"],
-    requiresOwnership: true,
-
-    hex: {
-      status: "claimed",
-      productionMult: 1.0,
-      addModifiers:    ["loyal_population", "integration_pact"],
-      removeModifiers: ["hostile_population"],
-      removePopulation: false
-    },
-
-    tracks: {
-      violenceAttritionDelta: 0,
-      empathyDelta: +1,
-      darknessDelta: 0,
-      moraleDelta: +3,
-      loyaltyDelta: +2
-    },
-
-    integration: {
-      garrisonEase: "easy",
-      integrationCostMult: 0.5
-    },
-
-    victory: {
-      vpOnce: 2,
-      unityOnce: 5
-    }
-  },
-
-  // -------------------------------------------------------------
-  // RETRIBUTION / SUBJUGATION
-  // -------------------------------------------------------------
-  "retribution_subjugation": {
-    label: "Retribution / Subjugation",
-
-    allowedTiers: ["complete", "partial", "pyrrhic"],
-    allowedTo: ["attacker"],
-    requiresOwnership: true,
-
-    hex: {
-      status: "occupied",
-      productionMult: 0.5,
-      addModifiers:    ["hostile_population"],
-      removeModifiers: [],
-      removePopulation: false
-    },
-
-    tracks: {
-      violenceAttritionDelta: +1,
-      empathyDelta: -1,
-      darknessDelta: +1,
-      moraleDelta: -1,
-      loyaltyDelta: -2
-    },
-
-    integration: {
-      garrisonEase: "hard",
-      integrationCostMult: 1.5
-    },
-
-    victory: {
-      vpOnce: 0,
-      unityOnce: 0
-    }
-  },
+  // (2026-10-02 owner ruling: a second, weaker copy of "best_friends_integration" and
+  //  "retribution_subjugation" used to follow here — and, being later in the literal, silently
+  //  WON. Merged into the definitions above: every effect of both kept; where they disagreed
+  //  the first (richer) value stands. The second added nothing the first lacked.)
 
   // -------------------------------------------------------------
   // SALT THE EARTH — Owner Action (hex-owner only, any time)

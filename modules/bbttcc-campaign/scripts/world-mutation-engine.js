@@ -1669,6 +1669,49 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (eCr) { console.warn(TAG, "crossing apply failed", eCr); }
 
+    // 2l) TIKKUN ATONEMENT (owner ruling 2026-10-02 — "a failed Final Ritual recovers through a story action AND a beat"):
+    // worldEffects.tikkun = { cleanseFinalRitual?: true, endAtonement?: true, factionId? }. cleanseFinalRitual unsets
+    // flags.bbttcc-factions.tikkun.corrupted.finalRitual on the acting faction, closes its pending atonement, retires the
+    // Rite of Atonement doctrine row, and war-logs it; endAtonement only closes the pending atonement (refusal / a miss —
+    // the stain stays, the Rite can be staged again). Acting faction: row factionId → ctx.factionId → the faction(s) with
+    // a pending atonement (the Rite of Atonement activity stamps it; executeBeat's tail does not forward ctx.factionId)
+    // → coalition factions carrying the stain.
+    try {
+      const tk = we.tikkun && typeof we.tikkun === "object" ? we.tikkun : null;
+      if (tk && (tk.cleanseFinalRitual === true || tk.endAtonement === true)) {
+        const tkOf = (A) => (A && A.getFlag ? (A.getFlag(MOD_FACTIONS, "tikkun") || {}) : {});
+        let targets = [];
+        const explicit = String(tk.factionId || (ctx && ctx.factionId) || "").replace(/^Actor\./, "");
+        if (explicit) { const A = asFactionActor(explicit); if (A) targets = [A]; }
+        if (!targets.length) targets = (game.actors?.contents || []).filter(A => asFactionActor(A) && tkOf(A).atonement && tkOf(A).atonement.pending);
+        if (!targets.length) {
+          const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
+          const camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null;
+          const ids = Array.from(new Set([].concat((camp && camp.factionIds) || [], (camp && camp.factionId) ? [camp.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean)));
+          targets = ids.map(id => asFactionActor(id)).filter(A => A && tkOf(A).corrupted && tkOf(A).corrupted.finalRitual);
+        }
+        if (!targets.length) console.warn(TAG, "tikkun: no acting faction resolved (no pending atonement, no stained coalition faction)", { beatId: beatCtx.beatId });
+        for (const A of targets) {
+          const t = tkOf(A);
+          if (t.atonement !== undefined) await A.unsetFlag(MOD_FACTIONS, "tikkun.atonement");
+          if (tk.cleanseFinalRitual === true) {
+            if (t.corrupted && t.corrupted.finalRitual !== undefined) {
+              await A.unsetFlag(MOD_FACTIONS, "tikkun.corrupted.finalRitual");
+              try {   // the doctrine row has done its work — the planner stops offering it
+                const rows = Array.from(A.items || []).filter(it => String(it?.flags?.bbttcc?.key || "").toLowerCase() === "rite_of_atonement").map(it => it.id);
+                if (rows.length) await A.deleteEmbeddedDocuments("Item", rows);
+              } catch (_eD) {}
+              await _appendWarLogDirect(A.id, { type: "tikkun", summary: `Atonement accepted (${beatCtx.beatLabel}): the Final Ritual's stain is lifted. The Great Work may be attempted again.` });
+              changed = true; notes.push("tikkun:cleansed:" + A.name);
+            }
+          } else {
+            await _appendWarLogDirect(A.id, { type: "tikkun", summary: `Atonement not accepted (${beatCtx.beatLabel}): the Final Ritual's stain remains. The Rite may be staged again.` });
+            changed = true; notes.push("tikkun:atonementClosed:" + A.name);
+          }
+        }
+      }
+    } catch (eTk) { console.warn(TAG, "tikkun atonement apply failed", eTk); }
+
     // 2g) RECIPE GRANTS (MATERIAL ECONOMY, 2026-09-20 — owner: "dole out the recipes"): worldEffects.recipeGrants =
     // [{ name | slug, to?: "coalition" (default) | "faction" | "common", factionId? }] — the beat teaches the recipe
     // (system RfiCrafting.recipes.learn) to every coalition faction's book, one faction's, or the common book.

@@ -43,6 +43,9 @@
 // On failure:
 //  - darkness.global += 2
 //  - flags.bbttcc-factions.tikkun.corrupted.finalRitual = true
+//  - the faction is taught the Rite of Atonement strategic activity (owner ruling 2026-10-02):
+//    staged + resolved, it hands the GM the atonement beat; that beat's success path
+//    (worldEffects.tikkun.cleanseFinalRitual) lifts the stain.
 //  - Sparks are left intact but GM can choose to narrate sulking / setbacks.
 //
 // All effects are logged to the faction's warLogs and emitted as GM whispers.
@@ -146,10 +149,35 @@
     flags.warLogs = war;
     await A.update({ [`flags.${MODF}`]: flags });
     // A later SUCCESS lifts the failed-ritual stain (update() merges, so the key
-    // must be unset explicitly). Any other recovery path is an owner ruling.
+    // must be unset explicitly). The other recovery path (owner ruling 2026-10-02)
+    // is the Rite of Atonement: a failure teaches the faction that strategic
+    // activity; its beat's worldEffects.tikkun.cleanseFinalRitual lifts the stain.
     if (success && A.getFlag(MODF, "tikkun.corrupted.finalRitual") !== undefined) {
       await A.unsetFlag(MODF, "tikkun.corrupted.finalRitual");
     }
+    if (!success) await grantAtonement(A, false);
+  }
+
+  // Rite of Atonement doctrine row (bbttcc-raid strategic-throughput ATONEMENT). Idempotent.
+  async function grantAtonement(A, silent) {
+    try {
+      const doc = game.bbttcc?.api?.factions?.doctrine;
+      if (doc?.grant) await doc.grant(A, { kind: "strategic", key: "rite_of_atonement", silent: !!silent });
+    } catch (e) { console.warn(TAG, "Rite of Atonement doctrine grant failed", A?.name, e); }
+  }
+  // Factions whose ritual failed before the Rite existed: teach it once at ready (primary GM only).
+  async function sweepAtonementDoctrine() {
+    try {
+      const gx = game.bbttcc?.api?.gmExec;
+      const primary = (typeof gx?.primaryGmId === "function") ? gx.primaryGmId() : game.users?.activeGM?.id;
+      if (!game.user?.isGM || (primary && primary !== game.user.id)) return;
+      for (const A of game.actors ?? []) {
+        if (!A.getFlag?.(MODF, "tikkun")?.corrupted?.finalRitual) continue;
+        const owned = game.bbttcc?.api?.factions?.doctrine?.ownedKeys?.(A, "strategic");
+        if (owned?.has?.("rite_of_atonement")) continue;
+        await grantAtonement(A, false);
+      }
+    } catch (e) { console.warn(TAG, "atonement doctrine sweep failed", e); }
   }
 
   function roundSpec(round) {
@@ -200,10 +228,12 @@
     const d = Math.max(0, Number(spendDiplomacy||0));
     // Spends are MARKS (they are clamped against and debited from the bank in marks);
     // the design weight was "per 2 OP" = per 20 marks (owner ruling 2026-09-06).
+    // Rounds DOWN: only FULL 20-mark steps earn bonus (owner ruling 2026-10-02) —
+    // 19 marks buys nothing, 39 buys one step.
     const base =
-      spec.weightFaith    * Math.ceil(f / 20) +
-      spec.weightCulture  * Math.ceil(c / 20) +
-      spec.weightDiplomacy* Math.ceil(d / 20);
+      spec.weightFaith    * Math.floor(f / 20) +
+      spec.weightCulture  * Math.floor(c / 20) +
+      spec.weightDiplomacy* Math.floor(d / 20);
     return base + Number(skillBonus||0);
   }
 
@@ -398,5 +428,6 @@
   }
 
   Hooks.once("ready", install);
+  Hooks.once("ready", () => setTimeout(sweepAtonementDoctrine, 4000));   // after raid.EFFECTS carries the row (label)
   if (game?.ready) install();
 })();

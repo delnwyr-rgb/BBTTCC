@@ -1306,7 +1306,8 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     if (spend && spend.ok !== false && ctx.crossing?.toll > 0 && ctx.crossing.tollTo) {
       try {
         const opApi = game.bbttcc?.api?.op;
-        if (opApi?.commit) await opApi.commit(ctx.crossing.tollTo, { economy: Number(ctx.crossing.toll) }, `bridge toll from ${actor.name}`);
+        // tollCredited: whether the holder actually received it — a rolled-back leg reverses only a credited toll (console).
+        if (opApi?.commit) { const rc = await opApi.commit(ctx.crossing.tollTo, { economy: Number(ctx.crossing.toll) }, `bridge toll from ${actor.name}`); ctx.crossing.tollCredited = rc?.ok !== false; }
         const holder = game.actors.get(ctx.crossing.tollTo);
         try { Hooks.callAll("bbttcc:travel:toll", { factionId, holderId: ctx.crossing.tollTo, toll: ctx.crossing.toll, hexUuid: to?.document?.uuid || to?.uuid }); } catch (_e) {}
         console.log(TAG, "bridge toll paid", { from: actor.name, to: holder?.name, toll: ctx.crossing.toll });

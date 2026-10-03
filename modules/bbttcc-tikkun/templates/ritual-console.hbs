@@ -83,17 +83,18 @@
           <div class="bbttcc-grid bbttcc-grid-cols-3 bbttcc-gap-md">
             <div class="bbttcc-field">
               <label>Faith marks to spend</label>
-              <input type="number" name="spendFaith" min="0" step="10" class="bbttcc-input" />
+              <input type="number" name="spendFaith" min="0" step="20" class="bbttcc-input" />
             </div>
             <div class="bbttcc-field">
               <label>Culture / Soft Power marks</label>
-              <input type="number" name="spendCulture" min="0" step="10" class="bbttcc-input" />
+              <input type="number" name="spendCulture" min="0" step="20" class="bbttcc-input" />
             </div>
             <div class="bbttcc-field">
               <label>Diplomacy marks</label>
-              <input type="number" name="spendDiplomacy" min="0" step="10" class="bbttcc-input" />
+              <input type="number" name="spendDiplomacy" min="0" step="20" class="bbttcc-input" />
             </div>
           </div>
+          <p class="bbttcc-muted" style="margin:0.35rem 0 0;font-size:0.85em;">Only full 20-mark steps count toward the roll bonus (19 marks buys nothing; leftovers are still spent). This round weighs Faith ×{{nextRound.weightFaith}}, Culture ×{{nextRound.weightCulture}}, Diplomacy ×{{nextRound.weightDiplomacy}} per step.</p>
           <div class="bbttcc-grid bbttcc-grid-cols-2 bbttcc-gap-md" style="margin-top:0.75rem;">
             <div class="bbttcc-field">
               <label>Leader's Ritual Skill Bonus (Arcana/Religion/etc.)</label>

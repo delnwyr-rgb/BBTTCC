@@ -1,7 +1,8 @@
 // bbttcc-territory/enhancers/territory-unitybonus.enhancer.js
 // Unity Bonus from Sephirothic Alignment + Sparks (Phase 3B rule) with DEV overrides.
 // - Normal rule: if a faction controls >=3 hexes aligned to the same Sephirah AND has an integrated Spark
-//   of that pillar, award that Sephirah's Unity bonus for this turn (OP deltas or temp caps).
+//   of that pillar, award that Sephirah's Unity bonus for this turn (marks into the bank — magnitudes are
+//   full OP × the canonical ratio, owner ruling 2026-10-02 — or Keter's temp caps).
 // - DEV overrides (per-faction): flags['bbttcc-factions'].victory.unityDev
 //     { prefer:'netzach'|'tiferet'|..., minAligned:3, bypassSparkGate:false, force:false }
 //     • prefer: pick this pillar when multiple qualify; if none qualify, it can be used with minAligned/force to test
@@ -39,18 +40,26 @@
     keter:   "caps"       // +10 marks to all caps until the next Advance Turn (owner ruling 2026-10-02)
   };
 
+  // Magnitudes are FULL OP (owner ruling 2026-10-02: "+3" means 3 OP) — banked as marks via the canonical
+  // ratio (api.op.marksPerOp / OP_TO_MARKS) in computeUnityDeltaFor. Keter is the exception: already marks.
   const DEFAULT_MAGNITUDE = {
     chokmah: 3,
     binah:   3,
     chesed:  0,
     gevurah: 3,
     tiferet: 3,
-    netzach: 2,   // +2 to all OPs
+    netzach: 2,   // 2 OP to every channel
     hod:     3,
     yesod:   2,
     malkuth: 0,
-    keter:   10   // MARKS added to every channel's cap (victory.tempCapBonus.all, read by the OP engine's factionCaps)
+    keter:   10   // MARKS added to every channel's cap (victory.tempCapBonus.all, read by the OP engine's factionCaps) — NOT scaled
   };
+  // The ONE ratio (bbttcc-factions op-engine). null when the OP engine is not loaded — then no OP bonus is paid.
+  function marksPerOp() {
+    const op = game.bbttcc?.api?.op;
+    const n = Number(typeof op?.marksPerOp === "function" ? op.marksPerOp() : op?.OP_TO_MARKS);
+    return n > 0 ? n : null;
+  }
 
   const PILLARS = ["keter","chokmah","binah","chesed","gevurah","tiferet","netzach","hod","yesod","malkuth"];
 
@@ -63,7 +72,7 @@
     return out;
   }
   function fmtOpsRow(ops){
-    return OP_KEYS.filter(k => (ops[k]||0)>0).map(k => `<b>${ops[k]}</b> ${k}`).join(" • ") || "—";
+    return OP_KEYS.filter(k => (ops[k]||0)>0).map(k => `<b>+${ops[k]}</b> marks ${k}`).join(" • ") || "—";
   }
   const cap = s => (s||"").charAt(0).toUpperCase() + String(s||"").slice(1);
 
@@ -103,16 +112,23 @@
     const channel = sephToOp[key] || null;
     const ops = zeroOps();
 
-    if (channel === "all" && mag > 0) {
-      for (const k of OP_KEYS) ops[k] += mag;
-      return { ops, caps:null, note:`${cap(key)} (+${mag} all OPs)` };
-    }
     if (channel === "caps" && mag > 0) {
       return { ops, caps: { all:+mag }, note:`${cap(key)} (+${mag} marks to all caps until the next Advance)` };
     }
+    // OP-channel bonuses: mag is full OP → marks (the bank's only unit).
+    const ratio = marksPerOp();
+    if ((channel === "all" || OP_KEYS.includes(channel)) && mag > 0 && !ratio) {
+      console.warn(TAG, "OP engine ratio unavailable — Unity bonus not paid", key);
+      return { ops, caps:null, note:`${cap(key)} (OP engine not loaded — no bonus)` };
+    }
+    const marks = Math.round(mag * (ratio || 0));
+    if (channel === "all" && mag > 0) {
+      for (const k of OP_KEYS) ops[k] += marks;
+      return { ops, caps:null, note:`${cap(key)} (+${marks} marks to every channel)` };
+    }
     if (channel && mag > 0 && OP_KEYS.includes(channel)) {
-      ops[channel] += mag;
-      return { ops, caps:null, note:`${cap(key)} (+${mag} ${channel})` };
+      ops[channel] += marks;
+      return { ops, caps:null, note:`${cap(key)} (+${marks} marks ${channel})` };
     }
     return { ops, caps:null, note:`${cap(key)} (no OP delta; bonus handled elsewhere)` };
   }

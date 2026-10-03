@@ -150,6 +150,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     alignment_shift: "Consecrate the hex to the Tree: +Sanctified, +Pilgrimage Site, Morale +1, Loyalty +1 next turn; +10 marks Faith next turn.",
     gather_intel: "Send scouts: the hex is revealed now, a dossier (holder, defense, loyalty, morale, integration, modifiers, alignment) is whispered to you, and it carries the Intel tag next turn.",
     policy_reforms: "Administrative reform: OP income ×1.05 this turn.",
+    rite_of_atonement: "Only after a failed Final Ritual: come back to the Great Work and make repair. At turn end the GM is handed the Rite (a scene) — succeed there and the Final Ritual stain lifts.",
     muster_drill: "Drill the Town Militia at the Muster: first drill = DRILLED (+2 defense DC at home, Violence +5 marks/turn); second = STANDING (absorbs the first strike on a home hex each turn; home roads escorted).",
     mass_mobilization_std: "Call up the militia: your next raid gains initiative advantage and one free maneuver.",
     repair_fortifications: "Mend the walls: the hex's primary facility recovers one damage step.",
@@ -816,7 +817,7 @@ Hooks.once("init",()=>{
   // "call out the activities that apply to the whole faction"). Read off the throughput adapters.
   const FACTION_WIDE = new Set(["harvest_season", "sell_surplus", "civic_audit", "local_festival", "charity_drive", "border_patrol", "training_parade",
     "muster_drill", "training_drills", "justice_tribunal", "mass_mobilization", "mass_mobilization_std", "policy_reforms", "industrial_revolution",
-    "alliance_summit", "crisis_summit", "world_reformation_council", "enlightenment_congress"]);
+    "alliance_summit", "crisis_summit", "world_reformation_council", "enlightenment_congress", "rite_of_atonement"]);
 
   // Human-friendly labels for primary OP categories
   const CATEGORY_LABELS = {

@@ -1367,6 +1367,7 @@ const CHASSIS_BRACKET_BOM = {
 };
 // Giant Fighting Robots (mecha bracket, tiers 0–5) borrow the envelope that
 // matches their tier: T0 personal, T1 light, T2 medium, T3–4 heavy, T5 siege.
+// Reviewed and ruled acceptable by the owner 2026-10-02 (housekeeping) — keep as is.
 const MECHA_TIER_BOM_BRACKET = ["personal", "light", "medium", "heavy", "heavy", "siege"];
 function _rigBracketBOM(bracket, tier = 1) {
   const b = String(bracket || "").toLowerCase();

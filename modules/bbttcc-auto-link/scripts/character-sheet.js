@@ -1,4 +1,30 @@
 // modules/bbttcc-auto-link/scripts/character-sheet.js
+//
+// ════════════════════════════════════════════════════════════════════════════
+// RETIRED 2026-10-02 (housekeeping, Dave) — this whole sheet layer is OFF.
+// ────────────────────────────────────────────────────────────────────────────
+// It was built for dnd5e-wrapped sheets: a `renderActorSheet` hook that
+// DOM-injected the Bad Eden quickbar, Identity tab, resource card, ▶ Use
+// buttons and affiliations card, plus two marker sheet classes ("Bad Eden
+// Character/NPC Sheet"). The world now runs the fourththing system, whose
+// sheets are ApplicationV2 (ActorSheetV2) — they never fire `renderActorSheet`
+// and render their OWN quickbar, affiliations, Tikkun/Work tab, ▶ Use buttons
+// and identity fields. So the layer was dead for PCs/NPCs, and the only thing
+// that still ran was the hook on the V1 FACTION sheet (it stamped the
+// `bbttcc-character-sheet` class on it and scheduled tab "heals") plus a
+// duplicate marker sheet in the sheet picker. Both are now switched off:
+//   • registerBBTTCCCharacterSheet() returns without registering anything
+//     (actors pinned to `bbttcc-auto-link.BBTTCCCharacterSheet` fall back to
+//     the system default sheet);
+//   • the `renderActorSheet` hook is not installed (guarded below).
+// Still live: game.bbttcc.api.autoLink.inspectIdentity (debug helper, runs
+// only when called). The code is KEPT, not deleted, as the source for any
+// feature Dave chooses to port into the native V2 sheets.
+// To revive for testing: set SHEET_LAYER_RETIRED = false (then cache-bust).
+// ════════════════════════════════════════════════════════════════════════════
+const SHEET_LAYER_RETIRED = true;
+//
+// (original header)
 // Bad Eden Character & NPC Sheet registration + render enhancements.
 //
 // Hex Chrome Bad Eden Identity tab with inline editing.
@@ -2892,6 +2918,10 @@ function hydrateNativeBBTTCCQuickbar(app, root) {
  * a future Option-A refactor that owns the AppV2 PARTS map).
  */
 export function registerBBTTCCCharacterSheet() {
+  if (SHEET_LAYER_RETIRED) {
+    LOG("Bad Eden sheet layer RETIRED (2026-10-02) — fourththing V2 sheets own the UI; no marker sheets registered.");
+    return;
+  }
   const baseChar = findBaseCharacterSheet();
   const baseNPC  = findBaseNPCSheet();
 
@@ -4624,7 +4654,8 @@ function _ftMountActionableUseButtons(app, root) {
 //   can write to the actor and trigger another render cascade. The
 //   `_bbttccEnhanceInFlight` / `_bbttccEnhanceRecent` guards inside
 //   `enhanceBBTTCCSheet` defend against any residual duplicate fires.
-Hooks.on("renderActorSheet", enhanceBBTTCCSheet);
+// RETIRED 2026-10-02 — see the file header. Not installed while SHEET_LAYER_RETIRED.
+if (!SHEET_LAYER_RETIRED) Hooks.on("renderActorSheet", enhanceBBTTCCSheet);
 
 /* ---------------------------------------
  * Ready hook: inspectIdentity debug helper

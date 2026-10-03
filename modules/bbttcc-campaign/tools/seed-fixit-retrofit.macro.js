@@ -7,10 +7,15 @@
  *  3. Wiring: Arc Bay → the stabilizer; the yard → the Gullywasher welcome; Delay → come back; Back Stairs → the Route Board.
  *  4. New beats: the MYSTERY Bin (gag + clue), the Route Board (THE TURN; two versions, before/after the Maneuver Vault),
  *     Load the Crate (hand-off home) + receipt THE CERTIFICATION.
- *  5. Full script → campaign.story (9 steps; the Route Board is not a step — see 2026-10-02).
+ *  5. Full script → campaign.story (10 steps; the Route Board is not a step, THE LATE RUN is — see 2026-10-02).
  * OWNER RULING 2026-10-02: the Route Board is a REWARD FOR ALIGNMENT — both versions carry the Back Stairs' allied hard gate
  * (standing with the Jackalopes ALLIED, set by patch-vault-allies), and it is no longer a NOW-card step; the Back Stairs door reaches it.
  * Seeded worlds: patch-template-review-fixes-c-2026-10-02.macro.js makes the same edits in place.
+ * OWNER RULING 2026-10-02 (option 3): an EARLIER way to the alliance — THE LATE RUN (~/FIXIT_EARLY_ALLIANCE_2026_10_02.md). Mara asks
+ * the Stewards to carry Uncle Thistle to his own wake exactly late enough; success sets coalition ↔ Jackalopes ALLIED (the same
+ * relationshipEffects rows patch-vault-allies puts on the Vault closers — setStatus is absolute, so the closers re-setting allied later
+ * is a no-op), which opens the Back Stairs, the Generator Hall and the pre-Vault Route Board in Acts 2–3. A NOW-card step after the
+ * MYSTERY Bin (act 3: it seals once Act 4 opens). Seeded worlds: patch-fixit-early-alliance-2026-10-02.macro.js.
  * Idempotent; backs up the campaigns setting. F5 after.
  */
 (async () => {
@@ -18,6 +23,58 @@
   const NS = "bbttcc-campaign", MAL = "bbttcc-mal-voice";
   const KEY = "fixit_farm", Q_MAIN = "quest_nrkJabUwZOLAJFYn", Q_STAB = "quest_bSwOIWzxqNBwJ5NM", Q_PRIS = "quest_uDuNp2yQxbuKkHx7", Q_VAULT = "quest_NwiADv8ZDoklqwEJ";
   const MARKER = "[FIXIT-RETROFIT-2026-09-27]";
+  // THE LATE RUN — VERBATIM in patch-fixit-early-alliance-2026-10-02.macro.js (keep the two in step)
+  const LATE_RUN_IDS = ["fixit_late_run_offer", "fixit_late_run_road", "fixit_late_run_success", "fixit_late_run_fail", "fixit_late_run_declined"];
+  const LATE_RUN_STEP = { id: "laterun", label: "The Late Run", act: 3, line: "Uncle Thistle was late to everything, including his birth. He's due at his own wake at dusk. No runner will make him late. You are not runners.", beats: ["fixit_late_run_offer", "fixit_late_run_road"], done: { anyOf: ["fixit_late_run_success", "fixit_late_run_fail", "fixit_late_run_declined"] } };
+  function LATE_RUN_BEATS({ beat, ch, P2, SC, mara, patter, JACKALOPES, Q_VAULT }) {
+    const A23 = [P2, { flag: "storyPhase", lte: 3 }];
+    const REASON = "The Stewards ran Uncle Thistle late to his own wake";
+    const ALLY_ROWS = [   // the shape patch-vault-allies puts on the Vault rescue closers
+      { sourceFactionId: "@coalition", targetFactionId: JACKALOPES, setStatus: "allied", reason: REASON },
+      { sourceFactionId: JACKALOPES, targetFactionId: "@coalition", setStatus: "allied", reason: REASON }
+    ];
+    const out = [
+      beat("fixit_late_run_offer", "Furrier's Fixit Farm — The Late Run",
+        "There is a crate on the Counter. It is long, and it is Uncle Thistle. Mara does not lower her voice. \"Thistle was late to everything. His own birth. Both weddings. The war, briefly.\" The coin flips. \"He's due at his own wake at dusk, in the Gullywasher, and the family wants him late one more time. Out of respect.\" The coin stops. \"No runner will carry him. Runners are never late; it goes on the board. You are not runners.\" Late enough to be Thistle, she says. Not so late it's rude. She will know.",
+        { speaker: mara, scene: SC.counter, priority: "high", requires: [...A23, { beatMark: "fixit_general_store_coversation" }, { questBucket: Q_VAULT, isNot: "completed" }],
+          memoryText: "Mara asked the Stewards to carry Uncle Thistle to his own wake, late. Runners are never late; the Stewards are not runners.", choices: [
+          ch("Take the crate.", "fixit_late_run_road", { description: "He is heavier than he looks. Patter falls in beside you with a pocket watch and no intention of helping." }),
+          ch("Decline. Respectfully.", "fixit_late_run_declined", { description: "Mara nods like you've confirmed something about yourselves." })
+        ] }),
+      beat("fixit_late_run_road", "Furrier's Fixit Farm — Killing Time",
+        "The Gullywasher is four minutes' walk from the Counter. You have two hours to be exactly the right amount of late. Patter checks the watch every eleven seconds and juggles with the other hand. Uncle Thistle says nothing, which the family insists is new.",
+        { speaker: patter, scene: SC.yard, dialogueOffer: false, requires: [...A23, { beatMark: "fixit_late_run_offer" }],
+          memoryText: "Patter kept time while the Stewards killed it, carrying Uncle Thistle to his wake.", choices: [
+          ch("Take the long way. Past the cows.", "fixit_late_run_success", { checkStat: "body", checkDC: 12, failNext: "fixit_late_run_fail", description: "Round the paddock with a dead Jackalope on your shoulders. Somewhere in the back of the Farm a door opens an inch toward the cows, and closes again." }),
+          ch("Stop for a drink in his honour. Several.", "fixit_late_run_success", { checkStat: "presence", checkDC: 12, failNext: "fixit_late_run_fail", description: "Three bars, all of them the Gullywasher's side door. Dougan pours one for the crate and drinks it for him." }),
+          ch("Just walk there.", "fixit_late_run_fail", { description: "Four minutes, on the dot. Patter looks at the watch, then at you, then at the sky." })
+        ] }),
+      beat("fixit_late_run_success", "Furrier's Fixit Farm — Fashionably Dead",
+        "You come through the Gullywasher's door forty minutes late, which the family agrees afterwards was exactly Thistle. A cousin weeps with relief. Patter is handed a beer and finally puts the watch away. Mara chalks a runner's peg, LATE, the only one on the coast that has ever said it, and hangs it on the crate. Then she looks at you for a long time, which at the Counter costs money, and says the word she gives once: \"Allies.\" (⚙ GM: the Jackalopes are ALLIES now; the Back Stairs and the Generator Hall open to the Stewards.)",
+        { speaker: mara, scene: SC.gully, dialogueOffer: false, requires: [...A23, { beatMark: "fixit_late_run_road" }, { beatMark: "fixit_late_run_fail", not: true }],
+          memoryText: "The Stewards carried Uncle Thistle to his own wake exactly late enough. The Jackalopes call the Stewards Allies now.",
+          receipts: [{ label: "The LATE Peg", effectKey: "rollPlus2", acquisition: "earned", source: { name: "Mara Quickhands, in chalk" },
+            truth: "A runner's peg chalked LATE in Mara's hand, the only Jackalope peg that has ever said it; it hung on Uncle Thistle's crate at his wake. Show it at any Jackalope counter and the pause gets shorter. Show it to Patter and she will tell you which routes on the board are actually running, and which one isn't." }],
+          fx: { relationshipEffects: ALLY_ROWS },
+          choices: [
+            ch("Raise a glass to Thistle.", "", { description: "Late, as is traditional." }),
+            ch("Ask Mara what the peg is worth.", "", { description: "\"Nothing. That's what makes it expensive.\"" })
+          ] }),
+      beat("fixit_late_run_fail", "Furrier's Fixit Farm — Punctual",
+        "The long way was a shortcut, or the drinks went down fast, or you simply walked. Somehow, horribly, you arrive on time. The Gullywasher goes quiet the way a room does when a joke dies on stage, and somebody stops the clock out of pure embarrassment. \"He was never on time in his LIFE,\" a cousin says, and it is the cruellest thing anyone says about Thistle all day. Mara thanks you for the carry, which is worse, and does not say the other word. (⚙ GM: no alliance; the Back Stairs stay shut. There will be another way in.)",
+        { type: "narration", speaker: mara, scene: SC.gully, dialogueOffer: false, requires: [...A23, { beatMark: "fixit_late_run_road" }, { beatMark: "fixit_late_run_success", not: true }],
+          memoryText: "The Stewards carried Uncle Thistle to his own wake ON TIME. The family has not forgiven it.",
+          choices: [ch("Apologise to the crate.", "", { description: "Thistle, consistent to the last, does not get back to you." })] }),
+      beat("fixit_late_run_declined", "Furrier's Fixit Farm — Pip Takes It",
+        "\"Pip,\" says Mara, and Pip is already there, cap backwards, lifting his end. \"I'll have him there on time,\" he says. \"I'm always on time.\" The whole family groans. Patter chalks the route on the board anyway, in her own hand, just in case.",
+        { type: "narration", speaker: mara, scene: SC.counter, dialogueOffer: false, requires: [...A23, { beatMark: "fixit_late_run_offer" }, { beatMark: "fixit_late_run_road", not: true }],
+          memoryText: "The Stewards turned down Uncle Thistle's last run. Pip took it, and was on time.",
+          choices: [ch("Watch him go.", "", { description: "Pip is on time. Of course he is. The family will talk about it for years." })] })
+    ];
+    // the way in survives the Farm settling first (quest-closed seals the step beats; evergreen exempts them — the act / Vault gates still bound it)
+    for (const b of out) if (b.id === "fixit_late_run_offer" || b.id === "fixit_late_run_road") b.inject.evergreen = true;
+    return out;
+  }
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   const report = []; let changes = 0; const say = (m) => report.push(m);
 
@@ -75,18 +132,23 @@
   const byId = new Map(camp.beats.map(b => [b.id, b]));
   for (const need of ["fixit_town_walk", "fixit_intro_scene", "fixit_arc_bay_conversation_2", "fixit_leyline_stabilizer", "fixit_backstairs_exterior", "fixit_hex_settles", "fixit_gullywasher_welcome"]) if (!byId.get(need)) return ui.notifications.error(`Beat ${need} missing — Fixit was never seeded here.`);
   const sceneOf = (...ids) => { for (const id of ids) { const s = byId.get(id)?.sceneId; if (s) return String(s).replace(/^Scene\./, ""); } return null; };
-  const SC = { yard: sceneOf("fixit_town_walk"), stairs: sceneOf("fixit_backstairs_exterior"), arcbay: sceneOf("fixit_arc_bay_conversation", "fixit_arc_bay_conversation_2") };
+  const SC = { yard: sceneOf("fixit_town_walk"), stairs: sceneOf("fixit_backstairs_exterior"), arcbay: sceneOf("fixit_arc_bay_conversation", "fixit_arc_bay_conversation_2"),
+    counter: sceneOf("fixit_general_store_coversation"), gully: sceneOf("fixit_gullywasher_welcome", "fixit_gullywasher_interior_convo") };
+  // the Jackalopes' faction actor — read off the Back Stairs' allied gate (patch-vault-allies) so every allied row/gate names one id
+  const JACKALOPES = ((x) => Array.isArray(x) ? x : (x && typeof x === "object" ? [x] : []))(byId.get("fixit_backstairs_exterior")?.inject?.requires).find(r => r && r.relation && r.is === "allied")?.relation || "U5YaO2p189LBMvVq";
+  // speakers by name, else the voice the town's own beats already carry (worlds whose actors are named differently)
+  const spOr = (name, beatId) => sp(name) || byId.get(beatId)?.speakerActorId || null;
 
   const TAGS = "fixit_farm story";
-  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, scene = null } = {}) => ({
+  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, fx = null, dialogueOffer = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, scene = null } = {}) => ({
     id, label, type, timeScale: "scene", timePoints, questId: Q_MAIN, tags: TAGS, politicalTags: "",
     description, outcomes: { success: null, failure: null },
     inject: { cooldownTurns: 0, repeatable: false, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}) },
     actors: [], refs: {}, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true,
     storyChain: KEY, priority, ...(scene ? { sceneId: scene } : {}), ...(speaker ? { speakerActorId: speaker } : {}),
-    story: story || { quest: KEY }, ...(memoryText ? { memoryText } : {}),
+    story: story || { quest: KEY }, ...(memoryText ? { memoryText } : {}), ...(dialogueOffer === false ? { dialogueOffer: false } : {}),
     choices: choices || [{ label: "Continue", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }],
-    worldEffects: { ...(receipts ? { receipts } : {}) }
+    worldEffects: { ...(receipts ? { receipts } : {}), ...(fx || {}) }
   });
   const ch = (label, next = "", extra = {}) => ({ label, next, description: "", checkStat: "", checkDC: 0, failNext: "", ...extra });
   const P2 = { flag: "storyPhase", gte: 2 };
@@ -126,7 +188,11 @@
         choices: [
           ch("Ride home to Garren.", "ride_back_home"),
           ch("Ask about the three doorstops.", "", { description: "\"Wrong fitting. Every one. Nobody brought a spanner.\" He taps the drawing in the margin. \"Nobody's forgetting again.\"" })
-        ] })
+        ] }),
+    // ── THE LATE RUN (OWNER RULING 2026-10-02, option 3) — the pre-Vault way to the alliance. ✎ DAVE: every line here is draft 1
+    //    (FIXIT_EARLY_ALLIANCE_2026_10_02.md). Gates: the offer waits for Mara's Counter (Acts 2–3, Vault unfinished, once-only);
+    //    the four routed nodes are routing-only (dialogueOffer:false + the predecessor's beatMark) and success / fail exclude each other.
+    ...LATE_RUN_BEATS({ beat, ch, P2, SC, mara: spOr("Mara Quickhands", "fixit_general_store_coversation"), patter: spOr("Patter", "fixit_pip_and_patter_convo"), JACKALOPES, Q_VAULT })
   ];
   const FIXIT_NEW = NEW.map(b => b.id);
   const BOARD_BEATS = ["fixit_route_board", "fixit_route_board_after"];
@@ -156,8 +222,18 @@
     const ALLY = reqsOf(byId.get("fixit_backstairs_exterior")?.inject?.requires).find(r => r && r.relation && r.is === "allied") || null;
     if (!ALLY) say("✗ fixit_backstairs_exterior has no allied gate (run patch-vault-allies first) — the Route Board is NOT gated; re-run after");
     else for (const id of BOARD_BEATS) edit(id, b => { b.inject = b.inject || {}; const r = reqsOf(b.inject.requires).slice(); if (!r.some(x => JSON.stringify(x) === JSON.stringify(ALLY))) b.inject.requires = [...r, { ...ALLY }]; if (b.inject.hardGate !== true) b.inject.hardGate = true; }, "allies only (the Back Stairs' hard gate)"); }
+  // THE LATE RUN reconcile (2026-10-02): a beat that already exists (an earlier run, the dated patch) keeps its text; its gates, routing-only
+  // flag and the allied rows are made whole (additive — conditions appended, rows added once, nothing removed)
+  for (const def of NEW.filter(b => LATE_RUN_IDS.includes(b.id))) edit(def.id, b => {
+    b.inject = b.inject || {}; const r = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires ? [b.inject.requires] : []);
+    for (const need of def.inject.requires || []) if (!r.some(x => JSON.stringify(x) === JSON.stringify(need))) r.push({ ...need });
+    if (JSON.stringify(r) !== JSON.stringify(b.inject.requires)) b.inject.requires = r;
+    if (def.dialogueOffer === false && b.dialogueOffer !== false) b.dialogueOffer = false;
+    if (def.inject.evergreen === true && b.inject.evergreen !== true) b.inject.evergreen = true;
+    const rows = def.worldEffects?.relationshipEffects; if (Array.isArray(rows)) { b.worldEffects = b.worldEffects || {}; const have = Array.isArray(b.worldEffects.relationshipEffects) ? b.worldEffects.relationshipEffects : []; const add = rows.filter(n => !have.some(h => String(h?.sourceFactionId) === n.sourceFactionId && String(h?.targetFactionId) === n.targetFactionId && String(h?.setStatus) === "allied")); if (add.length) b.worldEffects.relationshipEffects = [...have, ...add]; }
+  }, "the Late Run: gates / routing-only / allied rows");
   // speakers
-  const voice = (ids, name) => { for (const id of ids) edit(id, b => { if (!b.speakerActorId && sp(name)) b.speakerActorId = sp(name); }, `speaker ${name}`); };
+  const voice =(ids, name) => { for (const id of ids) edit(id, b => { if (!b.speakerActorId && sp(name)) b.speakerActorId = sp(name); }, `speaker ${name}`); };
   voice(["fixit_gullywasher_interior_convo", "fixit_gullywasher_choice_1", "fixit_gullywasher_choice_2", "fixit_gullywasher_choice_3", "fixit_gullywasher_choice_4", "fixit_gullywasher_choice_1_fail", "fixit_gullywasher_choice_2_fail", "fixit_gullywasher_choice_3_fail", "fixit_gullywasher_choice_4_fail", "fixit_gullywasher_welcome", "fixit_gully_answer_name"], "Dougan");
   voice(["fixit_arc_bay_conversation", "fixit_arc_bay_conversation_1", "fixit_arc_bay_conversation_2", "fixit_arc_bay_conversation_3", "fixit_leyline_stabilizer", "fixit_no_spanner"], "Young Gearbox");
   voice(["fixit_power_station_conversation", "fixit_power_station_conversation_2"], "Old Gearbox");
@@ -171,7 +247,7 @@
   if (!codeQuest || !codeScript) say("✗ code story for fixit_farm not readable — story script NOT written (hard-reload and re-run)");
   const QUEST = codeQuest ? JSON.parse(JSON.stringify(codeQuest)) : null;
   const SCRIPT = codeScript ? JSON.parse(JSON.stringify(codeScript)) : null;
-  let PREV_SCRIPT = null;
+  let PREV_SCRIPT = null, PREV2_SCRIPT = null;
   if (SCRIPT) {
     const old = Object.fromEntries(SCRIPT.steps.map(s => [s.id, s]));
     // (2026-10-02: the board step is built, then dropped — PREV_SCRIPT, the pre-ruling output, lets the overwrite guard below recognise it)
@@ -194,6 +270,9 @@
     PREV_SCRIPT = JSON.parse(JSON.stringify(SCRIPT));
     // OWNER RULING 2026-10-02: the Route Board is an allies' reward, not a NOW-card step (the Back Stairs door reaches it)
     SCRIPT.steps = SCRIPT.steps.filter(s => s.id !== "board");
+    PREV2_SCRIPT = JSON.parse(JSON.stringify(SCRIPT));   // the 10-02 output before THE LATE RUN (also recognised by the guard)
+    // OWNER RULING 2026-10-02 (option 3): THE LATE RUN, after the MYSTERY Bin — the NOW card points at it before the Vault
+    { const i = SCRIPT.steps.findIndex(s => s.id === "bin"); SCRIPT.steps.splice(i >= 0 ? i + 1 : SCRIPT.steps.length, 0, JSON.parse(JSON.stringify(LATE_RUN_STEP))); }
   }
   const haveData = storyApi?.get?.(campaignId) || {};
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
@@ -201,7 +280,7 @@
   // REVIEW 2026-10-01: never clobber live story data edited after seeding (✦ Script editor, a wordsmithing pass, a dated patch macro). Write only
   // when the live quest+script are missing, still the plain code copy, or already this output; anything else is reported and left alone.
   { const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null), lS = haveData.scripts?.[KEY], lQ = haveData.quests?.[KEY];
-    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT) || same(lS, PREV_SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
+    if (scriptChanged && !((!lS || same(lS, codeScript) || same(lS, SCRIPT) || same(lS, PREV_SCRIPT) || same(lS, PREV2_SCRIPT)) && (!lQ || same(lQ, codeQuest) || same(lQ, QUEST)))) { scriptChanged = false; say(`⚠ story script ${KEY}: live campaign.story was edited after seeding — NOT overwritten (repair seeded worlds with the dated patch-*-review-fixes macros)`); } }
   if (scriptChanged) { changes++; say(`✦ story script fixit_farm → campaign.story (${SCRIPT.steps.length} steps, ${SCRIPT.doors.length} doors)`); } else if (SCRIPT) say("· ok story script (already)");
 
   console.log(`[seed-fixit-retrofit] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  • " + r).join("\n"));

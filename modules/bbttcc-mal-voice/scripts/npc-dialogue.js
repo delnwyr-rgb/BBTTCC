@@ -751,6 +751,95 @@ ${gmNotes ? `\n## PRIVATE TRUTH (GM notes — these facts are TRUE about you and
 }
 
 // ---------------------------------------------------------------------------
+// GM relay for player-seat conversations (owner ruling 2026-10-02)
+//
+// The API key lives only on the GM's machine. A player seat sends the GM
+// { kind:"npc", npcActorUuid, sections, tools, toolChoice, messages }; the GM
+// re-checks the talk boundary for THAT user, REBUILDS the cached primer +
+// persona itself (so a player can't swap in their own system prompt), admits
+// only the known live-tail sections and the six dialogue tools, bounds every
+// turn, and fixes maxTokens/temperature/model. Rate limits live in the
+// provider relay. What a player still authors: their own lines and the
+// tool_result text of the one tool round — same as before, under the NPC.
+// ---------------------------------------------------------------------------
+
+const RELAY_TOOL_NAMES = new Set(["enact_story_choice", "point_the_way", "divulge_secret", "teach_recipe", "open_court_door", "court_notices"]);
+const RELAY_SECTION_HEADS = [
+  "## STORY MOMENTS YOU MAY ENACT", "## WAYS YOU CAN OPEN", "## SECRETS YOU GUARD",
+  "## THINGS YOU KNOW HOW TO MAKE", "## THE COURT DOOR YOU HOLD", "## THE COURT TONIGHT", "## THE ROOM IS LISTENING"
+];
+const RELAY_PERSONA_TTL = 10 * 60 * 1000;
+const RELAY_MAX_TURNS = HISTORY_CAP + 4;   // sent by the player seat; the GM admits HISTORY_CAP + 8
+const _RELAY_PERSONA_CACHE = new Map();   // actorUuid -> { ts, lore, dossier } (GM side; byte-stable for prompt caching)
+
+function _relayFailureLine(name, res) {
+  const e = String(res?.error || "");
+  if (["NO_GM", "RELAY_TIMEOUT", "RELAY_FAILED", "RELAY_UNAVAILABLE"].includes(e)) {
+    return `(${name} doesn't answer — the line is dead. NPC voices speak through the GM's seat; check that a GM is connected.)`;
+  }
+  if (e === "RATE_LIMITED") return `(${name} holds up a hand — too many words at once. Give it a moment.)`;
+  if (e === "NO_API_KEY" && !game.user?.isGM) return `(${name} is silent — the GM's machine has no AI key set.)`;
+  return null;
+}
+
+async function _npcRelayBuilder(payload, { user }) {
+  const refuse = (message) => ({ ok: false, error: "RELAY_REFUSED", message });
+  const U = game.bbttcc?.mal?.providers?.anthropic?.relayUtil;
+  if (!U) return refuse("relay validators missing");
+  if (!_playersAllowed()) return refuse("npcDialoguePlayers setting is off");
+
+  // Resolve by uuid (unlinked tokens carry their own synthetic actor).
+  let actor = null;
+  try { actor = fromUuidSync(String(payload?.npcActorUuid || "")); } catch (_e) { actor = null; }
+  if (!actor || actor.documentName !== "Actor") return refuse("NPC not found");
+  // Same talk boundary as _refusalReason, judged for the REQUESTING user.
+  if (actor.token?.hidden) return refuse(`'${actor.name}' is hidden`);
+  if (_isFactionActor(actor)) return refuse("factions are not conversational NPCs");
+  if (!_isTaggedNpc(actor) && actor.hasPlayerOwner) return refuse(`'${actor.name}' is a player-owned character`);
+
+  // Live-tail system sections: known headers only, bounded.
+  const rawSections = Array.isArray(payload?.sections) ? payload.sections : [];
+  if (rawSections.length > RELAY_SECTION_HEADS.length) return refuse("too many prompt sections");
+  const sections = [];
+  let secChars = 0;
+  for (const s of rawSections) {
+    const text = String(s?.text ?? "");
+    if (!text) continue;
+    if (text.length > 16000) return refuse("prompt section too large");
+    if (!RELAY_SECTION_HEADS.some(h => text.startsWith(h))) return refuse("unknown prompt section");
+    secChars += text.length;
+    sections.push({ text });
+  }
+  if (secChars > 40000) return refuse("prompt sections too large");
+
+  const tools = U.sanitizeTools(payload?.tools, RELAY_TOOL_NAMES);
+  if (tools === null) return refuse("tool definitions rejected");
+  const messages = U.sanitizeMessages(payload?.messages, { toolNames: RELAY_TOOL_NAMES, maxTurns: HISTORY_CAP + 8 });
+  if (!messages) return refuse("conversation turns rejected");
+  const toolChoice = (payload?.toolChoice?.type === "none") ? { type: "none" } : undefined;
+
+  // Primer + persona built HERE, from the GM's view of the world.
+  const state = await _storyState(actor);
+  let c = _RELAY_PERSONA_CACHE.get(actor.uuid);
+  if (!c || Date.now() - c.ts > RELAY_PERSONA_TTL) {
+    c = { ts: Date.now(), lore: _gatherWorldLore(actor, { state }), dossier: _gatherDossier(actor, { state }) };
+    _RELAY_PERSONA_CACHE.set(actor.uuid, c);
+  }
+  const lore = game.bbttcc?.mal?.lore;
+  const system = [];
+  if (lore?.enabled?.() !== false) system.push({ text: lore?.getPrimer?.() || "", cache: "1h" });
+  system.push({ text: _buildPersonaPrompt(actor, c.lore, state, c.dossier), cache: true });
+  system.push(...sections);
+
+  log(`relay: ${user.name} → '${actor.name}' (${messages.length} turns, ${sections.length} live sections, ${tools?.length || 0} tools)`);
+  return {
+    ok: true,
+    logId: `npc:${actor.id}`,
+    request: { system, messages, tools, toolChoice, maxTokens: 350, temperature: 0.9 }
+  };
+}
+
+// ---------------------------------------------------------------------------
 // History persistence (actor flag; GM-writable only)
 // ---------------------------------------------------------------------------
 
@@ -1748,7 +1837,14 @@ Every word of this conversation lands inside the engagement above — and courts
       const settings = game.bbttcc?.mal?.settings;
       const provider = game.bbttcc?.mal?.providers?.[settings?.provider?.() || "anthropic"];
       if (!provider?.call) return ui.notifications?.warn("Mal Voice provider not available.");
-      if (!settings?.apiKey?.()) return ui.notifications?.warn("No API key configured (Module Settings → Bad Eden Mal Voice).");
+      const isGM = !!game.user?.isGM;
+      if (isGM && !settings?.apiKey?.()) return ui.notifications?.warn("No API key on this GM machine (Module Settings → AI Faction/GM Advisor → API key).");
+      // Player seats speak through the GM's seat (owner ruling 2026-10-02) —
+      // with no GM connected, nobody picks up. No call; the typed line stays.
+      if (!isGM && !provider.gmOnline?.()) {
+        this._bubble("assistant", `(${this.actor.name} doesn't answer — the line is dead. NPC voices speak through the GM's seat, and no GM is connected.)`, { system: true });
+        return;
+      }
 
       const speaker = overrideSpeaker || this._speakerName();
       const userContent = overrideSpeaker ? raw : `${speaker}: ${raw}`;
@@ -1773,6 +1869,9 @@ Every word of this conversation lands inside the engagement above — and courts
         const system = [];
         if (usePrimer) system.push({ text: lore?.getPrimer?.() || "", cache: "1h" });
         system.push({ text: _buildPersonaPrompt(this.actor, this._lore, this._storyState, this._dossier), cache: true });
+        // Everything after this index is the per-send live tail; a player
+        // seat relays only that — the GM rebuilds primer + persona itself.
+        const liveFrom = system.length;
 
         // Story moments + doors: closed-enum tools + UNCACHED system sections
         // (quest state changes between sends; keep after cached breakpoints).
@@ -1808,10 +1907,27 @@ Every word of this conversation lands inside the engagement above — and courts
         if (baseMessages[0]?.role === "assistant") {
           baseMessages.unshift({ role: "user", content: "[Scene note — not spoken by anyone: the scene opens. You have already delivered your opening line; continue from it.]" });
         }
+        // Player seat: the relay descriptor the GM validates (see _npcRelayBuilder).
+        // A player's in-session history isn't capped by a save, so the relay
+        // sends the most recent turns only (user-first, as the API requires).
+        const relayFor = (messages, toolChoice) => {
+          if (isGM) return undefined;
+          let turns = messages.slice(-RELAY_MAX_TURNS);
+          if (turns[0]?.role !== "user") turns = [{ role: "user", content: "[Scene note — not spoken by anyone: the conversation continues from earlier.]" }, ...turns];
+          return {
+            kind: "npc",
+            npcActorUuid: this.actor.uuid,
+            sections: system.slice(liveFrom).map(s => ({ text: s.text })),
+            tools,
+            toolChoice,
+            messages: turns
+          };
+        };
         const res = await provider.call({
           system,
           messages: baseMessages,
           tools,
+          relay: relayFor(baseMessages, undefined),
           maxTokens: 350,
           temperature: 0.9,
           stream: true,
@@ -1822,7 +1938,8 @@ Every word of this conversation lands inside the engagement above — and courts
         });
 
         if (!res.ok) {
-          npcBubble.textContent = `(…the words don't come. ${res.error}: ${res.message || ""})`;
+          npcBubble.textContent = _relayFailureLine(this.actor.name, res)
+            || `(…the words don't come. ${res.error}: ${res.message || ""})`;
           npcBubble.style.opacity = ".55";
         } else {
           let finalText = res.text || "";
@@ -1846,22 +1963,24 @@ Every word of this conversation lands inside the engagement above — and courts
               ? await this._resolveCourtNotice(tu, live)
               : await this._resolveEnact(tu, choices);
             const prefix = finalText ? `${finalText}\n\n` : "";
+            const contMessages = [
+              ...baseMessages,
+              { role: "assistant", content: res.content },
+              // Every echoed tool_use needs a tool_result, else the API 400s.
+              // Only the first is resolved; extras get an is_error result.
+              { role: "user", content: [
+                { type: "tool_result", tool_use_id: tu.id, content: String(resultText ?? "") },
+                ...res.toolUses.slice(1).filter(x => x?.id).map(x => ({
+                  type: "tool_result", tool_use_id: x.id, is_error: true,
+                  content: "One moment per message — this was not done. Do not mention it."
+                }))
+              ] }
+            ];
             const cont = await provider.call({
               system,
-              messages: [
-                ...baseMessages,
-                { role: "assistant", content: res.content },
-                // Every echoed tool_use needs a tool_result, else the API 400s.
-                // Only the first is resolved; extras get an is_error result.
-                { role: "user", content: [
-                  { type: "tool_result", tool_use_id: tu.id, content: resultText },
-                  ...res.toolUses.slice(1).filter(x => x?.id).map(x => ({
-                    type: "tool_result", tool_use_id: x.id, is_error: true,
-                    content: "One moment per message — this was not done. Do not mention it."
-                  }))
-                ] }
-              ],
+              messages: contMessages,
               tools,
+              relay: relayFor(contMessages, { type: "none" }),
               toolChoice: { type: "none" },   // one moment per message
               maxTokens: 350,
               temperature: 0.9,
@@ -2043,6 +2162,7 @@ function _parseSecretLinesLenient(raw) {
 // Shared post-save: any open dialogue window re-sweeps so changes take
 // effect immediately.
 async function _afterPersonaSave(actor) {
+  _RELAY_PERSONA_CACHE.delete(actor.uuid);   // relayed player conversations re-sweep too
   const app = APPS.get(actor.id);
   if (app) {
     app._storyState = await _storyState(actor);
@@ -2888,7 +3008,7 @@ Hooks.once("init", () => {
 
   game.settings.register(MODULE_ID, "npcDialoguePlayers", {
     name:    "Players can speak with NPCs",
-    hint:    "Show the dialogue button on NPC token HUDs for players (GMs always see it). Conversations use the world API key under the gm-key-powers-all policy.",
+    hint:    "Show the dialogue button on NPC token HUDs for players (GMs always see it). Player conversations are relayed through the connected GM's seat and use the key stored on the GM's machine (rate-limited per player); with no GM connected, NPCs don't answer.",
     scope:   "world",
     config:  true,
     type:    Boolean,
@@ -2950,6 +3070,7 @@ function _install() {
       _gatherWorldLore,
       _gatherDossier
     });
+    game.bbttcc?.mal?.providers?.anthropic?.registerRelayKind?.("npc", _npcRelayBuilder);
     log("NPC dialogue installed (game.bbttcc.mal.npc.talkTo).");
   } catch (e) {
     warn("install failed:", e?.message || e);

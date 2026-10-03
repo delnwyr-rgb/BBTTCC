@@ -127,8 +127,12 @@ async function factionAdvisorContextBuilder(voice, triggerArgs) {
     recommendations: trunc(recommendations, 2500),
     mode,
     lengthHint:      triggerArgs.lengthHint || (mode === "sheet-glance" ? 25 : mode === "pre-raid" ? 100 : 40),
-    // SIGNAL TO OUTPUT CHANNEL — whisper to this faction's owners (per §2B.2 patch).
-    _audienceOverride: `faction:${factionId}`
+    // SIGNAL TO OUTPUT CHANNEL — whisper to this faction's owners (per §2B.2
+    // patch); a sheet-open glance goes to the seat that opened the sheet only
+    // (+ GMs, per the player: audience) — owner ruling 2026-10-02.
+    _audienceOverride: (mode === "sheet-glance" && args.userId && globalThis.game?.users?.get?.(args.userId))
+      ? `player:${args.userId}`
+      : `faction:${factionId}`
   };
 }
 

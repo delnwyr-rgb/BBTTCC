@@ -1,7 +1,7 @@
 /* REVIEW NOTE: Turn extensions are retained as engine logic; patched here only to correct victory flag read-path during the sheet cleanup review pass. */
 // bbttcc-factions/scripts/turn-extensions.enhancer.js
-// Post-turn enhancer for Unity, Morale/Loyalty trend, and Darkness nudge.
-// Spark-gated Victory/Unity sync added.
+// Post-turn enhancer for Morale/Loyalty trend, Darkness nudge and the per-turn Victory Unity reset.
+// (Its old Mercy-gated Unity OP payout is retired — territory-unitybonus is the one Unity authority.)
 
 (() => {
   const TAG = "[bbttcc/turn-extensions]";
@@ -12,44 +12,15 @@
   const get = (o,p,d)=>{ try{return foundry.utils.getProperty(o,p) ?? d;}catch{return d;} };
   const clamp = (v,min,max)=>Math.max(min,Math.min(max,Number(v||0)));
 
-  /* ---------- Unity helpers ---------- */
-  const SEPH_OP = { chokmah:"economy", binah:"intrigue", chesed:null, gevurah:"violence",
-                    tiferet:"culture", netzach:"all", hod:"faith", yesod:"diplomacy",
-                    malkuth:null, keter:"caps" };
-  // Sephirot Unity Bonus magnitudes, in MARKS (1 OP = 10 marks).
-  const MAG     = { chokmah:30, binah:30, chesed:0, gevurah:30, tiferet:30, netzach:20, hod:30, yesod:20, malkuth:0, keter:10 };
-  const normKey = s => String(s||"").toLowerCase();
-
-  function countAlignedHexes(fid){
-    const out = {};
-    for (const sc of game.scenes ?? []) {
-      for (const obj of [...(sc.drawings ?? []), ...(sc.tiles ?? [])]) {
-        const tf = obj.flags?.[MODT]; if (!tf) continue;
-        const owner = tf.factionId || tf.ownerId || "";
-        if (String(owner)!==String(fid)) continue;
-        // ⚠ OWNER RULING OWED (review 2026-10-01): alignment is stored as sephirotKey/Name/Uuid,
-        // so this legacy read never matches and this Mercy-gated Unity path is DORMANT. Reading
-        // the real keys would switch on a SECOND per-turn Unity payout beside the canonical
-        // territory-unitybonus (advanceOPRegen) — a balance call, deliberately not made here.
-        const k = normKey(tf.sephirahKey||tf.sephirah||"");
-        if (!k) continue; out[k]=(out[k]||0)+1;
-      }
-    }
-    return out;
-  }
-
-  function unityReport(A){
-    const cnt = countAlignedHexes(A.id);
-    const cand = Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
-    if (!cand.length) return { any:false };
-    const [k,n]=cand[0];
-    const chan = SEPH_OP[k]||"";
-    const mag = MAG[k]||0;
-    const ops={violence:0,nonlethal:0,intrigue:0,economy:0,softpower:0,diplomacy:0,logistics:0,culture:0,faith:0};
-    if (chan==="all"&&mag>0){for(const kk in ops)ops[kk]+=mag;}
-    else if (ops.hasOwnProperty(chan)&&mag>0){ops[chan]+=mag;}
-    return { any:true, sephirah:k, count:n, ops, note:`${k} +${mag} ${chan||"all"}` };
-  }
+  /* ---------- Unity: RETIRED here (2026-10-02 housekeeping) ----------
+   * This file used to carry a SECOND per-turn Unity payout (Mercy-spark gated,
+   * aligned-hex count → OP into the pillar's channel + Enlightened +10%). It read
+   * tf.sephirahKey / tf.sephirah, which nothing writes (alignment is stored as
+   * sephirotKey/Name/Uuid), so it never paid. Retired rather than switched on:
+   * the ONE Unity authority is bbttcc-territory/scripts/territory-unitybonus.enhancer.js
+   * (Phase 3B rule, advanceOPRegen, game.bbttcc.api.territory.getUnityBonusReport).
+   * Removed: countAlignedHexes, unityReport, SEPH_OP/MAG, the opBank write.
+   */
 
   function trendNext(cur,home=50,step=1){
     cur=Number(cur||0);home=Number(home||50);step=Math.max(0,Number(step||1));
@@ -64,50 +35,20 @@
     for(const A of factions){
       const updates={};const war=get(A,`flags.${MODF}.warLogs`,[])||[];let any=false;
 
-      // UNITY + Spark gate (guarded against missing Tikkun API)
-const UR = unityReport(A);
-const tikkun = game.bbttcc?.api?.tikkun;
-const hasMercy = (tikkun && typeof tikkun.hasSpark === "function")
-  ? await tikkun.hasSpark(A, "sparkOfMercy_Chesed")
-  : false;
-
-if (UR?.any && hasMercy) {
-  const bank = get(A, `flags.${MODF}.opBank`, {}) || {};
-  const nb = foundry.utils.deepClone(bank);
-  // Enlightenment opRegenBonus — an Enlightened faction regenerates +10% OP (the only
-  // per-turn OP regen in the engine is this Unity/Mercy path, so the bonus rides it).
-  const enlightened = String(get(A, `flags.${MODF}.enlightenmentLevel`, "")).toLowerCase();
-  const opMult = (enlightened === "enlightened" || enlightened === "transcendent") ? 1.10 : 1;
-  // Respect the bank caps the OP engine enforces (one authority: facts.faction.caps);
-  // never lowers a bank that is already over cap.
-  const caps = game.bbttcc?.facts?.faction?.caps?.(A) || null;
-  for (const [k, v] of Object.entries(UR.ops || {})) {
-    if (!(v > 0)) continue;
-    const cur = Number(nb[k] || 0);
-    let next = cur + Math.round(Number(v) * opMult);
-    const cap = caps ? Number(caps[k]) : NaN;
-    if (Number.isFinite(cap)) next = Math.max(cur, Math.min(cap, next));
-    nb[k] = next;
-  }
-  updates["opBank"] = nb; any = true;
-  war.push({
-    type: "turn",
-    date: (new Date()).toLocaleString(),
-    summary: `Unity Bonus — ${UR.sephirah} (${UR.count} aligned): ${UR.note}${opMult > 1 ? " · +10% Enlightened OP regen" : ""}`
-  });
-}
-
-// Victory + Unity sync (spark-gated)
-try {
-  const victory = foundry.utils.duplicate(get(A, `flags.${MODF}.victory`, {}) || {});
-  victory.vp = Number(victory.vp || 0);
-  victory.unity = (hasMercy && UR?.any)
-    ? Math.min(100, Math.round((UR.count || 0) * 10))
-    : 0;
-  updates["victory"] = victory;
-} catch (e) {
-  console.warn(TAG, "Victory/Unity update failed:", e);
-}
+      // Victory Unity reset — PRESERVED BEHAVIOUR. The retired Mercy path computed
+      // victory.unity = 0 every applied turn (its gate never passed), so Unity has been
+      // a per-turn meter: beat/ritual unityDelta is wiped here at the next applied turn
+      // (wrapper order decides whether VP gain sees it first). Kept exactly (incl. only landing when another update fires) so
+      // retiring the dead payout changes no balance. ⚠ Owner ruling: should Unity
+      // persist across turns instead? (Deleting this block = VP every turn from banked Unity.)
+      try {
+        const victory = foundry.utils.duplicate(get(A, `flags.${MODF}.victory`, {}) || {});
+        victory.vp = Number(victory.vp || 0);
+        victory.unity = 0;
+        updates["victory"] = victory;
+      } catch (e) {
+        console.warn(TAG, "Victory/Unity update failed:", e);
+      }
 
       // TREND
       // Morale buoyancy is PASSIVE recovery for the absence of pressure — it must not

@@ -2343,7 +2343,8 @@
                   }
                   // Refund the lead what travelHex ACTUALLY charged (r.cost) — not a local recompute,
                   // which minted marks when the lead rode free (dev-6) or paid a hook-adjusted amount.
-                  // A bridge toll already credited to the bridge holder stays paid (not reversed here).
+                  // The bridge toll is refunded too (owner ruling 2026-10-02 — the step didn't happen): it is
+                  // left out of leadRefund and reversed below, holder side first.
                   const leadRefund = {};
                   const charged = (r?.devSixFreePassage || r?.context?.devSixFreePassage) ? {} : (r?.cost || r?.context?.cost || {});
                   const toll = Number(r?.context?.crossing?.toll || 0);
@@ -2358,8 +2359,32 @@
                       await opApi.commit(factionId, leadRefund, { source: "travel-stack-rollback", label: `Leg ${i + 1}: lead refund (passenger underflow)` });
                     } catch (e) { console.warn(TAG, `lead refund failed`, e); }
                   }
+                  // Bridge toll reversal, atomic across both banks: take it back from the holder (if it was
+                  // credited), then return it to the lead; if the lead's credit fails, the holder is re-credited.
+                  // A holder who has already spent it keeps the leg's toll (nothing minted) — said in the output.
+                  let tollNote = "";
+                  if (tollPaid) {
+                    const holderId = String(r.context.crossing.tollTo);
+                    const holderName = game.actors?.get(holderId)?.name || "the bridge holder";
+                    const credited = r.context.crossing.tollCredited !== false;
+                    try {
+                      let holderOk = true;
+                      if (credited) {
+                        const hr = await opApi.commit(holderId, { economy: -toll }, { source: "travel-stack-rollback", label: `Leg ${i + 1}: bridge toll reversed (passenger underflow)` });
+                        holderOk = hr?.ok !== false;
+                      }
+                      if (!holderOk) tollNote = ` Bridge toll (${toll} marks) stays with ${holderName} — already spent.`;
+                      else {
+                        const lr = await opApi.commit(factionId, { economy: toll }, { source: "travel-stack-rollback", label: `Leg ${i + 1}: bridge toll refund (passenger underflow)`, allowOvercap: true });
+                        if (lr?.ok === false) {
+                          if (credited) await opApi.commit(holderId, { economy: toll }, { source: "travel-stack-rollback", label: `Leg ${i + 1}: bridge toll restored (lead refund refused)`, allowOvercap: true });
+                          tollNote = ` Bridge toll (${toll} marks) could not be refunded — it stays with ${holderName}.`;
+                        } else tollNote = ` Bridge toll (${toll} marks) refunded${credited ? ` — taken back from ${holderName}` : ""}.`;
+                      }
+                    } catch (e) { console.warn(TAG, `bridge toll refund failed`, e); tollNote = ` Bridge toll refund failed — see console.`; }
+                  }
                   const who = failures.map(f => f.name).join(", ");
-                  out.push(`    ↩ Leg ${i + 1} rolled back — ${who} could not afford the cut. Lead${successfulDebits.length ? ` + ${successfulDebits.length} paid passenger${successfulDebits.length === 1 ? "" : "s"}` : ""} refunded (token + war log unchanged).`);
+                  out.push(`    ↩ Leg ${i + 1} rolled back — ${who} could not afford the cut. Lead${successfulDebits.length ? ` + ${successfulDebits.length} paid passenger${successfulDebits.length === 1 ? "" : "s"}` : ""} refunded (token + war log unchanged).${tollNote}`);
                 }
               }
             }

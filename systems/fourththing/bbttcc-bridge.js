@@ -1022,22 +1022,29 @@ async function ftSyncLegacyIdentityMirror(actor, slotKey, slotData) {
 
 // Bootstrap: when a steward is freshly linked to a faction (or when a faction
 // has never had its echoAssets seeded), scan the steward's items for crew/
-// occult feats and persist any newly detected names into the faction flag.
-// Idempotent — only writes when there's a delta. Called during the async
-// context build (getBad EdenContext) so the steward tab + Manage Echo Assets
-// dialog both see auto-populated values on first render.
+// occult feats and fold them into the faction flag. Idempotent — only writes
+// when this steward's contribution changed. Called during the async context
+// build (getBad EdenContext) so the steward tab + Manage Echo Assets dialog
+// both see auto-populated values on first render.
+//
+// MULTI-STEWARD (2026-10-02 housekeeping, replaces first-steward-wins): each
+// steward's detected names live under echoAssets.bySteward.<actorId> =
+// {name, crew[], occult[], ts}, written by dotted path so one steward's write
+// never touches another's entry. The active lists are the UNION: a re-scan
+// removes only names this steward contributed that no OTHER steward still
+// holds, and adds its new ones — names added by hand in the Manage dialog
+// (active but owned by no steward) survive. Reserve lists stay dialog-curated.
+// GM or faction-owner seat only. Legacy single-steward data
+// ({stewardId, activeCrew, activeOccult}) seeds that steward's entry once.
 export async function ftEnsureEchoAssetsBootstrap(faction, actor) {
   if (!faction || !actor || !bbttccActive()) return;
-  // Only the faction's own steward seeds its roster: an NPC sheet (no crews)
-  // or a second steward rendering must never overwrite the faction-wide lists.
-  // A seat that can't write the faction skips quietly (no warning per render).
+  // Only stewards contribute (an NPC sheet has no crews). A seat that can't
+  // write the faction skips quietly (no warning per render).
   if (actorKind(actor) !== "steward") return;
   if (!game.user?.isGM && !faction.isOwner) return;
   try {
-    const stored0 = faction.getFlag?.("fourththing", "echoAssets") ?? {};
-    if (stored0.stewardId && stored0.stewardId !== actor.id) return;
-    const detectedCrew   = ftScanActorForAssetNames(actor, "crew");
-    const detectedOccult = ftScanActorForAssetNames(actor, "occult");
+    const detectedCrew   = ftUniqueStrings(ftScanActorForAssetNames(actor, "crew"));
+    const detectedOccult = ftUniqueStrings(ftScanActorForAssetNames(actor, "occult"));
 
     const stored = faction.getFlag?.("fourththing", "echoAssets")
                 ?? faction.flags?.fourththing?.echoAssets
@@ -1049,35 +1056,67 @@ export async function ftEnsureEchoAssetsBootstrap(faction, actor) {
     const storedActiveOccult = ftParseAssetBucket(stored.activeOccult ?? [], "occult");
     const storedReserveOccult= ftParseAssetBucket(stored.reserveOccult?? [], "occult");
 
-    // Bootstrap is AUTHORITATIVE for active lists: the steward's currently-
-    // attached crew/occult feats define the active roster. Anything that was
-    // previously active but is no longer detected gets dropped (they removed
-    // it via the wizard or sheet). Reserve lists are preserved as user-
-    // curated state — they only change via the Manage Echo Assets dialog.
-    const nextActiveCrew   = ftUniqueStrings(detectedCrew);
-    const nextActiveOccult = ftUniqueStrings(detectedOccult);
+    // Per-steward contributions. Legacy migration: the old single owner's
+    // active lists become that steward's entry (so a second steward rendering
+    // first never wipes them).
+    const bySteward = foundry.utils.deepClone(stored.bySteward ?? {});
+    const upd = {};
+    if (!stored.bySteward && stored.stewardId && stored.stewardId !== actor.id) {
+      bySteward[stored.stewardId] = {
+        name: stored.stewardName ?? "", crew: storedActiveCrew, occult: storedActiveOccult, ts: Date.now()
+      };
+      upd[`flags.fourththing.echoAssets.bySteward.${stored.stewardId}`] = bySteward[stored.stewardId];
+    }
 
-    const sameCrew   = nextActiveCrew.length   === storedActiveCrew.length
-                    && nextActiveCrew.every((n, i) => n === storedActiveCrew[i]);
-    const sameOccult = nextActiveOccult.length === storedActiveOccult.length
-                    && nextActiveOccult.every((n, i) => n === storedActiveOccult[i]);
-    if (sameCrew && sameOccult) return;
+    const sameList = (x = [], y = []) => x.length === y.length && x.every((n, i) => n === y[i]);
+    const mine = bySteward[actor.id] ?? null;
+    // First sight of this steward on a legacy roster it owned: its old entry is the stored active lists.
+    const prevCrew   = mine ? ftUniqueStrings(mine.crew)   : (stored.stewardId === actor.id ? storedActiveCrew   : []);
+    const prevOccult = mine ? ftUniqueStrings(mine.occult) : (stored.stewardId === actor.id ? storedActiveOccult : []);
+    if (mine && sameList(prevCrew, detectedCrew) && sameList(prevOccult, detectedOccult) && !Object.keys(upd).length) return;
 
-    const payload = {
-      ...stored,
-      activeCrew:    nextActiveCrew,
-      reserveCrew:   storedReserveCrew,
-      activeOccult:  nextActiveOccult,
-      reserveOccult: storedReserveOccult,
-      slots:         stored.slots ?? null,
-      updatedTs:     Date.now(),
-      stewardId:     actor.id,
-      stewardName:   actor.name
+    // Stewards that are gone or now belong to another faction: their names leave
+    // the union (unless a live steward still holds them) and their entry is
+    // emptied + marked `gone` (a write, never a key deletion — v14 dropped -=key).
+    const staleDrop = { crew: new Set(), occult: new Set() };
+    for (const [sid, e] of Object.entries(bySteward)) {
+      if (sid === actor.id || e?.gone) continue;
+      const other = game.actors?.get?.(sid);
+      const linkId = other ? ftResolveFactionLink(other).id : null;
+      if (other && (!linkId || linkId === faction.id)) continue;
+      for (const n of ftUniqueStrings(e?.crew ?? []))   staleDrop.crew.add(n);
+      for (const n of ftUniqueStrings(e?.occult ?? [])) staleDrop.occult.add(n);
+      bySteward[sid] = { name: e?.name ?? "", crew: [], occult: [], gone: true, ts: Date.now() };
+      upd[`flags.fourththing.echoAssets.bySteward.${sid}`] = bySteward[sid];
+    }
+
+    bySteward[actor.id] = { name: actor.name, crew: detectedCrew, occult: detectedOccult, ts: Date.now() };
+    upd[`flags.fourththing.echoAssets.bySteward.${actor.id}`] = bySteward[actor.id];
+
+    // Union update: drop what only this (or a departed) steward held, add what
+    // this steward holds now. Other live stewards' names are never removed here.
+    const othersHold = (kind) => new Set(Object.entries(bySteward)
+      .filter(([sid, e]) => sid !== actor.id && !e?.gone)
+      .flatMap(([, e]) => ftUniqueStrings(e?.[kind] ?? [])));
+    const merge = (storedActive, prev, next, kind) => {
+      const keep = othersHold(kind);
+      const dropped = new Set([...prev.filter(n => !next.includes(n)), ...staleDrop[kind]]
+        .filter(n => !keep.has(n) && !next.includes(n)));
+      return ftUniqueStrings([...storedActive.filter(n => !dropped.has(n)), ...next]);
     };
+    const nextActiveCrew   = merge(storedActiveCrew,   prevCrew,   detectedCrew,   "crew");
+    const nextActiveOccult = merge(storedActiveOccult, prevOccult, detectedOccult, "occult");
 
-    await faction.update({
-      "flags.fourththing.echoAssets": payload
-    });
+    upd["flags.fourththing.echoAssets.activeCrew"]    = nextActiveCrew;
+    upd["flags.fourththing.echoAssets.activeOccult"]  = nextActiveOccult;
+    upd["flags.fourththing.echoAssets.reserveCrew"]   = storedReserveCrew;
+    upd["flags.fourththing.echoAssets.reserveOccult"] = storedReserveOccult;
+    upd["flags.fourththing.echoAssets.updatedTs"]     = Date.now();
+    // Legacy readers: stewardId/Name now name the LAST steward to contribute.
+    upd["flags.fourththing.echoAssets.stewardId"]     = actor.id;
+    upd["flags.fourththing.echoAssets.stewardName"]   = actor.name;
+
+    await faction.update(upd);
   } catch (e) {
     console.warn("Roll For Initiation | ftEnsureEchoAssetsBootstrap failed:", e);
   }
@@ -1305,9 +1344,8 @@ export async function setStewardEchoRoster(actor, entryName = "", members = []) 
 export async function deleteStewardEchoRoster(actor, entryName = "") {
   const slug = ftSlugifyEchoName(entryName);
   if (!actor || !slug) return;
-  await actor.update({
-    [`flags.bbttcc-character-options.echoRoster.-=${slug}`]: null
-  });
+  // unsetFlag, not the `-=key` update syntax (v14 dropped it — the key survived).
+  await actor.unsetFlag("bbttcc-character-options", `echoRoster.${slug}`);
 }
 
 export function listStewardEchoRosters(actor) {

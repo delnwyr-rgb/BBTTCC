@@ -135,6 +135,16 @@ function _passesFilter(trigger, triggerArgs) {
 // served from Anthropic's prompt cache at ~0.1x input price — every voice
 // gets deep world grounding nearly free. Volatile per-trigger context stays
 // in the user message where it can't invalidate the cached prefix.
+function _voiceSystem(voice) {
+  const lore = globalThis.game?.bbttcc?.mal?.lore;
+  const usePrimer = (voice.useLore !== false) && (lore?.enabled?.() !== false);
+  const primer = usePrimer ? (lore?.getPrimer?.() || "") : "";
+  const system = [];
+  if (primer) system.push({ text: primer, cache: "1h" });
+  if (voice.systemPrompt) system.push({ text: voice.systemPrompt, cache: "1h" });
+  return system;
+}
+
 async function _callProvider(voice, context, streamHandle = null) {
   const settings = globalThis.game?.bbttcc?.mal?.settings;
   if (!settings) return { ok: false, error: "MODULE_NOT_READY", message: "game.bbttcc.mal not installed" };
@@ -145,15 +155,10 @@ async function _callProvider(voice, context, streamHandle = null) {
     return { ok: false, error: "PROVIDER_NOT_INSTALLED", message: `Provider '${providerName}' not installed (Phase 2A ships anthropic only)` };
   }
 
-  const lore = globalThis.game?.bbttcc?.mal?.lore;
-  const usePrimer = (voice.useLore !== false) && (lore?.enabled?.() !== false);
-  const primer = usePrimer ? (lore?.getPrimer?.() || "") : "";
-
-  const system = [];
-  if (primer) system.push({ text: primer, cache: "1h" });
-  if (voice.systemPrompt) system.push({ text: voice.systemPrompt, cache: "1h" });
-
-  const userMessage = JSON.stringify(context, null, 2);
+  // `_audienceOverride` steers THIS seat's chat render; it is not for the model.
+  const { _audienceOverride, ...forModel } = (context && typeof context === "object") ? context : { context };
+  const userMessage = JSON.stringify(forModel, null, 2);
+  const system = _voiceSystem(voice);
   return await provider.call({
     system,
     systemPrompt: voice.systemPrompt,   // back-compat for older adapters
@@ -162,8 +167,44 @@ async function _callProvider(voice, context, streamHandle = null) {
     maxTokens:    voice.maxTokens,
     temperature:  voice.temperature,
     stream:       !!streamHandle,
-    onDelta:      streamHandle ? (text) => streamHandle.update(text) : undefined
+    onDelta:      streamHandle ? (text) => streamHandle.update(text) : undefined,
+    // Player seat: the GM rebuilds system/model/maxTokens from ITS registry
+    // entry for this voice; only the voice id, hook and context travel.
+    relay:        { kind: "voice", voiceId: voice.id, hook: context?.trigger?.hook || "manual", userMessage }
   });
+}
+
+// GM-side builder for relayed voice calls (owner ruling 2026-10-02). A player
+// seat may fire Mal / the Watcher / the Faction Advisor (for a faction it
+// owns); GM-audience voices (GM Advisor) are refused — they speak to the GM,
+// and the GM's own seat fires them.
+function _voiceRelayBuilder(payload, { user }) {
+  const voice = globalThis.game?.bbttcc?.mal?.voices?.get?.(String(payload?.voiceId || ""));
+  if (!voice) return { ok: false, error: "RELAY_REFUSED", message: `Unknown voice '${payload?.voiceId}'.` };
+  if (voice.enabled === false) return { ok: false, error: "VOICE_DISABLED", message: `Voice '${voice.id}' is disabled.` };
+  if (String(voice.audience).split(":")[0] === "gm") return { ok: false, error: "RELAY_REFUSED", message: `Voice '${voice.id}' speaks to the GM only.` };
+  const userMessage = String(payload?.userMessage ?? "");
+  if (!userMessage || userMessage.length > 16000) return { ok: false, error: "RELAY_REFUSED", message: "Voice context missing or too large." };
+  let ctx = null;
+  try { ctx = JSON.parse(userMessage); } catch (_e) { ctx = null; }
+  if (!ctx || typeof ctx !== "object" || Array.isArray(ctx)) return { ok: false, error: "RELAY_REFUSED", message: "Voice context must be a JSON object." };
+  if (voice.id === "faction-advisor") {
+    const f = ctx.factionId ? globalThis.game?.actors?.get?.(String(ctx.factionId)) : null;
+    if (!f || !f.testUserPermission?.(user, "OWNER")) {
+      return { ok: false, error: "RELAY_REFUSED", message: "The Faction Advisor speaks only for a faction this seat owns." };
+    }
+  }
+  return {
+    ok: true,
+    logId: voice.id,
+    request: {
+      system: _voiceSystem(voice),
+      userMessage,
+      model: voice.model || undefined,
+      maxTokens: voice.maxTokens,
+      temperature: voice.temperature
+    }
+  };
 }
 
 // ----- Output dispatch -----
@@ -189,6 +230,17 @@ async function fire(voiceId, triggerArgs = {}) {
 
   const hook = triggerArgs.hook || "manual";
   const trig = voice.triggers.find(t => t.hook === hook) || null;
+
+  // Player seats relay through the GM (owner ruling 2026-10-02). GM-audience
+  // voices are the GM seat's own business; with no GM connected nothing can
+  // answer — say so for a manual consult, stay quiet for ambient fires.
+  if (!game?.user?.isGM) {
+    if (String(voice.audience).split(":")[0] === "gm") return { ok: false, error: "GM_SEAT_ONLY" };
+    if (!globalThis.game?.bbttcc?.mal?.providers?.anthropic?.gmOnline?.()) {
+      if (hook === "manual") ui.notifications?.info?.(`${voice.name}: the line is dead — advisors speak through the GM's seat, and no GM is connected.`);
+      return { ok: false, error: "NO_GM", message: "No GM connected to relay the call." };
+    }
+  }
 
   // Debounce
   const debounceMs = trig?.debounceMs ?? 0;
@@ -316,6 +368,9 @@ function _install() {
     });
 
     _wireAllVoices();
+
+    // GM relay kind for voices fired on player seats.
+    globalThis.game?.bbttcc?.mal?.providers?.anthropic?.registerRelayKind?.("voice", _voiceRelayBuilder);
 
     // Wire newly-registered voices retroactively.
     const voices = globalThis.game?.bbttcc?.mal?.voices;

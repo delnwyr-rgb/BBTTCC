@@ -36,12 +36,14 @@ function getFaction(fIdOrUuid) {
   }
 }
 
+// Display mirror of tikkun-ritual.enhancer.js roundSpec — keep the weights in step
+// with the engine (bonus = weight × FULL 20-mark steps, rounded down).
 function roundSpec(idx) {
   switch (idx) {
-    case 1: return { key:"invocation", label:"Invocation", dcBase:15 };
-    case 2: return { key:"contact",    label:"Contact",    dcBase:15 };
+    case 1: return { key:"invocation", label:"Invocation", dcBase:15, weightFaith:2, weightCulture:1, weightDiplomacy:0 };
+    case 2: return { key:"contact",    label:"Contact",    dcBase:15, weightFaith:1, weightCulture:1, weightDiplomacy:1 };
     case 3:
-    default: return { key:"integration", label:"Integration", dcBase:17 };
+    default: return { key:"integration", label:"Integration", dcBase:17, weightFaith:2, weightCulture:1, weightDiplomacy:1 };
   }
 }
 
@@ -144,7 +146,10 @@ class BBTTCC_RitualConsole extends HBM(AppV2) {
     context.nextRound = {
       index: nextIdx,
       label: spec.label,
-      dc:    nextDc
+      dc:    nextDc,
+      weightFaith:     spec.weightFaith,
+      weightCulture:   spec.weightCulture,
+      weightDiplomacy: spec.weightDiplomacy
     };
     context.isComplete = !!(state.outcome && state.outcome !== "ongoing");
     context.isSuccess  = state.outcome === "success";

@@ -381,6 +381,79 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   function militiaState(A){ const m = (A?.getFlag(MODF, "militia") || {}); const rung = Math.max(Number(m.rung || 0) || 0, militiaFounded(A) ? 1 : 0); return { rung, drills: Number(m.drills || 0) || 0, hexes: Array.isArray(m.hexes) && m.hexes.length ? m.hexes : MILITIA_HOME_HEXES, absorbedTurn: Number(m.absorbedTurn || 0) || 0 }; }
   async function militiaSet(A, patch){ const cur = A?.getFlag(MODF, "militia") || {}; await A.update({ [`flags.${MODF}.militia`]: { ...cur, hexes: MILITIA_HOME_HEXES, ...patch } }); }
 
+  // ── RITE OF ATONEMENT (owner ruling 2026-10-02 — "a failed Final Ritual recovers through a story action AND a beat") ──
+  // Available only to a faction carrying flags.bbttcc-factions.tikkun.corrupted.finalRitual (the doctrine row is granted by
+  // bbttcc-tikkun's ritual engine when the Great Work fails; canPlan refuses everyone else). Resolving it does NOT cleanse:
+  // it stamps tikkun.atonement = {pending, turn} and, at the end of the applied Advance, hands the GM a card whose ▶ runs
+  // the atonement beat (tools/seed-tikkun-atonement.macro.js) for that faction. The beat's success path carries
+  // worldEffects.tikkun = { cleanseFinalRitual: true } (world-mutation-engine 2l) — THAT is what lifts the stain.
+  // ─── TUNING — Dave's dials, all in one place ─────────────────────────────────────────────────────────────────────
+  const ATONEMENT = {
+    key: "rite_of_atonement",
+    label: "Rite of Atonement",
+    cost: { faith: 30, softpower: 20 },   // marks BEFORE the ×0.75 price policy → billed 23 Faith + 15 Culture/Soft Power
+                                          // (softpower = the channel the Final Ritual's "Culture" spend draws on)
+    tier: 1,                              // planner tier (minFactionTier) — any corrupted faction may atone
+    beatId: "tikkun_atonement_rite",      // the scene handed to the GM at turn end (beat checks/DCs live in the seeder)
+    oncePerTurn: true                     // one Rite staged per faction per turn
+  };
+  // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  const atonementCorrupted = (A) => { try { return !!A?.getFlag(MODF, "tikkun")?.corrupted?.finalRitual; } catch (_e) { return false; } };
+  const _pendingAtonement = new Set();    // factionIds resolved this Advance (only on the client running it)
+  Hooks.on("bbttcc:advanceTurn:end", async (p) => {
+    if (!_pendingAtonement.size) return;
+    const ids = Array.from(_pendingAtonement); _pendingAtonement.clear();
+    if (!p?.apply || !game.user?.isGM) return;
+    const esc = foundry.utils.escapeHTML;
+    for (const fid of ids) {
+      try {
+        const F = game.actors.get(fid); if (!F) continue;
+        await ChatMessage.create({
+          speaker: { alias: "Bad Eden Tikkun" },
+          whisper: game.users.filter(u => u.isGM).map(u => u.id),
+          content: `<div style="border-left:3px solid #c9a227;padding:.4em .6em;background:rgba(201,162,39,.08);">
+            🕯 <b>${esc(F.name)}</b> has come to atone for the failed Final Ritual.<br>
+            <span style="opacity:.8">When the table is ready, play the Rite. Success lifts the stain; refusal or a miss leaves it for another turn.</span><br>
+            <button type="button" data-bbttcc-atonement-run="${esc(F.id)}" style="width:auto;padding:.2em .8em;margin-top:.35em;">▶ Begin the Rite</button></div>`,
+          flags: { "bbttcc-raid": { atonement: { factionId: F.id, beatId: ATONEMENT.beatId } } }
+        });
+      } catch (e) { console.warn("[bbttcc-raid/strategic-throughput] atonement card failed", fid, e); }
+    }
+  });
+  let _atonementClickInstalled = false;
+  function installAtonementClick(){
+    if (_atonementClickInstalled) return; _atonementClickInstalled = true;
+    document.addEventListener("click", async (ev) => {
+      const btn = ev.target?.closest?.("[data-bbttcc-atonement-run]"); if (!btn) return;
+      ev.preventDefault(); ev.stopPropagation();
+      if (!game.user?.isGM) return void ui.notifications?.warn?.("The GM begins the Rite.");
+      const fid = String(btn.dataset.bbttccAtonementRun || ""); const F = game.actors.get(fid);
+      const capi = game.bbttcc?.api?.campaign; const cid = capi?.getActiveCampaignId?.();
+      if (!F || !cid || typeof capi?.runBeat !== "function") return void ui.notifications?.warn?.("Rite of Atonement: no faction or no active campaign.");
+      if (!atonementCorrupted(F)) return void ui.notifications?.info?.(`${F.name} carries no Final Ritual stain any more — nothing to atone for.`);
+      const beat = (capi.getCampaign?.(cid)?.beats || []).find(b => String(b?.id) === ATONEMENT.beatId);
+      if (!beat) return void ui.notifications?.warn?.(`Beat '${ATONEMENT.beatId}' is not in the active campaign — run tools/seed-tikkun-atonement.macro.js.`);
+      try { await capi.runBeat(cid, ATONEMENT.beatId, { factionId: F.id, source: "tikkun-atonement" }); }
+      catch (e) { console.warn("[bbttcc-raid/strategic-throughput] atonement runBeat failed", e); ui.notifications?.error?.(`Rite of Atonement: ${e?.message || e}`); }
+    });
+  }
+  Hooks.once("ready", installAtonementClick);
+  // Registers the planner row (cost/tier/text) on raid.EFFECTS; re-run after every registry rebuild.
+  function installAtonementRow(){
+    try {
+      const EFFECTS = game.bbttcc?.api?.raid?.EFFECTS; if (!EFFECTS) return false;
+      const cur = EFFECTS[ATONEMENT.key] || {};
+      const e = EFFECTS[ATONEMENT.key] = Object.assign({
+        kind: "strategic", band: "standard", label: ATONEMENT.label, tier: ATONEMENT.tier, minFactionTier: ATONEMENT.tier,
+        rarity: "common", storyOnly: false, primaryKey: "faith",
+        text: "Only for a faction whose Final Ritual failed. The faction gathers what is left of the Great Work and comes to make repair: at turn end the GM is handed the Rite (a scene). Succeed there and the Final Ritual stain lifts; refuse or miss and it stays for another turn."
+      }, cur);
+      if (!e.cost) e.cost = Object.assign({}, ATONEMENT.cost);
+      if (!e.opCosts || !Object.keys(e.opCosts).length) e.opCosts = { faith: ATONEMENT.cost.faith, softPower: ATONEMENT.cost.softpower };
+      return true;
+    } catch (_e) { return false; }
+  }
+
   const STRATEGIC_THROUGHPUT = {
     // Muster Drill — the Town Militia's rungs (see above)
     async muster_drill(ctx){
@@ -392,6 +465,16 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const rung = Math.max(st.rung, drills >= 2 ? 3 : 2);
       await militiaSet(A, { drills, rung, lastDrillTurn: (() => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) { return 0; } })() });
       await pushWarLog(A, `Muster Drill: the Town Militia is ${rung >= 3 ? "STANDING — the garrison absorbs the first strike on a home hex each turn and escorts the home roads" : "DRILLED — levies join your home raids (+2 defense DC) and Violence income ticks up"} (drill ${drills}).`);
+    },
+
+    // Rite of Atonement (owner ruling 2026-10-02; dials in ATONEMENT above). Stamps the pending atonement and queues the GM card.
+    async rite_of_atonement(ctx){
+      const A = game.actors.get(ctx.factionId); if (!A) return;
+      if (!atonementCorrupted(A)) { await pushWarLog(A, "Rite of Atonement: there is no failed Final Ritual on your books — the plate went round anyway."); return; }
+      let turn = 0; try { turn = Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) {}
+      await A.update({ [`flags.${MODF}.tikkun.atonement`]: { pending: true, turn, ts: Date.now() } });
+      _pendingAtonement.add(A.id);
+      await pushWarLog(A, "Rite of Atonement: the faction gathers what is left of the Great Work. The GM will hand you the Rite at the end of this turn.");
     },
 
     // ═══════════════════════════ T1 ═══════════════════════════
@@ -963,6 +1046,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     industrial_revolution:  (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — the revolution happens in YOUR works.`) : ok,
     pilgrimage_route:       (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — the route blesses a hex you HOLD.`) : ok,
     ration_distribution:    (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — rations go to a hex you HOLD.`) : ok,
+    rite_of_atonement:      (c) => { if (!atonementCorrupted(c.actor)) return no(`${c.actor?.name || "This faction"} has no failed Final Ritual to atone for.`); if (ATONEMENT.oncePerTurn) { const wl = c.actor?.getFlag?.(MODF, "warLogs") || []; if (wl.some(e => e?.type === "planned" && String(e.activityKey) === ATONEMENT.key)) return no("A Rite of Atonement is already staged this turn."); } return ok; },
     great_work_ritual:      (c) => (c.targetFlags?.spark?.key ? ok : no(`${_nm(c.targetFlags)} has no spark seated — nothing to integrate.`)),
     optact_integration_framework: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to integrate.`) : ok,
     optact_consecrated_alignment: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to consecrate.`) : ok,
@@ -1028,6 +1112,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     game.bbttcc.api.raid.militia = { state: militiaState, set: militiaSet, founded: militiaFounded, HOME_HEXES: MILITIA_HOME_HEXES };   // D-3 (2026-09-17)
     game.bbttcc.api.raid.PRICE_MULT = PRICE_MULT;
     game.bbttcc.api.raid.RECIPES = RECIPES;
+    installAtonementRow();
     attachCanPlan();
     applyPricePolicy();
   }
@@ -1035,8 +1120,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   // re-attach after every rebuild — no timers. (Ready-poll fallback only without bbttcc-core.)
   Hooks.once("ready", () => {
     const lc = game.bbttcc?.lifecycle;
-    if (lc?.need) { lc.need("raid.EFFECTS").then(() => { attachCanPlan(); applyPricePolicy(); }); lc.onRebuild("raid.EFFECTS", () => { attachCanPlan(); applyPricePolicy(); }); }
-    else for (const ms of [0, 600, 2000, 5000, 9000]) setTimeout(() => { attachCanPlan(); applyPricePolicy(); }, ms);
+    if (lc?.need) { lc.need("raid.EFFECTS").then(() => { installAtonementRow(); attachCanPlan(); applyPricePolicy(); }); lc.onRebuild("raid.EFFECTS", () => { installAtonementRow(); attachCanPlan(); applyPricePolicy(); }); }
+    else for (const ms of [0, 600, 2000, 5000, 9000]) setTimeout(() => { installAtonementRow(); attachCanPlan(); applyPricePolicy(); }, ms);
   });
 
   function boot(){
