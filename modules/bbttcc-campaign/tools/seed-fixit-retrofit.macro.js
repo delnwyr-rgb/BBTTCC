@@ -14,8 +14,12 @@
  * OWNER RULING 2026-10-02 (option 3): an EARLIER way to the alliance — THE LATE RUN (~/FIXIT_EARLY_ALLIANCE_2026_10_02.md). Mara asks
  * the Stewards to carry Uncle Thistle to his own wake exactly late enough; success sets coalition ↔ Jackalopes ALLIED (the same
  * relationshipEffects rows patch-vault-allies puts on the Vault closers — setStatus is absolute, so the closers re-setting allied later
- * is a no-op), which opens the Back Stairs, the Generator Hall and the pre-Vault Route Board in Acts 2–3. A NOW-card step after the
+ * is a no-op), which opens the Back Stairs and the Generator Hall in Acts 2–3 (the board waits for Pip, below). A NOW-card step after the
  * MYSTERY Bin (act 3: it seals once Act 4 opens). Seeded worlds: patch-fixit-early-alliance-2026-10-02.macro.js.
+ * OWNER RULING 2026-10-02: the PRE-VAULT board ("Pip's. For when he finishes the lesson.") shows only while PIP IS MISSING and the
+ * party is allied — `{ questBucket: <Vault>, is: "active" }` (the store starts the Vault quest on its first beat, Mara's summons;
+ * a closer completes it) in place of the old "Vault not completed", on the beat AND the Back Stairs' "Go up". The after-Vault board
+ * is unchanged. Seeded worlds: patch-fixit-board-vault-gate-2026-10-02.macro.js.
  * Idempotent; backs up the campaigns setting. F5 after.
  */
 (async () => {
@@ -23,6 +27,16 @@
   const NS = "bbttcc-campaign", MAL = "bbttcc-mal-voice";
   const KEY = "fixit_farm", Q_MAIN = "quest_nrkJabUwZOLAJFYn", Q_STAB = "quest_bSwOIWzxqNBwJ5NM", Q_PRIS = "quest_uDuNp2yQxbuKkHx7", Q_VAULT = "quest_NwiADv8ZDoklqwEJ";
   const MARKER = "[FIXIT-RETROFIT-2026-09-27]";
+  // PIP IS MISSING (OWNER RULING 2026-10-02) — VERBATIM in patch-fixit-board-vault-gate-2026-10-02.macro.js (keep the two in step)
+  const reqsOf = (x) => Array.isArray(x) ? x : (x && typeof x === "object" ? [x] : []);
+  const PIP_MISSING = { questBucket: Q_VAULT, is: "active" };
+  const isPM = (x) => !!x && x.questBucket === Q_VAULT && x.is === "active" && x.isNot == null;
+  const pipMissing = (list) => {   // the old "Vault not completed" becomes "Vault active", in place (once); added if absent
+    const r = reqsOf(list).map(x => (x && x.questBucket === Q_VAULT && x.isNot === "completed" && x.is == null) ? { ...PIP_MISSING } : x);
+    const out = r.filter((x, i) => !isPM(x) || r.findIndex(isPM) === i);
+    if (!out.some(isPM)) out.push({ ...PIP_MISSING });
+    return out;
+  };
   // THE LATE RUN — VERBATIM in patch-fixit-early-alliance-2026-10-02.macro.js (keep the two in step)
   const LATE_RUN_IDS = ["fixit_late_run_offer", "fixit_late_run_road", "fixit_late_run_success", "fixit_late_run_fail", "fixit_late_run_declined"];
   const LATE_RUN_STEP = { id: "laterun", label: "The Late Run", act: 3, line: "Uncle Thistle was late to everything, including his birth. He's due at his own wake at dusk. No runner will make him late. You are not runners.", beats: ["fixit_late_run_offer", "fixit_late_run_road"], done: { anyOf: ["fixit_late_run_success", "fixit_late_run_fail", "fixit_late_run_declined"] } };
@@ -166,7 +180,7 @@
       { type: "narration", scene: SC.yard, requires: [P2], choices: [ch("Keep the sock.", "", { description: "It's a good sock." })] }),
     beat("fixit_route_board", "Furrier's Fixit Farm — The Route Board",
       "Up the back stairs the wall is pegs and chalk: every message, light cargo and rumor that crosses the coast gets a peg before it gets a road. One route is chalked in a different hand and kept current — times updated this morning — for a runner who is late. Runners are never late. Patter is juggling three bolts and not looking at it.",
-      { speaker: sp("Patter"), scene: SC.stairs, priority: "high", requires: [P2, { questBucket: Q_VAULT, isNot: "completed" }], choices: [
+      { speaker: sp("Patter"), scene: SC.stairs, priority: "high", requires: [P2, { ...PIP_MISSING }], choices: [
         ch("\"Whose route is that?\"", "", { description: "\"Pip's. For when he finishes the lesson.\" She says WE." }),
         ch("Ask why nobody's erased it.", "", { checkStat: "soul", checkDC: 12, failNext: "fixit_route_board_fail", description: "Mara made it a firing offense. Patter has not said the word 'dead' once, and is not going to, and you stop waiting for her to." }),
         ch("Offer to run it with her.", "", { checkStat: "presence", checkDC: 12, failNext: "fixit_route_board_fail", description: "She stops juggling. \"We go at dusk.\" She means it. So do you." })
@@ -210,7 +224,9 @@
   // THE CERTIFICATION; none of them is a hub, so all are once-only (a route still plays them again). (2) the plain "Go up" led to the PRE-Vault
   // board after the Vault — it hides once the Vault is done (the after-Vault choice takes over).
   for (const id of FIXIT_NEW) edit(id, b => { b.inject = b.inject || {}; if (b.inject.repeatable !== false) b.inject.repeatable = false; }, "once-only (repeatable:false)");
-  edit("fixit_backstairs_exterior", b => { const up = (b.choices || []).find(c => c.label === "Go up" && c.next === "fixit_route_board"); if (!up) return; const r = Array.isArray(up.requires) ? up.requires : (up.requires ? [up.requires] : []); if (!r.some(x => x && x.questBucket === Q_VAULT)) up.requires = [...r, { questBucket: Q_VAULT, isNot: "completed" }]; }, "\"Go up\" hides after the Vault");
+  // OWNER RULING 2026-10-02: … and shows only once Pip is missing (Vault ACTIVE) — reconciled in place on the beat and the choice
+  edit("fixit_backstairs_exterior", b => { const up = (b.choices || []).find(c => c && c.next === "fixit_route_board"); if (!up) return; const r = pipMissing(up.requires); if (JSON.stringify(r) !== JSON.stringify(up.requires)) up.requires = r; }, "\"Go up\" shows only while Pip is missing (Vault active)");
+  edit("fixit_route_board", b => { b.inject = b.inject || {}; const r = pipMissing(b.inject.requires); if (JSON.stringify(r) !== JSON.stringify(b.inject.requires)) b.inject.requires = r; }, "pre-Vault board waits for Pip to go missing (Vault active)");
   edit("fixit_gullywasher_welcome", b => { for (const c of b.choices || []) if (/amber thing/i.test(c.label) && !c.description) c.description = "Carbonated, aggressively. It is, on balance, a drink. The second one costs where you're from."; }, "the amber thing gets a line");
   edit("fixit_intro_scene", b => { if (!String(b.description || "").trim()) b.description = "The yard, from the middle of it: generators, chimes, the OPEN!!! sign, a Chupacabra visible through a bar window washing a glass and looking at you the way you are looking at him. Everything here is for sale, for some values of sale, and everybody here is deciding what you are."; }, "hub gets a description");
   edit("fixit_arc_bay_conversation", b => { if (!String(b.description || "").trim()) b.description = "Amazing machines of war and discounted air filters, and Young Gearbox in the middle of it with his boot on a tarp that has a shape under it. He is delighted to see you. He is delighted to see anyone. \"Browse,\" he says. \"Touch nothing. Ask anything.\""; }, "Arc Bay gets a description");

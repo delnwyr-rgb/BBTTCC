@@ -35,20 +35,10 @@
     for(const A of factions){
       const updates={};const war=get(A,`flags.${MODF}.warLogs`,[])||[];let any=false;
 
-      // Victory Unity reset — PRESERVED BEHAVIOUR. The retired Mercy path computed
-      // victory.unity = 0 every applied turn (its gate never passed), so Unity has been
-      // a per-turn meter: beat/ritual unityDelta is wiped here at the next applied turn
-      // (wrapper order decides whether VP gain sees it first). Kept exactly (incl. only landing when another update fires) so
-      // retiring the dead payout changes no balance. ⚠ Owner ruling: should Unity
-      // persist across turns instead? (Deleting this block = VP every turn from banked Unity.)
-      try {
-        const victory = foundry.utils.duplicate(get(A, `flags.${MODF}.victory`, {}) || {});
-        victory.vp = Number(victory.vp || 0);
-        victory.unity = 0;
-        updates["victory"] = victory;
-      } catch (e) {
-        console.warn(TAG, "Victory/Unity update failed:", e);
-      }
+      // Unity is NOT touched here (owner ruling 2026-10-02): the leftover reset to 0 from the
+      // retired Mercy path is gone. victory.unity is owned by advance-turn.tracks.js
+      // doUnityRecompute (10% per aligned hex, gated on the Spark of Mercy), which feeds
+      // VP gain (vp-engine) and Great Work readiness (Unity ≥ 30).
 
       // TREND
       // Morale buoyancy is PASSIVE recovery for the absence of pressure — it must not

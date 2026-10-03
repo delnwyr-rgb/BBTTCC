@@ -312,8 +312,8 @@
   //   op.bank.<channel>  → api.op.commit (MARKS; delta = value − current bank;
   //                        refused over cap unless args.allowOvercap === true)
   //   tracks.morale/loyalty → api.factions.setMorale / setLoyalty (0–100)
-  //   tracks.unity   → flags.bbttcc-factions.victory.unity  (reset to 0 by
-  //                    turn-extensions each applied turn — a set is transient)
+  //   tracks.unity   → flags.bbttcc-factions.victory.unity  (recomputed by
+  //                    advance-turn.tracks each applied turn — a set lasts until then)
   //   tracks.victory → flags.bbttcc-factions.victory.vp
   //   tracks.darkness → flags.bbttcc-factions.darkness.global
   // `sparks.*` is refused: sparks are phased records owned by api.tikkun
