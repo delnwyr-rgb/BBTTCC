@@ -86,6 +86,35 @@ function _laneFracX(fx, lane = 0) {
   return s.col ? _laneWrap(base, s.col * (LANE_BAND / s.cols)) : base;
 }
 
+// Registry writes are serialized: two players starting within the same tick
+// would otherwise both read a pre-write snapshot and claim the same lane.
+// Module scope (group induction Phase 1, 2026-10-02) so the cohort registry
+// (cohort.js) queues on the SAME line as activeRuns — a class Start writes both.
+let _regQueue = Promise.resolve();
+const _serialize = (fn) => (_regQueue = _regQueue.then(fn, fn));
+
+// Per-key queue for idempotent shared props (one marker per sigil per class):
+// two members reaching the same beat in the same second must not both create.
+const _keyQueues = new Map();
+function _keyed(key, fn) {
+  const prev = _keyQueues.get(key) || Promise.resolve();
+  const next = prev.then(() => fn(), () => fn());
+  _keyQueues.set(key, next);
+  next.then(() => {}, () => {}).then(() => { if (_keyQueues.get(key) === next) _keyQueues.delete(key); });
+  return next;
+}
+
+/** Is this owner key a class that is still live? (cohort:<id> with state ≠ done) */
+function _liveCohortKey(key) {
+  const k = String(key || "");
+  if (!k.startsWith("cohort:")) return false;
+  try {
+    const c = (game.settings?.get?.(MODULE_ID, "cohorts") ?? {})[k.slice(7)];
+    return !!c && c.state !== "done";
+  } catch (_) { return false; }
+}
+const _docOwnerKey = (doc) => { try { return String(doc?.getFlag?.(MODULE_ID, "ownerKey") || ""); } catch (_) { return ""; } };
+
 function _readRuns() {
   const raw = game.settings?.get?.(MODULE_ID, "activeRuns") ?? {};
   const now = Date.now();
@@ -110,7 +139,10 @@ function _combatOwnerKey(ownerUserId = "", ownerKey = "") {
 }
 /** This run's unstarted Combat on a scene — matched on the owner stamp only, never "any". */
 function _findOwnedCombat(sceneId, key) {
-  return game.combats?.find?.(c => c.scene?.id === sceneId && !c.started
+  // A class's ONE showdown Combat is found started or not: a member who steps
+  // into the circle after the GM pressed Begin joins that fight, not a new one.
+  const cohort = String(key).startsWith("cohort:");
+  return game.combats?.find?.(c => c.scene?.id === sceneId && (cohort || !c.started)
     && c.getFlag?.(MODULE_ID, "ownerKey") === key) || null;
 }
 
@@ -216,11 +248,6 @@ function _registerOps() {
   const reg = _ns()?.relay?.registerOp;
   if (!reg) { console.warn(TAG, "relay.registerOp unavailable — ops not registered."); return; }
 
-  // Registry writes are serialized: two players starting within the same tick
-  // would otherwise both read a pre-write snapshot and claim the same lane.
-  let _regQueue = Promise.resolve();
-  const _serialize = (fn) => (_regQueue = _regQueue.then(fn, fn));
-
   // Claim a lane + join the live-run registry. Idempotent: re-entering keeps
   // the same lane (so a resumed run's props line up with the ones it left).
   reg("runBegin", async ({ userId, name = "" }) => {
@@ -229,7 +256,8 @@ function _registerOps() {
       const runs = _readRuns();
       const prior = Number(runs[userId]?.lane);
       const lane = Number.isFinite(prior) ? prior : _lowestFreeLane(runs, userId);
-      runs[userId] = { lane, ts: Date.now(), name };
+      const cohortId = runs[userId]?.cohortId;      // never strip a class's claim on this lane
+      runs[userId] = { lane, ts: Date.now(), name, ...(cohortId ? { cohortId } : {}) };
       await game.settings.set(MODULE_ID, "activeRuns", runs);
       return { lane, others: Object.keys(runs).filter(u => u !== userId).length };
     });
@@ -252,6 +280,9 @@ function _registerOps() {
     if (!userId) return { others: 0 };
     return _serialize(async () => {
       const runs = _readRuns();
+      // A class member's entry belongs to the conductor (group induction review
+      // fix 8): a stale solo runEnd from that seat must not drop the class lane.
+      if (runs[userId]?.cohortId) return { others: Object.keys(runs).length - 1, kept: true };
       delete runs[userId];
       await game.settings.set(MODULE_ID, "activeRuns", runs);
       return { others: Object.keys(runs).length };
@@ -311,7 +342,8 @@ function _registerOps() {
    */
   reg("spawnFoe", async ({ sceneId, x = 1000, y = 1000, elevation = 0, name = "Foe", img = "",
                           size = 1, foeClass = "qliphothic", body = 3, level = 1,
-                          resistances = [], vulnerabilities = [], conditions = [], ownerUserId = "" }) => {
+                          resistances = [], vulnerabilities = [], conditions = [], ownerUserId = "", ownerKey = "" }) => {
+    const shared = ownerKey ? { ownerKey } : {};   // a class's shared foe/messenger (group induction Phase 1)
     const folder = await _folder();
     const actor = await Actor.create({
       name, type: "npc", folder: folder?.id, img: img || "icons/svg/mystery-man.svg",
@@ -325,7 +357,7 @@ function _registerOps() {
         attributes: { body: { value: Math.max(1, Number(body) || 3) } },
         defenses: { resistances, immunities: [], vulnerabilities }
       },
-      flags: { [MODULE_ID]: { spawned: true, kind: "foe", foeClass, ownerUserId } }
+      flags: { [MODULE_ID]: { spawned: true, kind: "foe", foeClass, ownerUserId, ...shared } }
     });
     if (!actor) return null;
     // Fill the tracks AFTER create — max is derived, so it isn't known until the
@@ -355,7 +387,7 @@ function _registerOps() {
       try {
         const td = (await actor.getTokenDocument({ x, y })).toObject();
         if (Number(elevation)) td.elevation = Number(elevation);
-        td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId } });
+        td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId, ...shared } });
         const [c] = await scene.createEmbeddedDocuments("Token", [td]);
         tokenId = c.id;
       } catch (e) { console.warn(TAG, "foe token place failed", e); }
@@ -483,7 +515,22 @@ function _registerOps() {
    * default-OWNER for the same reasons the foes are, but disposition NEUTRAL and
    * `kind:"marker"` so nothing mistakes it for something to shoot.
    */
-  reg("spawnMarker", async ({ sceneId, x = 1000, y = 1000, elevation = 0, levelId = "", name = "Relic", img = "", size = 1, ownerUserId = "" }) => {
+  // Shared props (group induction Phase 1): with an ownerKey ("cohort:<id>")
+  // AND a propKey ("sigil:lava"), the marker is the CLASS's — the first member
+  // to reach the beat creates it, everyone after gets the same ids back.
+  reg("spawnMarker", async (args) => {
+    const { sceneId, ownerKey = "", propKey = "" } = args || {};
+    if (!ownerKey || !propKey) return _spawnMarker(args);
+    return _keyed(`${ownerKey}|${sceneId}|${propKey}`, async () => {
+      const scene = game.scenes?.get?.(String(sceneId || ""));
+      const have = scene?.tokens?.find?.(t => t.getFlag?.(MODULE_ID, "ownerKey") === ownerKey
+        && t.getFlag?.(MODULE_ID, "propKey") === propKey && t.actor);
+      if (have) return { actorId: have.actorId, tokenId: have.id, sceneId: scene.id, reused: true };
+      return _spawnMarker(args);
+    });
+  });
+  const _spawnMarker = async ({ sceneId, x = 1000, y = 1000, elevation = 0, levelId = "", name = "Relic", img = "", size = 1, ownerUserId = "", ownerKey = "", propKey = "" }) => {
+    const shared = ownerKey && propKey ? { ownerKey, propKey } : {};
     const folder = await _folder();
     const actor = await Actor.create({
       name, type: "npc", folder: folder?.id, img: img || "icons/svg/mystery-man.svg",
@@ -492,7 +539,7 @@ function _registerOps() {
         { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL, name, width: size, height: size },
         img ? { texture: { src: img } } : {}
       ),
-      flags: { [MODULE_ID]: { spawned: true, kind: "marker", ownerUserId } }
+      flags: { [MODULE_ID]: { spawned: true, kind: "marker", ownerUserId, ...shared } }
     });
     if (!actor) return null;
     let tokenId = null;
@@ -504,13 +551,13 @@ function _registerOps() {
         // Tokens default to the scene's INITIAL level — a marker meant for a
         // dive level must carry the level id or it lands on the ground floor.
         if (levelId) td.level = String(levelId);
-        td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId } });
+        td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId, ...shared } });
         const [c] = await scene.createEmbeddedDocuments("Token", [td]);
         tokenId = c.id;
       } catch (e) { console.warn(TAG, "marker token place failed", e); }
     }
     return { actorId: actor.id, tokenId, sceneId };
-  });
+  };
 
   // A PRE-GEN from the master-content NPC compendium — full authored statblock,
   // real abilities, real art — cloned into the world as tutorial scaffolding
@@ -520,7 +567,8 @@ function _registerOps() {
   // bestiary author gave the creature.
   reg("spawnFromPack", async ({ sceneId, actorName = "", packId = "bbttcc-master-content.npcs",
                                 x = 1000, y = 1000, elevation = 0, size = 0, displayName = "",
-                                mergeDefenses = null, conditions = [], ownerUserId = "" }) => {
+                                mergeDefenses = null, conditions = [], ownerUserId = "", ownerKey = "" }) => {
+    const shared = ownerKey ? { ownerKey } : {};   // a class's shared foe (group induction Phase 1)
     const scene = game.scenes?.get?.(String(sceneId || ""));
     const pack = game.packs?.get?.(String(packId));
     if (!scene || !pack || !actorName) return null;
@@ -535,7 +583,7 @@ function _registerOps() {
       data.folder = folder?.id ?? null;
       data.ownership = { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER };   // damage applies client-side
       data.flags = Object.assign({}, data.flags,
-        { [MODULE_ID]: { spawned: true, kind: "foe", fromPack: `${packId}:${actorName}`, ownerUserId } });
+        { [MODULE_ID]: { spawned: true, kind: "foe", fromPack: `${packId}:${actorName}`, ownerUserId, ...shared } });
       if (mergeDefenses) {
         const cur = foundry.utils.getProperty(data, "system.defenses") ?? {};
         const uni = (a, b) => [...new Set([...(a ?? []), ...(b ?? [])])];
@@ -567,7 +615,7 @@ function _registerOps() {
         if (Number(elevation)) td.elevation = Number(elevation);
         if (Number(size)) { td.width = Number(size); td.height = Number(size); }
         td.disposition = CONST.TOKEN_DISPOSITIONS.HOSTILE;
-        td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId } });
+        td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId, ...shared } });
         const [c] = await scene.createEmbeddedDocuments("Token", [td]);
         tokenId = c.id;
       } catch (e) { console.warn(TAG, "pack foe token place failed", e); }
@@ -579,13 +627,29 @@ function _registerOps() {
   // walls laid on the painted circle, every segment flagged for surgical
   // removal. Idempotent — re-sealing replaces any previous ring. The parley
   // (or the beat's exit) unseals; nothing else on the scene is touched.
-  reg("sealCircle", async ({ sceneId, cx = 0, cy = 0, radius = 700, segments = 24, ownerUserId = "" }) => {
+  // A class (ownerKey "cohort:<id>") has ONE ring: matched on the key, so any
+  // member's parley unseals it for everyone. Solo runs match on ownerUserId as before.
+  const _ringOf = (scene, ownerUserId, ownerKey) => scene.walls?.filter?.(w => w.flags?.[MODULE_ID]?.kind === "circleWall"
+    && (ownerKey ? String(w.flags?.[MODULE_ID]?.ownerKey || "") === String(ownerKey)
+                 : String(w.flags?.[MODULE_ID]?.ownerUserId || "") === String(ownerUserId || ""))) ?? [];
+  reg("sealCircle", async (args) => {
+    const key = String(args?.ownerKey || "");
+    // A class's ring is sealed ONCE, serialized per class (review fix 3): two
+    // members staging at the same moment get the same ring back, not two.
+    if (!key.startsWith("cohort:")) return _sealCircle(args);
+    return _keyed(`ring|${args.sceneId}|${key}`, async () => {
+      const scene = game.scenes?.get?.(String(args.sceneId || ""));
+      const have = scene ? _ringOf(scene, "", key) : [];
+      if (have.length) return { ok: true, count: have.length, reused: true };
+      return _sealCircle(args);
+    });
+  });
+  const _sealCircle = async ({ sceneId, cx = 0, cy = 0, radius = 700, segments = 24, ownerUserId = "", ownerKey = "" }) => {
     const scene = game.scenes?.get?.(String(sceneId || ""));
     if (!scene) return { ok: false };
     try {
       // Only THIS run's ring — concurrent showdowns must not tear down each other's.
-      const old = scene.walls?.filter?.(w => w.flags?.[MODULE_ID]?.kind === "circleWall"
-        && String(w.flags?.[MODULE_ID]?.ownerUserId || "") === String(ownerUserId || "")) ?? [];
+      const old = _ringOf(scene, ownerUserId, ownerKey);
       if (old.length) await scene.deleteEmbeddedDocuments("Wall", old.map(w => w.id));
       const MOVE = CONST.WALL_MOVEMENT_TYPES?.NORMAL ?? 20;
       const NONE = CONST.WALL_SENSE_TYPES?.NONE ?? 0;
@@ -596,20 +660,19 @@ function _registerOps() {
           c: [Math.round(cx + radius * Math.cos(a1)), Math.round(cy + radius * Math.sin(a1)),
               Math.round(cx + radius * Math.cos(a2)), Math.round(cy + radius * Math.sin(a2))],
           move: MOVE, sight: NONE, light: NONE, sound: NONE, dir: 0, door: 0, ds: 0,
-          flags: { [MODULE_ID]: { spawned: true, kind: "circleWall", ownerUserId } }
+          flags: { [MODULE_ID]: { spawned: true, kind: "circleWall", ownerUserId, ...(ownerKey ? { ownerKey } : {}) } }
         });
       }
       const created = await scene.createEmbeddedDocuments("Wall", walls);
       return { ok: true, count: created.length };
     } catch (e) { console.warn(TAG, "sealCircle failed", e); return { ok: false }; }
-  });
+  };
 
-  reg("unsealCircle", async ({ sceneId, ownerUserId = "" }) => {
+  reg("unsealCircle", async ({ sceneId, ownerUserId = "", ownerKey = "" }) => {
     const scene = game.scenes?.get?.(String(sceneId || ""));
     if (!scene) return { ok: false, removed: 0 };
     try {
-      const ring = scene.walls?.filter?.(w => w.flags?.[MODULE_ID]?.kind === "circleWall"
-        && String(w.flags?.[MODULE_ID]?.ownerUserId || "") === String(ownerUserId || "")) ?? [];
+      const ring = _ringOf(scene, ownerUserId, ownerKey);
       if (ring.length) await scene.deleteEmbeddedDocuments("Wall", ring.map(w => w.id));
       return { ok: true, removed: ring.length };
     } catch (e) { console.warn(TAG, "unsealCircle failed", e); return { ok: false, removed: 0 }; }
@@ -631,11 +694,16 @@ function _registerOps() {
       const tokens = scene.tokens?.filter?.(t => ids.has(String(t.actorId))) ?? [];
       if (!tokens.length) return { ok: false };
       const key = _combatOwnerKey(ownerUserId, ownerKey);
+      // A class's members each add themselves to the ONE Combat; serialized so
+      // two arrivals in the same second can't both create it.
+      return await _keyed(`combat|${scene.id}|${key}`, async () => {
       let combat = _findOwnedCombat(scene.id, key);
+      const created = !combat;
       if (!combat) combat = await Combat.create({ scene: scene.id, flags: { [MODULE_ID]: { spawned: true, kind: "showdown", ownerUserId: ownerUserId || "", ownerKey: key } } });
       const have = new Set(combat.combatants.map(c => c.tokenId));
       const add = tokens.filter(t => !have.has(t.id)).map(t => ({ tokenId: t.id, sceneId: scene.id, actorId: t.actorId }));
       if (add.length) await combat.createEmbeddedDocuments("Combatant", add);
+      if (!created && key.startsWith("cohort:")) return { ok: true, combatants: combat.combatants.size ?? tokens.length, joined: true };
       try { await combat.activate?.(); } catch (_) {}
       await ChatMessage.create({
         whisper: game.users.filter(u => u.isGM).map(u => u.id),
@@ -646,6 +714,7 @@ function _registerOps() {
                  ` you run the foes. When the big one starts losing, a <b>messenger</b> will interrupt with a parley.</p>`
       });
       return { ok: true, combatants: tokens.length };
+      });
     } catch (e) { console.warn(TAG, "beginShowdownCombat failed", e); return { ok: false }; }
   });
 
@@ -1230,6 +1299,7 @@ function _registerOps() {
     if (factionId) { try { await game.actors?.get?.(factionId)?.unsetFlag?.("bbttcc-raid", "raidSession"); } catch (_) {} }
     const othersLive = Object.keys(_readRuns()).filter(u => u !== ownerUserId).length > 0;
     const isMine = (doc) => {
+      if (_liveCohortKey(_docOwnerKey(doc))) return false;   // a live class's props: the conductor reaps those
       const owner = doc.getFlag?.(MODULE_ID, "ownerUserId") ?? "";
       if (owner && ownerUserId) return owner === ownerUserId;
       return !othersLive;   // untagged/legacy: only safe to sweep when alone
@@ -1284,6 +1354,9 @@ function _registerOps() {
       const actorSpawned = a?.getFlag?.(MODULE_ID, "spawned") === true;
       const tokenSpawned = t.getFlag?.(MODULE_ID, "spawned") === true;
       const owner = a?.getFlag?.(MODULE_ID, "ownerUserId") || t.getFlag?.(MODULE_ID, "ownerUserId") || "";
+      // A live class's shared props (sigils, the showdown's foes) belong to the
+      // class, not whoever happened to spawn them — only the conductor reaps them.
+      if (_liveCohortKey(_docOwnerKey(a) || _docOwnerKey(t))) continue;
       if (actorSpawned) {
         // Scaffolding prop (marker/foe/obstacle/dummy): token AND actor go.
         if (a.getFlag?.(MODULE_ID, "kind") === "courtier") continue;      // standing court persists
@@ -1334,10 +1407,17 @@ function _registerOps() {
 /* Run context — set once by the director at start(). Every helper stamps it onto
  * its op call so props are owner-tagged and lane-placed without each beat having
  * to thread it through. Solo runs keep working with an empty context. */
-let _run = { userId: "", lane: 0 };
-function setRunContext({ userId = "", lane = 0 } = {}) { _run = { userId, lane }; }
+let _run = { userId: "", lane: 0, cohortId: "", cohortKey: "" };
+/** cohortId (group induction Phase 1): set when this run is one member's part
+ *  of a class — helpers called with `{shared:true}` then stamp the CLASS key
+ *  ("cohort:<id>") so every member sees one marker set / one ring / one fight. */
+function setRunContext({ userId = "", lane = 0, cohortId = "" } = {}) {
+  _run = { userId, lane, cohortId: cohortId || "", cohortKey: cohortId ? `cohort:${cohortId}` : "" };
+}
 function runContext() { return { ..._run }; }
 const _ownedBy = () => ({ ownerUserId: _run.userId, lane: _run.lane });
+/** Class owner key for a `{shared:true}` prop — empty in solo runs (byte-identical payloads). */
+const _sharedBy = (opts) => (opts?.shared && _run.cohortKey ? { ownerKey: _run.cohortKey } : {});
 
 /** Join the live-run registry and claim a spawn lane. Returns { lane, others }. */
 async function runBegin(userId, name = "") {
@@ -1399,7 +1479,8 @@ async function grantOp(factionId, marks = {}) {
 
 /** Spawn an inert relic marker + token on `scene`. Returns { actor, token } or null. */
 async function spawnMarker(scene, opts = {}) {
-  const res = await _runAsGM("spawnMarker", { sceneId: scene?.id, ...opts, ..._ownedBy() });
+  const { shared, ...rest } = opts || {};
+  const res = await _runAsGM("spawnMarker", { sceneId: scene?.id, ...rest, ..._ownedBy(), ..._sharedBy(opts) });
   if (!res?.actorId) return null;
   const actor = await _ns()?.relay?.resolveActor?.(res.actorId);
   const token = res.tokenId ? await _ns()?.relay?.resolveToken?.(res.sceneId, res.tokenId) : null;
@@ -1419,7 +1500,8 @@ async function sweepScene(scene, { keepActorIds = [] } = {}) {
  *         mergeDefenses:{resistances,immunities,vulnerabilities}, conditions}. */
 async function spawnFromPack(scene, opts = {}) {
   if (!scene?.id) return null;
-  const res = await _runAsGM("spawnFromPack", { sceneId: scene.id, ...opts, ..._ownedBy() });
+  const { shared, ...rest } = opts || {};
+  const res = await _runAsGM("spawnFromPack", { sceneId: scene.id, ...rest, ..._ownedBy(), ..._sharedBy(opts) });
   if (!res?.actorId) return null;
   const actor = await _ns()?.relay?.resolveActor?.(res.actorId);
   const token = res.tokenId ? await _ns()?.relay?.resolveToken?.(res.sceneId, res.tokenId) : null;
@@ -1427,22 +1509,23 @@ async function spawnFromPack(scene, opts = {}) {
 }
 
 /** Seal the great circle: a ring of movement-blocking walls at (cx,cy). */
-async function sealCircle(scene, { cx = 0, cy = 0, radius = 700, segments = 24 } = {}) {
+async function sealCircle(scene, { cx = 0, cy = 0, radius = 700, segments = 24, shared = false } = {}) {
   if (!scene?.id) return { ok: false };
-  return (await _runAsGM("sealCircle", { sceneId: scene.id, cx, cy, radius, segments, ..._ownedBy() })) ?? { ok: false };
+  return (await _runAsGM("sealCircle", { sceneId: scene.id, cx, cy, radius, segments, ..._ownedBy(), ..._sharedBy({ shared }) })) ?? { ok: false };
 }
 
 /** Remove the sealed circle's wall ring (parley, beat exit). */
-async function unsealCircle(scene) {
+async function unsealCircle(scene, { shared = false } = {}) {
   if (!scene?.id) return { ok: false, removed: 0 };
-  return (await _runAsGM("unsealCircle", { sceneId: scene.id, ownerUserId: _run.userId })) ?? { ok: false, removed: 0 };
+  return (await _runAsGM("unsealCircle", { sceneId: scene.id, ownerUserId: _run.userId, ..._sharedBy({ shared }) })) ?? { ok: false, removed: 0 };
 }
 
 /** Load the GM's combat tracker with the showdown participants + whisper why. */
 async function beginShowdownCombat(scene, actorIds = [], { playerName = "" } = {}) {
   if (!scene?.id || !actorIds?.length) return { ok: false };
+  // A class shares ONE Combat (cohort key); a solo run keeps its own user key.
   return (await _runAsGM("beginShowdownCombat", { sceneId: scene.id, actorIds, playerName,
-    ownerUserId: _run.userId, ownerKey: _run.userId ? `user:${_run.userId}` : "" })) ?? { ok: false };
+    ownerUserId: _run.userId, ownerKey: _run.cohortKey || (_run.userId ? `user:${_run.userId}` : "") })) ?? { ok: false };
 }
 
 /** Spawn (or reuse) a courtly delegation NPC on a tableau scene.
@@ -1486,7 +1569,8 @@ async function grantSecret(factionId, { name, effectKey, text = "", img } = {}) 
 /** Spawn a combat-simulator foe + token. opts: {x,y,elevation,name,img,size,foeClass,body,level,
  *  resistances,vulnerabilities}. Returns { actor, token, integrityMax } or null. */
 async function spawnFoe(scene, opts = {}) {
-  const res = await _runAsGM("spawnFoe", { sceneId: scene?.id, ...opts, ..._ownedBy() });
+  const { shared, ...rest } = opts || {};
+  const res = await _runAsGM("spawnFoe", { sceneId: scene?.id, ...rest, ..._ownedBy(), ..._sharedBy(opts) });
   if (!res?.actorId) return null;
   const actor = await _ns()?.relay?.resolveActor?.(res.actorId);
   const token = res.tokenId ? await _ns()?.relay?.resolveToken?.(res.sceneId, res.tokenId) : null;
@@ -1613,6 +1697,8 @@ Hooks.once("ready", () => {
     sealCircle, unsealCircle, beginShowdownCombat, sweepScene,
     ensureSandboxHex, claimHex, unclaimHex, spawnHostileFaction, ensureHex,
     setRaidSession, clearRaidSession, openRaidConsoleForGM, teardownFinale, cleanup, folder: _folder,
-    setRunContext, runContext, runBegin, runEnd, runPing, runList, laneFrac: _laneFrac, laneFracX: _laneFracX
+    setRunContext, runContext, runBegin, runEnd, runPing, runList, laneFrac: _laneFrac, laneFracX: _laneFracX,
+    // group induction Phase 1: the cohort registry queues on the activeRuns line
+    serialize: _serialize, readRuns: _readRuns
   };
 });

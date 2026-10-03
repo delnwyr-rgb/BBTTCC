@@ -33,7 +33,8 @@
     "scripts/tours.js",
     "scripts/tour-defs.js",
     "scripts/tour-beats.js",
-    "scripts/incarnation-forge.js"
+    "scripts/incarnation-forge.js",
+    "scripts/cohort.js"
   ],
   "styles": [
     "styles/onboarding.css"

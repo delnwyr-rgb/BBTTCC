@@ -1,0 +1,46 @@
+<div class="bbttcc-cohort-console">
+  {{#if cohort}}
+  <header class="cc-head">
+    <div class="cc-title">
+      <b>{{cohort.name}}</b>
+      <span class="cc-state cc-state-{{cohort.state}}">{{stateLabel}}</span>
+      <span class="cc-muted">· {{rosterCount}} on the roster · {{playersLabel}} connected</span>
+    </div>
+    <div class="cc-seg">{{segLabel}}</div>
+    <div class="cc-count"><span class="cc-st cc-st-barrier">◆</span> {{arrivedCount}}/{{presentCount}} at the gate{{#if awayCount}} · <span class="cc-st cc-st-away">○</span> {{awayCount}} away (not counted){{/if}}</div>
+  </header>
+
+  <div class="cc-controls">
+    {{#if canForm}}<button type="button" data-cc="form" title="Add every connected player to the roster">⚑ Form from present players</button>{{/if}}
+    {{#if canStart}}<button type="button" data-cc="start">▶ Start</button>{{/if}}
+    {{#if canPause}}<button type="button" data-cc="pause">⏸ Pause</button>{{/if}}
+    {{#if canResume}}<button type="button" data-cc="resume">▶ Resume</button>{{/if}}
+    {{#if canRelease}}<button type="button" data-cc="release" title="Move the class on now, whoever has arrived">⏭ Release barrier now</button>{{/if}}
+    {{#if canAbort}}<button type="button" data-cc="abort" class="cc-danger">✕ Abort + teardown</button>{{/if}}
+    <button type="button" data-cc="refresh" title="Refresh">↻</button>
+  </div>
+
+  <div class="cc-roster">
+    <table>
+      <thead><tr><th class="cc-col-st">Status</th><th>Player</th><th>Steward</th><th>Faction</th><th>Now</th><th class="cc-col-act"></th></tr></thead>
+      <tbody>
+        {{#each rows}}
+        <tr class="cc-row cc-row-{{statusCls}}">
+          <td class="cc-col-st"><span class="cc-st cc-st-{{statusCls}}" title="{{statusLabel}}">{{glyph}}</span> <span class="cc-st-label">{{statusLabel}}</span></td>
+          <td>{{player}}{{#unless online}} <span class="cc-muted" title="not connected">(offline)</span>{{/unless}}</td>
+          <td>{{steward}}</td>
+          <td>{{faction}}</td>
+          <td class="cc-beat">{{beat}}</td>
+          <td class="cc-col-act">{{#if canAct}}<button type="button" data-cc="skip" data-uid="{{uid}}" title="Skip past the current beat (offline: wave through this gate)">⏭</button><button type="button" data-cc="kick" data-uid="{{uid}}" title="Remove from the class">✕</button>{{/if}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="cc-feed" title="{{feedTitle}}">{{feedLine}}</footer>
+  {{else}}
+  <p class="cc-muted">No class on the roster. Players join from the “Report for training” card (⚑ Join the class), or form one from everyone connected ({{players}} now).</p>
+  <div class="cc-controls"><button type="button" data-cc="form">⚑ Form from present players</button><button type="button" data-cc="refresh">↻</button></div>
+  {{/if}}
+</div>

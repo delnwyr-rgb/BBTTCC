@@ -69,6 +69,23 @@ const RUN_OPS = new Set(["runBegin", "runPing", "runEnd", "runList"]);
 const ACTOR_OPS = { hurt: ["actorId"], mend: ["actorId"], raiseDarkness: ["actorId"], billKill: ["foeActorId", "fallbackActorId"], foeSurrender: ["actorId"], setElevation: ["actorId"], shoveOffPerch: ["actorId"], ensureToken: ["actorId"], disembark: ["stewardId", "rigId"], foundPlayerFaction: ["stewardId"] };
 const FACTION_OPS = { grantOp: "factionId", grantSecret: "factionId", setRaidSession: "factionId", clearRaidSession: "factionId", teardownFinale: "factionId", mintRig: "factionId", openRaidConsoleForGM: "factionId", claimHex: "factionId" };
 const HEX_OPS = new Set(["claimHex", "unclaimHex"]);
+// Group induction Phase 1 (2026-10-02). A member seat may only join, report
+// arrival and heartbeat — identity forced to the sender, no live run needed to
+// JOIN (that is how a seat gets one). Every class control is GM-only. The two
+// beat-support ops (a class relic claim, a shared-prop claim) need a live run
+// AND membership of the cohort they name.
+const COHORT_MEMBER_OPS = new Set(["cohortJoin", "cohortArrive", "cohortPing"]);
+const COHORT_GM_OPS = new Set(["cohortForm", "cohortStart", "cohortPause", "cohortResume", "cohortRelease",
+                               "cohortSkipMember", "cohortKick", "cohortAbort", "cohortTeardownProps"]);
+const COHORT_BEAT_OPS = new Set(["classRelic", "sharedProp"]);
+/** Is `userId` a current (not left) member of the live cohort `cohortId`? */
+function _cohortMember(cohortId, userId) {
+  try {
+    const c = (game.settings?.get?.(MODULE_ID, "cohorts") ?? {})[String(cohortId || "")];
+    const m = c?.members?.[String(userId || "")];
+    return !!c && c.state !== "done" && !!m && m.status !== "left";
+  } catch (_) { return false; }
+}
 
 const _spawned = (doc) => { try { return doc?.getFlag?.(MODULE_ID, "spawned") === true || doc?.getFlag?.(MODULE_ID, "foundedViaOnboarding") === true; } catch (_) { return false; } };
 const _owns = (user, doc) => { try { return !!doc?.testUserPermission?.(user, "OWNER"); } catch (_) { return false; } };
@@ -89,13 +106,24 @@ async function _authorize(op, payload, fromUserId) {
   const user = game.users?.get?.(String(fromUserId || ""));
   if (!user) return "unknown sender";
   if (user.isGM) return null;
+  if (COHORT_GM_OPS.has(op)) return "class controls are GM-only";
   // identity fields always mean the sender
   for (const k of ["userId", "ownerUserId", "exceptUserId"]) if (k in payload) payload[k] = user.id;
-  // run-scoped owner key (Combats etc.): a seat can only ever name its own — cohort keys arrive with Phase 1
-  if ("ownerKey" in payload) payload.ownerKey = `user:${user.id}`;
+  // run-scoped owner key (Combats, rings, shared props): a seat names its own,
+  // or the class it is a live member of — never anyone else's
+  if ("ownerKey" in payload) {
+    const k = String(payload.ownerKey || "");
+    const ok = k.startsWith("cohort:") && _cohortMember(k.slice(7), user.id);
+    payload.ownerKey = ok ? k : `user:${user.id}`;
+  }
   if (RUN_OPS.has(op)) return null;
+  if (COHORT_MEMBER_OPS.has(op)) { payload.userId = user.id; return null; }
   const runs = game.settings?.get?.(MODULE_ID, "activeRuns") ?? {};
   if (!runs[user.id]) return "no live tutorial run for this seat";
+  if (COHORT_BEAT_OPS.has(op)) {
+    payload.userId = user.id;
+    if (!_cohortMember(payload.cohortId, user.id)) return "not a member of that class";
+  }
   for (const key of ACTOR_OPS[op] || []) {
     const id = String(payload[key] || ""); if (!id) continue;
     if (!_actorMine(user, game.actors?.get?.(id))) return `${key} is not a tutorial actor or yours`;
@@ -163,7 +191,7 @@ Hooks.once("ready", () => {
   const ns = globalThis.game?.bbttcc?.onboarding;
   if (ns) {
     ns.runAsGM = runAsGM;
-    ns.relay = { registerOp, resolveActor, resolveToken };
+    ns.relay = { registerOp, resolveActor, resolveToken, isPrimaryGM: _isPrimaryGM };
   }
   console.log(TAG, "GM relay ready.");
 });

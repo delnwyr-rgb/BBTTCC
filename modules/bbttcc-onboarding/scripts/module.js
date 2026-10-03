@@ -43,6 +43,15 @@ Hooks.once("init", () => {
   game.settings.register(MODULE_ID, "activeRuns", {
     scope: "world", config: false, type: Object, default: {}
   });
+  // Group induction (Phase 1, 2026-10-02) — the CLASS registry, beside activeRuns:
+  // { [cohortId]: { id, name, gmId, state: forming|running|paused|done, bannerMode,
+  //   segmentIdx, beatId, segments[], barrier:{id, arrived[]}, members:{ [userId]:
+  //   { stewardId, factionId, name, lane, status: working|barrier|away|left,
+  //   lastSeen, joinedAt } }, relics, props, feed[], ts } }. Written ONLY by the
+  // primary GM (scripts/cohort.js), serialized on the activeRuns queue.
+  game.settings.register(MODULE_ID, "cohorts", {
+    scope: "world", config: false, type: Object, default: {}
+  });
 
   // Campaign handoff wiring (owner's Act-0 order-of-operations, 2026-08-23):
   // Offices of Fates and Destinies runs its dream-sayings up to "Wake up" →
@@ -101,19 +110,32 @@ Hooks.once("ready", () => {
       // two hotbar macros: Begin/Resume (start) and Reset & run again (reset → start
       // from the top). Each player clicks on THEIR OWN screen — the Proving Ground
       // lane is per client.
+      // Group induction (Dave, 2026-10-02): with 2+ players connected the card
+      // offers "⚑ Join the class" INSTEAD of Begin — the GM's Cohort Console then
+      // runs the table in lockstep. One player keeps the solo card exactly.
+      const classMode = _connectedPlayers() >= 2;
       ChatMessage.create({
         speaker: { alias: "◇ OPERATOR" },
         content: `<div class="bbttcc-onb-handoff">` +
           `<h3>🎓 Report for training</h3>` +
-          `<p>You wake on the Proving Ground. <b>Each of you, on your own screen:</b> Begin drops you into your Steward and picks up wherever you left off; Reset wipes your progress and runs the whole gauntlet again. Everyone else, stretch; the orientation film starts when the class graduates.</p>` +
+          (classMode
+            // WORDSMITH (Dave): class-mode card copy, new 2026-10-02.
+            ? `<p>You wake on the Proving Ground — all of you, which is more of you than I budgeted for. <b>Click Join the class</b>; your GM rings the bell when everyone's on the roster, and the class runs together from there. The orientation film starts when the class graduates.</p>`
+            : `<p>You wake on the Proving Ground. <b>Each of you, on your own screen:</b> Begin drops you into your Steward and picks up wherever you left off; Reset wipes your progress and runs the whole gauntlet again. Everyone else, stretch; the orientation film starts when the class graduates.</p>`) +
           `<p style="font-size:.85em;opacity:.8">No Steward assigned yet? Set your character first (player config → Select Character) — the Operator can't incarnate nobody.</p>` +
           `<div style="display:flex;gap:.5rem;flex-wrap:wrap;">` +
-          `<button type="button" class="bbttcc-onb-begin">▶ Begin / Resume Onboarding</button>` +
-          `<button type="button" class="bbttcc-onb-reset">↺ Reset &amp; run again</button>` +
+          `<button type="button" class="bbttcc-onb-join"${classMode ? "" : " hidden"}>⚑ Join the class</button>` +
+          `<button type="button" class="bbttcc-onb-begin"${classMode ? " hidden" : ""}>▶ Begin / Resume Onboarding</button>` +
+          `<button type="button" class="bbttcc-onb-reset"${classMode ? " hidden" : ""}>↺ Reset &amp; run again</button>` +
           `</div></div>`
       });
     } catch (e) { warn("wake handoff card failed", e); }
   });
+
+  /** Non-GM seats connected right now (group induction: 2+ = class mode). */
+  function _connectedPlayers() {
+    return (game.users?.contents ?? []).filter(u => u.active && !u.isGM).length;
+  }
 
   // Button binders — Begin runs on the CLICKING player's client (their lane).
   // v13+ fires renderChatMessageHTML; the legacy hook registers only on old
@@ -134,6 +156,31 @@ Hooks.once("ready", () => {
       // back to the campaign for enrolled users (2026-08-29).
       try { await game.user?.setFlag?.(MODULE_ID, "campaignClass", true); } catch (_) {}
     };
+    // Class mode is re-judged at render on every client: a class that is FORMING
+    // (or one this seat already belongs to) shows Join; otherwise 2+ seats
+    // connected shows Join; otherwise Begin/Reset. A class some other table left
+    // running never forces Join on a solo player (review fix 2 — stale classes
+    // also expire GM-side). Cards posted before group induction stay solo.
+    const joinBtns = root?.querySelectorAll?.(".bbttcc-onb-join") ?? [];
+    if (joinBtns.length) {
+      const co = game.bbttcc?.onboarding?.cohort;
+      const forming = co?.live?.()?.state === "forming";
+      const member = !!co?.memberOf?.(game.user?.id);
+      const classMode = forming || member || _connectedPlayers() >= 2;
+      const show = (b, on) => { b.hidden = !on; b.style.display = on ? "" : "none"; };   // chat CSS can beat [hidden]
+      joinBtns.forEach(b => show(b, classMode));
+      root.querySelectorAll(".bbttcc-onb-begin, .bbttcc-onb-reset").forEach(b => show(b, !classMode));
+    }
+    joinBtns.forEach?.(btn => {
+      btn.addEventListener("click", async () => {
+        if (game.user.isGM) return ui.notifications?.info?.("GMs conduct the class — open the Cohort Console instead.");
+        btn.disabled = true;
+        await _enroll();
+        // No Steward is fine here: the incarnation segment opens the forge.
+        const r = await game.bbttcc?.onboarding?.cohort?.join?.()?.catch?.(e => { warn("class join failed", e); return null; });
+        if (!r?.ok) btn.disabled = false;
+      });
+    });
     root?.querySelectorAll?.(".bbttcc-onb-begin")?.forEach(btn => {
       btn.addEventListener("click", async () => {
         if (!_stewardOrExplain()) return;

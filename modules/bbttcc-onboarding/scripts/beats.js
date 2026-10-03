@@ -1167,10 +1167,11 @@ const SIM_WAVES = [
  *  "The Pull" are canon; the sim's bestiary names are the flavor). The def's
  *  resist/vuln pairs ride along as a mergeDefenses UNION either way, so any
  *  taught damage grammar survives the authored profile. */
-async function _spawnFoeSmart(stage, scene, f, lane) {
+async function _spawnFoeSmart(stage, scene, f, lane, extra = {}) {
   let sp = null;
   if (f.fromPack) {
     sp = await stage.spawnFromPack?.(scene, {
+      ...extra,
       actorName: f.fromPack,
       displayName: f.keepName ? f.name : "",
       elevation: f.elevation ?? 0, size: f.size ?? 0,
@@ -1180,6 +1181,7 @@ async function _spawnFoeSmart(stage, scene, f, lane) {
     });
   }
   if (!sp?.actor) sp = await stage.spawnFoe?.(scene, {
+    ...extra,
     name: f.name, img: f.img || "", foeClass: f.foeClass, body: f.body, size: f.size ?? 1,
     elevation: f.elevation ?? 0,
     resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [],
@@ -1736,8 +1738,27 @@ async function _pgMintRelicItem(steward, key) {
   } catch (e) { console.warn(TAG, "relic item mint failed:", key, e); return null; }
 }
 
-async function _pgTakeRelic(steward, key) {
+// Group induction (Phase 1, 2026-10-02): in a CLASS the relic set is the
+// class's — the GM records each claim and writes provingRelics onto every
+// member's Steward (it is the only writer then, so concurrent claims never
+// clobber each other); the claimer's client only mints the item. Solo runs
+// keep the client-side flag write exactly as before.
+const _cohortApi = () => globalThis.game?.bbttcc?.onboarding?.cohort || null;
+/** A class member's spot near an art anchor: lane 0 is the anchor itself (solo
+ *  placement unchanged); other lanes ring it, 8 to a ring, so 20 Stewards never stack. */
+function _classSpot(scene, fx, fy, lane = 0) {
+  const base = _scenePoint(scene, fx, fy, ART_LANE);
+  const l = Math.max(0, Math.floor(Number(lane) || 0));
+  if (!l) return base;
+  const g = Number(scene?.grid?.size) || 100;
+  const ring = Math.floor((l - 1) / 8), slot = (l - 1) % 8;
+  const r = g * (1.4 + ring * 1.2), a = (slot / 8) * 2 * Math.PI + ring * 0.4;
+  return { x: Math.round(base.x + r * Math.cos(a)), y: Math.round(base.y + r * Math.sin(a)) };
+}
+
+async function _pgTakeRelic(steward, key, { flag = true } = {}) {
   const held = new Set(_pgRelics(steward));
+  if (!flag) { await _pgMintRelicItem(steward, key); held.add(key); return [...held]; }
   if (held.has(key)) return [...held];
   held.add(key);
   const next = [...held];
@@ -1825,12 +1846,15 @@ const provingTrials = {
       }
       // One marker per un-taken trial. Replay-safe: a relic already held is
       // skipped, so a resumed run doesn't re-litter the map.
+      // A class shares ONE sigil set (group induction): the first member here
+      // spawns it, the rest get the same markers back; the conductor reaps them.
+      const co = ctx.cohort || null;
       const held = new Set(_pgRelics(ctx.steward));
       for (const t of PG_TRIALS) {
         if (held.has(t.key)) { ctx._pg.done.add(t.key); continue; }
         const pt = _scenePoint(scene, t.xFrac, t.yFrac, ART_LANE);
-        const sp = await stage.spawnMarker?.(scene, { name: t.name, img: t.img, ...pt });
-        if (sp) { ctx._spawned.push(sp); ctx._pg.markers.set(t.key, { ...t, pt, tokenId: sp.token?.id ?? null, actorId: sp.actor?.id ?? null }); }
+        const sp = await stage.spawnMarker?.(scene, { name: t.name, img: t.img, ...pt, ...(co ? { shared: true, propKey: `sigil:${t.key}` } : {}) });
+        if (sp) { if (!co) ctx._spawned.push(sp); ctx._pg.markers.set(t.key, { ...t, pt, tokenId: sp.token?.id ?? null, actorId: sp.actor?.id ?? null }); }
       }
     }
 
@@ -1862,6 +1886,7 @@ const provingTrials = {
     }
 
     const finish = () => { if (!sim.finished) { sim.finished = true; done(); } };
+    const co = ctx.cohort || null;
 
     /** Take one relic: hazard or boon, flag it, clear the marker, count up. */
     const claim = async (t) => {
@@ -1870,6 +1895,24 @@ const provingTrials = {
       const marker = sim.markers.get(t.key);
       sim.markers.delete(t.key);
 
+      // A class: ask the GM first — the first claim wins it for everybody.
+      // (No answer → claim it solo-style, so a lost GM never strands a relic.)
+      let cls = null;
+      if (co) {
+        cls = await _cohortApi()?.classRelic?.(co.id, t.key);
+        if (cls && !cls.ok) {
+          // WORDSMITH (Dave): new 2026-10-02.
+          await ctx.speak?.(`${cls.byName || "A classmate"} got to the ${t.name} first — it's the class's now. One less sigil for you.`);
+          return;
+        }
+        // The class's marker goes for everyone the moment it's taken.
+        try {
+          const tok = marker?.tokenId ? sim.scene?.tokens?.get?.(marker.tokenId) : null;
+          const act = marker?.actorId ? globalThis.game?.actors?.get?.(marker.actorId) : null;
+          if (tok || act) await stage.cleanup?.([{ token: tok, actor: act }]);
+        } catch (_) {}
+      }
+
       if (t.hazard) {
         const r = await stage.hurt?.(ctx.steward?.id, t.hazard);
         await ctx.speak?.(t.hazard.line.replace("{n}", String(r?.amount ?? "some")));
@@ -1877,10 +1920,10 @@ const provingTrials = {
         const r = await stage.mend?.(ctx.steward?.id, t.heal.formula);
         await ctx.speak?.(t.heal.line.replace("{n}", String(r?.amount ?? "some")));
       }
-      const held = await _pgTakeRelic(ctx.steward, t.key);
+      const held = await _pgTakeRelic(ctx.steward, t.key, { flag: !cls });
       // The tally is spoken from the LIVE count, not baked into the trial —
       // there's no forced order, so any sigil can be first or fourth.
-      const n = held.length;
+      const n = cls ? (cls.held?.length ?? held.length) : held.length;
       const COUNT = ["One", "Two", "Three", "Four"];
       const tally = n >= PG_TRIALS.length ? `${COUNT[n - 1] ?? n}. That's the set.` : `${COUNT[n - 1] ?? n}.`;
       await ctx.speak?.(`${t.taken} ${tally}`);
@@ -1890,7 +1933,7 @@ const provingTrials = {
       }
       try { await stage.cleanup?.([marker].filter(Boolean)); } catch (_) {}
 
-      if (held.length >= PG_TRIALS.length) {
+      if (n >= PG_TRIALS.length) {
         await _pause(700);
         await ctx.speak?.("All four. The floor stops arguing with itself— *bzzt* —and the great circle in the south-east just went LIVE. Get in it.");
         finish();
@@ -2052,6 +2095,33 @@ const provingTrials = {
     };
     Hooks.on("updateToken", onMove);
 
+    // A class: a classmate's claim lands on OUR Steward's relic flag (the GM
+    // writes it for every member) — drop that sigil, say who took it, and close
+    // the beat when the class holds all four.
+    const onClassRelic = (actor, changed) => {
+      if (!co || sim.finished || actor?.id !== ctx.steward?.id) return;
+      if (changed?.flags?.[MODULE_ID]?.provingRelics === undefined) return;
+      // Count only the four trial keys — a stray/stale flag entry never opens the circle (review fix 6).
+      const held = _pgRelics(actor).filter(k => PG_TRIALS.some(t => t.key === k));
+      const fresh = held.filter(k => !sim.done.has(k));
+      if (!fresh.length) return;
+      for (const k of fresh) { sim.done.add(k); sim.markers.delete(k); }
+      const who = _cohortApi()?.get?.(co.id)?.relics || {};
+      (async () => {
+        for (const k of fresh) {
+          const t = PG_TRIALS.find(x => x.key === k);
+          // WORDSMITH (Dave): new 2026-10-02.
+          await ctx.speak?.(`${who[k]?.name || "A classmate"} just pulled the ${t?.name || k} — for all of you. ${held.length} of ${PG_TRIALS.length}.`);
+        }
+        if (sim.reef && fresh.includes(sim.reef.trial?.key)) await surface();   // someone beat us to the shard
+        if (held.length >= PG_TRIALS.length && !sim.finished) {
+          await ctx.speak?.("All four. The floor stops arguing with itself— *bzzt* —and the great circle in the south-east just went LIVE. Get in it.");
+          finish();
+        }
+      })().catch(e => console.warn(TAG, "class relic update failed", e));
+    };
+    if (co) Hooks.on("updateActor", onClassRelic);
+
     // The skip hatch GRANTS every remaining relic, so it must never fire off a
     // DISMISSED window (owner closed a stale-looking dialog 2026-08-24 and the
     // old handler silently completed the whole beat onto his Steward): the
@@ -2084,7 +2154,13 @@ const provingTrials = {
           }) ?? "play";
           if (sure === "skip" && !disposed && !sim.finished) {
             // Never trap them behind a hazard that won't fire — grant the remainder.
-            for (const t of PG_TRIALS) if (!sim.done.has(t.key)) await _pgTakeRelic(ctx.steward, t.key);
+            for (const t of PG_TRIALS) {
+              if (sim.done.has(t.key)) continue;
+              if (!co) { await _pgTakeRelic(ctx.steward, t.key); continue; }
+              sim.done.add(t.key);   // a class: the hatch claims for everyone, first-claim rules still apply
+              const r = await _cohortApi()?.classRelic?.(co.id, t.key);
+              if (!r || r.ok) await _pgTakeRelic(ctx.steward, t.key, { flag: !r });
+            }
             finish();
             return;
           }
@@ -2095,7 +2171,7 @@ const provingTrials = {
     };
     offerSkip();
 
-    return () => { disposed = true; if (skipTimer) clearTimeout(skipTimer); Hooks.off("updateToken", onMove); closeFallback(); };
+    return () => { disposed = true; if (skipTimer) clearTimeout(skipTimer); Hooks.off("updateToken", onMove); if (co) Hooks.off("updateActor", onClassRelic); closeFallback(); };
   },
 
   exit: async (ctx) => {
@@ -2181,7 +2257,7 @@ const finalShowdown = {
     try { await _stage()?.ensureOwned?.([ctx.faction?.id, ctx.rig?.id, ctx.steward?.id], ctx.user?.id); }
     catch (e) { console.warn(TAG, "showdown ownership repair failed", e); }
 
-    const held = _pgRelics(ctx.steward);
+    const held = _pgRelics(ctx.steward).filter(k => PG_TRIALS.some(t => t.key === k));   // trial keys only
     const scene = await _requireScene(ctx, "meatsuit-range", "Proving Ground");
     ctx._fs.scene = scene;
 
@@ -2202,7 +2278,29 @@ const finalShowdown = {
     await _pause(900);
     await ctx.speak("You've run all three consoles by now — violence, intrigue, presence. This is where you stop practising. How do you want to go in?");
 
-    const picked = await ctx.choose?.({
+    // A class (group induction Phase 1) shares ONE circle, ONE set of foes and
+    // ONE Combat: the first member here picks the door and stages the fight;
+    // everyone after walks into the same one. (The class vote is Phase 2.)
+    const co = ctx.cohort || null;
+    let shared = null;                 // { approach, foes:[{actorId,name,boss}] } staged by a classmate
+    // Who stages? Claim the slot; a classmate's claim → wait for what they
+    // publish. A claim left unpublished too long (or by a seat that left) is
+    // taken over GM-side, so a timeout RE-CLAIMS instead of staging a second
+    // fight locally (review fix 3). Bounded: after ~5 rounds we stage our own.
+    const claimShowdown = async () => {
+      for (let round = 0, told = false; round < 5; round++) {
+        const cl = await _cohortApi()?.sharedProp?.(co.id, "showdown", "claim");
+        if (!cl || cl.first) return null;                 // ours to stage (or no GM answer)
+        if (cl.data) return cl.data;
+        if (!told) { told = true; await ctx.speak("A classmate's already at the door, picking how the class goes in. Hang on."); } // WORDSMITH (Dave): new 2026-10-02.
+        const d = await _cohortApi()?.waitProp?.(co.id, "showdown", { timeoutMs: 75000 });
+        if (d) return d;
+      }
+      return null;
+    };
+    if (co) shared = await claimShowdown();
+
+    let picked = shared ? (PG_APPROACHES[shared.approach] ? shared.approach : "violence") : await ctx.choose?.({
       title: "◇ OPERATOR — How do we do this?",
       content:
         `<p>The circle is open and the thing on the other side doesn't know which door you're using.</p>` +
@@ -2215,8 +2313,19 @@ const finalShowdown = {
       ],
       fallback: "violence"
     }) ?? "violence";
+    // Slow at the door? A classmate may have taken the staging over while this
+    // dialog was open — confirm we still hold it before spawning anything.
+    if (co && !shared) {
+      const again = await _cohortApi()?.sharedProp?.(co.id, "showdown", "claim");
+      if (again && !again.first) {
+        shared = again.data ?? await claimShowdown();
+        if (shared && PG_APPROACHES[shared.approach]) picked = shared.approach;
+      }
+    }
     const approach = PG_APPROACHES[picked] ?? PG_APPROACHES.violence;
     ctx._fs.approach = picked;
+    // WORDSMITH (Dave): the "class already chose" line is new 2026-10-02.
+    if (shared) await ctx.speak(`The class is going in ${picked === "intrigue" ? "quiet" : "loud"}. You're with them.`);
     await ctx.speak(approach.brief);
     await _pause(800);
 
@@ -2225,40 +2334,60 @@ const finalShowdown = {
       // INSIDE the circle, both of them — move:true, because "step in and it
       // closes behind you" was silently a no-op for tokens already standing
       // elsewhere on the map from the trials (owner playtest 2026-08-22).
+      // A class member stands in their own spot round the anchor (lane ring).
+      const spot = (fx, fy) => (co ? _classSpot(scene, fx, fy, co.lane) : _scenePoint(scene, fx, fy, ART_LANE));
       const st = await stage.ensureTokenOnScene(ctx.steward, scene,
-        { ..._scenePoint(scene, PG_ARENA.xFrac - 0.06, PG_ARENA.yFrac + 0.04, ART_LANE), move: true });
+        { ...spot(PG_ARENA.xFrac - 0.06, PG_ARENA.yFrac + 0.04), move: true });
       if (st?.created) ctx._spawned.push({ token: st.doc });
       if (ctx.rig) {
         const rt = await stage.ensureTokenOnScene(ctx.rig, scene,
-          { ..._scenePoint(scene, PG_ARENA.xFrac - 0.11, PG_ARENA.yFrac + 0.08, ART_LANE), move: true });
+          { ...spot(PG_ARENA.xFrac - 0.11, PG_ARENA.yFrac + 0.08), move: true });
         if (rt?.created) ctx._spawned.push({ token: rt.doc });
       }
-      for (const f of approach.foes) {
-        const sp = await _spawnFoeSmart(stage, scene, f, ART_LANE);
-        if (!sp?.actor) continue;
-        ctx._spawned.push(sp);
-        ctx._fs.foes.set(sp.actor.id, { actorId: sp.actor.id, name: sp.actor.name, boss: (f.body ?? 0) >= 8, down: false });
-      }
-
-      // The promise kept: the circle CLOSES. A ring of movement-blocking,
-      // sight-transparent wall segments on the painted circle — the parley
-      // breaks it, and the beat's exit unseals no matter how this ends.
-      const d = scene.dimensions ?? {};
-      const centre = _scenePoint(scene, PG_ARENA.xFrac, PG_ARENA.yFrac, ART_LANE);
-      const radius = Math.round((d.sceneWidth ?? scene.width ?? 4400) * PG_CIRCLE_RADIUS_FRAC);
-      const sealed = await stage.sealCircle?.(scene, { cx: centre.x, cy: centre.y, radius });
-      if (sealed?.ok) {
+      if (shared) {
+        // The classmate's foes and ring ARE ours — never a second set.
+        for (const f of (shared.foes || [])) {
+          if (f?.actorId) ctx._fs.foes.set(f.actorId, { actorId: f.actorId, name: f.name || "", boss: !!f.boss, down: false });
+        }
         ctx._fs.sealedScene = scene;
-        await ctx.speak("And there it is — the circle just closed behind you. Told you it would. Nothing gets out— *bzzt* —which cuts both ways.");
-        await _pause(700);
+      } else {
+        for (const f of approach.foes) {
+          const sp = await _spawnFoeSmart(stage, scene, f, ART_LANE, co ? { shared: true } : {});
+          if (!sp?.actor) continue;
+          if (!co) ctx._spawned.push(sp);            // a class's foes are reaped by the conductor
+          ctx._fs.foes.set(sp.actor.id, { actorId: sp.actor.id, name: sp.actor.name, boss: (f.body ?? 0) >= 8, down: false });
+        }
+
+        // The promise kept: the circle CLOSES. A ring of movement-blocking,
+        // sight-transparent wall segments on the painted circle — the parley
+        // breaks it, and the beat's exit unseals no matter how this ends.
+        const d = scene.dimensions ?? {};
+        const centre = _scenePoint(scene, PG_ARENA.xFrac, PG_ARENA.yFrac, ART_LANE);
+        const radius = Math.round((d.sceneWidth ?? scene.width ?? 4400) * PG_CIRCLE_RADIUS_FRAC);
+        const sealed = await stage.sealCircle?.(scene, { cx: centre.x, cy: centre.y, radius, ...(co ? { shared: true } : {}) });
+        if (sealed?.ok) {
+          ctx._fs.sealedScene = scene;
+          await ctx.speak("And there it is — the circle just closed behind you. Told you it would. Nothing gets out— *bzzt* —which cuts both ways.");
+          await _pause(700);
+        }
+        // Publish the staged fight so classmates walk into THIS one.
+        if (co) {
+          try {
+            await _cohortApi()?.sharedProp?.(co.id, "showdown", "set", {
+              approach: picked,
+              foes: [...ctx._fs.foes.values()].map(f => ({ actorId: f.actorId, name: f.name, boss: f.boss }))
+            });
+          } catch (e) { console.warn(TAG, "class showdown publish failed", e); }
+        }
       }
 
       // Hand the GM a loaded tracker: combat staged with the steward and
       // every spawned foe, whispered handoff. GM rolls initiative and begins.
+      // A class: ONE Combat (class key) — each member adds their Steward + rig.
       try {
         await stage.beginShowdownCombat?.(scene,
-          [ctx.steward?.id, ...ctx._fs.foes.keys()].filter(Boolean),
-          { playerName: ctx.steward?.name || "" });
+          [ctx.steward?.id, ...(co && ctx.rig ? [ctx.rig.id] : []), ...ctx._fs.foes.keys()].filter(Boolean),
+          { playerName: co ? "The class" : (ctx.steward?.name || "") });
       } catch (e) { console.warn(TAG, "showdown combat staging failed", e); }
     }
 
@@ -2289,8 +2418,9 @@ const finalShowdown = {
       fs.parleyed = true;
       // The seal lets go for the messenger — the circle opening FROM THE OTHER
       // SIDE is the tell that whatever's out there wants in to talk, not fight.
+      const co = ctx.cohort || null;
       if (fs.sealedScene) {
-        try { await stage.unsealCircle?.(fs.sealedScene); } catch (_) {}
+        try { await stage.unsealCircle?.(fs.sealedScene, co ? { shared: true } : undefined); } catch (_) {}
         fs.sealedScene = null;
         await ctx.speak("— the circle just OPENED. Not from your side. *bzzt* Hold. Hold—");
         await _pause(800);
@@ -2312,13 +2442,17 @@ const finalShowdown = {
       }
       const stageScene = court || fs.scene;
       let messenger = null;
-      if (stageScene && stage) {
+      // A class gets ONE messenger (and one GM console below): first parley stages it.
+      let firstParley = true;
+      if (co) { const cl = await _cohortApi()?.sharedProp?.(co.id, "messenger", "claim"); firstParley = !cl || !!cl.first; }
+      if (stageScene && stage && firstParley) {
         messenger = await stage.spawnFoe?.(stageScene, {
           name: "A Messenger, Sent In Haste", img: OBSTACLE_ART("courtier-messenger.webp"), foeClass: "sentient", body: 2,
-          ...(court ? _scenePoint(court, 0.58, 0.56, ctx.lane)
-                    : _scenePoint(stageScene, PG_ARENA.xFrac + 0.10, PG_ARENA.yFrac - 0.09, ART_LANE))
+          ...(court ? _scenePoint(court, 0.58, 0.56, co ? ART_LANE : ctx.lane)
+                    : _scenePoint(stageScene, PG_ARENA.xFrac + 0.10, PG_ARENA.yFrac - 0.09, ART_LANE)),
+          ...(co ? { shared: true } : {})
         });
-        if (messenger) ctx._spawned.push(messenger);
+        if (messenger && !co) ctx._spawned.push(messenger);
       }
       await ctx.speak("It's a messenger. Unarmed, badly rendered, and carrying paperwork. *bzzt* — I did not have this on the list.");
       await _pause(900);
@@ -2354,7 +2488,9 @@ const finalShowdown = {
             difficulty: "standard", targetType: "hex", targetUuid: "", targetName: "The Pull",
             defenderId: "", rounds: [], logWar: false, includeDefender: false
           });
-          await stage.openRaidConsoleForGM?.(fid, { playerName: ctx.steward?.name || "", activityKey: "presence",
+          // A class: the GM gets ONE console (the first parley's); every member's
+          // faction is still pre-targeted for its own. Coalition parley = Phase 3.
+          if (firstParley) await stage.openRaidConsoleForGM?.(fid, { playerName: co ? "The class" : (ctx.steward?.name || ""), activityKey: "presence",
                                                    sceneId: court?.id ?? "" });
         }
       } catch (e) { console.warn(TAG, "parley handoff failed", e); }
@@ -2421,7 +2557,9 @@ const finalShowdown = {
     const fs = ctx._fs || {};
     // Belt and braces: however the beat ended (kill, skip, crash), no wall
     // ring survives it — a sealed arena outliving its fight strands the token.
-    try { if (fs.sealedScene) { await _stage()?.unsealCircle?.(fs.sealedScene); fs.sealedScene = null; } } catch (_) {}
+    // A class's ring is the class's — one member leaving early must not open it
+    // on everyone still fighting; the conductor reaps it when the class is through.
+    try { if (fs.sealedScene && !ctx.cohort) { await _stage()?.unsealCircle?.(fs.sealedScene); fs.sealedScene = null; } } catch (_) {}
     if (fs.parleyed) {
       await ctx.speak("However that ended — it ended with words on the table. Remember that you had the option. Most things in Bad Eden won't offer it twice.");
     } else {

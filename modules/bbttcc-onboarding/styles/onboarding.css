@@ -271,3 +271,37 @@
 }
 
 #bbttcc-operator-screen.ob-scr-hidden { display: none; }
+
+/* ─── Group induction — GM Cohort Console (Phase 1, 2026-10-02) ─────────────
+ * Status reads by GLYPH + label + colour on the blue↔yellow axis only (Dave is
+ * red-green colour-blind): ● blue working · ◆ yellow at the gate · ○ away · ✕ left.
+ * Compact rows so a 20-seat convention table fits; the roster scrolls. */
+.bbttcc-cohort-console { display: flex; flex-direction: column; gap: .4rem; height: 100%; font-size: .85rem; }
+.bbttcc-cohort-console .cc-head { display: flex; flex-direction: column; gap: .15rem; }
+.bbttcc-cohort-console .cc-muted { opacity: .65; font-size: .8em; }
+.bbttcc-cohort-console .cc-state { padding: 0 .4em; border-radius: 3px; font-size: .75em; text-transform: uppercase; letter-spacing: .06em; border: 1px solid currentColor; }
+.bbttcc-cohort-console .cc-state-running { color: #5fb8ff; }
+.bbttcc-cohort-console .cc-state-paused,
+.bbttcc-cohort-console .cc-state-forming { color: #ffd34d; }
+.bbttcc-cohort-console .cc-state-done { color: #9aa4ae; }
+.bbttcc-cohort-console .cc-seg { font-weight: 600; }
+.bbttcc-cohort-console .cc-controls { display: flex; flex-wrap: wrap; gap: .3rem; }
+.bbttcc-cohort-console .cc-controls button { flex: 0 0 auto; width: auto; padding: 0 .55em; line-height: 1.7; }
+.bbttcc-cohort-console .cc-controls .cc-danger { border-style: dashed; }
+.bbttcc-cohort-console .cc-roster { flex: 1 1 auto; min-height: 8rem; overflow-y: auto; border: 1px solid rgba(127, 214, 255, .25); border-radius: 3px; }
+.bbttcc-cohort-console table { width: 100%; border-collapse: collapse; margin: 0; }
+.bbttcc-cohort-console th { position: sticky; top: 0; background: rgba(18, 22, 32, .95); color: #dff0ff; font-size: .75em; text-align: left; padding: .2rem .35rem; }
+.bbttcc-cohort-console td { padding: .12rem .35rem; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 9rem; }
+.bbttcc-cohort-console td.cc-beat { max-width: 12rem; }
+.bbttcc-cohort-console .cc-col-st { width: 7.5rem; }
+.bbttcc-cohort-console .cc-col-act { width: 3.6rem; text-align: right; }
+.bbttcc-cohort-console .cc-col-act button { width: 1.6rem; height: 1.4rem; line-height: 1.2; padding: 0; margin-left: .15rem; font-size: .8em; }
+.bbttcc-cohort-console .cc-st { display: inline-block; width: 1em; text-align: center; font-weight: 700; }
+.bbttcc-cohort-console .cc-st-working { color: #5fb8ff; }
+.bbttcc-cohort-console .cc-st-barrier { color: #ffd34d; }
+.bbttcc-cohort-console .cc-st-away { color: #9aa4ae; }
+.bbttcc-cohort-console .cc-st-left { color: #6b7279; }
+.bbttcc-cohort-console .cc-row-left td { opacity: .5; text-decoration: line-through; }
+.bbttcc-cohort-console .cc-row-away td { opacity: .7; font-style: italic; }
+.bbttcc-cohort-console .cc-st-label { font-size: .8em; opacity: .85; }
+.bbttcc-cohort-console .cc-feed { font-size: .8em; opacity: .8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-top: 1px solid rgba(127, 214, 255, .2); padding-top: .2rem; cursor: help; }

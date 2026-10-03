@@ -40,6 +40,10 @@ function _ns() { return globalThis.game?.bbttcc?.onboarding; }
 let _speakUserId = null;   // the user whose run is in progress on this client
 function _defaultAudience() {
   try { if (game.settings.get(MODULE_ID, "operatorAudience") === "all") return "all"; } catch (_) {}
+  // A class member's lines stay on their own screen (review fix 4): twenty
+  // members' Operator chatter would bury the GM, and the conductor already
+  // speaks the class-level lines to the GM.
+  try { if (_ns()?.stage?.runContext?.()?.cohortId) return [_speakUserId || game.user.id]; } catch (_) {}
   const ids = new Set((game.users?.contents ?? []).filter(u => u.active && u.isGM).map(u => u.id));
   ids.add(_speakUserId || game.user.id);
   return [...ids];
@@ -250,6 +254,41 @@ async function choose({ title = "Operator", content = "", options = [], fallback
 
 let _running = false;
 
+// Group induction Phase 1 (2026-10-02): the cohort conductor can skip a member
+// past the beat they're on, or abort their part of the class. Both only ever
+// touch THIS client's run; solo runs never see either unless someone calls them.
+let _current = null;        // { beatId, finish } while a beat's detect() is wired
+let _skipPending = null;    // beat id asked to skip before its detect() wired up
+let _abortRun = false;
+
+/** Finish the beat this client is on (cohort "skip member"). Returns the beat id or null. */
+function skipBeat() {
+  if (!_running) return null;
+  const id = _current?.beatId ?? _currentBeatId ?? null;
+  _skipPending = id;
+  closeAllOnboardingPrompts();             // a beat parked on a prompt resolves on close
+  try { _current?.finish?.(); } catch (_) {}
+  return id;
+}
+/** Stop this client's run after the current beat (cohort kick / abort). */
+function abortRun() {
+  if (!_running) return false;
+  _abortRun = true;
+  skipBeat();
+  return true;
+}
+let _currentBeatId = null;
+
+// A skip/abort that reached this client BEFORE the director started (the class
+// cue is still in the Steward forge — review fix 7). Only a class start() reads
+// them; the cohort agent clears them when its cue ends, so a solo run never does.
+let _pendingKind = null;    // null | "skip" | "abort"
+function cohortPending(kind) {
+  if (kind === "clear") { _pendingKind = null; return null; }
+  if (kind === "abort" || (kind === "skip" && _pendingKind !== "abort")) _pendingKind = kind;
+  return _pendingKind;
+}
+
 /** Run the arc.
  *    start()                            — resume; finished beats are skipped
  *    start({fromStart:true})            — wipe progress and replay everything
@@ -259,8 +298,17 @@ let _running = false;
  *  fifteen beats deep behind three raids, and replaying the whole tutorial to
  *  reach it is not a reasonable test loop. Both ignore stored progress for the
  *  beats they select, so a finished beat still re-runs when you name it. */
-async function start({ user = game.user, fromStart = false, from = null, only = null } = {}) {
-  if (_running) { ui.notifications?.warn?.("Onboarding is already running."); return; }
+/*  start({only, cohort:{id, lane, seg}}) — one member's part of a CLASS (group
+ *  induction Phase 1). The conductor already put this seat in activeRuns with a
+ *  lane, so no runBegin/heartbeat here; graduation never runs inside a member's
+ *  segment (the conductor graduates the class once); beats this client already
+ *  finished in THIS segment (stamped cohortSeg) are skipped, so a re-cue after
+ *  a refresh resumes instead of replaying. Returns {ok, ran:[ids], aborted}. */
+async function start({ user = game.user, fromStart = false, from = null, only = null, cohort = null } = {}) {
+  if (_running) {
+    ui.notifications?.warn?.("Onboarding is already running.");
+    return cohort ? { ok: false, busy: true, ran: [] } : undefined;
+  }
   const ns = _ns();
   const steward = ns?.resolve?.steward?.(user);
   if (!steward) {
@@ -269,8 +317,16 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
     return;
   }
 
+  const co = cohort?.id ? { id: String(cohort.id), key: `cohort:${cohort.id}`, lane: Number(cohort.lane) || 0, seg: String(cohort.seg || "") } : null;
+  const parked = co ? _pendingKind : null;
+  if (co) _pendingKind = null;
+  if (parked === "abort") return { ok: false, aborted: true, ran: [] };   // kicked/aborted during the forge
+
   _running = true;
   _speakUserId = user?.id || null;
+  _abortRun = false; _skipPending = null; _current = null; _currentBeatId = null;
+  const ran = [];
+  let _skipConsumed = false;   // a parked skip applies to the FIRST beat only
   let pingIv = null;   // declared OUTSIDE the try — the finally clears it
   try {
     let p = _progress(steward);
@@ -283,7 +339,11 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
     // players get their own scaffolding rows and nobody's teardown reaps another's
     // props. Solo runs land in lane 0 and behave exactly as before.
     let lane = 0, others = 0;
-    try {
+    if (co) {
+      // Class member: the conductor owns the registry entry + lane.
+      lane = co.lane;
+      ns?.stage?.setRunContext?.({ userId: user.id, lane, cohortId: co.id });
+    } else try {
       const r = await ns?.stage?.runBegin?.(user.id, user.name);
       lane = Number(r?.lane) || 0;
       others = Number(r?.others) || 0;
@@ -298,6 +358,7 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
 
     const ctx = {
       user, steward, lane,
+      cohort: co,                        // null in solo runs — beats branch on it for shared props
       faction: ns?.resolve?.faction?.(user, steward) || null,
       get rig() { return ns?.resolve?.rig?.(this.faction) || null; },
       scene: (key) => ns?.resolve?.scene?.(key) || null,
@@ -324,6 +385,7 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
       }
     }
     const selected = (beat, i) => {
+      if (co && beat.id === "graduation") return false;   // the conductor graduates the class once
       if (onlySet) return onlySet.has(beat.id);
       if (fromIdx >= 0) return i >= fromIdx;
       return true;
@@ -334,8 +396,10 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
     }
 
     for (const [beatIdx, beat] of _beats.entries()) {
+      if (_abortRun) break;
       if (!selected(beat, beatIdx)) continue;
       p = _progress(steward);
+      if (co && co.seg && p.steps?.[beat.id]?.cohortSeg === co.seg) continue;   // finished in this segment already
       // A named beat always runs — that's the point of asking for it.
       const _ignoreDone = fromStart || onlySet || fromIdx >= 0;
       if (p.steps?.[beat.id]?.done && !_ignoreDone) {
@@ -347,6 +411,8 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
 
       p.currentStep = beat.id;
       await _setProgress(steward, p);
+      _currentBeatId = beat.id;
+      if (parked === "skip" && !ran.length && _skipPending === null && !_skipConsumed) { _skipPending = beat.id; _skipConsumed = true; }
 
       try {
         await beat.enter?.(ctx);
@@ -355,18 +421,25 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
             let done = false, cleanup = null;
             const finish = () => {
               if (done) return; done = true;
+              _current = null;
               try { if (typeof cleanup === "function") cleanup(); } catch (_) {}
               resolve();
             };
+            _current = { beatId: beat.id, finish };
             cleanup = beat.detect(ctx, finish) || null;
+            // Skipped (or aborted) while enter() was still running: settle now.
+            if (_skipPending === beat.id || _abortRun) finish();
           });
         }
+        _skipPending = null;
         await beat.exit?.(ctx);
       } catch (e) {
         // Never trap the run — but a thrown beat must not vanish invisibly either.
         console.warn(TAG, `beat "${beat.id}" threw — continuing`, e);
         ui.notifications?.warn?.(`Onboarding: the "${beat.title || beat.id}" module hit an error and was skipped — see console (F12).`);
       }
+      // Aborted (kicked / class torn down): the interrupted beat is NOT done.
+      if (_abortRun) { closeAllOnboardingPrompts(); break; }
 
       // Stage switch: no dialog from the finished beat survives into the next.
       closeAllOnboardingPrompts();
@@ -395,20 +468,24 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
       } catch (_) {}
 
       p = _progress(steward);
-      p.steps[beat.id] = { done: true, at: Date.now() };
+      p.steps[beat.id] = co ? { done: true, at: Date.now(), cohortSeg: co.seg } : { done: true, at: Date.now() };
       await _setProgress(steward, p);
+      ran.push(beat.id);
     }
 
     p = _progress(steward);
     p.currentStep = null;
     await _setProgress(steward, p);
     console.log(TAG, "Run finished. Completed beats:", Object.keys(p.steps || {}));
+    if (co) return { ok: true, ran, aborted: _abortRun };
   } finally {
     // Release the lane whatever happened (completed, thrown, or bailed early).
+    // A class member's lane belongs to the conductor — it outlives this segment.
     try { if (pingIv) clearInterval(pingIv); } catch (_) {}
-    try { await _ns()?.stage?.runEnd?.(user.id); } catch (_) {}
+    if (!co) { try { await _ns()?.stage?.runEnd?.(user.id); } catch (_) {} }
     try { _ns()?.stage?.setRunContext?.({ userId: "", lane: 0 }); } catch (_) {}
     _running = false;
+    _current = null; _currentBeatId = null; _skipPending = null; _abortRun = false;
   }
 }
 
@@ -449,7 +526,7 @@ Hooks.once("ready", () => {
   if (!ns) return;
   ns.beats = { register: registerBeat, list: listBeats, get: getBeat };
   ns.ui = Object.assign(ns.ui ?? {}, { raiseDialogByTitle, closeDialogByTitle, closeAllOnboardingPrompts, promptIdFor, PROMPT_POSITION, deck, choose });
-  Object.assign(ns, { start, skip, reset, status, activeRuns, isRunning: () => _running });
+  Object.assign(ns, { start, skip, reset, status, activeRuns, isRunning: () => _running, skipBeat, abortRun, cohortPending });
 
   try {
     if (game.user.isGM && ns.settings?.get?.("offerOnReady") && !ns.settings.completed() && !ns.user.skipped()) {
