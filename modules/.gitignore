@@ -54,6 +54,8 @@
 !bbttcc-world/**
 !surge-powers/
 !surge-powers/**
+!dnd5e-hybrid-guard/
+!dnd5e-hybrid-guard/**
 
 # Allow root docs if added later
 !README.md

@@ -1,0 +1,26 @@
+{
+  "id": "dnd5e-hybrid-guard",
+  "title": "D&D 5e Hybrid Guard",
+  "description": "Keeps dnd5e character prep from crashing on Active Effects authored for another ruleset (SW5E or older dnd5e): tool/skill entries an effect conjures without a roll schema, and changes aimed at the getter-only system.details.background. Works with or without the sw5e module enabled.",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "David English"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/hybrid-guard.js"
+  ]
+}
