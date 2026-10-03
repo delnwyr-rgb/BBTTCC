@@ -1,0 +1,29 @@
+{
+  "id": "dnd5e-table-kit",
+  "title": "D&D 5e Table Kit",
+  "description": "Table-side automation for dnd5e without midi-qol. Legendary actions and legendary resistances for player characters: granted by Active Effects (system.resources.legact.max / legres.max), tracked on the character sheet, reset like NPCs (actions at encounter start and turn end, resistances on a long rest).",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "David English"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/legendary.js"
+  ],
+  "styles": [
+    "styles/table-kit.css"
+  ]
+}

@@ -1,0 +1,15 @@
+/* Legendary pools on the character sheet sidebar — reuses dnd5e's own .pips/.pip styling. */
+.dnd5e2 .tk-legendary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dnd5e2 .tk-legendary .tk-pool {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.dnd5e2 .tk-legendary .tk-pool .label {
+  font-size: var(--font-size-11, 11px);
+}

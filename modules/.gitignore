@@ -56,6 +56,8 @@
 !surge-powers/**
 !dnd5e-hybrid-guard/
 !dnd5e-hybrid-guard/**
+!dnd5e-table-kit/
+!dnd5e-table-kit/**
 
 # Allow root docs if added later
 !README.md
