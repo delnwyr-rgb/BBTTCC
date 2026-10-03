@@ -1167,6 +1167,8 @@ const SIM_WAVES = [
  *  "The Pull" are canon; the sim's bestiary names are the flavor). The def's
  *  resist/vuln pairs ride along as a mergeDefenses UNION either way, so any
  *  taught damage grammar survives the authored profile. */
+// An explicit canvas point in `extra` (Phase 2: the showdown's in-ring spots) wins over the def's fractions.
+const _at = (extra) => (Number.isFinite(extra?.x) && Number.isFinite(extra?.y) ? { x: extra.x, y: extra.y } : {});
 async function _spawnFoeSmart(stage, scene, f, lane, extra = {}) {
   let sp = null;
   if (f.fromPack) {
@@ -1177,7 +1179,8 @@ async function _spawnFoeSmart(stage, scene, f, lane, extra = {}) {
       elevation: f.elevation ?? 0, size: f.size ?? 0,
       mergeDefenses: { resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [] },
       conditions: f.conditions ?? [],
-      ..._scenePoint(scene, f.xFrac, f.yFrac, lane)
+      ..._scenePoint(scene, f.xFrac, f.yFrac, lane),
+      ..._at(extra)
     });
   }
   if (!sp?.actor) sp = await stage.spawnFoe?.(scene, {
@@ -1186,7 +1189,8 @@ async function _spawnFoeSmart(stage, scene, f, lane, extra = {}) {
     elevation: f.elevation ?? 0,
     resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [],
     conditions: f.conditions ?? [],
-    ..._scenePoint(scene, f.xFrac, f.yFrac, lane)
+    ..._scenePoint(scene, f.xFrac, f.yFrac, lane),
+    ..._at(extra)
   });
   return sp;
 }
@@ -2919,6 +2923,622 @@ const graduation = {
   }
 };
 
+/* ═════════════════ PARTY VARIANTS — group induction Phase 2 (2026-10-02) ═════════════════
+ * `beat.party = {enter, detect, exit, scale?}` — run ONCE by the class conductor
+ * on the GM client (cohort.js), never by N member copies. The party ctx:
+ *   members[] {userId,user,name,lane,steward,faction,rig} (PRESENT seats only) ·
+ *   N · dial · scale(key) · scene(key) · released() · speakAll(line) ·
+ *   speakTo(userIds, line) · askAll({title,content,label|options,quorum,forge,tag}) ·
+ *   askOne(userId, spec) · cancelAsks(tag) · vote({options,timeoutMs}) ·
+ *   viewAll(scene,{label}) · riff · cohort {id,key}
+ * Prompts render on each member's screen with the same prompt/choose UI as the
+ * solo beats. Everything spawned carries the class key (cohort:<id>), so the
+ * conductor reaps it when the class leaves the segment. Solo beats are untouched.
+ * New Operator lines in this block are marked WORDSMITH (Dave). */
+
+// ONE scaling table for every party beat (design §4.6). n = present seats; the
+// GM's console dial (−1/0/+1) is added on top by ctx.scale(key). TUNE: Dave.
+const PARTY_SCALE = {
+  combat_sim:     { husks: (n) => 2 + Math.ceil(n / 2), scavengers: (n) => Math.ceil(n / 2), guntruck: (n) => Math.ceil(n / 3) },
+  // Storm = N − 1 Null Processes (min 2). Slip = about half that (min 1) — the
+  // quiet road is "fewer, and Surprised", same as solo. Always one Pull.
+  final_showdown: { nullsLoud: (n) => Math.max(2, n - 1), nullsQuiet: (n) => Math.max(1, Math.ceil((n - 1) / 2)) }
+};
+
+/** `count` foe defs cycled from `defs`, each extra lap nudged off the last so a
+ *  scaled wave fans out instead of stacking. Fractions stay inside the art. */
+function _partyFoes(defs, count) {
+  const out = [], clamp = (f) => Math.min(0.94, Math.max(0.06, f));
+  for (let i = 0; i < count && defs.length; i++) {
+    const d = defs[i % defs.length], lap = Math.floor(i / defs.length);
+    const dx = lap ? (lap % 2 ? 1 : -1) * 0.035 * Math.ceil(lap / 2) : 0;
+    out.push({ ...d, xFrac: clamp(d.xFrac + dx), yFrac: clamp(d.yFrac + 0.03 * lap) });
+  }
+  return out;
+}
+
+/** Every present member's Steward + rig onto `scene`, each in their own lane spot. */
+async function _placeClass(stage, scene, ctx, at, rigAt) {
+  const placed = [];
+  for (const m of ctx.members) {
+    try {
+      if (m.steward) {
+        const st = await stage.ensureTokenOnScene(m.steward, scene, { ..._classSpot(scene, at.xFrac, at.yFrac, m.lane), move: true });
+        if (st?.created) placed.push({ token: st.doc });
+      }
+      const rig = m.rig;
+      if (rig && rigAt) {
+        const rt = await stage.ensureTokenOnScene(rig, scene, { ..._classSpot(scene, rigAt.xFrac, rigAt.yFrac, m.lane), move: true });
+        if (rt?.created) placed.push({ token: rt.doc });
+      }
+    } catch (e) { console.warn(TAG, "class placement failed for", m.name, e); }
+  }
+  return placed;
+}
+const _classActorIds = (ctx) => ctx.members.flatMap(m => [m.steward?.id, m.rig?.id]).filter(Boolean);
+
+/** `count` points INSIDE the sealed great circle (review fix 4): concentric arcs
+ *  round the arena centre, every centre within 0.8·R (≤ 0.85·R with any token),
+ *  angles spread over [from, to]° (0° = east, y down). Points are shared across
+ *  the rings by arc length, so a 20-seat class or a dial-+1 Storm never spills out. */
+function _ringSpots(scene, count, { from = 0, to = 360, radii = [0.35, 0.55, 0.75] } = {}) {
+  const c = _scenePoint(scene, PG_ARENA.xFrac, PG_ARENA.yFrac, ART_LANE);
+  const d = scene?.dimensions ?? {};
+  const R = (d.sceneWidth ?? scene?.width ?? 4400) * PG_CIRCLE_RADIUS_FRAC;
+  const tot = radii.reduce((a, b) => a + b, 0) || 1;
+  const per = radii.map(r => Math.floor(count * r / tot));
+  for (let left = count - per.reduce((a, b) => a + b, 0), i = radii.length - 1; left > 0; left--, i = (i - 1 + radii.length) % radii.length) per[i]++;
+  const out = [];
+  radii.forEach((rf, ri) => {
+    const n = per[ri];
+    for (let k = 0; k < n; k++) {
+      const t = n === 1 ? 0.5 : k / (n - 1);
+      const a = (from + (to - from) * t) * Math.PI / 180;
+      out.push({ x: Math.round(c.x + rf * R * Math.cos(a)), y: Math.round(c.y + rf * R * Math.sin(a)) });
+    }
+  });
+  return out;
+}
+/** The class (west arc: Steward + rig side by side) and the foes (east arc; the
+ *  Pull near the centre) inside the ring. */
+function _showdownSpots(scene, nSeats, nNulls) {
+  const seats = _ringSpots(scene, nSeats * 2, { from: 110, to: 250, radii: [0.2, 0.35, 0.5, 0.65, 0.8] });
+  return {
+    seats: Array.from({ length: nSeats }, (_, i) => ({ steward: seats[2 * i], rig: seats[2 * i + 1] })),
+    nulls: _ringSpots(scene, nNulls, { from: -65, to: 65, radii: [0.3, 0.5, 0.7] }),
+    pull: _ringSpots(scene, 1, { from: 0, to: 0, radii: [0.12] })[0]
+  };
+}
+
+/** "First one to press it, then they confirm" — any member may trigger a class-wide
+ *  action, but never off a stray click. Resolves the confirming userId or null. */
+async function _firstThenConfirm(ctx, { title, content, label, confirm, tag }) {
+  const r = await ctx.askAll({ title, content, label, quorum: "first", tag });
+  if (!r?.first || ctx.released()) return null;
+  const sure = await ctx.askOne(r.first, { title, content: confirm, tag,
+    options: [{ action: "yes", label: "Yes — for everyone" }, { action: "no", label: "Not yet" }], fallback: "no" });
+  return sure === "yes" ? r.first : null;
+}
+
+/* ── INCARNATION: one intro, forges in parallel, the class drops in together ── */
+incarnation.party = {
+  enter: async (ctx) => {
+    await ctx.speakAll("Connection established. You were The One — a perfect run, god-mode earned, a story told true enough to become load-bearing in the weave of things.");
+    // WORDSMITH (Dave): class version of the second line.
+    await ctx.speakAll("So we spun you back in to fix what broke — all of you, apparently, which nobody cleared with me. The catch— *bzzt* —you'll be doing it from inside a homemade Foundry video game. Mine. Try not to touch the walls.");
+    if (ctx.released()) return;
+    const scene = ctx.scene("incarnation");
+    if (scene) {
+      await ctx.viewAll(scene, { label: "Incarnate" });
+      try { await _stage()?.sweepScene?.(scene); } catch (_) {}
+    } else {
+      await ctx.speakAll("Hm. The Incarnation stage is dark — someone rearranged my furniture. *bzzt* We'll do this without the set dressing.");
+    }
+    ctx.riff({ beat: "incarnation", line: "Welcome a whole class of reincarnated Ones into the homemade game.", intent: "Ominous, glitchy, a little funny. One short aside." });
+  },
+  detect: (ctx, done) => {
+    const forging = ctx.members.filter(m => !m.steward).length;
+    // WORDSMITH (Dave): new 2026-10-02.
+    if (forging) ctx.speakAll(`${forging === 1 ? "One of you has" : `${forging} of you have`} no meatsuit on file — the forge opens on your screen. Everyone else: the door opens when the last soul is poured.`);
+    ctx.askAll({
+      title: "◇ OPERATOR",
+      content:
+        `<p>Time to put on a body. We're dropping your consciousness into your <b>Steward</b> — your meatsuit for this run.</p>` +
+        `<p>Everything from here uses your <i>real</i> interface: your sheet, your rig, your faction.</p>` +
+        `<p>The class drops in <b>together</b> — when everyone's ready.</p>`,
+      label: "Drop into my meatsuit", quorum: "all", forge: true
+    }).then(() => done());
+    return null;
+  },
+  exit: async (ctx) => {
+    // WORDSMITH (Dave): new 2026-10-02.
+    await ctx.speakAll(`You're in — all ${ctx.N} of you. Wiggle the fingers, check the seams, apologise to whoever you just elbowed. Next module loading— *bzzt*`);
+  }
+};
+
+/* ── STEWARDSHIP — the Turn: ONE preview for the class ── */
+stewardshipTurn.party = {
+  enter: async (ctx) => {
+    const op = globalThis.game?.bbttcc?.api?.op;
+    const fmt = (m) => { try { return op?.fmt ? op.fmt(m) : `${Math.round(Number(m) || 0)} marks`; } catch (_) { return `${Math.round(Number(m) || 0)} marks`; } };
+    // Each banner's readout goes to ITS member(s) only — one faction per Steward.
+    const byFaction = new Map();
+    for (const m of ctx.members) if (m.faction) {
+      const e = byFaction.get(m.faction.id) || { faction: m.faction, userIds: [] };
+      e.userIds.push(m.userId); byFaction.set(m.faction.id, e);
+    }
+    for (const { faction, userIds } of byFaction.values()) {
+      if (ctx.released()) return;
+      let line = "Operations Points — OP — fund every order you give. They refill each Turn, capped by your tier.";
+      if (op?.preview) {
+        try {
+          const b = (await op.preview(faction.id, {}, {}))?.before || {};
+          line = `${faction.name} — your treasury, OPERATIONS POINTS. Economy ${fmt(b.economy)}, Violence ${fmt(b.violence)}, Diplomacy ${fmt(b.diplomacy)}. Every order spends from these buckets; they refill each Turn, capped by your tier.`;
+        } catch (_) {}
+      }
+      await ctx.speakTo(userIds, line);
+    }
+    await _pause(800);
+    // WORDSMITH (Dave): class version.
+    await ctx.speakAll("Now the heartbeat that refills them: the TURN. Advancing one regens your OP toward its caps, resolves every queued order, and ticks the clock. One PREVIEW, for all of you at once — all rhythm, zero consequences.");
+    ctx.riff({ beat: "stewardship_turn", line: "Explaining OP and the Turn cycle to a whole class; about to run one shared dry-run preview.", intent: "Clinical, a touch grand. One line." });
+  },
+  detect: (ctx, done) => {
+    ctx.askAll({
+      title: "◇ OPERATOR",
+      content: `<p>Feel the <b>Turn cycle</b> — one real <b>preview</b> for the whole class, nothing committed to the living world.</p><p>It runs when everyone's ready.</p>`,
+      label: "Ready for the practice Turn", quorum: "all"
+    }).then(async () => {
+      if (!ctx.released()) {
+        const turn = globalThis.game?.bbttcc?.api?.turn;
+        try { if (turn?.advanceTurn) await turn.advanceTurn({ apply: false }); }
+        catch (e) { console.warn(TAG, "class dry-run turn failed", e); }
+        await ctx.speakAll("That's a Turn — previewed, once, for every banner in the room. In the living world it'd refill your OP and resolve every queued order. Nothing was committed. You've got the rhythm.");
+      }
+      done();
+    });
+    return null;
+  },
+  exit: async (ctx) => {
+    // Each member's sandbox hold goes back to unclaimed (the claim was personal).
+    const sc = ctx.scene("sandbox-hex");
+    for (const m of ctx.members) {
+      try {
+        const dr = (sc?.drawings?.contents ?? Array.from(sc?.drawings ?? [])).find(d => d.getFlag?.(MODULE_ID, "sandboxHex") === m.userId);
+        if (dr?.uuid) await _stage()?.unclaimHex?.(dr.uuid);
+      } catch (_) {}
+    }
+    await ctx.speakAll("Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.");
+  }
+};
+
+/* ── COMBAT SIM: one field, ONE tracker, waves scaled to the class ── */
+combatSim.party = {
+  scale: PARTY_SCALE.combat_sim,
+  enter: async (ctx) => {
+    ctx._spawned = [];
+    ctx._sim = { scene: null, waveIdx: -1, records: new Map(), advancing: false, finished: false,
+                 tally: { husksDown: 0, saved: 0, killed: 0, talked: 0, rigsWrecked: 0 } };
+    // WORDSMITH (Dave): class version.
+    await ctx.speakAll("Gear's bought, crews are behind you, and every one of you is carrying something you built yourself. Now the part the manuals skip: what all of it does when something is trying to end you. Proving Ground, live-fire, together. *bzzt*");
+    const scene = ctx.scene("meatsuit-range");
+    ctx._sim.scene = scene;
+    const stage = _stage();
+    if (!scene || !stage || ctx.released()) return;
+    await ctx.viewAll(scene, { label: "Proving Ground" });
+    try { await stage.sweepScene?.(scene); } catch (_) {}
+    if (ctx.released()) return;
+    ctx._spawned.push(...await _placeClass(stage, scene, ctx, SIM_STEWARD_AT, SIM_RIG_AT));
+    if (ctx.released()) return;
+
+    // ONE briefing for the GM — the class's numbers, not N students'.
+    const n = ctx.N;
+    try {
+      await ChatMessage.create({
+        whisper: game.users.filter(u => u.isGM).map(u => u.id),
+        speaker: { alias: "◇ OPERATOR" },
+        content:
+          `<p><b>Onboarding combat simulator — a class of ${n} is on the Proving Ground.</b> One tracker holds every Steward, rig and foe.</p>` +
+          `<p>Waves, one at a time as each clears (scaled to the class${ctx.dial ? `, dial ${ctx.dial > 0 ? "+1" : "−1"}` : ""}): ` +
+          `<b>${ctx.scale("husks")} hollow</b> (qliphothic — gantry perches drop on the first hit) → <b>${ctx.scale("scavengers")} scavengers</b> (sentient) → <b>${ctx.scale("guntruck")} gun-truck${ctx.scale("guntruck") === 1 ? "" : "s"}</b> (rig).</p>` +
+          `<p>You run the foes. A sentient at 40% or less <b>surrenders</b>; killed outright, <b>+1 Darkness goes to whoever landed the kill</b>. Any student can call a stand-down (they confirm it).</p>`
+      });
+    } catch (e) { console.warn(TAG, "class sim GM briefing failed", e); }
+    await _pause(400);
+    await ctx.speakAll("Ground rules. QLIPHOTHIC are hollow — a shape with nothing living in it. Kill them; there's nothing to save. SENTIENT are people. People fold when they're losing, and a folded enemy is a saved one.");
+    await _pause(800);
+    // WORDSMITH (Dave): class version.
+    await ctx.speakAll("You can kill the sentient ones. Nobody stops you. It goes on the DARKNESS track of whoever pulled the trigger — receipts are personal, even in a crowd. And it's one tracker: take your turns.");
+  },
+
+  detect: (ctx, done) => {
+    const sim = ctx._sim;
+    const stage = _stage();
+    if (!sim?.scene || !stage) {
+      // Degraded (review fix b): everyone present continues — one seat can't end it for the class.
+      ctx.askAll({ title: "◇ OPERATOR — Proving Ground", content: "<p>The Proving Ground isn't available right now. Continue when ready; you can replay this beat solo later.</p>", label: "Continue", quorum: "present" }).then(() => done());
+      return null;
+    }
+    const key = ctx.cohort.key;
+    const integrityOf = (actor, isRig) => {
+      const sys = actor?.system?.system ?? actor?.system;
+      const n = Number(foundry.utils.getProperty(sys, isRig ? "integrity.value" : "derived.integrity.value"));
+      return Number.isFinite(n) ? n : null;
+    };
+    let disposed = false, sdTimer = null, endTimer = null;
+    const finish = () => { if (sim.finished) return; sim.finished = true; done(); };
+
+    // A Release/End/Abort can land mid-wave: stop spawning at the next step
+    // (review fix 2) — the runner waits for this to settle before it reaps.
+    const stopped = () => disposed || sim.finished || ctx.released();
+    const advance = () => ctx.busy(advanceInner());
+    const advanceInner = async () => {
+      if (sim.advancing || stopped()) return;
+      sim.advancing = true;
+      try {
+        await ctx.hold();                                 // Pause holds the next wave
+        if (stopped()) return;
+        sim.waveIdx += 1;
+        sim.records.clear();
+        const wave = SIM_WAVES[sim.waveIdx];
+        if (!wave) { finish(); return; }
+        const count = ctx.scale(wave.key);
+        await ctx.speakAll(wave.brief);
+        if (wave.rig) {
+          for (const [slot, f] of _partyFoes([{ ...wave.rig }], count).entries()) {
+            if (stopped()) break;
+            const sp = await stage.spawnObstacle?.(sim.scene, {
+              name: f.name, size: f.size, integrity: f.integrity, bracket: f.bracket, img: f.img ?? "", loadout: f.loadout ?? null,
+              ownerKey: key, ..._scenePoint(sim.scene, f.xFrac, f.yFrac, ART_LANE)
+            });
+            if (sp?.actor) sim.records.set(sp.actor.id, { actorId: sp.actor.id, tokenId: sp.token?.id || null, name: sp.actor.name, slot,
+              foeClass: "qliphothic", isRig: true, perch: false, resolved: false, max: Number(f.integrity) || 0, last: Number(f.integrity) || 0 });
+          }
+        } else {
+          for (const [slot, f] of _partyFoes(wave.foes || [], count).entries()) {
+            if (stopped()) break;
+            const sp = await _spawnFoeSmart(stage, sim.scene, f, ART_LANE, { ownerKey: key });
+            if (!sp?.actor) continue;
+            const max = Number(sp.integrityMax) || Number(integrityOf(sp.actor, false)) || 0;
+            sim.records.set(sp.actor.id, { actorId: sp.actor.id, tokenId: sp.token?.id || null, name: sp.actor.name, slot,
+              foeClass: f.foeClass, isRig: false, perch: !!f.perch, resolved: false, shoved: false, max, last: max });
+          }
+        }
+        if (stopped()) return;                            // whatever landed is class-keyed: the reap takes it
+        if (!sim.records.size) { console.warn(TAG, `class sim: wave "${wave.key}" spawned nothing — skipping it.`); sim.advancing = false; return advanceInner(); }
+        // ONE tracker: the class (first wave) and every wave's foes join the same Combat.
+        try {
+          await stage.beginShowdownCombat?.(sim.scene,
+            [...(sim.waveIdx === 0 ? _classActorIds(ctx) : []), ...sim.records.keys()],
+            { ownerKey: key, quiet: true, kind: "sim", playerName: "The class" });
+        } catch (e) { console.warn(TAG, "class sim tracker failed", e); }
+        if (stopped()) return;
+        await ctx.speakAll(wave.coach);
+        ctx.cancelAsks("sd");
+        offerStandDown();
+      } catch (e) { console.warn(TAG, "class sim wave advance failed", e); }
+      finally { sim.advancing = false; }
+    };
+
+    const SD_TITLE = "◇ OPERATOR — Stand-Down";
+    const sentientsPending = () => [...sim.records.values()].filter(r => !r.resolved && r.foeClass === "sentient");
+    const offerStandDown = () => {
+      if (disposed || sim.finished || !sentientsPending().length) return;
+      _firstThenConfirm(ctx, {
+        title: SD_TITLE, tag: "sd", label: "🕊 They stood down",
+        content: `<p><b>Talking instead of shooting?</b> Sentient foes can be TALKED DOWN at the table. Any of you can press this once they've actually agreed — you'll be asked to confirm it for the whole class.</p>`,
+        confirm: `<p><b>Confirm the peace for everyone:</b> did the table actually talk it out with ${sentientsPending().map(p => p.name).join(" and ")}?</p>`
+      }).then(async (who) => {
+        if (disposed || sim.finished) return;
+        if (who && sentientsPending().length) {
+          const name = ctx.members.find(m => m.userId === who)?.name || "Someone";
+          await ctx.speakAll(`${name} called the stand-down, and the class confirmed it.`);   // WORDSMITH (Dave)
+          for (const rec of sentientsPending()) await resolveFoe(rec, "talked");
+          return;
+        }
+        if (!ctx.released()) sdTimer = setTimeout(offerStandDown, 15000);
+      });
+    };
+
+    const resolveFoe = async (rec, how) => {
+      if (!rec || rec.resolved) return;
+      rec.resolved = true;
+      if (how === "saved") {
+        sim.tally.saved += 1;
+        try { await stage.foeSurrender?.(rec.actorId, 1, { sceneId: sim.scene?.id, tokenId: rec.tokenId }); } catch (_) {}
+        await ctx.speakAll(`${rec.name} drops their weapon — hands up, still breathing. That's a save.`);
+      } else if (how === "killed" && rec.foeClass === "sentient") {
+        sim.tally.killed += 1;
+        // Billed to the KILLER (Phase 0 billKill — resolved on the GM). No run
+        // owner to fall back on in a class: an unattributable kill bills nobody.
+        // A re-run of the beat (GM refresh / conductor change) never bills the same wave slot twice (review fix 5).
+        let landed = null;
+        const firstBill = await ctx.once(`kill:sim:${sim.waveIdx}:${rec.slot ?? rec.actorId}`);
+        if (firstBill) { try { landed = await stage.billKill?.(rec.actorId, { sceneId: sim.scene?.id, tokenId: rec.tokenId, fallbackActorId: "", reason: `killed ${rec.name} (onboarding class sim)` }); } catch (_) {} }
+        if (landed?.ok && landed.after > landed.before) await ctx.speakAll(`${rec.name} is dead — that one goes on ${landed.name}'s ledger. Darkness ${landed.before} → ${landed.after}. I write down who pulled the trigger.`);
+        else await ctx.speakAll(`${rec.name} is dead. That one was a person.`);
+      } else if (how === "talked") {
+        sim.tally.talked += 1;
+        try { await stage.cleanup?.([{ token: sim.scene?.tokens?.get?.(rec.tokenId), actor: game.actors?.get?.(rec.actorId) }]); } catch (_) {}
+        await ctx.speakAll(`${rec.name} lowers the gun and walks. Nobody bled, nothing's owed.`);
+      } else if (how === "gone") {
+        console.log(TAG, `class sim: "${rec.name}" left the board unresolved — not scored.`);
+      } else if (rec.isRig) {
+        sim.tally.rigsWrecked += 1;
+        await ctx.speakAll(`${rec.name} — wrecked. Nothing in it was ever alive.`);
+      } else {
+        sim.tally.husksDown += 1;
+        const left = [...sim.records.values()].filter(r => !r.resolved).length;
+        if (left > 0) await ctx.speakAll(`${rec.name} folds into nothing. ${left} still standing.`);
+      }
+      if ([...sim.records.values()].every(r => r.resolved) && !stopped()) { await _pause(500); await advance(); }
+    };
+
+    const onUpd = (actor) => {
+      const rec = sim.records.get(actor?.id);
+      if (!rec || rec.resolved || sim.finished) return;
+      const val = integrityOf(actor, rec.isRig);
+      if (val === null) return;
+      if (rec.perch && !rec.shoved && val < rec.last) {
+        rec.shoved = true;
+        stage.shoveOffPerch?.(sim.scene, rec.tokenId, rec.actorId).then(r => {
+          if (r?.ok) ctx.speakAll(`The gantry rail gives — ${rec.name} goes over the side and lands hard (${r.damage} impact). Height is a weapon.`);
+        }).catch(() => {});
+      }
+      rec.last = val;
+      if (val <= 0) { ctx.busy(resolveFoe(rec, "killed")); return; }
+      const sys = actor?.system?.system ?? actor?.system;
+      const stress = Number(foundry.utils.getProperty(sys, "derived.stress.value"));
+      const stressMax = Number(foundry.utils.getProperty(sys, "derived.stress.max")) || 0;
+      if (!rec.isRig && stressMax > 0 && Number.isFinite(stress) && stress <= 0) { ctx.busy(resolveFoe(rec, rec.foeClass === "sentient" ? "saved" : "killed")); return; }
+      const losing = (rec.max > 0 && val <= Math.max(2, Math.ceil(rec.max * 0.4)))
+        || (stressMax > 0 && Number.isFinite(stress) && stress <= Math.max(2, Math.ceil(stressMax * 0.4)));
+      if (rec.foeClass === "sentient" && losing) ctx.busy(resolveFoe(rec, "saved"));
+    };
+    const onRigDestroyed = ({ rig } = {}) => { const rec = sim.records.get(rig?.id); if (rec) ctx.busy(resolveFoe(rec, "killed")); };
+    const onDelTok = (tokenDoc) => { const rec = sim.records.get(tokenDoc?.actorId); if (rec) resolveFoe(rec, "gone").catch(() => {}); };
+    Hooks.on("updateActor", onUpd);
+    Hooks.on("bbttcc:rig:destroyed", onRigDestroyed);
+    Hooks.on("deleteToken", onDelTok);
+
+    advance();
+
+    // Escape hatch — any member, confirm-gated (it ends the sim for everyone). The GM's Release also ends it.
+    const offerEnd = () => {
+      if (disposed || sim.finished) return;
+      _firstThenConfirm(ctx, {
+        title: "◇ OPERATOR — Proving Ground", tag: "end", label: "End the simulation",
+        content: `<p><b>Qliphothic</b> — kill them. <b>Sentient</b> — take them low and they surrender; a kill adds <b>Darkness</b> to whoever lands it.</p><p><i>Stuck? Any of you can end the simulation for the class (you'll confirm).</i></p>`,
+        confirm: "<p>End the simulation for the <b>whole class</b>?</p>"
+      }).then(who => {
+        if (disposed || sim.finished) return;
+        if (who) return finish();
+        if (!ctx.released()) endTimer = setTimeout(offerEnd, 15000);
+      });
+    };
+    offerEnd();
+
+    return () => {
+      disposed = true;
+      if (sdTimer) clearTimeout(sdTimer);
+      if (endTimer) clearTimeout(endTimer);
+      Hooks.off("updateActor", onUpd);
+      Hooks.off("bbttcc:rig:destroyed", onRigDestroyed);
+      Hooks.off("deleteToken", onDelTok);
+      ctx.cancelAsks();
+    };
+  },
+
+  exit: async (ctx) => {
+    const t = ctx._sim?.tally || { husksDown: 0, saved: 0, killed: 0, talked: 0, rigsWrecked: 0 };
+    await ctx.speakAll(`Simulation closed. ${t.husksDown} hollow put down, ${t.rigsWrecked} vehicle${t.rigsWrecked === 1 ? "" : "s"} wrecked, ${t.saved} spared, ${t.killed} killed${t.talked ? `, ${t.talked} talked down` : ""}.`);
+    // WORDSMITH (Dave): class verdict line.
+    if (t.killed === 0 && (t.saved || t.talked)) await ctx.speakAll("Everyone who could be spared was spared — by a committee, which is harder. Darkness tracks are clean. I noticed.");
+    else if (t.killed > 0) await ctx.speakAll("Some of you pulled triggers you didn't have to. The ledger knows whose. Carry it and keep going.");
+    for (const m of ctx.members) { try { await _stage()?.disembark?.(m.steward?.id, m.rig?.id); } catch (_) {} }
+    try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
+    ctx._spawned = []; ctx._sim = null;
+  }
+};
+
+/* ── FINAL SHOWDOWN: the class votes the door, ONE ring / fight / parley ── */
+finalShowdown.party = {
+  scale: PARTY_SCALE.final_showdown,
+  enter: async (ctx) => {
+    ctx._spawned = [];
+    const fs = ctx._fs = { scene: null, foes: new Map(), parleyed: false, resolved: false, downed: 0, approach: "violence", sealedScene: null };
+    const stage = _stage();
+    const scene = ctx.scene("meatsuit-range");
+    fs.scene = scene;
+    const stop = () => { if (ctx.released()) { fs.scene = null; return true; } return false; };
+    try { if (scene) await stage?.sweepScene?.(scene); } catch (_) {}
+    if (stop()) return;
+    // Class relics: the circle opens when the CLASS holds all four.
+    const held = Math.max(0, ...ctx.members.map(m => _pgRelics(m.steward).filter(k => PG_TRIALS.some(t => t.key === k)).length));
+    if (held < PG_TRIALS.length) {
+      await ctx.speakAll(`The great circle won't take you — the class holds ${held} of ${PG_TRIALS.length} anchors. It isn't being coy, it's being LOAD-BEARING.`);
+      fs.scene = null;
+      return;
+    }
+    if (scene) await ctx.viewAll(scene, { label: "Proving Ground" });
+    if (stop()) return;
+    await ctx.speakAll("Four anchors, one circle. Step in and it closes behind you — that's the point of a circle.");
+    await _pause(700);
+    await ctx.speakAll("Whatever's been pulling at us is going to have to come through in person to finish the job. Good. In person, it can be HIT. *bzzt*");
+    // WORDSMITH (Dave): class version.
+    await ctx.speakAll("You've all run the consoles — violence, intrigue, presence. How does the CLASS go in? Vote. Majority wins; a tie goes to your GM.");
+    const v = await ctx.vote({
+      title: "◇ OPERATOR — How do we do this?",
+      content:
+        `<p><b>⚔ Storm the gates</b> — everything inside is awake and there are more of them.</p>` +
+        `<p><b>🗡 Slip inside</b> — fewer of them, and they start <b>Surprised</b>: no actions on the first round.</p>` +
+        `<p><i>Your vote. Majority decides; a tie goes to the GM.</i></p>`,
+      options: [{ action: "violence", label: PG_APPROACHES.violence.label }, { action: "intrigue", label: PG_APPROACHES.intrigue.label }],
+      timeoutMs: 60000
+    });
+    // Released/aborted mid-vote: nothing is staged (review fix 1).
+    if (!v?.winner || stop()) { fs.scene = null; return; }
+    const picked = PG_APPROACHES[v.winner] ? v.winner : "violence";
+    const approach = PG_APPROACHES[picked];
+    fs.approach = picked;
+    const tallyTxt = Object.entries(v?.tally || {}).map(([k, n]) => `${k === "violence" ? "storm" : "slip"} ${n}`).join(", ");
+    // WORDSMITH (Dave): new 2026-10-02.
+    await ctx.speakAll(`The class has spoken (${tallyTxt}${v?.tied ? " — the GM broke the tie" : ""}): we go in ${picked === "intrigue" ? "quiet" : "loud"}. ${approach.brief}`);
+    if (!scene || !stage || stop()) return;
+
+    // Everyone and everything INSIDE the ring (review fix 4): the class on the
+    // west arc, Null Processes on the east arc, the Pull near the centre.
+    const key = ctx.cohort.key;
+    const nulls = picked === "violence" ? Math.max(2, ctx.scale("nullsLoud")) : ctx.scale("nullsQuiet");
+    const members = ctx.members;
+    const spots = _showdownSpots(scene, members.length, nulls);
+    for (const [i, m] of members.entries()) {
+      if (stop()) return;
+      try {
+        if (m.steward) { const st = await stage.ensureTokenOnScene(m.steward, scene, { ...spots.seats[i].steward, move: true }); if (st?.created) ctx._spawned.push({ token: st.doc }); }
+        const rig = m.rig;
+        if (rig) { const rt = await stage.ensureTokenOnScene(rig, scene, { ...spots.seats[i].rig, move: true }); if (rt?.created) ctx._spawned.push({ token: rt.doc }); }
+      } catch (e) { console.warn(TAG, "class arena placement failed for", m.name, e); }
+    }
+    const nullDef = approach.foes.find(f => (f.body ?? 0) < 8);
+    const boss = approach.foes.find(f => (f.body ?? 0) >= 8);
+    const toSpawn = [...spots.nulls.map(pt => ({ def: nullDef, pt })), ...(boss ? [{ def: boss, pt: spots.pull }] : [])];
+    for (const { def, pt } of toSpawn) {
+      if (stop()) return;                                   // anything already landed is class-keyed — Abort's teardown waits for us
+      const sp = await _spawnFoeSmart(stage, scene, def, ART_LANE, { ownerKey: key, ...pt });
+      if (sp?.actor) fs.foes.set(sp.actor.id, { actorId: sp.actor.id, name: sp.actor.name, boss: (def.body ?? 0) >= 8, down: false });
+    }
+    if (stop()) return;
+    const d = scene.dimensions ?? {};
+    const centre = _scenePoint(scene, PG_ARENA.xFrac, PG_ARENA.yFrac, ART_LANE);
+    const sealed = await stage.sealCircle?.(scene, { cx: centre.x, cy: centre.y, radius: Math.round((d.sceneWidth ?? scene.width ?? 4400) * PG_CIRCLE_RADIUS_FRAC), ownerKey: key });
+    if (sealed?.ok) { fs.sealedScene = scene; await ctx.speakAll("And there it is — the circle just closed behind you. Nothing gets out— *bzzt* —which cuts both ways."); }
+    if (stop()) return;
+    try { await stage.beginShowdownCombat?.(scene, [..._classActorIds(ctx), ...fs.foes.keys()], { ownerKey: key, playerName: "The class", kind: "showdown" }); }
+    catch (e) { console.warn(TAG, "class showdown tracker failed", e); }
+    await ctx.speakAll(approach.coach);
+    await ctx.speakAll("The small ones were never people. The big one is the hand on the lever.");
+  },
+
+  detect: (ctx, done) => {
+    const fs = ctx._fs;
+    const stage = _stage();
+    if (!fs?.scene || !fs.foes.size) {
+      ctx.askAll({ title: "◇ OPERATOR — Final Show Down", content: "<p>The circle isn't ready — missing arena or missing anchors. Continue when you like.</p>", label: "Continue", quorum: "present" }).then(() => done());
+      return null;
+    }
+    const key = ctx.cohort.key;
+    let disposed = false, setTimer = null;
+    const finish = () => { if (!fs.resolved) { fs.resolved = true; done(); } };
+
+    const parley = () => ctx.busy(parleyInner());
+    const parleyInner = async () => {
+      if (fs.parleyed || ctx.released()) return;
+      fs.parleyed = true;
+      if (fs.sealedScene) {
+        try { await stage.unsealCircle?.(fs.sealedScene, { ownerKey: key }); } catch (_) {}
+        fs.sealedScene = null;
+        await ctx.speakAll("— the circle just OPENED. Not from your side. *bzzt* Hold. Hold—");
+      }
+      await ctx.speakAll("— wait. Something's coming in on a channel that shouldn't exist. It's not attacking. It's TALKING.");
+      const court = ctx.scene("court-parley");
+      if (court) {
+        await ctx.speakAll("The channel reaches out and FOLDS — *bzzt* — a room that wasn't in the world model a second ago. A court.");
+        await ctx.viewAll(court, { label: "The Parley" });
+        for (const m of ctx.members) {
+          try { const st = await stage.ensureTokenOnScene?.(m.steward, court, _scenePoint(court, 0.42, 0.74, m.lane)); if (st?.created) ctx._spawned.push({ token: st.doc }); } catch (_) {}
+        }
+      }
+      if (ctx.released()) return;
+      const stageScene = court || fs.scene;
+      try {
+        if (await ctx.once("parley:messenger")) await stage.spawnFoe?.(stageScene, {
+          name: "A Messenger, Sent In Haste", img: OBSTACLE_ART("courtier-messenger.webp"), foeClass: "sentient", body: 2, ownerKey: key,
+          ...(court ? _scenePoint(court, 0.58, 0.56, ART_LANE) : _scenePoint(stageScene, PG_ARENA.xFrac + 0.10, PG_ARENA.yFrac - 0.09, ART_LANE))
+        });
+      } catch (_) {}
+      await ctx.speakAll("It's a messenger. Unarmed, badly rendered, and carrying paperwork. *bzzt* — I did not have this on the list.");
+      // Every banner in the class gets the two secrets (one faction per Steward).
+      const factions = [...new Map(ctx.members.filter(m => m.faction).map(m => [m.faction.id, m.faction])).values()];
+      let granted = 0;
+      // Once per banner per class, even if the beat re-runs (review fix 5).
+      for (const f of factions) {
+        if (ctx.released()) return;
+        if (!(await ctx.once(`parley:secrets:${f.id}`))) { granted += PG_PARLEY_SECRETS.length; continue; }
+        for (const spec of PG_PARLEY_SECRETS) { const r = await stage.grantSecret?.(f.id, spec); if (r?.ok) granted++; }
+      }
+      // WORDSMITH (Dave): class version.
+      await ctx.speakAll(granted
+        ? `It hands every banner here two documents: ${PG_PARLEY_SECRETS.map(s => s.name).join(" and ")}. COURTLY SECRETS — real ones, playable the moment a parley opens.`
+        : "It hands over its paperwork — though the court's filing system just refused it. Your GM can add the secrets by hand.");
+      await ctx.speakAll("Finish what's in the circle — it's losing, nobody would blame you — or take the surrender and open the parley. Your GM runs it from the Raid Console: PRESENCE, not violence.");
+      try {
+        for (const f of factions) {
+          await stage.setRaidSession?.(f.id, { rev: Date.now(), ts: Date.now(), by: "", attackerId: f.id, supportFactionIds: [], activityKey: "presence",
+            difficulty: "standard", targetType: "hex", targetUuid: "", targetName: "The Pull", defenderId: "", rounds: [], logWar: false, includeDefender: false });
+        }
+        // ONE GM console (raid captains / coalition parley are Phase 3).
+        if (factions[0] && !ctx.released() && await ctx.once("parley:console")) await stage.openRaidConsoleForGM?.(factions[0].id, { playerName: "The class", activityKey: "presence", sceneId: court?.id ?? "" });
+      } catch (e) { console.warn(TAG, "class parley handoff failed", e); }
+    };
+
+    const tracksOf = (a) => {
+      const sys = a?.system?.system ?? a?.system;
+      const rd = (p) => { const n = Number(foundry.utils.getProperty(sys, p)); return Number.isFinite(n) ? n : null; };
+      return { integ: rd("derived.integrity.value"), integMax: rd("derived.integrity.max") ?? 0, stress: rd("derived.stress.value"), stressMax: rd("derived.stress.max") ?? 0 };
+    };
+    const onUpd = (actor) => {
+      const rec = fs.foes.get(actor?.id);
+      if (!rec || rec.down || fs.resolved) return;
+      const t = tracksOf(actor);
+      if (t.integ === null && t.stress === null) return;
+      const half = (v, m) => v !== null && m > 0 && v <= m * 0.5;
+      if (rec.boss && !fs.parleyed && (half(t.integ, t.integMax) || half(t.stress, t.stressMax))) parley().catch(() => {});
+      const killed = t.integ !== null && t.integ <= 0;
+      const koed = !killed && t.stress !== null && t.stressMax > 0 && t.stress <= 0;
+      if (!killed && !koed) return;
+      rec.down = true; fs.downed += 1;
+      if (rec.boss) {
+        ctx.speakAll(killed ? "The hand comes off the lever. The pull stops— *bzzt* —and the tick rate steadies. You killed it." : "The hand slides off the lever — out cold, not dead. Same silence, cleaner hands.");
+        finish();
+      } else {
+        ctx.speakAll(`${rec.name} unspools. It was never anyone.`);
+        if (fs.downed >= Math.max(2, Math.ceil(fs.foes.size / 2)) && !fs.parleyed) parley().catch(() => {});
+      }
+    };
+    Hooks.on("updateActor", onUpd);
+
+    const offerSettle = () => {
+      if (disposed || fs.resolved) return;
+      _firstThenConfirm(ctx, {
+        title: "◇ OPERATOR — Final Show Down", tag: "settle", label: "This is settled",
+        content: `<p>Fight what's in the circle. When it starts losing, a <b>messenger</b> arrives with an offer.</p><p><b>Finish it</b>, or <b>take the parley</b> (your GM runs it on <b>presence</b>). Any of you can call it settled once the table has — you'll confirm.</p>`,
+        confirm: "<p>Call the showdown settled for the <b>whole class</b>?</p>"
+      }).then(who => {
+        if (disposed || fs.resolved) return;
+        if (who) return finish();
+        if (!ctx.released()) setTimer = setTimeout(offerSettle, 15000);
+      });
+    };
+    offerSettle();
+    return () => { disposed = true; if (setTimer) clearTimeout(setTimer); Hooks.off("updateActor", onUpd); ctx.cancelAsks(); };
+  },
+
+  exit: async (ctx) => {
+    const fs = ctx._fs || {};
+    try { if (fs.sealedScene) await _stage()?.unsealCircle?.(fs.sealedScene, { ownerKey: ctx.cohort.key }); } catch (_) {}
+    if (fs.scene) {
+      await ctx.speakAll(fs.parleyed
+        ? "However that ended — it ended with words on the table. Remember that you had the option. Most things in Bad Eden won't offer it twice."
+        : "Circle's quiet. The game is still here, and so are all of you. *bzzt* — I'd call that a pass.");
+      await ctx.speakAll("Training's over. Whatever tried that is still out there, and now it knows your names. Go be worth knowing.");
+    }
+    for (const m of ctx.members) { try { await _stage()?.disembark?.(m.steward?.id, m.rig?.id); } catch (_) {} }
+    try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
+    ctx._spawned = []; ctx._fs = null;
+  }
+};
+
 /* ───────────────────────── REGISTRATION ───────────────────────── */
 Hooks.once("ready", () => {
   const ns = globalThis.game?.bbttcc?.onboarding;
@@ -2937,5 +3557,9 @@ Hooks.once("ready", () => {
     graduation
   ];
   for (const beat of ordered) ns.beats.register(beat);
+  // Group induction Phase 2: the class conductor moves members between scenes with the solo entrance.
+  ns.ui = Object.assign(ns.ui ?? {}, { enterScene: _enterScene });
+  ns.partyScale = PARTY_SCALE;
+  ns.partyGeom = { ringSpots: _ringSpots, showdownSpots: _showdownSpots, arena: PG_ARENA, ringFrac: PG_CIRCLE_RADIUS_FRAC };
   console.log(TAG, "Registered beats:", ns.beats.list().map(b => b.id).join(", "));
 });

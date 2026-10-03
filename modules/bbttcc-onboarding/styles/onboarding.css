@@ -305,3 +305,6 @@
 .bbttcc-cohort-console .cc-row-away td { opacity: .7; font-style: italic; }
 .bbttcc-cohort-console .cc-st-label { font-size: .8em; opacity: .85; }
 .bbttcc-cohort-console .cc-feed { font-size: .8em; opacity: .8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-top: 1px solid rgba(127, 214, 255, .2); padding-top: .2rem; cursor: help; }
+.bbttcc-cohort-console .cc-dial { display: flex; align-items: center; gap: .35rem; }
+.bbttcc-cohort-console .cc-dial button { width: 1.8rem; flex: 0 0 auto; line-height: 1.4; padding: 0; }
+.bbttcc-cohort-console .cc-dial-val { min-width: 1.6rem; text-align: center; color: #ffd34d; }

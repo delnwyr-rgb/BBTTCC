@@ -525,7 +525,7 @@ Hooks.once("ready", () => {
   const ns = globalThis.game?.bbttcc?.onboarding;
   if (!ns) return;
   ns.beats = { register: registerBeat, list: listBeats, get: getBeat };
-  ns.ui = Object.assign(ns.ui ?? {}, { raiseDialogByTitle, closeDialogByTitle, closeAllOnboardingPrompts, promptIdFor, PROMPT_POSITION, deck, choose });
+  ns.ui = Object.assign(ns.ui ?? {}, { raiseDialogByTitle, closeDialogByTitle, closeAllOnboardingPrompts, promptIdFor, PROMPT_POSITION, deck, choose, prompt });
   Object.assign(ns, { start, skip, reset, status, activeRuns, isRunning: () => _running, skipBeat, abortRun, cohortPending });
 
   try {

@@ -250,6 +250,9 @@ Hooks.once("ready", () => {
   if (!ns) return console.warn(TAG, "onboarding namespace missing — forge not installed.");
 
   _registerFoundingOp();
+  // Group induction Phase 2: a class member without a Steward forges on their
+  // own screen while the class waits at the incarnation door.
+  ns.forgeSteward = () => _forgeSteward(game.user);
 
   // Gate 1: steward forge in front of the director's start().
   const originalStart = ns.start;

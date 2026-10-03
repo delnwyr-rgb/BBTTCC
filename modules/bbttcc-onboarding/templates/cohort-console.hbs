@@ -17,8 +17,17 @@
     {{#if canResume}}<button type="button" data-cc="resume">▶ Resume</button>{{/if}}
     {{#if canRelease}}<button type="button" data-cc="release" title="Move the class on now, whoever has arrived">⏭ Release barrier now</button>{{/if}}
     {{#if canAbort}}<button type="button" data-cc="abort" class="cc-danger">✕ Abort + teardown</button>{{/if}}
+    {{#if canResend}}<button type="button" data-cc="resend" title="{{#if conducted}}Send everyone present back to the class's scene{{else}}Nudge anyone not at the gate back into this segment{{/if}}">↺ Re-send to scene</button>{{/if}}
     <button type="button" data-cc="refresh" title="Refresh">↻</button>
   </div>
+  {{#if live}}
+  <div class="cc-dial" title="Party-beat foe scaling: added to every scaled count (sim waves, showdown Null Processes). Takes effect on the next spawn.">
+    <span class="cc-muted">Foe dial</span>
+    <button type="button" data-cc="dial" data-dial="{{#if dialMinus}}-1{{else}}{{#if dialPlus}}0{{else}}-1{{/if}}{{/if}}" {{#if dialMinus}}disabled{{/if}}>−</button>
+    <b class="cc-dial-val">{{dialLabel}}</b>
+    <button type="button" data-cc="dial" data-dial="{{#if dialPlus}}1{{else}}{{#if dialMinus}}0{{else}}1{{/if}}{{/if}}" {{#if dialPlus}}disabled{{/if}}>+</button>
+  </div>
+  {{/if}}
 
   <div class="cc-roster">
     <table>

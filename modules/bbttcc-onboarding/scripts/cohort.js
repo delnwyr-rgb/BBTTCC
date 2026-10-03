@@ -81,7 +81,10 @@ const LINES = {
 const SEGMENT_PLAN = [
   { key: "incarnation", kind: "party",      label: "Incarnation",                 beats: ["incarnation"] },
   { key: "stretch-a",   kind: "personal",   label: "Meatsuit + Test Track",       beats: ["meatsuit", "driving"] },
-  { key: "stewardship", kind: "party",      label: "Stewardship",                 beats: ["stewardship_claim", "stewardship_turn"] },
+  // Phase 2: the claim stays personal (founding + each faction's own hex); the
+  // practice Turn is ONE preview for the class, conducted on the GM.
+  { key: "stewardship-claim", kind: "personal", label: "Stewardship — claim",   beats: ["stewardship_claim"] },
+  { key: "stewardship-turn",  kind: "party",    label: "Stewardship — the Turn", beats: ["stewardship_turn"] },
   { key: "stretch-b",   kind: "personal",   label: "Outfitting → Manifestations", beats: ["outfitting", "crew_occult", "surge", "manifestations"] },
   { key: "combat-sim",  kind: "party",      label: "Combat Sim",                  beats: ["combat_sim"] },
   { key: "travel",      kind: "party",      label: "Crossing",                    beats: ["travel"] },
@@ -91,7 +94,7 @@ const SEGMENT_PLAN = [
   { key: "graduation",  kind: "graduation", label: "Graduation",                  beats: ["graduation"] }
 ];
 // Segments whose class props (cohort key) are reaped once the class leaves them.
-const REAP_AFTER = new Set(["trials", "showdown"]);
+const REAP_AFTER = new Set(["combat-sim", "trials", "showdown"]);
 
 function buildSegments(arcIds) {
   const out = [];
@@ -220,9 +223,18 @@ function _refreshIds(uid, m) {
 }
 
 /* Advance logic — pure registry edits; returns the side effects to perform AFTER the write. */
+/** A party segment is CONDUCTED (run once on the GM via beat.party) when every
+ *  beat in it has a party variant; otherwise members run their solo beats (Phase 1). */
+function _conductable(seg) {
+  if (!seg || seg.kind !== "party") return false;
+  const get = _ns()?.beats?.get;
+  return seg.beats.length > 0 && seg.beats.every(id => !!get?.(id)?.party);
+}
 function _openSegment(c, idx) {
   c.segmentIdx = idx;
   const seg = _segOf(c);
+  if (seg) seg.conducted = _conductable(seg);
+  c.partyDone = []; c.partyBeat = ""; delete c.partyScene;
   c.barrier = { id: `${idx}:${_rid()}`, arrived: [] };
   c.beatId = seg?.beats?.[0] || "";
   for (const m of Object.values(c.members || {})) if (m.status === "barrier") m.status = "working";
@@ -264,6 +276,7 @@ function _emit(msg) {
 function _cue(c, uids, { recue = false } = {}) {
   const seg = _segOf(c);
   if (!seg || !uids.length) return;
+  if (seg.conducted) return _rejoin(c, uids);     // the GM runs this one: just bring them back in
   const lanes = {};
   for (const uid of uids) { lanes[uid] = Number(c.members?.[uid]?.lane) || 0; _lastCue.set(uid, { ts: _now(), barrierId: c.barrier?.id || "" }); }
   _emit({ t: "cohort-cue", cohortId: c.id, to: uids, segIdx: c.segmentIdx, barrierId: c.barrier?.id || "",
@@ -283,7 +296,8 @@ async function _perform(cohortId, acts = []) {
           // Every working member at once; graduation opens with one class line first.
           if (_segOf(c)?.kind === "graduation") await _speakClass(c, LINES.gradIn);
           if (c.segmentIdx === 0) await _speakClass(c, LINES.start(Object.values(c.members).filter(m => m.status !== "left").length));
-          _cue(c, _presentIds(c).filter(uid => c.members[uid].status === "working"));
+          if (_segOf(c)?.conducted) _runParty(cohortId).catch(e => console.warn(TAG, "party segment failed", e));
+          else _cue(c, _presentIds(c).filter(uid => c.members[uid].status === "working"));
         }
       }
     } catch (e) { console.warn(TAG, `side effect "${a.type}" failed`, e); }
@@ -312,6 +326,264 @@ async function _teardownProps(cohortId) {
   for (const a of (game.actors?.contents ?? []).filter(x => k(x) === key && x.getFlag?.(MODULE_ID, "spawned"))) { try { await a.delete(); nA++; } catch (_) {} }
   if (nT || nW || nA || nC) console.log(TAG, `class props reaped for ${key}: ${nT} token(s), ${nW} wall(s), ${nA} actor(s), ${nC} combat(s).`);
   return { ok: true, tokens: nT, walls: nW, actors: nA, combats: nC };
+}
+
+/* ─── Party beats (group induction Phase 2, 2026-10-02) ──────────────────────
+ * A CONDUCTED segment runs each beat's `party` variant ONCE, here on the GM:
+ * one Operator voice for the class, one fight, one preview. Members never run
+ * a director for it — they answer prompts the conductor sends (socket round
+ * trip, first answer per seat wins, away seats skipped) and get moved between
+ * scenes. Progress is stamped on PRESENT members only; absent ones catch up solo. */
+const _partyRuns = new Map();   // cohortId → { release(why), released, why }
+const _asks = new Map();        // requestId → open ask (GM memory)
+
+/** Foe scaling: base(N) from the beat's table + the GM's dial, never below 1. */
+function scaleFor(table, key, n, dial = 0) {
+  const fn = table?.[key];
+  const base = typeof fn === "function" ? Number(fn(Math.max(1, Number(n) || 1))) : Number(fn);
+  return Math.max(1, Math.round((Number.isFinite(base) ? base : 1) + (Number(dial) || 0)));
+}
+
+function _closeAsk(a, why) {
+  if (!a || a.done) return;
+  a.done = true;
+  if (a.timer) clearTimeout(a.timer);
+  _asks.delete(a.requestId);
+  const left = [...a.uids].filter(u => !(u in a.answers));
+  if (left.length) _emit({ t: "cohort-prompt-close", cohortId: a.cohortId, to: left, requestId: a.requestId, title: a.spec?.title || "" });
+  a.resolve({ answers: { ...a.answers }, first: a.firstUid || "", closedBy: why });
+}
+/** Close an ask once its quorum is met over the members still PRESENT. */
+function _checkAsk(a) {
+  if (!a || a.done) return;
+  const c = getCohort(a.cohortId);
+  if (!c || c.aborting || c.state === "done") return _closeAsk(a, "gone");
+  const n = Object.keys(a.answers).length;
+  // "first": the first REAL answer closes it; a seat that just closed its dialog
+  // only drops out (one stray X must not dismiss everyone's button).
+  if (a.quorum === "first" && a.firstUid) return _closeAsk(a, "first");
+  const pending = [...a.uids].filter(u => !(u in a.answers) && PRESENT(c.members?.[u]) && game.users?.get?.(u)?.active !== false);
+  if (!pending.length) _closeAsk(a, n ? "quorum" : "nobody present");
+}
+function _recheckAsks(cohortId) { for (const a of [..._asks.values()]) if (!cohortId || a.cohortId === cohortId) _checkAsk(a); }
+
+/** Ask members on THEIR screens (prompt or choose). quorum: "all" (every present
+ *  member) · "present" (same, with a timeout) · "first" (first answer closes). */
+function _ask(cohortId, uids, spec, { quorum = "all", timeoutMs = 0, tag = "", single = false } = {}) {
+  return new Promise((resolve) => {
+    const requestId = _rid();
+    const a = { requestId, cohortId, uids: new Set(uids), answers: {}, firstUid: "", quorum, tag, spec, resolve, done: false, timer: null, single };
+    _asks.set(requestId, a);
+    if (!a.uids.size) return _closeAsk(a, "nobody present");
+    _emit({ t: "cohort-prompt", cohortId, to: [...a.uids], requestId, ...spec });
+    if (timeoutMs > 0) a.timer = setTimeout(() => _closeAsk(a, "timeout"), timeoutMs);
+  });
+}
+
+/** Bring seats back into a conducted segment: the party scene + any open asks for them. */
+function _rejoin(c, uids) {
+  for (const uid of uids) _lastCue.set(uid, { ts: _now(), barrierId: c.barrier?.id || "" });
+  if (c.partyScene) _emit({ t: "cohort-view", cohortId: c.id, to: uids, sceneUuid: c.partyScene, label: _segOf(c)?.label || "" });
+  // Re-send only asks this seat was ALREADY part of — never a classmate's
+  // one-seat confirm (review fix 3: a reload once inherited P1's "Yes — for
+  // everyone" and the sim hung waiting on it). A seat that was away when an
+  // ask went out simply isn't counted in it.
+  for (const a of _asks.values()) {
+    if (a.cohortId !== c.id) continue;
+    const to = uids.filter(u => a.uids.has(u) && !(u in a.answers));
+    if (to.length) _emit({ t: "cohort-prompt", cohortId: c.id, to, requestId: a.requestId, ...a.spec });
+  }
+}
+
+/** Member records the party beats work with (present seats only). */
+function _partyMembers(c) {
+  const ns = _ns();
+  return _presentIds(c).map(uid => {
+    const m = c.members[uid]; _refreshIds(uid, m);
+    const user = game.users?.get?.(uid) || null;
+    const steward = game.actors?.get?.(m.stewardId || "") || null;
+    const faction = (m.factionId && game.actors?.get?.(m.factionId)) || ns?.resolve?.faction?.(user, steward) || null;
+    return { userId: uid, user, name: _memberLabel(m, uid), lane: Number(m.lane) || 0, steward, faction,
+             get rig() { return ns?.resolve?.rig?.(faction) || null; } };
+  });
+}
+
+function _partyCtx(cohortId, beat, run) {
+  const ns = _ns();
+  const live = () => getCohort(cohortId);
+  const present = () => { const c = live(); return c ? _presentIds(c) : []; };
+  const released = () => !!run.released || !_isPrimary();
+  // Pause holds a GM-run beat (review fix a): asks, votes and waves wait here.
+  const hold = async () => { while (!released() && live()?.state === "paused") await new Promise(r => setTimeout(r, 500)); };
+  const ctx = {
+    cohort: { id: cohortId, key: `cohort:${cohortId}` },
+    beatId: beat.id,
+    _inflight: new Set(),
+    /** Track async work the runner must let land before teardown. */
+    busy: (p) => { const q = Promise.resolve(p).catch(() => {}); ctx._inflight.add(q); q.then(() => ctx._inflight.delete(q)); return p; },
+    hold,
+    /** One-shot per class (persisted): true the first time `key` is claimed — a
+     *  re-run after a GM refresh / conductor change skips it (review fix 5). */
+    once: async (key) => !!(await _mutate(cohortId, (c) => { c.partyOnce = c.partyOnce || {}; if (c.partyOnce[key]) return false; c.partyOnce[key] = _now(); return true; })),
+    get members() { const c = live(); return c ? _partyMembers(c) : []; },
+    get N() { return present().length; },
+    get dial() { return Number(live()?.dial) || 0; },
+    scale: (key) => scaleFor(beat.party?.scale, key, present().length, Number(live()?.dial) || 0),
+    scene: (key) => ns?.resolve?.scene?.(key) || null,
+    released,
+    speakAll: async (line) => { const c = live(); if (c) await _speakClass(c, line); },
+    speakTo: async (userIds, line) => {
+      const ids = new Set([...(Array.isArray(userIds) ? userIds : [userIds]).filter(Boolean)]);
+      try { await ns?.speak?.(line, { audience: [...ids] }); } catch (_) {}
+    },
+    askAll: async (spec = {}) => {
+      await hold();
+      if (released()) return { answers: {}, first: "", closedBy: run.why || "released" };
+      return _ask(cohortId, present(), _askSpec(spec), { quorum: spec.quorum || "all", timeoutMs: Number(spec.timeoutMs) || (spec.quorum === "present" ? 120000 : 0), tag: spec.tag || "" });
+    },
+    askOne: async (userId, spec = {}) => {
+      await hold();
+      if (released()) return null;
+      return (await _ask(cohortId, [userId], _askSpec(spec), { quorum: "all", timeoutMs: Number(spec.timeoutMs) || 0, tag: spec.tag || "", single: true })).answers[userId] ?? null;
+    },
+    cancelAsks: (tag = "") => { for (const a of [..._asks.values()]) if (a.cohortId === cohortId && (!tag || a.tag === tag)) _closeAsk(a, "cancelled"); },
+    vote: async (spec = {}) => { await hold(); return released() ? { winner: null, tally: {}, votes: {}, tied: false, aborted: true } : _vote(cohortId, spec); },
+    viewAll: async (scene, { label = "" } = {}) => {
+      if (!scene?.uuid || released()) return;            // a released beat never moves anyone's camera
+      await _mutate(cohortId, (c) => { c.partyScene = scene.uuid; });
+      _emit({ t: "cohort-view", cohortId, to: present(), sceneUuid: scene.uuid, label });
+    },
+    riff: (a, o) => (ns?.riff ? ns.riff(a, o) : Promise.resolve(null))
+  };
+  return ctx;
+}
+function _askSpec(spec) {
+  const out = { kind: spec.options ? "choose" : "prompt", title: String(spec.title || "◇ OPERATOR"), content: String(spec.content || "") };
+  if (spec.options) { out.options = spec.options.map(o => ({ action: String(o.action), label: String(o.label) })); out.fallback = spec.fallback ?? null; }
+  else out.label = String(spec.label || "Continue");
+  if (spec.forge) out.forge = true;
+  return out;
+}
+
+/** Class vote on present seats; majority wins, a tie goes to the GM (picks on this client). */
+async function _vote(cohortId, { title = "◇ OPERATOR — Vote", content = "", options = [], timeoutMs = 60000, tie = "gm" } = {}) {
+  const c = getCohort(cohortId);
+  const valid = new Set(options.map(o => String(o.action)));
+  const r = await _ask(cohortId, c ? _presentIds(c) : [], _askSpec({ title, content, options, fallback: null }), { quorum: "present", timeoutMs });
+  // Closed by Release/Abort/conductor change with nobody voted: no result, and
+  // above all no GM "tie" dialog for a vote that never happened (review fix 1).
+  if (!Object.values(r.answers).some(v => valid.has(String(v))) && !["quorum", "timeout", "nobody present"].includes(r.closedBy)) {
+    return { winner: null, tally: {}, votes: r.answers, tied: false, aborted: true };
+  }
+  const tally = Object.fromEntries(options.map(o => [o.action, 0]));
+  for (const v of Object.values(r.answers)) if (valid.has(String(v))) tally[v] += 1;
+  const top = Math.max(0, ...Object.values(tally));
+  let lead = options.filter(o => tally[o.action] === top).map(o => o.action);
+  let winner = lead[0] ?? options[0]?.action ?? null, tied = lead.length > 1;
+  const natural = ["quorum", "timeout", "nobody present"].includes(r.closedBy);
+  if (tied && tie === "gm" && natural) {
+    const pick = await _ns()?.ui?.choose?.({
+      title: `${title} — tie`, content: `<p>The class split ${lead.map(a => `${_esc(options.find(o => o.action === a)?.label)} ${tally[a]}`).join(" / ")}. Your call, GM.</p>`,
+      options: options.filter(o => lead.includes(o.action)), fallback: lead[0]
+    });
+    if (lead.includes(pick)) winner = pick;
+  }
+  await _mutate(cohortId, (cc) => { _feed(cc, `🗳 vote "${title.replace(/^◇ OPERATOR — /, "")}": ${Object.entries(tally).map(([k, n]) => `${k} ${n}`).join(" · ")} → ${winner}${tied ? " (GM broke the tie)" : ""}`); });
+  return { winner, tally, votes: r.answers, tied };
+}
+
+/** Stamp a party beat on the PRESENT members' Stewards (absent ones replay it solo). */
+async function _stampParty(cohortId, beatId, { done = true } = {}) {
+  const c = getCohort(cohortId);
+  if (!c) return;
+  const seg = _segToken(c);
+  for (const uid of _presentIds(c)) {
+    const m = c.members[uid]; _refreshIds(uid, m);
+    const st = game.actors?.get?.(m.stewardId || "");
+    if (!st) continue;
+    try {
+      const p = _clone(st.getFlag?.(MODULE_ID, "progress") || { currentStep: null, steps: {}, startedAt: _now(), completedAt: null });
+      p.steps = p.steps || {}; p.startedAt = p.startedAt || _now();
+      if (done) { p.steps[beatId] = { done: true, at: _now(), cohortSeg: seg }; p.currentStep = null; }
+      else p.currentStep = beatId;
+      await st.setFlag(MODULE_ID, "progress", p);
+    } catch (e) { console.warn(TAG, "party stamp failed for", st.name, e); }
+  }
+}
+
+/** Run the current conducted segment's beats once, on this (primary GM) client. */
+const _isPrimary = () => !!_ns()?.relay?.isPrimaryGM?.();
+const _settleWithin = (promises, ms) => Promise.race([Promise.allSettled([...promises]), new Promise(r => setTimeout(r, ms))]);
+
+async function _runParty(cohortId) {
+  if (_partyRuns.has(cohortId)) return;
+  let relRes, doneRes;
+  const run = { released: false, why: "", handoff: false, gate: new Promise(r => (relRes = r)), done: new Promise(r => (doneRes = r)) };
+  run.release = (why = "released") => { if (run.released) return; run.released = true; run.why = why; for (const a of [..._asks.values()]) if (a.cohortId === cohortId) _closeAsk(a, why); relRes(); };
+  // Lost the conductor's seat (co-GM became primary, review fix 5): stop here and
+  // let the new primary's tick restart the beat — never two conductors at once.
+  const stillPrimary = () => { if (_isPrimary()) return true; run.handoff = true; run.release("conductor changed"); return false; };
+  const watch = setInterval(() => { if (!run.released) stillPrimary(); }, 2000);
+  _partyRuns.set(cohortId, run);
+  const ns = _ns();
+  let acts = [];
+  try {
+    const c0 = getCohort(cohortId);
+    const seg = _segOf(c0);
+    if (!seg?.conducted || !stillPrimary()) return;
+    const segIdx = c0.segmentIdx;
+    for (const beatId of seg.beats) {
+      const c = getCohort(cohortId);
+      if (!c || c.aborting || c.state === "done" || c.segmentIdx !== segIdx || run.released || !stillPrimary()) break;
+      if ((c.partyDone || []).includes(beatId)) continue;           // finished before a GM refresh
+      const beat = ns?.beats?.get?.(beatId);
+      if (!beat?.party) continue;
+      await _mutate(cohortId, (cc) => { cc.partyBeat = beatId; cc.beatId = beatId; _feed(cc, `◇ conducting ${beat.title || beatId} for the class`); });
+      await _stampParty(cohortId, beatId, { done: false });
+      const ctx = _partyCtx(cohortId, beat, run);
+      let cleanup = null;
+      try {
+        // enter() checks ctx.released() after every await (review fix 1), so a
+        // Release/Abort mid-enter stops it at the next step instead of staging on.
+        await beat.party.enter?.(ctx);
+        if (typeof beat.party.detect === "function" && !ctx.released()) {
+          await Promise.race([
+            new Promise((resolve) => {
+              let fin = false;
+              const finish = () => { if (fin) return; fin = true; resolve(); };
+              cleanup = beat.party.detect(ctx, finish) || null;
+            }),
+            run.gate
+          ]);
+        }
+      } catch (e) { console.warn(TAG, `party beat "${beatId}" threw — continuing`, e); }
+      finally {
+        try { if (typeof cleanup === "function") cleanup(); } catch (_) {}
+        ctx.cancelAsks();
+      }
+      // Whatever the beat still had in flight (a wave mid-spawn, a parley) lands
+      // BEFORE we reap/teardown — so nothing it makes outlives the class (fix 1/2).
+      await _settleWithin(ctx._inflight, 20000);
+      if (run.handoff || getCohort(cohortId)?.aborting) break;
+      try { await beat.party.exit?.(ctx); } catch (e) { console.warn(TAG, `party beat "${beatId}" exit threw`, e); }
+      if (run.handoff || getCohort(cohortId)?.aborting || !stillPrimary()) break;
+      await _stampParty(cohortId, beatId);
+      await _mutate(cohortId, (cc) => { cc.partyDone = [...(cc.partyDone || []), beatId]; cc.partyBeat = ""; });
+    }
+    if (run.handoff || run.why === "aborted") return;
+    // The class passes the gate together: every present seat is "arrived".
+    await _mutate(cohortId, (c) => {
+      if (c.aborting || c.state === "done" || c.segmentIdx !== c0.segmentIdx) return;
+      c.barrier.arrived = [...new Set([...(c.barrier.arrived || []), ..._presentIds(c)])];
+      for (const uid of _presentIds(c)) c.members[uid].status = "barrier";
+      _feed(c, `◆ ${seg.label} done${run.released ? ` (${run.why})` : ""}`);
+      acts = run.released && c.state === "paused" ? [] : _settle(c);
+      if (run.released && run.why === "GM released" && !acts.length) acts = _passBarrier(c, "GM released", { force: true });
+    });
+  } finally { clearInterval(watch); _partyRuns.delete(cohortId); doneRes(); }
+  // AFTER the run is deregistered, so a following conducted segment starts at
+  // once instead of waiting for the next tick (review fix c).
+  await _perform(cohortId, acts);
 }
 
 /** ONE graduation for the class: teardown, stamp, one table-wide dive, one handoff. */
@@ -478,7 +750,7 @@ const OPS = {
   /* Member heartbeat. Cheap: only writes when a status flips or an arrival
    * that never landed (GM was away) is carried in. Re-cues a seat that is
    * neither running nor at the gate (a refresh mid-segment). */
-  async cohortPing({ userId, cohortId, arrivedBarrierId = "", running = false }) {
+  async cohortPing({ userId, cohortId, arrivedBarrierId = "", running = false, fresh = false }) {
     _lastSeen.set(userId, _now());
     const c0 = getCohort(cohortId);
     const m0 = c0?.members?.[userId];
@@ -505,6 +777,16 @@ const OPS = {
     // segment's cue entirely (it was away when the class moved) is cued at once.
     const lc = _lastCue.get(userId);
     const recent = lc && lc.barrierId === c?.barrier?.id && _now() - lc.ts < RECUE_GAP_MS;
+    // A CONDUCTED segment has nothing to "run" on the member: only a seat that
+    // was away or just reloaded is brought back in (scene + its open prompts) —
+    // never every heartbeat, which would yank the camera every 30 s.
+    if (_segOf(c)?.conducted) {
+      if ((m0.status === "away" || fresh) && m?.status === "working" && !recent && (c.state === "running" || c.state === "paused")) {
+        _rejoin(c, [userId]);
+        return { ok: true, recued: true };
+      }
+      return { ok: true, state: c?.state };
+    }
     if (c && (c.state === "running" || c.state === "paused") && c.segmentIdx >= 0 && m?.status === "working"
         && !atGate && !running && !recent) {
       _cue(c, [userId], { recue: true });
@@ -652,6 +934,9 @@ const OPS = {
       if (!(c.state === "running" || c.state === "paused") || c.segmentIdx < 0) return { ok: false };
       const pres = _presentIds(c), arr = pres.filter(u => (c.barrier?.arrived || []).includes(u)).length;
       c.state = "running";
+      // A conducted party beat in flight: end it (it closes, stamps and passes the gate itself).
+      const run = _partyRuns.get(c.id);
+      if (run && _segOf(c)?.conducted) { run.release("GM released"); _feed(c, "⏭ GM released the party beat"); acts = []; return { ok: true, party: true }; }
       acts = _passBarrier(c, `GM released (${arr}/${pres.length} had arrived)`, { force: true });
       return { ok: true };
     });
@@ -713,6 +998,12 @@ const OPS = {
       return _clone(cc);
     });
     if (!c) return { ok: false };
+    const prun = _partyRuns.get(cohortId);
+    prun?.release("aborted");
+    for (const a of [..._asks.values()]) if (a.cohortId === cohortId) _closeAsk(a, "aborted");
+    // Let a GM-run beat stop at its next check and land what it had in flight
+    // BEFORE teardown, so nothing it stages survives the Abort (review fix 1).
+    if (prun) await _settleWithin([prun.done], 20000);
     _emit({ t: "cohort-abort", cohortId, to: null });
     const uids = Object.keys(c.members || {});
     const hostileScene = _ns()?.resolve?.scene?.("hostile-hex");
@@ -730,7 +1021,41 @@ const OPS = {
     return { ok: true };
   },
 
-  async cohortTeardownProps({ cohortId }) { return _teardownProps(cohortId); }
+  async cohortTeardownProps({ cohortId }) { return _teardownProps(cohortId); },
+
+  /* Member: answer a party prompt. First answer per seat per request wins. */
+  async cohortAnswer({ userId, cohortId, requestId, answer = null }) {
+    const a = _asks.get(String(requestId || ""));
+    if (!a || a.done || a.cohortId !== cohortId || !a.uids.has(userId) || (userId in a.answers)) return { ok: false };
+    _lastSeen.set(userId, _now());
+    a.answers[userId] = answer == null ? null : String(answer).slice(0, 64);
+    if (!a.firstUid && answer != null) a.firstUid = userId;
+    _checkAsk(a);
+    return { ok: true };
+  },
+
+  /* GM: foe-scaling dial for party beats (−1 / 0 / +1). */
+  async cohortDial({ cohortId, dial = 0 }) {
+    const d = Math.max(-1, Math.min(1, Math.round(Number(dial) || 0)));
+    return (await _mutate(cohortId, (c) => { c.dial = d; _feed(c, `🎚 foe dial ${d > 0 ? "+1" : d < 0 ? "−1" : "0"}`); return { ok: true, dial: d }; })) ?? { ok: false };
+  },
+
+  /* GM: re-send everyone present to the class's current scene (conducted beats),
+   * or re-cue anyone idle in a personal segment. */
+  async cohortResend({ cohortId }) {
+    const c = getCohort(cohortId);
+    if (!c || !(c.state === "running" || c.state === "paused")) return { ok: false };
+    const pres = _presentIds(c);
+    if (_segOf(c)?.conducted) {
+      if (c.partyScene) _emit({ t: "cohort-view", cohortId, to: pres, sceneUuid: c.partyScene, label: _segOf(c)?.label || "" });
+    } else {
+      // personal segment: the scene belongs to each member's own beat — nudge the
+      // ones not yet at the gate (their client ignores it while a run is active).
+      _cue(c, pres.filter(u => !(c.barrier?.arrived || []).includes(u)), { recue: true });
+    }
+    await _mutate(cohortId, (cc) => { _feed(cc, "↺ GM re-sent the class to the scene"); });
+    return { ok: true };
+  }
 };
 
 /* ─── Conductor housekeeping (primary GM) ────────────────────────────────── */
@@ -760,7 +1085,13 @@ async function _expireStale() {
 }
 
 let _lastRunRefresh = 0;
+/** A GM-run beat on a client that is no longer the primary GM stops (fix 5). */
+function _checkConductor() {
+  if (_isPrimary()) return;
+  for (const run of _partyRuns.values()) if (!run.released) { run.handoff = true; run.release("conductor changed"); }
+}
 async function _tick() {
+  _checkConductor();
   if (!_ns()?.relay?.isPrimaryGM?.()) return;
   await _expireStale();
   const live = Object.values(_all()).filter(_isLive);
@@ -790,6 +1121,14 @@ async function _tick() {
     await _perform(c0.id, acts);
   }
   if (refreshRuns) _lastRunRefresh = now;
+  _recheckAsks();
+  // A conducted segment with no conductor (GM refresh / new primary GM): reap
+  // whatever the interrupted beat staged and run it again from its top.
+  for (const c of Object.values(_all()).filter(_isLive)) {
+    if (c.aborting || c.state !== "running" || !_segOf(c)?.conducted || _partyRuns.has(c.id) || _barrierDone(c)) continue;
+    if (c.partyBeat) await _teardownProps(c.id);
+    _runParty(c.id).catch(e => console.warn(TAG, "party resume failed", e));
+  }
 }
 
 /* ─── Member agent (player clients) ──────────────────────────────────────── */
@@ -854,14 +1193,44 @@ function _onCue(msg) {
   _runCue(msg).catch(e => console.warn(TAG, "cue run failed", e));
 }
 
+let _freshClient = true;     // the first heartbeat after a (re)load asks to be brought back in
 async function _heartbeat() {
   if (game.user?.isGM) return;
   const c = memberOf(game.user.id);
   if (!c || !_gmOnline()) return;
+  const fresh = _freshClient; _freshClient = false;
   try {
-    await _ns()?.runAsGM?.("cohortPing", { cohortId: c.id, arrivedBarrierId: _arrivedBarrier,
-      running: _cueActive || !!_ns()?.isRunning?.() }, { timeoutMs: 10000 });
+    await _ns()?.runAsGM?.("cohortPing", { cohortId: c.id, arrivedBarrierId: _arrivedBarrier, fresh,
+      running: _cueActive || _forging || !!_ns()?.isRunning?.() }, { timeoutMs: 10000 });
   } catch (_) {}
+}
+
+/* Party prompts on THIS seat: render with the director's own prompt/choose UI
+ * (same ids, same between-beat sweep) and send the answer back to the GM. */
+const _closedAsks = new Set();
+let _forging = false;
+const _openAsks = new Set();
+async function _onPrompt(msg) {
+  const c = getCohort(msg.cohortId);
+  const m = c?.members?.[game.user.id];
+  if (!c || c.aborting || c.state === "done" || !m || m.status === "left") return;
+  if (_openAsks.has(msg.requestId) || _closedAsks.has(msg.requestId)) return;   // a re-send of one already on screen
+  _openAsks.add(msg.requestId);
+  const ui = _ns()?.ui;
+  let answer = null;
+  try {
+    // No Steward yet? Forge first, on this screen (the class waits at the door).
+    if (msg.forge && !_ns()?.resolve?.steward?.(game.user)) {
+      _forging = true;
+      try { await _ns()?.forgeSteward?.(); } finally { _forging = false; }
+    }
+    if (_closedAsks.has(msg.requestId)) return;
+    if (msg.kind === "choose") answer = await ui?.choose?.({ title: msg.title, content: msg.content, options: msg.options || [], fallback: msg.fallback ?? null });
+    else answer = await ui?.prompt?.({ title: msg.title, content: msg.content, label: msg.label || "Continue" });
+  } catch (e) { console.warn(TAG, "party prompt failed", e); }
+  finally { _openAsks.delete(msg.requestId); }
+  if (_closedAsks.has(msg.requestId)) return;                // the class moved on without us
+  try { await _ns()?.runAsGM?.("cohortAnswer", { cohortId: msg.cohortId, requestId: msg.requestId, answer }); } catch (_) {}
 }
 
 /** Player: join the class (the "⚑ Join the class" button). */
@@ -904,6 +1273,26 @@ function _onSocket(msg, senderId) {
       _speakSelf(LINES.dismissed);
       return;
     }
+    if (t === "cohort-prompt") { if (forMe && !game.user.isGM) _onPrompt(msg); return; }
+    if (t === "cohort-prompt-close") {
+      if (!forMe || game.user.isGM) return;
+      _closedAsks.add(msg.requestId);
+      if (msg.title) _ns()?.ui?.closeDialogByTitle?.(msg.title);
+      return;
+    }
+    if (t === "cohort-view") {
+      if (!forMe || game.user.isGM) return;
+      const cv = getCohort(msg.cohortId), mv = cv?.members?.[game.user.id];
+      if (!cv || cv.aborting || !(cv.state === "running" || cv.state === "paused") || !mv || mv.status === "left") return;
+      fromUuid(msg.sceneUuid).then(async sc => {
+        if (!sc) return;
+        const lane = Number(getCohort(msg.cohortId)?.members?.[game.user.id]?.lane) || 0;
+        const enter = _ns()?.ui?.enterScene;
+        if (typeof enter === "function") return enter(sc, msg.label || sc.name, lane);
+        return sc.view?.();
+      }).catch(e => console.warn(TAG, "class scene view failed", e));
+      return;
+    }
     if (t === "cohort-dive") {
       if (!forMe || game.user.isGM) return;
       const tx = globalThis.game?.bbttcc?.api?.transition;
@@ -917,7 +1306,7 @@ function _onSocket(msg, senderId) {
     if (t === "cohort-control") {
       if (!_ns()?.relay?.isPrimaryGM?.()) return;
       const fn = OPS[msg.op];
-      if (fn && /^cohort[A-Z]/.test(msg.op) && !["cohortJoin", "cohortArrive", "cohortPing"].includes(msg.op)) {
+      if (fn && /^cohort[A-Z]/.test(msg.op) && !["cohortJoin", "cohortArrive", "cohortPing", "cohortAnswer"].includes(msg.op)) {
         fn(msg.payload || {}).catch?.(e => console.warn(TAG, `control "${msg.op}" failed`, e));
       }
     }
@@ -1021,7 +1410,7 @@ if (AppV2 && HBS) {
       return {
         cohort: { id: c.id, name: c.name, state: c.state },
         stateLabel: { forming: "forming", running: "running", paused: "paused", done: c.aborted ? "aborted" : (c.graduated ? "graduated" : "done") }[c.state] || c.state,
-        segLabel: seg ? `${c.segmentIdx + 1}/${c.segments.length} · ${seg.label} (${seg.kind})` : (c.state === "forming" ? "waiting for Start" : "—"),
+        segLabel: seg ? `${c.segmentIdx + 1}/${c.segments.length} · ${seg.label} (${seg.conducted ? "party — GM conducts" : seg.kind})` : (c.state === "forming" ? "waiting for Start" : "—"),
         presentCount: present.length,
         arrivedCount: present.filter(u => arrived.has(u)).length,
         awayCount: Object.values(c.members || {}).filter(m => m.status === "away").length,
@@ -1033,7 +1422,14 @@ if (AppV2 && HBS) {
         canStart: c.state === "forming" && rows.some(r => r.statusCls !== "left"),
         canPause: c.state === "running", canResume: c.state === "paused",
         canRelease: (c.state === "running" || c.state === "paused") && c.segmentIdx >= 0,
-        canAbort: c.state !== "done"
+        canAbort: c.state !== "done",
+        // Phase 2: foe dial for party beats + re-send to the class scene
+        live: c.state !== "done",
+        dial: Number(c.dial) || 0,
+        dialLabel: (Number(c.dial) || 0) > 0 ? "+1" : (Number(c.dial) || 0) < 0 ? "−1" : "0",
+        dialMinus: (Number(c.dial) || 0) <= -1, dialPlus: (Number(c.dial) || 0) >= 1,
+        canResend: c.state === "running" || c.state === "paused",
+        conducted: !!seg?.conducted
       };
     }
 
@@ -1059,6 +1455,8 @@ if (AppV2 && HBS) {
           else if (act === "abort") { if (await confirm("Abort the class?", "<p>Stop every member's run, tear down the class's props and release all lanes? Progress already earned stays on each Steward.</p>")) await _control("cohortAbort", { cohortId }); }
           else if (act === "skip") await _control("cohortSkipMember", { cohortId, userId: uid });
           else if (act === "kick") { if (await confirm("Remove from the class?", `<p>Remove <b>${_esc(game.users?.get?.(uid)?.name || uid)}</b>? Their run stops after the current beat.</p>`)) await _control("cohortKick", { cohortId, userId: uid }); }
+          else if (act === "dial") await _control("cohortDial", { cohortId, dial: Number(btn.dataset.dial) || 0 });
+          else if (act === "resend") await _control("cohortResend", { cohortId });
           else if (act === "refresh") this.render(false);
         } catch (e) { console.warn(TAG, `console action "${act}" failed`, e); ui.notifications?.error?.(`Cohort Console: ${act} failed — see console (F12).`); }
       });
@@ -1100,7 +1498,9 @@ Hooks.once("ready", () => {
   else console.warn(TAG, "relay.registerOp unavailable — cohort ops not registered.");
 
   ns.cohort = {
-    join, live: liveCohort, get: getCohort, list: _all, memberOf, segments: buildSegments,
+    join, live: liveCohort, get: getCohort, list: _all, memberOf, segments: buildSegments, scaleFor,
+    dial: (dial, cohortId = liveCohort()?.id) => _control("cohortDial", { cohortId, dial }),
+    resend: (cohortId = liveCohort()?.id) => _control("cohortResend", { cohortId }),
     console: openConsole, classRelic, sharedProp, waitProp,
     form: (o = {}) => _control("cohortForm", o),
     start: (cohortId = liveCohort()?.id) => _control("cohortStart", { cohortId }),
@@ -1164,4 +1564,4 @@ Hooks.once("ready", () => {
 });
 
 // Test seam for the offline harness (scratchpad) — not an API.
-globalThis.__bbttccCohortTest = { OPS, buildSegments, _tick, _all, getCohort, liveCohort, memberOf, _lastSeen, _lastCue, LINES };
+globalThis.__bbttccCohortTest = { OPS, buildSegments, _tick, _all, getCohort, liveCohort, memberOf, _lastSeen, _lastCue, LINES, _asks, _partyRuns, scaleFor, _runParty, _vote };

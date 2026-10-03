@@ -74,9 +74,10 @@ const HEX_OPS = new Set(["claimHex", "unclaimHex"]);
 // JOIN (that is how a seat gets one). Every class control is GM-only. The two
 // beat-support ops (a class relic claim, a shared-prop claim) need a live run
 // AND membership of the cohort they name.
-const COHORT_MEMBER_OPS = new Set(["cohortJoin", "cohortArrive", "cohortPing"]);
+const COHORT_MEMBER_OPS = new Set(["cohortJoin", "cohortArrive", "cohortPing", "cohortAnswer"]);   // + answer a party prompt (Phase 2)
 const COHORT_GM_OPS = new Set(["cohortForm", "cohortStart", "cohortPause", "cohortResume", "cohortRelease",
-                               "cohortSkipMember", "cohortKick", "cohortAbort", "cohortTeardownProps"]);
+                               "cohortSkipMember", "cohortKick", "cohortAbort", "cohortTeardownProps",
+                               "cohortDial", "cohortResend"]);
 const COHORT_BEAT_OPS = new Set(["classRelic", "sharedProp"]);
 /** Is `userId` a current (not left) member of the live cohort `cohortId`? */
 function _cohortMember(cohortId, userId) {
