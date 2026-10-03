@@ -13136,63 +13136,92 @@ function _ftParseEchoGenJson(text) {
   }
 }
 
-// Main entry: LLM if a bbttcc-mal-voice key is configured, else procedural fallback.
-// Returns { ok, source: "llm"|"offline", members: [{name, role, notes}], costUSD }.
+// The Echo Gen request, built from data the CALLER'S seat holds — a GM seat for a relayed call
+// (owner ruling 2026-10-02: every AI call goes through the GM; the player never supplies the prompt).
+function _ftEchoGenRequest({ entryName, k, n, archetype, taken = [], actor = null }) {
+  const faction = (actor && typeof getLinkedFaction === "function") ? getLinkedFaction(actor) : null;
+  const kindLabel = (k === "occult") ? "Occult Association" : "Awesome Crew";
+  const systemPrompt = `You generate fictional roster members for a tabletop RPG set in Bad Eden. Return ONLY a JSON array — no prose, no code fences. Each element: {"name": string, "role": string (a short job/specialty, 1-4 words), "hook": string (ONE sentence: who they were to the Steward — a debt, scar, or piece of unfinished business)}. Keep names and hooks vivid, grounded, and specific to this world.\n\n${FT_ECHO_FLAVOR_PRIMER}`;
+  // Structured-output schema: the bbttcc-mal-voice adapter constrains the reply to this shape
+  // (guaranteed-valid JSON); a reply without `json` falls back to the text parser.
+  const schema = {
+    type: "object",
+    properties: {
+      members: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: { name: { type: "string" }, role: { type: "string" }, hook: { type: "string" } },
+          required: ["name", "role", "hook"],
+          additionalProperties: false
+        }
+      }
+    },
+    required: ["members"],
+    additionalProperties: false
+  };
+  const userMessage = JSON.stringify({
+    task: `Invent ${n} roster members from one of the Steward's past lives.`,
+    pastLife: String(entryName ?? "").trim(),
+    kind: kindLabel,
+    archetypeSpecialty: archetype.specialty,
+    archetypeDrift: archetype.drift,
+    roleInspiration: archetype.roles,
+    stewardName: actor?.name || null,
+    factionName: faction?.name || null,
+    avoidDuplicateNames: taken,
+    count: n,
+    outputFormat: '[{"name":"...","role":"...","hook":"..."}]'
+  });
+  // system as a cached block: repeated "Suggest members" clicks within the hour reuse the big flavor primer at ~0.1x price.
+  return { system: [{ text: systemPrompt, cache: "1h" }], systemPrompt, userMessage, schema, maxTokens: 90 + n * 110, temperature: 0.95 };
+}
+
+// GM-side builder for a relayed Echo Gen call (bbttcc-mal-voice relay kind "echoRoster"). The seat sends only the
+// steward's uuid, the past-life name, the roster kind, a count and the names already on the roster; the GM checks
+// the seat owns that steward and rebuilds the whole request (system prompt, schema, token budget) itself.
+async function _ftEchoRosterRelayBuilder(payload, { user } = {}) {
+  const refuse = (message) => ({ ok: false, error: "RELAY_REFUSED", message });
+  const entryName = String(payload?.entryName ?? "").trim();
+  if (!entryName || entryName.length > 160) return refuse("Echo Gen: past-life name missing or too long.");
+  const k = (payload?.echoKind === "occult") ? "occult" : "crew";
+  const n = Math.max(1, Math.min(8, Number(payload?.count) || 3));
+  const rawNames = Array.isArray(payload?.existingNames) ? payload.existingNames : [];
+  if (rawNames.length > 60) return refuse("Echo Gen: too many existing names.");
+  const taken = rawNames.map(x => String(x ?? "").trim().slice(0, 80)).filter(Boolean);
+  let actor = null;
+  try { actor = await fromUuid(String(payload?.actorUuid || "")); } catch (_e) { actor = null; }
+  if (!(actor instanceof Actor)) return refuse("Echo Gen: unknown Steward.");
+  if (!user || !actor.testUserPermission?.(user, "OWNER")) return refuse("Echo Gen: that seat does not own this Steward.");
+  const req = _ftEchoGenRequest({ entryName, k, n, archetype: _ftResolveEchoArchetype(entryName, k), taken, actor });
+  return { ok: true, logId: "echo-roster", maxTokensCap: req.maxTokens, request: req };
+}
+Hooks.once("ready", () => {
+  // mal-voice installs its provider in ITS ready handler (after the system's) — register once those have run.
+  setTimeout(() => { try { game.bbttcc?.mal?.providers?.anthropic?.registerRelayKind?.("echoRoster", _ftEchoRosterRelayBuilder); } catch (_e) {} }, 0);
+});
+
+// Main entry: LLM when Mal Voice can call (GM seat with the key, or a player seat with a GM online to relay through),
+// else procedural fallback. Returns { ok, source: "llm"|"offline", members: [{name, role, notes}], costUSD }.
 async function ftGenerateEchoRosterMembers({ entryName, kind = "crew", count = 3, actor = null, existingNames = [] } = {}) {
   const k = (kind === "occult") ? "occult" : "crew";
   const n = Math.max(1, Math.min(8, Number(count) || 3));
   const archetype = _ftResolveEchoArchetype(entryName, k);
   const taken = (existingNames || []).filter(Boolean);
 
-  let apiKey = "";
-  try { apiKey = game.bbttcc?.mal?.settings?.apiKey?.() || ""; } catch (_e) { apiKey = ""; }
+  let canCall = false;
+  try { canCall = !!game.bbttcc?.mal?.settings?.canCall?.(); } catch (_e) { canCall = false; }
   const call = game.bbttcc?.mal?.providers?.anthropic?.call;
+  // A player seat relays through the GM and needs a Steward the GM can check ownership of.
+  if (canCall && !game.user?.isGM && !actor?.uuid) canCall = false;
 
-  if (apiKey && typeof call === "function") {
+  if (canCall && typeof call === "function") {
     try {
-      const faction = (actor && typeof getLinkedFaction === "function") ? getLinkedFaction(actor) : null;
-      const kindLabel = (k === "occult") ? "Occult Association" : "Awesome Crew";
-      const systemPrompt = `You generate fictional roster members for a tabletop RPG set in Bad Eden. Return ONLY a JSON array — no prose, no code fences. Each element: {"name": string, "role": string (a short job/specialty, 1-4 words), "hook": string (ONE sentence: who they were to the Steward — a debt, scar, or piece of unfinished business)}. Keep names and hooks vivid, grounded, and specific to this world.\n\n${FT_ECHO_FLAVOR_PRIMER}`;
-      // Structured-output schema: newer bbttcc-mal-voice adapters constrain the
-      // reply to this shape (guaranteed-valid JSON, no fence-stripping needed);
-      // older adapters ignore `schema` and we fall back to the text parser.
-      const echoSchema = {
-        type: "object",
-        properties: {
-          members: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                name: { type: "string" },
-                role: { type: "string" },
-                hook: { type: "string" }
-              },
-              required: ["name", "role", "hook"],
-              additionalProperties: false
-            }
-          }
-        },
-        required: ["members"],
-        additionalProperties: false
-      };
-      const userMessage = JSON.stringify({
-        task: `Invent ${n} roster members from one of the Steward's past lives.`,
-        pastLife: String(entryName ?? "").trim(),
-        kind: kindLabel,
-        archetypeSpecialty: archetype.specialty,
-        archetypeDrift: archetype.drift,
-        roleInspiration: archetype.roles,
-        stewardName: actor?.name || null,
-        factionName: faction?.name || null,
-        avoidDuplicateNames: taken,
-        count: n,
-        outputFormat: '[{"name":"...","role":"...","hook":"..."}]'
+      const req = _ftEchoGenRequest({ entryName, k, n, archetype, taken, actor });
+      const res = await call({
+        ...req,
+        relay: { kind: "echoRoster", actorUuid: actor?.uuid || "", entryName: String(entryName ?? "").trim(), echoKind: k, count: n, existingNames: taken.slice(0, 60) }
       });
-      // system as a cached block: repeated "Suggest members" clicks within the
-      // hour reuse the big flavor primer at ~0.1x price (old adapters fall back
-      // to the plain systemPrompt string).
-      const res = await call({ system: [{ text: systemPrompt, cache: "1h" }], systemPrompt, userMessage, schema: echoSchema, maxTokens: 90 + n * 110, temperature: 0.95 });
       if (res?.ok && (res.json || res.text)) {
         const parsed = Array.isArray(res.json?.members) ? res.json.members : _ftParseEchoGenJson(res.text);
         const members = parsed.slice(0, n).map(m => ({
@@ -13568,8 +13597,8 @@ async function openEchoRosterEditor(actor, entryName, kind = "crew") {
           $rows.find(".ft-roster-row").last().find("[data-row-field='name']").trigger("focus");
         });
 
-        // ✨ Suggest members — LLM if a bbttcc-mal-voice key is configured, else
-        // procedural fallback. Appends rows the player can keep / edit / delete.
+        // ✨ Suggest members — LLM when Mal Voice can call (GM key, or relayed through an online
+        // GM from a player seat), else procedural fallback. Appends rows the player can keep / edit / delete.
         $html.find("[data-roster-action='suggest']").on("click", async (ev) => {
           ev.preventDefault();
           const btn = ev.currentTarget;

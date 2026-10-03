@@ -5,8 +5,10 @@
  *   speak(line)  — DETERMINISTIC, offline-safe styled chat line. This is the INSTRUCTION
  *                  channel: it always fires, instantly, free, with no API key required.
  *   riff(args)   — OPTIONAL live-LLM aside via game.bbttcc.mal. This is the COLOUR channel:
- *                  it only fires when Mal Voice is present AND a world API key is set, and
- *                  it never blocks the flow. If unavailable, the tutorial is unaffected.
+ *                  it only fires when Mal Voice can call (a GM seat holding the key, or a
+ *                  player seat with a GM online — the call relays through the GM as the
+ *                  "voice" kind, and the GM rebuilds the Operator prompt from ITS registry),
+ *                  and it never blocks the flow. If unavailable, the tutorial is unaffected.
  *
  * So the onboarding works perfectly with Mal disabled — it just loses the improv.
  */
@@ -33,10 +35,10 @@ HARD RULES:
 
 function _mal() { return globalThis.game?.bbttcc?.mal || null; }
 
-/** True only when Mal Voice can actually make an LLM call (module present + key set). */
+/** True only when Mal Voice can actually make an LLM call (GM seat with the key, or a GM online to relay through). */
 function _operatorAvailable() {
   const m = _mal();
-  try { return !!(m?.triggers?.fire && m?.settings?.apiKey?.()); }
+  try { return !!(m?.triggers?.fire && m?.settings?.canCall?.()); }
   catch (_) { return false; }
 }
 

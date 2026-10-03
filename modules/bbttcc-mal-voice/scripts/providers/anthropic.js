@@ -461,8 +461,11 @@ function _finish(text, model, usage, stopReason, retried, opts, debug, content =
 //
 // Kinds are registered per call-site with registerRelayKind(kind, builder):
 //   builder(payload, { user, meta }) -> { ok:true, request:{system, messages|
-//   userMessage, tools?, toolChoice?, maxTokens, temperature?, model?}, logId }
+//   userMessage, tools?, toolChoice?, schema?, maxTokens, temperature?, model?},
+//   logId, maxTokensCap? (≤1024; default RELAY_LIMITS.maxTokens) }
 //   | { ok:false, error, message }.   Unknown kinds are refused.
+//   Kinds: "npc" (npc-dialogue), "voice" (trigger-engine — every registered
+//   voice incl. the onboarding Operator), "echoRoster" (fourththing Echo Gen).
 // ============================================================
 const RELAY_TYPE       = "malVoice.provider.call";
 const DELTA_CHANNEL    = "module.bbttcc-core";   // bbttcc-core declares socket:true
@@ -557,6 +560,8 @@ async function _relayHandler(payload, meta) {
     return _err(built?.error || "RELAY_REFUSED", built?.message || "Request rejected by the GM relay.");
   }
   const req = built.request;
+  // A builder may raise its own token ceiling (GM-side code, e.g. Echo Gen's 8-member batch) — never past 1024.
+  const maxCap = Math.max(RELAY_LIMITS.maxTokens, Math.min(1024, Number(built.maxTokensCap) || 0));
 
   const st = RATE.get(user.id);
   st.inFlight++;
@@ -582,8 +587,9 @@ async function _relayHandler(payload, meta) {
       tools:       req.tools,
       toolChoice:  req.toolChoice,
       model:       req.model || undefined,
-      maxTokens:   Math.min(RELAY_LIMITS.maxTokens, Math.max(16, Number(req.maxTokens) || 256)),
+      maxTokens:   Math.min(maxCap, Math.max(16, Number(req.maxTokens) || 256)),
       temperature: req.temperature,
+      schema:      (req.schema && typeof req.schema === "object") ? req.schema : undefined,
       stream:      !!payload.stream,
       onDelta
     });

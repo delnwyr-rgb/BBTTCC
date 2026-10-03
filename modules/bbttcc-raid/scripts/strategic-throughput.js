@@ -391,8 +391,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   const ATONEMENT = {
     key: "rite_of_atonement",
     label: "Rite of Atonement",
-    cost: { faith: 30, softpower: 20 },   // marks BEFORE the ×0.75 price policy → billed 23 Faith + 15 Culture/Soft Power
-                                          // (softpower = the channel the Final Ritual's "Culture" spend draws on)
+    cost: { faith: 30, culture: 20 },     // marks BEFORE the ×0.75 price policy → billed 23 Faith + 15 Culture
+                                          // (owner ruling 2026-10-02: the Rite draws on Culture, not Soft Power)
     tier: 1,                              // planner tier (minFactionTier) — any corrupted faction may atone
     beatId: "tikkun_atonement_rite",      // the scene handed to the GM at turn end (beat checks/DCs live in the seeder)
     oncePerTurn: true                     // one Rite staged per faction per turn
@@ -449,7 +449,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
         text: "Only for a faction whose Final Ritual failed. The faction gathers what is left of the Great Work and comes to make repair: at turn end the GM is handed the Rite (a scene). Succeed there and the Final Ritual stain lifts; refuse or miss and it stays for another turn."
       }, cur);
       if (!e.cost) e.cost = Object.assign({}, ATONEMENT.cost);
-      if (!e.opCosts || !Object.keys(e.opCosts).length) e.opCosts = { faith: ATONEMENT.cost.faith, softPower: ATONEMENT.cost.softpower };
+      if (!e.opCosts || !Object.keys(e.opCosts).length) e.opCosts = { faith: ATONEMENT.cost.faith, culture: ATONEMENT.cost.culture };
       return true;
     } catch (_e) { return false; }
   }

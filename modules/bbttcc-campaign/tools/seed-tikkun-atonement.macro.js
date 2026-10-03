@@ -18,8 +18,15 @@
   const NS = "bbttcc-campaign";
   const MARKER_TAG = "tikkun_atonement_2026_10_02";
   // ─── TUNING — the Rite's checks (2d10x10 scale; op.* checks auto-roll against the selected steward's faction) ───
-  const DC_HEAVEN = 14;                       // Confess it to Heaven (op.faith) — the harder road
-  const DC_PEOPLE = 12;                       // Go and make it right with the people first (op.diplomacy) — the Mishnah's road
+  // Owner ruling 2026-10-02 ("wow, those DCs should be higher"): an op.* check rolls 2d10x10 + floor(bank marks / 10) + roster OP,
+  // so a late-game bank of 60–90 marks is already +6..+9 — DC 14/12 was a formality. The Final Ritual this repairs runs DC 15/15/17
+  // + darkness (a failed ritual leaves darkness up, so ~18–19 on its last round) against only a +2..+6 spend bonus; the Rite is
+  // pitched at least that hard once the bigger bank bonus is counted. Odds at +6 / +8 / +10: Heaven 23% / 33% / 47%,
+  // People 33% / 47% / 64%. A miss re-offers the menu (the other road can be tried in the same sitting); the Rite can be staged
+  // again every turn (and paid again).
+  const DC_HEAVEN = 22;                       // Confess it to Heaven (op.faith) — the harder road
+  const DC_PEOPLE = 20;                       // Go and make it right with the people first (op.diplomacy) — the Mishnah's road (Yoma 8:9)
+  const PRIOR_DCS = { "op.faith": [14], "op.diplomacy": [12] };   // values earlier drafts of this seeder wrote — reconciled up on re-run
   // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   const report = []; let changes = 0; const say = (m) => report.push(m);
@@ -74,6 +81,19 @@
         choices: [ch("Step around it.", "")] })
   ];
   // The Rite itself is entered by the GM card (▶ Begin the Rite) — not a dialogue offer, not a Director pick.
+
+  // Reconcile the Rite's check DCs on an already-seeded beat (ours by tag) — only where the value is still one an earlier draft of
+  // this seeder wrote; a DC Dave hand-tuned in the Beat Editor is reported, never clobbered. Idempotent.
+  const DC_BY_STAT = { "op.faith": DC_HEAVEN, "op.diplomacy": DC_PEOPLE };
+  const haveRite = byId.get("tikkun_atonement_rite");
+  if (haveRite && String(haveRite.tags || "").includes(MARKER_TAG) && Array.isArray(haveRite.choices)) {
+    for (const c of haveRite.choices) {
+      const stat = String(c?.checkStat || "").trim().toLowerCase(); const want = DC_BY_STAT[stat]; if (want == null) continue;
+      const cur = Number(c.checkDC) || 0; if (cur === want) continue;
+      if ((PRIOR_DCS[stat] || []).includes(cur)) { c.checkDC = want; changes++; say(`↑ tikkun_atonement_rite ${stat} DC ${cur} → ${want}`); }
+      else say(`⚠ tikkun_atonement_rite ${stat} DC is ${cur} (hand-tuned?) — NOT changed; the seeder's dial is ${want}`);
+    }
+  }
 
   for (const nb of NEW) {
     const have = byId.get(nb.id);
