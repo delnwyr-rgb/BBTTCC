@@ -17,9 +17,10 @@
  *          heals add Prof, DR equals Prof, auras reach Prof×5 ft, damage
  *          riders add Prof d6. High entries gate on a minimum Prof.
  *
- *  MIDI/DAE (optional): advantage entries carry both the dnd5e flag and its
- *  midi-qol twin, and a DAE 1Attack specialDuration — real automation when
- *  those modules are present, inert-but-labeled markers when they aren't.
+ *  RIDERS  one-shot "next roll" riders (advantage, extra dice, maximise,
+ *          auto-save, reaction miss, ignore resistance) are consumed by the
+ *          D&D 5e Table Kit module inside dnd5e's own roll hooks — no midi-qol.
+ *          Without the kit they stay flag-and-narrate.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 (() => {
@@ -103,6 +104,16 @@
       });
     } catch (e) { /* best-effort */ }
   }
+  async function pickDamageType(title) {
+    const options = Object.entries(CONFIG.DND5E.damageTypes ?? {})
+      .map(([k, v]) => `<option value="${k}">${v.label ?? k}</option>`).join("");
+    return foundry.applications.api.DialogV2.prompt({
+      window: { title: `${title}: choose a damage type` },
+      content: `<select name="type" style="width:100%">${options}</select>`,
+      ok: { label: "Resist", callback: (_ev, b) => b.form.elements.type?.value },
+      rejectClose: false,
+    }).catch(() => null);
+  }
   function firstTarget() { return [...(game.user?.targets ?? [])][0]?.actor ?? null; }
   function casterToken(actor) {
     return actor.getActiveTokens?.(true)?.[0]?.object ?? actor.getActiveTokens?.()?.[0] ?? canvas?.tokens?.controlled?.[0] ?? null;
@@ -124,14 +135,15 @@
     try { return await writeActor(targetActor, "addAE", { ae }); }
     catch (e) { console.warn(TAG, "AE apply failed", targetActor?.name, e); return false; }
   }
+  // Native dnd5e damage reduction: every damage type's amount is lowered by n per hit.
   const drAE = (n, origin) => ({
     name: `DR ${n} (Surge)`, img: "icons/magic/defensive/shield-barrier-glowing-blue.webp", origin,
-    duration: { rounds: 1, seconds: 6 }, changes: [],
-    flags: { [MOD]: { surgeDR: n, cue: `reduce each incoming hit by ${n} this round (GM applies; temp HP granted as the floor)` } }
+    duration: { rounds: 1, seconds: 6 },
+    changes: Object.keys(CONFIG.DND5E.damageTypes ?? {}).map(type => ({
+      key: `system.traits.dm.amount.${type}`, mode: 2, value: `-${n}`, priority: 20
+    })),
+    flags: { [MOD]: { surgeDR: n } }
   });
-  async function grantTempHP(targetActor, n) {
-    try { await writeActor(targetActor, "tempHP", { n }); } catch (e) { /* best-effort */ }
-  }
   async function healActor(targetActor, formula, flavor) {
     try {
       const r = await new Roll(String(formula)).evaluate();
@@ -147,21 +159,21 @@
 
   // ── The table ──────────────────────────────────────────────────────────────
   // fx fields: tgt self|ally|allyOrSelf|alliesProfSq · heal · dr ("prof"
-  //   scales) · acBonus · advAttack1 · oneShot(key) · note (GM line) · init
+  //   scales) · acBonus · resistChoice · oneShot(key) · auto (kit line) · note (GM line) · init
   //   (reposition) · phoenix. Gate: minProf (minimum Proficiency Bonus).
   const MENU = [
     // ── cost 1 ──
     { cost: 1, key: "bonus-die", bucket: "narr", label: "Bonus Die — your next roll rolls one extra die (keep best)",
-      fiction: "Press the moment. The dice remember what they were doing.", fx: { tgt: "self", oneShot: "bonusDie", note: "Next d20 roll: roll one extra d20 and keep the best (GM applies)." } },
+      fiction: "Press the moment. The dice remember what they were doing.", fx: { tgt: "self", oneShot: "bonusDie", auto: "Your next d20 roll gets an extra die (keep the best).", note: "Next d20 roll: roll one extra d20 and keep the best (GM applies)." } },
     { cost: 1, key: "snap-strike", bucket: "off", label: "Snap Strike — advantage on your next attack",
-      fiction: "An opening narrows. You take it.", fx: { tgt: "self", advAttack1: true } },
+      fiction: "An opening narrows. You take it.", fx: { tgt: "self", oneShot: "advAttack", auto: "Your next attack roll has advantage." } },
     { cost: 1, key: "brace", bucket: "def", label: "Brace — +1 AC till your next turn",
       fiction: "Weight settles. Stance hardens.", fx: { tgt: "self", acBonus: 1 } },
     // ── cost 2 ──
     { cost: 2, key: "reaction-miss", bucket: "def", label: "Reaction Miss — turn one incoming attack into a miss",
-      fiction: "You slide sideways through the moment.", fx: { tgt: "self", oneShot: "reactionMiss", note: "One incoming attack this round becomes a miss (declare before damage; GM applies)." } },
+      fiction: "You slide sideways through the moment.", fx: { tgt: "self", oneShot: "reactionMiss", auto: "The next attack that hits you this round misses instead.", note: "One incoming attack this round becomes a miss (declare before damage; GM applies)." } },
     { cost: 2, key: "sundering-blow", bucket: "off", label: "Sundering Blow — next attack ignores resistances",
-      fiction: "Whatever they call armor, it stops mattering for one breath.", fx: { tgt: "self", oneShot: "ignoreResists", note: "Next hit ignores damage resistances (GM applies)." } },
+      fiction: "Whatever they call armor, it stops mattering for one breath.", fx: { tgt: "self", oneShot: "ignoreResists", auto: "Your next damage roll ignores the target's resistances.", note: "Next hit ignores damage resistances (GM applies)." } },
     { cost: 2, key: "stitch", bucket: "heal", label: "Stitch — heal self 2d6 + Prof",
       fiction: "Flesh re-knits along the seams you remember.", fx: { tgt: "self", heal: "2d6+@prof" } },
     // ── cost 3 ──
@@ -175,30 +187,30 @@
       fiction: "Your stance covers theirs.", fx: { tgt: "ally", dr: "prof" } },
     // ── cost 4 ──
     { cost: 4, key: "surging-cast", bucket: "off", label: "Surging Cast — maximize one damage die of your next spell/feature",
-      fiction: "The current runs hotter. Anything could come through.", fx: { tgt: "self", oneShot: "surgingCast", note: "Next spell/feature damage: maximize one die (GM applies)." } },
+      fiction: "The current runs hotter. Anything could come through.", fx: { tgt: "self", oneShot: "surgingCast", auto: "Your next spell/feature damage roll maximises one die.", note: "Next spell/feature damage: maximize one die (GM applies)." } },
     { cost: 4, key: "iron-word", bucket: "def", label: "Iron Word — auto-succeed one save",
-      fiction: "You name what is happening. It listens.", fx: { tgt: "self", oneShot: "autoSaveOnce", note: "Automatically succeed one saving throw this round (declare before rolling)." } },
+      fiction: "You name what is happening. It listens.", fx: { tgt: "self", oneShot: "autoSaveOnce", auto: "Your next saving throw succeeds automatically.", note: "Automatically succeed one saving throw this round (declare before rolling)." } },
     { cost: 4, key: "field-patch", bucket: "heal", label: "Field Patch — heal ally 2d6 + Prof (in reach)",
       fiction: "Hands move faster than the wound can close.", fx: { tgt: "ally", heal: "2d6+@prof" } },
     // ── cost 5+ ──
     { cost: 5, key: "reshape-fiction", bucket: "narr", label: "Reshape Fiction — one beat (GM-gated, 1/scene)",
       fiction: "A small miracle. A door that wasn't there. A body that didn't quite fall.", fx: { tgt: "self", note: "One narrative beat reshaped (GM-gated, once per scene)." } },
     { cost: 5, key: "doomstrike", bucket: "off", label: "Doomstrike — next attack +Prof d6 damage",
-      fiction: "You bring more than you swung.", fx: { tgt: "self", oneShot: "doomstrike", note: "Next hit deals +Prof d6 extra damage (GM applies)." } },
+      fiction: "You bring more than you swung.", fx: { tgt: "self", oneShot: "doomstrike", auto: "Your next damage roll adds Prof d6.", note: "Next hit deals +Prof d6 extra damage (GM applies)." } },
     { cost: 5, key: "steel-veil", minProf: 3, bucket: "def", label: "Steel Veil — resistance to one damage type this round",
-      fiction: "Something between you and the world refuses the harm.", fx: { tgt: "self", oneShot: "resistTypePending", note: "Choose a damage type — resistance this round (GM applies)." } },
+      fiction: "Something between you and the world refuses the harm.", fx: { tgt: "self", resistChoice: true } },
     { cost: 6, key: "wrath-cascade", minProf: 3, bucket: "off", label: "Wrath Cascade — reroll all 1s and 2s on your next damage roll",
-      fiction: "The dice all remember at once.", fx: { tgt: "self", oneShot: "wrathCascade", note: "Next damage roll: reroll all 1s and 2s, keep the new results (GM applies)." } },
+      fiction: "The dice all remember at once.", fx: { tgt: "self", oneShot: "wrathCascade", auto: "Your next damage roll rerolls 1s and 2s.", note: "Next damage roll: reroll all 1s and 2s, keep the new results (GM applies)." } },
     { cost: 7, key: "crowning-blow", minProf: 4, bucket: "off", label: "Crowning Blow — next hit is a max-die critical",
-      fiction: "Inevitable. The kind of strike fables remember.", fx: { tgt: "self", oneShot: "crowningBlow", note: "Next hit is a critical with maximized dice (GM applies)." } },
+      fiction: "Inevitable. The kind of strike fables remember.", fx: { tgt: "self", oneShot: "crowningBlow", auto: "Your next damage roll is a critical with maximised dice.", note: "Next hit is a critical with maximized dice (GM applies)." } },
     { cost: 7, key: "rallying-cry", bucket: "heal", label: "Rallying Cry — heal allies within Prof×5 ft for 1d6 + Prof",
       fiction: "Your voice carries the life back into them.", fx: { tgt: "alliesProfSq", heal: "1d6+@prof" } },
     { cost: 8, key: "power-surge", minProf: 4, bucket: "off", label: "Power Surge — next attack or feature adds your Prof again",
-      fiction: "You reach above your weight class for one moment.", fx: { tgt: "self", oneShot: "powerSurge", note: "Next attack/feature: add your Proficiency Bonus to the roll a second time (GM applies)." } },
+      fiction: "You reach above your weight class for one moment.", fx: { tgt: "self", oneShot: "powerSurge", auto: "Your next attack roll adds your Proficiency Bonus again.", note: "Next attack/feature: add your Proficiency Bonus to the roll a second time (GM applies)." } },
     { cost: 9, key: "cinderwake", minProf: 6, bucket: "off", label: "Cinderwake — next damage roll: maximize all dice",
-      fiction: "The dice run hot enough to leave scars.", fx: { tgt: "self", oneShot: "cinderwake", note: "Next damage roll is maximized (GM applies)." } },
+      fiction: "The dice run hot enough to leave scars.", fx: { tgt: "self", oneShot: "cinderwake", auto: "Your next damage roll is maximised.", note: "Next damage roll is maximized (GM applies)." } },
     { cost: 10, key: "final-argument", minProf: 6, bucket: "off", label: "Final Argument — next attack auto-hits, max damage, +Prof to damage",
-      fiction: "There will be no negotiation.", fx: { tgt: "self", oneShot: "finalArgument", note: "Next attack auto-hits with maximized damage, plus your Proficiency Bonus (GM applies)." } },
+      fiction: "There will be no negotiation.", fx: { tgt: "self", oneShot: "finalArgument", auto: "Your next attack auto-hits; its damage is maximised + Prof.", note: "Next attack auto-hits with maximized damage, plus your Proficiency Bonus (GM applies)." } },
     { cost: 10, key: "phoenix", bucket: "heal", label: "Phoenix — restore self/ally from 0 HP to half (1/encounter)",
       fiction: "Remember what you were before the wound. Be that now.", fx: { tgt: "allyOrSelf", phoenix: true } },
   ];
@@ -230,7 +242,7 @@
     }
 
     // Someone else's character needs the GM relay — bail (and refund) up front if no GM is online.
-    const writes = fx.heal || fx.phoenix || fx.dr || fx.acBonus || fx.advAttack1;
+    const writes = fx.heal || fx.phoenix || fx.dr || fx.acBonus || fx.resistChoice;
     if (writes && !game.users?.activeGM && targets.some(t => t && !t.isOwner)) {
       ui.notifications?.warn?.(`${entry.label}: no GM online to apply it to another character.`);
       return false;
@@ -247,28 +259,22 @@
         if (!(await writeActor(t, "phoenix"))) return false;
         lines.push(t.isOwner ? `${t.name} is restored to ${half} HP.` : `${t.name} is restored to half HP.`);
       }
-      if (fx.dr) { const n = resolveN(fx.dr); await addAE(t, drAE(n, origin)); await grantTempHP(t, n); lines.push(`${t.name}: DR ${n} this round (temp HP floor granted).`); }
+      if (fx.dr) { const n = resolveN(fx.dr); await addAE(t, drAE(n, origin)); lines.push(`${t.name}: each hit this round is reduced by ${n}.`); }
+      if (fx.resistChoice) {
+        const type = await pickDamageType(entry.label.split("—")[0].trim());
+        if (!type) return false;   // cancelled → refund
+        const label = CONFIG.DND5E.damageTypes[type]?.label ?? type;
+        await addAE(t, { name: `Steel Veil (${label})`, img: "icons/magic/defensive/shield-barrier-glowing-blue.webp", origin,
+          duration: { rounds: 1, seconds: 6 }, changes: [{ key: "system.traits.dr.value", mode: 2, value: type, priority: 20 }],
+          flags: { [MOD]: { surgeMarker: true } } });
+        lines.push(`${t.name}: resistance to ${label} until next turn.`);
+      }
       if (fx.acBonus) {
         const n = resolveN(fx.acBonus);
         await addAE(t, { name: `${entry.label.split("—")[0].trim()} (+${n} AC)`, img: "icons/magic/defensive/shield-barrier-glowing-blue.webp", origin,
           duration: { rounds: 1, seconds: 6 }, changes: [{ key: "system.attributes.ac.bonus", mode: 2, value: String(n), priority: 20 }],
           flags: { [MOD]: { surgeMarker: true } } });
         lines.push(`${t.name}: +${n} AC till next turn.`);
-      }
-      if (fx.advAttack1) {
-        // Real next-attack advantage: midi-qol honors the flag, DAE expires the
-        // AE after one attack (1Attack specialDuration). 10-round failsafe.
-        await addAE(t, {
-          name: `${entry.label.split("—")[0].trim()} (advantage, next attack)`,
-          img: "icons/skills/melee/strike-dagger-arcane-pink.webp", origin,
-          duration: { rounds: 10, seconds: 60 },
-          changes: [
-            { key: "flags.midi-qol.advantage.attack.all", mode: 5, value: "1", priority: 20 },
-            { key: "flags.dnd5e.advantage.attack.all", mode: 5, value: "1", priority: 20 },
-          ],
-          flags: { [MOD]: { surgeMarker: true }, dae: { specialDuration: ["1Attack"] } }
-        });
-        lines.push(`${t.name}: next attack has advantage (auto with midi; expires after the attack).`);
       }
     }
 
@@ -285,7 +291,9 @@
         if (Number.isFinite(v)) { await game.combat.setInitiative(c.id, v); lines.push(`Initiative set to ${v}.`); }
       } else lines.push("Not in combat — initiative unchanged.");
     }
-    if (fx.note) lines.push(`<em>${fx.note}</em>`);
+    const kit = game.modules.get("dnd5e-table-kit")?.active;
+    if (kit && fx.auto) lines.push(`<em>Armed: ${fx.auto}</em>`);
+    else if (fx.note) lines.push(`<em>${fx.note}</em>`);
 
     await cue(actor, `${entry.label} (${entry.cost} Surge)`, [entry.fiction ? `<em>${entry.fiction}</em>` : "", ...lines].filter(Boolean));
     return true;

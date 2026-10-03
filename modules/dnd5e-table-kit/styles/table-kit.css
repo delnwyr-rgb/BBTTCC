@@ -13,3 +13,15 @@
 .dnd5e2 .tk-legendary .tk-pool .label {
   font-size: var(--font-size-11, 11px);
 }
+
+/* GM automation summary cards. */
+.tk-card p {
+  margin: 0.15rem 0;
+}
+.tk-card .tk-title {
+  font-weight: 700;
+}
+.tk-card .tk-undo {
+  margin-top: 0.3rem;
+  width: 100%;
+}

@@ -12,6 +12,10 @@
 // legendary actions reset at encounter start and turn end, resistances (and
 // actions) on a long rest. Spending a legendary resistance posts a chat card.
 
+// Entry point for the whole kit (the manifest lists only this file).
+import { activateRiders } from "./riders.js";
+import { activateAutomation } from "./automation.js";
+
 const ID = "dnd5e-table-kit";
 const KINDS = {
   legact: { label: "DND5E.LegendaryAction.Label" },
@@ -100,10 +104,17 @@ async function adjust(actor, key, delta) {
   await actor.update({ [`flags.${ID}.legendary.${key}`]: spent });
   if ( (key === "legres") && (delta > 0) ) {
     const left = pool.max - spent;
+    // Flip this actor's most recent failed save (last 10 minutes) to a success, the
+    // same "resisted" mark dnd5e uses, so half-damage and effect automation follow.
+    const recent = Date.now() - (10 * 60 * 1000);
+    const failed = game.messages.contents.findLast(m => (m.type === "save") && (m.timestamp > recent)
+      && (m.getAssociatedActor?.() === actor) && m.rolls?.[0]?.isFailure && !m.system?.resisted);
+    if ( failed?.canUserModify(game.user, "update") ) await failed.update({ "system.resisted": true });
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
       content: `<p><strong>${foundry.utils.escapeHTML(actor.name)}</strong> uses a <strong>Legendary Resistance</strong>: `
-        + `the failed saving throw succeeds instead. <em>(${left}/${pool.max} left)</em></p>`
+        + `the failed saving throw succeeds instead.${failed ? "" : " <em>(No recent failed save found; mark it by hand.)</em>"}`
+        + ` <em>(${left}/${pool.max} left)</em></p>`
     });
   }
 }
@@ -149,6 +160,8 @@ function onRenderCharacterSheet(app, element) {
 
 export function activate() {
   if ( game.system.id !== "dnd5e" ) return;
+  try { activateRiders(); } catch(err) { console.error(`${ID} | could not start riders`, err); }
+  try { activateAutomation(); } catch(err) { console.error(`${ID} | could not start automation`, err); }
   try { patchCharacterData(); } catch(err) { console.error(`${ID} | could not patch CharacterData`, err); }
   Hooks.on("dnd5e.preRestCompleted", onPreRestCompleted);
   Hooks.on("renderCharacterActorSheet", onRenderCharacterSheet);
