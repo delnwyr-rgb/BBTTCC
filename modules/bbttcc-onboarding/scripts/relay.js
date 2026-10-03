@@ -66,7 +66,7 @@ async function runAsGM(op, payload = {}, { timeoutMs = 15000 } = {}) {
  * must be a sandbox hex; tokens to delete must be tutorial-spawned. Everything except the run-registry ops
  * also needs a live tutorial run for the sender. Identity fields in the payload are forced to the sender. */
 const RUN_OPS = new Set(["runBegin", "runPing", "runEnd", "runList"]);
-const ACTOR_OPS = { hurt: ["actorId"], mend: ["actorId"], raiseDarkness: ["actorId"], foeSurrender: ["actorId"], setElevation: ["actorId"], shoveOffPerch: ["actorId"], ensureToken: ["actorId"], disembark: ["stewardId", "rigId"], foundPlayerFaction: ["stewardId"] };
+const ACTOR_OPS = { hurt: ["actorId"], mend: ["actorId"], raiseDarkness: ["actorId"], billKill: ["foeActorId", "fallbackActorId"], foeSurrender: ["actorId"], setElevation: ["actorId"], shoveOffPerch: ["actorId"], ensureToken: ["actorId"], disembark: ["stewardId", "rigId"], foundPlayerFaction: ["stewardId"] };
 const FACTION_OPS = { grantOp: "factionId", grantSecret: "factionId", setRaidSession: "factionId", clearRaidSession: "factionId", teardownFinale: "factionId", mintRig: "factionId", openRaidConsoleForGM: "factionId", claimHex: "factionId" };
 const HEX_OPS = new Set(["claimHex", "unclaimHex"]);
 
@@ -91,6 +91,8 @@ async function _authorize(op, payload, fromUserId) {
   if (user.isGM) return null;
   // identity fields always mean the sender
   for (const k of ["userId", "ownerUserId", "exceptUserId"]) if (k in payload) payload[k] = user.id;
+  // run-scoped owner key (Combats etc.): a seat can only ever name its own — cohort keys arrive with Phase 1
+  if ("ownerKey" in payload) payload.ownerKey = `user:${user.id}`;
   if (RUN_OPS.has(op)) return null;
   const runs = game.settings?.get?.(MODULE_ID, "activeRuns") ?? {};
   if (!runs[user.id]) return "no live tutorial run for this seat";

@@ -156,7 +156,12 @@ import {
   isRetiredFoldedFeature,
   // Action-economy audit pass 2026-05-04 — exposed for tools/audit-action-economy-gaps
   CHAR_OPT_ABILITIES,
-  FEATURE_ROUTER
+  FEATURE_ROUTER,
+  // Burn timer / lock (2026-10-02 — port of the retired auto-link layer)
+  ftBurnLockInfo,
+  ftCombatPos,
+  ftAdvanceCombatPos,
+  ftBurnMax
 } from "./ft-class-automation.js";
 
 import RfiItems    from "./rfi-items.js";
@@ -5993,12 +5998,247 @@ async function _ftBurnOnHitGen(actor) {
     if (!_ftSurgeAllowed(actor)) return;          // suppress on foes unless GM-enabled
     const inCombat = !!game.combat?.started;
     const round = Number(game.combat?.round ?? 0);
+    if (ftBurnLockInfo(actor).locked) return;     // Burn timer lock: don't spend the round cap on a frozen track
     const f = actor.flags?.fourththing?.burnOnHit ?? {};
     const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
     if (inCombat && count >= 2) return; // +2 Burn/round cap from the on-hit hook
     await ftAddBurn(actor, 1);
     await actor.setFlag("fourththing", "burnOnHit", { round, count: count + 1 });
   } catch (e) { console.warn("[ft] burn-on-hit gen failed", e); }
+}
+
+// ─── Burn timer (2026-10-02) ─────────────────────────────────────────────────
+// Port of the retired auto-link sheet layer's Burn lock / delayed-delta /
+// set-at-end-of-turn (it hooked V1 renderActorSheet, dead since the AppV2 sheet).
+// State: flags.fourththing.burnTimer (shape in ft-class-automation.js). The
+// active GM applies due timers + expires the lock on combat turn/round change and
+// clears the flag when the combat is deleted. Lock enforcement lives in a
+// preUpdateActor guard so every writer (Stabilize, Aura switch, edit-mode input,
+// upkeep accrual, forge/on-hit gens) is held; timer writes pass { ftBurnTimer: true }.
+const _FT_BURN_PATH = "system.resources.burn.current";
+
+Hooks.on("preUpdateActor", (actor, changes, options) => {
+  if (options?.ftBurnTimer) return;
+  const flat   = Object.prototype.hasOwnProperty.call(changes ?? {}, _FT_BURN_PATH);
+  const nested = foundry.utils.hasProperty(changes ?? {}, _FT_BURN_PATH);
+  if (!flat && !nested) return;
+  const info = ftBurnLockInfo(actor);
+  if (!info.locked) return;
+  const cur  = Number(ftSourceSystem(actor)?.resources?.burn?.current ?? 0) || 0;
+  const next = Number(flat ? changes[_FT_BURN_PATH] : foundry.utils.getProperty(changes, _FT_BURN_PATH));
+  if (next === cur) return;
+  if (flat) delete changes[_FT_BURN_PATH];
+  if (nested) delete changes.system.resources.burn.current;
+  ui.notifications?.info?.(`${actor.name}: Burn is locked until round ${info.untilRound}, turn ${info.untilTurn + 1} — change held.`);
+});
+
+// One summary row per timer for the sheet + dialog (escaped at the call site).
+function _ftBurnTimerSummary(actor) {
+  const bt = actor?.flags?.fourththing?.burnTimer;
+  const combat = bt?.combatId ? game.combats?.get?.(bt.combatId) : null;
+  if (!bt || !combat) return { active: false, lockLabel: "", timers: [] };
+  const info = ftBurnLockInfo(actor);
+  const timers = (Array.isArray(bt.timers) ? bt.timers : []).map(t => ({
+    label: t.kind === "set"
+      ? `Burn → ${Number(t.value) || 0} at round ${t.atRound}, turn ${(Number(t.atTurn) || 0) + 1}`
+      : `Burn ${Number(t.value) > 0 ? "+" : ""}${Number(t.value) || 0} at round ${t.atRound}, turn ${(Number(t.atTurn) || 0) + 1}`,
+    note: String(t.note ?? "")
+  }));
+  const lockLabel = info.locked ? `Locked until round ${info.untilRound}, turn ${info.untilTurn + 1}` : "";
+  return { active: !!(lockLabel || timers.length), lockLabel, timers };
+}
+
+// Apply due timers + expire the lock for one actor at combat position `now`.
+async function _ftBurnTimerTick(actor, bt, now) {
+  const timers = Array.isArray(bt.timers) ? bt.timers : [];
+  const due  = timers.filter(t => ftCombatPos(t.atRound, t.atTurn) <= now)
+    .sort((a, b) => ftCombatPos(a.atRound, a.atTurn) - ftCombatPos(b.atRound, b.atTurn));
+  const keep = timers.filter(t => ftCombatPos(t.atRound, t.atTurn) > now);
+  const lockLive = bt.lock && now < ftCombatPos(bt.lock.untilRound, bt.lock.untilTurn);
+  if (!due.length && (lockLive || !bt.lock)) return;
+
+  if (due.length) {
+    const max  = ftBurnMax(actor);
+    const from = Number(ftSourceSystem(actor)?.resources?.burn?.current ?? 0) || 0;
+    let burn = from;
+    for (const t of due) burn = t.kind === "set" ? (Number(t.value) || 0) : burn + (Number(t.value) || 0);
+    burn = Math.max(0, Math.min(max, burn));
+    if (burn !== from) {
+      await actor.update({ [_FT_BURN_PATH]: burn }, { ftBurnTimer: true });
+      const esc = foundry.utils.escapeHTML;
+      const notes = due.map(t => String(t.note ?? "").trim()).filter(Boolean);
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">🔥 Burn timer — ${esc(actor.name)}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.8rem">Burn ${from} → <b>${burn}</b>${notes.length ? ` · ${esc(notes.join("; "))}` : ""}</p></div>`
+      });
+    }
+  }
+  if (!keep.length && !lockLive) return actor.unsetFlag("fourththing", "burnTimer");
+  return actor.setFlag("fourththing", "burnTimer", { timers: keep, lock: lockLive ? bt.lock : null });
+}
+
+// Single writer: the active GM processes every combatant on turn/round change.
+Hooks.on("updateCombat", async (combat, change) => {
+  if (!("round" in (change ?? {})) && !("turn" in (change ?? {}))) return;
+  if (!game.user || game.users?.activeGM?.id !== game.user.id) return;
+  if (!combat?.started) return;
+  const now  = ftCombatPos(combat.round, combat.turn);
+  const seen = new Set();
+  for (const c of (combat.combatants ?? [])) {
+    const a = c?.actor;
+    if (!a || seen.has(a.uuid)) continue;
+    seen.add(a.uuid);
+    const bt = a.flags?.fourththing?.burnTimer;
+    if (!bt || bt.combatId !== combat.id) continue;
+    try { await _ftBurnTimerTick(a, bt, now); }
+    catch (e) { console.warn("[fourththing] Burn timer tick failed", a?.name, e); }
+  }
+});
+
+// Combat ended → drop every Burn timer/lock tied to it.
+Hooks.on("deleteCombat", async (combat) => {
+  if (!game.user || game.users?.activeGM?.id !== game.user.id) return;
+  const seen = new Set();
+  for (const c of (combat?.combatants ?? [])) {
+    const a = c?.actor;
+    if (!a || seen.has(a.uuid)) continue;
+    seen.add(a.uuid);
+    if (a.flags?.fourththing?.burnTimer?.combatId !== combat.id) continue;
+    try { await a.unsetFlag("fourththing", "burnTimer"); }
+    catch (e) { console.warn("[fourththing] Burn timer cleanup failed", a?.name, e); }
+  }
+});
+
+// Sheet control: lock Burn for N turns and/or schedule a delta / end-of-turn set.
+// GM or the actor's owner (the retired layer let the owner's own item use do this).
+async function _ftOpenBurnTimerDialog(actor) {
+  if (!actor) return;
+  if (!(game.user?.isGM || actor.isOwner)) return ui.notifications?.warn("Only the GM or this steward's owner can set Burn timers.");
+  const combat = game.combat;
+  if (!combat?.started) return ui.notifications?.warn("Burn timers run on the combat clock — start combat first.");
+  const esc  = foundry.utils.escapeHTML;
+  const sum  = _ftBurnTimerSummary(actor);
+  const cur  = Number(ftSourceSystem(actor)?.resources?.burn?.current ?? 0) || 0;
+  const max  = ftBurnMax(actor);
+  const status = sum.active
+    ? `<ul style="margin:0.2rem 0 0.5rem;padding-left:1.1rem;font-size:0.8rem">${sum.lockLabel ? `<li>🔒 ${esc(sum.lockLabel)}</li>` : ""}${sum.timers.map(t => `<li>⏱ ${esc(t.label)}${t.note ? ` — <i>${esc(t.note)}</i>` : ""}</li>`).join("")}</ul>`
+    : `<p style="margin:0.2rem 0 0.5rem;font-size:0.8rem;opacity:0.7">No Burn timers running.</p>`;
+  const content = `<div class="ft-cast-dialog">
+    <p style="margin:0 0 0.3rem;font-size:0.82rem">Burn <b>${cur}/${max}</b> · round ${combat.round}, turn ${(Number(combat.turn) || 0) + 1}</p>
+    ${status}
+    <div class="form-group"><label>Lock Burn for (turns)</label><input type="number" name="lockTurns" value="0" min="0" step="1" style="width:4rem"/></div>
+    <div class="form-group"><label>Change Burn by (±)</label><input type="number" name="delta" value="0" step="1" style="width:4rem"/>
+      <label style="margin-left:0.5rem">in rounds</label><input type="number" name="rounds" value="1" min="1" step="1" style="width:4rem"/></div>
+    <div class="form-group"><label><input type="checkbox" name="setOn"/> Set Burn to</label><input type="number" name="setValue" value="0" min="0" max="${max}" step="1" style="width:4rem"/><span style="font-size:0.75rem;opacity:0.7;margin-left:0.4rem">when this turn ends</span></div>
+    <div class="form-group"><label>Note</label><input type="text" name="note" placeholder="e.g. Emotional Lock"/></div>
+    <p style="margin:0.3rem 0 0;font-size:0.72rem;opacity:0.65">A lock holds Burn against every change (Stabilize, aura switches, on-hit gains); scheduled changes still land. Everything clears when the combat ends.</p>
+  </div>`;
+  const buttons = [{ action: "apply", label: "Schedule", default: true,
+    callback: (ev, btn, dialog) => {
+      const q = (n) => dialog.element.querySelector(`[name="${n}"]`);
+      return { action: "apply", lockTurns: Math.max(0, Math.floor(Number(q("lockTurns")?.value) || 0)),
+        delta: Math.trunc(Number(q("delta")?.value) || 0), rounds: Math.max(1, Math.floor(Number(q("rounds")?.value) || 1)),
+        setOn: !!q("setOn")?.checked, setValue: Math.max(0, Math.min(max, Math.floor(Number(q("setValue")?.value) || 0))),
+        note: String(q("note")?.value ?? "").trim().slice(0, 120) };
+    } }];
+  if (sum.active && game.user.isGM) buttons.push({ action: "clear", label: "Clear all", callback: () => ({ action: "clear" }) });
+  buttons.push({ action: "cancel", label: "Cancel" });
+  let res = null;
+  try { res = await foundry.applications.api.DialogV2.wait({ window: { title: `Burn Timer — ${actor.name}` }, content, buttons, rejectClose: false }); }
+  catch { res = null; }
+  if (!res || typeof res !== "object") return;
+  if (res.action === "clear") {
+    await actor.unsetFlag("fourththing", "burnTimer");
+    return ui.notifications?.info(`${actor.name}: Burn timers cleared.`);
+  }
+  const prev = actor.flags?.fourththing?.burnTimer;
+  const same = prev?.combatId === combat.id;
+  const timers = same && Array.isArray(prev.timers) ? prev.timers.slice() : [];
+  let lock = same ? (prev.lock ?? null) : null;
+  const stamp = () => foundry.utils.randomID();
+  if (res.lockTurns > 0) {
+    const until = ftAdvanceCombatPos(combat, res.lockTurns);
+    if (!lock || ftCombatPos(until.round, until.turn) > ftCombatPos(lock.untilRound, lock.untilTurn)) lock = { untilRound: until.round, untilTurn: until.turn };
+  }
+  if (res.delta) timers.push({ id: stamp(), kind: "delta", value: res.delta, atRound: (Number(combat.round) || 0) + res.rounds, atTurn: 0, note: res.note });
+  if (res.setOn) {
+    const next = ftAdvanceCombatPos(combat, 1);
+    timers.push({ id: stamp(), kind: "set", value: res.setValue, atRound: next.round, atTurn: next.turn, note: res.note });
+  }
+  if (!res.lockTurns && !res.delta && !res.setOn) return ui.notifications?.info("Nothing scheduled.");
+  // Replace wholesale (combat switch drops stale entries); unset first so setFlag can't merge old keys.
+  if (prev && !same) await actor.unsetFlag("fourththing", "burnTimer");
+  await actor.setFlag("fourththing", "burnTimer", { combatId: combat.id, lock, timers });
+  ui.notifications?.info(`${actor.name}: Burn timer set.`);
+}
+
+// GM Blood Debt control: add (±) with a source + note, or clear (archived by the API).
+const _FT_BD_SOURCES = [
+  ["manual", "Manual (GM)"], ["death", "Death"], ["transference", "Transference"], ["pact", "Pact"],
+  ["great_work", "Great Work"], ["atonement", "Atonement"], ["other", "Other"]
+];
+async function _ftOpenBloodDebtGMDialog(actor) {
+  if (!actor || !game.user?.isGM) return;
+  const api = game.fourththing?.bloodDebt;
+  if (!api?.add || !api?.clear) return ui.notifications?.warn("Blood Debt API unavailable.");
+  const esc = foundry.utils.escapeHTML;
+  const cur = api.get(actor).value;
+  const content = `<div class="ft-cast-dialog">
+    <p style="margin:0 0 0.4rem;font-size:0.82rem">${esc(actor.name)} — Blood Debt <b>${cur}</b></p>
+    <div class="form-group"><label>Amount (±)</label><input type="number" name="amount" value="1" step="1" style="width:4rem"/></div>
+    <div class="form-group"><label>Source</label><select name="source">${_FT_BD_SOURCES.map(([k, l]) => `<option value="${k}">${l}</option>`).join("")}</select></div>
+    <div class="form-group"><label>Note</label><input type="text" name="note" placeholder="what happened"/></div>
+    <p style="margin:0.3rem 0 0;font-size:0.72rem;opacity:0.65">Clear sets the debt to 0; the old ledger is archived in flags.fourththing.bloodDebtHistory.</p>
+  </div>`;
+  const read = (dialog, action) => {
+    const q = (n) => dialog.element.querySelector(`[name="${n}"]`);
+    return { action, amount: Math.trunc(Number(q("amount")?.value) || 0), source: String(q("source")?.value || "manual"), note: String(q("note")?.value ?? "").trim().slice(0, 200) };
+  };
+  let res = null;
+  try {
+    res = await foundry.applications.api.DialogV2.wait({
+      window: { title: `Blood Debt — ${actor.name}` }, content, rejectClose: false,
+      buttons: [
+        { action: "add", label: "Apply", default: true, callback: (ev, btn, dialog) => read(dialog, "add") },
+        { action: "clear", label: "Clear debt", callback: (ev, btn, dialog) => read(dialog, "clear") },
+        { action: "cancel", label: "Cancel" }
+      ]
+    });
+  } catch { res = null; }
+  if (!res || typeof res !== "object") return;
+  if (res.action === "clear") {
+    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: "Clear Blood Debt?" },
+      content: `<p>Set ${esc(actor.name)}'s Blood Debt to <b>0</b> and archive the ledger?</p>`, rejectClose: false });
+    if (!ok) return;
+    await api.clear(actor, { reason: res.note || res.source });
+    return ui.notifications?.info(`${actor.name}: Blood Debt cleared.`);
+  }
+  // A reduction can't take the debt below 0 (the ledger stays a true sum).
+  const amount = res.amount < 0 ? Math.max(res.amount, -api.get(actor).value) : res.amount;
+  if (!amount) return ui.notifications?.warn(res.amount ? "No Blood Debt to reduce." : "Enter a non-zero amount.");
+  await api.add(actor, { value: amount, source: res.source, tag: "gm", note: res.note });
+  ui.notifications?.info(`${actor.name}: Blood Debt ${amount > 0 ? "+" : ""}${amount}.`);
+}
+
+// Affiliation OP breakdown for the steward sheet — mirrors the faction sheet's
+// roster "Aff" column (bbttcc-raid affiliationOP.contributionBreakdown). Read-only.
+const _FT_AFF_KIND_LABEL = { sephirah: "Sephirotic Alignment", ancestry: "Ancestry", political: "Political Philosophy", archetype: "Archetype", crew: "Crew", occult: "Occult Association" };
+const _FT_AFF_OP_LABEL = { violence: "Violence", nonlethal: "Non-Lethal", intrigue: "Intrigue", economy: "Economy", softpower: "Softpower", diplomacy: "Diplomacy", logistics: "Logistics", culture: "Culture", faith: "Faith" };
+function _ftAffiliationOPContext(actor) {
+  const api = globalThis.BBTTCC_AffiliationOP || game.bbttcc?.api?.factions?.affiliationOP || null;
+  if (typeof api?.contributionBreakdown !== "function") return { available: false };
+  let br = { total: {}, parts: [] };
+  try { br = api.contributionBreakdown(actor) || br; } catch (e) { console.warn("[fourththing] affiliation breakdown failed", e); return { available: false }; }
+  const pills = (ops) => Object.entries(ops || {}).filter(([, v]) => Number(v))
+    .map(([k, v]) => ({ label: _FT_AFF_OP_LABEL[k] ?? k, value: `${Number(v) > 0 ? "+" : ""}${Number(v)}` }));
+  const nice = (s) => String(s ?? "").replace(/[_-]+/g, " ").replace(/\b\w/g, m => m.toUpperCase()).trim();
+  const parts = (br.parts || []).map(p => ({
+    kind: _FT_AFF_KIND_LABEL[p.kind] ?? nice(p.kind), key: nice(p.key), ops: pills(p.ops),
+    source: p.source === "item-flag" ? "from the item" : "standard table"
+  })).filter(p => p.ops.length);
+  const total = pills(br.total);
+  return { available: true, parts, total, sum: Object.values(br.total || {}).reduce((s, v) => s + (Number(v) || 0), 0) };
 }
 
 // ─── Bulwark (Pool archetype) — "eat the blow" generation + Surge spends ──────
@@ -19552,7 +19792,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ftMoveAdjust:     FourthThingCharacterSheet._onFtMoveAdjust,
         ftNewTurn:        FourthThingCharacterSheet._onFtNewTurn,
         ftStrainAdjust:   FourthThingCharacterSheet._onFtStrainAdjust,
-        ftActAgain:       FourthThingCharacterSheet._onFtActAgain,
+        ftBurnTimer:      FourthThingCharacterSheet._onFtBurnTimer,
+        ftBloodDebtGM:    FourthThingCharacterSheet._onFtBloodDebtGM,
+        ftActAgain:      FourthThingCharacterSheet._onFtActAgain,
         ftSurgeSpend:     FourthThingCharacterSheet._onFtSurgeSpend,
         ftSomaBreak:      FourthThingCharacterSheet._onFtSomaBreak,
         ftSceneBreak:     FourthThingCharacterSheet._onFtSceneBreak,
@@ -20249,6 +20491,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         isDying,
         lastStand:     lsData,
         bloodDebt:     bdData,
+        // Burn timer readout + who may open the control (GM or owner, combat only).
+        burnTimer:     (() => {
+          const s = _ftBurnTimerSummary(actor);
+          const canEdit = !!(game.user?.isGM || actor.isOwner);
+          return { ...s, canEdit, show: s.active || canEdit };
+        })(),
+        // Affiliation OP breakdown (bbttcc-raid engine), read-only.
+        affiliationOP: _ftAffiliationOPContext(actor),
         bulwarkPools,
         isTCC: actorIsTCC,
         shadowCourierState,
@@ -20933,6 +21183,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const delta = Number(target.dataset.delta) || 0;
       if (!delta) return;
       return game.fourththing.strain.gain(this.actor, delta, "sheet");
+    }
+    // Burn timer (lock / scheduled delta / end-of-turn set) — GM or owner.
+    static async _onFtBurnTimer(event, target) {
+      return _ftOpenBurnTimerDialog(this.actor);
+    }
+    // GM-only Blood Debt add (±) / clear.
+    static async _onFtBloodDebtGM(event, target) {
+      if (!game.user?.isGM) return;
+      return _ftOpenBloodDebtGMDialog(this.actor);
     }
 
     static async _onFtSkillRoll(event, target) {

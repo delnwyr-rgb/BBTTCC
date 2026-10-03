@@ -556,6 +556,14 @@
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_stabilize">Stabilize</button>
           </div>
         </div>
+        {{!-- Burn timer (2026-10-02): lock / scheduled change / end-of-turn set, ticked by the GM on the combat clock. --}}
+        {{#if burnTimer.show}}
+        <div class="ft-burn-timer-row">
+          {{#if burnTimer.lockLabel}}<span class="ft-burn-timer-chip lock">🔒 {{burnTimer.lockLabel}}</span>{{/if}}
+          {{#each burnTimer.timers as |t|}}<span class="ft-burn-timer-chip" data-tooltip="{{t.note}}">⏱ {{t.label}}</span>{{/each}}
+          {{#if burnTimer.canEdit}}<button type="button" class="ft-res-btn ft-res-btn-sm" data-action="ftBurnTimer" data-tooltip="Burn timer: lock Burn for N turns, change it in N rounds, or set it when this turn ends (combat only).">⏱ Timer</button>{{/if}}
+        </div>
+        {{/if}}
       </div>
       {{/if}}
 
@@ -656,6 +664,7 @@
           <span class="ft-resource-count" style="color:{{burnBand.color}}">🔥 {{ftOr resources.burn.current 0}}/8 · {{burnBand.label}}</span>
           <div class="ft-resource-controls">
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_stabilize" data-tooltip="Vent the forge (cool Burn).">Vent</button>
+            {{#if burnTimer.canEdit}}<button type="button" class="ft-res-btn ft-res-btn-sm" data-action="ftBurnTimer" data-tooltip="Burn timer: lock forge heat for N turns, change it in N rounds, or set it when this turn ends (combat only).">⏱</button>{{/if}}
           </div>
           <div class="ft-edit-only ft-resource-edit">
             <input type="number" name="system.resources.burn.current" value="{{ftOr resources.burn.current 0}}" min="0" max="8" style="width:40px" data-tooltip="Forge heat (Burn 0–8)"/>
@@ -665,6 +674,12 @@
         <div class="ft-aura-row" style="margin-top:0.2rem">
           <span class="ft-aura-desc" style="color:{{burnBand.color}}"><b>{{burnBand.label}}:</b> {{burnBand.desc}}</span>
         </div>
+        {{#if burnTimer.active}}
+        <div class="ft-burn-timer-row">
+          {{#if burnTimer.lockLabel}}<span class="ft-burn-timer-chip lock">🔒 {{burnTimer.lockLabel}}</span>{{/if}}
+          {{#each burnTimer.timers as |t|}}<span class="ft-burn-timer-chip" data-tooltip="{{t.note}}">⏱ {{t.label}}</span>{{/each}}
+        </div>
+        {{/if}}
         {{#if soulSmithState.forge}}
         {{!-- Subclass Spark economy (Forge of Victory / Spark Reclaimer / Bound Light). --}}
         <div class="ft-aura-row" style="margin-top:0.2rem" data-tooltip="Sparks — your forge's subclass resource. Earned when foes fall / things are destroyed / allies are hurt near you (per forge). Spend on your forge abilities via the Surge menu.">
@@ -971,6 +986,7 @@
           <span style="margin-left:auto;font-size:0.72rem;opacity:0.6;font-style:italic">
             {{#if bloodDebt.hasDebt}}Accrued via faction sacrifice and Threshold crossings.{{else}}No debt accrued.{{/if}}
           </span>
+          {{#if isGM}}<button type="button" class="ft-res-btn ft-res-btn-sm ft-bd-gm-btn" data-action="ftBloodDebtGM" data-tooltip="GM: add / reduce Blood Debt with a source + note, or clear it (ledger archived).">⚖ Adjust</button>{{/if}}
         </div>
         {{#if bloodDebt.hasDebt}}
         <details style="margin-top:0.5rem">
@@ -1544,6 +1560,28 @@
               <p class="ft-work-empty">Unaffiliated.</p>
               {{/if}}
             </section>
+            {{!-- Affiliation OP breakdown (2026-10-02): what this steward's alignment,
+                 ancestry, philosophy, archetype, crew and occult ties add to the faction's
+                 OP rolls — same engine as the faction sheet roster's Aff column. --}}
+            {{#if affiliationOP.available}}
+            <section class="ft-work-panel ft-aff-op">
+              <header class="ft-work-panel-head"><h3>Affiliation OP</h3><small>{{#if bbttcc.faction}}to {{bbttcc.faction.name}}{{else}}no faction yet{{/if}}</small></header>
+              {{#if affiliationOP.parts.length}}
+              <div class="ft-aff-op-rows">
+                {{#each affiliationOP.parts as |p|}}
+                <div class="ft-aff-op-row" data-tooltip="{{p.kind}}: {{p.key}} ({{p.source}})">
+                  <span class="ft-aff-op-kind">{{p.kind}}</span>
+                  <span class="ft-aff-op-key">{{p.key}}</span>
+                  <span class="ft-aff-op-pills">{{#each p.ops as |o|}}<span class="ft-aff-op-pill">{{o.value}} {{o.label}}</span>{{/each}}</span>
+                </div>
+                {{/each}}
+              </div>
+              <div class="ft-aff-op-total"><small>Total</small><span class="ft-aff-op-pills">{{#each affiliationOP.total as |o|}}<span class="ft-aff-op-pill total">{{o.value}} {{o.label}}</span>{{/each}}</span></div>
+              {{else}}
+              <p class="ft-work-empty">No affiliation adds to the faction's OP rolls.</p>
+              {{/if}}
+            </section>
+            {{/if}}
             <section class="ft-work-panel">
               <header class="ft-work-panel-head"><h3>Ground</h3></header>
               {{#if bbttcc.terrain.terrainLabel}}

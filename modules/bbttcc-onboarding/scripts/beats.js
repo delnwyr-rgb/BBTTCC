@@ -57,11 +57,13 @@ async function _requireScene(ctx, key, label) {
 // use ART_LANE; only free-placed scaffolding takes the run's lane.
 const ART_LANE = 0;
 function _scenePoint(scene, fx, fy, lane = 0) {
-  const laneFrac = _stage()?.laneFrac;
+  const laneFrac = _stage()?.laneFrac, laneFracX = _stage()?.laneFracX;
   const y = typeof laneFrac === "function" ? laneFrac(fy, lane) : fy;
+  // Big classes (8+) split into columns — the x shift is 0 until they do.
+  const x = (lane && typeof laneFracX === "function") ? laneFracX(fx, lane) : fx;
   const d = scene?.dimensions;
-  if (d?.sceneWidth) return { x: Math.round(d.sceneX + d.sceneWidth * fx), y: Math.round(d.sceneY + d.sceneHeight * y) };
-  return { x: Math.round((scene?.width ?? 2000) * fx), y: Math.round((scene?.height ?? 1400) * y) };
+  if (d?.sceneWidth) return { x: Math.round(d.sceneX + d.sceneWidth * x), y: Math.round(d.sceneY + d.sceneHeight * y) };
+  return { x: Math.round((scene?.width ?? 2000) * x), y: Math.round((scene?.height ?? 1400) * y) };
 }
 
 /** Centered-and-fitted landing view for a scene: middle of the IMAGE (lane-
@@ -1406,11 +1408,21 @@ const combatSim = {
       } else if (how === "killed" && rec.foeClass === "sentient") {
         sim.tally.killed += 1;
         // The receipt. Darkness is a manual track — nothing else writes it.
+        // It bills the KILLER (Dave, 2026-10-02), resolved on the GM: the seat
+        // that landed the killing hit, else whoever's turn it is, else us.
         let landed = null;
-        try { landed = await stage.raiseDarkness?.(ctx.steward?.id, 1, `killed ${rec.name} (onboarding sim)`); } catch (_) {}
-        if (landed?.ok && landed.after > landed.before) {
+        try {
+          landed = await stage.billKill?.(rec.actorId, {
+            sceneId: sim.scene?.id, tokenId: rec.tokenId,
+            fallbackActorId: ctx.steward?.id, reason: `killed ${rec.name} (onboarding sim)`
+          });
+        } catch (_) {}
+        const mine = !landed?.actorId || landed.actorId === ctx.steward?.id;
+        if (landed?.ok && landed.after > landed.before && mine) {
           sim.tally.darkness += (landed.after - landed.before);
           await ctx.speak?.(`${rec.name} is dead. Darkness ${landed.before} → ${landed.after}. I'm not scolding you, One — I'm just the one who writes it down.`);
+        } else if (landed?.ok && !mine) {
+          await ctx.speak?.(`${rec.name} is dead — and that one goes on ${landed.name}'s ledger, not yours. I write down who pulled the trigger.`);
         } else {
           await ctx.speak?.(`${rec.name} is dead. That one was a person.`);
         }

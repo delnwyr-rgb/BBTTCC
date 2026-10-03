@@ -36,13 +36,54 @@ async function _folder() {
 // is running the same program" from a login that had long since refreshed
 // (2026-08-21 playtest).
 const RUN_STALE_MS = 15 * 60 * 1000;
-const LANE_STEP = 0.17;                  // vertical separation between concurrent runs
+const LANE_STEP = 0.17;                  // vertical separation between concurrent runs (roomy classes)
+// Convention tables (group induction Phase 0, 2026-10-02): lanes used to wrap
+// at `lane % 5`, so the 6th Steward landed on the 1st. Now the layout derives
+// from the class size: up to 5 runs keep the old 0.17 rows exactly; more runs
+// tighten the rows down to LANE_MIN_STEP, and past that the class splits into
+// side-by-side COLUMNS (x-offset) instead of overlapping. Lane 0 never moves.
+const LANE_BAND = 0.88;                  // usable band 0.06–0.94 on either axis
+const LANE_MIN_STEP = 0.12;              // tightest row spacing before a new column opens
+const LANE_ROWS_MAX = Math.floor(LANE_BAND / LANE_MIN_STEP);   // 7 rows per column
 
-/** Shift a fractional y-position into this run's lane, kept inside the visible band. */
-function _laneFrac(fy, lane = 0) {
-  const shifted = (Number(fy) || 0.5) + ((Number(lane) || 0) % 5) * LANE_STEP;
-  const wrapped = shifted > 0.94 ? shifted - 0.88 : shifted;   // wrap high lanes back up
+/** Class size the layout is cut for: the highest live lane + 1 (sticky while
+ *  lower lanes come and go), at least the live-run count and the asking lane. */
+function _laneHeadcount(lane) {
+  let n = lane + 1;
+  try {
+    const runs = _readRuns();
+    n = Math.max(n, Object.keys(runs).length);
+    for (const e of Object.values(runs)) n = Math.max(n, (Number(e?.lane) || 0) + 1);
+  } catch (_) {}
+  return n;
+}
+/** Lane → { row, col, cols, step }. Rows fill a column top-down, then the next column. */
+function _laneSlot(lane = 0) {
+  const l = Math.max(0, Math.floor(Number(lane) || 0));
+  if (l === 0) return { row: 0, col: 0, cols: 1, step: LANE_STEP };
+  const n = _laneHeadcount(l);
+  const cols = Math.ceil(n / LANE_ROWS_MAX);
+  const rows = Math.ceil(n / cols);
+  return { row: l % rows, col: Math.floor(l / rows), cols, step: Math.min(LANE_STEP, LANE_BAND / rows) };
+}
+/** Offset a fraction by `by`, wrapping inside the visible band (high lanes wrap back up). */
+function _laneWrap(f, by) {
+  const shifted = f + by;
+  const wrapped = shifted > 0.94 ? shifted - LANE_BAND : shifted;
   return Math.min(0.94, Math.max(0.06, wrapped));
+}
+
+/** Shift a fractional y-position into this run's lane row, kept inside the visible band. */
+function _laneFrac(fy, lane = 0) {
+  const s = _laneSlot(lane);
+  return _laneWrap(Number(fy) || 0.5, s.row * s.step);
+}
+/** Shift a fractional x-position into this run's lane column (0 shift until the class needs a 2nd column). */
+function _laneFracX(fx, lane = 0) {
+  const s = _laneSlot(lane);
+  const f = Number(fx);
+  const base = Number.isFinite(f) ? f : 0.5;
+  return s.col ? _laneWrap(base, s.col * (LANE_BAND / s.cols)) : base;
 }
 
 function _readRuns() {
@@ -61,6 +102,114 @@ function _lowestFreeLane(runs, exceptUserId) {
   let lane = 0;
   while (taken.has(lane)) lane++;
   return lane;
+}
+
+/** Owner key for run-scoped docs: explicit key, else "user:<ownerUserId>", else "solo". */
+function _combatOwnerKey(ownerUserId = "", ownerKey = "") {
+  return String(ownerKey || (ownerUserId ? `user:${ownerUserId}` : "solo"));
+}
+/** This run's unstarted Combat on a scene — matched on the owner stamp only, never "any". */
+function _findOwnedCombat(sceneId, key) {
+  return game.combats?.find?.(c => c.scene?.id === sceneId && !c.started
+    && c.getFlag?.(MODULE_ID, "ownerKey") === key) || null;
+}
+
+/** Darkness write, shared by raiseDarkness + billKill. Returns {ok,before,after}. */
+async function _gainDarkness(actor, amount = 1, reason = "") {
+  if (!actor) return { ok: false, before: 0, after: 0 };
+  const dk = game.fourththing?.darkness;
+  if (typeof dk?.gain === "function") {
+    try {
+      const before = Number(dk.get(actor)?.value) || 0;
+      const b = await dk.gain(actor, Number(amount) || 0, reason || "onboarding");
+      const after = Number(b?.value) || before;
+      console.log(TAG, `Darkness ${before} → ${after} on ${actor.name}${reason ? ` (${reason})` : ""}`);
+      return { ok: true, before, after, capped: after === before };
+    } catch (e) { console.warn(TAG, "raiseDarkness (darkness.gain) failed", e); return { ok: false, before: 0, after: 0 }; }
+  }
+  // Fallback only when the system API is missing: direct clamped write.
+  const sys = actor.system?.system ?? actor.system;
+  const before = Number(sys?.darkness?.value) || 0;
+  const after = Math.min(10, Math.max(0, before + (Number(amount) || 0)));
+  if (after === before) return { ok: true, before, after, capped: true };
+  try {
+    await actor.update({ "system.darkness.value": after });
+    console.log(TAG, `Darkness ${before} → ${after} on ${actor.name}${reason ? ` (${reason})` : ""}`);
+  } catch (e) { console.warn(TAG, "raiseDarkness failed", e); return { ok: false, before, after: before }; }
+  return { ok: true, before, after };
+}
+
+/* ─── Kill attribution (group induction Phase 0 spike, 2026-10-02) ──────────
+ * The system's damage path carries NO attacker: _applyDamageToActor takes no
+ * source, the ft-applyDamage relay carries no sender, and the actor.update it
+ * makes passes no options. What every client DOES see is updateActor's userId
+ * — the seat whose client wrote the hit. Tutorial foes are default-OWNER, so a
+ * player's Apply click writes from THEIR client and that userId is the
+ * attacker's seat; a hit the GM wrote (relayed, a shove, the GM's own click)
+ * says nothing about who swung, so it falls through to the combat turn.
+ * GM-side only: the GM watches every tutorial foe's Integrity drops and
+ * remembers the last seat that lowered it. */
+const _lastHit = new Map();          // foe actor id → { userId, value, ts }
+const _billedKills = new Set();      // foe actor ids already billed (one bill per kill)
+let _hitTrackerOn = false;
+
+/** Integrity for either actor shape (rigs: system.integrity; npcs/characters: derived). */
+function _integrityOf(actor) {
+  const sys = actor?.system?.system ?? actor?.system;
+  const raw = actor?.type === "rig"
+    ? foundry.utils.getProperty(sys, "integrity.value")
+    : foundry.utils.getProperty(sys, "derived.integrity.value");
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : null;
+}
+
+function _installHitTracker() {
+  if (_hitTrackerOn || !game.user?.isGM) return;
+  _hitTrackerOn = true;
+  Hooks.on("updateActor", (actor, _changed, _opts, userId) => {
+    try {
+      if (actor?.getFlag?.(MODULE_ID, "spawned") !== true) return;
+      const value = _integrityOf(actor);
+      if (value === null) return;
+      const prev = _lastHit.get(actor.id);
+      if (prev && !(value < prev.value)) { prev.value = value; return; }   // not a hit
+      _lastHit.set(actor.id, { userId: String(userId || ""), value, ts: Date.now() });
+      if (_lastHit.size > 500) _lastHit.delete(_lastHit.keys().next().value);
+    } catch (_) {}
+  });
+}
+
+/** A rig's Steward: its pilot, else the first character aboard. */
+function _rigSteward(rig) {
+  const slots = rig?.system?.crew?.slots ?? [];
+  const pick = slots.find(s => s?.role === "pilot" && s?.actorId) || slots.find(s => s?.actorId);
+  const a = pick ? game.actors?.get?.(pick.actorId) : null;
+  return a?.type === "character" ? a : null;
+}
+/** Attacker actor → the Steward to bill (a rig bills its pilot). Foes never bill. */
+function _stewardOf(actor) {
+  if (!actor || actor.getFlag?.(MODULE_ID, "spawned") === true) return null;
+  if (actor.type === "rig") return _rigSteward(actor);
+  return actor.type === "character" ? actor : null;
+}
+
+/** Resolution order: (1) the seat that wrote the killing hit → its Steward;
+ *  (2) the current combatant of the started Combat holding the foe's token
+ *  (a rig → its pilot); (3) nothing — the caller falls back to the run owner. */
+function _resolveKiller(foeId, foeToken) {
+  const hit = _lastHit.get(foeId);
+  const hitter = hit?.userId ? game.users?.get?.(hit.userId) : null;
+  if (hitter && !hitter.isGM) {
+    const st = _stewardOf(_ns()?.resolve?.steward?.(hitter) || null);
+    if (st) return { killer: st, via: "hit" };
+  }
+  const scId = foeToken?.parent?.id;
+  const combat = game.combats?.find?.(c => c.started && c.combatants?.some?.(cb => cb.tokenId === foeToken?.id))
+    || (game.combats?.filter?.(c => c.started && c.scene?.id === scId) ?? []).find((c, _i, all) => all.length === 1)
+    || null;
+  const st = _stewardOf(combat?.combatant?.actor || null);
+  if (st) return { killer: st, via: "turn" };
+  return { killer: null, via: "" };
 }
 
 function _registerOps() {
@@ -246,30 +395,34 @@ function _registerOps() {
   // the Descent band icon, darknessSpikes and overflow-to-taint all apply).
   // Reports what actually landed so the Operator never announces a point that
   // didn't stick.
-  reg("raiseDarkness", async ({ actorId, amount = 1, reason = "" }) => {
-    const actor = game.actors?.get?.(String(actorId || ""));
-    if (!actor) return { ok: false, before: 0, after: 0 };
-    const dk = game.fourththing?.darkness;
-    if (typeof dk?.gain === "function") {
-      try {
-        const before = Number(dk.get(actor)?.value) || 0;
-        const b = await dk.gain(actor, Number(amount) || 0, reason || "onboarding");
-        const after = Number(b?.value) || before;
-        console.log(TAG, `Darkness ${before} → ${after} on ${actor.name}${reason ? ` (${reason})` : ""}`);
-        return { ok: true, before, after, capped: after === before };
-      } catch (e) { console.warn(TAG, "raiseDarkness (darkness.gain) failed", e); return { ok: false, before: 0, after: 0 }; }
-    }
-    // Fallback only when the system API is missing: direct clamped write.
-    const sys = actor.system?.system ?? actor.system;
-    const before = Number(sys?.darkness?.value) || 0;
-    const after = Math.min(10, Math.max(0, before + (Number(amount) || 0)));
-    if (after === before) return { ok: true, before, after, capped: true };
-    try {
-      await actor.update({ "system.darkness.value": after });
-      console.log(TAG, `Darkness ${before} → ${after} on ${actor.name}${reason ? ` (${reason})` : ""}`);
-    } catch (e) { console.warn(TAG, "raiseDarkness failed", e); return { ok: false, before, after: before }; }
-    return { ok: true, before, after };
+  reg("raiseDarkness", async ({ actorId, amount = 1, reason = "" }) =>
+    _gainDarkness(game.actors?.get?.(String(actorId || "")), amount, reason));
+
+  // A kill's Darkness goes to the KILLER (group induction Phase 0, 2026-10-02 —
+  // Dave: "Darkness bills the killer"). The asking client only names the foe
+  // and its own Steward as the fallback; WHO pulled the trigger is resolved
+  // here on the GM from what the GM saw (_resolveKiller), so a seat can never
+  // aim a point at someone else. One bill per foe; amount is always 1; and a
+  // foe whose token resolves must actually be at 0 Integrity. An unverifiable
+  // kill bills only the fallback (the sender's own Steward — no new power).
+  reg("billKill", async ({ foeActorId, sceneId = "", tokenId = "", fallbackActorId = "", reason = "" }) => {
+    const foeId = String(foeActorId || "");
+    if (!foeId) return { ok: false, before: 0, after: 0 };
+    if (_billedKills.has(foeId)) return { ok: false, before: 0, after: 0, duplicate: true };
+    const tok = game.scenes?.get?.(String(sceneId || ""))?.tokens?.get?.(String(tokenId || "")) || null;
+    const foe = tok?.actor || null;
+    if (foe && foe.id !== foeId) return { ok: false, before: 0, after: 0 };
+    const verified = !!foe && _integrityOf(foe) !== null && _integrityOf(foe) <= 0;
+    if (foe && !verified) return { ok: false, before: 0, after: 0, notDead: true };
+    _billedKills.add(foeId);
+    let { killer, via } = verified ? _resolveKiller(foeId, tok) : { killer: null, via: "" };
+    if (!killer) { killer = game.actors?.get?.(String(fallbackActorId || "")) || null; via = "owner"; }
+    if (!killer) return { ok: false, before: 0, after: 0 };
+    const r = await _gainDarkness(killer, 1, reason);
+    return { ...r, actorId: killer.id, name: killer.name, via };
   });
+
+  _installHitTracker();
 
   // A sentient foe folds instead of dying. Routed through the system's own
   // toggleCondition so the condition AE + chat card fire exactly as they would
@@ -465,15 +618,21 @@ function _registerOps() {
   // Combat staging handoff: load the tracker (combat + combatants for the
   // steward and every spawned foe) and whisper the GM why. The GM still rolls
   // initiative and presses Begin — nothing fights itself.
-  reg("beginShowdownCombat", async ({ sceneId, actorIds = [], playerName = "" }) => {
+  // Each run finds ITS OWN Combat (group induction Phase 0, 2026-10-02): the
+  // old "any unstarted Combat on the scene" lookup put player B's foes in
+  // player A's tracker. Combats we create carry the run's owner stamp
+  // (ownerUserId + ownerKey — "user:<id>" today, "cohort:<id>" later) and are
+  // only ever matched on it.
+  reg("beginShowdownCombat", async ({ sceneId, actorIds = [], playerName = "", ownerUserId = "", ownerKey = "" }) => {
     const scene = game.scenes?.get?.(String(sceneId || ""));
     if (!scene) return { ok: false };
     try {
       const ids = new Set((actorIds || []).map(String));
       const tokens = scene.tokens?.filter?.(t => ids.has(String(t.actorId))) ?? [];
       if (!tokens.length) return { ok: false };
-      let combat = game.combats?.find?.(c => c.scene?.id === scene.id && !c.started) || null;
-      if (!combat) combat = await Combat.create({ scene: scene.id });
+      const key = _combatOwnerKey(ownerUserId, ownerKey);
+      let combat = _findOwnedCombat(scene.id, key);
+      if (!combat) combat = await Combat.create({ scene: scene.id, flags: { [MODULE_ID]: { spawned: true, kind: "showdown", ownerUserId: ownerUserId || "", ownerKey: key } } });
       const have = new Set(combat.combatants.map(c => c.tokenId));
       const add = tokens.filter(t => !have.has(t.id)).map(t => ({ tokenId: t.id, sceneId: scene.id, actorId: t.actorId }));
       if (add.length) await combat.createEmbeddedDocuments("Combatant", add);
@@ -845,7 +1004,7 @@ function _registerOps() {
     // Padding-aware: canvas coords include scene padding — bare width*frac drifts off-map.
     const dims = scene.dimensions ?? {};
     const yFrac = _laneFrac(0.5, lane);
-    const cx = Math.round((dims.sceneX ?? 0) + (dims.sceneWidth ?? scene.width) * 0.5);
+    const cx = Math.round((dims.sceneX ?? 0) + (dims.sceneWidth ?? scene.width) * _laneFracX(0.5, lane));
     const cy = Math.round((dims.sceneY ?? 0) + (dims.sceneHeight ?? scene.height) * yFrac);
     const r = 130, start = Math.PI / 6;
     const abs = [];
@@ -984,7 +1143,7 @@ function _registerOps() {
     }
     // Padding-aware, lane-aware placement (canvas coords include scene padding).
     const dims = scene.dimensions ?? {};
-    const cx = Math.round((dims.sceneX ?? 0) + (dims.sceneWidth ?? scene.width) * xFrac);
+    const cx = Math.round((dims.sceneX ?? 0) + (dims.sceneWidth ?? scene.width) * _laneFracX(xFrac, lane));
     const cy = Math.round((dims.sceneY ?? 0) + (dims.sceneHeight ?? scene.height) * _laneFrac(yFrac, lane));
     const start = Math.PI / 6, abs = [];
     for (let i = 0; i < 6; i++) { const a = start + i * Math.PI / 3; abs.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); }
@@ -1167,7 +1326,7 @@ function _registerOps() {
     return { ok: true };
   });
 
-  console.log(TAG, "GM ops registered: spawnDummy, spawnObstacle, spawnFoe, raiseDarkness, foeSurrender, shoveOffPerch, spawnMarker, spawnCourtier, hurt, mend, grantSecret, setElevation, ensureToken, mintRig, ensureSandboxHex, claimHex, unclaimHex, disembark, spawnHostileFaction, ensureHex, setRaidSession, clearRaidSession, teardownFinale, cleanup.");
+  console.log(TAG, "GM ops registered: spawnDummy, spawnObstacle, spawnFoe, raiseDarkness, billKill, foeSurrender, shoveOffPerch, spawnMarker, spawnCourtier, hurt, mend, grantSecret, setElevation, ensureToken, mintRig, ensureSandboxHex, claimHex, unclaimHex, disembark, spawnHostileFaction, ensureHex, setRaidSession, clearRaidSession, teardownFinale, cleanup.");
 }
 
 /* ─── Public helpers (called by beats; resolve ids -> Documents) ────────────── */
@@ -1282,7 +1441,8 @@ async function unsealCircle(scene) {
 /** Load the GM's combat tracker with the showdown participants + whisper why. */
 async function beginShowdownCombat(scene, actorIds = [], { playerName = "" } = {}) {
   if (!scene?.id || !actorIds?.length) return { ok: false };
-  return (await _runAsGM("beginShowdownCombat", { sceneId: scene.id, actorIds, playerName })) ?? { ok: false };
+  return (await _runAsGM("beginShowdownCombat", { sceneId: scene.id, actorIds, playerName,
+    ownerUserId: _run.userId, ownerKey: _run.userId ? `user:${_run.userId}` : "" })) ?? { ok: false };
 }
 
 /** Spawn (or reuse) a courtly delegation NPC on a tableau scene.
@@ -1337,6 +1497,15 @@ async function spawnFoe(scene, opts = {}) {
 async function raiseDarkness(actorId, amount = 1, reason = "") {
   if (!actorId) return { ok: false, before: 0, after: 0 };
   return (await _runAsGM("raiseDarkness", { actorId, amount, reason })) ?? { ok: false, before: 0, after: 0 };
+}
+
+/** Bill a kill's Darkness to whoever made it — resolved GM-side (last seat to
+ *  land an Integrity hit → its Steward; else the current combatant, a rig → its
+ *  pilot; else `fallbackActorId`, the run's own Steward). Always +1, once per foe.
+ *  Returns {ok,before,after,actorId,name,via:"hit"|"turn"|"owner"}. */
+async function billKill(foeActorId, { sceneId = "", tokenId = "", fallbackActorId = "", reason = "" } = {}) {
+  if (!foeActorId) return { ok: false, before: 0, after: 0 };
+  return (await _runAsGM("billKill", { foeActorId, sceneId, tokenId, fallbackActorId, reason })) ?? { ok: false, before: 0, after: 0 };
 }
 
 /** A sentient foe folds: Calmed + integrity floored so a stray hit can't finish them. */
@@ -1439,11 +1608,11 @@ Hooks.once("ready", () => {
   const ns = _ns();
   if (ns) ns.stage = {
     ensureTokenOnScene, spawnDummy, spawnObstacle, mintRig, grantOp, ensureOwned, disembark,
-    spawnFoe, raiseDarkness, foeSurrender, shoveOffPerch,
+    spawnFoe, raiseDarkness, billKill, foeSurrender, shoveOffPerch,
     spawnMarker, spawnCourtier, spawnFromPack, hurt, mend, grantSecret, setElevation,
     sealCircle, unsealCircle, beginShowdownCombat, sweepScene,
     ensureSandboxHex, claimHex, unclaimHex, spawnHostileFaction, ensureHex,
     setRaidSession, clearRaidSession, openRaidConsoleForGM, teardownFinale, cleanup, folder: _folder,
-    setRunContext, runContext, runBegin, runEnd, runPing, runList, laneFrac: _laneFrac
+    setRunContext, runContext, runBegin, runEnd, runPing, runList, laneFrac: _laneFrac, laneFracX: _laneFracX
   };
 });

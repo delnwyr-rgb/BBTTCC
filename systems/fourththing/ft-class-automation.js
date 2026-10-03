@@ -116,10 +116,44 @@ export function ftBurnBandFor(actor) {
   return getBurnBand(ftGetBurn(actor), desc?.bands ?? BURN_BANDS);
 }
 
+// ─── Burn timer / lock (ported from the retired auto-link sheet layer, 2026-10-02)
+// flags.fourththing.burnTimer = { combatId, lock: { untilRound, untilTurn } | null,
+//   timers: [{ id, kind: "delta"|"set", value, atRound, atTurn, note }] }
+// A lock freezes Burn until the combat reaches (untilRound, untilTurn); timers are
+// applied by the active GM on combat turn/round change (module.js). Writers that
+// carry the `ftBurnTimer` update option bypass the lock.
+export function ftCombatPos(round, turn) {
+  return (Number(round) || 0) * 10000 + (Number(turn) || 0);
+}
+
+// (round, turn) after advancing `turns` combat turns from the current position.
+export function ftAdvanceCombatPos(combat, turns) {
+  const n = Math.max(0, Math.floor(Number(turns) || 0));
+  const total = combat?.turns?.length || 0;
+  let round = Number(combat?.round) || 0;
+  let turn  = Number(combat?.turn) || 0;
+  if (!total) return { round: round + n, turn };
+  turn += n;
+  while (turn >= total) { turn -= total; round += 1; }
+  return { round, turn };
+}
+
+export function ftBurnLockInfo(actor) {
+  const bt   = actor?.flags?.fourththing?.burnTimer;
+  const lock = bt?.lock;
+  if (!lock) return { locked: false };
+  const combat = game.combats?.get?.(bt.combatId);
+  if (!combat?.started) return { locked: false };
+  const locked = ftCombatPos(combat.round, combat.turn) < ftCombatPos(lock.untilRound, lock.untilTurn);
+  return { locked, untilRound: Number(lock.untilRound) || 0, untilTurn: Number(lock.untilTurn) || 0, combat };
+}
+
 // Add (or subtract) Burn, clamped to [0, class max]. Returns the new value.
+// A Burn lock makes this a no-op (auto-gens like burn-on-hit stay frozen too).
 export async function ftAddBurn(actor, delta) {
   const max  = ftBurnMax(actor);
   const cur  = ftGetBurn(actor);
+  if (ftBurnLockInfo(actor).locked) return cur;
   const next = Math.max(0, Math.min(max, cur + (Number(delta) || 0)));
   if (next !== cur) await actor.update({ "system.resources.burn.current": next });
   return next;
@@ -857,7 +891,7 @@ export async function openChangeAura(actor) {
         label: "Switch Aura (+1 Burn)",
         callback: async (html) => {
           const newAura = html.find("[name='aura']:checked").val() ?? aura;
-          const newBurn = Math.min(8, burn + (newAura !== aura ? 1 : 0));
+          const newBurn = ftBurnLockInfo(actor).locked ? burn : Math.min(8, burn + (newAura !== aura ? 1 : 0));
           await actor.update({
             "system.resources.aura.state":   newAura,
             "system.resources.burn.current": newBurn,
@@ -1047,7 +1081,8 @@ export async function openAurabladeAction(actor) {
           const sel       = html.find("[name='action'] option:selected");
           const actionId  = html.find("[name='action']").val();
           const burnCost  = parseInt(sel.data("cost")) || 1;
-          const newBurn   = Math.min(8, burn + burnCost);
+          // A Burn lock holds the track; the action still resolves (retired-layer rule).
+          const newBurn   = ftBurnLockInfo(actor).locked ? burn : Math.min(8, burn + burnCost);
           const newBand   = getBurnBand(newBurn);
           const action    = available.find(a => a.id === actionId);
           if (!action) return;
@@ -1278,6 +1313,11 @@ export async function openStabilizeBurn(actor) {
 
   if (burn <= 0) {
     return ui.notifications.info(`${actor.name}: Burn is already at 0.`);
+  }
+  // A Burn lock (Burn timer) freezes the track — don't spend the action / Stress.
+  const _lk = ftBurnLockInfo(actor);
+  if (_lk.locked) {
+    return ui.notifications.warn(`${actor.name}: Burn is locked until round ${_lk.untilRound}, turn ${_lk.untilTurn + 1} — it can't be vented yet.`);
   }
 
   // Vent options come from the burn descriptor; fall back to the Aurablade set so

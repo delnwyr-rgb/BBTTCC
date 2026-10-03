@@ -6483,3 +6483,23 @@
 .ft-character-sheet .ft-work-ground { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; font-size: 0.84rem; }
 .ft-character-sheet .ft-work-ground-hex { color: #00e5ff; text-shadow: 0 0 8px rgba(0,229,255,0.6); }
 .ft-character-sheet .ft-work-ground-name { color: #d8e4ff; font-weight: 500; }
+
+/* ── Burn timer + GM Blood Debt + Affiliation OP (2026-10-02, port of the retired
+   auto-link sheet layer). Lock = amber (structural), timers = cyan (data) — a
+   blue/yellow axis plus an icon cue (🔒 / ⏱), never red-vs-green. */
+.ft-character-sheet .ft-burn-timer-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin-top: 0.3rem; }
+.ft-character-sheet .ft-burn-timer-chip {
+  padding: 0.08rem 0.4rem; border-radius: 3px; font-size: 0.7rem;
+  color: var(--be-data, #bcd3ff); border: 1px solid rgba(76,245,255,0.4); background: rgba(76,245,255,0.07);
+}
+.ft-character-sheet .ft-burn-timer-chip.lock { color: var(--be-structural, #ffcf5c); border-color: rgba(255,207,92,0.55); background: rgba(255,207,92,0.08); font-weight: 600; }
+.ft-character-sheet .ft-bd-gm-btn { margin-left: 0.3rem; }
+.ft-character-sheet .ft-aff-op-rows { display: flex; flex-direction: column; gap: 0.3rem; }
+.ft-character-sheet .ft-aff-op-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.1rem 0.5rem; font-size: 0.76rem; }
+.ft-character-sheet .ft-aff-op-kind { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.6; grid-column: 1 / -1; }
+.ft-character-sheet .ft-aff-op-key { color: var(--be-text, #e5f1ff); }
+.ft-character-sheet .ft-aff-op-pills { display: inline-flex; flex-wrap: wrap; gap: 0.2rem; justify-content: flex-end; }
+.ft-character-sheet .ft-aff-op-pill { padding: 0.02rem 0.35rem; border-radius: 3px; font-size: 0.68rem; color: var(--be-data, #bcd3ff); border: 1px solid rgba(160,180,255,0.35); }
+.ft-character-sheet .ft-aff-op-pill.total { color: var(--be-structural, #ffcf5c); border-color: rgba(255,207,92,0.55); font-weight: 600; }
+.ft-character-sheet .ft-aff-op-total { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-top: 0.45rem; padding-top: 0.4rem; border-top: 1px solid rgba(255,255,255,0.08); }
+.ft-character-sheet .ft-aff-op-total small { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.6; }
