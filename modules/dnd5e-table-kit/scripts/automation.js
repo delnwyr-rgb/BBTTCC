@@ -43,6 +43,11 @@ function registerSettings() {
     hint: "Apply an activity's effects to targets that fail its save, or that its attack hits.",
     type: Boolean, default: true
   });
+  reg("autoBuffs", {
+    name: "Auto-apply buffs",
+    hint: "When a spell, power or feature with no save or attack (Bless, Haste, Shield, Mage Armor, Reckless Attack…) is used, apply its effects: to the caster for Self abilities, otherwise to the targeted tokens (or to the caster if nothing is targeted and it's an ally/willing-creature ability).",
+    type: Boolean, default: true
+  });
 }
 
 /* -------------------------------------------- */
@@ -253,8 +258,8 @@ async function rollTargetSaves(usage, activity) {
 }
 
 /** Apply the usage card's effects to the given actors, exactly as dnd5e's effect tray does. */
-async function applyEffects(usage, actors, { successes=new Set() }={}) {
-  if ( !setting("autoEffects") || !actors.length ) return [];
+async function applyEffects(usage, actors, { successes=new Set(), filter=null }={}) {
+  if ( !actors.length ) return [];
   const effects = await usage.system?.getEffects?.() ?? [];
   if ( !effects.length ) return [];
   const activity = usage.getAssociatedActivity?.();
@@ -264,6 +269,9 @@ async function applyEffects(usage, actors, { successes=new Set() }={}) {
   const applied = [];
   for ( const actor of actors ) {
     for ( const effect of effects ) {
+      // Enchantments go on items through dnd5e's own prompt, never on actors.
+      if ( effect.type === "enchantment" ) continue;
+      if ( filter && !filter(effect, actor) ) continue;
       // On a successful save, only effects flagged "apply on save" land.
       if ( successes.has(actor) && !profiles.get(effect.id)?.onSave ) continue;
       try {
@@ -277,8 +285,75 @@ async function applyEffects(usage, actors, { successes=new Set() }={}) {
   return applied;
 }
 
+/**
+ * Activity types whose effects are buffs/self-effects rather than save or attack riders.
+ * "damage" is left out on purpose: its effects are hit riders (Spirit Shroud, smites).
+ */
+const BUFF_TYPES = new Set(["utility", "heal"]);
+/** Range units that mean "a real distance to someone else", so targets are meant literally. */
+const REACH = new Set(["ft", "mi", "m", "km", "touch", "any"]);
+/** Target kinds that are friendly, so an untargeted cast can fall back to the caster. */
+const FRIENDLY = new Set(["self", "ally", "willing"]);
+
+/** Conditions that mark an effect as a debuff for whoever gets hit, never a self-buff. */
+const HARMFUL = new Set(["blinded", "charmed", "deafened", "exhaustion", "frightened", "grappled", "incapacitated",
+  "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious", "bleeding", "cursed",
+  "shocked", "slowed", "weakened", "ignited", "corroded"]);
+
+/**
+ * Who a buff lands on: the caster for Self abilities, else the usage card's targets.
+ * `inferred` is true when "it's for the caster" is a guess (range Self, or nothing
+ * targeted) rather than the activity explicitly saying it affects self.
+ */
+function buffRecipients(message, activity) {
+  const none = { actors: [], inferred: false, fallback: false };
+  const caster = message.getAssociatedActor?.() ?? activity.actor;
+  if ( !caster ) return none;
+  const affects = activity.target?.affects?.type ?? "";
+  const range = activity.range?.units ?? "";
+  const template = activity.target?.template?.type ?? "";
+
+  // 1. The activity says outright that it affects its user.
+  if ( affects === "self" ) return { actors: [caster], inferred: false, fallback: false };
+  // 2. Range Self with no other target description: a personal effect (potions, Disguise Self).
+  if ( (range === "self") && !affects && !template ) return { actors: [caster], inferred: true, fallback: false };
+  // Anything else at range Self (auras, "creature" at range self, emanations) is ambiguous: leave it manual.
+  if ( !REACH.has(range) ) return none;
+
+  // 3. A real range: whoever the user targeted.
+  const targeted = (message.system?.targets ?? []).map(d => resolveTarget(d)?.actor).filter(Boolean);
+  if ( targeted.length ) return { actors: [...new Set(targeted)], inferred: false, fallback: false };
+  // 4. Nothing targeted on an ally/willing ability: the caster is the obvious recipient.
+  if ( FRIENDLY.has(affects) ) return { actors: [caster], inferred: true, fallback: true };
+  return none;
+}
+
+async function onBuff(message, activity) {
+  if ( !setting("autoBuffs") || !message.system?.effects?.length ) return;
+  const { actors, inferred, fallback } = buffRecipients(message, activity);
+  if ( !actors.length ) return;
+  if ( !(await claim(message, "buffs")) ) return;
+  // dnd5e already narrows the card to the cast level (Aid at 3rd → one effect). Several
+  // effects left means a choice (Protection from Energy, Fire Shield, Potion of Resistance).
+  const offered = (await message.system.getEffects?.() ?? []).filter(e => e.type !== "enchantment");
+  if ( offered.length > 1 ) {
+    await gmCard(`✦ ${activity.item?.name ?? "Effects"}`, [
+      `Pick which effect to apply from the card's Effects tray (${offered.map(e => e.name).join(", ")}).`
+    ]);
+    return;
+  }
+  // A guessed self-target never receives a debuff (Blinding Smite's Blinded is for the foe).
+  const filter = inferred ? effect => !(effect.statuses?.size && [...effect.statuses].some(s => HARMFUL.has(s))) : null;
+  const applied = await applyEffects(message, actors, { filter });
+  if ( applied.length ) {
+    const note = fallback ? ["<em>Nothing was targeted, so it went on the caster.</em>"] : [];
+    await gmCard(`✦ ${activity.item?.name ?? "Effects"}`, [...applied, ...note]);
+  }
+}
+
 async function onUsage(message) {
   const activity = message.getAssociatedActivity?.();
+  if ( BUFF_TYPES.has(activity?.type) ) return onBuff(message, activity);
   if ( activity?.type !== "save" ) return;
   if ( !message.system?.targets?.length ) return;
   if ( !(await claim(message, "saves")) ) return;
@@ -296,6 +371,7 @@ async function onUsage(message) {
     if ( o === "failure" ) failed.push(target.actor);
     else if ( o === "success" ) { failed.push(target.actor); succeeded.add(target.actor); }
   }
+  if ( !setting("autoEffects") ) return;
   const applied = await applyEffects(message, failed, { successes: succeeded });
   if ( applied.length ) await gmCard(`✦ ${activity.item?.name ?? "Effects"}`, applied);
 }
