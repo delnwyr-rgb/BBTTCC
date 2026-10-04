@@ -172,7 +172,13 @@ function onPostDamageConfig(rolls, config) {
   if ( !plan || !roll ) return;
   const dice = rolls.flatMap(r => r.terms.filter(t => t instanceof Die));
   if ( plan.reroll ) dice.forEach(d => d.modifiers.push("r<=2"));
-  if ( plan.maximize ) dice.forEach(d => d.modifiers.push(`min${d.faces}`));
+  if ( plan.maximize ) {
+    // Replace each die with its maximum as a flat number. (A `min{faces}` modifier totals
+    // correctly but the card's dice breakdown still shows the original faces, e.g. 1,3,3,3.)
+    // This runs after dnd5e has already doubled dice for a critical, so crits stay doubled.
+    for ( const r of rolls ) r.terms = r.terms.map(t => (t instanceof Die)
+      ? new NumericTerm({ number: (t.number ?? 1) * t.faces }) : t);
+  }
   else if ( plan.maxOne && dice.length ) {
     const die = [...dice].sort((a, b) => b.faces - a.faces)[0];
     const owner = rolls.find(r => r.terms.includes(die));
