@@ -71,9 +71,38 @@ function onPreRollD20(config) {
   }
 }
 
+/**
+ * Effect-driven attack modes (dnd5e 6 has no native AE key for these):
+ *   flags.dnd5e-table-kit.advantage.attack            "all" | "weapon" | "melee" | "ranged"
+ *   flags.dnd5e-table-kit.grants.disadvantage.attack  any truthy value, on the TARGET:
+ *                                                     attacks against it roll with disadvantage
+ * Advantage and disadvantage together cancel, exactly as dnd5e resolves them.
+ */
+function attackMatches(scope, activity) {
+  if ( !scope ) return false;
+  if ( (scope === true) || (scope === "all") || (scope === "1") ) return true;
+  const isWeapon = activity?.item?.type === "weapon";
+  const type = activity?.attack?.type?.value;   // "melee" | "ranged"
+  if ( scope === "weapon" ) return isWeapon;
+  if ( (scope === "melee") || (scope === "ranged") ) return type === scope;
+  return false;
+}
+
+function attackTargets(activity) {
+  const fromUser = [...(game.user?.targets ?? [])].map(t => t.actor).filter(Boolean);
+  return fromUser;
+}
+
+function applyEffectAttackModes(config, actor) {
+  const activity = config.subject;
+  if ( attackMatches(actor.flags?.[ID]?.advantage?.attack, activity) ) config.advantage = true;
+  if ( attackTargets(activity).some(t => t.flags?.[ID]?.grants?.disadvantage?.attack) ) config.disadvantage = true;
+}
+
 function onPreRollAttack(config) {
   const actor = actorOf(config.subject);
   if ( !actor ) return;
+  applyEffectAttackModes(config, actor);
   const got = take(actor, ["advAttack", "powerSurge"]);
   if ( got.has("advAttack") ) config.advantage = true;
   if ( got.has("powerSurge") ) {

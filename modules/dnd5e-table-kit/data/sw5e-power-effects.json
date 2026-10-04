@@ -1,146 +1,762 @@
 {
   "_about": "Active Effects authored for SW5E powers that shipped without any (2026-10-03). Keyed by power name. `on` = which activity type carries the effect (save → lands on a failed save; utility/heal → buff; damage → manual apply tray). Change patterns mirror dnd5e's own Player's Handbook spells (Bless, Haste, Slow, Shield, Hold Person, Suggestion, Eyebite). `marker` effects carry no mechanics: they track duration/concentration and remind the table of a rule dnd5e can't express natively.",
   "powers": {
-    "Absorb Energy": { "on": "damage", "effects": [
-      { "name": "Absorb Energy (Acid)", "seconds": 6, "changes": [["system.traits.dr.value", "add", "acid"]] },
-      { "name": "Absorb Energy (Cold)", "seconds": 6, "changes": [["system.traits.dr.value", "add", "cold"]] },
-      { "name": "Absorb Energy (Energy)", "seconds": 6, "changes": [["system.traits.dr.value", "add", "energy"]] },
-      { "name": "Absorb Energy (Fire)", "seconds": 6, "changes": [["system.traits.dr.value", "add", "fire"]] },
-      { "name": "Absorb Energy (Ion)", "seconds": 6, "changes": [["system.traits.dr.value", "add", "ion"]] },
-      { "name": "Absorb Energy (Lightning)", "seconds": 6, "changes": [["system.traits.dr.value", "add", "lightning"]] }
-    ] },
-    "Adrenaline": { "on": "utility", "effects": [
-      { "name": "Adrenaline", "seconds": 60, "changes": [["system.attributes.init.roll.mode", "add", "1"]] }
-    ] },
-    "Affect Mind": { "on": "save", "effects": [
-      { "name": "Affected Mind", "seconds": 60, "marker": "The caster has advantage on Charisma checks directed at this creature." }
-    ] },
-    "Art of Movement": { "on": "damage", "effects": [
-      { "name": "Art of Movement", "seconds": 600, "changes": [["system.attributes.movement.walk", "add", "10"]], "marker": "Climb speed = walking speed, jump distance tripled, ignores difficult terrain and slowed levels under 3; once, advantage on one weapon attack." }
-    ] },
-    "Battle Insight": { "on": "utility", "effects": [
-      { "name": "Battle Insight", "seconds": 6, "marker": "The caster has advantage on their first attack roll against this creature on their next turn." }
-    ] },
-    "Breath Control": { "on": "utility", "effects": [
-      { "name": "Breath Control", "seconds": 600, "changes": [["system.traits.dr.value", "add", "poison"]], "marker": "No need to breathe; advantage on saving throws against being poisoned." }
-    ] },
-    "Choke": { "on": "save", "effects": [
-      { "name": "Choked", "seconds": 6, "statuses": ["restrained"], "marker": "While restrained, the caster can use a bonus action to move this creature 5 feet." }
-    ] },
-    "Coerce Mind": { "on": "save", "effects": [
-      { "name": "Coerced", "seconds": 28800, "statuses": ["charmed"], "marker": "Pursues the suggested course of action." }
-    ] },
-    "Crush": { "on": "save", "effects": [
-      { "name": "Crushed", "seconds": 6, "statuses": ["paralyzed"], "marker": "While paralyzed, the caster can use a bonus action to move this creature 10 feet." }
-    ] },
-    "Cryogenic Suspension": { "on": "save", "effects": [
-      { "name": "Cryogenic Suspension", "seconds": 60, "statuses": ["slowed"], "changes": [["system.attributes.ac.bonus", "add", "-2"], ["system.abilities.dex.bonuses.save", "add", "-2"]], "marker": "No reactions; action OR bonus action; one attack per turn; 1-action powers may be delayed. Repeats the save at the end of each turn." }
-    ] },
-    "Dark Aura": { "on": "damage", "effects": [
-      { "name": "Dark Aura", "seconds": 60, "marker": "Attacks deal +1d8 necrotic to creatures within 10 ft (who can't regain HP until your next turn); chosen creatures starting within 10 ft gain 1 slowed level." }
-    ] },
-    "Disable Droid": { "on": "save", "effects": [
-      { "name": "Disabled", "seconds": 60, "statuses": ["paralyzed"], "marker": "Droids/constructs only. Takes energy damage = caster's forcecasting modifier at the start of each turn, then repeats the save." }
-    ] },
-    "Dominate Mind": { "on": "save", "effects": [
-      { "name": "Dominated", "seconds": 60, "statuses": ["charmed"] }
-    ] },
-    "Electromesh": { "on": "save", "effects": [
-      { "name": "Electromeshed", "seconds": 3600, "statuses": ["restrained"], "marker": "Restrained while in the mesh; an action and a Strength check vs the tech save DC breaks free." }
-    ] },
-    "Energy Shield": { "on": "utility", "effects": [
-      { "name": "Energy Shield", "seconds": 6, "changes": [["system.attributes.ac.bonus", "add", "5"]] }
-    ] },
-    "Feedback": { "on": "save", "effects": [
-      { "name": "Feedback", "seconds": 6, "marker": "Disadvantage on its next attack roll before the end of its next turn." }
-    ] },
-    "Force Blur": { "on": "utility", "effects": [
-      { "name": "Blurred", "seconds": 60, "marker": "Attack rolls against this creature have disadvantage (unless the attacker has blindsight or truesight)." }
-    ] },
-    "Force Mend": { "on": "heal", "effects": [
-      { "name": "Force Mend", "seconds": 3600, "marker": "Regains 1 hit point at the start of each of its turns; a held severed limb reattaches." }
-    ] },
-    "Improved Force Barrier": { "on": "heal", "effects": [
-      { "name": "Improved Force Barrier", "seconds": 86400, "changes": [["system.traits.di.value", "add", "poison"], ["system.traits.ci.value", "add", "poisoned"], ["system.traits.ci.value", "add", "diseased"]], "marker": "Immune to being frightened by powers. Hit point maximum and current hit points +2d10 (add as temp max HP)." }
-    ] },
-    "Instinctive Movement": { "on": "damage", "effects": [
-      { "name": "Instinctive Movement", "seconds": 60, "changes": [["system.attributes.movement.walk", "add", "5"]], "marker": "Spend a speed point (bonus action): ignore difficult terrain, climb speed = walking speed, +10 ft long jump / +3 ft high jump, walls and ceilings." }
-    ] },
-    "Mass Coerce Mind": { "on": "save", "effects": [
-      { "name": "Coerced", "seconds": 86400, "statuses": ["charmed"], "marker": "Pursues the suggested course of action." }
-    ] },
-    "Mind Trick": { "on": "save", "effects": [
-      { "name": "Mind Tricked", "seconds": 60, "changes": [["system.skills.prc.roll.mode", "add", "-1"], ["system.skills.inv.roll.mode", "add", "-1"]] }
-    ] },
-    "Mirror Image": { "on": "utility", "effects": [
-      { "name": "Duplicate A", "seconds": 60, "changes": [["flags.dnd-players-handbook.mirrorImages", "add", "1"]] },
-      { "name": "Duplicate B", "seconds": 60, "changes": [["flags.dnd-players-handbook.mirrorImages", "add", "1"]] },
-      { "name": "Duplicate C", "seconds": 60, "changes": [["flags.dnd-players-handbook.mirrorImages", "add", "1"]] }
-    ] },
-    "Pyrotechnics": { "on": "save", "effects": [
-      { "name": "Dazzled", "seconds": 6, "statuses": ["blinded"] }
-    ] },
-    "Saber Assault": { "on": "save", "effects": [
-      { "name": "Saber Assault: Staggered", "seconds": 6, "statuses": ["slowed"], "marker": "1st hit: 1 slowed level. 2nd hit: no reactions (+1d6 kinetic). 3rd hit: see power." }
-    ] },
-    "Saber Strike": { "on": "save", "effects": [
-      { "name": "Knocked Prone", "statuses": ["prone"] }
-    ] },
-    "Saber Ward": { "on": "utility", "effects": [
-      { "name": "Saber Ward", "seconds": 6, "changes": [["system.traits.dr.value", "add", "kinetic"], ["system.traits.dr.value", "add", "energy"]], "marker": "Only against damage dealt by weapons." }
-    ] },
-    "Scourge": { "on": "save", "effects": [
-      { "name": "Scourge: Asleep", "seconds": 60, "statuses": ["unconscious"], "marker": "Wakes if it takes damage or is shaken awake." },
-      { "name": "Scourge: Panicked", "seconds": 60, "statuses": ["frightened"], "marker": "Must Dash away from the caster each turn." },
-      { "name": "Scourge: Sickened", "seconds": 60, "statuses": ["poisoned"] }
-    ] },
-    "Sense Emotion": { "on": "utility", "effects": [
-      { "name": "Sense Emotion", "seconds": 600, "changes": [["system.skills.ins.roll.mode", "add", "1"]], "marker": "Advantage on Insight against the focused humanoid only." }
-    ] },
-    "Sense Shatterpoint": { "on": "utility", "effects": [
-      { "name": "Shatterpoint", "seconds": 6, "marker": "The caster has advantage on their next two attack rolls against this creature." }
-    ] },
-    "Stasis": { "on": "save", "effects": [
-      { "name": "Stasis", "seconds": 60, "statuses": ["paralyzed"], "marker": "Repeats the Wisdom save at the end of each of its turns." }
-    ] },
-    "Stasis Field": { "on": "save", "effects": [
-      { "name": "Stasis", "seconds": 60, "statuses": ["paralyzed"], "marker": "Repeats the Wisdom save at the end of each of its turns." }
-    ] },
-    "Storming Shot": { "on": "damage", "effects": [
-      { "name": "Shocked", "seconds": 6, "statuses": ["shocked"] }
-    ] },
-    "Stun": { "on": "save", "effects": [
-      { "name": "Stunned (Force)", "seconds": 60, "statuses": ["paralyzed"], "marker": "Repeats the Wisdom save at the end of each of its turns." }
-    ] },
-    "Stun Droid": { "on": "save", "effects": [
-      { "name": "Stunned (Droid)", "seconds": 60, "statuses": ["paralyzed"], "marker": "Takes energy damage = caster's forcecasting modifier at the start of each turn; repeats the Con save at the end of each turn." }
-    ] },
-    "Tactical Advantage": { "on": "utility", "effects": [
-      { "name": "Tactical Advantage", "seconds": 60, "changes": [["system.attributes.movement.speed", "multiply", "2"], ["system.attributes.ac.bonus", "add", "2"], ["system.abilities.dex.save.roll.mode", "add", "1"]], "marker": "One extra action each turn (one weapon attack, Dash, Disengage, Hide or Use an Object). When it ends: can't move or act until after its next turn." }
-    ] },
-    "Telekinetic Burst": { "on": "save", "effects": [
-      { "name": "Knocked Prone", "statuses": ["prone"] }
-    ] },
-    "Telekinetic Storm": { "on": "save", "effects": [
-      { "name": "Buffeted", "seconds": 6, "statuses": ["slowed"], "marker": "1 slowed level while inside the storm." }
-    ] },
-    "Telekinetic Wave": { "on": "save", "effects": [
-      { "name": "Knocked Prone", "statuses": ["prone"], "marker": "Also pushed 5 feet in a direction of the caster's choice." }
-    ] },
-    "Valor": { "on": "utility", "effects": [
-      { "name": "Valor", "seconds": 60, "changes": [["system.bonuses.abilities.save", "add", "1d4"], ["system.bonuses.mwak.attack", "add", "1d4"], ["system.bonuses.msak.attack", "add", "1d4"], ["system.bonuses.rsak.attack", "add", "1d4"], ["system.bonuses.rwak.attack", "add", "1d4"]], "marker": "Die grows to d6/d8/d10 when cast at 3rd/6th/9th level." }
-    ] },
-    "Vitality Shield": { "on": "damage", "effects": [
-      { "name": "Vitality Shield", "seconds": 3600, "changes": [["system.abilities.str.save.roll.mode", "add", "1"], ["system.abilities.dex.save.roll.mode", "add", "1"], ["system.abilities.con.save.roll.mode", "add", "1"]], "marker": "Only while the power's temporary hit points last." }
-    ] },
-    "Wall Run": { "on": "utility", "effects": [
-      { "name": "Wall Run", "seconds": 6, "changes": [["system.skills.acr.roll.mode", "add", "1"], ["system.skills.ath.roll.mode", "add", "1"]], "marker": "Climb speed = walking speed; run along vertical surfaces this turn (movement checks only)." }
-    ] }
+    "Absorb Energy": {
+      "on": "damage",
+      "effects": [
+        {
+          "name": "Absorb Energy (Acid)",
+          "seconds": 6,
+          "changes": [
+            [
+              "system.traits.dr.value",
+              "add",
+              "acid"
+            ]
+          ]
+        },
+        {
+          "name": "Absorb Energy (Cold)",
+          "seconds": 6,
+          "changes": [
+            [
+              "system.traits.dr.value",
+              "add",
+              "cold"
+            ]
+          ]
+        },
+        {
+          "name": "Absorb Energy (Energy)",
+          "seconds": 6,
+          "changes": [
+            [
+              "system.traits.dr.value",
+              "add",
+              "energy"
+            ]
+          ]
+        },
+        {
+          "name": "Absorb Energy (Fire)",
+          "seconds": 6,
+          "changes": [
+            [
+              "system.traits.dr.value",
+              "add",
+              "fire"
+            ]
+          ]
+        },
+        {
+          "name": "Absorb Energy (Ion)",
+          "seconds": 6,
+          "changes": [
+            [
+              "system.traits.dr.value",
+              "add",
+              "ion"
+            ]
+          ]
+        },
+        {
+          "name": "Absorb Energy (Lightning)",
+          "seconds": 6,
+          "changes": [
+            [
+              "system.traits.dr.value",
+              "add",
+              "lightning"
+            ]
+          ]
+        }
+      ]
+    },
+    "Adrenaline": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Adrenaline",
+          "seconds": 60,
+          "changes": [
+            [
+              "system.attributes.init.roll.mode",
+              "add",
+              "1"
+            ]
+          ]
+        }
+      ]
+    },
+    "Affect Mind": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Affected Mind",
+          "seconds": 60,
+          "marker": "The caster has advantage on Charisma checks directed at this creature."
+        }
+      ]
+    },
+    "Art of Movement": {
+      "on": "damage",
+      "effects": [
+        {
+          "name": "Art of Movement",
+          "seconds": 600,
+          "changes": [
+            [
+              "system.attributes.movement.walk",
+              "add",
+              "10"
+            ]
+          ],
+          "marker": "Climb speed = walking speed, jump distance tripled, ignores difficult terrain and slowed levels under 3; once, advantage on one weapon attack."
+        }
+      ]
+    },
+    "Battle Insight": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Battle Insight",
+          "seconds": 6,
+          "marker": "The caster has advantage on their first attack roll against this creature on their next turn."
+        }
+      ]
+    },
+    "Breath Control": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Breath Control",
+          "seconds": 600,
+          "changes": [
+            [
+              "system.traits.dr.value",
+              "add",
+              "poison"
+            ]
+          ],
+          "marker": "No need to breathe; advantage on saving throws against being poisoned."
+        }
+      ]
+    },
+    "Choke": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Choked",
+          "seconds": 6,
+          "statuses": [
+            "restrained"
+          ],
+          "marker": "While restrained, the caster can use a bonus action to move this creature 5 feet."
+        }
+      ]
+    },
+    "Coerce Mind": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Coerced",
+          "seconds": 28800,
+          "statuses": [
+            "charmed"
+          ],
+          "marker": "Pursues the suggested course of action."
+        }
+      ]
+    },
+    "Crush": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Crushed",
+          "seconds": 6,
+          "statuses": [
+            "paralyzed"
+          ],
+          "marker": "While paralyzed, the caster can use a bonus action to move this creature 10 feet."
+        }
+      ]
+    },
+    "Cryogenic Suspension": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Cryogenic Suspension",
+          "seconds": 60,
+          "statuses": [
+            "slowed"
+          ],
+          "changes": [
+            [
+              "system.attributes.ac.bonus",
+              "add",
+              "-2"
+            ],
+            [
+              "system.abilities.dex.bonuses.save",
+              "add",
+              "-2"
+            ]
+          ],
+          "marker": "No reactions; action OR bonus action; one attack per turn; 1-action powers may be delayed. Repeats the save at the end of each turn."
+        }
+      ]
+    },
+    "Dark Aura": {
+      "on": "damage",
+      "effects": [
+        {
+          "name": "Dark Aura",
+          "seconds": 60,
+          "marker": "Attacks deal +1d8 necrotic to creatures within 10 ft (who can't regain HP until your next turn); chosen creatures starting within 10 ft gain 1 slowed level."
+        }
+      ]
+    },
+    "Disable Droid": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Disabled",
+          "seconds": 60,
+          "statuses": [
+            "paralyzed"
+          ],
+          "marker": "Droids/constructs only. Takes energy damage = caster's forcecasting modifier at the start of each turn, then repeats the save."
+        }
+      ]
+    },
+    "Dominate Mind": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Dominated",
+          "seconds": 60,
+          "statuses": [
+            "charmed"
+          ]
+        }
+      ]
+    },
+    "Electromesh": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Electromeshed",
+          "seconds": 3600,
+          "statuses": [
+            "restrained"
+          ],
+          "marker": "Restrained while in the mesh; an action and a Strength check vs the tech save DC breaks free."
+        }
+      ]
+    },
+    "Energy Shield": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Energy Shield",
+          "seconds": 6,
+          "changes": [
+            [
+              "system.attributes.ac.bonus",
+              "add",
+              "5"
+            ]
+          ]
+        }
+      ]
+    },
+    "Feedback": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Feedback",
+          "seconds": 6,
+          "marker": "Disadvantage on its next attack roll before the end of its next turn."
+        }
+      ]
+    },
+    "Force Blur": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Blurred",
+          "seconds": 60,
+          "marker": "Attack rolls against this creature have disadvantage (Table Kit applies it). Doesn't work on attackers with blindsight or truesight; drop it by hand for those.",
+          "changes": [
+            [
+              "flags.dnd5e-table-kit.grants.disadvantage.attack",
+              "override",
+              "1"
+            ]
+          ]
+        }
+      ]
+    },
+    "Force Mend": {
+      "on": "heal",
+      "effects": [
+        {
+          "name": "Force Mend",
+          "seconds": 3600,
+          "marker": "Regains 1 hit point at the start of each of its turns; a held severed limb reattaches."
+        }
+      ]
+    },
+    "Improved Force Barrier": {
+      "on": "heal",
+      "effects": [
+        {
+          "name": "Improved Force Barrier",
+          "seconds": 86400,
+          "changes": [
+            [
+              "system.traits.di.value",
+              "add",
+              "poison"
+            ],
+            [
+              "system.traits.ci.value",
+              "add",
+              "poisoned"
+            ],
+            [
+              "system.traits.ci.value",
+              "add",
+              "diseased"
+            ]
+          ],
+          "marker": "Immune to being frightened by powers. Hit point maximum and current hit points +2d10 (add as temp max HP)."
+        }
+      ]
+    },
+    "Instinctive Movement": {
+      "on": "damage",
+      "effects": [
+        {
+          "name": "Instinctive Movement",
+          "seconds": 60,
+          "changes": [
+            [
+              "system.attributes.movement.walk",
+              "add",
+              "5"
+            ]
+          ],
+          "marker": "Spend a speed point (bonus action): ignore difficult terrain, climb speed = walking speed, +10 ft long jump / +3 ft high jump, walls and ceilings."
+        }
+      ]
+    },
+    "Mass Coerce Mind": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Coerced",
+          "seconds": 86400,
+          "statuses": [
+            "charmed"
+          ],
+          "marker": "Pursues the suggested course of action."
+        }
+      ]
+    },
+    "Mind Trick": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Mind Tricked",
+          "seconds": 60,
+          "changes": [
+            [
+              "system.skills.prc.roll.mode",
+              "add",
+              "-1"
+            ],
+            [
+              "system.skills.inv.roll.mode",
+              "add",
+              "-1"
+            ]
+          ]
+        }
+      ]
+    },
+    "Mirror Image": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Duplicate A",
+          "seconds": 60,
+          "changes": [
+            [
+              "flags.dnd-players-handbook.mirrorImages",
+              "add",
+              "1"
+            ]
+          ]
+        },
+        {
+          "name": "Duplicate B",
+          "seconds": 60,
+          "changes": [
+            [
+              "flags.dnd-players-handbook.mirrorImages",
+              "add",
+              "1"
+            ]
+          ]
+        },
+        {
+          "name": "Duplicate C",
+          "seconds": 60,
+          "changes": [
+            [
+              "flags.dnd-players-handbook.mirrorImages",
+              "add",
+              "1"
+            ]
+          ]
+        }
+      ]
+    },
+    "Pyrotechnics": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Dazzled",
+          "seconds": 6,
+          "statuses": [
+            "blinded"
+          ]
+        }
+      ]
+    },
+    "Saber Assault": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Saber Assault: Staggered",
+          "seconds": 6,
+          "statuses": [
+            "slowed"
+          ],
+          "marker": "1st hit: 1 slowed level. 2nd hit: no reactions (+1d6 kinetic). 3rd hit: see power."
+        }
+      ]
+    },
+    "Saber Strike": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Knocked Prone",
+          "statuses": [
+            "prone"
+          ]
+        }
+      ]
+    },
+    "Saber Ward": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Saber Ward",
+          "seconds": 6,
+          "changes": [
+            [
+              "system.traits.dr.value",
+              "add",
+              "kinetic"
+            ],
+            [
+              "system.traits.dr.value",
+              "add",
+              "energy"
+            ]
+          ],
+          "marker": "Only against damage dealt by weapons."
+        }
+      ]
+    },
+    "Scourge": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Scourge: Asleep",
+          "seconds": 60,
+          "statuses": [
+            "unconscious"
+          ],
+          "marker": "Wakes if it takes damage or is shaken awake."
+        },
+        {
+          "name": "Scourge: Panicked",
+          "seconds": 60,
+          "statuses": [
+            "frightened"
+          ],
+          "marker": "Must Dash away from the caster each turn."
+        },
+        {
+          "name": "Scourge: Sickened",
+          "seconds": 60,
+          "statuses": [
+            "poisoned"
+          ]
+        }
+      ]
+    },
+    "Sense Emotion": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Sense Emotion",
+          "seconds": 600,
+          "changes": [
+            [
+              "system.skills.ins.roll.mode",
+              "add",
+              "1"
+            ]
+          ],
+          "marker": "Advantage on Insight against the focused humanoid only."
+        }
+      ]
+    },
+    "Sense Shatterpoint": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Shatterpoint",
+          "seconds": 6,
+          "marker": "The caster has advantage on their next two attack rolls against this creature."
+        }
+      ]
+    },
+    "Stasis": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Stasis",
+          "seconds": 60,
+          "statuses": [
+            "paralyzed"
+          ],
+          "marker": "Repeats the Wisdom save at the end of each of its turns."
+        }
+      ]
+    },
+    "Stasis Field": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Stasis",
+          "seconds": 60,
+          "statuses": [
+            "paralyzed"
+          ],
+          "marker": "Repeats the Wisdom save at the end of each of its turns."
+        }
+      ]
+    },
+    "Storming Shot": {
+      "on": "damage",
+      "effects": [
+        {
+          "name": "Shocked",
+          "seconds": 6,
+          "statuses": [
+            "shocked"
+          ]
+        }
+      ]
+    },
+    "Stun": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Stunned (Force)",
+          "seconds": 60,
+          "statuses": [
+            "paralyzed"
+          ],
+          "marker": "Repeats the Wisdom save at the end of each of its turns."
+        }
+      ]
+    },
+    "Stun Droid": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Stunned (Droid)",
+          "seconds": 60,
+          "statuses": [
+            "paralyzed"
+          ],
+          "marker": "Takes energy damage = caster's forcecasting modifier at the start of each turn; repeats the Con save at the end of each turn."
+        }
+      ]
+    },
+    "Tactical Advantage": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Tactical Advantage",
+          "seconds": 60,
+          "changes": [
+            [
+              "system.attributes.movement.speed",
+              "multiply",
+              "2"
+            ],
+            [
+              "system.attributes.ac.bonus",
+              "add",
+              "2"
+            ],
+            [
+              "system.abilities.dex.save.roll.mode",
+              "add",
+              "1"
+            ]
+          ],
+          "marker": "One extra action each turn (one weapon attack, Dash, Disengage, Hide or Use an Object). When it ends: can't move or act until after its next turn."
+        }
+      ]
+    },
+    "Telekinetic Burst": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Knocked Prone",
+          "statuses": [
+            "prone"
+          ]
+        }
+      ]
+    },
+    "Telekinetic Storm": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Buffeted",
+          "seconds": 6,
+          "statuses": [
+            "slowed"
+          ],
+          "marker": "1 slowed level while inside the storm."
+        }
+      ]
+    },
+    "Telekinetic Wave": {
+      "on": "save",
+      "effects": [
+        {
+          "name": "Knocked Prone",
+          "statuses": [
+            "prone"
+          ],
+          "marker": "Also pushed 5 feet in a direction of the caster's choice."
+        }
+      ]
+    },
+    "Valor": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Valor",
+          "seconds": 60,
+          "changes": [
+            [
+              "system.bonuses.abilities.save",
+              "add",
+              "1d4"
+            ],
+            [
+              "system.bonuses.mwak.attack",
+              "add",
+              "1d4"
+            ],
+            [
+              "system.bonuses.msak.attack",
+              "add",
+              "1d4"
+            ],
+            [
+              "system.bonuses.rsak.attack",
+              "add",
+              "1d4"
+            ],
+            [
+              "system.bonuses.rwak.attack",
+              "add",
+              "1d4"
+            ]
+          ],
+          "marker": "Die grows to d6/d8/d10 when cast at 3rd/6th/9th level."
+        }
+      ]
+    },
+    "Vitality Shield": {
+      "on": "damage",
+      "effects": [
+        {
+          "name": "Vitality Shield",
+          "seconds": 3600,
+          "changes": [
+            [
+              "system.abilities.str.save.roll.mode",
+              "add",
+              "1"
+            ],
+            [
+              "system.abilities.dex.save.roll.mode",
+              "add",
+              "1"
+            ],
+            [
+              "system.abilities.con.save.roll.mode",
+              "add",
+              "1"
+            ]
+          ],
+          "marker": "Only while the power's temporary hit points last."
+        }
+      ]
+    },
+    "Wall Run": {
+      "on": "utility",
+      "effects": [
+        {
+          "name": "Wall Run",
+          "seconds": 6,
+          "changes": [
+            [
+              "system.skills.acr.roll.mode",
+              "add",
+              "1"
+            ],
+            [
+              "system.skills.ath.roll.mode",
+              "add",
+              "1"
+            ]
+          ],
+          "marker": "Climb speed = walking speed; run along vertical surfaces this turn (movement checks only)."
+        }
+      ]
+    }
   },
   "_skipped": {
     "Force Project": "An illusory double: nothing to put on a creature.",
     "Project": "Damage only.",
     "Saber Slash": "Damage only (the movement/strike has no lingering effect).",
     "Saber Dance": "A spinning-blade zone; its save damage is already on the card and there's no lasting condition."
+  },
+  "_rebuilt": {
+    "Rage": "Rebuilt by hand 2026-10-04 (not via this spec): bogus Save activity removed; 'Cast Rage' heal activity = 7 FP once, 50 temp HP, applies 'Rage' (advantage on melee attacks via flags.dnd5e-table-kit.advantage.attack=melee, Str/Con save proficiency, armor + lightweapon/vibroweapon proficiency); free 'Rage Strike (+2d12 force)' damage activity. Copies: Darth Babs, Kaeron Pleroma Master."
   }
 }

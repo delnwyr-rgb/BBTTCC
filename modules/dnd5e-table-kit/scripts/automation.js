@@ -150,6 +150,13 @@ async function applyDamageCard(message) {
     const attackMsg = usage?.getAssociatedRolls?.("attack").pop();
     descriptors = attackMsg?.system?.targets?.length ? attackMsg.system.targets : (usage?.system?.targets ?? []);
   }
+  if ( !descriptors.length ) {
+    // Untargeted healing from a Self ability (Rage's temp HP, Second Wind) lands on the user.
+    const act = message.getAssociatedActivity?.() ?? usage?.getAssociatedActivity?.();
+    const self = (act?.target?.affects?.type === "self") || (act?.range?.units === "self");
+    const caster = message.getAssociatedActor?.() ?? act?.actor;
+    if ( (message.type === "healing") && self && caster ) descriptors = [{ actor: caster.uuid, name: caster.name }];
+  }
   if ( !descriptors.length ) return;
   const activity = message.getAssociatedActivity?.() ?? usage?.getAssociatedActivity?.();
   const DamageRoll = CONFIG.Dice.DamageRoll;
