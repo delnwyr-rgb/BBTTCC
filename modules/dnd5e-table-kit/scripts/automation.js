@@ -257,23 +257,38 @@ async function rollTargetSaves(usage, activity) {
   }
 }
 
-/** Apply the usage card's effects to the given actors, exactly as dnd5e's effect tray does. */
+/** What an effect does, ignoring its name — identical copies (Mirror Image's duplicates) share one. */
+function effectSignature(effect) {
+  const changes = (effect.changes ?? []).map(c => `${c.key}|${c.type ?? c.mode}|${c.value}`).sort().join(";");
+  return `${[...(effect.statuses ?? [])].sort().join(",")}#${changes}`;
+}
+
+/**
+ * Apply the usage card's effects to the given actors, exactly as dnd5e's effect tray does.
+ * If an actor would receive several *different* effects (Eyebite's Asleep/Panicked/Sickened,
+ * Protection from Energy's five types), that's a choice for a person: nothing is applied and
+ * the effect names come back in `choices`. Identical copies all apply.
+ * @returns {Promise<{applied: string[], choices: string[]|null}>}
+ */
 async function applyEffects(usage, actors, { successes=new Set(), filter=null }={}) {
-  if ( !actors.length ) return [];
-  const effects = await usage.system?.getEffects?.() ?? [];
-  if ( !effects.length ) return [];
+  const result = { applied: [], choices: null };
+  if ( !actors.length ) return result;
+  const effects = (await usage.system?.getEffects?.() ?? []).filter(e => e.type !== "enchantment");
+  if ( !effects.length ) return result;
   const activity = usage.getAssociatedActivity?.();
   const profiles = new Map((activity?.effects ?? []).map(p => [p._id ?? p.effect?.id, p]));
   const Tray = customElements.get("effect-application");
   const shim = { chatMessage: usage };
-  const applied = [];
+  const applied = result.applied;
   for ( const actor of actors ) {
-    for ( const effect of effects ) {
-      // Enchantments go on items through dnd5e's own prompt, never on actors.
-      if ( effect.type === "enchantment" ) continue;
-      if ( filter && !filter(effect, actor) ) continue;
-      // On a successful save, only effects flagged "apply on save" land.
-      if ( successes.has(actor) && !profiles.get(effect.id)?.onSave ) continue;
+    // On a successful save, only effects flagged "apply on save" land.
+    const eligible = effects.filter(effect => (!filter || filter(effect, actor))
+      && (!successes.has(actor) || profiles.get(effect.id)?.onSave));
+    if ( new Set(eligible.map(effectSignature)).size > 1 ) {
+      result.choices = eligible.map(e => e.name);
+      continue;
+    }
+    for ( const effect of eligible ) {
       try {
         const { action, data } = await Tray.prototype._prepareEffectData.call(shim, effect, actor);
         if ( action === "update" ) await actor.effects.get(data._id).update(data);
@@ -282,7 +297,14 @@ async function applyEffects(usage, actors, { successes=new Set(), filter=null }=
       } catch(err) { console.warn(`${ID} | effect apply failed`, effect.name, actor.name, err); }
     }
   }
-  return applied;
+  return result;
+}
+
+/** GM summary for an effects pass, including a "pick one" prompt when a choice was left open. */
+async function reportEffects(title, { applied, choices }, extra=[]) {
+  const lines = [...applied];
+  if ( choices ) lines.push(`Pick which effect to apply from the card's Effects tray (${choices.join(", ")}).`);
+  if ( lines.length ) await gmCard(`✦ ${title}`, [...lines, ...(applied.length ? extra : [])]);
 }
 
 /**
@@ -333,22 +355,13 @@ async function onBuff(message, activity) {
   const { actors, inferred, fallback } = buffRecipients(message, activity);
   if ( !actors.length ) return;
   if ( !(await claim(message, "buffs")) ) return;
-  // dnd5e already narrows the card to the cast level (Aid at 3rd → one effect). Several
-  // effects left means a choice (Protection from Energy, Fire Shield, Potion of Resistance).
-  const offered = (await message.system.getEffects?.() ?? []).filter(e => e.type !== "enchantment");
-  if ( offered.length > 1 ) {
-    await gmCard(`✦ ${activity.item?.name ?? "Effects"}`, [
-      `Pick which effect to apply from the card's Effects tray (${offered.map(e => e.name).join(", ")}).`
-    ]);
-    return;
-  }
+  // dnd5e already narrows the card to the cast level (Aid at 3rd → one effect); applyEffects
+  // turns any remaining choice (Protection from Energy, Fire Shield) into a "pick one" note.
   // A guessed self-target never receives a debuff (Blinding Smite's Blinded is for the foe).
   const filter = inferred ? effect => !(effect.statuses?.size && [...effect.statuses].some(s => HARMFUL.has(s))) : null;
-  const applied = await applyEffects(message, actors, { filter });
-  if ( applied.length ) {
-    const note = fallback ? ["<em>Nothing was targeted, so it went on the caster.</em>"] : [];
-    await gmCard(`✦ ${activity.item?.name ?? "Effects"}`, [...applied, ...note]);
-  }
+  const result = await applyEffects(message, actors, { filter });
+  const note = fallback ? ["<em>Nothing was targeted, so it went on the caster.</em>"] : [];
+  await reportEffects(activity.item?.name ?? "Effects", result, note);
 }
 
 async function onUsage(message) {
@@ -372,8 +385,7 @@ async function onUsage(message) {
     else if ( o === "success" ) { failed.push(target.actor); succeeded.add(target.actor); }
   }
   if ( !setting("autoEffects") ) return;
-  const applied = await applyEffects(message, failed, { successes: succeeded });
-  if ( applied.length ) await gmCard(`✦ ${activity.item?.name ?? "Effects"}`, applied);
+  await reportEffects(activity.item?.name ?? "Effects", await applyEffects(message, failed, { successes: succeeded }));
 }
 
 async function onAttackCard(message) {
@@ -390,8 +402,7 @@ async function onAttackCard(message) {
     const target = resolveTarget(descriptor);
     if ( target?.actor ) hit.push(target.actor);
   }
-  const applied = await applyEffects(usage, hit);
-  if ( applied.length ) await gmCard(`✦ ${usage.getAssociatedItem?.()?.name ?? "Effects"}`, applied);
+  await reportEffects(usage.getAssociatedItem?.()?.name ?? "Effects", await applyEffects(usage, hit));
 }
 
 /* -------------------------------------------- */
