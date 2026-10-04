@@ -111,8 +111,33 @@ function patchBackground() {
   AE.applyChange = function(...args) { return skip(original.bind(this), ...args); };
 }
 
+/**
+ * dnd5e 6 groups initiative by calling `combatant.token.getGroupingKey(...)` on EVERY
+ * combatant whenever anyone rolls. A combatant has no token when its combat isn't linked
+ * to a scene (v14 allows unlinked combats) or its token was deleted — and then the whole
+ * roll throws for whoever triggered it. Treat a tokenless combatant as ungroupable.
+ */
+function patchCombatantGrouping() {
+  const Combatant = CONFIG.Combatant.documentClass;
+  for ( const name of ["getInitiativeGroupingKey", "getGroupingKey"] ) {
+    const proto = ownerOf(Combatant, name);
+    if ( !proto || proto[`__${ID}_${name}`] ) continue;
+    const original = proto[name];
+    proto[name] = function(...args) {
+      if ( !this.group && !this.token ) {
+        warnOnce(`init:${this.parent?.id}`, `Combat ${this.parent?.id} has combatants without a token `
+          + "(is the combat linked to a scene?) — initiative grouping skipped for them.");
+        return null;
+      }
+      return original.apply(this, args);
+    };
+    proto[`__${ID}_${name}`] = true;
+  }
+}
+
 Hooks.once("init", () => {
   if ( game.system.id !== "dnd5e" ) return;
   try { patchPrep(); } catch(err) { console.error(TAG, "could not patch tool/skill prep", err); }
   try { patchBackground(); } catch(err) { console.error(TAG, "could not patch background guard", err); }
+  try { patchCombatantGrouping(); } catch(err) { console.error(TAG, "could not patch initiative grouping", err); }
 });
