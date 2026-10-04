@@ -73,9 +73,11 @@ function onPreRollD20(config) {
 
 /**
  * Effect-driven attack modes (dnd5e 6 has no native AE key for these):
- *   flags.dnd5e-table-kit.advantage.attack            "all" | "weapon" | "melee" | "ranged"
- *   flags.dnd5e-table-kit.grants.disadvantage.attack  any truthy value, on the TARGET:
- *                                                     attacks against it roll with disadvantage
+ *   flags.dnd5e-table-kit.advantage.attack            scope — the bearer's attacks have advantage
+ *   flags.dnd5e-table-kit.disadvantage.attack         scope — the bearer's attacks have disadvantage
+ *   flags.dnd5e-table-kit.grants.advantage.attack     truthy, on the TARGET — attacks against it have advantage
+ *   flags.dnd5e-table-kit.grants.disadvantage.attack  truthy, on the TARGET — attacks against it have disadvantage
+ * Scope: "all" | "weapon" | "melee" | "ranged" | an ability key ("str", "dex"…) for attacks using it.
  * Advantage and disadvantage together cancel, exactly as dnd5e resolves them.
  */
 function attackMatches(scope, activity) {
@@ -85,6 +87,7 @@ function attackMatches(scope, activity) {
   const type = activity?.attack?.type?.value;   // "melee" | "ranged"
   if ( scope === "weapon" ) return isWeapon;
   if ( (scope === "melee") || (scope === "ranged") ) return type === scope;
+  if ( scope in (CONFIG.DND5E.abilities ?? {}) ) return activity?.ability === scope;
   return false;
 }
 
@@ -95,8 +98,12 @@ function attackTargets(activity) {
 
 function applyEffectAttackModes(config, actor) {
   const activity = config.subject;
-  if ( attackMatches(actor.flags?.[ID]?.advantage?.attack, activity) ) config.advantage = true;
-  if ( attackTargets(activity).some(t => t.flags?.[ID]?.grants?.disadvantage?.attack) ) config.disadvantage = true;
+  const mine = actor.flags?.[ID] ?? {};
+  if ( attackMatches(mine.advantage?.attack, activity) ) config.advantage = true;
+  if ( attackMatches(mine.disadvantage?.attack, activity) ) config.disadvantage = true;
+  const targets = attackTargets(activity);
+  if ( targets.some(t => t.flags?.[ID]?.grants?.advantage?.attack) ) config.advantage = true;
+  if ( targets.some(t => t.flags?.[ID]?.grants?.disadvantage?.attack) ) config.disadvantage = true;
 }
 
 function onPreRollAttack(config) {
