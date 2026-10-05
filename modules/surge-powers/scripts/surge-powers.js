@@ -454,11 +454,16 @@
 
   // ── Path rules ─────────────────────────────────────────────────────────────
   const pathOfItem = (item) => item?.flags?.[MOD]?.path ?? null;
+  // Dave and Mags share the Gamemaster login, so "same user" can be two windows.
+  // pre* hooks run only in the window that made the change: it stamps this id
+  // on the operation options, and only that window acts on the broadcast.
+  const CLIENT_ID = foundry.utils.randomID();
 
   function onPreCreateItem(item, data, options) {
     const path = pathOfItem(item);
     const actor = item.parent;
-    if (!path?.key || !(actor instanceof Actor) || options?.surgePathForce) return;
+    if (!path?.key || !(actor instanceof Actor)) return;
+    if (options?.surgePathForce) { if (!path.doctrine) options[`${MOD}DoctrineBy`] = CLIENT_ID; return; }
     const have = pathsOf(actor);
     const level = Number(get(actor, "system.details.level", 0)) || 0;
     const name = PATHS[path.key]?.name ?? path.key;
@@ -467,6 +472,7 @@
     else if (have.length >= 2) why = `${actor.name} already has two Paths.`;
     else if (have.length === 1 && level < 17) why = `A second Path opens at 17th level (${actor.name} is level ${level}).`;
     if (why) { ui.notifications?.warn?.(why); return false; }
+    if (!path.doctrine) options[`${MOD}DoctrineBy`] = CLIENT_ID;
   }
 
   async function chooseDoctrine(item) {
@@ -490,7 +496,7 @@
   }
 
   function onCreateItem(item, options, userId) {
-    if (userId !== game.user.id || !(item.parent instanceof Actor)) return;
+    if (options?.[`${MOD}DoctrineBy`] !== CLIENT_ID || !(item.parent instanceof Actor)) return;
     const path = pathOfItem(item);
     if (path?.key && !path.doctrine) chooseDoctrine(item);
   }
@@ -513,10 +519,10 @@
     if (!hp) return;
     const cur = actor.system?.attributes?.hp ?? {};
     const lost = (Number.isFinite(hp.value) && hp.value < cur.value) || (Number.isFinite(hp.temp) && hp.temp < (cur.temp ?? 0));
-    if (lost) options[`${MOD}Damaged`] = true;
+    if (lost) options[`${MOD}Damaged`] = CLIENT_ID;
   }
   async function onUpdateActor(actor, changes, options, userId) {
-    if (!options?.[`${MOD}Damaged`] || userId !== game.user.id || !game.combat?.started) return;
+    if (options?.[`${MOD}Damaged`] !== CLIENT_ID || !game.combat?.started) return;
     for (const p of pathsOf(actor)) {
       const rule = PATHS[p.key]?.onDamaged;
       if (!rule?.surge) continue;
