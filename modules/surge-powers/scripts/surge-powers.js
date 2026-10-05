@@ -399,12 +399,12 @@
         : spent ? "Used until your next long rest" : "";
       return `<button type="button" data-surge-key="${e.key}" ${disabled ? "disabled" : ""}
         title="${(e.fiction || "").replace(/"/g, "&quot;")}${why ? " — " + why : ""}"
-        style="display:block;width:100%;text-align:left;margin:.15rem 0;padding:.3rem .45rem;border-radius:5px;
+        style="display:block;width:100%;height:auto;min-height:0;line-height:1.25;white-space:normal;text-align:left;margin:.2rem 0;padding:.3rem .45rem;border-radius:5px;
         border:1px solid ${disabled ? "rgba(255,255,255,.08)" : "#b9882e66"};
         background:${disabled ? "rgba(255,255,255,.02)" : "rgba(185,136,46,.08)"};
         opacity:${disabled ? ".45" : "1"};cursor:${disabled ? "not-allowed" : "pointer"}">
         <b style="color:#e8c84a">${e.cost}⚡</b> <b>${e.label.split("—")[0].trim()}</b>
-        <span style="font-size:.72rem;opacity:.75;display:block">${e.label.includes("—") ? e.label.split("—").slice(1).join("—").trim() : ""}</span>
+        <span style="font-size:.72rem;opacity:.75;display:block;margin-top:.1rem">${e.label.includes("—") ? e.label.split("—").slice(1).join("—").trim() : ""}</span>
       </button>`;
     };
     // Universal columns, then one column per Path the character walks (with its doctrine).
@@ -424,7 +424,9 @@
       position: { width: 900 + 220 * pathCols.length },
       content: `<div style="display:flex;gap:.8rem;max-height:60vh;overflow:auto">${cols}</div>
         <p style="font-size:.7rem;opacity:.55;margin:.5rem 0 0">Spends are hard-gated by your pool. Mechanical effects apply now; <em>italic</em> lines are GM-applied riders.</p>`,
-      buttons: [{ action: "close", label: "Close", default: true }],
+      buttons: [
+        ...(canTakePath(actor) ? [{ action: "path", label: "🜂 Choose a Path…", callback: () => { pickPath(actor); } }] : []),
+        { action: "close", label: "Close", default: true }],
       rejectClose: false,
     }).render(true);
 
@@ -535,6 +537,39 @@
     }
   }
 
+  // A character can take a Path when it has none, or one and is 17th level+.
+  function canTakePath(actor) {
+    if (!actor?.isOwner || !Object.keys(PATHS).length) return false;
+    const have = pathsOf(actor), level = Number(get(actor, "system.details.level", 0)) || 0;
+    const open = Object.keys(PATHS).some(k => !have.some(p => p.key === k));
+    return open && (have.length === 0 || (have.length === 1 && level >= 17));
+  }
+  function pathItemData(key, def) {
+    return {
+      name: def.name, type: "feat", img: def.img ?? "icons/svg/mystery-man.svg",
+      system: { description: { value: `<p><em>${def.tagline ?? ""}</em></p>${def.entry?.description ?? ""}` } },
+      flags: { [MOD]: { path: { key } } }
+    };
+  }
+  /** Pick a Path from the Surge menu; adding it then asks for the doctrine (onCreateItem). */
+  async function pickPath(actor) {
+    const have = pathsOf(actor);
+    const options = Object.entries(PATHS).filter(([k]) => !have.some(p => p.key === k)).map(([k, d]) =>
+      `<label style="display:block;margin:.35rem 0"><input type="radio" name="path" value="${k}"> <b>${d.name}</b>${d.tagline ? ` <em style="opacity:.7">“${d.tagline}”</em>` : ""}<br><span style="font-size:.8rem;opacity:.8">${(d.entry?.description ?? "").replace(/<[^>]+>/g, " ")}</span></label>`).join("");
+    const key = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `${actor.name}: choose a Path` },
+      content: `<p>${have.length ? "Your second Path" : "Your Path"} can't be changed later.</p>${options}`,
+      ok: { label: "Walk this Path", callback: (_ev, b) => b.form.querySelector("input[name=path]:checked")?.value },
+      rejectClose: false,
+    }).catch(() => null);
+    if (!key) return;
+    // Prefer the GM's world item (it carries the reaction activity); otherwise build one.
+    const world = game.items.find(i => i.flags?.[MOD]?.path?.key === key);
+    const data = world ? world.toObject() : pathItemData(key, PATHS[key]);
+    delete data._id; delete data.folder;
+    await actor.createEmbeddedDocuments("Item", [data]);
+  }
+
   /** GM helper: create (or refresh) one world item per Path, ready to drag onto a sheet. */
   async function createPathItems() {
     if (!game.user.isGM) return [];
@@ -543,11 +578,7 @@
     if (!folder) folder = await Folder.create({ name: "Paths", type: "Item", color: "#b9882e" });
     const made = [];
     for (const [key, def] of Object.entries(PATHS)) {
-      const data = {
-        name: def.name, type: "feat", img: def.img ?? "icons/svg/mystery-man.svg", folder: folder.id,
-        system: { description: { value: `<p><em>${def.tagline ?? ""}</em></p>${def.entry?.description ?? ""}` } },
-        flags: { [MOD]: { path: { key } } }
-      };
+      const data = { ...pathItemData(key, def), folder: folder.id };
       const existing = game.items.find(i => i.flags?.[MOD]?.path?.key === key);
       const item = existing ? await existing.update(data) && existing : await Item.implementation.create(data);
       if (!item.system.activities?.size) {
@@ -571,7 +602,7 @@
     Hooks.on("updateActor", onUpdateActor);
     game.surgePowers = Object.assign(game.surgePowers || {}, {
       openMenu, menu: MENU, applyEntry, profOf,
-      paths: { get data() { return PATHS; }, load: loadPaths, of: pathsOf, entries: pathEntries, chooseDoctrine, createItems: createPathItems }
+      paths: { get data() { return PATHS; }, load: loadPaths, of: pathsOf, entries: pathEntries, chooseDoctrine, pick: pickPath, canTake: canTakePath, createItems: createPathItems }
     });
     console.log(TAG, `Surge Powers table ready (${MENU.length} universal entries, ${Object.keys(PATHS).length} Path(s))`);
   });
