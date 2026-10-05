@@ -215,6 +215,50 @@
       fiction: "Remember what you were before the wound. Be that now.", fx: { tgt: "allyOrSelf", phoenix: true } },
   ];
 
+  // ── Paths (Bad Eden) ───────────────────────────────────────────────────────
+  // A Path is an item on the character (flags.surge-powers.path = {key, doctrine})
+  // that adds its own column of entries to this menu. Path content lives in
+  // data/paths.json; entries share MENU's shape. Rules: chosen at 1st level, a
+  // second Path opens at 17th, never the same Path twice, players can't remove one.
+  let PATHS = {};
+  async function loadPaths() {
+    try {
+      const res = await fetch(`modules/${MOD}/data/paths.json`, { cache: "no-store" });
+      PATHS = (await res.json()).paths ?? {};
+    } catch (e) { console.warn(TAG, "could not load Path data", e); PATHS = {}; }
+    return PATHS;
+  }
+  function pathsOf(actor) {
+    return (actor?.items ?? []).filter(i => i.flags?.[MOD]?.path?.key)
+      .map(i => ({ item: i, key: i.flags[MOD].path.key, doctrine: i.flags[MOD].path.doctrine ?? null }));
+  }
+  function pathEntries(actor) {
+    const out = [];
+    for (const { key, doctrine } of pathsOf(actor)) {
+      const def = PATHS[key];
+      if (!def) continue;
+      for (const a of def.abilities ?? []) {
+        if (a.doctrine && a.doctrine !== doctrine) continue;
+        out.push({ ...a, key: `path:${key}:${a.key}`, bucket: `path:${key}`, minProf: a.minProf ?? 0 });
+      }
+    }
+    return out;
+  }
+  const usedKey = (entry) => entry.key.replace(/[^a-z0-9]+/gi, "_");
+  function usedUp(actor, entry) {
+    return !!entry.oncePer && !!actor?.flags?.[MOD]?.used?.[usedKey(entry)];
+  }
+  const evalAmount = (actor, f) => {
+    const prof = profOf(actor), level = Number(get(actor, "system.details.level", 0)) || 0;
+    try { return Math.max(0, Math.round(Roll.safeEval(String(f).replaceAll("@prof", prof).replaceAll("@level", level)))); }
+    catch { return 0; }
+  };
+  const aeChanges = (changes) => (changes ?? []).flatMap(([key, type, value]) => {
+    const vals = value === "__all__" ? Object.keys(CONFIG.DND5E.damageTypes ?? {}) : [value];
+    const mode = { add: 2, override: 5, multiply: 1, upgrade: 4, downgrade: 3 }[type] ?? 2;
+    return vals.map(v => ({ key, type, mode, value: String(v), priority: 20 }));
+  });
+
   // ── Effect application ─────────────────────────────────────────────────────
   async function applyEntry(actor, entry) {
     const prof = profOf(actor);
@@ -240,16 +284,44 @@
       targets = (token ? alliesInRange(token, prof * 5) : []).map(t => t.actor);
       if (!targets.length) targets = [actor];
     }
+    else if (tgt === "allies10") {
+      targets = [actor, ...(token ? alliesInRange(token, 10) : []).map(t => t.actor)];
+    }
+    else if (tgt === "target") {
+      const foe = firstTarget();
+      if (!foe) { ui.notifications?.warn?.(`${entry.label}: target a token first.`); return false; }
+      targets = [foe];
+    }
+    if (usedUp(actor, entry)) {
+      ui.notifications?.warn?.(`${entry.label.split("—")[0].trim()}: already used until your next long rest.`);
+      return false;
+    }
 
     // Someone else's character needs the GM relay — bail (and refund) up front if no GM is online.
-    const writes = fx.heal || fx.phoenix || fx.dr || fx.acBonus || fx.resistChoice;
+    const writes = fx.heal || fx.phoenix || fx.dr || fx.acBonus || fx.resistChoice || fx.ae || fx.tempHP;
     if (writes && !game.users?.activeGM && targets.some(t => t && !t.isOwner)) {
       ui.notifications?.warn?.(`${entry.label}: no GM online to apply it to another character.`);
       return false;
     }
 
+    const shortName = entry.label.split("—")[0].trim();
+    let chosenType = null;
     for (const t of targets) {
       if (!t) continue;
+      if (fx.unbroken && Number(get(t, "system.attributes.hp.value", 1)) <= 0) {
+        await writeActor(t, "heal", { amount: 1 });
+        lines.push(`${t.name} rises to 1 HP.`);
+      }
+      if (fx.tempHP) {
+        const n = evalAmount(actor, fx.tempHP);   // scales with the user's Prof / level
+        if (n > 0) { await writeActor(t, "tempHP", { n }); lines.push(`${t.name}: ${n} temporary HP.`); }
+      }
+      if (fx.ae) {
+        await addAE(t, { name: fx.ae.name ?? shortName, img: "icons/magic/defensive/shield-barrier-glowing-blue.webp", origin,
+          duration: { rounds: fx.ae.rounds ?? 1, seconds: 6 * (fx.ae.rounds ?? 1) }, changes: aeChanges(fx.ae.changes),
+          flags: { [MOD]: { surgeMarker: true } } });
+        lines.push(`${t.name}: ${fx.ae.name ?? shortName}${(fx.ae.rounds ?? 1) > 1 ? ` for ${fx.ae.rounds} rounds` : " until your next turn"}.`);
+      }
       if (fx.heal) {
         const healed = await healActor(t, formula(fx.heal), `⚡ ${entry.label}`);
         lines.push(`${t.name} heals ${healed}.`);
@@ -261,10 +333,11 @@
       }
       if (fx.dr) { const n = resolveN(fx.dr); await addAE(t, drAE(n, origin)); lines.push(`${t.name}: each hit this round is reduced by ${n}.`); }
       if (fx.resistChoice) {
-        const type = await pickDamageType(entry.label.split("—")[0].trim());
+        const type = chosenType ?? await pickDamageType(shortName);
         if (!type) return false;   // cancelled → refund
+        chosenType = type;
         const label = CONFIG.DND5E.damageTypes[type]?.label ?? type;
-        await addAE(t, { name: `Steel Veil (${label})`, img: "icons/magic/defensive/shield-barrier-glowing-blue.webp", origin,
+        await addAE(t, { name: `${shortName} (${label})`, img: "icons/magic/defensive/shield-barrier-glowing-blue.webp", origin,
           duration: { rounds: 1, seconds: 6 }, changes: [{ key: "system.traits.dr.value", mode: 2, value: type, priority: 20 }],
           flags: { [MOD]: { surgeMarker: true } } });
         lines.push(`${t.name}: resistance to ${label} until next turn.`);
@@ -279,6 +352,11 @@
     }
 
     if (fx.oneShot) { await oneShot(actor, fx.oneShot); }
+    // Absorbing Guard: the resisted type rides the next melee hit (Table Kit rider "absorbStrike").
+    if (fx.absorb && chosenType) {
+      await actor.update({ [`flags.${MOD}.oneShot.absorbStrike`]: true, [`flags.${MOD}.absorbType`]: chosenType });
+    }
+    if (entry.oncePer) await actor.update({ [`flags.${MOD}.used.${usedKey(entry)}`]: true });
     if (fx.init) {
       const c = game.combat?.combatants?.find?.(c => c.actor === actor || c.actor?.id === actor.id);
       if (c) {
@@ -308,12 +386,17 @@
     const surge = game.surgePowers;
     if (!surge?.spend) return;
     const cur = surge.get(actor), max = surge.max(actor), prof = profOf(actor);
+    // A Path still waiting on its doctrine asks first (the owner closed the prompt earlier).
+    for (const p of pathsOf(actor)) if (!p.doctrine && PATHS[p.key]?.doctrines && actor.isOwner) await chooseDoctrine(p.item);
 
+    const entries = MENU.concat(pathEntries(actor));
     const entryHtml = (e) => {
       const profLocked = (e.minProf ?? 0) > prof;
       const broke = e.cost > cur;
-      const disabled = profLocked || broke;
-      const why = profLocked ? `Prof +${e.minProf} required (you have +${prof})` : broke ? `Costs ${e.cost} Surge (you have ${cur})` : "";
+      const spent = usedUp(actor, e);
+      const disabled = profLocked || broke || spent;
+      const why = profLocked ? `Prof +${e.minProf} required (you have +${prof})` : broke ? `Costs ${e.cost} Surge (you have ${cur})`
+        : spent ? "Used until your next long rest" : "";
       return `<button type="button" data-surge-key="${e.key}" ${disabled ? "disabled" : ""}
         title="${(e.fiction || "").replace(/"/g, "&quot;")}${why ? " — " + why : ""}"
         style="display:block;width:100%;text-align:left;margin:.15rem 0;padding:.3rem .45rem;border-radius:5px;
@@ -324,15 +407,21 @@
         <span style="font-size:.72rem;opacity:.75;display:block">${e.label.includes("—") ? e.label.split("—").slice(1).join("—").trim() : ""}</span>
       </button>`;
     };
-    const cols = BUCKETS.map(([b, title]) => {
-      const list = MENU.filter(e => e.bucket === b).sort((a, z) => a.cost - z.cost);
+    // Universal columns, then one column per Path the character walks (with its doctrine).
+    const pathCols = pathsOf(actor).filter(p => PATHS[p.key]).map(p => {
+      const def = PATHS[p.key], doc = def.doctrines?.[p.doctrine]?.name;
+      return [`path:${p.key}`, `🜂 ${def.name}${doc ? ` · ${doc}` : ""}`];
+    });
+    const cols = [...BUCKETS, ...pathCols].map(([b, title]) => {
+      const list = entries.filter(e => e.bucket === b)
+        .sort((a, z) => ((a.minProf ?? 0) - (z.minProf ?? 0)) || (a.cost - z.cost));
       return `<div style="flex:1;min-width:200px"><p style="margin:.2rem 0;font-weight:700;border-bottom:1px solid #b9882e44">${title}</p>
         ${list.map(entryHtml).join("") || "<p style='font-size:.72rem;opacity:.5'>—</p>"}</div>`;
     }).join("");
 
     const dlg = await new foundry.applications.api.DialogV2({
       window: { title: `⚡ Surge Powers — ${actor.name} (${cur}/${max})`, resizable: true },
-      position: { width: 900 },
+      position: { width: 900 + 220 * pathCols.length },
       content: `<div style="display:flex;gap:.8rem;max-height:60vh;overflow:auto">${cols}</div>
         <p style="font-size:.7rem;opacity:.55;margin:.5rem 0 0">Spends are hard-gated by your pool. Mechanical effects apply now; <em>italic</em> lines are GM-applied riders.</p>`,
       buttons: [{ action: "close", label: "Close", default: true }],
@@ -341,11 +430,11 @@
 
     dlg.element.querySelectorAll("[data-surge-key]").forEach(btn => {
       btn.addEventListener("click", async () => {
-        const entry = MENU.find(e => e.key === btn.dataset.surgeKey);
+        const entry = entries.find(e => e.key === btn.dataset.surgeKey);
         if (!entry) return;
         // Validate the target BEFORE debiting — an ally power with no target
         // used to burn the Surge and do nothing.
-        if (entry.fx?.tgt === "ally" && !firstTarget()) {
+        if (["ally", "target"].includes(entry.fx?.tgt) && !firstTarget()) {
           return ui.notifications?.warn?.(`${entry.label}: target a token first.`);
         }
         const ok = await surge.spend(actor, entry.cost);
@@ -363,10 +452,121 @@
     return dlg;
   }
 
+  // ── Path rules ─────────────────────────────────────────────────────────────
+  const pathOfItem = (item) => item?.flags?.[MOD]?.path ?? null;
+
+  function onPreCreateItem(item, data, options) {
+    const path = pathOfItem(item);
+    const actor = item.parent;
+    if (!path?.key || !(actor instanceof Actor) || options?.surgePathForce) return;
+    const have = pathsOf(actor);
+    const level = Number(get(actor, "system.details.level", 0)) || 0;
+    const name = PATHS[path.key]?.name ?? path.key;
+    let why = null;
+    if (have.some(p => p.key === path.key)) why = `${actor.name} already walks the ${name}.`;
+    else if (have.length >= 2) why = `${actor.name} already has two Paths.`;
+    else if (have.length === 1 && level < 17) why = `A second Path opens at 17th level (${actor.name} is level ${level}).`;
+    if (why) { ui.notifications?.warn?.(why); return false; }
+  }
+
+  async function chooseDoctrine(item) {
+    const def = PATHS[pathOfItem(item)?.key];
+    if (!def?.doctrines) return;
+    const options = Object.entries(def.doctrines).map(([k, d]) =>
+      `<label style="display:block;margin:.35rem 0"><input type="radio" name="doctrine" value="${k}"> <b>${d.name}</b>${d.tagline ? ` <em style="opacity:.7">“${d.tagline}”</em>` : ""}<br><span style="font-size:.8rem;opacity:.8">${(d.perk?.description ?? "").replace(/<[^>]+>/g, "")}</span></label>`).join("");
+    const pick = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `${def.name}: choose a doctrine` },
+      content: `<p>Choose once; a doctrine can't be changed later.</p>${options}`,
+      ok: { label: "Choose", callback: (_ev, b) => b.form.querySelector("input[name=doctrine]:checked")?.value },
+      rejectClose: false,
+    }).catch(() => null);
+    if (!pick) return ui.notifications?.info?.(`${def.name}: no doctrine chosen yet; you'll be asked again next time you open the Surge menu.`);
+    const doc = def.doctrines[pick];
+    await item.update({ name: `${def.name} (${doc.name})`, [`flags.${MOD}.path.doctrine`]: pick,
+      "system.description.value": `${def.entry?.description ?? ""}<h3>Doctrine: ${doc.name}</h3>${doc.perk?.description ?? ""}` });
+    const changes = aeChanges(doc.perk?.changes);
+    if (changes.length) await item.createEmbeddedDocuments("ActiveEffect", [{ name: `${doc.name}: ${doc.perk.name}`, img: item.img,
+      transfer: true, disabled: false, changes, flags: { [MOD]: { doctrinePerk: pick } } }]);
+  }
+
+  function onCreateItem(item, options, userId) {
+    if (userId !== game.user.id || !(item.parent instanceof Actor)) return;
+    const path = pathOfItem(item);
+    if (path?.key && !path.doctrine) chooseDoctrine(item);
+  }
+
+  function onPreDeleteItem(item) {
+    if (!pathOfItem(item)?.key || game.user.isGM) return;
+    ui.notifications?.warn?.("A Path can't be removed or changed; ask your GM.");
+    return false;
+  }
+
+  // Long rest: once-per-long-rest Path abilities come back.
+  function onRestCompleted(actor, result) {
+    if (!result?.longRest || !actor?.flags?.[MOD]?.used) return;
+    actor.unsetFlag(MOD, "used").catch(() => {});
+  }
+
+  // onDamaged (the Bulwark): bank Surge the first time(s) each combat round you take damage.
+  function onPreUpdateActor(actor, changes, options) {
+    const hp = foundry.utils.getProperty(changes, "system.attributes.hp");
+    if (!hp) return;
+    const cur = actor.system?.attributes?.hp ?? {};
+    const lost = (Number.isFinite(hp.value) && hp.value < cur.value) || (Number.isFinite(hp.temp) && hp.temp < (cur.temp ?? 0));
+    if (lost) options[`${MOD}Damaged`] = true;
+  }
+  async function onUpdateActor(actor, changes, options, userId) {
+    if (!options?.[`${MOD}Damaged`] || userId !== game.user.id || !game.combat?.started) return;
+    for (const p of pathsOf(actor)) {
+      const rule = PATHS[p.key]?.onDamaged;
+      if (!rule?.surge) continue;
+      const roundKey = `${game.combat.id}.${game.combat.round}`;
+      const tally = actor.flags?.[MOD]?.damagedRound?.[p.key];
+      const count = tally?.round === roundKey ? tally.count : 0;
+      if (count >= (rule.perRound ?? 1)) continue;
+      await actor.update({ [`flags.${MOD}.damagedRound.${p.key}`]: { round: roundKey, count: count + 1 } });
+      await game.surgePowers?.grant?.(actor, rule.surge);
+    }
+  }
+
+  /** GM helper: create (or refresh) one world item per Path, ready to drag onto a sheet. */
+  async function createPathItems() {
+    if (!game.user.isGM) return [];
+    await loadPaths();
+    let folder = game.folders.find(f => f.type === "Item" && f.name === "Paths");
+    if (!folder) folder = await Folder.create({ name: "Paths", type: "Item", color: "#b9882e" });
+    const made = [];
+    for (const [key, def] of Object.entries(PATHS)) {
+      const data = {
+        name: def.name, type: "feat", img: def.img ?? "icons/svg/mystery-man.svg", folder: folder.id,
+        system: { description: { value: `<p><em>${def.tagline ?? ""}</em></p>${def.entry?.description ?? ""}` } },
+        flags: { [MOD]: { path: { key } } }
+      };
+      const existing = game.items.find(i => i.flags?.[MOD]?.path?.key === key);
+      const item = existing ? await existing.update(data) && existing : await Item.implementation.create(data);
+      if (!item.system.activities?.size) {
+        await item.createActivity?.("utility", { name: def.entry?.name ?? "Path feature", activation: { type: "reaction" },
+          description: { chatFlavor: "" } });
+      }
+      made.push(item.name);
+    }
+    return made;
+  }
+
   // ── API ────────────────────────────────────────────────────────────────────
-  Hooks.once("ready", () => {
+  Hooks.once("ready", async () => {
     if (game.system?.id !== "dnd5e") return;
-    game.surgePowers = Object.assign(game.surgePowers || {}, { openMenu, menu: MENU, applyEntry, profOf });
-    console.log(TAG, `Surge Powers table ready (${MENU.length} universal entries)`);
+    await loadPaths();
+    Hooks.on("preCreateItem", onPreCreateItem);
+    Hooks.on("createItem", onCreateItem);
+    Hooks.on("preDeleteItem", onPreDeleteItem);
+    Hooks.on("dnd5e.restCompleted", onRestCompleted);
+    Hooks.on("preUpdateActor", onPreUpdateActor);
+    Hooks.on("updateActor", onUpdateActor);
+    game.surgePowers = Object.assign(game.surgePowers || {}, {
+      openMenu, menu: MENU, applyEntry, profOf,
+      paths: { get data() { return PATHS; }, load: loadPaths, of: pathsOf, entries: pathEntries, chooseDoctrine, createItems: createPathItems }
+    });
+    console.log(TAG, `Surge Powers table ready (${MENU.length} universal entries, ${Object.keys(PATHS).length} Path(s))`);
   });
 })();

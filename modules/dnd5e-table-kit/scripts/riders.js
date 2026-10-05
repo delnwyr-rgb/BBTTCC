@@ -136,14 +136,15 @@ function onPreRollSave(config, dialog, message) {
 /* -------------------------------------------- */
 
 const DAMAGE_KEYS = ["doomstrike", "surgingCast", "wrathCascade", "cinderwake", "crowningBlow", "finalArgument",
-  "ignoreResists"];
+  "ignoreResists", "absorbStrike"];
 
 function onPreRollDamage(config, dialog, message) {
   const activity = config.subject;
   const actor = actorOf(activity);
   if ( !actor ) return;
   const isWeapon = activity?.item?.type === "weapon";
-  const keys = DAMAGE_KEYS.filter(k => (k !== "surgingCast") || !isWeapon);
+  const isMelee = activity?.attack?.type?.value === "melee";
+  const keys = DAMAGE_KEYS.filter(k => ((k !== "surgingCast") || !isWeapon) && ((k !== "absorbStrike") || isMelee));
   const got = take(actor, keys);
   if ( !got.size ) return;
 
@@ -159,6 +160,8 @@ function onPreRollDamage(config, dialog, message) {
   if ( got.has("surgingCast") ) plan.maxOne = true;
   if ( got.has("wrathCascade") ) plan.reroll = true;
   if ( got.has("ignoreResists") ) foundry.utils.setProperty(message, `data.flags.${ID}.ignoreResist`, true);
+  // Absorbing Guard (Path of the Bulwark): 1d6 of the absorbed type rides the next melee hit.
+  if ( got.has("absorbStrike") ) plan.absorbType = actor.flags?.[SURGE]?.absorbType || null;
   plan.labels = [...got];
 }
 
@@ -186,6 +189,7 @@ function onPostDamageConfig(rolls, config) {
     else owner.terms.splice(owner.terms.indexOf(die), 1, new NumericTerm({ number: die.faces }));
   }
   if ( plan.extra ) appendTerms(roll, plan.extra);
+  if ( plan.absorbType ) rolls.push(new CONFIG.Dice.DamageRoll("1d6", roll.data, { type: plan.absorbType }));
   if ( plan.flat ) appendTerms(roll, String(plan.flat));
   rolls.forEach(r => r.resetFormula());
 }

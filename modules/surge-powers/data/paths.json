@@ -1,0 +1,90 @@
+{
+  "_about": "Bad Eden Paths: Surge overlays chosen at 1st level (a second at 17th), each with three doctrines. Entries use the same shape as the universal Surge menu (cost, minProf, label, fiction, fx). 'doctrine' limits an entry to one doctrine; 'perk' marks free doctrine moves available from 1st level. Design source: the 'Bad Eden Paths' Claude Doc.",
+  "paths": {
+    "bulwark": {
+      "name": "Path of the Bulwark",
+      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "tagline": "Set your feet. The line forms on you.",
+      "entry": {
+        "name": "Hold the Line",
+        "description": "<p><strong>Hold the Line (free).</strong> Once per round, as a reaction when a creature you can see within 5 feet of you is targeted by an attack, you can become the target instead.</p><p>The wall runs on what hits it: the first time each round you take damage, you bank 1 Surge.</p>"
+      },
+      "onDamaged": { "surge": 1, "perRound": 1 },
+      "doctrines": {
+        "mountain": {
+          "name": "Mountain",
+          "tagline": "You belong here now. Argue with the mountain.",
+          "perk": {
+            "name": "Rooted",
+            "description": "<p><strong>Rooted.</strong> You have advantage on Strength saving throws, and you can't be pushed or knocked prone while you haven't moved this turn.</p>",
+            "changes": [["system.abilities.str.save.roll.mode", "add", "1"]]
+          }
+        },
+        "avalanche": {
+          "name": "Avalanche",
+          "tagline": "You do not stop. They learn this the hard way.",
+          "perk": {
+            "name": "No Terminal Velocity",
+            "description": "<p><strong>No Terminal Velocity.</strong> Your walking speed increases by 5 feet, and difficult terrain doesn't slow you.</p>",
+            "changes": [["system.attributes.movement.speeds.walk", "add", "5"]]
+          }
+        },
+        "cataclyst": {
+          "name": "Cataclyst",
+          "tagline": "Something gives way. You aim where.",
+          "perk": {
+            "name": "Stance Dance",
+            "description": "<p><strong>Stance Dance.</strong> At the start of your turn you can take Advance or Anchor for free (from the Surge menu); it lasts until your next turn.</p>",
+            "changes": []
+          }
+        }
+      },
+      "abilities": [
+        { "key": "brace-the-line", "cost": 1, "minProf": 2, "label": "Brace the Line — +2 AC to you or a targeted ally against one attack",
+          "fiction": "You set your shoulder where the blow will land.",
+          "fx": { "tgt": "allyOrSelf", "acBonus": 2, "note": "Use it as a reaction when the attack hits: it can turn the hit into a miss." } },
+        { "key": "steady-feet", "cost": 1, "minProf": 2, "label": "Steady Feet — advantage on Str and Dex saves; you can't be moved",
+          "fiction": "The ground agrees with you.",
+          "fx": { "tgt": "self", "ae": { "name": "Steady Feet", "rounds": 1,
+            "changes": [["system.abilities.str.save.roll.mode", "add", "1"], ["system.abilities.dex.save.roll.mode", "add", "1"]] },
+            "note": "Until your next turn you can't be moved or knocked prone." } },
+        { "key": "absorbing-guard", "cost": 2, "minProf": 3, "label": "Absorbing Guard — resist one damage type; your next melee hit adds 1d6 of it",
+          "fiction": "You take it in, and you keep it.",
+          "fx": { "tgt": "self", "resistChoice": true, "absorb": true,
+            "auto": "Your next melee hit adds 1d6 of the absorbed type." } },
+        { "key": "shelter", "cost": 3, "minProf": 3, "label": "Shelter — you and allies within 10 ft gain temp HP equal to twice your Prof",
+          "fiction": "Stand behind me. All of you.",
+          "fx": { "tgt": "allies10", "tempHP": "2*@prof" } },
+        { "key": "bastion", "cost": 4, "minProf": 4, "label": "Bastion — 1 minute: +1 AC and resistance to weapon damage",
+          "fiction": "You become the wall the others lean on.",
+          "fx": { "tgt": "self", "ae": { "name": "Bastion", "rounds": 10,
+            "changes": [["system.attributes.ac.bonus", "add", "1"], ["system.traits.dr.value", "add", "bludgeoning"], ["system.traits.dr.value", "add", "piercing"], ["system.traits.dr.value", "add", "slashing"], ["system.traits.dr.value", "add", "kinetic"]] },
+            "note": "Concentration: it ends if your concentration breaks." } },
+        { "key": "unbroken", "cost": 5, "minProf": 5, "oncePer": "long", "label": "Unbroken — at 0 HP, rise to 1 and gain temp HP equal to your level (1/long rest)",
+          "fiction": "Not today. Not like this.",
+          "fx": { "tgt": "self", "unbroken": true, "tempHP": "@level" } },
+        { "key": "last-wall", "cost": 7, "minProf": 6, "label": "The Last Wall — 1 minute: allies within 10 ft resist all damage",
+          "fiction": "Everything they throw finds you first.",
+          "fx": { "tgt": "allies10", "ae": { "name": "The Last Wall", "rounds": 10, "changes": [["system.traits.dr.value", "add", "__all__"]] },
+            "note": "For the duration you can't drop below 1 HP." } },
+
+        { "key": "denial", "doctrine": "mountain", "cost": 3, "minProf": 4, "label": "Denial — a creature trying to move past you stops dead",
+          "fiction": "You decide which side of you is the wall.",
+          "fx": { "tgt": "target", "ae": { "name": "Denied", "rounds": 1, "changes": [["system.attributes.movement.speeds.walk", "override", "0"]] },
+            "note": "Use it as a reaction when a creature within 5 ft tries to move past you." } },
+        { "key": "shockwave-arrival", "doctrine": "avalanche", "cost": 3, "minProf": 4, "label": "Shockwave Arrival — your next melee hit also strikes everyone around the target",
+          "fiction": "Arriving is the strike.",
+          "fx": { "tgt": "self", "note": "After moving at least 10 ft in a straight line, your next melee hit also deals its weapon damage to every other creature within 5 ft of the target (apply it from the damage card)." } },
+        { "key": "advance", "doctrine": "cataclyst", "perk": true, "cost": 0, "minProf": 0, "label": "Advance — +2 melee damage, −1 AC until your next turn",
+          "fiction": "Lean into it.",
+          "fx": { "tgt": "self", "ae": { "name": "Advance", "rounds": 1, "changes": [["system.rolls.damage.mwak.bonus", "add", "2"], ["system.attributes.ac.bonus", "add", "-1"]] } } },
+        { "key": "anchor", "doctrine": "cataclyst", "perk": true, "cost": 0, "minProf": 0, "label": "Anchor — +1 AC, half speed until your next turn",
+          "fiction": "Plant it.",
+          "fx": { "tgt": "self", "ae": { "name": "Anchor", "rounds": 1, "changes": [["system.attributes.ac.bonus", "add", "1"], ["system.attributes.movement.speeds.walk", "multiply", "0.5"]] } } },
+        { "key": "decide-the-weather", "doctrine": "cataclyst", "cost": 3, "minProf": 4, "label": "Decide the Weather — a wall of debris, or an eruption",
+          "fiction": "One. Or the other. Not both. Decide.",
+          "fx": { "tgt": "self", "note": "Wall: a 30-ft line of debris gives full cover until it's cleared. Or Eruption: a 30-ft line, each creature makes a Dex save, 4d8 bludgeoning, half on a success." } }
+      ]
+    }
+  }
+}
