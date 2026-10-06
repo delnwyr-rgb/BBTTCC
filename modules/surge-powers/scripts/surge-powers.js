@@ -390,15 +390,26 @@
     const vals = value === "__all__" ? Object.keys(CONFIG.DND5E.damageTypes ?? {}) : [value];
     const mode = { add: 2, override: 5, multiply: 1, upgrade: 4, downgrade: 3 }[type] ?? 2;
     const resolve = (v) => (actor && /@(prof|level)/.test(String(v))) ? String(evalAmount(actor, v)) : String(v);
-    return keys.flatMap(k => vals.map(v => ({ key: k, type, mode, value: resolve(v), priority: 20 })));
+    return keys.flatMap(k => vals.map(v => ({ key: legacyKey(k), type, mode, value: resolve(v), priority: 20 })));
   });
+  // Path data is written in dnd5e 6 keys; dnd5e 5.x (the RFI/D&D port) stores these elsewhere.
+  const DND5E_V5 = () => foundry.utils.isNewerVersion("6.0.0", game.system?.version ?? "6.0.0");
+  function legacyKey(key) {
+    if (!DND5E_V5()) return key;
+    return key
+      .replace(/^system\.attributes\.movement\.speeds\./, "system.attributes.movement.")
+      .replace(/^system\.rolls\.(damage|attack)\.(mwak|rwak|msak|rsak)\.bonus$/, (_m, kind, t) => `system.bonuses.${t}.${kind}`)
+      .replace(/^system\.attributes\.init\.roll\.bonus$/, "system.attributes.init.bonus");
+  }
   // dnd5e sets a flat-AC creature's AC (most NPCs) from ac.override before effects apply and
   // ignores ac.bonus, so on those targets an AC change goes to ac.override instead.
   function fitAC(changes, target) {
     const ac = target?._source?.system?.attributes?.ac ?? {};
     const flat = ac.calc === "flat" || (ac.calc === undefined && ac.override != null);   // dnd5e 6 stores flat AC as override
     if (!flat) return changes;
-    return changes.map(c => c.key === "system.attributes.ac.bonus" ? { ...c, key: "system.attributes.ac.override" } : c);
+    // dnd5e 6 reads ac.override; dnd5e 5.x computes flat AC straight from ac.flat.
+    const flatKey = DND5E_V5() ? "system.attributes.ac.flat" : "system.attributes.ac.override";
+    return changes.map(c => c.key === "system.attributes.ac.bonus" ? { ...c, key: flatKey } : c);
   }
 
   // ── Effect application ─────────────────────────────────────────────────────
