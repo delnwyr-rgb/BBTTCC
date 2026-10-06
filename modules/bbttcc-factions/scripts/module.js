@@ -5090,3 +5090,24 @@ Hooks.once("ready", () => {
   }, 1500);
 });
 
+// ─── Faction tier watcher (2026-10-05) ───────────────────────────────────────
+// `bbttcc:faction:tierUp {factionId, factionName, from, to}` — the faction's tier
+// (flags.bbttcc-factions.tier) went UP by any writer: api.factions.tier.set, the
+// GM Advance Tier button, the Director's cadence floor. Fired ONCE on the writing
+// client. A first stamp (tier previously unset) is bookkeeping, not a rise.
+Hooks.on("preUpdateActor", (actor, changed, options) => {
+  try {
+    const next = foundry.utils.getProperty(changed, "flags.bbttcc-factions.tier") ?? changed?.["flags.bbttcc-factions.tier"];
+    if (next === undefined || next === null) return;
+    const prevRaw = actor.getFlag?.("bbttcc-factions", "tier");
+    if (prevRaw === undefined || prevRaw === null || prevRaw === "") return;
+    const from = Number(prevRaw), to = Number(next);
+    if (!Number.isFinite(from) || !Number.isFinite(to) || to <= from) return;
+    options.bbttccTierUp = { from, to };
+  } catch (_e) {}
+});
+Hooks.on("updateActor", (actor, _changed, options, userId) => {
+  const t = options?.bbttccTierUp;
+  if (!t || game.user?.id !== userId) return;
+  try { Hooks.callAll("bbttcc:faction:tierUp", { factionId: actor.id, factionName: actor.name, from: t.from, to: t.to }); } catch (_e) {}
+});

@@ -5136,7 +5136,10 @@ async function _storyRecord(campaign, beat, ctx = {}) {
   try { await _awardCreature(campaign, ctx, beat); } catch (eAc) { warn("[awards] creature award failed", eAc); }
   if (changes.length) {
     try { await _storyProject(campaign, ctx); } catch (e) { warn("story projection failed:", e); }
-    try { Hooks.callAll("bbttcc:story:changed", { campaignId: campaign.id, beatId: beat.id, changes }); } catch (_e) {}
+    try {
+      const labelFor = (q, c) => c != null ? (QUEST_MAP.quests[q]?.chapters?.[c]?.name || c) : (QUEST_MAP.quests[q]?.name || q);
+      Hooks.callAll("bbttcc:story:changed", { campaignId: campaign.id, beatId: beat.id, changes, labelFor });
+    } catch (_e) {}
     try {
       const nm = (q) => QUEST_MAP.quests[q]?.name || q, cn = (q, c) => QUEST_MAP.quests[q]?.chapters?.[c]?.name || c;
       const lines = changes.map(c => c.kind === "quest-started" ? `▷ ${nm(c.quest)} begins` : c.kind === "chapter-started" ? `▷ ${nm(c.quest)} · ${cn(c.quest, c.chapter)} opens` : c.kind === "chapter-ended" ? `✓ ${nm(c.quest)} · ${cn(c.quest, c.chapter)} — ${c.ending}` : c.kind === "quest-closed" ? `🏁 ${nm(c.quest)} — ${c.ending}` : JSON.stringify(c));
@@ -7562,6 +7565,12 @@ async function _drawAdversaryBeat(info = {}) {
     const over   = Number(info.over) || 0;
     const actor  = info.actorUuid  ? (globalThis.fromUuidSync?.(info.actorUuid)  ?? null) : null;
     const target = info.targetUuid ? (globalThis.fromUuidSync?.(info.targetUuid) ?? null) : null;
+
+    // The warning used to streak by in chat. Announce it (bbttcc-fx MOMENTS dims every
+    // screen + flashes THE ADVERSARY…), let the dark land, THEN draw — the beat's own
+    // scene (sceneId) loads under the veil.
+    try { Hooks.callAll("bbttcc:adversary:overshoot", { band, over, actorName: actor?.name ?? null, targetName: target?.name ?? null, kind: info.kind }); } catch (_eH) {}
+    try { await game.bbttcc?.api?.fx?.moments?.lead?.(`adversary_${band}`); } catch (_eL) {}
 
     const res = await injectorFire({
       campaignId,

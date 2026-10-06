@@ -167,6 +167,10 @@
     const [created] = await actor.createEmbeddedDocuments("Item", [baseData]);
     await enforceCap(actor);
     try { Hooks.callAll("bbttcc:courtly:state", { scenario, state: scenario?.getState?.() || null }); } catch (_e) {}
+    // Receipt acquisition (presentation: bbttcc-fx-integration MOMENTS, faction seats only).
+    if (created) {
+      try { Hooks.callAll("bbttcc:receipt:gained", { factionId: actor.id, factionName: actor.name, label: created.name, acquisition, effectKey, itemId: created.id }); } catch (_e) {}
+    }
     return created;
   }
 

@@ -208,10 +208,19 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   const keptSum       = kept.reduce((s, d) => s + d.chainTotal, 0);
   const total         = keptSum + totalBonus;
 
-  // Bank Surge on the actor (explosions from ALL dice, including dropped).
+  // Bank Surge on the actor (explosions from ALL dice, including dropped) —
+  // through the system's one banking path so the tier cap, foe gate and Harmony
+  // harvest apply here exactly like every other bank (was a raw uncapped write
+  // until 2026-10-05). surgeBanked becomes what was ACTUALLY banked, so the chat
+  // card's "+N Surge banked" never overstates a full pool.
   if (surgeBanked > 0) {
-    const curSurge = rawSys?.resources?.surge?.value ?? 0;
-    await actor.update({ "system.resources.surge.value": curSurge + surgeBanked });
+    const bank = game.fourththing?.bankSurge;
+    if (typeof bank === "function") {
+      surgeBanked = await bank(actor, surgeBanked);
+    } else {
+      const curSurge = rawSys?.resources?.surge?.value ?? 0;
+      await actor.update({ "system.resources.surge.value": curSurge + surgeBanked });
+    }
   }
 
   // Flag bonus-action availability so the sheet can show an "Act Again" button.

@@ -19,6 +19,8 @@
     "integrations/class-tier-a-vfx.js"
   ],
   "styles": [
-    "styles/fx.css"
-  ]
+    "styles/fx.css",
+    "styles/moments.css"
+  ],
+  "socket": true
 }

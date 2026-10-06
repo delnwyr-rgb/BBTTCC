@@ -1,0 +1,138 @@
+/* Bad Eden — MOMENTS (core/fx-moments.js). Colour-blind safe (Dave: red-green):
+   tones live on the blue↔amber axis, and every tone also carries an icon. */
+
+#bbttcc-fx-root {
+  --m-surge: #45d4ff;
+  --m-receipt: #e8c84a;
+  --m-adversary: #ffb020;
+  --m-spark: #bfe9ff;
+  --m-good: #4aa8ff;
+  --m-bad: #ffb020;
+  --m-info: #d1d5db;
+}
+.tone-surge     { --m: var(--m-surge); }
+.tone-receipt   { --m: var(--m-receipt); }
+.tone-adversary { --m: var(--m-adversary); }
+.tone-spark     { --m: var(--m-spark); }
+.tone-good      { --m: var(--m-good); }
+.tone-bad       { --m: var(--m-bad); }
+.tone-info      { --m: var(--m-info); }
+
+/* ── whisper: floating text by the token ─────────────────────────────────── */
+.bbttcc-moment-whisper {
+  position: fixed;
+  transform: translate(-50%, 0) scale(.8);
+  opacity: 0;
+  z-index: 100002;
+  pointer-events: none;
+  display: flex; align-items: center; gap: 6px;
+  font: 900 20px/1 "Signika", Arial, sans-serif;
+  letter-spacing: .06em;
+  color: #fff;
+  text-shadow: 0 0 8px var(--m), 0 0 18px var(--m), 0 2px 4px #000;
+  transition: transform 1.4s cubic-bezier(.2,.8,.2,1), opacity .25s ease;
+}
+.bbttcc-moment-whisper .icon { font-size: 22px; filter: drop-shadow(0 0 6px var(--m)); }
+.bbttcc-moment-whisper.show { opacity: 1; transform: translate(-50%, -46px) scale(1); }
+.bbttcc-moment-whisper.unanchored { left: 50%; top: 22%; }
+.bbttcc-moment-whisper.show { animation: bbttcc-moment-whisper-out 1.9s ease forwards; }
+@keyframes bbttcc-moment-whisper-out { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
+
+/* ── beat / thunder stage ────────────────────────────────────────────────── */
+.bbttcc-moment-stage {
+  position: fixed; inset: 0;
+  z-index: 100001;
+  pointer-events: none;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 16vh;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.bbttcc-moment-stage.size-thunder { align-items: center; padding-top: 0; }
+.bbttcc-moment-stage.show { opacity: 1; }
+.bbttcc-moment-stage.out { opacity: 0; transition: opacity .6s ease; }
+
+.bbttcc-moment-stage .veil,
+.bbttcc-moment-stage .edge,
+.bbttcc-moment-stage .hazard { position: absolute; inset: 0; pointer-events: none; }
+
+/* Edge glow — the screen's rim lights in the tone colour. */
+.bbttcc-moment-stage .edge {
+  box-shadow: inset 0 0 90px color-mix(in srgb, var(--m) 55%, transparent),
+              inset 0 0 22px color-mix(in srgb, var(--m) 70%, transparent);
+  animation: bbttcc-moment-edge 1.6s ease-in-out infinite alternate;
+}
+@keyframes bbttcc-moment-edge { from { opacity: .55; } to { opacity: 1; } }
+
+/* Dim — the world goes dark around the warning. */
+.bbttcc-moment-stage.dim .veil {
+  background: radial-gradient(ellipse at center, rgba(8,4,16,.55) 0%, rgba(4,0,10,.88) 70%, rgba(0,0,0,.96) 100%);
+}
+
+/* Thunder: a striped hazard frame that flashes (shape = the second cue). */
+.bbttcc-moment-stage .hazard {
+  --stripe: repeating-linear-gradient(-45deg, var(--m) 0 18px, #120a00 18px 36px);
+  border: 14px solid transparent;
+  border-image: var(--stripe) 14;
+  animation: bbttcc-moment-hazard .5s steps(2, jump-none) 6, bbttcc-moment-hazard-hold 1s ease 3s forwards;
+}
+@keyframes bbttcc-moment-hazard { from { opacity: 1; } to { opacity: .15; } }
+@keyframes bbttcc-moment-hazard-hold { to { opacity: .55; } }
+
+/* ── the card ────────────────────────────────────────────────────────────── */
+.bbttcc-moment-card {
+  position: relative;
+  width: max-content;
+  min-width: 380px; max-width: min(860px, 90vw);
+  padding: 18px 40px 22px;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(10,12,20,.94), rgba(4,4,10,.97));
+  border: 2px solid var(--m);
+  border-radius: 14px;
+  box-shadow: 0 0 34px color-mix(in srgb, var(--m) 45%, transparent), 0 18px 60px rgba(0,0,0,.7);
+  font-family: "Signika", Arial, sans-serif;
+  transform: translateY(-14px) scale(.96);
+  transition: transform .45s cubic-bezier(.2,.9,.25,1.2);
+}
+.bbttcc-moment-stage.show .bbttcc-moment-card { transform: none; }
+.bbttcc-moment-card .icon {
+  font-size: 34px; line-height: 1;
+  filter: drop-shadow(0 0 10px var(--m));
+  margin-bottom: 4px;
+}
+.bbttcc-moment-card .kicker {
+  font-size: 14px; font-weight: 700; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--m); opacity: .9;
+}
+.bbttcc-moment-card .title {
+  font-size: 34px; font-weight: 900; letter-spacing: .06em; line-height: 1.1;
+  margin-top: 4px;
+  text-shadow: 0 0 14px color-mix(in srgb, var(--m) 70%, transparent);
+}
+.bbttcc-moment-card .subtitle { font-size: 16px; margin-top: 8px; opacity: .85; font-style: italic; }
+
+/* Thunder card: bigger, and the title flashes like a klaxon. */
+.size-thunder .bbttcc-moment-card { padding: 26px 56px 30px; border-width: 3px; }
+.size-thunder .bbttcc-moment-card .icon { font-size: 56px; animation: bbttcc-moment-eye 2.4s ease-in-out infinite; }
+.size-thunder .bbttcc-moment-card .title { font-size: 46px; animation: bbttcc-moment-klaxon .5s steps(2, jump-none) 6; }
+@keyframes bbttcc-moment-klaxon { from { color: var(--m); } to { color: #fff; } }
+@keyframes bbttcc-moment-eye { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bbttcc-moment-stage .hazard,
+  .bbttcc-moment-stage .edge,
+  .size-thunder .bbttcc-moment-card .icon,
+  .size-thunder .bbttcc-moment-card .title { animation: none; }
+}
+
+/* Beat cards: a light veil so the card pops without blacking out the table. */
+.bbttcc-moment-stage.size-beat .veil { background: radial-gradient(ellipse at 50% 25%, rgba(0,0,0,.05) 0%, rgba(0,0,0,.38) 75%); }
+.size-beat .bbttcc-moment-card { padding: 22px 48px 26px; }
+.size-beat .bbttcc-moment-card .icon { font-size: 40px; }
+.size-beat .bbttcc-moment-card .title { font-size: 38px; }
+.size-beat .bbttcc-moment-card .subtitle { font-size: 17px; }
+/* Dimmed beat (tier-ups): the table darkens, a soft glory of the tone colour behind the card. */
+.bbttcc-moment-stage.size-beat.dim .veil {
+  background: radial-gradient(ellipse at 50% 28%, color-mix(in srgb, var(--m) 22%, transparent) 0%, rgba(4,4,12,.72) 45%, rgba(0,0,0,.9) 100%);
+}

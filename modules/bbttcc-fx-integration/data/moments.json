@@ -1,0 +1,107 @@
+{
+  "_readme": "Bad Eden MOMENTS — what each on-screen moment looks/sounds like. size: whisper|beat|thunder. tone: surge|receipt|adversary|spark|good|bad|info. audience: all|gm|owners|faction. sound: synth:<surge-tick|surge-full|stamp|adversary|gaze|spark|ascend|heartbeat|fanfare|triumph> or a file path (e.g. a Pixabay .ogg under worlds/.../audio). {placeholders} come from the hook's ctx. holdMs = how long a card stays; leadMs = how long the caller waits before moving the table.",
+
+  "surge_banked": {
+    "size": "whisper", "tone": "surge", "icon": "⚡", "audience": "all",
+    "title": "+{amount} SURGE", "sound": "synth:surge-tick", "soundGain": 0.6, "holdMs": 1500
+  },
+  "surge_full": {
+    "size": "beat", "tone": "surge", "icon": "⚡", "audience": "all",
+    "kicker": "{actor}", "title": "SURGE FULL", "subtitle": "{value} / {cap} banked — spend it",
+    "sound": "synth:surge-full", "shake": "subtle", "holdMs": 2200
+  },
+
+  "receipt_gained": {
+    "size": "beat", "tone": "receipt", "icon": "🧾", "audience": "faction",
+    "kicker": "{faction}", "title": "RECEIPT GAINED", "subtitle": "{label}",
+    "sound": "synth:stamp", "holdMs": 2800
+  },
+  "receipt_stolen": {
+    "size": "beat", "tone": "receipt", "icon": "🧾", "audience": "faction",
+    "kicker": "{faction}", "title": "RECEIPT STOLEN", "subtitle": "{label} — costs Suspicion when played",
+    "sound": "synth:stamp", "holdMs": 3000
+  },
+
+  "adversary_rupture": {
+    "size": "thunder", "tone": "adversary", "icon": "👁", "audience": "all",
+    "kicker": "REALITY RUPTURE", "title": "THE ADVERSARY TAKES NOTICE", "subtitle": "{actor} reached too far",
+    "sound": "synth:adversary", "shake": "heavy", "holdMs": 4200, "leadMs": 2400
+  },
+  "adversary_sundering": {
+    "size": "thunder", "tone": "adversary", "icon": "👁", "audience": "all",
+    "kicker": "REALITY SUNDERED", "title": "THE ADVERSARY DRAWS A BEAT", "subtitle": "{actor} tore the world open",
+    "sound": "synth:adversary", "shake": "heavy", "holdMs": 4600, "leadMs": 2600
+  },
+
+  "gaze_omen": {
+    "size": "thunder", "tone": "adversary", "icon": "👁", "audience": "all",
+    "kicker": "THE GAZE — {tier}", "title": "AN OMEN", "subtitle": "Something on the Other Side is paying attention",
+    "sound": "synth:gaze", "holdMs": 3400
+  },
+  "gaze_hunter": {
+    "size": "thunder", "tone": "adversary", "icon": "👁", "audience": "all",
+    "kicker": "THE GAZE — {tier}", "title": "SOMETHING HAS YOUR SCENT", "subtitle": "It is patient the way roads are patient",
+    "sound": "synth:gaze", "holdMs": 3600
+  },
+  "gaze_corruption": {
+    "size": "thunder", "tone": "adversary", "icon": "👁", "audience": "all",
+    "kicker": "THE GAZE — {tier}", "title": "A SPARK IS CORRUPTED", "subtitle": "{hex}",
+    "sound": "synth:adversary", "shake": "subtle", "holdMs": 3800
+  },
+  "gaze_reprisal": {
+    "size": "thunder", "tone": "adversary", "icon": "👁", "audience": "all",
+    "kicker": "THE GAZE — {tier}", "title": "REPRISAL", "subtitle": "The Gaze settles on {hex}",
+    "sound": "synth:adversary", "shake": "heavy", "holdMs": 3800
+  },
+  "gaze_fracture": {
+    "size": "thunder", "tone": "adversary", "icon": "👁", "audience": "all",
+    "kicker": "THE GAZE — {tier}", "title": "FRACTURE", "subtitle": "{hex} forgets it was ever healed",
+    "sound": "synth:adversary", "shake": "heavy", "holdMs": 4000
+  },
+  "gaze_hunter_springs": {
+    "size": "thunder", "tone": "adversary", "icon": "👁", "audience": "all",
+    "kicker": "THE HUNTER", "title": "THE ROAD WAS NEVER EMPTY", "subtitle": "{actor}",
+    "sound": "synth:adversary", "shake": "heavy", "holdMs": 4000
+  },
+
+  "spark_integrated": {
+    "size": "beat", "tone": "spark", "icon": "✦", "audience": "all",
+    "kicker": "{actor}", "title": "SPARK INTEGRATED", "subtitle": "{spark}",
+    "sound": "synth:spark", "holdMs": 2800
+  },
+  "enlightenment_stepped": {
+    "size": "beat", "tone": "spark", "icon": "☉", "audience": "all",
+    "kicker": "{actor}", "title": "ENLIGHTENMENT RISES", "subtitle": "{level}",
+    "sound": "synth:ascend", "holdMs": 3200
+  },
+  "last_stand": {
+    "size": "thunder", "tone": "bad", "icon": "☠", "audience": "all",
+    "kicker": "INTEGRITY COLLAPSED", "title": "{actor} — LAST STAND", "subtitle": "The body holds the line. For now.",
+    "sound": "synth:heartbeat", "shake": "heavy", "holdMs": 3200
+  },
+  "level_up": {
+    "size": "beat", "tone": "good", "icon": "✦", "audience": "all",
+    "kicker": "{actor}", "title": "INITIATION ADVANCED", "subtitle": "Initiation {level}",
+    "sound": "synth:ascend", "holdMs": 3000
+  },
+  "tier_up": {
+    "size": "beat", "tone": "good", "icon": "✦", "audience": "all", "dim": true,
+    "kicker": "{actor} · Initiation {level}", "title": "TIER {tier}", "subtitle": "Signature manifestations rise with them",
+    "sound": "synth:triumph", "shake": "subtle", "holdMs": 4000
+  },
+  "faction_tier_up": {
+    "size": "beat", "tone": "receipt", "icon": "⛨", "audience": "all", "dim": true,
+    "kicker": "{faction}", "title": "FACTION TIER {to}", "subtitle": "Tier {from} → {to} · the coffers widen",
+    "sound": "synth:triumph", "shake": "subtle", "holdMs": 4200
+  },
+  "quest_closed": {
+    "size": "beat", "tone": "good", "icon": "🏁", "audience": "all",
+    "kicker": "QUEST COMPLETE", "title": "{quest}", "subtitle": "{ending}",
+    "sound": "synth:fanfare", "holdMs": 3200
+  },
+  "chapter_ended": {
+    "size": "beat", "tone": "good", "icon": "✓", "audience": "all",
+    "kicker": "{quest}", "title": "{chapter}", "subtitle": "{ending}",
+    "sound": "synth:fanfare", "soundGain": 0.6, "holdMs": 2400
+  }
+}

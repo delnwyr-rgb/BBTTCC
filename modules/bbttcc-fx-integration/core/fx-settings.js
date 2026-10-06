@@ -46,4 +46,31 @@ export function installFXSettings() {
     },
     default: "normal"
   });
+
+  // MOMENTS (core/fx-moments.js) — on-screen + sound stings for big events.
+  reg("moments_enabled", {
+    name: "Enable Moments",
+    hint: "On-screen moments for big events: Surge banked, Receipts, the Adversary, Sparks, quests.",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  reg("moments_sound", {
+    name: "Moment Sound Stings",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  reg("moments_volume", {
+    name: "Moment Sound Volume",
+    scope: "client",
+    config: true,
+    type: Number,
+    range: { min: 0, max: 1, step: 0.05 },
+    default: 0.7
+  });
 }

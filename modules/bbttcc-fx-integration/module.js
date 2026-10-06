@@ -3,6 +3,9 @@ import { createFXAPI } from "./api/fx-api.js";
 import { installRegistry } from "./core/fx-registry.js";
 import { installRaidConsoleIntegration } from "./integrations/raid-console-integration.js";
 import { installTurnIntegration } from "./integrations/turn-integration.js";
+import { installMoments } from "./core/fx-moments.js";
+import { installMomentBridge } from "./integrations/moment-bridge.js";
+import { engine } from "./core/fx-engine.js";
 
 const TAG = "[bbttcc-fx]";
 const STYLE_ID = "bbttcc-fx-runtime-styles";
@@ -251,6 +254,8 @@ Hooks.once("ready", async () => {
     await installRegistry(api);
     installRaidConsoleIntegration(api);
     installTurnIntegration(api);
+    await installMoments(api, engine);
+    installMomentBridge(api);
 
     console.log(TAG, "FX module ready.");
   } catch (err) {

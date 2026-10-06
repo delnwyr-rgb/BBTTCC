@@ -945,6 +945,37 @@ function _ftChangedValue(changed, path) {
   return nested !== undefined ? nested : changed?.[path];
 }
 
+// ─── Level / Tier watcher (2026-10-05) ───────────────────────────────────────
+// `fourththing.leveledUp` — a Steward's Initiation (system.details.level) went UP,
+// by whatever path (the level-up dialog, the Story Director, a GM sheet edit).
+// Fired ONCE, on the writing client (presentation: bbttcc-fx MOMENTS). Characters
+// only — bestiary reconcile tools rewrite monster levels in bulk.
+Hooks.on("preUpdateActor", (actor, changed, options) => {
+  if (actor?.type !== "character") return;
+  const next = _ftChangedValue(changed, "system.details.level");
+  if (next === undefined) return;
+  const sys  = actor.system?.system ?? actor.system;
+  const from = Number(sys?.details?.level) || 0;
+  const to   = Number(next) || 0;
+  if (to <= from) return;
+  const tierNext = _ftChangedValue(changed, "system.details.tier");
+  options.ftLevelUp = {
+    from, to,
+    tierFrom: Number(sys?.details?.tier) || tierForLevel(from || 1),
+    tierTo:   Number(tierNext) || tierForLevel(to)
+  };
+});
+Hooks.on("updateActor", (actor, changed, options, userId) => {
+  const l = options?.ftLevelUp;
+  if (!l || game.user?.id !== userId) return;
+  try {
+    Hooks.callAll("fourththing.leveledUp", {
+      actorId: actor.id, actorUuid: actor.uuid, actorName: actor.name,
+      from: l.from, to: l.to, tierFrom: l.tierFrom, tier: l.tierTo, tierUp: l.tierTo > l.tierFrom
+    });
+  } catch (_e) {}
+});
+
 // ─── Noise watcher ───────────────────────────────────────────────────────────
 // 2026-08-17 — Blood Debt has had `fourththing.bloodDebtChanged` for months;
 // Noise never got an equivalent, so a Steward could climb from Quiet to
@@ -3998,7 +4029,20 @@ async function _ftBankSurge(actor, n, { fromHarvest = false } = {}) {
   if (next === cur) return 0;
   try { await actor.update({ "system.resources.surge.value": next }); }
   catch (e) { return 0; }   // not writable / no surge resource — nothing banked
+  _ftEmitSurgeBanked(actor, next - cur, next, cap, { fromHarvest });
   return next - cur;
+}
+
+// Hook for presentation (bbttcc-fx-integration MOMENTS: "+N SURGE" by the token,
+// SURGE FULL when the pool brims). Local to the banking client, like every hook.
+function _ftEmitSurgeBanked(actor, amount, value, cap, { fromHarvest = false } = {}) {
+  try {
+    Hooks.callAll("fourththing.surgeBanked", {
+      actorId: actor.id, actorUuid: actor.uuid, actorName: actor.name,
+      tokenId: actor.token?.id ?? actor.getActiveTokens?.(true, false)?.[0]?.id ?? null,
+      amount, value, cap, fromHarvest
+    });
+  } catch (_e) {}
 }
 
 // Aurablade flavor Surge gen (playtest fix 2026-05-27): committing to the aura —
@@ -14117,6 +14161,9 @@ Hooks.once("init", function () {
   }
 
   game.fourththing = foundry.utils.mergeObject(game.fourththing ?? {}, {
+    // The ONE Surge-banking path (cap + foe gate + Harmony harvest + surgeBanked
+    // hook). ft-progression can't import module.js (circular), so it calls this.
+    bankSurge: _ftBankSurge,
     rolls: {},
     constants: FT,
     items:   RfiItems,

@@ -1766,13 +1766,16 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         const norm = (v) => (api.normEffectKeys ? api.normEffectKeys(v) : [String(v || "")].filter(Boolean));
         const docKeys = (d) => { const m = d.flags && d.flags["bbttcc-raid"] && d.flags["bbttcc-raid"].secret; return norm(m ? (m.effectKeys != null ? m.effectKeys : m.effectKey) : ""); };
         const esc = (t) => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-        const lines = [];
+        // Receipts are a faction's private leverage (owner ruling 2026-10-05): the card goes
+        // only to that faction's seats + GMs, one card per faction.
+        const linesBy = new Map();
+        const lineFor = (fid, l) => { if (!linesBy.has(fid)) linesBy.set(fid, []); linesBy.get(fid).push(l); };
         for (const row of rows) {
           const fid = String(row.factionId || defaultFid).replace(/^Actor\./, "");
           const faction = fid ? game.actors.get(fid) : null;
           if (!faction) { console.warn(TAG, "receipts: no faction to grant to", { beatId: beatCtx.beatId, row }); continue; }
           const label = String(row.label).trim();
-          if ((faction.items || []).some(it => it && String(it.name || "").trim() === label && it.flags && it.flags["bbttcc-raid"] && it.flags["bbttcc-raid"].secret)) { lines.push(`· ${label} — already held by ${faction.name}`); continue; }
+          if ((faction.items || []).some(it => it && String(it.name || "").trim() === label && it.flags && it.flags["bbttcc-raid"] && it.flags["bbttcc-raid"].secret)) { lineFor(fid, `· ${label} — already held by ${faction.name}`); continue; }
           const wantKeys = norm(row.effectKey || "rollPlus2");
           const template = docs.find(d => docKeys(d).join("+") === wantKeys.join("+")) || docs.find(d => docKeys(d)[0] === wantKeys[0]) || docs[0] || null;
           if (!template) { console.warn(TAG, "receipts: courtly-secrets pack missing/empty"); break; }
@@ -1785,14 +1788,18 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           });
           let created = null;
           try { created = await api.addSecret(faction.id, source, { acquisition, effectKey: wantKeys.join("+") }); } catch (eAdd) { console.warn(TAG, "receipts: addSecret failed", eAdd); }
-          if (created) { changed = true; notes.push("receipt:" + label); lines.push(`🧾 ${label} → ${faction.name}${acquisition === "stolen" ? " (stolen — costs Suspicion when played)" : ""}`); }
-          else lines.push(`⚠ ${label} — refused (the faction may be at its Receipt cap)`);
+          if (created) { changed = true; notes.push("receipt:" + label); lineFor(fid, `🧾 ${label} → ${faction.name}${acquisition === "stolen" ? " (stolen — costs Suspicion when played)" : ""}`); }
+          else lineFor(fid, `⚠ ${label} — refused (the faction may be at its Receipt cap)`);
         }
-        if (lines.length) {
+        for (const [rfid, lines] of linesBy) {
+          const gmIds = (game.users?.contents || []).filter(u => u.isGM).map(u => u.id);
+          const aud = get(game, "bbttcc.api.fx.moments.audience", null);
+          const whisper = typeof aud === "function" ? (aud("faction", { factionId: rfid }) || gmIds) : gmIds;
           try {
             await ChatMessage.create({
               content: `<div class="bbttcc-receipts"><b>Receipts</b> — <i>${esc(beat?.label || beat?.id || "beat")}</i><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul><div style="opacity:.7;font-size:.9em;margin-top:.3em">Produce a Receipt in a court from the faction's Assets.</div></div>`,
-              speaker: { alias: "Bad Eden" }
+              speaker: { alias: "Bad Eden" },
+              whisper
             });
           } catch (_eMsg) {}
         }
