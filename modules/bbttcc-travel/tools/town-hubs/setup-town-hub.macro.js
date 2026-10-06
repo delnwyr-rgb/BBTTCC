@@ -30,7 +30,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 (async () => {
-  const TOWN_KEY = "chuckle";              // <-- fixit | ag | lyrenn | kt | chuckle | softlanding | stillwater | crownmall | maneuvervault | gloomgill | portkudzu  (keys of towns.json)
+  const TOWN_KEY = "chuckle";              // <-- fixit | ag | lyrenn | kt | chuckle | softlanding | stillwater | crownmall | maneuvervault | gloomgill | portkudzu | wtchapel | wtflats | wtmire | wtreach | wtlegansus | agvacancy  (keys of towns.json)
   const DRY_RUN = true;                   // <-- set false to apply
   const CONFIG_URL = "modules/bbttcc-travel/tools/town-hubs/towns.json";
   const SCOPE = "bbttcc-travel", NS = "bbttcc-campaign", TERR = "bbttcc-territory";
@@ -239,6 +239,7 @@
     await placeDoor(d.hub, d.key, d.label, d.color || "#ffffff", d.x, d.y, d.w, d.h, { key: d.key, label: d.label, targetSceneUuid: d.sc.exterior.uuid, sceneUuids: d.allScenes.map(s => s.uuid), beatId: d.beatId || null }, "e", { floor: d.floor ?? null, gate: d.gate || null, walkIn: d.walkIn ?? WALK_IN });
     const hubScene = HUBS[d.hub].scene;
     for (const sc of d.allScenes) {
+      if (sc.id === hubScene.id) continue;   // a door that opens onto its own hub (a staircase, a console) never relinks the hub to itself (2026-10-04)
       const rl = sc.flags?.[SCOPE]?.returnLink;
       if (!rl || rl.targetSceneUuid !== hubScene.uuid) { changes.push(`"${sc.name}": returnLink → ${HUBS[d.hub].label}${rl ? ` (was "${rl.label}")` : ""}`); if (!DRY_RUN) await sc.update({ [`flags.${SCOPE}.returnLink`]: { targetSceneUuid: hubScene.uuid, label: TOWN } }); }
     }

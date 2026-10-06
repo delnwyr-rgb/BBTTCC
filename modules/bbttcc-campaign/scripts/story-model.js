@@ -219,7 +219,7 @@ export const QUEST_MAP = {
    "chapters": {}
   },
   "sarmoung_hum": {
-   "name": "The Sarmoung Hum",
+   "name": "Two Kinds of Tent",
    "act": 0,
    "keystone": false,
    "hex": "",

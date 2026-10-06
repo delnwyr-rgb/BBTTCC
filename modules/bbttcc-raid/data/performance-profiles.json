@@ -1,0 +1,31 @@
+{
+  "_readme": "Performance contests (2026-10-04) — one social duel (the Courtly engine), many styles. Each profile: label, fuel [full pool, half pool] for starting Influence, the four moves (persuade/inspire/expose/intimidate keep their mechanics; label + OP pool are the style's), crowd (who is judging; the Suspicion track), crowdTrack (its chat name), foul (the move that ends it ugly) + foulText. Endings route via api.raid.performance: triumph (the party wins clean), grace (loss, stalemate, mutual ruin), ugly (anyone fouls). Add a style here; no code needed.",
+  "dance": {
+    "label": "The Floor",
+    "fuel": ["culture", "softpower"],
+    "crowd": "the floor",
+    "crowdTrack": "Crowd",
+    "actions": {
+      "persuade":   { "label": "Find the Pocket", "pool": "culture",   "hint": "Lock into the beat and do not leave it." },
+      "inspire":    { "label": "Showstopper",     "pool": "softpower", "hint": "A figure the crowd will talk about for a week." },
+      "expose":     { "label": "Call-Out",        "pool": "culture",   "hint": "Answer their figure with a better one, at them. The crowd gets loud." },
+      "intimidate": { "label": "Draw Steel",      "pool": "violence",  "hint": "FOUL. Nobody draws steel on the floor. Ends it ugly." }
+    },
+    "foul": "intimidate",
+    "foulText": "drew steel on the floor. The music stops. Everyone will remember who escalated."
+  },
+  "skate": {
+    "label": "The Skate-Off",
+    "fuel": ["culture", "softpower"],
+    "crowd": "the rail",
+    "crowdTrack": "Rail",
+    "actions": {
+      "persuade":   { "label": "Land the Line",       "pool": "culture",   "hint": "Clean, committed, the way the run was drawn." },
+      "inspire":    { "label": "Go Big",              "pool": "softpower", "hint": "Something the rail will film. Eating pavement interestingly counts." },
+      "expose":     { "label": "Call Their Bail",     "pool": "culture",   "hint": "Point out the sketchy landing, loudly. The rail takes sides." },
+      "intimidate": { "label": "Bust Them (Mall Cop)", "pool": "violence", "hint": "FOUL. Shut the session down like a mall cop. Ends it ugly, forever." }
+    },
+    "foul": "intimidate",
+    "foulText": "went full mall cop and shut the session down. The wheels stop. The rail goes quiet in the worst way."
+  }
+}

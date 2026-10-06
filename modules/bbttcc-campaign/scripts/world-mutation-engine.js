@@ -1712,6 +1712,50 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (eTk) { console.warn(TAG, "tikkun atonement apply failed", eTk); }
 
+    // 2l) PERFORMANCE CONTESTS (2026-10-04): worldEffects.performance = { profile, challengerName|challengerId, defenderName|defenderId
+    // (default "@coalition" = the party), routes: { triumph, grace, ugly } } — the beat opens a performance contest (bbttcc-raid
+    // api.raid.performance, the Courtly engine in a style's clothes) on the GM seat; its ending plays the matching route beat.
+    // Deferred a tick so the beat that asked finishes resolving first.
+    try {
+      const pf = we.performance && typeof we.performance === "object" ? we.performance : null;
+      const papi = get(game, "bbttcc.api.raid.performance", null);
+      if (pf && game.user && game.user.isGM) {
+        if (!papi || typeof papi.open !== "function") console.warn(TAG, "performance: bbttcc-raid performance API not loaded", { beatId: beatCtx.beatId });
+        else { setTimeout(() => { try { papi.open({ profile: pf.profile, challengerId: pf.challengerId, challengerName: pf.challengerName, defenderId: pf.defenderId || (pf.defenderName ? null : "@coalition"), defenderName: pf.defenderName, routes: pf.routes || {}, partySide: pf.partySide, label: pf.label }); } catch (eO) { console.warn(TAG, "performance open failed", eO); } }, 0); notes.push("performance:" + pf.profile); }
+      }
+    } catch (ePf) { console.warn(TAG, "performance apply failed", ePf); }
+
+    // 2m) RIG TRANSFER (2026-10-04, Dave: the leased hovercraft can be bought or signed over): worldEffects.rigTransfer =
+    // { rigName|rigId, to?: "@coalition" } — the rig becomes the coalition's: its owner flag moves to the campaign's lead faction,
+    // every other coalition faction gets a STANDING charter on it from the lead (so all of them travel with it), and the coalition's
+    // charters from the previous owner (the 3-turn starter lease) are revoked. Idempotent: an already-transferred rig is a no-op.
+    try {
+      const rt = we.rigTransfer && typeof we.rigTransfer === "object" ? we.rigTransfer : null;
+      if (rt) {
+        const nn = (x) => String(x || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase();
+        const rig = rt.rigId ? game.actors.get(String(rt.rigId).replace(/^Actor\./, "")) : game.actors.find(a => nn(a.name) === nn(rt.rigName) && (a.type === "rig" || a.flags?.fourththing?.kind === "rig"));
+        const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
+        const camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null;
+        const coal = [...new Set([].concat((camp && camp.factionId) ? [camp.factionId] : [], (camp && camp.factionIds) || []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean))];
+        const lead = coal[0];
+        if (!rig || !lead) console.warn(TAG, "rigTransfer: rig or coalition not resolved", { rig: rt.rigName || rt.rigId, lead, beatId: beatCtx.beatId });
+        else {
+          const prev = String(rig.flags?.["bbttcc-factions"]?.factionId || "");
+          const tapi = get(game, "bbttcc.api.travel.charters", null); const dom = get(game, "bbttcc.api.travel.domains", null);
+          const doms = (dom && typeof dom.rigDomains === "function") ? dom.rigDomains(rig).filter(d => d !== "land") : [];
+          if (prev !== lead) { await rig.update({ "flags.bbttcc-factions.factionId": lead }); changed = true; notes.push("rigTransfer:" + rig.name); }
+          if (tapi && typeof tapi.grant === "function") {
+            for (const fid of coal) {
+              if (prev && prev !== lead && typeof tapi.revoke === "function") { try { await tapi.revoke(fid, { fromFactionId: prev }); } catch (eRv) { console.warn(TAG, "rigTransfer: revoke failed", eRv); } }
+              if (fid === lead) continue;
+              const has = (typeof tapi.list === "function" ? (tapi.list(fid) || []) : []).some(c => String(c.fromFactionId) === lead && nn(c.rigName) === nn(rig.name) && c.until == null);
+              if (!has) { try { await tapi.grant(fid, { fromFactionId: lead, rigName: rig.name, domains: doms.length ? doms : null, turns: null, until: null, source: "coalition", note: "the coalition's own" }); } catch (eG) { console.warn(TAG, "rigTransfer: grant failed", eG); } }
+            }
+          }
+        }
+      }
+    } catch (eRT) { console.warn(TAG, "rigTransfer apply failed", eRT); }
+
     // 2g) RECIPE GRANTS (MATERIAL ECONOMY, 2026-09-20 — owner: "dole out the recipes"): worldEffects.recipeGrants =
     // [{ name | slug, to?: "coalition" (default) | "faction" | "common", factionId? }] — the beat teaches the recipe
     // (system RfiCrafting.recipes.learn) to every coalition faction's book, one faction's, or the common book.

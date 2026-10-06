@@ -17,6 +17,14 @@
  *  FLOODED TOWNS — "The route used to be a military railway."
  *   • The Dispatcher's persona (actor flag bbttcc-mal-voice.persona): the route it is trying to finish is a military railway.
  *
+ *  THE HUM RENAME — "Let's go with Two Kinds of Tent."
+ *   • quest registry (bbttcc-campaign.quests) quest_sarmoung_hum: name + player-facing description + tags carry no "Sarmoung";
+ *     the cached questName in every campaign faction's Quest Log buckets; campaign.story.quests.sarmoung_hum.name.
+ *  THE CULT CAMP — "the camp needs to be a scene on the Khezek Tor hex itself"
+ *   • wt_cult_camp.hexName = "Khezek-Tor" (the wagon's route is a chain, so the location guard still lets it play from Port Kudzu).
+ *
+ * Safe to re-run if you already applied the first version: everything is idempotent.
+ *
  * HOW TO RUN: 1) hard-reload (F5 — loads the engine's new crossing effect); 2) run as-is → console (F12) report;
  *   3) set DRY_RUN = false, run again (backup downloads first); 4) F5.
  */
@@ -76,10 +84,33 @@
     if (hit) { changes++; say("✎ actor The Dispatcher: the route is a military railway"); actorEdits.push(() => disp.setFlag("bbttcc-mal-voice", "persona", per)); } else say("· ok actor The Dispatcher (already)");
   }
 
+  // ── THE CULT CAMP is on the Khezek Tor hex ──
+  edit("wt_cult_camp", b => { if (b.hexName !== "Khezek-Tor") b.hexName = "Khezek-Tor"; }, "hexName → Khezek-Tor (the camp is near the mountain)");
+
+  // ── THE HUM RENAME: "Two Kinds of Tent" ──
+  const HUM_Q = "quest_sarmoung_hum", HUM_NAME = "Two Kinds of Tent";
+  const HUM_DESC = "Two kinds of tent on the roads now, and Bit and Coll noticed first. Its rungs are met on the way, not sought.";
+  const sq = camp.story?.quests?.sarmoung_hum;
+  if (sq && sq.name !== HUM_NAME) { sq.name = HUM_NAME; changes++; say(`✎ campaign.story.quests.sarmoung_hum.name → "${HUM_NAME}"`); } else if (sq) say("· ok story quest name (already)");
+  let reg = game.settings.get(NS, "quests"); const regStr = typeof reg === "string"; if (regStr) { try { reg = JSON.parse(reg); } catch (_e) { reg = null; } }
+  reg = reg ? foundry.utils.deepClone(reg) : null; let regChanged = false;
+  if (reg?.[HUM_Q]) {
+    const r = reg[HUM_Q];
+    if (r.name !== HUM_NAME || r.description !== HUM_DESC || (r.tags || []).includes("sarmoung")) { r.name = HUM_NAME; r.description = HUM_DESC; r.tags = ["road", "tent"]; regChanged = true; changes++; say(`✎ registry ${HUM_Q}: "${HUM_NAME}", description + tags without the word`); } else say("· ok registry name (already)");
+  } else say(`✗ registry has no ${HUM_Q}`);
+  const fids = [...new Set([].concat(camp.factionIds || [], camp.factionId ? [camp.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean))];
+  for (const fid of fids) {
+    const F = game.actors.get(fid); if (!F) continue;
+    const t = foundry.utils.deepClone(F.getFlag("bbttcc-factions", "quests") || {}); let hit = false;
+    for (const bk of ["active", "completed", "archived"]) { const row = t?.[bk]?.[HUM_Q]; if (row && row.questName !== HUM_NAME) { row.questName = HUM_NAME; hit = true; } }
+    if (hit) { changes++; say(`✎ ${F.name}'s Quest Log: "${HUM_NAME}"`); actorEdits.push(() => F.setFlag("bbttcc-factions", "quests", t)); }
+  }
+  if (regChanged) actorEdits.push(() => game.settings.set(NS, "quests", regStr ? JSON.stringify(reg) : reg));
+
   console.group(`[patch-owner-canon-2026-10-02] ${DRY_RUN ? "DRY RUN — " : ""}${changes} change(s)`); report.forEach(r => console.log(" •", r)); console.groupEnd();
   if (DRY_RUN) return ui.notifications.info(`Owner canon 10-02 DRY RUN: ${changes} change(s) — console (F12). Set DRY_RUN=false to apply.`);
   if (!changes) return ui.notifications.info("Owner canon 10-02: nothing to change.");
-  (foundry.utils.saveDataToFile)(JSON.stringify(wasStr ? JSON.parse(raw) : raw), "application/json", `backup-campaigns-before-owner-canon-2026-10-02-${Date.now()}.json`);
+  (foundry.utils.saveDataToFile ?? saveDataToFile)(JSON.stringify(wasStr ? JSON.parse(raw) : raw), "application/json", `backup-campaigns-before-owner-canon-2026-10-02-${Date.now()}.json`);
   await game.settings.set(NS, "campaigns", wasStr ? JSON.stringify(camps) : camps);
   for (const fn of actorEdits) await fn();
   ui.notifications.info(`Owner canon 10-02 applied: ${changes} change(s). F5.`);

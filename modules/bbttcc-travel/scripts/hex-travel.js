@@ -298,6 +298,7 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
     try {
       if (ctx?.apply === false || !game.user?.isGM) return;
       const t = _worldTurn();
+      const story = [];   // 2026-10-04: the starter lease tells the story when it is about to end and when it has
       for (const A of (game.actors?.contents ?? [])) {
         if (!isFactionActor(A)) continue;
         const rows = charterList(A.id, { activeOnly: false }); if (!rows.length) continue;
@@ -305,12 +306,30 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
         for (const c of rows) {
           if (c.until == null) continue;
           const carrier = game.actors.get(String(c.fromFactionId))?.name || "the carrier"; const boat = c.rigName || `${carrier}'s boats`;
+          if (Number(c.until) === t && c.noted !== t) { story.push({ kind: "lastTurn", factionId: A.id, charter: { ...c } }); }
+          else if (Number(c.until) === t - 1 && c.noted !== t) { story.push({ kind: "ended", factionId: A.id, charter: { ...c } }); }
           if (Number(c.until) === t && c.noted !== t) { lines.push(`Charter — ${boat} (${carrier}): this is the LAST turn of the rental. Renew it (Charter Passage), open a trade route with ${carrier}, or build your own.`); c.noted = t; changed = true; }
           else if (Number(c.until) === t - 1 && c.noted !== t) { lines.push(`Charter ENDED — ${boat} went home to ${carrier}. Rivers are walls again until you charter, bridge, or buy.`); c.noted = t; changed = true; }
         }
         if (!changed) continue;
         await A.setFlag(CHARTER_FLAG_NS, "charters", rows);
         try { const logs = Array.isArray(A.getFlag(CHARTER_FLAG_NS, "warLogs")) ? foundry.utils.duplicate(A.getFlag(CHARTER_FLAG_NS, "warLogs")) : []; for (const summary of lines) { const ts = Date.now(); logs.push({ ts, date: new Date(ts).toLocaleString(), type: "travel", summary }); } await A.setFlag(CHARTER_FLAG_NS, "warLogs", logs); } catch (_e) {}
+      }
+      // STARTER LEASE STORY (Dave, 2026-10-04: the Jackalopes' hovercraft mobile home, leased for 3 turns; keep it by buying it,
+      // earning it from Young Gearbox, or renewing — or lapse to rooms at the Vacancy). Hooks for anyone; the campaign beats play once
+      // (their own gates hide them once the coalition owns the craft), and only if nobody still holds an active charter on that rig.
+      for (const ev of story) { try { Hooks.callAll(`bbttcc:charter:${ev.kind}`, ev); } catch (_eH) {} }
+      const STARTER_BEATS = { lastTurn: "reliable_lease_last_turn", ended: "reliable_lease_lapsed" };
+      const camp = game.bbttcc?.api?.campaign; const cid = camp?.getActiveCampaignId?.();
+      const fired = new Set();
+      for (const ev of story) {
+        if (String(ev.charter?.source || "") !== "starter" || fired.has(ev.kind) || !camp?.runBeat || !cid) continue;
+        const rig = String(ev.charter.rigName || "").toLowerCase();
+        const heldPast = (turn) => (game.actors?.contents ?? []).some(F => isFactionActor(F) && charterList(F.id, { activeOnly: false }).some(c => String(c.rigName || "").toLowerCase() === rig && String(c.source || "") !== "starter" && (c.until == null || Number(c.until) >= turn)));
+        if (ev.kind === "lastTurn" && heldPast(t + 1)) continue;   // renewed past this turn already
+        if (ev.kind === "ended" && heldPast(t)) continue;          // renewed, or the coalition owns it (standing charter)
+        fired.add(ev.kind);
+        try { await camp.runBeat(cid, STARTER_BEATS[ev.kind], { source: "charter", trigger: `charter:${ev.kind}` }); } catch (eB) { console.warn(TAG, "starter lease beat failed", eB); }
       }
     } catch (e) { console.warn(TAG, "charter rental clock failed", e); }
   });

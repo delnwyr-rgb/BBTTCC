@@ -320,6 +320,25 @@
     return scars.length - kept.length;
   }
 
+  // ── PERFORMANCE CONTESTS (2026-10-04, Dave: "genericize it for any type of performance style battle") ──────────────
+  // Profiles live in modules/bbttcc-raid/data/performance-profiles.json (loaded at ready; built-ins below as the fallback).
+  const PERF_BUILTIN = {
+    dance: { label: "The Floor", fuel: ["culture", "softpower"], crowd: "the floor", crowdTrack: "Crowd", foul: "intimidate", foulText: "drew steel on the floor. The music stops.",
+      actions: { persuade: { label: "Find the Pocket", pool: "culture" }, inspire: { label: "Showstopper", pool: "softpower" }, expose: { label: "Call-Out", pool: "culture" }, intimidate: { label: "Draw Steel", pool: "violence" } } },
+    skate: { label: "The Skate-Off", fuel: ["culture", "softpower"], crowd: "the rail", crowdTrack: "Rail", foul: "intimidate", foulText: "went full mall cop and shut the session down.",
+      actions: { persuade: { label: "Land the Line", pool: "culture" }, inspire: { label: "Go Big", pool: "softpower" }, expose: { label: "Call Their Bail", pool: "culture" }, intimidate: { label: "Bust Them (Mall Cop)", pool: "violence" } } }
+  };
+  let PERF_PROFILES = { ...PERF_BUILTIN };
+  async function _loadPerfProfiles() {
+    try {
+      const res = await fetch(`modules/bbttcc-raid/data/performance-profiles.json?t=${Date.now()}`);
+      if (!res.ok) return;
+      const j = await res.json();
+      for (const [k, v] of Object.entries(j || {})) if (!k.startsWith("_") && v && typeof v === "object") PERF_PROFILES[k] = v;
+    } catch (e) { console.warn(TAG, "performance profiles: using built-ins", e); }
+  }
+  function _perfProfile(key) { const k = String(key || "").trim(); const p = PERF_PROFILES[k]; return p ? { key: k, ...p } : null; }
+
   whenRaidReady((raidApi) => {
     raidApi.courtly = async function createCourtlyScenario({
       attackerId,
@@ -328,7 +347,8 @@
       atkInitSoft = 0,
       defInitDip = 0,
       defInitSoft = 0,
-      label = "Courtly Intrigue"
+      label = "Courtly Intrigue",
+      performance = null              // PERFORMANCE MODE (2026-10-04): a profile key or object — see raid-performance below
     } = {}) {
       const A = game.actors.get(String(attackerId||"").replace(/^Actor\./,""));
       const D = game.actors.get(String(defenderId||"").replace(/^Actor\./,""));
@@ -337,15 +357,20 @@
       // Spend initial commitment OPs & compute starting Influence HP
       // Spends are OP; banks store marks. Clamp to what each side can pay,
       // debit at marks scale (×10).
-      const atkInitDipM = Math.min(_m10(atkInitDip), bankOpOf(A, "diplomacy"));   // marks
-      const atkInitSoftM = Math.min(_m10(atkInitSoft), bankOpOf(A, "softpower"));   // marks
-      const defInitDipM = Math.min(_m10(defInitDip), bankOpOf(D, "diplomacy"));   // marks
-      const defInitSoftM = Math.min(_m10(defInitSoft), bankOpOf(D, "softpower"));   // marks
+      // PERFORMANCE MODE: the profile's two fuel pools stand in for Diplomacy (full) and Soft Power (half)
+      const PERF = performance ? (typeof performance === "object" ? performance : _perfProfile(performance)) : null;
+      if (performance && !PERF) throw new Error(`${TAG} unknown performance profile ${performance}`);
+      const FUEL1 = PERF?.fuel?.[0] || "diplomacy", FUEL2 = PERF?.fuel?.[1] || "softpower";
+      if (PERF && !label || (PERF && label === "Courtly Intrigue")) label = PERF.label || label;
+      const atkInitDipM = Math.min(_m10(atkInitDip), bankOpOf(A, FUEL1));   // marks
+      const atkInitSoftM = Math.min(_m10(atkInitSoft), bankOpOf(A, FUEL2));   // marks
+      const defInitDipM = Math.min(_m10(defInitDip), bankOpOf(D, FUEL1));   // marks
+      const defInitSoftM = Math.min(_m10(defInitSoft), bankOpOf(D, FUEL2));   // marks
 
-      if (atkInitDipM) await adjustOpBank(A, "diplomacy", -atkInitDipM, label);
-      if (atkInitSoftM) await adjustOpBank(A, "softpower", -atkInitSoftM, label);
-      if (defInitDipM) await adjustOpBank(D, "diplomacy", -defInitDipM, label);
-      if (defInitSoftM) await adjustOpBank(D, "softpower", -defInitSoftM, label);
+      if (atkInitDipM) await adjustOpBank(A, FUEL1, -atkInitDipM, label);
+      if (atkInitSoftM) await adjustOpBank(A, FUEL2, -atkInitSoftM, label);
+      if (defInitDipM) await adjustOpBank(D, FUEL1, -defInitDipM, label);
+      if (defInitSoftM) await adjustOpBank(D, FUEL2, -defInitSoftM, label);
       // influence math counts per 10 marks
       atkInitDip = atkInitDipM / 10; atkInitSoft = atkInitSoftM / 10; defInitDip = defInitDipM / 10; defInitSoft = defInitSoftM / 10;
 
@@ -403,7 +428,9 @@
         // Schema: { side, type: "bonus"|"forceReroll"|"actionBonus", value?, source,
         //          actionFilter? (D), fireOnRound? (E — gate to specific round) }
         pendingMods: [],
-        history: []
+        history: [],
+        performance: PERF ? { key: PERF.key, label: PERF.label, crowd: PERF.crowd || "the Crowd", foul: PERF.foul || null, actions: Object.fromEntries(Object.entries(PERF.actions || {}).map(([k, v]) => [k, v?.label || k])) } : null,
+        foulBy: null
       };
 
       // Phase E — Consume pending Scandal Scars on both factions. Each scar
@@ -492,8 +519,26 @@
 
         const atkAct = String(atkAction||"").toLowerCase();
         const defAct = String(defAction||"").toLowerCase();
-        const atkKey = actionToOpKey(atkAct);
-        const defKey = actionToOpKey(defAct);
+        const _opKey = (act) => PERF ? (PERF.actions?.[act]?.pool || actionToOpKey(act)) : actionToOpKey(act);
+        const _nm = (act) => (PERF && PERF.actions?.[act]?.label) || act;
+        const atkKey = _opKey(atkAct);
+        const defKey = _opKey(defAct);
+
+        // PERFORMANCE MODE — the foul ends it. Whoever plays the profile's foul takes the floor by force: the contest is over,
+        // the outcome is "foul" (routes to the story's won-ugly ending), and no roll is made. Both foul = mutual ruin.
+        if (PERF?.foul && (atkAct === PERF.foul || defAct === PERF.foul)) {
+          const aF = atkAct === PERF.foul, dF = defAct === PERF.foul;
+          state.foulBy = aF && dF ? "both" : (aF ? "A" : "D");
+          state.outcome = aF && dF ? "mutualRuin" : (aF ? "attackerWin" : "defenderWin");
+          state.outcomeKind = "foul";
+          state.history.push({ round: state.round, atkAction: atkAct, defAction: defAct, foul: state.foulBy, note });
+          const who = state.foulBy === "both" ? "Both sides" : foundry.utils.escapeHTML((aF ? A : D).name);
+          await sendChat([`<b>${who}</b> ${foundry.utils.escapeHTML(PERF.foulText || "broke the one rule.")}`, `The contest is over. Nobody calls this a win, whatever the scoreboard says.`], { title: `${label}: Round ${state.round} — Foul` });
+          _emitCourtlyVfx("outcome", { outcome: state.outcome, outcomeKind: "foul", winnerSide: outcomeWinner(state), attackerName: A.name, defenderName: D.name });
+          try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+          try { Hooks.callAll("bbttcc:performance:resolved", { profile: PERF.key, state: getState() }); } catch (_e) {}
+          return { ...state };
+        }
 
         let atkSpendM = Math.min(_m10(atkSpend), atkKey ? bankOpOf(A, atkKey) : 0);   // marks
         let defSpendM = Math.min(_m10(defSpend), defKey ? bankOpOf(D, defKey) : 0);
@@ -832,7 +877,7 @@
         const _cbLine = (cb) => cb !== 0 ? ` <small style="opacity:.7;">(court ${cb > 0 ? "+" : ""}${cb})</small>` : "";
         const lines = [
           `Round ${state.round}: <b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,
-          `Actions: Attacker <i>${atkAct}</i> (spend ${atkSpendInt})${_opLine("atk", atkKey || "", atkOpBonusInt)}${_cbLine(courtBonusA)} vs Defender <i>${defAct}</i> (spend ${defSpendInt})${_opLine("def", defKey || "", defOpBonusInt)}${_cbLine(courtBonusD)}`,
+          `Actions: Attacker <i>${foundry.utils.escapeHTML(_nm(atkAct))}</i> (spend ${atkSpendInt})${_opLine("atk", atkKey || "", atkOpBonusInt)}${_cbLine(courtBonusA)} vs Defender <i>${foundry.utils.escapeHTML(_nm(defAct))}</i> (spend ${defSpendInt})${_opLine("def", defKey || "", defOpBonusInt)}${_cbLine(courtBonusD)}`,
           `Rolls: Attacker ${atkTotal} vs Defender ${defTotal} (margin ${margin >= 0 ? "+"+margin : margin})`,
           `Result: ${result.toUpperCase()} — Influence ${beforeA}/${beforeD} → ${state.influenceA}/${state.influenceD}`
         ];
@@ -842,7 +887,7 @@
           lines.splice(3, 0, `Mods: <small style="opacity:.8;">${consumedMods.map(m => foundry.utils.escapeHTML(m)).join("; ")}</small>`);
         }
         if (suspDelta !== 0 || uneasy) {
-          lines.push(`Suspicion ${suspBefore} → ${state.suspicion}${uneasy ? " <small style=\"opacity:.7;\">(court uneasy)</small>" : ""}${susReasons.length ? ` <small style=\"opacity:.7;\">(${susReasons.join("; ")})</small>` : ""}`);
+          lines.push(`${PERF ? foundry.utils.escapeHTML(PERF.crowdTrack || "Crowd") : "Suspicion"} ${suspBefore} → ${state.suspicion}${uneasy ? ` <small style="opacity:.7;">(${PERF ? "the crowd is restless" : "court uneasy"})</small>` : ""}${susReasons.length ? ` <small style=\"opacity:.7;\">(${susReasons.join("; ")})</small>` : ""}`);
         }
         if (extraNotes.length) lines.push(...extraNotes.map(n => foundry.utils.escapeHTML(n)));
         if (note) lines.push(foundry.utils.escapeHTML(note));
@@ -858,12 +903,16 @@
         // when state.outcome !== "ongoing" at entry, so any non-ongoing
         // outcome we see here IS this round's transition. Fires once.
         if (state.outcome !== "ongoing") {
+          // PERFORMANCE MODE: a contest is friendly — no relation shifts, no scandal scars or court marks; the story's own
+          // ending beats carry the consequences (raid-performance routes them).
+          if (!PERF) {
           try { await applyRelDeltas(A, D, state.outcomeKind, outcomeWinner(state), label); }
           catch (e) { console.warn(TAG, "applyRelDeltas failed", e); }
           // Phase E — apply per-outcome marks (scars, favor gifts, secrets,
           // suspicion reset, courtier loss). Fires once.
           try { await _applyOutcomeMarks(); }
           catch (e) { console.warn(TAG, "_applyOutcomeMarks failed", e); }
+          } else { try { Hooks.callAll("bbttcc:performance:resolved", { profile: PERF.key, state: getState() }); } catch (_e) {} }
           // Phase F — broadcast outcome VFX to all clients.
           _emitCourtlyVfx("outcome", {
             outcome: state.outcome,
@@ -1421,5 +1470,84 @@
     };
 
     console.log(TAG, "Courtly Intrigue engine attached to raid API.");
+
+    // ── api.raid.performance — run a performance contest and route its ending into the story ──────────────────────────
+    // open({ profile, challengerId|challengerName, defenderId|defenderName ("@coalition" = the party), routes:{triumph,grace,ugly},
+    //        partySide?: "A"|"D" (default: whichever side is a coalition faction), label? }) — GM dialogs: commitments, then one
+    // exchange per round until it ends (Cancel pauses; open() again resumes the same contest). On the end the matching route beat
+    // runs (force: the contest is the authority, like a choice route).
+    const _esc = (x) => foundry.utils.escapeHTML(String(x ?? ""));
+    const _coalition = () => { try { const capi = game.bbttcc?.api?.campaign; const cid = capi?.getActiveCampaignId?.(); const c = cid && capi.getCampaign ? capi.getCampaign(cid) : null; return [...new Set([].concat(c?.factionIds || [], c?.factionId ? [c.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean))]; } catch (_e) { return []; } };
+    const _actorOf = (id, name) => {
+      if (id === "@coalition" || name === "@coalition") { const f = _coalition()[0]; return f ? game.actors.get(f) : null; }
+      if (id) return game.actors.get(String(id).replace(/^Actor\./, "")) || null;
+      const nn = String(name || "").replace(/[\s ]+/g, " ").trim().toLowerCase();
+      return nn ? (game.actors.find(a => a.flags?.["bbttcc-factions"]?.isFaction && String(a.name).replace(/[\s ]+/g, " ").trim().toLowerCase() === nn) || game.actors.find(a => String(a.name).trim().toLowerCase() === nn) || null) : null;
+    };
+    const _dlg = (title, content, okLabel = "OK", extra = {}) => new Promise((resolve) => {
+      const buttons = { ok: { label: okLabel, callback: (html) => resolve({ ok: true, form: html[0].querySelector("form") }) }, ...Object.fromEntries(Object.entries(extra).map(([k, l]) => [k, { label: l, callback: () => resolve({ [k]: true }) }])), cancel: { label: "Pause", callback: () => resolve(null) } };
+      new Dialog({ title, content, buttons, default: "ok", close: () => resolve(null) }, { width: 560 }).render(true);
+    });
+    const perf = { _active: null };
+    perf.profiles = () => Object.fromEntries(Object.entries(PERF_PROFILES).map(([k, v]) => [k, { key: k, ...v }]));
+    perf.getProfile = _perfProfile;
+    perf.reload = _loadPerfProfiles;
+    perf.routeOf = (st, partySide) => {
+      if (!st || st.outcome === "ongoing") return null;
+      if (st.outcomeKind === "foul") return "ugly";
+      const winner = st.outcome === "attackerWin" ? "A" : st.outcome === "defenderWin" ? "D" : null;
+      return winner && winner === partySide ? "triumph" : "grace";
+    };
+    async function _route(run) {
+      const st = run.scenario.getState(); const r = perf.routeOf(st, run.partySide); const beatId = r ? run.routes?.[r] : null;
+      perf._active = null;
+      const P = run.profile; const party = run.partySide === "A" ? run.A : run.D;
+      const names = { triumph: "won it clean", grace: "lost it with grace (or held it to a draw)", ugly: "ended it ugly" };
+      await ChatMessage.create({ speaker: { alias: P.label }, content: `<div style="border-left:3px solid #ffd54f;padding:.3em .6em;"><b>${_esc(P.label)}</b> — ${_esc(party?.name || "The party")} ${_esc(names[r] || "finished")}.${beatId ? "" : " <i>(no ending beat set for this result)</i>"}</div>` });
+      try { Hooks.callAll("bbttcc:performance:routed", { profile: P.key, route: r, beatId, state: st }); } catch (_e) {}
+      if (!beatId) return { ok: true, route: r };
+      const capi = game.bbttcc?.api?.campaign; const cid = capi?.getActiveCampaignId?.();
+      try { const res = await capi.runBeat(cid, beatId, { source: "performance", force: true, performance: P.key }); return { ok: !(res && res.ok === false), route: r, beatId }; }
+      catch (e) { console.warn(TAG, "performance route failed", e); ui.notifications?.warn?.(`${P.label}: play "${beatId}" by hand (route failed).`); return { ok: false, route: r, beatId }; }
+    }
+    perf.open = async function open(opts = {}) {
+      if (!game.user?.isGM) return ui.notifications?.warn?.("Performance contests are run from the GM seat.");
+      let run = perf._active;
+      if (!run || (opts.profile && run.profile.key !== opts.profile)) {
+        const P = _perfProfile(opts.profile); if (!P) return ui.notifications?.error?.(`Unknown performance profile "${opts.profile}".`);
+        const A = _actorOf(opts.challengerId, opts.challengerName), D = _actorOf(opts.defenderId || (opts.defenderName ? null : "@coalition"), opts.defenderName);
+        if (!A || !D) return ui.notifications?.error?.(`${P.label}: challenger or defender faction not found (${opts.challengerName || opts.challengerId} vs ${opts.defenderName || opts.defenderId || "@coalition"}).`);
+        const coal = _coalition(); const partySide = opts.partySide || (coal.includes(D.id) ? "D" : coal.includes(A.id) ? "A" : "D");
+        const pool = (a, k) => Math.floor(bankOpOf(a, k));
+        const [f1, f2] = P.fuel || ["culture", "softpower"];
+        const init = await _dlg(`${P.label} — Take Your Places`, `<form><p class="hint">${_esc(A.name)} challenges ${_esc(D.name)}. Starting presence = 10, plus 1 per 10 marks of ${_esc(f1)} committed, plus 1 per 20 marks of ${_esc(f2)}. ${_esc(P.crowd ? `Judged by ${P.crowd}.` : "")} The foul — <b>${_esc(P.actions?.[P.foul]?.label || P.foul)}</b> — ends it ugly.</p>
+          <div class="form-group"><label>${_esc(A.name)}: ${_esc(f1)} marks (has ${pool(A, f1)})</label><input type="number" name="a1" value="${Math.min(30, pool(A, f1))}" min="0" step="10"/></div>
+          <div class="form-group"><label>${_esc(A.name)}: ${_esc(f2)} marks (has ${pool(A, f2)})</label><input type="number" name="a2" value="${Math.min(20, pool(A, f2))}" min="0" step="10"/></div><hr/>
+          <div class="form-group"><label>${_esc(D.name)}: ${_esc(f1)} marks (has ${pool(D, f1)})</label><input type="number" name="d1" value="${Math.min(30, pool(D, f1))}" min="0" step="10"/></div>
+          <div class="form-group"><label>${_esc(D.name)}: ${_esc(f2)} marks (has ${pool(D, f2)})</label><input type="number" name="d2" value="${Math.min(20, pool(D, f2))}" min="0" step="10"/></div></form>`, "Begin");
+        if (!init?.ok) return null;
+        const f = init.form;
+        const scenario = await raidApi.courtly({ attackerId: A.id, defenderId: D.id, atkInitDip: Number(f.a1.value || 0), atkInitSoft: Number(f.a2.value || 0), defInitDip: Number(f.d1.value || 0), defInitSoft: Number(f.d2.value || 0), label: opts.label || P.label, performance: P });
+        run = perf._active = { profile: P, A, D, partySide, routes: opts.routes || {}, scenario };
+      }
+      const P = run.profile; const acts = ["persuade", "inspire", "expose", "intimidate"];
+      const opt = (sel) => acts.map(k => `<option value="${k}"${k === sel ? " selected" : ""}>${_esc(P.actions?.[k]?.label || k)}${k === P.foul ? " ⚠ FOUL" : ""} (${_esc(P.actions?.[k]?.pool || "")})</option>`).join("");
+      const hints = acts.map(k => `<li><b>${_esc(P.actions?.[k]?.label || k)}</b>${k === P.foul ? " ⚠" : ""} — ${_esc(P.actions?.[k]?.hint || "")}</li>`).join("");
+      while (run.scenario.getState().outcome === "ongoing") {
+        const st = run.scenario.getState();
+        const ex = await _dlg(`${P.label} — Round ${st.round + 1}`, `<form><p><b>${_esc(run.A.name)}</b> ${st.influenceA}/${st.maxA} · <b>${_esc(run.D.name)}</b> ${st.influenceD}/${st.maxD} · ${_esc(P.crowdTrack || "Crowd")} ${st.suspicion}/10 · round cap ${st.roundCap}</p><ul style="font-size:.9em;margin:.2em 0 .6em 1em">${hints}</ul>
+          <div class="form-group"><label>${_esc(run.A.name)}</label><select name="aa">${opt("persuade")}</select></div>
+          <div class="form-group"><label>${_esc(run.A.name)} spend (marks)</label><input type="number" name="as" value="20" min="0" step="10"/></div><hr/>
+          <div class="form-group"><label>${_esc(run.D.name)}</label><select name="da">${opt("inspire")}</select></div>
+          <div class="form-group"><label>${_esc(run.D.name)} spend (marks)</label><input type="number" name="ds" value="20" min="0" step="10"/></div>
+          <div class="form-group"><label>Steward skill bonus (party side)</label><input type="number" name="sk" value="0" step="1"/></div></form>`, "Play the round");
+        if (!ex?.ok) { ui.notifications?.info?.(`${P.label} paused — run the contest again (or api.raid.performance.open()) to resume.`); return { paused: true, state: run.scenario.getState() }; }
+        const f = ex.form; const sk = Number(f.sk.value || 0);
+        await run.scenario.step({ atkAction: f.aa.value, defAction: f.da.value, atkSpend: Number(f.as.value || 0), defSpend: Number(f.ds.value || 0), atkSkillBonus: run.partySide === "A" ? sk : 0, defSkillBonus: run.partySide === "D" ? sk : 0 });
+      }
+      return _route(run);
+    };
+    raidApi.performance = perf;
+    _loadPerfProfiles().then(() => console.log(TAG, "performance contests ready:", Object.keys(PERF_PROFILES).join(", ")));
   });
 })();

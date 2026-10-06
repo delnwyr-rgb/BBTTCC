@@ -242,7 +242,7 @@
 
   // ── ✦ story script (Layer-2 data; the Hum had none — UNSCRIPTED by the 09-15 ruling, lifted by the 10-02 tier move) ──
   const storyApi = game.bbttcc?.api?.campaign?.story?.data;
-  const codeQuest = storyApi?.code?.()?.quests?.[KEY] || { name: "The Sarmoung Hum", act: 0, keystone: false, hex: "", registryId: Q, chapters: {} };
+  const codeQuest = storyApi?.code?.()?.quests?.[KEY] || { name: "Two Kinds of Tent", act: 0, keystone: false, hex: "", registryId: Q, chapters: {} };
   const QUEST = { ...JSON.parse(JSON.stringify(codeQuest)), act: 3, background: true };   // background: fills idle time, never the NOW headline (story-model 2026-10-02)
   const SCRIPT = {
     giver: "Bit and Coll, again. They get reused. So, it turns out, do towns.",

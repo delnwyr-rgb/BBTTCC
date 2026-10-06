@@ -4463,7 +4463,7 @@ factionApi.applyStartingPackage ??= (async ({
 
 // The Jackalopes' boat: Furrier's Fixit Farm by name, else any faction whose mobile rig has a water-surface
 // domain. Exported on the API so the grant-starter-charter macro and a from-the-top reset use the same rule.
-const STARTER_CHARTER = { carrierName: "Furrier's Fixit Farm", rigName: "The Absolutely Reliable", turns: 3, dock: "Bedlam Plains" };
+const STARTER_CHARTER = { carrierName: "Furrier's Fixit Farm", rigName: "The Absolutely Reliable", turns: 3, dock: "Allesh-Gilliam" };   // 2026-10-04: Young Gearbox drops them in Allesh-Gilliam in the hovercraft mobile home (the lease)
 async function _bbttccGrantStarterCharter(a, ch) {
   const norm = (s) => String(s || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase();
   const dom = game.bbttcc?.api?.travel?.domains;
