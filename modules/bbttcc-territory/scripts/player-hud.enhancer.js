@@ -262,6 +262,55 @@
   ];
   const DEFENSES = [ ["guard","Guard"], ["evasion","Evasion"], ["resolve","Resolve"] ];
 
+  // ── dnd5e (the Bad Eden 5E build) ───────────────────────────────────────
+  // Same tray, dnd5e-native contents: ability checks / saves / skills, items
+  // fired through dnd5e's own use flow, and the Surge Powers pool (Paths).
+  const IS_5E = () => game.system?.id === "dnd5e";
+  const surgeApi5e = () => game.surgePowers?.get ? game.surgePowers : null;
+  const signed = (n) => `${Number(n) >= 0 ? "+" : ""}${Number(n) || 0}`;
+  function checksBody5e(steward) {
+    const abil = steward.system?.abilities ?? {};
+    return Object.entries(CONFIG.DND5E?.abilities ?? {}).map(([k, cfg]) =>
+      btn(`data-fire="check5e" data-key="${k}"`, "dice-d20", `${(cfg.abbreviation ?? k).toUpperCase()} ${signed(abil[k]?.mod)}`, `${cfg.label ?? k} check`)).join("");
+  }
+  function savesBody5e(steward) {
+    const abil = steward.system?.abilities ?? {};
+    return Object.entries(CONFIG.DND5E?.abilities ?? {}).map(([k, cfg]) => {
+      const sv = abil[k]?.save;
+      const v = typeof sv === "number" ? sv : (sv?.value ?? abil[k]?.mod);
+      return btn(`data-fire="save5e" data-key="${k}"`, "shield", `${(cfg.abbreviation ?? k).toUpperCase()} ${signed(v)}`, `${cfg.label ?? k} saving throw`);
+    }).join("");
+  }
+  function skillRows5e(steward) {
+    const skills = steward.system?.skills ?? {};
+    return Object.entries(skills).filter(([, sk]) => Number(sk?.value) > 0)
+      .map(([key, sk]) => ({ key, total: sk.total ?? sk.mod ?? 0, label: CONFIG.DND5E?.skills?.[key]?.label ?? key, expert: Number(sk.value) >= 2 }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }
+  function skillsBody5e(steward) {
+    const rows = skillRows5e(steward);
+    if (!rows.length) return `<div style="padding:.4rem .5rem;opacity:.6;font-size:.82rem">No proficient skills.</div>`;
+    return rows.map(r => btn(`data-fire="skill5e" data-key="${esc(r.key)}"`, "dice-d20", `${r.label} ${signed(r.total)}${r.expert ? " ★" : ""}`, `${r.label} check${r.expert ? " (expertise)" : ""}`)).join("");
+  }
+  const usable5e = (it) => (it.system?.activities?.size ?? 0) > 0;
+  function collectSections5e(steward) {
+    const abilities = [], ancestry = [], strikes = [], spells = [];
+    for (const it of (steward.items?.contents ?? [])) {
+      if (it.type === "weapon") { if (usable5e(it)) strikes.push(it); continue; }
+      if (it.type === "spell" || it.type === "power") { if (usable5e(it)) spells.push(it); continue; }
+      if (it.type !== "feat" || !usable5e(it)) continue;
+      (it.system?.type?.value === "race" ? ancestry : abilities).push(it);
+    }
+    const byName = (a, b) => a.name.localeCompare(b.name);
+    spells.sort((a, b) => (Number(a.system?.level) || 0) - (Number(b.system?.level) || 0) || byName(a, b));
+    return { abilities: abilities.sort(byName), ancestry: ancestry.sort(byName), strikes: strikes.sort(byName), spells };
+  }
+  async function useItem5e(steward, item) {
+    await ensureEmanateFromRig(steward);
+    if (typeof item?.use === "function") return item.use({}, { event: window.event });
+    return item?.sheet?.render(true, { focus: true });
+  }
+
   function isActionable(it) {
     const fn = game.fourththing?._classAutomation?.isActionableFeature;
     return typeof fn === "function" ? !!fn(it) : true;
@@ -371,6 +420,10 @@
     </button>`;
   }
   function resStripHTML(steward) {
+    if (IS_5E()) {
+      const radChip = radChipHTML(steward);
+      return radChip ? `<div class="bbttcc-resstrip">${radChip}</div>` : "";
+    }
     const keys = poolsFor(steward);
     const chips = keys.map(key => {
       const def = POOL_DEFS[key];
@@ -398,6 +451,21 @@
   // Opens the full spend table (class kit + universal options). Disabled with a
   // reason when nothing is banked or Surge is gated off for a foe.
   function surgeActionHTML(steward) {
+    if (IS_5E()) {
+      // The Surge Powers pool (universal table + Path columns). Opens even at 0:
+      // some Path entries (Auras, stances, the Dream-Cache) cost nothing.
+      const sp = surgeApi5e();
+      const cur = sp ? sp.get(steward) : 0, max = sp ? sp.max(steward) : 0;
+      const title = sp ? "Open the Surge table — universal powers + your Path" : "Surge Powers module not active";
+      return `<div class="bbttcc-surge-action" style="padding:.1rem .4rem .45rem;">
+        <button type="button" class="bbttcc-res-chip bbttcc-surge-spend ${sp ? 'is-clickable' : 'is-empty'}"
+          ${sp ? 'data-fire="pool" data-key="surge"' : 'disabled'} title="${esc(title)}"
+          style="width:100%;display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.35rem .5rem;font-weight:600;">
+          <i class="fas fa-bolt-lightning"></i> Surge
+          <span class="bbttcc-res-val">${cur}/${max} ◆</span>
+        </button>
+      </div>`;
+    }
     const obj = foundry.utils.getProperty(steward, "system.resources.surge") ?? {};
     const cur = Number(obj.value ?? 0);
     const max = Number(obj.max ?? 0);
@@ -597,7 +665,24 @@
     </div>`;
   }
 
+  function abilitiesTrayHTML5e(steward) {
+    const { abilities, ancestry, strikes, spells } = collectSections5e(steward);
+    const states = liveStates(steward);
+    const skills = skillRows5e(steward);
+    const parts = [resStripHTML(steward), surgeActionHTML(steward)];
+    parts.push(section("checks", "Ability Checks", 6, checksBody5e(steward)));
+    parts.push(section("saves", "Saving Throws", 6, savesBody5e(steward)));
+    parts.push(section("skills", "Skills", skills.length, skillsBody5e(steward)));
+    if (abilities.length) parts.push(section("abilities", "Steward Abilities", abilities.length, itemsBody(abilities, "use5e")));
+    if (ancestry.length)  parts.push(section("ancestry", "Ancestry Abilities", ancestry.length, itemsBody(ancestry, "use5e")));
+    if (strikes.length)   parts.push(section("strikes", "Weapons", strikes.length, itemsBody(strikes, "use5e")));
+    if (spells.length)    parts.push(section("manifestations", "Spells & Powers", spells.length, itemsBody(spells, "use5e")));
+    if (states.length)    parts.push(section("states", "Active States", states.length, statesBody(steward)));
+    return parts.join("");
+  }
+
   function abilitiesTrayHTML(steward) {
+    if (IS_5E()) return abilitiesTrayHTML5e(steward);
     const { abilities, ancestry, echo, strikes, manifs } = collectSections(steward);
     const states = liveStates(steward);
     const apts = aptitudeRows(steward);
@@ -687,6 +772,12 @@
   }
   async function firePool(steward, key) {
     // Surge → open the unified spend table (the engine of action).
+    if (key === "surge" && IS_5E()) {
+      const sp = surgeApi5e();
+      if (!sp?.openMenu) return ui.notifications?.warn?.("Surge Powers module not active.");
+      await ensureEmanateFromRig(steward);
+      return sp.openMenu(steward);
+    }
     if (key === "surge") {
       const fn = game.fourththing?.surge?.openSpendDialog;
       if (typeof fn !== "function") return ui.notifications?.warn?.("Surge spend table not ready.");
@@ -856,6 +947,10 @@
           case "strike":  if (item) return fireStrike(steward, item); break;
           case "mani":    if (item) return fireManifestation(steward, item); break;
           case "pool":    return firePool(steward, key);
+          case "check5e": return steward.rollAbilityCheck?.({ ability: key }, { event: ev });
+          case "save5e":  return steward.rollSavingThrow?.({ ability: key }, { event: ev });
+          case "skill5e": return steward.rollSkill?.({ skill: key }, { event: ev });
+          case "use5e":   if (item) return useItem5e(steward, item); break;
         }
         return;
       }
