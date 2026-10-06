@@ -211,10 +211,14 @@
         "w": 4000,
         "h": 3700,
         "color": "#c9a0ff",
-        "exterior": "the_vacancy_exterior",
-        "interior": "the_vacancy_interior",
+        "exterior": "Scene.u1Su9WE8fpJaGGuP",
+        "interior": "Scene.2KrZTKCKw92D32fD",
         "extra": [
-          "The Vacancy hexchrome battlemap"
+          "Scene.pz1wzjvHaFzhLuAg",
+          "Scene.YVDerfXKLjIciku1",
+          "Scene.tqOeMXwSxcCPM5Cw",
+          "Scene.XhqOyJ9o9Onr0QKg",
+          "Scene.WD2xaZwG1Eobh2GV"
         ],
         "beatId": "allesh_gilliam_vacancy_exterior",
         "intro": "allesh_gilliam_vacancy_intro",
@@ -2255,7 +2259,7 @@
     ],
     "hubs": {
       "main": {
-        "sceneName": "port_kudzu_hexchrome_battlemap",
+        "sceneName": "Scene.mToHNVLp0OARgICs",
         "label": "Port Kudzu",
         "refWidth": 4950,
         "refHeight": 4950
@@ -2275,7 +2279,7 @@
         "w": 450,
         "h": 500,
         "color": "#ffd54f",
-        "exterior": "port_kudzu_hexchrome_pov",
+        "exterior": "Scene.9bKPkKPsyk6hitBS",
         "beatId": "port_kudzu_saloon_exterior",
         "intro": "wt_kudzu_saloon"
       },
@@ -2288,7 +2292,7 @@
         "w": 450,
         "h": 350,
         "color": "#4fc3ff",
-        "exterior": "port_kudzu_wharf_pov",
+        "exterior": "Scene.9bKPkKPsyk6hitBS",
         "beatId": "port_kudzu_harbour_exterior",
         "intro": "map_port_kudzu_testimony"
       },
@@ -2301,7 +2305,7 @@
         "w": 900,
         "h": 700,
         "color": "#ffffff",
-        "exterior": "port_kudzu_hexchrome_pov",
+        "exterior": "Scene.9bKPkKPsyk6hitBS",
         "beatId": "wt_caravan_ride",
         "direct": true
       }
@@ -2320,7 +2324,7 @@
       ],
       [
         "map_port_kudzu_intro",
-        "@port_kudzu_hexchrome_battlemap",
+        "@Scene.mToHNVLp0OARgICs",
         ""
       ],
       [
@@ -2346,9 +2350,409 @@
     ],
     "notes": [
       "Placed off the baked port_kudzu_hexchrome_battlemap.webm (4950x4950; DA export 7500 → -s 66; scene JSON rescaled to 5000x5000, the runner scales per axis).",
-      "IMPORT FIRST: scene JSON ~/files_for_webm_bake/baked/port_kudzu_hexchrome_battlemap.scene.json (background already points at the uploaded webm); create a gridless POV scene named port_kudzu_hexchrome_pov on art/bbttcc/GOTTGAIT/GOTTGAIT Scene files/port_kudzu_hexchrome_pov.webm.",
+      "LIVE 2026-10-02: hub = Scene.mToHNVLp0OARgICs (the old wharf battlemap scene, now on the hexchrome render); one POV = Scene.9bKPkKPsyk6hitBS, shared by every door.",
       "The DA export carried 79 lights and NO walls — re-export walls from the .dam if the battlemap needs them for fights.",
-      "Saloon = the sigil-signed building inside the boardwalk loop; harbour = the pier hut on the water (the older wharf POV); wagon = the tarped cargo yard east. Ungated; the wagon is a direct door, its own requires decide."
+      "PROVISIONAL buildings (Dave has not designated any): saloon = the sigil-signed building inside the boardwalk loop, harbour = the pier hut, wagon = the tarped cargo yard. No interiors exist; every door plays its beat over the one POV. Many more buildings on the map are free for future content."
+    ]
+  },
+  "wtchapel": {
+    "town": "The Rotating Chapel",
+    "hexAliases": [
+      "the rotating chapel",
+      "rotating chapel"
+    ],
+    "hubs": {
+      "main": {
+        "sceneName": "Scene.TKJSilLgHpYkUOAp",
+        "label": "The Rotating Chapel",
+        "refWidth": 4000,
+        "refHeight": 4000
+      }
+    },
+    "walkIn": true,
+    "townQuestFrom": [
+      "map_rotating_chapel_approach"
+    ],
+    "doors": [
+      {
+        "hub": "main",
+        "key": "chapel",
+        "label": "The Chapel",
+        "x": 2193,
+        "y": 1985,
+        "w": 840,
+        "h": 1046,
+        "color": "#ffd54f",
+        "exterior": "Scene.p9P9tYYA9mlQUkVP",
+        "interior": "Scene.DKNQwfFSsFCYxNsl",
+        "beatId": "wt_chapel_door_exterior",
+        "intro": "wt_chapel_keeper",
+        "blurb": "Step inside. Mind the man with the broom."
+      }
+    ],
+    "cross": [],
+    "beatMap": [
+      [
+        "wt_chapel_door_exterior",
+        "chapel",
+        "exterior"
+      ],
+      [
+        "map_rotating_chapel_map",
+        "chapel",
+        "interior"
+      ],
+      [
+        "map_rotating_chapel_force",
+        "chapel",
+        "interior"
+      ],
+      [
+        "map_rotating_chapel_harmonize",
+        "chapel",
+        "interior"
+      ],
+      [
+        "wt_chapel_keeper",
+        "chapel",
+        "interior"
+      ]
+    ],
+    "notes": [
+      "Widening Trail (2026-10-04): arrival lands on the battlemap (the hex's onEnter beat keeps its challenge there); success beats show the POV; fail beats stay on the battlemap (where a fight starts). Doors placed off the live battlemap webms (scene size = render size).",
+      "The chapel building is the walk-in door: exterior POV → interior POV → Brother Ansel (the Keeper). The approach's three results show the interior (that is where the pews turn)."
+    ]
+  },
+  "wtflats": {
+    "town": "The Burnt Flats",
+    "hexAliases": [
+      "the burnt flats",
+      "burnt flats"
+    ],
+    "hubs": {
+      "main": {
+        "sceneName": "Scene.AuzTN1PihzE8Qivb",
+        "label": "The Burnt Flats",
+        "refWidth": 3000,
+        "refHeight": 3000
+      }
+    },
+    "walkIn": true,
+    "townQuestFrom": [
+      "map_burnt_flats_intro"
+    ],
+    "doors": [
+      {
+        "hub": "main",
+        "key": "seams",
+        "label": "The Warm Seams",
+        "x": 2150,
+        "y": 1600,
+        "w": 700,
+        "h": 700,
+        "color": "#ffd54f",
+        "exterior": "Scene.niBbSiaGm6afzwzv",
+        "blurb": "The mud still breathes. Read the heat."
+      }
+    ],
+    "cross": [],
+    "beatMap": [
+      [
+        "map_burnt_flats_pattern",
+        "seams",
+        "exterior"
+      ],
+      [
+        "map_burnt_flats_partial",
+        "seams",
+        "exterior"
+      ],
+      [
+        "wt_flats_mud",
+        "@Scene.AuzTN1PihzE8Qivb",
+        ""
+      ]
+    ],
+    "notes": [
+      "Widening Trail (2026-10-04): arrival lands on the battlemap (the hex's onEnter beat keeps its challenge there); success beats show the POV; fail beats stay on the battlemap (where a fight starts). Doors placed off the live battlemap webms (scene size = render size).",
+      "The walk-in door 'The Warm Seams' is a look: it opens the POV with no beat (the challenge already played on arrival)."
+    ]
+  },
+  "wtmire": {
+    "town": "The Singing Mire",
+    "hexAliases": [
+      "the singing mire",
+      "singing mire"
+    ],
+    "hubs": {
+      "main": {
+        "sceneName": "Scene.mNEAW05GWh9COWBo",
+        "label": "The Singing Mire",
+        "refWidth": 3000,
+        "refHeight": 3000
+      }
+    },
+    "walkIn": true,
+    "townQuestFrom": [
+      "map_singing_mire_intro"
+    ],
+    "doors": [
+      {
+        "hub": "main",
+        "key": "choir",
+        "label": "The Choir",
+        "x": 1690,
+        "y": 2160,
+        "w": 480,
+        "h": 480,
+        "color": "#c9a0ff",
+        "exterior": "Scene.hbfdzaC2wYCVyiJI",
+        "blurb": "Stand at the edge. Each of you hears a different line."
+      }
+    ],
+    "cross": [],
+    "beatMap": [
+      [
+        "map_singing_mire_truth",
+        "choir",
+        "exterior"
+      ],
+      [
+        "map_singing_mire_counter",
+        "choir",
+        "exterior"
+      ],
+      [
+        "map_singing_mire_partial",
+        "choir",
+        "exterior"
+      ],
+      [
+        "wt_mire_static",
+        "@Scene.mNEAW05GWh9COWBo",
+        ""
+      ]
+    ],
+    "notes": [
+      "Widening Trail (2026-10-04): arrival lands on the battlemap (the hex's onEnter beat keeps its challenge there); success beats show the POV; fail beats stay on the battlemap (where a fight starts). Doors placed off the live battlemap webms (scene size = render size).",
+      "The walk-in door 'The Choir' is a look: it opens the POV with no beat (the challenge already played on arrival)."
+    ]
+  },
+  "wtreach": {
+    "town": "Anchor Reach",
+    "hexAliases": [
+      "the anchor reach",
+      "anchor reach"
+    ],
+    "hubs": {
+      "main": {
+        "sceneName": "Scene.LoiyZHUYbBhXAkAI",
+        "label": "Anchor Reach",
+        "refWidth": 3100,
+        "refHeight": 3800
+      }
+    },
+    "walkIn": true,
+    "townQuestFrom": [
+      "map_anchor_reach_intro"
+    ],
+    "doors": [
+      {
+        "hub": "main",
+        "key": "diagram",
+        "label": "The Diagram at Low Tide",
+        "x": 2480,
+        "y": 1140,
+        "w": 700,
+        "h": 600,
+        "color": "#4fc3ff",
+        "exterior": "Scene.wCfvpvGcBPJdCVIw",
+        "blurb": "One of the drowned pilings has shoulders."
+      }
+    ],
+    "cross": [],
+    "beatMap": [
+      [
+        "map_anchor_reach_stabilize",
+        "diagram",
+        "exterior"
+      ],
+      [
+        "map_anchor_reach_break",
+        "diagram",
+        "exterior"
+      ],
+      [
+        "map_anchor_reach_marked",
+        "diagram",
+        "exterior"
+      ],
+      [
+        "wt_reach_slip",
+        "@Scene.LoiyZHUYbBhXAkAI",
+        ""
+      ]
+    ],
+    "notes": [
+      "Widening Trail (2026-10-04): arrival lands on the battlemap (the hex's onEnter beat keeps its challenge there); success beats show the POV; fail beats stay on the battlemap (where a fight starts). Doors placed off the live battlemap webms (scene size = render size).",
+      "The walk-in door 'The Diagram at Low Tide' is a look: it opens the POV with no beat (the challenge already played on arrival)."
+    ]
+  },
+  "wtlegansus": {
+    "town": "Legansus Waystation",
+    "hexAliases": [
+      "legansus waystation",
+      "legansus"
+    ],
+    "hubs": {
+      "main": {
+        "sceneName": "Scene.ganhj97p4oXwkXNm",
+        "label": "Legansus Waystation",
+        "refWidth": 4000,
+        "refHeight": 4000
+      }
+    },
+    "walkIn": true,
+    "townQuestFrom": [
+      "map_legansus_waystation_intro"
+    ],
+    "doors": [
+      {
+        "hub": "main",
+        "key": "tower",
+        "label": "The Relay Tower",
+        "x": 2105,
+        "y": 2025,
+        "w": 760,
+        "h": 760,
+        "color": "#4fc3ff",
+        "exterior": "Scene.w7Iq5sXOCCfRmjzG",
+        "beatId": "wt_legansus_tower_exterior",
+        "intro": "map_legansus_waystation_intro",
+        "blurb": "Bring everything. Everything counts."
+      },
+      {
+        "hub": "main",
+        "key": "hearing",
+        "label": "The Hearing Room",
+        "x": 2025,
+        "y": 2865,
+        "w": 640,
+        "h": 500,
+        "color": "#ffd54f",
+        "exterior": "Scene.w7Iq5sXOCCfRmjzG",
+        "beatId": "legansus_second_hearing",
+        "direct": true
+      }
+    ],
+    "cross": [],
+    "beatMap": [
+      [
+        "wt_legansus_tower_exterior",
+        "tower",
+        "exterior"
+      ],
+      [
+        "map_legansus_waystation_verified",
+        "tower",
+        "exterior"
+      ],
+      [
+        "map_legansus_waystation_flagged",
+        "tower",
+        "exterior"
+      ],
+      [
+        "wt_legansus_sequence",
+        "tower",
+        "exterior"
+      ],
+      [
+        "legansus_",
+        "tower",
+        "exterior"
+      ]
+    ],
+    "notes": [
+      "Widening Trail (2026-10-04): arrival lands on the battlemap (the hex's onEnter beat keeps its challenge there); success beats show the POV; fail beats stay on the battlemap (where a fight starts). Doors placed off the live battlemap webms (scene size = render size).",
+      "Relay tower dome = the waystation's verification (the intro again, over the POV). The neon console room below it = the Second Hearing (gated: it plays only for parties the Riders have not allied with). The Colossus looms at the north edge; its camp beat belongs to Act 2, so it has no door here."
+    ]
+  },
+  "agvacancy": {
+    "town": "The Vacancy",
+    "hexAliases": [],
+    "arrivalToHub": false,
+    "hubs": {
+      "main": {
+        "sceneName": "Scene.pz1wzjvHaFzhLuAg",
+        "label": "The Vacancy",
+        "refWidth": 3400,
+        "refHeight": 3400
+      }
+    },
+    "walkIn": true,
+    "townQuestFrom": [],
+    "doors": [
+      {
+        "hub": "main",
+        "key": "upstairs",
+        "label": "Upstairs — the hall",
+        "floor": "vacancy_second_floor_hexchrome_battlemap",
+        "x": 2300,
+        "y": 2450,
+        "w": 200,
+        "h": 200,
+        "color": "#ffd54f",
+        "exterior": "Scene.tqOeMXwSxcCPM5Cw",
+        "beatId": "ag_vacancy_upstairs",
+        "direct": true
+      },
+      {
+        "hub": "main",
+        "key": "wickroom",
+        "label": "The Pilgrim's Room",
+        "floor": "vacancy_second_floor_hexchrome_battlemap",
+        "x": 2420,
+        "y": 2190,
+        "w": 200,
+        "h": 300,
+        "color": "#ffd54f",
+        "exterior": "Scene.WD2xaZwG1Eobh2GV",
+        "beatId": "ag_wick_room",
+        "direct": true
+      }
+    ],
+    "cross": [],
+    "beatMap": [
+      [
+        "ag_wick_room",
+        "@Scene.WD2xaZwG1Eobh2GV",
+        ""
+      ],
+      [
+        "ag_vacancy_upstairs",
+        "@Scene.tqOeMXwSxcCPM5Cw",
+        ""
+      ]
+    ],
+    "notes": [
+      "2026-10-05: re-shot. Battlemap pz1wzjvHaFzhLuAg has two native levels (ground / second floor). The east-wing stairs are a changeLevel Region; on the second floor the corridor by the landing is a walk-in door to the hall beat (ag_vacancy_upstairs, cinematic hall → second door) and the doorway of the room with the trunk at the bed's foot is Wick's room (ag_wick_room). Rects placed off the level art at 3400×3400 — nudge in place if they sit a square off.",
+      "No hex: arrival wiring is skipped on purpose (the Vacancy is reached through the Allesh-Gilliam door)."
+    ],
+    "escalators": [
+      {
+        "hub": "main",
+        "key": "stairs",
+        "label": "The stairs",
+        "x": 2570,
+        "y": 2610,
+        "w": 200,
+        "h": 300,
+        "floors": [
+          "vacancy_first_floor_hexchrome_battlemap",
+          "vacancy_second_floor_hexchrome_battlemap"
+        ]
+      }
     ]
   }
 }

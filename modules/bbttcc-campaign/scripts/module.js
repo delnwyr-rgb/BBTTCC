@@ -2317,6 +2317,51 @@ async function _storeFactsHtml(campaign, ctx = {}) {
   return `<details open class="bbttcc-store-facts" style="border-left:3px solid #4db8b0;padding:.35em .6em;margin:0 0 10px 0;background:rgba(77,184,176,.08);font-size:12px;"><summary style="cursor:pointer;"><b>📒 What the story knows</b> <span style="opacity:.7;">(GM only — he's grading energy, you're holding the ledger)</span></summary>${rows.join("")}</details>`;
 }
 
+// STORY TOKENS (owner ask 2026-10-05: "the number of hexes varies with the number of players, 3–12, never more than half the
+// River Heart") — beat text may carry {{coalition.hexCount}}, {{coalition.hexNames}}, {{riverHeart.hexCount}} and
+// {{riverHeart.claimedCount}}, filled from the River Heart map when the beat plays, so the opening and Joan's speech name the
+// hexes THIS table actually starts with. Coalition = the active campaign's roster (factionIds + factionId, the same reading as
+// the WME's "@coalition"). Unknown tokens are left as written; a missing map reads "a handful of" / "a few scattered towns".
+function _storyTokenFacts(campaign) {
+  const out = { coalitionCount: null, coalitionNames: [], rhCount: null, rhClaimed: null };
+  try {
+    const camp = campaign || (typeof getCampaign === "function" ? getCampaign(getActiveCampaignId()) : null);
+    const roster = new Set([].concat((camp && camp.factionIds) || [], (camp && camp.factionId) ? [camp.factionId] : [])
+      .map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean));
+    const scene = (game.scenes?.contents || []).find(sc => /river\s*heart/i.test(String(sc?.name || "")) &&
+      (sc.drawings?.contents || []).some(d => d?.flags?.["bbttcc-territory"]?.isHex));
+    if (!scene) return out;
+    const hexes = (scene.drawings?.contents || []).map(d => d?.flags?.["bbttcc-territory"]).filter(t => t && t.isHex);
+    const held = hexes.filter(t => roster.has(String(t.factionId || "").replace(/^Actor\./, "")));
+    const name = t => String(t.name || "").replace(/[ \s]+/g, " ").trim();
+    held.sort((a, b) => (b.capital ? 1 : 0) - (a.capital ? 1 : 0) || name(a).localeCompare(name(b)));
+    out.coalitionCount = held.length; out.coalitionNames = held.map(name).filter(Boolean);
+    out.rhCount = hexes.length; out.rhClaimed = hexes.filter(t => String(t.factionId || "").trim()).length;
+    // the owner's band: 3..half the River Heart — tell the GM (once a session) when the table started outside it
+    try {
+      const cap = Math.floor(hexes.length / 2);
+      if (game.user?.isGM && !globalThis.__bbttccHexBandWarned && held.length && (held.length < 3 || held.length > cap)) {
+        globalThis.__bbttccHexBandWarned = true;
+        ui.notifications?.warn?.(`The coalition starts with ${held.length} River Heart hexes — the band is 3 to ${cap} (half the River Heart).`);
+      }
+    } catch (_eW) {}
+  } catch (_e) {}
+  return out;
+}
+function _expandStoryTokens(text, campaign) {
+  const s = String(text || "");
+  if (s.indexOf("{{") < 0) return s;
+  const f = _storyTokenFacts(campaign);
+  const list = (a) => a.length <= 1 ? (a[0] || "") : a.length === 2 ? `${a[0]} and ${a[1]}` : `${a.slice(0, -1).join(", ")}, and ${a[a.length - 1]}`;
+  const map = {
+    "coalition.hexcount": f.coalitionCount != null && f.coalitionCount > 0 ? String(f.coalitionCount) : "a handful of",
+    "coalition.hexnames": f.coalitionNames.length ? list(f.coalitionNames) : "a few scattered towns",
+    "riverheart.hexcount": f.rhCount ? String(f.rhCount) : "dozens of",
+    "riverheart.claimedcount": f.rhClaimed != null ? String(f.rhClaimed) : "a few"
+  };
+  return s.replace(/\{\{\s*([A-Za-z.]+)\s*\}\}/g, (m, k) => (Object.prototype.hasOwnProperty.call(map, k.toLowerCase()) ? _escapeHtml(map[k.toLowerCase()]) : m));
+}
+
 async function _runBeatDialog(campaign, beat, ctx={}) {
   try { if (ctx && ctx.allowDesperation == null) ctx.allowDesperation = true; } catch (_eAD) {}
 
@@ -2337,7 +2382,7 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
   // was never played, the NPC's Act 2 opener leads with the unmet line (Pike / Tamsin / Etta remember who skipped them)
   let unmetHtml = "";
   try { const u = beat.unmet; if (u && u.beatId && u.html && !_storyStateFor(campaign?.id)?.played?.[String(u.beatId)]) unmetHtml = String(u.html); } catch (_eU) {}
-  const desc = (unmetHtml + String(beat.description || "")).trim();
+  const desc = _expandStoryTokens((unmetHtml + String(beat.description || "")).trim(), campaign);
   // WHAT THE STORY KNOWS (owner ruling M, 2026-09-20: "make sure Gloomgill knows the answers before he asks them") —
   // `beat.storeFacts` puts the run's ledger in front of the GM: closed quests and their endings, chapter endings, open
   // threads, Receipts held, the meters and the militia. GM dialog only; never broadcast.
@@ -6339,7 +6384,7 @@ async function dialogueChoicesFor(actorId, ctx = {}) {
       const shown = new Set(await _visibleChoiceIndices(beat, campaignForGates, ctx));   // D-1/D-2
       // The beat's description is the NPC's authored script for the scene —
       // the dialogue engine plays it in-voice when the conversation arrives.
-      let beatDescription = stripHtml(beat.description);
+      let beatDescription = stripHtml(_expandStoryTokens(beat.description, campaignForGates));
       // The invitation loop closes in-voice: this NPC SENT WORD asking to
       // talk, and the party showing up IS the answer. Tell the model so.
       if (invited[beat.id])
@@ -7098,7 +7143,7 @@ function _bindHandoffButtons(message, root) {
           const sid = String(beat.sceneId || beat.refs?.sceneId || "").replace(/^Scene\./, "");
           const scene = sid ? game.scenes?.get?.(sid) : null;
           if (scene && !scene.active) await scene.activate();
-          const desc = String(beat.description || "").trim();
+          const desc = _expandStoryTokens(String(beat.description || "").trim(), campaign);
           if (desc) await ChatMessage.create({
             speaker: { alias: "Bad Eden" },
             content: `<div class="bbttcc-narration" style="border-left:3px solid #b8974d;padding:.45em .6em;background:rgba(184,151,77,.08);">${desc}</div>`
@@ -9269,13 +9314,14 @@ Hooks.once("ready", () => {
     // later beat's show/close replaces or closes it — so an overlapping chain
     // (or a courier miss) can eat a mirror the players still need. One call
     // puts it back.
+    game.bbttcc.api.campaign.expandStoryTokens = (text) => _expandStoryTokens(text);   // {{coalition.hexCount}} etc. (2026-10-05)
     game.bbttcc.api.campaign.remirrorBeatDialog = () => {
       try {
         const beat = __bbttccCurrentBeatDialogBeat;
         if (!beat) { ui.notifications?.warn?.("No beat dialog is open on this client — nothing to re-mirror."); return false; }
         _broadcastPlayerFacingDialog("show", {
           title: beat.label || beat.id || "Beat",
-          desc: String(beat.description || "").trim(),
+          desc: _expandStoryTokens(String(beat.description || "").trim()),
           choices: (Array.isArray(beat.choices) ? beat.choices : []).map((ch, i) => ({
             label: (ch && ch.label) || ("Choice " + (i + 1)),
             description: String((ch && ch.description) || "").trim(),
