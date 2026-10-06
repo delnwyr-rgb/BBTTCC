@@ -87,7 +87,7 @@ function _safeQty(v) {
 }
 
 function _matMetaFromItem(item) {
-  const rfi = item?.getFlag?.("fourththing", "rfi.item") ?? {};
+  const rfi = item?.flags?.fourththing?.rfi?.item ?? {};
   if (rfi.frame !== "material" || !rfi.materialKey) return null;
   const qty = Math.max(0, Math.floor(Number(rfi.charges ?? 1) || 1));
   return {
@@ -210,7 +210,7 @@ async function depositFromCharacter(character, faction, opts = {}) {
   if (left <= 0) {
     await item.delete();
   } else {
-    await item.setFlag("fourththing", "rfi.item.charges", left);
+    await item.update({ "flags.fourththing.rfi.item.charges": left });   // update(), not setFlag: the "fourththing" scope is invalid on dnd5e
   }
   deposited.push({ key: meta.key, qty: take, name: meta.name });
   return { ok: true, deposited };
@@ -295,7 +295,7 @@ const TIER_BASE_MARKS = { I: 50, II: 150, III: 450, IV: 1350, 1: 50, 2: 150, 3: 
 async function unitPrice(faction, matKey) {
   const F = _resolveActor(faction); const cur = F ? (_readMap(F)[matKey] || null) : null;
   let tier = "I", rarity = 1.0;
-  try { if (cur?.lastUuid) { const src = await fromUuid(cur.lastUuid); const rfi = src?.getFlag?.("fourththing", "rfi.item") || {}; if (rfi.tier) tier = rfi.tier; if (Number(rfi.rarityMult) > 0) rarity = Number(rfi.rarityMult); } } catch (_e) {}
+  try { if (cur?.lastUuid) { const src = await fromUuid(cur.lastUuid); const rfi = src?.flags?.fourththing?.rfi?.item || {}; if (rfi.tier) tier = rfi.tier; if (Number(rfi.rarityMult) > 0) rarity = Number(rfi.rarityMult); } } catch (_e) {}
   const retail = Math.round((TIER_BASE_MARKS[tier] ?? 50) * 0.1 * rarity);
   const { family, channel } = channelFor(matKey);
   return { retail, sell: Math.max(1, Math.round(retail * SELL_FRACTION)), tier, rarity, family, channel };

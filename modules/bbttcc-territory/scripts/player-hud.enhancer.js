@@ -132,7 +132,7 @@
   }
 
   function getBoardedRig(steward) {
-    const b = steward?.getFlag?.("fourththing", "boardedRig");
+    const b = steward?.flags?.fourththing?.boardedRig;
     const rig = b?.rigId ? game.actors?.get(b.rigId) : null;
     return rig && rig.type === "rig" ? rig : null;
   }

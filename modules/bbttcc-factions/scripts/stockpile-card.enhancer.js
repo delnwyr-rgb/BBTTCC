@@ -31,7 +31,7 @@
     const out = [];
     if (!character?.items) return out;
     for (const it of character.items) {
-      const rfi = it.getFlag?.("fourththing", "rfi.item");
+      const rfi = it.flags?.fourththing?.rfi?.item;
       if (!rfi || rfi.frame !== "material" || !rfi.materialKey) continue;
       const qty = Math.max(0, Math.floor(Number(rfi.charges ?? 1) || 1));
       out.push({ id: it.id, name: it.name, materialKey: rfi.materialKey, qty });

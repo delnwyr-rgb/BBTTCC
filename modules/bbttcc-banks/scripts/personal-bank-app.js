@@ -38,7 +38,7 @@ function _isBankable(item) { return !!_bankCategory(item); }
 
 // Tier for the badge: RFI flag first, then manifestation/system data.
 function _itemTier(item) {
-  const rfi = (() => { try { return item?.getFlag?.("fourththing", "rfi.item") || null; } catch { return null; } })();
+  const rfi = (() => { try { return item?.flags?.fourththing?.rfi?.item || null; } catch { return null; } })();
   return rfi?.tier ?? item?.system?.manifestation?.tier ?? item?.system?.tier ?? null;
 }
 
@@ -70,7 +70,7 @@ class PersonalBankApp extends ApplicationV2 {
       return `<li class="bbttcc-bank-empty">No bankable gear carried.</li>`;
     }
     return items.map(it => {
-      const rfi = it.getFlag("fourththing", "rfi.item") || {};
+      const rfi = it.flags?.fourththing?.rfi?.item || {};
       const qty = Math.max(1, Math.floor(Number(it.system?.quantity ?? rfi?.charges ?? 1)) || 1);
       const sv = (() => { try { return it.getFlag("bbttcc-banks", "salvage"); } catch { return null; } })();
       const svBadge = sv?.markValue
