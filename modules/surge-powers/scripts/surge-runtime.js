@@ -88,13 +88,43 @@
     } catch (e) { /* best-effort */ }
     return v;
   }
-  async function grant(actor, n = 1, { quiet = false } = {}) {
+  async function grant(actor, n = 1, { quiet = false, resonance = false } = {}) {
     if (!actor || n <= 0) return getSurge(actor);
     const before = getSurge(actor);
     const after = await setSurge(actor, before + n);
     if (!quiet && after > before && setting("notify", true))
       ui.notifications?.info?.(`${actor.name}: +${after - before} Surge (${after}/${maxSurge(actor)})`);
+    // Path engines listen (the Harmony Marshal's Resonance); `resonance` marks
+    // Surge that came FROM a Resonance so it never sets off another one.
+    if (after > before) Hooks.callAll("surgePowers.banked", actor, after - before, { resonance });
     return after;
+  }
+
+  // ── One acting window ──────────────────────────────────────────────────────
+  // Dave and Mags share the Gamemaster login, so "the active GM" can be two
+  // browser windows. GM windows heartbeat on the module socket; the lowest
+  // window id seen in the last 15 s is the leader, and only the leader runs
+  // GM-side work (relayed writes, combat ticks).
+  const WINDOW_ID = foundry.utils.randomID();
+  const peers = new Map();   // window id → last heartbeat (ms)
+  function isLeader() {
+    if (!game.user?.isGM || game.users.activeGM?.id !== game.user.id) return false;
+    const now = Date.now();
+    for (const [id, seen] of peers) {
+      if (now - seen > 15000) { peers.delete(id); continue; }
+      if (id < WINDOW_ID) return false;
+    }
+    return true;
+  }
+  function startHeartbeat() {
+    const SOCKET = `module.${MOD}`;
+    game.socket.on(SOCKET, (msg) => {
+      if (msg?.type === "hb" && msg.userId === game.user.id && msg.id !== WINDOW_ID) peers.set(msg.id, Date.now());
+    });
+    if (!game.user.isGM) return;
+    const beat = () => game.socket.emit(SOCKET, { type: "hb", id: WINDOW_ID, userId: game.user.id });
+    beat();
+    setInterval(beat, 5000);
   }
   async function spend(actor, n = 1) {
     if (!actor || n <= 0) return true;
@@ -185,7 +215,7 @@
     // each other's actors, and this keeps the grant single-fire).
     Hooks.on("combatStart", (combat) => {
       try {
-        if (game.users.activeGM?.id !== game.user.id) return;
+        if (!isLeader()) return;
         const n = Number(setting("combatTick", 1)) || 0;
         if (n <= 0) return;
         for (const c of (combat?.combatants ?? [])) {
@@ -198,7 +228,7 @@
     // still false, so they can't double-dip here.)
     Hooks.on("createCombatant", (combatant) => {
       try {
-        if (game.users.activeGM?.id !== game.user.id) return;
+        if (!isLeader()) return;
         if (!combatant?.combat?.started) return;
         const n = Number(setting("combatTick", 1)) || 0;
         if (n > 0 && combatant.actor?.type === "character") grant(combatant.actor, n);
@@ -213,7 +243,8 @@
         grant(actor, pb);
       } catch (e) { /* best-effort */ }
     });
-    game.surgePowers = Object.assign(game.surgePowers || {}, { get: getSurge, max: maxSurge, grant, spend, set: setSurge });
+    startHeartbeat();
+    game.surgePowers = Object.assign(game.surgePowers || {}, { get: getSurge, max: maxSurge, grant, spend, set: setSurge, isLeader });
     console.log(TAG, "Surge runtime ready (threshold fill + explosion + cast gain + combat tick + rest refill)");
   });
 })();

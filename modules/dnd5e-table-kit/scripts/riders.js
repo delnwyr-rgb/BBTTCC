@@ -15,6 +15,7 @@
 //            cinderwake     → maximise every die               (Cinderwake)
 //            crowningBlow   → critical with maximised dice     (Crowning Blow)
 //            ignoreResists  → message flag; automation applies with resistance ignored
+//            pressHarder    → melee only: + Prof flat damage           (Aurablade: Press Harder)
 //   save     autoSaveOnce   → the save is marked resisted (forced success)  (Iron Word)
 //
 // reactionMiss is consumed by automation.js when damage would be applied.
@@ -136,7 +137,7 @@ function onPreRollSave(config, dialog, message) {
 /* -------------------------------------------- */
 
 const DAMAGE_KEYS = ["doomstrike", "surgingCast", "wrathCascade", "cinderwake", "crowningBlow", "finalArgument",
-  "ignoreResists", "absorbStrike"];
+  "ignoreResists", "absorbStrike", "pressHarder"];
 
 function onPreRollDamage(config, dialog, message) {
   const activity = config.subject;
@@ -144,7 +145,8 @@ function onPreRollDamage(config, dialog, message) {
   if ( !actor ) return;
   const isWeapon = activity?.item?.type === "weapon";
   const isMelee = activity?.attack?.type?.value === "melee";
-  const keys = DAMAGE_KEYS.filter(k => ((k !== "surgingCast") || !isWeapon) && ((k !== "absorbStrike") || isMelee));
+  const meleeOnly = new Set(["absorbStrike", "pressHarder"]);
+  const keys = DAMAGE_KEYS.filter(k => ((k !== "surgingCast") || !isWeapon) && (!meleeOnly.has(k) || isMelee));
   const got = take(actor, keys);
   if ( !got.size ) return;
 
@@ -157,6 +159,7 @@ function onPreRollDamage(config, dialog, message) {
   }
   if ( got.has("doomstrike") ) plan.extra = `${prof}d6`;
   if ( got.has("finalArgument") ) plan.flat = prof;
+  if ( got.has("pressHarder") ) plan.flat = (plan.flat ?? 0) + prof;
   if ( got.has("surgingCast") ) plan.maxOne = true;
   if ( got.has("wrathCascade") ) plan.reroll = true;
   if ( got.has("ignoreResists") ) foundry.utils.setProperty(message, `data.flags.${ID}.ignoreResist`, true);

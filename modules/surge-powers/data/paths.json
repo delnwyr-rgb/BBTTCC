@@ -1,90 +1,2036 @@
 {
-  "_about": "Bad Eden Paths: Surge overlays chosen at 1st level (a second at 17th), each with three doctrines. Entries use the same shape as the universal Surge menu (cost, minProf, label, fiction, fx). 'doctrine' limits an entry to one doctrine; 'perk' marks free doctrine moves available from 1st level. Design source: the 'Bad Eden Paths' Claude Doc.",
-  "paths": {
-    "bulwark": {
-      "name": "Path of the Bulwark",
-      "img": "icons/equipment/shield/heater-steel-worn.webp",
-      "tagline": "Set your feet. The line forms on you.",
-      "entry": {
-        "name": "Hold the Line",
-        "description": "<p><strong>Hold the Line (free).</strong> Once per round, as a reaction when a creature you can see within 5 feet of you is targeted by an attack, you can become the target instead.</p><p>The wall runs on what hits it: the first time each round you take damage, you bank 1 Surge.</p>"
-      },
-      "onDamaged": { "surge": 1, "perRound": 1 },
-      "doctrines": {
-        "mountain": {
-          "name": "Mountain",
-          "tagline": "You belong here now. Argue with the mountain.",
-          "perk": {
-            "name": "Rooted",
-            "description": "<p><strong>Rooted.</strong> You have advantage on Strength saving throws, and you can't be pushed or knocked prone while you haven't moved this turn.</p>",
-            "changes": [["system.abilities.str.save.roll.mode", "add", "1"]]
-          }
-        },
-        "avalanche": {
-          "name": "Avalanche",
-          "tagline": "You do not stop. They learn this the hard way.",
-          "perk": {
-            "name": "No Terminal Velocity",
-            "description": "<p><strong>No Terminal Velocity.</strong> Your walking speed increases by 5 feet, and difficult terrain doesn't slow you.</p>",
-            "changes": [["system.attributes.movement.speeds.walk", "add", "5"]]
-          }
-        },
-        "cataclyst": {
-          "name": "Cataclyst",
-          "tagline": "Something gives way. You aim where.",
-          "perk": {
-            "name": "Stance Dance",
-            "description": "<p><strong>Stance Dance.</strong> At the start of your turn you can take Advance or Anchor for free (from the Surge menu); it lasts until your next turn.</p>",
-            "changes": []
-          }
-        }
-      },
-      "abilities": [
-        { "key": "brace-the-line", "cost": 1, "minProf": 2, "label": "Brace the Line — +2 AC to you or a targeted ally against one attack",
-          "fiction": "You set your shoulder where the blow will land.",
-          "fx": { "tgt": "allyOrSelf", "acBonus": 2, "note": "Use it as a reaction when the attack hits: it can turn the hit into a miss." } },
-        { "key": "steady-feet", "cost": 1, "minProf": 2, "label": "Steady Feet — advantage on Str and Dex saves; you can't be moved",
-          "fiction": "The ground agrees with you.",
-          "fx": { "tgt": "self", "ae": { "name": "Steady Feet", "rounds": 1,
-            "changes": [["system.abilities.str.save.roll.mode", "add", "1"], ["system.abilities.dex.save.roll.mode", "add", "1"]] },
-            "note": "Until your next turn you can't be moved or knocked prone." } },
-        { "key": "absorbing-guard", "cost": 2, "minProf": 3, "label": "Absorbing Guard — resist one damage type; your next melee hit adds 1d6 of it",
-          "fiction": "You take it in, and you keep it.",
-          "fx": { "tgt": "self", "resistChoice": true, "absorb": true,
-            "auto": "Your next melee hit adds 1d6 of the absorbed type." } },
-        { "key": "shelter", "cost": 3, "minProf": 3, "label": "Shelter — you and allies within 10 ft gain temp HP equal to twice your Prof",
-          "fiction": "Stand behind me. All of you.",
-          "fx": { "tgt": "allies10", "tempHP": "2*@prof" } },
-        { "key": "bastion", "cost": 4, "minProf": 4, "label": "Bastion — 1 minute: +1 AC and resistance to weapon damage",
-          "fiction": "You become the wall the others lean on.",
-          "fx": { "tgt": "self", "ae": { "name": "Bastion", "rounds": 10,
-            "changes": [["system.attributes.ac.bonus", "add", "1"], ["system.traits.dr.value", "add", "bludgeoning"], ["system.traits.dr.value", "add", "piercing"], ["system.traits.dr.value", "add", "slashing"], ["system.traits.dr.value", "add", "kinetic"]] },
-            "note": "Concentration: it ends if your concentration breaks." } },
-        { "key": "unbroken", "cost": 5, "minProf": 5, "oncePer": "long", "label": "Unbroken — at 0 HP, rise to 1 and gain temp HP equal to your level (1/long rest)",
-          "fiction": "Not today. Not like this.",
-          "fx": { "tgt": "self", "unbroken": true, "tempHP": "@level" } },
-        { "key": "last-wall", "cost": 7, "minProf": 6, "label": "The Last Wall — 1 minute: allies within 10 ft resist all damage",
-          "fiction": "Everything they throw finds you first.",
-          "fx": { "tgt": "allies10", "ae": { "name": "The Last Wall", "rounds": 10, "changes": [["system.traits.dr.value", "add", "__all__"]] },
-            "note": "For the duration you can't drop below 1 HP." } },
-
-        { "key": "denial", "doctrine": "mountain", "cost": 3, "minProf": 4, "label": "Denial — a creature trying to move past you stops dead",
-          "fiction": "You decide which side of you is the wall.",
-          "fx": { "tgt": "target", "ae": { "name": "Denied", "rounds": 1, "changes": [["system.attributes.movement.speeds.walk", "override", "0"]] },
-            "note": "Use it as a reaction when a creature within 5 ft tries to move past you." } },
-        { "key": "shockwave-arrival", "doctrine": "avalanche", "cost": 3, "minProf": 4, "label": "Shockwave Arrival — your next melee hit also strikes everyone around the target",
-          "fiction": "Arriving is the strike.",
-          "fx": { "tgt": "self", "note": "After moving at least 10 ft in a straight line, your next melee hit also deals its weapon damage to every other creature within 5 ft of the target (apply it from the damage card)." } },
-        { "key": "advance", "doctrine": "cataclyst", "perk": true, "cost": 0, "minProf": 0, "label": "Advance — +2 melee damage, −1 AC until your next turn",
-          "fiction": "Lean into it.",
-          "fx": { "tgt": "self", "ae": { "name": "Advance", "rounds": 1, "changes": [["system.rolls.damage.mwak.bonus", "add", "2"], ["system.attributes.ac.bonus", "add", "-1"]] } } },
-        { "key": "anchor", "doctrine": "cataclyst", "perk": true, "cost": 0, "minProf": 0, "label": "Anchor — +1 AC, half speed until your next turn",
-          "fiction": "Plant it.",
-          "fx": { "tgt": "self", "ae": { "name": "Anchor", "rounds": 1, "changes": [["system.attributes.ac.bonus", "add", "1"], ["system.attributes.movement.speeds.walk", "multiply", "0.5"]] } } },
-        { "key": "decide-the-weather", "doctrine": "cataclyst", "cost": 3, "minProf": 4, "label": "Decide the Weather — a wall of debris, or an eruption",
-          "fiction": "One. Or the other. Not both. Decide.",
-          "fx": { "tgt": "self", "note": "Wall: a 30-ft line of debris gives full cover until it's cleared. Or Eruption: a 30-ft line, each creature makes a Dex save, 4d8 bludgeoning, half on a success." } }
+ "_about": "Bad Eden Paths: Surge overlays chosen at 1st level (a second at 17th), each with three doctrines. Entries use the same shape as the universal Surge menu (cost, minProf, label, fiction, fx). 'doctrine' limits an entry to one doctrine; 'perk' marks free doctrine moves available from 1st level. Design source: the 'Bad Eden Paths' Claude Doc.",
+ "paths": {
+  "bulwark": {
+   "name": "Path of the Bulwark",
+   "img": "icons/equipment/shield/heater-steel-worn.webp",
+   "tagline": "Set your feet. The line forms on you.",
+   "entry": {
+    "name": "Hold the Line",
+    "description": "<p><strong>Hold the Line (free).</strong> Once per round, as a reaction when a creature you can see within 5 feet of you is targeted by an attack, you can become the target instead.</p><p>The wall runs on what hits it: the first time each round you take damage, you bank 1 Surge.</p>"
+   },
+   "doctrines": {
+    "mountain": {
+     "name": "Mountain",
+     "tagline": "You belong here now. Argue with the mountain.",
+     "perk": {
+      "name": "Rooted",
+      "description": "<p><strong>Rooted.</strong> You have advantage on Strength saving throws, and you can't be pushed or knocked prone while you haven't moved this turn.</p>",
+      "changes": [
+       [
+        "system.abilities.str.save.roll.mode",
+        "add",
+        "1"
+       ]
       ]
+     }
+    },
+    "avalanche": {
+     "name": "Avalanche",
+     "tagline": "You do not stop. They learn this the hard way.",
+     "perk": {
+      "name": "No Terminal Velocity",
+      "description": "<p><strong>No Terminal Velocity.</strong> Your walking speed increases by 5 feet, and difficult terrain doesn't slow you.</p>",
+      "changes": [
+       [
+        "system.attributes.movement.speeds.walk",
+        "add",
+        "5"
+       ]
+      ]
+     }
+    },
+    "cataclyst": {
+     "name": "Cataclyst",
+     "tagline": "Something gives way. You aim where.",
+     "perk": {
+      "name": "Stance Dance",
+      "description": "<p><strong>Stance Dance.</strong> At the start of your turn you can take Advance or Anchor for free (from the Surge menu); it lasts until your next turn.</p>",
+      "changes": []
+     }
     }
+   },
+   "abilities": [
+    {
+     "key": "brace-the-line",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Brace the Line — +2 AC to you or a targeted ally against one attack",
+     "fiction": "You set your shoulder where the blow will land.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "acBonus": 2,
+      "note": "Use it as a reaction when the attack hits: it can turn the hit into a miss."
+     }
+    },
+    {
+     "key": "steady-feet",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Steady Feet — advantage on Str and Dex saves; you can't be moved",
+     "fiction": "The ground agrees with you.",
+     "fx": {
+      "tgt": "self",
+      "ae": {
+       "name": "Steady Feet",
+       "rounds": 1,
+       "changes": [
+        [
+         "system.abilities.str.save.roll.mode",
+         "add",
+         "1"
+        ],
+        [
+         "system.abilities.dex.save.roll.mode",
+         "add",
+         "1"
+        ]
+       ]
+      },
+      "note": "Until your next turn you can't be moved or knocked prone."
+     }
+    },
+    {
+     "key": "absorbing-guard",
+     "cost": 2,
+     "minProf": 3,
+     "label": "Absorbing Guard — resist one damage type; your next melee hit adds 1d6 of it",
+     "fiction": "You take it in, and you keep it.",
+     "fx": {
+      "tgt": "self",
+      "resistChoice": true,
+      "absorb": true,
+      "auto": "Your next melee hit adds 1d6 of the absorbed type."
+     }
+    },
+    {
+     "key": "shelter",
+     "cost": 3,
+     "minProf": 3,
+     "label": "Shelter — you and allies within 10 ft gain temp HP equal to twice your Prof",
+     "fiction": "Stand behind me. All of you.",
+     "fx": {
+      "tgt": "allies10",
+      "tempHP": "2*@prof"
+     }
+    },
+    {
+     "key": "bastion",
+     "cost": 4,
+     "minProf": 4,
+     "label": "Bastion — 1 minute: +1 AC and resistance to weapon damage",
+     "fiction": "You become the wall the others lean on.",
+     "fx": {
+      "tgt": "self",
+      "ae": {
+       "name": "Bastion",
+       "rounds": 10,
+       "changes": [
+        [
+         "system.attributes.ac.bonus",
+         "add",
+         "1"
+        ],
+        [
+         "system.traits.dr.value",
+         "add",
+         "bludgeoning"
+        ],
+        [
+         "system.traits.dr.value",
+         "add",
+         "piercing"
+        ],
+        [
+         "system.traits.dr.value",
+         "add",
+         "slashing"
+        ],
+        [
+         "system.traits.dr.value",
+         "add",
+         "kinetic"
+        ]
+       ]
+      },
+      "note": "Concentration: it ends if your concentration breaks."
+     }
+    },
+    {
+     "key": "unbroken",
+     "cost": 5,
+     "minProf": 5,
+     "oncePer": "long",
+     "label": "Unbroken — at 0 HP, rise to 1 and gain temp HP equal to your level (1/long rest)",
+     "fiction": "Not today. Not like this.",
+     "fx": {
+      "tgt": "self",
+      "unbroken": true,
+      "tempHP": "@level"
+     }
+    },
+    {
+     "key": "last-wall",
+     "cost": 7,
+     "minProf": 6,
+     "label": "The Last Wall — 1 minute: allies within 10 ft resist all damage",
+     "fiction": "Everything they throw finds you first.",
+     "fx": {
+      "tgt": "allies10",
+      "ae": {
+       "name": "The Last Wall",
+       "rounds": 10,
+       "changes": [
+        [
+         "system.traits.dr.value",
+         "add",
+         "__all__"
+        ]
+       ]
+      },
+      "note": "For the duration you can't drop below 1 HP."
+     }
+    },
+    {
+     "key": "denial",
+     "doctrine": "mountain",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Denial — a creature trying to move past you stops dead",
+     "fiction": "You decide which side of you is the wall.",
+     "fx": {
+      "tgt": "target",
+      "ae": {
+       "name": "Denied",
+       "rounds": 1,
+       "changes": [
+        [
+         "system.attributes.movement.speeds.walk",
+         "override",
+         "0"
+        ]
+       ]
+      },
+      "note": "Use it as a reaction when a creature within 5 ft tries to move past you."
+     }
+    },
+    {
+     "key": "shockwave-arrival",
+     "doctrine": "avalanche",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Shockwave Arrival — your next melee hit also strikes everyone around the target",
+     "fiction": "Arriving is the strike.",
+     "fx": {
+      "tgt": "self",
+      "note": "After moving at least 10 ft in a straight line, your next melee hit also deals its weapon damage to every other creature within 5 ft of the target (apply it from the damage card)."
+     }
+    },
+    {
+     "key": "advance",
+     "doctrine": "cataclyst",
+     "perk": true,
+     "cost": 0,
+     "minProf": 0,
+     "label": "Advance — +2 melee damage, −1 AC until your next turn",
+     "fiction": "Lean into it.",
+     "fx": {
+      "tgt": "self",
+      "ae": {
+       "name": "Advance",
+       "rounds": 1,
+       "changes": [
+        [
+         "system.rolls.damage.mwak.bonus",
+         "add",
+         "2"
+        ],
+        [
+         "system.attributes.ac.bonus",
+         "add",
+         "-1"
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "key": "anchor",
+     "doctrine": "cataclyst",
+     "perk": true,
+     "cost": 0,
+     "minProf": 0,
+     "label": "Anchor — +1 AC, half speed until your next turn",
+     "fiction": "Plant it.",
+     "fx": {
+      "tgt": "self",
+      "ae": {
+       "name": "Anchor",
+       "rounds": 1,
+       "changes": [
+        [
+         "system.attributes.ac.bonus",
+         "add",
+         "1"
+        ],
+        [
+         "system.attributes.movement.speeds.walk",
+         "multiply",
+         "0.5"
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "key": "decide-the-weather",
+     "doctrine": "cataclyst",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Decide the Weather — a wall of debris, or an eruption",
+     "fiction": "One. Or the other. Not both. Decide.",
+     "fx": {
+      "tgt": "self",
+      "note": "Wall: a 30-ft line of debris gives full cover until it's cleared. Or Eruption: a 30-ft line, each creature makes a Dex save, 4d8 bludgeoning, half on a success."
+     }
+    }
+   ],
+   "bank": [
+    {
+     "on": "damaged"
+    }
+   ]
+  },
+  "aurablade": {
+   "name": "Path of the Aurablade",
+   "img": "icons/weapons/swords/sword-runed-glowing.webp",
+   "tagline": "Emotion sharpens faster than steel.",
+   "entry": {
+    "name": "Aura",
+    "description": "<p><strong>Aura (free).</strong> As a bonus action, take up one of four Auras from the Surge menu; it lasts until you change it. <em>Fury:</em> +1 damage on melee weapon attacks. <em>Resolve:</em> +1 AC while you haven't moved this turn. <em>Mercy:</em> you can deal nonlethal damage at no cost, and a creature you drop to 0 HP can be left stable. <em>Dread:</em> creatures within 5 ft of you have disadvantage on saves against being frightened.</p><p>Burn, as Surge: the first time each round you hit with a melee weapon attack, you bank 1 Surge.</p>"
+   },
+   "bank": [
+    {
+     "on": "meleeHit"
+    }
+   ],
+   "doctrines": {
+    "stillheart": {
+     "name": "Stillheart",
+     "tagline": "The calm is the discipline.",
+     "perk": {
+      "name": "Centered Breath",
+      "description": "<p><strong>Centered Breath.</strong> You and allies within 10 ft have advantage on saves against being frightened or charmed.</p>",
+      "changes": []
+     }
+    },
+    "bloodhymn": {
+     "name": "Blood Hymn",
+     "tagline": "The wound is the prayer.",
+     "perk": {
+      "name": "Lifetithe",
+      "description": "<p><strong>Lifetithe.</strong> Once per turn (0 Surge, from the Surge menu), take damage equal to your Prof and bank 1 Surge.</p>",
+      "changes": []
+     }
+    },
+    "voidedge": {
+     "name": "Void Edge",
+     "tagline": "Entropy has a shape. I cut along it.",
+     "perk": {
+      "name": "Null Field",
+      "description": "<p><strong>Null Field.</strong> A creature you hit with a melee attack can't take reactions until the start of your next turn.</p>",
+      "changes": []
+     }
+    }
+   },
+   "abilities": [
+    {
+     "key": "aura-fury",
+     "cost": 0,
+     "minProf": 0,
+     "label": "Aura: Fury — +1 melee weapon damage",
+     "fiction": "Press harder. Break lines.",
+     "fx": {
+      "tgt": "self",
+      "stance": "aura",
+      "ae": {
+       "name": "Aura: Fury",
+       "rounds": 0,
+       "changes": [
+        [
+         "system.rolls.damage.mwak.bonus",
+         "add",
+         "1"
+        ]
+       ]
+      }
+     },
+     "perk": true
+    },
+    {
+     "key": "aura-resolve",
+     "cost": 0,
+     "minProf": 0,
+     "label": "Aura: Resolve — +1 AC while you haven't moved this turn",
+     "fiction": "Stand firm. Make removal expensive.",
+     "fx": {
+      "tgt": "self",
+      "stance": "aura",
+      "ae": {
+       "name": "Aura: Resolve",
+       "rounds": 0,
+       "changes": [
+        [
+         "system.attributes.ac.bonus",
+         "add",
+         "1"
+        ]
+       ]
+      },
+      "note": "The +1 AC only counts on turns you haven't moved."
+     },
+     "perk": true
+    },
+    {
+     "key": "aura-mercy",
+     "cost": 0,
+     "minProf": 0,
+     "label": "Aura: Mercy — nonlethal at no cost; the fallen can be left stable",
+     "fiction": "Prevent loss. Redirect harm.",
+     "fx": {
+      "tgt": "self",
+      "stance": "aura",
+      "ae": {
+       "name": "Aura: Mercy",
+       "rounds": 0,
+       "changes": []
+      },
+      "note": "Nonlethal damage costs you nothing; a creature you drop to 0 HP can be left stable."
+     },
+     "perk": true
+    },
+    {
+     "key": "aura-dread",
+     "cost": 0,
+     "minProf": 0,
+     "label": "Aura: Dread — creatures within 5 ft have disadvantage on saves vs fear",
+     "fiction": "Remove hope. End momentum.",
+     "fx": {
+      "tgt": "self",
+      "stance": "aura",
+      "ae": {
+       "name": "Aura: Dread",
+       "rounds": 0,
+       "changes": []
+      },
+      "note": "Creatures within 5 ft of you have disadvantage on saves against being frightened."
+     },
+     "perk": true
+    },
+    {
+     "key": "press-harder",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Press Harder — your next melee hit deals +Prof damage and pushes 5 ft",
+     "fiction": "Commit. The blade answers.",
+     "fx": {
+      "tgt": "self",
+      "oneShot": "pressHarder",
+      "auto": "Your next melee hit deals +Prof damage.",
+      "note": "That hit also pushes the target 5 ft.",
+      "alsoNote": true
+     }
+    },
+    {
+     "key": "stand-firm",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Stand Firm — resist one damage type; you can't be moved",
+     "fiction": "Make removal expensive.",
+     "fx": {
+      "tgt": "self",
+      "resistChoice": true,
+      "note": "Until your next turn you can't be moved against your will."
+     }
+    },
+    {
+     "key": "take-it-for-them",
+     "cost": 2,
+     "minProf": 3,
+     "label": "Take It for Them — an ally takes Prof less from each hit this round",
+     "fiction": "Not them. Me.",
+     "fx": {
+      "tgt": "ally",
+      "dr": "prof",
+      "note": "Use it as a reaction when the ally is hit."
+     }
+    },
+    {
+     "key": "dread-mark",
+     "cost": 3,
+     "minProf": 3,
+     "label": "Dread Mark — a foe has disadvantage on attacks and no reactions",
+     "fiction": "Hope falters where you look.",
+     "fx": {
+      "tgt": "target",
+      "ae": {
+       "name": "Dread Mark (no reactions)",
+       "rounds": 1,
+       "changes": [
+        [
+         "flags.dnd5e-table-kit.disadvantage.attack",
+         "override",
+         "all"
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "key": "overheat",
+     "cost": 4,
+     "minProf": 4,
+     "label": "Overheat — 1 minute of +Prof melee damage, then a backlash",
+     "fiction": "Past the safe line, on purpose.",
+     "fx": {
+      "tgt": "self",
+      "ae": {
+       "name": "Overheat",
+       "rounds": 10,
+       "changes": [
+        [
+         "system.rolls.damage.mwak.bonus",
+         "add",
+         "@prof"
+        ]
+       ]
+      },
+      "note": "When it ends, you have disadvantage on your next attack roll and your next saving throw."
+     }
+    },
+    {
+     "key": "not-on-my-watch",
+     "cost": 5,
+     "minProf": 5,
+     "label": "Not on My Watch — an ally at 0 HP rises to 1 with temp HP = your level (1/long rest)",
+     "fiction": "Mercy delays consequences.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "unbroken": true,
+      "tempHP": "@level"
+     },
+     "oncePer": "long"
+    },
+    {
+     "key": "aura-unbound",
+     "cost": 7,
+     "minProf": 6,
+     "label": "Aura Unbound — 1 minute: allies within 10 ft share your Aura",
+     "fiction": "Your certainty becomes infrastructure.",
+     "fx": {
+      "tgt": "allies10",
+      "shareStance": "aura",
+      "shareRounds": 10
+     }
+    },
+    {
+     "key": "eye-of-the-storm",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Eye of the Storm — 1 minute: allies within 10 ft have advantage on Wisdom saves",
+     "fiction": "Violence happens around you. It does not take you.",
+     "fx": {
+      "tgt": "allies10",
+      "ae": {
+       "name": "Eye of the Storm",
+       "rounds": 10,
+       "changes": [
+        [
+         "system.abilities.wis.save.roll.mode",
+         "add",
+         "1"
+        ]
+       ]
+      },
+      "note": "Fear and charm on them are suppressed for the duration."
+     },
+     "doctrine": "stillheart"
+    },
+    {
+     "key": "lifetithe",
+     "cost": 0,
+     "minProf": 0,
+     "label": "Lifetithe — take Prof damage, bank 1 Surge (once per turn)",
+     "fiction": "The blade accepts sacrifice.",
+     "fx": {
+      "tgt": "self",
+      "selfDamage": "@prof",
+      "gainSurge": 1
+     },
+     "doctrine": "bloodhymn",
+     "perk": true,
+     "oncePer": "turn"
+    },
+    {
+     "key": "crimson-arc",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Crimson Arc — your next melee hit also deals half its damage to another creature in reach",
+     "fiction": "Momentum becomes violence.",
+     "fx": {
+      "tgt": "self",
+      "note": "Your next melee hit also deals half its damage to another creature within your reach (apply it from the damage card)."
+     },
+     "doctrine": "bloodhymn"
+    },
+    {
+     "key": "dread-cut",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Dread Cut — a creature makes a Wisdom save or is frightened of you",
+     "fiction": "Dread is contagious.",
+     "fx": {
+      "tgt": "target",
+      "save": {
+       "ability": "wis",
+       "ae": {
+        "name": "Frightened (Dread Cut)",
+        "rounds": 1,
+        "statuses": [
+         "frightened"
+        ]
+       }
+      }
+     },
+     "doctrine": "voidedge"
+    }
+   ]
+  },
+  "harmony": {
+   "name": "Path of the Harmony Marshal",
+   "img": "icons/sundries/flags/banner-flag-blue.webp",
+   "tagline": "You're not the hero. You're the reason the heroes don't trip over each other.",
+   "entry": {
+    "name": "Resonance",
+    "description": "<p><strong>Resonance (free).</strong> When an ally within 30 ft banks Surge, you bank 1 too, up to half your Prof (rounded down) per round. Surge you bank this way never sets off another Marshal's Resonance.</p>"
+   },
+   "bank": [
+    {
+     "on": "allyBanked",
+     "cap": "halfProf",
+     "range": 30
+    }
+   ],
+   "doctrines": {
+    "accord": {
+     "name": "Mandate of Accord",
+     "tagline": "Act as one.",
+     "perk": {
+      "name": "Accord Partner",
+      "description": "<p><strong>Accord Partner.</strong> At the start of each combat, name one ally. When either of you hits a creature, the other has advantage on their next attack against it.</p>",
+      "changes": []
+     }
+    },
+    "overwatch": {
+     "name": "Mandate of Overwatch",
+     "tagline": "Nothing unobserved.",
+     "perk": {
+      "name": "All-Seeing",
+      "description": "<p><strong>All-Seeing.</strong> +5 passive Perception, and you can't be surprised.</p>",
+      "changes": [
+       [
+        "system.skills.prc.bonuses.passive",
+        "add",
+        "5"
+       ]
+      ]
+     }
+    },
+    "resolve": {
+     "name": "Mandate of Resolve",
+     "tagline": "No one breaks.",
+     "perk": {
+      "name": "The Long Watch",
+      "description": "<p><strong>The Long Watch.</strong> When you lead a short rest, each ally who spends Hit Dice regains extra HP equal to your Prof.</p>",
+      "changes": []
+     }
+    }
+   },
+   "abilities": [
+    {
+     "key": "rallying-words",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Rallying Words — an ally has advantage on their next d20 roll",
+     "fiction": "The right word, at exactly the right moment.",
+     "fx": {
+      "tgt": "ally",
+      "arm": "bonusDie"
+     }
+    },
+    {
+     "key": "ease-attrition",
+     "cost": 2,
+     "minProf": 3,
+     "label": "Ease Attrition — heal an ally 2d6 + Prof and end one condition",
+     "fiction": "Process it. Then keep going.",
+     "fx": {
+      "tgt": "ally",
+      "heal": "2d6+@prof",
+      "endCondition": 1
+     }
+    },
+    {
+     "key": "rally-to-me",
+     "cost": 2,
+     "minProf": 3,
+     "label": "Rally to Me — an ally moves half speed to you and has advantage on their next d20",
+     "fiction": "On me. Now.",
+     "fx": {
+      "tgt": "ally",
+      "arm": "bonusDie",
+      "note": "Reaction: they move up to half their speed toward you without provoking."
+     }
+    },
+    {
+     "key": "unity-flourish",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Unity Flourish — every ally within 30 ft has advantage on their next d20",
+     "fiction": "The dice obey because you asked nicely.",
+     "fx": {
+      "tgt": "allies30",
+      "arm": "bonusDie"
+     }
+    },
+    {
+     "key": "conductors-crescendo",
+     "cost": 5,
+     "minProf": 5,
+     "label": "Conductor's Crescendo — allies within 30 ft: advantage, temp HP = Prof, end a condition",
+     "fiction": "The whole line, on one breath.",
+     "fx": {
+      "tgt": "allies30",
+      "arm": "bonusDie",
+      "tempHP": "@prof",
+      "note": "Each ally may also end one condition on themselves (GM applies)."
+     }
+    },
+    {
+     "key": "one-breath",
+     "cost": 7,
+     "minProf": 6,
+     "label": "One Breath — until your next turn, allies within 30 ft have advantage on attacks",
+     "fiction": "Act as one animal.",
+     "fx": {
+      "tgt": "allies30",
+      "ae": {
+       "name": "One Breath",
+       "rounds": 1,
+       "changes": [
+        [
+         "flags.dnd5e-table-kit.advantage.attack",
+         "override",
+         "all"
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "key": "synchronized-advance",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Synchronized Advance — every ally within 30 ft has advantage on their next attack",
+     "fiction": "The second blow lands in the hole the first made.",
+     "fx": {
+      "tgt": "allies30",
+      "arm": "advAttack"
+     },
+     "doctrine": "accord"
+    },
+    {
+     "key": "locked-perimeter",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Locked Perimeter — this round, allies within 30 ft take Prof less from each hit",
+     "fiction": "Hold the ground.",
+     "fx": {
+      "tgt": "allies30",
+      "dr": "prof"
+     },
+     "doctrine": "overwatch"
+    },
+    {
+     "key": "second-wind",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Second Wind — ward an ally: their next drop to 0 HP stops at 1",
+     "fiction": "Not this one. Not today.",
+     "fx": {
+      "tgt": "ally",
+      "ward": 1
+     },
+     "doctrine": "resolve"
+    }
+   ]
+  },
+  "courier": {
+   "name": "Path of the Shadow Courier",
+   "img": "icons/sundries/documents/envelope-sealed-red-tan.webp",
+   "tagline": "You're already moving. The fight rearranges around it.",
+   "entry": {
+    "name": "In Motion",
+    "description": "<p><strong>In Motion (free).</strong> The first time each round you move 30 ft or more on your turn, you bank 1 Surge.</p><p><strong>The Package.</strong> You can carry one Package at a time: a message, a key, a person, a secret. Delivering it fills your Surge to maximum (your GM confirms the delivery from the Surge menu).</p>"
+   },
+   "bank": [
+    {
+     "on": "moved30"
+    }
+   ],
+   "doctrines": {
+    "wayfarer": {
+     "name": "Wayfarer Tongue",
+     "tagline": "Go. I'll hold the way.",
+     "perk": {
+      "name": "The Tongue That Does Not Lie",
+      "description": "<p><strong>The Tongue That Does Not Lie.</strong> While carrying a message, you have advantage on Insight checks about its recipient and on Persuasion checks to reach them.</p>",
+      "changes": []
+     }
+    },
+    "blackstair": {
+     "name": "Black Stair",
+     "tagline": "You came through a door that wasn't for them.",
+     "perk": {
+      "name": "Blade or Key",
+      "description": "<p><strong>Blade or Key.</strong> At the start of each scene, carry one. Blade: your first attack from hiding or surprise deals an extra 1d10. Key: open one ordinary lock or password without a roll.</p>",
+      "changes": []
+     }
+    },
+    "lastmile": {
+     "name": "Last Mile",
+     "tagline": "Give it to me. I carry things.",
+     "perk": {
+      "name": "The Arms That Carry",
+      "description": "<p><strong>The Arms That Carry.</strong> Pick up an unconscious or willing ally as a bonus action and carry them at your full speed.</p>",
+      "changes": []
+     }
+    }
+   },
+   "abilities": [
+    {
+     "key": "package-delivered",
+     "cost": 0,
+     "minProf": 0,
+     "label": "The Package — delivered: Surge to full (your GM confirms)",
+     "fiction": "The arrival that mattered.",
+     "fx": {
+      "tgt": "self",
+      "fillSurge": true
+     },
+     "gmOnly": true,
+     "perk": true
+    },
+    {
+     "key": "couriers-step",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Courier's Step — move half your speed without provoking",
+     "fiction": "Flow through the fight.",
+     "fx": {
+      "tgt": "self",
+      "note": "Move up to half your speed; this movement doesn't provoke opportunity attacks."
+     }
+    },
+    {
+     "key": "ghoststep",
+     "cost": 2,
+     "minProf": 3,
+     "label": "Ghoststep — Prof less damage per hit until your next turn; slip 10 ft",
+     "fiction": "Already elsewhere.",
+     "fx": {
+      "tgt": "self",
+      "dr": "prof",
+      "note": "Move 10 ft without provoking opportunity attacks."
+     }
+    },
+    {
+     "key": "the-crossing",
+     "cost": 3,
+     "minProf": 3,
+     "label": "The Crossing — pass through a door, wall or ward up to 5 ft thick (1/short rest)",
+     "fiction": "The membrane chooses you instead of the wall.",
+     "fx": {
+      "tgt": "self",
+      "note": "As part of your move, pass through one door, wall or ward up to 5 ft thick. Ordinary barriers don't register you; a magical ward needs a Dexterity check against its DC."
+     },
+     "oncePer": "short"
+    },
+    {
+     "key": "flank-and-strike",
+     "cost": 5,
+     "minProf": 4,
+     "label": "Flank & Strike — your next attack has advantage and deals +Prof d6",
+     "fiction": "Reposition, then end it.",
+     "fx": {
+      "tgt": "self",
+      "oneShot": [
+       "advAttack",
+       "doomstrike"
+      ],
+      "auto": "Your next attack has advantage and deals +Prof d6 damage."
+     }
+    },
+    {
+     "key": "unfound-route",
+     "cost": 6,
+     "minProf": 5,
+     "label": "Unfound Route — step through one doorway and out of another you've crossed (1/long rest)",
+     "fiction": "Every threshold you've crossed remembers you.",
+     "fx": {
+      "tgt": "self",
+      "note": "Out of combat: you and up to four allies step through one doorway and out of another you have personally crossed before."
+     },
+     "oncePer": "long"
+    },
+    {
+     "key": "no-such-door",
+     "cost": 8,
+     "minProf": 6,
+     "label": "No Such Door — allies within 30 ft move half speed free and have advantage on their next d20",
+     "fiction": "Open the road for the whole team.",
+     "fx": {
+      "tgt": "allies30",
+      "arm": "bonusDie",
+      "note": "Each ally can immediately move up to half their speed without provoking."
+     }
+    },
+    {
+     "key": "safe-passage",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Safe Passage — an ally takes Prof less per hit this round and has advantage on their next d20",
+     "fiction": "Nothing touches what you're carrying.",
+     "fx": {
+      "tgt": "ally",
+      "dr": "prof",
+      "arm": "bonusDie"
+     },
+     "doctrine": "wayfarer"
+    },
+    {
+     "key": "cut-off",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Cut Off — a creature can't take reactions and has 0 speed until your next turn",
+     "fiction": "The threshold slams shut.",
+     "fx": {
+      "tgt": "target",
+      "ae": {
+       "name": "Cut Off (no reactions)",
+       "rounds": 1,
+       "changes": [
+        [
+         "system.attributes.movement.speeds.walk",
+         "override",
+         "0"
+        ]
+       ]
+      }
+     },
+     "doctrine": "blackstair"
+    },
+    {
+     "key": "shoulder-the-weight",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Shoulder the Weight — heal an ally 2d6 + Prof; you take half; they have advantage next",
+     "fiction": "Give it to me.",
+     "fx": {
+      "tgt": "ally",
+      "heal": "2d6+@prof",
+      "selfDamage": "halfHeal",
+      "arm": "bonusDie"
+     },
+     "doctrine": "lastmile"
+    }
+   ]
+  },
+  "wyrdlens": {
+   "name": "Path of the Wyrdlens Adept",
+   "img": "icons/tools/scribal/lens-blue.webp",
+   "tagline": "Every structure has a flaw. You only have to look at it correctly.",
+   "entry": {
+    "name": "The Lens",
+    "description": "<p><strong>The Lens (free).</strong> <em>Probability Overlay:</em> once per round, roll one of your own d20s with advantage (0 Surge, from the Surge menu). <em>The seam shows:</em> the first time each round a creature within 60 ft of you fails a saving throw, you bank 1 Surge.</p>"
+   },
+   "bank": [
+    {
+     "on": "seenSaveFail",
+     "range": 60
+    }
+   ],
+   "doctrines": {
+    "truth": {
+     "name": "Truth",
+     "tagline": "I see what you actually are.",
+     "perk": {
+      "name": "The Reading Eye",
+      "description": "<p><strong>The Reading Eye.</strong> Truesight out to 10 ft.</p>",
+      "changes": [
+       [
+        "system.attributes.senses.ranges.truesight",
+        "upgrade",
+        "10"
+       ]
+      ]
+     }
+    },
+    "foresight": {
+     "name": "Foresight",
+     "tagline": "You already know how this goes.",
+     "perk": {
+      "name": "Half a Second Early",
+      "description": "<p><strong>Half a Second Early.</strong> Add your Prof to initiative rolls.</p>",
+      "changes": [
+       [
+        "system.attributes.init.roll.bonus",
+        "add",
+        "@prof"
+       ]
+      ]
+     }
+    },
+    "mercy": {
+     "name": "Mercy",
+     "tagline": "Not them. Not like this.",
+     "perk": {
+      "name": "The Prevented Blow",
+      "description": "<p><strong>The Prevented Blow.</strong> Once per round, as a reaction, reduce the damage an ally within 10 ft takes from one hit by your Prof.</p>",
+      "changes": []
+     }
+    }
+   },
+   "abilities": [
+    {
+     "key": "probability-overlay",
+     "cost": 0,
+     "minProf": 0,
+     "label": "Probability Overlay — your next d20 has advantage (once per round)",
+     "fiction": "You saw the thread.",
+     "fx": {
+      "tgt": "self",
+      "oneShot": "bonusDie",
+      "auto": "Your next d20 roll has advantage."
+     },
+     "perk": true,
+     "oncePer": "round"
+    },
+    {
+     "key": "foresight",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Foresight — you or an ally has advantage on the next d20 roll",
+     "fiction": "You saw it coming.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "arm": "bonusDie"
+     }
+    },
+    {
+     "key": "expose",
+     "cost": 2,
+     "minProf": 3,
+     "label": "Expose — a creature has disadvantage on its next attack and its saves",
+     "fiction": "You read the seam.",
+     "fx": {
+      "tgt": "target",
+      "ae": {
+       "name": "Exposed",
+       "rounds": 1,
+       "changes": [
+        [
+         "flags.dnd5e-table-kit.disadvantage.attack",
+         "override",
+         "all"
+        ],
+        [
+         "system.abilities.__all__.save.roll.mode",
+         "add",
+         "-1"
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "key": "refract",
+     "cost": 3,
+     "minProf": 3,
+     "label": "Refract — an ally takes Prof less from each hit this round",
+     "fiction": "Harm bends aside.",
+     "fx": {
+      "tgt": "ally",
+      "dr": "prof",
+      "note": "Use it as a reaction when the ally is hit."
+     }
+    },
+    {
+     "key": "read-the-seam",
+     "cost": 4,
+     "minProf": 4,
+     "label": "Read the Seam — your next attack has advantage and ignores resistances",
+     "fiction": "The flaw is right there.",
+     "fx": {
+      "tgt": "self",
+      "oneShot": [
+       "advAttack",
+       "ignoreResists"
+      ],
+      "auto": "Your next attack has advantage and ignores the target's resistances."
+     }
+    },
+    {
+     "key": "revelation",
+     "cost": 5,
+     "minProf": 5,
+     "label": "Revelation — allies within 30 ft have advantage next; a targeted foe has disadvantage next",
+     "fiction": "Everyone sees it at once.",
+     "fx": {
+      "tgt": "allies30",
+      "arm": "bonusDie",
+      "and": {
+       "tgt": "target",
+       "ae": {
+        "name": "Revealed",
+        "rounds": 1,
+        "changes": [
+         [
+          "flags.dnd5e-table-kit.disadvantage.attack",
+          "override",
+          "all"
+         ]
+        ]
+       }
+      }
+     }
+    },
+    {
+     "key": "tikkun-sight",
+     "cost": 7,
+     "minProf": 6,
+     "label": "Tikkun Sight — a missed spell hits, or a save it allowed fails (1/long rest)",
+     "fiction": "The Tree pays the difference.",
+     "fx": {
+      "tgt": "self",
+      "note": "When your spell or power misses every target or every target saves, treat one target as hit or as having failed (GM applies)."
+     },
+     "oncePer": "long"
+    },
+    {
+     "key": "the-exposure",
+     "cost": 3,
+     "minProf": 4,
+     "label": "The Exposure — a creature can't take reactions and has disadvantage on saves",
+     "fiction": "Nowhere left to put an intention.",
+     "fx": {
+      "tgt": "target",
+      "ae": {
+       "name": "The Exposure (no reactions)",
+       "rounds": 1,
+       "changes": [
+        [
+         "system.abilities.__all__.save.roll.mode",
+         "add",
+         "-1"
+        ]
+       ]
+      }
+     },
+     "doctrine": "truth"
+    },
+    {
+     "key": "stopped-strike",
+     "cost": 3,
+     "minProf": 4,
+     "label": "The Stopped Strike — the next hit on an ally this round misses",
+     "fiction": "The strike simply declines to land.",
+     "fx": {
+      "tgt": "ally",
+      "arm": "reactionMiss",
+      "note": "Use it as a reaction when a creature hits the ally."
+     },
+     "doctrine": "foresight"
+    },
+    {
+     "key": "redirected-harm",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Redirected Harm — an ally takes Prof less per hit and is warded at 1 HP",
+     "fiction": "Send it into the wall instead.",
+     "fx": {
+      "tgt": "ally",
+      "dr": "prof",
+      "ward": 1
+     },
+     "doctrine": "mercy"
+    }
+   ]
+  },
+  "linguist": {
+   "name": "Path of the Cosmic Linguist",
+   "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+   "tagline": "Strike the clause. Insert your own. Reality reads from the top.",
+   "entry": {
+    "name": "The Next Word",
+    "description": "<p><strong>The Next Word (free).</strong> At the start of each round of combat you bank 1 Surge.</p><p><strong>The Sentence.</strong> While you concentrate on a spell or power, its main target has disadvantage on ability checks against you.</p>"
+   },
+   "bank": [
+    {
+     "on": "roundStart"
+    }
+   ],
+   "doctrines": {
+    "annotator": {
+     "name": "Annotator",
+     "tagline": "See below. It changes everything above.",
+     "perk": {
+      "name": "Footnote",
+      "description": "<p><strong>Footnote.</strong> Once per round, as a reaction, add 1d4 to a d20 roll an ally within 30 ft just made.</p>",
+      "changes": []
+     }
+    },
+    "metaphor": {
+     "name": "Metaphor Apostle",
+     "tagline": "Say what counts as what now. Reality is listening.",
+     "perk": {
+      "name": "Declared Likeness",
+      "description": "<p><strong>Declared Likeness.</strong> Once per turn (0 Surge, from the Surge menu): \"you are a wall\". A targeted ally gains +1 AC until your next turn.</p>",
+      "changes": []
+     }
+    },
+    "redactor": {
+     "name": "Redactor",
+     "tagline": "It is not there anymore. It was never there.",
+     "perk": {
+      "name": "Clean Edges",
+      "description": "<p><strong>Clean Edges.</strong> Once per short rest (0 Surge, from the Surge menu), end the charmed or frightened condition on yourself or an ally you can see.</p>",
+      "changes": []
+     }
+    }
+   },
+   "abilities": [
+    {
+     "key": "emphasis",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Emphasis — your next attack or spell that hits deals +Prof d6",
+     "fiction": "The word, underlined.",
+     "fx": {
+      "tgt": "self",
+      "oneShot": "doomstrike",
+      "auto": "Your next damage roll adds Prof d6."
+     }
+    },
+    {
+     "key": "stabilize",
+     "cost": 2,
+     "minProf": 3,
+     "label": "Stabilize — Prof less damage per hit and advantage on concentration until your next turn",
+     "fiction": "The sentence holds.",
+     "fx": {
+      "tgt": "self",
+      "dr": "prof",
+      "ae": {
+       "name": "Stabilize",
+       "rounds": 1,
+       "changes": [
+        [
+         "system.attributes.concentration.roll.mode",
+         "add",
+         "1"
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "key": "impose-a-reading",
+     "cost": 3,
+     "minProf": 3,
+     "label": "Impose a Reading — a creature has disadvantage on its next attack and its saves",
+     "fiction": "Only one correct interpretation: yours.",
+     "fx": {
+      "tgt": "target",
+      "ae": {
+       "name": "Imposed Reading",
+       "rounds": 1,
+       "changes": [
+        [
+         "flags.dnd5e-table-kit.disadvantage.attack",
+         "override",
+         "all"
+        ],
+        [
+         "system.abilities.__all__.save.roll.mode",
+         "add",
+         "-1"
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "key": "strike-the-clause",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Strike the Clause — end one condition on an ally",
+     "fiction": "Struck through.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "endCondition": 1
+     }
+    },
+    {
+     "key": "rewrite-the-sentence",
+     "cost": 5,
+     "minProf": 5,
+     "label": "Rewrite the Sentence — a foe: no reactions, disadvantage on saves; allies: advantage next",
+     "fiction": "Reality reads from the top.",
+     "fx": {
+      "tgt": "target",
+      "ae": {
+       "name": "Rewritten (no reactions)",
+       "rounds": 1,
+       "changes": [
+        [
+         "system.abilities.__all__.save.roll.mode",
+         "add",
+         "-1"
+        ]
+       ]
+      },
+      "and": {
+       "tgt": "allies30",
+       "arm": "bonusDie"
+      }
+     }
+    },
+    {
+     "key": "final-draft",
+     "cost": 7,
+     "minProf": 6,
+     "label": "Final Draft — a creature that just saved against you fails instead (1/long rest)",
+     "fiction": "Revised.",
+     "fx": {
+      "tgt": "self",
+      "note": "A creature that just succeeded on a save against your spell or power fails it instead (GM applies)."
+     },
+     "oncePer": "long"
+    },
+    {
+     "key": "revision",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Revision — every ally within 30 ft has advantage on their next d20",
+     "fiction": "The whole passage, corrected.",
+     "fx": {
+      "tgt": "allies30",
+      "arm": "bonusDie"
+     },
+     "doctrine": "annotator"
+    },
+    {
+     "key": "declared-likeness",
+     "cost": 0,
+     "minProf": 0,
+     "label": "Declared Likeness — \"you are a wall\": an ally gains +1 AC (once per turn)",
+     "fiction": "You are a wall.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "acBonus": 1
+     },
+     "doctrine": "metaphor",
+     "perk": true,
+     "oncePer": "turn"
+    },
+    {
+     "key": "declared-frailty",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Declared Frailty — \"their armor is paper\": AC −2 and disadvantage on its next attack",
+     "fiction": "Their armor is paper.",
+     "fx": {
+      "tgt": "target",
+      "ae": {
+       "name": "Paper Armor",
+       "rounds": 1,
+       "changes": [
+        [
+         "system.attributes.ac.bonus",
+         "add",
+         "-2"
+        ],
+        [
+         "flags.dnd5e-table-kit.disadvantage.attack",
+         "override",
+         "all"
+        ]
+       ]
+      }
+     },
+     "doctrine": "metaphor"
+    },
+    {
+     "key": "clean-edges",
+     "cost": 0,
+     "minProf": 0,
+     "label": "Clean Edges — end charmed or frightened on you or an ally (once per short rest)",
+     "fiction": "Clean edges where it used to be.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "endCondition": 1
+     },
+     "doctrine": "redactor",
+     "perk": true,
+     "oncePer": "short"
+    },
+    {
+     "key": "silence",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Silence — a creature can't take reactions or speak until your next turn",
+     "fiction": "Its options, omitted.",
+     "fx": {
+      "tgt": "target",
+      "ae": {
+       "name": "Silenced (no reactions, no speech)",
+       "rounds": 1,
+       "changes": []
+      },
+      "note": "It can't take reactions or speak (no verbal components) until your next turn."
+     },
+     "doctrine": "redactor"
+    }
+   ]
+  },
+  "dreamwalker": {
+   "name": "Path of the Dreamwalker",
+   "img": "icons/magic/perception/eye-ringed-glow-angry-large-teal.webp",
+   "tagline": "The future is just memory pointed the other way.",
+   "entry": {
+    "name": "Saw It Coming",
+    "description": "<p><strong>Saw It Coming (free).</strong> The first time each round an enemy within 60 ft of you misses an attack, you bank 1 Surge.</p><p><strong>The Dream-Cache.</strong> After a long rest, store one 1st–3rd level spell or power you know (from the Surge menu). Before your next long rest you can cast it once without spending a slot or points.</p>"
+   },
+   "bank": [
+    {
+     "on": "enemyMiss",
+     "range": 60
+    }
+   ],
+   "doctrines": {
+    "quietsun": {
+     "name": "Quiet Sun",
+     "tagline": "Stillness is the loudest thing.",
+     "perk": {
+      "name": "The Revelation",
+      "description": "<p><strong>The Revelation.</strong> Once per long rest, ask the GM one question; the answer is true.</p>",
+      "changes": []
+     }
+    },
+    "sapphire": {
+     "name": "Sapphire Gate",
+     "tagline": "Every threshold is also a doorway.",
+     "perk": {
+      "name": "Gate-Touched",
+      "description": "<p><strong>Gate-Touched.</strong> Once per turn, 10 ft of your movement can be a teleport to a space you can see.</p>",
+      "changes": []
+     }
+    },
+    "thousandfaces": {
+     "name": "Thousand Faces",
+     "tagline": "Identity is negotiable.",
+     "perk": {
+      "name": "Borrowed Face",
+      "description": "<p><strong>Borrowed Face.</strong> You can change your appearance at will, as the disguise self spell.</p>",
+      "changes": []
+     }
+    }
+   },
+   "abilities": [
+    {
+     "key": "dream-cache",
+     "cost": 0,
+     "minProf": 0,
+     "label": "Dream-Cache",
+     "fiction": "The dream remembers it for you.",
+     "fx": {
+      "tgt": "self",
+      "dreamCache": true
+     },
+     "perk": true
+    },
+    {
+     "key": "omen",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Omen — you or an ally has advantage on the next d20 roll",
+     "fiction": "The thread, seen early.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "arm": "bonusDie"
+     }
+    },
+    {
+     "key": "dream-ward",
+     "cost": 2,
+     "minProf": 3,
+     "label": "Dream Ward — an ally takes Prof less per hit this round and has advantage next",
+     "fiction": "A protective dreamstate.",
+     "fx": {
+      "tgt": "ally",
+      "dr": "prof",
+      "arm": "bonusDie"
+     }
+    },
+    {
+     "key": "shared-dream",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Shared Dream — allies within 30 ft: advantage on their next d20 and temp HP = Prof",
+     "fiction": "Everyone dreams the same way out.",
+     "fx": {
+      "tgt": "allies30",
+      "arm": "bonusDie",
+      "tempHP": "@prof"
+     }
+    },
+    {
+     "key": "sleepwalk",
+     "cost": 4,
+     "minProf": 4,
+     "label": "Sleepwalk — a creature makes a Wisdom save or is incapacitated until its next turn ends",
+     "fiction": "It forgets it was fighting.",
+     "fx": {
+      "tgt": "target",
+      "save": {
+       "ability": "wis",
+       "ae": {
+        "name": "Sleepwalking",
+        "rounds": 1,
+        "statuses": [
+         "incapacitated"
+        ]
+       }
+      },
+      "note": "Taking damage wakes it."
+     }
+    },
+    {
+     "key": "reality-hack",
+     "cost": 5,
+     "minProf": 5,
+     "label": "Reality Hack — allies within 30 ft have advantage next; a targeted foe has disadvantage next",
+     "fiction": "Rewrite the moment.",
+     "fx": {
+      "tgt": "allies30",
+      "arm": "bonusDie",
+      "and": {
+       "tgt": "target",
+       "ae": {
+        "name": "Reality Hacked",
+        "rounds": 1,
+        "changes": [
+         [
+          "flags.dnd5e-table-kit.disadvantage.attack",
+          "override",
+          "all"
+         ]
+        ]
+       }
+      }
+     }
+    },
+    {
+     "key": "memory-pointed",
+     "cost": 7,
+     "minProf": 6,
+     "label": "Memory Pointed the Other Way — the last roll within 60 ft is rolled again (1/long rest)",
+     "fiction": "It already happened. Differently.",
+     "fx": {
+      "tgt": "self",
+      "note": "Undo the last attack roll, save or check made within 60 ft: it is rolled again and the new result stands (GM applies)."
+     },
+     "oncePer": "long"
+    },
+    {
+     "key": "radiant-pause",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Radiant Pause — targeted creatures make a Wisdom save or can't attack until their next turn ends",
+     "fiction": "A beat of peace nobody asked for.",
+     "fx": {
+      "tgt": "targets",
+      "save": {
+       "ability": "wis",
+       "ae": {
+        "name": "Radiant Pause (can't attack)",
+        "rounds": 1,
+        "changes": []
+       }
+      }
+     },
+     "doctrine": "quietsun"
+    },
+    {
+     "key": "sapphire-step",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Sapphire Step — you and an ally teleport up to 30 ft; both have advantage next",
+     "fiction": "Step through. Out elsewhere.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "arm": "bonusDie",
+      "oneShot": "bonusDie",
+      "note": "You and the ally each teleport up to 30 ft to spaces you can see."
+     },
+     "doctrine": "sapphire"
+    },
+    {
+     "key": "mirror-read",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Mirror Read — a foe has disadvantage next; you have advantage and take Prof less per hit",
+     "fiction": "You wear its tell back at it.",
+     "fx": {
+      "tgt": "target",
+      "ae": {
+       "name": "Mirror Read",
+       "rounds": 1,
+       "changes": [
+        [
+         "flags.dnd5e-table-kit.disadvantage.attack",
+         "override",
+         "all"
+        ]
+       ]
+      },
+      "and": {
+       "tgt": "self",
+       "arm": "bonusDie",
+       "dr": "prof"
+      }
+     },
+     "doctrine": "thousandfaces"
+    }
+   ]
+  },
+  "soulsmith": {
+   "name": "Path of the Soul-Smith",
+   "img": "icons/tools/smithing/anvil.webp",
+   "tagline": "Give me time, a fire, and something to hit, and then we'll see.",
+   "entry": {
+    "name": "The Forge",
+    "description": "<p><strong>The Forge (free).</strong> The first time each round you or an ally within 30 ft takes damage, you bank 1 Surge.</p>"
+   },
+   "bank": [
+    {
+     "on": "allyDamaged",
+     "range": 30
+    }
+   ],
+   "doctrines": {
+    "boundlight": {
+     "name": "Bound Light",
+     "tagline": "Containment is the first virtue.",
+     "perk": {
+      "name": "The First Vessel",
+      "description": "<p><strong>The First Vessel.</strong> Your Forge-Weld and Furnace of Renewal heal an extra amount equal to your Prof.</p>",
+      "changes": []
+     }
+    },
+    "victory": {
+     "name": "Victory",
+     "tagline": "What breaks makes the hammer.",
+     "perk": {
+      "name": "The Victor's Spark",
+      "description": "<p><strong>The Victor's Spark.</strong> When a hostile creature within 30 ft drops to 0 HP, you bank 1 Surge (once per round).</p>",
+      "changes": []
+     },
+     "bank": [
+      {
+       "on": "foeDown",
+       "range": 30
+      }
+     ]
+    },
+    "reclaimer": {
+     "name": "Spark Reclaimer",
+     "tagline": "Nothing is beyond salvage.",
+     "perk": {
+      "name": "Where the Heat Was",
+      "description": "<p><strong>Where the Heat Was.</strong> Your Forge-Weld also ends one condition.</p>",
+      "changes": []
+     }
+    }
+   },
+   "abilities": [
+    {
+     "key": "forge-weld",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Forge-Weld — an ally within 5 ft heals 1d8 + Prof",
+     "fiction": "Lay hands on the breakage.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "heal": "1d8+@prof"
+     },
+     "byDoctrine": {
+      "boundlight": {
+       "fx": {
+        "heal": "1d8+@prof+@prof"
+       }
+      },
+      "reclaimer": {
+       "fx": {
+        "endCondition": 1
+       }
+      }
+     }
+    },
+    {
+     "key": "atonement-crucible",
+     "cost": 2,
+     "minProf": 3,
+     "label": "Atonement Crucible — end one condition on an ally; they take Prof less per hit this round",
+     "fiction": "The bad thing is now load-bearing.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "endCondition": 1,
+      "dr": "prof"
+     }
+    },
+    {
+     "key": "temper",
+     "cost": 3,
+     "minProf": 3,
+     "label": "Temper — an ally gains resistance to one damage type for 1 minute",
+     "fiction": "Quenched against it.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "resistChoice": true,
+      "resistRounds": 10
+     }
+    },
+    {
+     "key": "furnace-of-renewal",
+     "cost": 4,
+     "minProf": 4,
+     "label": "Furnace of Renewal — you and allies within 30 ft heal 1d8 + Prof and resist poison for 1 minute",
+     "fiction": "Stand near the fire. It is rude not to.",
+     "fx": {
+      "tgt": "allies30",
+      "heal": "1d8+@prof",
+      "ae": {
+       "name": "Furnace of Renewal",
+       "rounds": 10,
+       "changes": [
+        [
+         "system.traits.dr.value",
+         "add",
+         "poison"
+        ]
+       ]
+      }
+     },
+     "byDoctrine": {
+      "boundlight": {
+       "fx": {
+        "heal": "1d8+@prof+@prof"
+       }
+      }
+     }
+    },
+    {
+     "key": "relic-of-rebirth",
+     "cost": 5,
+     "minProf": 5,
+     "label": "Relic of Rebirth — ward an ally for 1 minute: their next drop to 0 HP stops at 1",
+     "fiction": "Dead is a draft.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "ward": 10
+     }
+    },
+    {
+     "key": "forge-does-not-accept-dead",
+     "cost": 7,
+     "minProf": 6,
+     "label": "The Forge Does Not Accept \"Dead\" — an ally who died this minute returns at half HP (1/long rest)",
+     "fiction": "It considers it a draft.",
+     "fx": {
+      "tgt": "ally",
+      "phoenix": true,
+      "note": "Only for an ally who died within the last minute."
+     },
+     "oncePer": "long"
+    },
+    {
+     "key": "sealed-work",
+     "cost": 3,
+     "minProf": 4,
+     "label": "The Sealed Work — an ally takes Prof less per hit and is warded at 1 HP",
+     "fiction": "Sealed against breaking, briefly.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "dr": "prof",
+      "ward": 1
+     },
+     "doctrine": "boundlight"
+    },
+    {
+     "key": "forged-trophy",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Forged Trophy — your next hit deals +Prof d6; an ally takes Prof less per hit this round",
+     "fiction": "A weapon and a shield, both made of someone's worst day.",
+     "fx": {
+      "tgt": "ally",
+      "dr": "prof",
+      "oneShot": "doomstrike",
+      "auto": "Your next damage roll adds Prof d6."
+     },
+     "doctrine": "victory"
+    },
+    {
+     "key": "deep-salvage",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Deep Salvage — an ally heals 2d8 + Prof and every condition on them ends",
+     "fiction": "Some ruins are worth the dig.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "heal": "2d8+@prof",
+      "endCondition": "all"
+     },
+     "doctrine": "reclaimer"
+    }
+   ]
+  },
+  "pactkeeper": {
+   "name": "Path of the Pactkeeper",
+   "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+   "tagline": "Every manifestation is an agreement with something. Most casters don't read what they signed. You did.",
+   "entry": {
+    "name": "The Bargain",
+    "description": "<p><strong>The Bargain (free).</strong> <em>Upkeep paid:</em> at the start of each of your turns in combat, if you are concentrating on a spell or power, you bank 1 Surge.</p>"
+   },
+   "bank": [
+    {
+     "on": "concentratingTurn"
+    }
+   ],
+   "doctrines": {
+    "archivist": {
+     "name": "Archivist of Precedent",
+     "tagline": "Every ruling has already been made. I know where.",
+     "perk": {
+      "name": "Read the Ledger",
+      "description": "<p><strong>Read the Ledger.</strong> Advantage on checks to recall laws, treaties, history and precedent.</p>",
+      "changes": []
+     }
+    },
+    "auditor": {
+     "name": "Auditor",
+     "tagline": "Show me the books. I will find the clause.",
+     "perk": {
+      "name": "The Examination",
+      "description": "<p><strong>The Examination.</strong> After watching a creature for a round, ask the GM one of its resistances, immunities or vulnerabilities.</p>",
+      "changes": []
+     }
+    },
+    "steward": {
+     "name": "Steward of Living Communities",
+     "tagline": "The contract exists to serve the people bound by it.",
+     "perk": {
+      "name": "The Protected Clause",
+      "description": "<p><strong>The Protected Clause.</strong> You and allies within 10 ft have advantage on saves against being charmed.</p>",
+      "changes": []
+     }
+    }
+   },
+   "abilities": [
+    {
+     "key": "countersign",
+     "cost": 1,
+     "minProf": 2,
+     "label": "Countersign — you or an ally has advantage on the next d20 roll",
+     "fiction": "Witnessed and signed.",
+     "fx": {
+      "tgt": "allyOrSelf",
+      "arm": "bonusDie"
+     }
+    },
+    {
+     "key": "renegotiate",
+     "cost": 2,
+     "minProf": 3,
+     "label": "Renegotiate — a failed concentration save succeeds; you owe a favor",
+     "fiction": "The debt is real.",
+     "fx": {
+      "tgt": "self",
+      "note": "Reaction when you fail a concentration save: you succeed instead. The GM notes a favor you now owe."
+     }
+    },
+    {
+     "key": "binding-clause",
+     "cost": 3,
+     "minProf": 3,
+     "label": "Binding Clause — a creature makes a Wisdom save or its speed is 0 until its next turn ends",
+     "fiction": "Read the fine print.",
+     "fx": {
+      "tgt": "target",
+      "save": {
+       "ability": "wis",
+       "ae": {
+        "name": "Bound (speed 0)",
+        "rounds": 1,
+        "changes": [
+         [
+          "system.attributes.movement.speeds.walk",
+          "override",
+          "0"
+         ]
+        ]
+       }
+      }
+     }
+    },
+    {
+     "key": "sealed-pact",
+     "cost": 4,
+     "minProf": 4,
+     "label": "Sealed Pact — 1 minute: advantage on concentration saves, +1 spell and power save DC",
+     "fiction": "In writing.",
+     "fx": {
+      "tgt": "self",
+      "ae": {
+       "name": "Sealed Pact",
+       "rounds": 10,
+       "changes": [
+        [
+         "system.attributes.concentration.roll.mode",
+         "add",
+         "1"
+        ],
+        [
+         "system.bonuses.spell.dc",
+         "add",
+         "1"
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "key": "writ-of-protection",
+     "cost": 5,
+     "minProf": 5,
+     "label": "Writ of Protection — 1 minute: you and allies within 30 ft can't be charmed or frightened",
+     "fiction": "Protected by clause.",
+     "fx": {
+      "tgt": "allies30",
+      "ae": {
+       "name": "Writ of Protection",
+       "rounds": 10,
+       "changes": [
+        [
+         "system.traits.ci.value",
+         "add",
+         "charmed"
+        ],
+        [
+         "system.traits.ci.value",
+         "add",
+         "frightened"
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "key": "ledger-day",
+     "cost": 7,
+     "minProf": 6,
+     "label": "Ledger Day — a willing ally takes over one spell you're concentrating on (1/long rest)",
+     "fiction": "The pact moves with the paper.",
+     "fx": {
+      "tgt": "ally",
+      "note": "The ally takes over concentration on one spell or power you are concentrating on (GM applies)."
+     },
+     "oncePer": "long"
+    },
+    {
+     "key": "invoke-precedent",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Invoke Precedent — a creature makes a Charisma save or can't attack you or your allies",
+     "fiction": "Precedent compels.",
+     "fx": {
+      "tgt": "target",
+      "save": {
+       "ability": "cha",
+       "ae": {
+        "name": "Bound by Precedent (can't attack the party)",
+        "rounds": 1,
+        "changes": []
+       }
+      },
+      "note": "Attacking it ends the effect."
+     },
+     "doctrine": "archivist"
+    },
+    {
+     "key": "formal-correction",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Formal Correction — end one spell or magical effect on a creature, as dispel magic",
+     "fiction": "In violation of its own terms.",
+     "fx": {
+      "tgt": "target",
+      "note": "End one spell or magical effect on the creature, as dispel magic cast at a level equal to your Prof (GM applies)."
+     },
+     "doctrine": "auditor"
+    },
+    {
+     "key": "sanctuary",
+     "cost": 3,
+     "minProf": 4,
+     "label": "Sanctuary — 1 minute: allies within 10 ft can't be charmed, frightened or moved",
+     "fiction": "The contract serves the people bound by it.",
+     "fx": {
+      "tgt": "allies10",
+      "ae": {
+       "name": "Sanctuary",
+       "rounds": 10,
+       "changes": [
+        [
+         "system.traits.ci.value",
+         "add",
+         "charmed"
+        ],
+        [
+         "system.traits.ci.value",
+         "add",
+         "frightened"
+        ]
+       ]
+      },
+      "note": "They also can't be moved against their will."
+     },
+     "doctrine": "steward"
+    }
+   ]
   }
+ }
 }
