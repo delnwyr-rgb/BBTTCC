@@ -492,6 +492,12 @@ Tools (5): `load-sparks-pack` ⚠ **DRY_RUN=false (armed)** · `seed-hex-sparks`
 
 ---
 
+## 26. bad-eden-5e
+
+**D&D-only (dnd5e ≥6; RFI never loads it).** Bad Eden for D&D 5E: the Flow and Artifice points-casting engine (`scripts/casting.js`, adapted from the SW5E module's MIT powercasting — `NOTICE.md`); content (the Flow Wolf classes, the Gearwright, archetypes, powers) to follow. Traditions = slotless casting methods `be5e-flow` (schools `seph` Wis / `qliph` Cha / `unal` best) and `be5e-artifice` (school `art`, Int), registered in `CONFIG.DND5E.spellcasting` at init. Class/subclass flag `flags.bad-eden-5e.casting = {tradition: flow|artifice, progression: full|3/4|half|arch}`; pool state `flags.bad-eden-5e.points.<trad> = {value, temp, used[]}` (value unset ⇒ full); bonus `flags.bad-eden-5e.bonus.<trad>`. Cost = level + 1 (at-will free); upcast picker wraps `ActivityUsageDialog._prepareScalingContext/_prepareSubmitData`; scripted upcast `activity.use({ be5eLevel: N })`; payment in `dnd5e.activityConsumption` (chat flag `flags.bad-eden-5e.cast = {tradition, level, cost}`); gate in `dnd5e.preUseActivity` (level, points, high-level once-per-long-rest); Flow refills on a long rest, Artifice on short or long (`dnd5e.restCompleted`); sheet meters (`renderCharacterActorSheet`); spellbook refile (`BaseActorSheet._prepareSpellbook`); a power's `system.ability` set by school on create. API `game.badEden5e = { MOD, TRADITIONS, castingFor, setPoints, restore, costAt, traditionOf, abilityFor }`. Local D&D test env loads it by symlink (`FoundryData-DnD5E/Data/modules/bad-eden-5e`).
+
+---
+
 ## Appendix A — Dormant / Broken registry
 
 *The "what we're both forgetting" list. 🔴 = broken wire (should fix) · 🟡 = dormant (decide: wire, keep as future seam, or delete). Retire lines when resolved.*
