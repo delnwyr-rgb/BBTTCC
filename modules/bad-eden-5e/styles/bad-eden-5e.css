@@ -1,0 +1,13 @@
+/* Bad Eden 5E — Flow / Artifice point meters on the character sheet sidebar. */
+.be5e-points-group { display: flex; flex-direction: column; gap: 4px; margin: 6px 0; }
+.be5e-points { display: flex; flex-direction: column; gap: 2px; }
+.be5e-points-label { font-size: var(--font-size-11, 11px); text-transform: uppercase; letter-spacing: .05em; font-weight: 700; }
+.be5e-points-meter { position: relative; height: 22px; border-radius: 4px; overflow: hidden;
+  background: rgba(0, 0, 0, .45); border: 1px solid rgba(255, 255, 255, .25); }
+.be5e-points-bar { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, #2a6fb0, #58b4e8); }
+[data-be5e-trad="artifice"] .be5e-points-bar { background: linear-gradient(90deg, #a87a1c, #e8c84a); }
+.be5e-points-value { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 4px;
+  color: #fff; font-weight: 700; text-shadow: 0 0 3px #000; }
+.be5e-points-value input { width: 3em; height: 18px; padding: 0 2px; text-align: right; background: transparent;
+  border: none; color: inherit; font: inherit; }
+.be5e-points-value input:focus { background: rgba(0, 0, 0, .5); }

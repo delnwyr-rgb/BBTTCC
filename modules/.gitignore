@@ -58,6 +58,8 @@
 !dnd5e-hybrid-guard/**
 !dnd5e-table-kit/
 !dnd5e-table-kit/**
+!bad-eden-5e/
+!bad-eden-5e/**
 
 # Allow root docs if added later
 !README.md
