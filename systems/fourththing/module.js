@@ -72,6 +72,19 @@ import {
   collectTriggers,
   fireTriggers,
   resetSomaBreakTriggerLimits,
+  fireAllyTriggers,
+  acceptTriggerOffer,
+  TRIGGER_EVENTS,
+  TRIGGER_EFFECT_KINDS,
+  ftNearbyActors,
+  ftSquaresBetween,
+  collectAuraSources,
+  collectCheckBonuses,
+  consumeBankedBonus,
+  auraDefenseBonus,
+  auraWalkSquares,
+  auraIgnoreForcedSquares,
+  rankGrantsOf,
   SKILL_RANK_DATA,
   tierForLevel,
   SKILL_POINT_LEVELS,
@@ -2080,7 +2093,7 @@ function _ftXd10(actor) { return (actor && !_ftSurgeAllowed(actor)) ? "2d10" : "
 async function _ftRollDefenseCheck(actor, which = "guard") {
   if (!actor) return null;
   const sys   = actor.system?.system ?? actor.system ?? {};
-  const v     = Number(sys.derived?.[which]?.value ?? 10);
+  const v     = Number(sys.derived?.[which]?.value ?? 10) + auraDefenseBonus(actor, which);   // + allies' auras (2026-10-07)
   const pen   = _ftStrainBite(actor).rollPenalty;
   const imposed = !!game.fourththing.impose?.isImposed?.(actor);
   const die   = imposed ? "3d10kl2" : _ftXd10(actor);
@@ -11236,6 +11249,7 @@ FT.COMBAT_ACTIONS = {
       let mode;
       try { mode = await _ftSetFlagSeatSafe(ally, "aidBanked", banked); }
       catch (e) { ui.notifications?.warn(`Couldn't bank Aid on ${ally.name} — ${e?.message ?? e}.`); return null; }
+      try { await fireTriggers(actor, "on-help-action", { target: ally, tags: ["aid"], scope: "self" }); } catch (_e) {}   // 2026-10-07
       return `${actor.name} aids ${ally.name} — reroll-lowest banked for ${ally.name}'s next roll this scene.${mode === "relay" ? " (relayed to GM)" : ""}`;
     }
   },
@@ -14524,6 +14538,10 @@ Hooks.once("init", function () {
   // reset each turn and may still be written, so flipping this back on loses nothing.
   game.settings.register("fourththing", "actionEconomy", { name: "Steward sheet tracks action economy", hint: "Off (default): the Combat Tracker is the authority — the sheet neither gates Action/Bonus/Reaction nor nags about movement. On: the pre-2026-09-21 lockouts and the sheet's Action Economy block return.", scope: "world", config: true, type: Boolean, default: false });
   // THE RECIPE BOOK (2026-09-20): { common:[slugs], factions:{actorId:[slugs]}, stewards:{actorId:[slugs]} } — see RfiCrafting.recipes.
+  // Steward sheet watermark (2026-10-07): the Avuncular Order sigil behind the character sheet (CSS .ft-character-sheet::before).
+  game.settings.register("fourththing", "sheetWatermark", { name: "Steward sheet watermark", hint: "Show the Avuncular Order sigil as a faint watermark behind steward sheets.", scope: "client", config: true, type: Boolean, default: true,
+    onChange: (v) => document.body.classList.toggle("ft-no-watermark", !v) });
+  Hooks.once("ready", () => { try { document.body.classList.toggle("ft-no-watermark", game.settings.get("fourththing", "sheetWatermark") === false); } catch (_e) {} });
   game.settings.register("fourththing", "recipeBook", { scope: "world", config: false, type: Object, default: { common: [], factions: {}, stewards: {} } });
   game.settings.register("fourththing", "overshootEnabled", {
     name: "Reality Tear — enable Overshoot",
@@ -14778,7 +14796,8 @@ game.fourththing.rolls.flatCheck = async function ({ bonus = 0, dc = null, mode 
 
 game.fourththing.rolls.attributeTest = async function (actor, {
     attribute, skill = null, label = "",
-    dc = null, target = null, applyOvershoot = false, restraintReduction = 0, kind = "tactical"
+    dc = null, target = null, applyOvershoot = false, restraintReduction = 0, kind = "tactical",
+    _noFailTriggers = false
   } = {}) {
     // ⚠ SOURCE reads (2026-08-15). `actor.system` is AE-applied for this
     // DataModel-less system (see ftSourceSystem), and the aeAttr/aeSkill sweep
@@ -14787,7 +14806,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // exactly once, and the chat breakdown still itemises it.
     const srcSys   = ftSourceSystem(actor);
     const attrVal  = srcSys?.attributes?.[attribute]?.value ?? 0;
-    const skillVal = skill ? (srcSys?.skills?.[skill]?.value ?? 0) : 0;
+    // 2026-10-07 (regimen pass 7): item rank grants (flags.fourththing.passives.ranks) add to the SOURCE rank.
+    const skillVal = skill ? ((srcSys?.skills?.[skill]?.value ?? 0) + (rankGrantsOf(actor)[skill] || 0)) : 0;
 
     // Passive AE bonuses (mode 2 = ADD) on the attribute and (optional) skill.
     // Roll path was bypassing actor.appliedEffects entirely — Aurablade auras,
@@ -14827,7 +14847,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // a general debuff (it already taxes every cast total directly).
     const _noiseBite = _ftNoiseBite(actor);
     const _noisePen  = attribute === "intrigue" ? _noiseBite.detection : 0;
-    const totalBonus = attrVal + skillVal + aeAttr + aeSkill + _framePushBonus - _radPen - _noisePen;
+    // 2026-10-07 (regimen pass 7): flat check bonuses — own passives.checkBonus, nearby auras, banked bonuses.
+    const _cb = collectCheckBonuses(actor, { context: "check", skill, attribute, target: target?.actor ?? target ?? null });
+    const _cbSum = _cb.reduce((n, b) => n + (Number(b.bonus) || 0), 0);
+    const totalBonus = attrVal + skillVal + aeAttr + aeSkill + _framePushBonus - _radPen - _noisePen + _cbSum;
 
     // Dreamwalker per-rest one-shot bonus dice — consumed on use.
     const _dw = _ftReadDwOneShots(actor, { context: "check" });
@@ -14852,13 +14875,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // this roll (e.g. "advantage on Body checks" from a heritage). Surge for
     // rerolled 10s is NOT banked (v1 limitation — explosion chain already
     // resolved at this point); the original explosion bookkeeping above stands.
-    const rerollGrants = collectRerolls(actor, { context: "check", skill, attribute });
+    const rerollGrants = collectRerolls(actor, { context: "check", skill, attribute, target: target?.actor ?? target ?? null });
     if (_dw.advantage) rerollGrants.push({ sourceItemName: "Fractal Self", mode: "reroll-lowest" });
     const rerollResult = await _ftApplyRerollsSafe(roll, rerollGrants);
     await consumeAnnotationReroll(actor, rerollResult.applied);
     await consumeAidReroll(actor, rerollResult.applied);
     await consumePaceReroll(actor, rerollResult.applied);
     await consumeAncestryReroll(actor, rerollResult.applied);
+    await consumeBankedBonus(actor, _cb);
     // Consume any DW one-shots used on this roll (omen d6, foresight d4,
     // fractal advantage). Append a chat note crediting the source(s).
     if (_dw.sources.length) await _ftConsumeDwOneShots(actor, _dw);
@@ -14889,6 +14913,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
     if (_framePushBonus > 0) noteBits.push(`⛰ Frame Push +${_framePushBonus} (Body)`);
     if (_radPen > 0)         noteBits.push(`☢ Radiation −${_radPen}`);
+    if (_cb.length)          noteBits.push(`Bonuses: ${_cb.map(b => `${b.bonus >= 0 ? "+" : ""}${b.bonus} (${b.source})`).join(", ")}`);
     if (rerollResult.applied.length) {
       const parts = rerollResult.applied.map(r => `${r.mode === "reroll-lowest" ? "↑" : "↓"} ${r.before}→${r.after} (${r.source})`);
       noteBits.push(`Reroll: ${parts.join(", ")}`);
@@ -14925,7 +14950,19 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const passed = adjustedTotal >= Number(dc);
       const event  = passed ? "on-skill-success" : "on-skill-fail";
       const tags   = [skill, attribute].filter(Boolean);
-      await fireTriggers(actor, event, { tags, scope: "self" });
+      // 2026-10-07 (regimen pass 7): payload carries the target and the roll's arguments so an Offer
+      // card can re-run the check (kind reroll-failed-check); a retry never re-offers itself.
+      const _tgtA  = target?.actor ?? target ?? null;
+      const rollArgs = { attribute, skill: skill || null, label, dc: Number(dc), kind, targetUuid: _tgtA?.uuid ?? null };
+      if (!(_noFailTriggers && !passed)) await fireTriggers(actor, event, { tags, scope: "self", target: _tgtA, rollArgs, total: adjustedTotal, dc: Number(dc) });
+      // Social agreement — a passed Diplomacy / Empathy / Intimidation / Performance check against someone.
+      if (passed && ["diplomacy", "empathy", "intimidation", "performance"].includes(skill)) {
+        try { await fireTriggers(actor, "on-agreement", { tags, scope: "self", target: _tgtA }); } catch (_e) {}
+      }
+    }
+    // 2026-10-07: searching (Perception / Investigation) is an event whether or not a DC was set.
+    if (["perception", "investigation"].includes(skill) && !_noFailTriggers) {
+      try { await fireTriggers(actor, "on-search", { tags: [skill, attribute].filter(Boolean), scope: "self", target: target?.actor ?? target ?? null }); } catch (_e) {}
     }
 
     return roll;
@@ -15229,7 +15266,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const tSys = target.system?.system ?? target.system ?? {};
 
     const attackVs = ["guard", "evasion", "resolve"].includes(resolution.attackVs) ? resolution.attackVs : "evasion";
-    const defenseValue = Number(tSys?.derived?.[attackVs]?.value) || 10;
+    const defenseValue = (Number(tSys?.derived?.[attackVs]?.value) || 10) + auraDefenseBonus(target, attackVs);   // + allies' auras (2026-10-07)
 
     // Base from SOURCE (2026-10-01) — the AE sweep below is the single
     // application of passives; AE-applied actor.system counted them twice.
@@ -15429,6 +15466,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
     // Iron Word OR Aurablade Resolve OR Human Adaptive auto-succeed: override DC.
     const saved = (_saveSurge.ironWord || _abAutoHit || _adaptiveApplies) ? true : (total >= dc);
+    // 2026-10-07 (regimen pass 7): the saver's on-save-fail / on-save-success triggers (payload target = the caster).
+    try { await fireTriggers(target, saved ? "on-save-success" : "on-save-fail", { tags: [saveAttr, channel].filter(Boolean), scope: "self", target: actor, total, dc }); } catch (_e) {}
     // Hard Lessons (technique): a failed defense check arms reroll-lowest on the
     // defense checks you make before the end of your next turn (round-scoped —
     // collectRerolls reads the flag; nothing to clear).
@@ -15699,7 +15738,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // exactly once, and the chat breakdown still itemises it.
     const srcSys  = ftSourceSystem(actor);
     const attrVal  = srcSys?.attributes?.[intent]?.value ?? 0;
-    let   skillVal = srcSys?.skills?.[skill]?.value      ?? 0;
+    let   skillVal = (srcSys?.skills?.[skill]?.value      ?? 0) + (rankGrantsOf(actor)[skill] || 0);   // + item rank grants (2026-10-07)
 
     // 2026-05-19 — Consume signal bonus on the attacker. Signaler (a crew
     // member's bonus action) sets flags.fourththing.combat.signalBonus on
@@ -15777,7 +15816,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const _threatAtk = actor.system?.derived?.threat ?? null;
     if (_threatAtk && (Number(skillVal) || 0) < _threatAtk.rank) skillVal = _threatAtk.rank;
     const threatAttack = Number(_threatAtk?.attack) || 0;
-    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus + threatAttack - echoPenalty - _radPen;
+    // 2026-10-07 (regimen pass 7): flat attack bonuses (passives.checkBonus context attack, auras, banked).
+    const _atkCb = collectCheckBonuses(actor, { context: "attack", skill, attribute: intent, target: target?.actor ?? target ?? null });
+    const _atkCbSum = _atkCb.reduce((n, b) => n + (Number(b.bonus) || 0), 0);
+    const total_mod = _atkCbSum + attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus + threatAttack - echoPenalty - _radPen;
     // ── Aptitude rank + roll mode → dice pool ────────────────────────────────
     // Strikes roll the SAME rank-aware pool as an Aptitude check so a weapon hit
     // benefits identically. The rank's flat +N is already in total_mod; here the
@@ -15832,7 +15874,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const constPart     = rawTotal - origBaseSum - explosionSum0;
 
     // Proficient (reroll-lowest) + Shape-B / Aid / Snap-Strike reroll grants.
-    const rerollGrants = collectRerolls(actor, { context: "attack", skill, attribute: intent });
+    const rerollGrants = collectRerolls(actor, { context: "attack", skill, attribute: intent, target: target?.actor ?? target ?? null });
+    consumeBankedBonus(actor, _atkCb).catch(() => {});
     if (_rankData.mechanic === "reroll_low") rerollGrants.push({ sourceItemName: `${ftCap(skill)} · Proficient`, mode: "reroll-lowest" });
     if (_surge.snapStrike) rerollGrants.push({ sourceItemName: "Surge: Snap Strike", mode: "reroll-lowest" });
     // NPC automation (2026-10-06): "rerolls the lowest die on attacks against a creature that hasn't acted" & kin
@@ -16162,6 +16205,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         }
       } catch (e) { console.warn("[fourththing] auto-apply weapon effects on hit failed", e); }
     }
+    // 2026-10-07 (regimen pass 7): a miss is an event for the attacker (on-attack-miss) and for the one missed (on-missed-by → reaction Strikes).
+    if (!success) {
+      try {
+        const _missTags = [skill, defense, intent, damageType].filter(Boolean);
+        const _missTgt  = target?.actor ?? target ?? null;
+        await fireTriggers(actor, "on-attack-miss", { tags: _missTags, scope: "self", target: _missTgt });
+        if (_missTgt) await fireTriggers(_missTgt, "on-missed-by", { tags: _missTags, scope: "self", target: actor, squares: ftSquaresBetween(_missTgt, actor) });
+      } catch (e) { console.warn("[fourththing] on-attack-miss triggers failed", e); }
+    }
     return { roll, success };
   };
 
@@ -16196,9 +16248,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   //   • Aurablade Resolve — Ignore Forced Movement (one-shot; consumed)
   // Forced-movement chokepoints (Aurablade push, structure collapse knockback)
   // call this and skip the move when it returns true.
-  game.fourththing.resistsForcedMove = async function (actor, { reason = "forced movement" } = {}) {
+  game.fourththing.resistsForcedMove = async function (actor, { reason = "forced movement", squares = 1 } = {}) {
     if (!actor) return false;
     if (await game.fourththing.consumeBulwarkAnchor?.(actor, { reason })) return true;
+    // 2026-10-07 (regimen pass 7): on-forced-movement triggers (kind resist-forced-movement) and aura shrug-off.
+    try {
+      const _fm = await fireTriggers(actor, "on-forced-movement", { scope: "self", amount: Number(squares) || 1, tags: [String(reason)] });
+      if (_fm?.data?.resist) return true;
+      for (const r of await fireAllyTriggers(actor, "on-ally-forced-movement", { amount: Number(squares) || 1, tags: [String(reason)] })) if (r?.data?.resist) return true;
+      if (auraIgnoreForcedSquares(actor) >= (Number(squares) || 1)) { ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p style="font-size:0.78rem">⛰ ${ftEscapeHtml(actor.name)} shrugs off ${Number(squares) || 1} square(s) of forced movement (aura).</p>` }); return true; }
+    } catch (_e) {}
     const ff = actor.flags?.fourththing ?? {};
     const note = async (label) => {
       try {
@@ -16440,6 +16499,19 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       dmg -= reduced;
       tags.push(`Aegis DR −${reduced}`);
     }
+    // 2026-10-07 (regimen pass 7): on-incoming-damage — the victim's own triggers and allies' reactions
+    // (on-ally-incoming-damage) may REDUCE the hit before the write. Offer-mode triggers refund after.
+    if (op === "damage" && dmg > 0) {
+      try {
+        const _inTags = [damageType, damageFlavor, track].filter(Boolean);
+        const _inSelf = await fireTriggers(actor, "on-incoming-damage", { amount: dmg, tags: _inTags, track, scope: "self" });
+        let _inNew = Number.isFinite(_inSelf?.data?.newAmount) ? _inSelf.data.newAmount : null;
+        for (const r of await fireAllyTriggers(actor, "on-ally-incoming-damage", { amount: dmg, tags: _inTags, track })) {
+          if (Number.isFinite(r?.data?.newAmount)) _inNew = Math.min(_inNew ?? Infinity, r.data.newAmount);
+        }
+        if (_inNew !== null && _inNew < dmg) { tags.push(`triggers: ${dmg} → ${_inNew}`); dmg = _inNew; }
+      } catch (e) { console.warn("[fourththing] on-incoming-damage triggers failed", e); }
+    }
 
     // ── One-shot defensive consumers on the DEFENDER (Bulwark + Aurablade) ───
     // All read flags on `actor`. Damage-reducing ones mutate `dmg`; clears
@@ -16579,7 +16651,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // Fires BEFORE the write so a Frame Die can react while still standing.
     // Guarded so already-destroyed rigs (cur===0) re-hit by AoE don't re-fire.
     if (track === "integrity" && (cur - dmg) <= 0 && cur > 0) {
-      await fireTriggers(actor, "on-would-drop-to-zero", { amount: dmg, scope: "self" });
+      const _wdz = await fireTriggers(actor, "on-would-drop-to-zero", { amount: dmg, scope: "self" });
+      // 2026-10-07: survive-at-1 / spend-and-survive now EXECUTE — the trigger's data holds the track at 1.
+      if (_wdz?.data?.holdAt1 && newVal < 1) { newVal = 1; preventDropNote += " · held at 1 (trigger)"; }
     }
 
     // B11.B (2026-05-12): rigs store canonical integrity at system.integrity,
@@ -16618,6 +16692,19 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const trigTags = [damageType, damageFlavor].filter(Boolean);
       await fireTriggers(actor, "on-damage-taken", { amount: dmg, tags: trigTags, scope: "self" });
       try { await game.fourththing.npcAuto?.onDamaged?.(actor, { amount: dmg, damageType }); } catch (_e) {}
+      // 2026-10-07 (regimen pass 7): the hit is also an event for the victim's allies.
+      try {
+        await fireTriggers(actor, "on-self-or-ally-hit", { amount: dmg, tags: trigTags, scope: "self" });
+        await fireAllyTriggers(actor, "on-ally-hit", { amount: dmg, tags: trigTags });
+        await fireAllyTriggers(actor, "on-self-or-ally-hit", { amount: dmg, tags: trigTags });
+      } catch (e) { console.warn("[fourththing] ally-hit triggers failed", e); }
+    }
+    // 2026-10-07: dropping to 0 is an event for the fallen and for everyone adjacent to them.
+    if (track === "integrity" && cur > 0 && newVal <= 0) {
+      try {
+        await fireTriggers(actor, "on-drop-to-zero", { scope: "self" });
+        for (const n of ftNearbyActors(actor, { radius: 1 })) await fireTriggers(n.actor, "on-adjacent-drop", { target: actor, scope: n.ally ? "ally" : "enemy" });
+      } catch (e) { console.warn("[fourththing] drop-to-zero triggers failed", e); }
     }
 
     // B11.B rig hooks + destruction cascade.
@@ -16877,6 +16964,58 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // canonical sheet paths without the steward sheet being open. Same dialogs
   // the sheet's Strike / Invoke buttons drive.
   game.fourththing.ftOpenEngageDialog = ftOpenEngageDialog;
+  // ── Regimen pass 7 (2026-10-07): shared bank + trigger helpers ────────────────
+  // aid.bank(target, entry) — one seat-safe writer for banked rerolls / bonuses (Aid, techniques, trigger kinds bank-reroll / bank-bonus).
+  game.fourththing.aid = {
+    async bank(target, entry = {}) {
+      if (!target) return false;
+      const cur = target.getFlag?.("fourththing", "aidBanked") ?? [];
+      const e = { kind: entry.kind === "bonus" ? "bonus" : "reroll-lowest", from: entry.from || "", source: entry.source || "", set: Date.now() };
+      for (const k of ["bonus", "context", "skill", "attribute", "note"]) if (entry[k] != null) e[k] = entry[k];
+      try { await _ftSetFlagSeatSafe(target, "aidBanked", [...cur, e]); return true; }
+      catch (err) { console.warn("[fourththing] aid.bank failed", target?.name, err); return false; }
+    }
+  };
+  game.fourththing.triggers = {
+    accept: acceptTriggerOffer, events: TRIGGER_EVENTS, kinds: TRIGGER_EFFECT_KINDS, fire: fireTriggers, fireAllies: fireAllyTriggers,
+    /** displace-token: push/pull a target along the line from the actor, or widen the actor's own movement budget for a free shift. */
+    async displace(actor, target, args = {}, source = "") {
+      const who = args.who || (target ? "target" : "self");
+      const squares = Math.max(1, Number(args.squares) || 1);
+      const dist = Number(canvas?.scene?.grid?.distance) || 5, px = canvas?.grid?.size || 100;
+      if (who === "self") {
+        const sys = actor.system?.system ?? actor.system;
+        const budget = Number(sys?.actions?.movementBudgetFt) || 0;
+        if (actor.isOwner || game.user.isGM) await actor.update({ "system.actions.movementBudgetFt": budget + squares * dist });
+        return { ok: true, summary: `${actor.name} may shift ${squares} square${squares > 1 ? "s" : ""} (free movement this turn)` };
+      }
+      if (!target) return { ok: false, reason: "no target to move" };
+      if (await game.fourththing.resistsForcedMove(target, { reason: source || "forced movement", squares })) return { ok: true, summary: `${target.name} holds fast — not moved` };
+      const src = actor.getActiveTokens?.()[0], tgt = target.getActiveTokens?.()[0];
+      if (!src || !tgt) return { ok: false, reason: "tokens not on the scene" };
+      const dx = tgt.center.x - src.center.x, dy = tgt.center.y - src.center.y, mag = Math.hypot(dx, dy) || 1;
+      const sign = args.mode === "pull" ? -1 : 1;
+      const nx = Math.round(tgt.document.x + sign * (dx / mag) * px * squares), ny = Math.round(tgt.document.y + sign * (dy / mag) * px * squares);
+      const verb = args.mode === "pull" ? "pulled" : "pushed";
+      if (tgt.document.isOwner || game.user.isGM) { await tgt.document.update({ x: nx, y: ny }); return { ok: true, summary: `${target.name} ${verb} ${squares} square${squares > 1 ? "s" : ""}` }; }
+      ChatMessage.create({ user: game.user.id, speaker: ChatMessage.getSpeaker({ actor }), whisper: ChatMessage.getWhisperRecipients?.("GM")?.map(u => u.id) ?? [],
+        content: `<p style="font-size:0.78rem"><b>${ftEscapeHtml(source || "Trigger")}</b>: GM, ${args.mode === "pull" ? "pull" : "push"} ${ftEscapeHtml(target.name)} ${squares} square(s) ${args.mode === "pull" ? "toward" : "away from"} ${ftEscapeHtml(actor.name)}.</p>` });
+      return { ok: true, summary: `GM asked to move ${target.name} ${squares} square(s)` };
+    },
+    /** reaction-attack: spend the reaction and open the Engage flow with a melee weapon against the target. */
+    async reactionStrike(actor, target, args = {}, source = "") {
+      const sys = actor.system?.system ?? actor.system;
+      if (sys?.actions?.reactionUsed) return { ok: false, reason: `${actor.name}'s reaction is already used` };
+      if (_ftReactionsDenied(actor)) return { ok: false, reason: `${actor.name}'s reactions are denied` };
+      const item = ftFindMeleeAttackItem(actor);
+      if (!item) return { ok: false, reason: `${actor.name} has no melee weapon` };
+      if (args.adjacentOnly !== false && ftSquaresBetween(actor, target) > (Number(args.reachSquares) || 1)) return { ok: false, reason: `${target.name} is out of reach` };
+      await actor.update({ "system.actions.reactionUsed": true });
+      const tt = target.getActiveTokens?.()[0]; if (tt) ftSetUserTargets([tt]);
+      ftOpenEngageDialog(actor, item, { skipActionGate: true });
+      return { ok: true, summary: `${actor.name} — reaction Strike vs ${target.name} (${item.name})` };
+    }
+  };
   game.fourththing.ftOpenCastDialog   = ftOpenCastDialog;
   game.fourththing.classifyPrinciple  = ftClassifyPrinciple;
   // The manifestation glossary + knob tooltips, exposed 2026-08-17 so the
@@ -17861,6 +18000,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         skipped.push({ key: condKey, reason: "anchored" });
         continue;
       }
+      // 2026-10-07 (regimen pass 7): on-would-gain-condition — a trigger (kind negate-condition) refuses it.
+      try {
+        const _wgc = await fireTriggers(target, "on-would-gain-condition", { tags: [condKey], scope: "self", target: caster ?? null });
+        if (_wgc?.data?.resist) { skipped.push({ key: condKey, reason: "negated" }); continue; }
+      } catch (_e) {}
 
       // Per-condition save attribute — falls back to global when no override.
       const saveAttr = overrides[condKey] || globalSaveAttr;
@@ -19086,6 +19230,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // REGIMEN step 3 (2026-10-06): a real `on-turn-start` trigger event (ancestry/class triggers used to sit on a dead event)
     try { await fireTriggers(actor, "on-turn-start", { scope: "self", round: combat.round, tags: ["turn-start"] }); }
     catch (e) { console.warn("[fourththing] on-turn-start triggers failed", actor?.name, e); }
+    // 2026-10-07 (regimen pass 7): the PREVIOUS combatant just ended its turn — its own on-turn-end, and
+    // "a creature ends its turn adjacent to me" for everyone within 1 square of it.
+    try {
+      const _prevId = combat.previous?.combatantId;
+      const _prev = (_prevId && _prevId !== combatant?.id) ? combat.combatants.get(_prevId)?.actor : null;
+      if (_prev) {
+        await fireTriggers(_prev, "on-turn-end", { scope: "self", round: combat.round, tags: ["turn-end"] });
+        for (const n of ftNearbyActors(_prev, { radius: 2 })) await fireTriggers(n.actor, n.ally ? "on-ally-turn-end-adjacent" : "on-enemy-turn-end-adjacent", { target: _prev, scope: n.ally ? "ally" : "enemy", squares: n.squares });
+      }
+    } catch (e) { console.warn("[fourththing] on-turn-end triggers failed", e); }
 
     // Reset per-turn action economy + reseed movement budget from current walk speed.
     // Underwater: a Submerged actor moves at Swim speed (half walk if no Swim speed).
@@ -19100,6 +19254,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     let moveFt = walkFt;
     if (_submerged)  moveFt = _swimFt > 0 ? _swimFt : Math.floor(walkFt / 2);   // swim underwater
     else if (_aloft) moveFt = _flyFt  > 0 ? _flyFt  : Math.floor(walkFt / 2);   // fly when aloft
+    try { const _aw = auraWalkSquares(actor); if (_aw > 0) moveFt += _aw * (Number(canvas?.scene?.grid?.distance) || 5); } catch (_e) {}   // allies' walk auras (2026-10-07)
     await actor.update({
       "system.actions.actionUsed":      false,
       "system.actions.bonusUsed":       false,
@@ -24834,6 +24989,16 @@ Hooks.on(_chatHook, (message, html) => {
         console.error("fourththing | AoO strike-button failed", err);
         btn.disabled = false;
       }
+    });
+  });
+
+  // 2026-10-07 (regimen pass 7): trigger Offer cards — accept = dispatch the effect and burn the limited use.
+  root.querySelectorAll(".ft-trigger-accept").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (btn.disabled) return;
+      btn.disabled = true;
+      try { const r = await acceptTriggerOffer(message); if (!r?.ok) btn.disabled = false; }
+      catch (err) { console.error("fourththing | trigger offer failed", err); btn.disabled = false; }
     });
   });
 

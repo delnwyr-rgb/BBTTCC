@@ -7,6 +7,7 @@
  *   P1 W  prose-only mechanic: the text states a rule and no engine data carries it (shape + engine hint per hit)
  *   I1 W  technique with mechanic text but only card routing (no TECHNIQUE_EFFECTS / grant / derive row)
  *   I2 W  triggers that are only chat-prompts (looks automated, executes nothing)
+ *   I15 E  data the engine ignores: unknown trigger event/kind, reroll `when`, passives key, empty aura (vocab read from ft-progression.js)
  *   I5 I  dead flag families nothing reads (bbttcc.opEffects/opHooks/hexHooks/tikkunHooks/tierLevel/subclassKey/featureKey)
  *   I6 W  power with no payload — E when its effect text is EMPTY (nothing to automate until it's written)
  *   I7 W  weapon rider prose (system.effect) with no live manifestation states/save
@@ -277,6 +278,11 @@ function ownerOf(pack, v, folders) {
 const TEMPLATE_TYPES = new Set(Object.keys(JSON.parse(read(path.join(ROOT, "systems/fourththing/template.json"))).Item).filter(k => k !== "types"));
 const REROLL_CONTEXTS = new Set([...PR.matchAll(/context:\s*"([a-z-]+)"/g)].map(m => m[1]));
 const REROLL_MODES = new Set(["reroll-lowest", "reroll-highest"]);
+// 2026-10-07 (pass 7): the engine's closed vocabularies, read from ft-progression.js so the lint cannot drift from the code.
+const _listOf = (name) => { const m = PR.match(new RegExp(`export const ${name} = \\[([\\s\\S]*?)\\];`)); return new Set(m ? [...m[1].matchAll(/"([^"]+)"/g)].map(x => x[1]) : []); };
+const TRIGGER_EVENTS = _listOf("TRIGGER_EVENTS"), TRIGGER_KINDS = _listOf("TRIGGER_EFFECT_KINDS"), WHEN_VOCAB = _listOf("REROLL_WHEN_VOCAB");
+const PASSIVE_KEYS = new Set(["ranks", "checkBonus", "aura", "movement", "initiative", "vision", "combat"]);
+const _whenBad = (w) => (Array.isArray(w) ? w : [w]).filter(x => !WHEN_VOCAB.has(String(x)));
 const hits = [];
 const hit = (rule, sev, pack, v, msg) => { if (ONLY_RULE && !ONLY_RULE.includes(rule)) return; hits.push({ rule, sev, pack, id: v._id, name: v.name, type: v.type, msg }); };
 const PACK_FILES = fs.readdirSync(PACKS).filter(f => f.endsWith(".jsonl")).filter(f => !/^npcs/.test(f)).sort();
@@ -294,6 +300,15 @@ for (const file of PACK_FILES) {
     if (mech && !auto && !isAnchor) { S.prose++; const sh = shapeOf(text); hit("P1", "W", pack, v, `prose-only [${sh}] → ${HINT[sh]} :: ${text.slice(0, 110)}`); }
     if (c.includes("technique:card-only") && mech) hit("I1", "W", pack, v, `technique ${id} routes to a card only`);
     if (c.includes("triggers(chat-prompt only)")) hit("I2", "W", pack, v, "triggers are chat-prompts only");
+    // I15 (2026-10-07): data the engine would silently ignore — unknown trigger event / kind, reroll `when`, passives key, aura shape.
+    for (const t of Array.isArray(ff.triggers) ? ff.triggers : []) {
+      if (t?.event && TRIGGER_EVENTS.size && !TRIGGER_EVENTS.has(t.event)) hit("I15", "E", pack, v, `trigger event "${t.event}" is never fired`);
+      if (t?.effect?.kind && TRIGGER_KINDS.size && !TRIGGER_KINDS.has(t.effect.kind)) hit("I15", "E", pack, v, `trigger kind "${t.effect.kind}" is never dispatched`);
+      if (t?.predicate?.when && _whenBad(t.predicate.when).length) hit("I15", "E", pack, v, `trigger when ${JSON.stringify(_whenBad(t.predicate.when))} unknown`);
+    }
+    for (const r of Array.isArray(ff.rerolls) ? ff.rerolls : []) if (r?.when && _whenBad(r.when).length) hit("I15", "E", pack, v, `rerolls.when ${JSON.stringify(_whenBad(r.when))} unknown`);
+    for (const k of Object.keys(ff.passives || {})) if (!PASSIVE_KEYS.has(k)) hit("I15", "E", pack, v, `passives.${k} is not read by the engine`);
+    if (ff.passives?.aura) { const a = ff.passives.aura; if (!(Number(a.radius) > 0) || (!a.rerolls?.length && !a.checkBonus?.length && !a.defenseBonus && !a.walkSquares && !a.ignoreForcedMovementSquares)) hit("I15", "E", pack, v, "aura has no radius or grants nothing the engine reads"); }
     const b = v.flags?.bbttcc || {}; const dead = ["opEffects","opHooks","hexHooks","tikkunHooks","opDiscounts","tierLevel","subclassKey","featureKey"].filter(k => b[k] !== undefined);
     if (dead.length) hit("I5", "I", pack, v, `dead flags: bbttcc.${dead.join(", bbttcc.")}`);
     if (v.type === "power" && !c.some(x => /appliedStates|appliedEffects|damageRoll|^save$/.test(x))) { const eff = strip(v.system?.effect); hit("I6", eff ? "W" : "E", pack, v, eff ? `power with prose effect, no payload :: ${eff.slice(0, 90)}` : "power with EMPTY effect text and no payload"); }

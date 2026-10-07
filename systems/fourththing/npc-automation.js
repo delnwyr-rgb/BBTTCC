@@ -27,10 +27,13 @@
  *             "damaged"    the owner took damage (any source; if.damageType) — self effects only (heal, tempIntegrity, prompt)
  *             "attacked"   someone Strikes the owner (do.reroll: "attack-highest" = the attacker rerolls their highest die)
  *   if        { firstRound, targetNotActed, allyAdjacentToTarget, targetTag:[…], targetCondition:[…], weapon:"<item name>",
- *               damageType:[…], ownerNotAttacked, ownerBloodied, targetBloodied }
+ *               damageType:[…], ownerNotAttacked, ownerBloodied, ownerNotBloodied, targetBloodied, ownerAirborne, targetNotAirborne,
+ *               ownerMovedSquares:N (moved ≥ N squares this turn) }
  *   do        { reroll, condition:{key, duration, save:{attr, dc}}, save:{attr, dc, onSave}, damage:{formula, type, track?},
  *               dot:{formula, type, ends:"action"|"rounds", rounds}, radiation:N, noReactions:true, tempIntegrity:N|"formula",
- *               heal:N|"formula", morale:{attr, dc, outcome, condition?}, ward:0.5, prompt:"…" }
+ *               heal:N|"formula", morale:{attr, dc, outcome, condition?}, ward:0.5, prompt:"…",
+ *               bankReroll:true|{context?,skill?,attribute?,note?}, bankBonus:{bonus,context?,skill?,attribute?,note?},
+ *               removeCondition:[keys], impose:true }   (2026-10-07: the last four run on ▶ Use / hit / struck / saveFail targets)
  *   limit     { per: "round" | "combat" | "scene", uses: 1 }
  *   recharge  (on a WEAPON's npcAuto) { mode: "d6", min: 5 } | { mode: "combat" } — spent on use, rolled back at turn start
  *
@@ -117,6 +120,12 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     const bloodied = a => { const d = a?.system?.derived?.integrity; return d?.max > 0 && d.value <= d.max / 2; };
     if (cond.ownerBloodied && !bloodied(actor)) return false;
     if (cond.targetBloodied && !bloodied(target)) return false;
+    // 2026-10-07 (regimen pass 7): airborne / above-half / moved-this-turn predicates for the attacked-by direction
+    const airborne = a => !!(a?.system?.system ?? a?.system)?.conditions?.airborne;
+    if (cond.ownerNotBloodied && bloodied(actor)) return false;
+    if (cond.ownerAirborne && !airborne(actor)) return false;
+    if (cond.targetNotAirborne && airborne(target)) return false;
+    if (Number(cond.ownerMovedSquares) > 0 && (Number((actor?.system?.system ?? actor?.system)?.actions?.movementUsedFt) || 0) < Number(cond.ownerMovedSquares) * SQ()) return false;
     return true;
   }
 
@@ -190,6 +199,25 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
       const amt = typeof d.heal === "number" ? d.heal : (await new Roll(String(d.heal)).evaluate()).total;
       try { await game.fourththing.rolls._applyDamageToActor(who, amt, { op: "heal", track: "integrity" }); lines.push(`${esc(who.name)}: regains ${amt} Integrity`); } catch (e) { console.warn("[npc-automation] heal", e); }
     }
+    // 2026-10-07 (regimen pass 7): banked rerolls / bonuses, condition removal and Impose — through the shared system helpers
+    if (d.bankReroll && target) {
+      const b = typeof d.bankReroll === "object" ? d.bankReroll : {};
+      try { await game.fourththing.aid.bank(target, { from: actor.name, source: item.name, context: b.context ?? null, skill: b.skill ?? null, attribute: b.attribute ?? null, note: b.note ?? null }); lines.push(`${tName}: a reroll-lowest banked${b.note ? ` (${esc(b.note)})` : ""}`); } catch (e) { console.warn("[npc-automation] bankReroll", e); }
+    }
+    if (d.bankBonus && target) {
+      const b = d.bankBonus;
+      try { await game.fourththing.aid.bank(target, { kind: "bonus", from: actor.name, source: item.name, bonus: Number(b.bonus) || 1, context: b.context ?? null, skill: b.skill ?? null, attribute: b.attribute ?? null, note: b.note ?? null }); lines.push(`${tName}: +${Number(b.bonus) || 1} banked${b.note ? ` (${esc(b.note)})` : ""}`); } catch (e) { console.warn("[npc-automation] bankBonus", e); }
+    }
+    if (Array.isArray(d.removeCondition) && target) {
+      const sys = target.system?.system ?? target.system ?? {};
+      for (const k of d.removeCondition) {
+        if (!sys.conditions?.[k]) continue;
+        try { if (k === "imposed") await game.fourththing.impose.clear(target, item.name); else if (target.isOwner || game.user.isGM) await game.fourththing.toggleCondition(target, k); lines.push(`${tName}: ${esc(k)} ends`); } catch (e) { console.warn("[npc-automation] removeCondition", e); }
+      }
+    }
+    if (d.impose && target) {
+      try { await game.fourththing.impose.apply(target, { source: item.name }); lines.push(`${tName}: <b>Imposed</b>`); } catch (e) { console.warn("[npc-automation] impose", e); }
+    }
     if (d.prompt) lines.push(`<i>${esc(d.prompt)}</i>`);
   }
   function toDr(dmg) {
@@ -233,7 +261,7 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
       if (!on() || !target) return out;
       for (const { item: src, rule } of rulesOf(target, "attacked")) {
         if (!predicateOk(rule.if, { actor: target, target: attacker, item, damageType: item?.system?.damage?.type }) || !limitOk(src, rule)) continue;
-        if (rule.do?.reroll === "attack-highest") out.rerolls.push({ sourceItemName: `${target.name} · ${src.name}`, mode: "reroll-highest" });
+        if (rule.do?.reroll === "attack-highest") { out.rerolls.push({ sourceItemName: `${target.name} · ${src.name}`, mode: "reroll-highest" }); if (rule.limit) limitSpend(src, rule).catch(() => {}); }
       }
       return out;
     },

@@ -412,13 +412,73 @@ export const ID_REROLL_GRANTS = {
   bbttcc_feat_sure_recitation:    [ { context: "caster-check", mode: "reroll-lowest", note: "Sure Recitation" } ]
 };
 // ENGINE gates for `when` (evaluated at roll time; false = the grant sits out).
-function _grantWhenOk(actor, when) {
+// ── Token / side helpers for positional predicates and auras (2026-10-07) ──
+// Canvas-aware but canvas-tolerant: with no scene or no token the positional
+// predicates fail closed and auras contribute nothing.
+export function ftTokenOf(actor) {
+  if (!actor) return null;
+  try { return actor.getActiveTokens?.()[0] ?? canvas?.tokens?.placeables?.find(t => t.actor?.id === actor.id) ?? null; }
+  catch (_e) { return null; }
+}
+export function ftSquaresBetween(a, b) {
+  const ta = a?.document ? a : ftTokenOf(a), tb = b?.document ? b : ftTokenOf(b);
+  if (!ta || !tb) return Infinity;
+  const sq = Number(canvas?.scene?.grid?.distance) || 5;
+  try { return Math.round(canvas.grid.measurePath([ta.center, tb.center]).distance / sq); }
+  catch (_e) { return Math.round(Math.hypot(ta.center.x - tb.center.x, ta.center.y - tb.center.y) / (canvas?.grid?.size || 100)); }
+}
+export function ftDisposition(actor) {
+  const t = ftTokenOf(actor);
+  return t?.document?.disposition ?? (actor?.type === "character" ? 1 : -1);
+}
+export const ftSameSide = (a, b) => ftDisposition(a) === ftDisposition(b);
+/** Every placed token with an actor other than `actor`, with its distance in squares and side. */
+export function ftNearbyActors(actor, { radius = Infinity, who = "all" } = {}) {
+  const me = ftTokenOf(actor); if (!me) return [];
+  const out = [];
+  for (const t of canvas?.tokens?.placeables ?? []) {
+    const a = t.actor; if (!a || a.id === actor.id) continue;
+    if ((a.system?.system ?? a.system)?.derived?.integrity?.value <= 0) continue;
+    const same = (t.document?.disposition ?? -1) === (me.document?.disposition ?? 1);
+    if (who === "allies" && !same) continue;
+    if (who === "enemies" && same) continue;
+    const squares = ftSquaresBetween(me, t);
+    if (squares > radius) continue;
+    out.push({ actor: a, token: t, squares, ally: same });
+  }
+  return out;
+}
+/** Dim light or artificial light within 30 ft: scene darkness ≥ 0.5, or a light source (ambient or token) within 6 squares. */
+function _ftDimOrNearLight(actor) {
+  const me = ftTokenOf(actor); if (!me) return false;
+  const dark = Number(canvas?.scene?.environment?.darknessLevel ?? canvas?.scene?.darkness ?? 0);
+  if (dark >= 0.5) return true;
+  const sq = Number(canvas?.scene?.grid?.distance) || 5, px = canvas?.grid?.size || 100;
+  const near = (x, y) => Math.hypot(me.center.x - x, me.center.y - y) / px * sq <= 30;
+  for (const l of canvas?.lighting?.placeables ?? []) { const c = l.document?.config; if ((c?.bright > 0 || c?.dim > 0) && !l.document?.hidden && near(l.document.x, l.document.y)) return true; }
+  for (const t of canvas?.tokens?.placeables ?? []) { const l = t.document?.light; if ((l?.bright > 0 || l?.dim > 0) && near(t.center.x, t.center.y)) return true; }
+  return false;
+}
+// ENGINE gates for `when` (evaluated at roll time; false = the grant sits out).
+// `when` is a string or an array of strings (all must hold). `query.target` is
+// the roll's target when the caller knows it (attackTest, trigger payloads).
+// Vocabulary (also validated by lint-items / the pass builders):
+//   belowHalfIntegrity · atOneIntegrity · aboveHalfIntegrity · armored · unmoved · firstRound
+//   carryingSoul (Shadow Courier package carried) · airborne
+//   targetDamaged · targetBloodied · targetGrounded · adjacentAlly · allyAdjacentToTarget
+//   dimLightOrNearLight
+export const REROLL_WHEN_VOCAB = ["belowHalfIntegrity", "atOneIntegrity", "aboveHalfIntegrity", "armored", "unmoved", "firstRound",
+  "carryingSoul", "airborne", "targetDamaged", "targetBloodied", "targetGrounded", "adjacentAlly", "allyAdjacentToTarget", "dimLightOrNearLight"];
+function _grantWhenOk(actor, when, query = {}) {
+  if (Array.isArray(when)) return when.every(w => _grantWhenOk(actor, w, query));
   const rawSys = actor?.system?.system ?? actor?.system;
+  const target = query?.target?.actor ?? query?.target ?? null;
+  const tSys   = target?.system?.system ?? target?.system;
+  const integ  = (s) => ({ v: Number(s?.derived?.integrity?.value) || 0, m: Number(s?.derived?.integrity?.max) || 0 });
   switch (String(when)) {
-    case "belowHalfIntegrity": {
-      const v = Number(rawSys?.derived?.integrity?.value) || 0, m = Number(rawSys?.derived?.integrity?.max) || 0;
-      return m > 0 && v < m / 2;
-    }
+    case "belowHalfIntegrity": { const { v, m } = integ(rawSys); return m > 0 && v < m / 2; }
+    case "atOneIntegrity":     { const { v } = integ(rawSys); return v === 1; }
+    case "aboveHalfIntegrity": { const { v, m } = integ(rawSys); return m > 0 && v > m / 2; }
     case "armored":
       return (actor?.items ?? []).some(i => (i.type === "armor" && (i.system?.equipped ?? i.flags?.fourththing?.equipped ?? true))
                                           || /\bshield\b/i.test(String(i.name ?? "")) && (i.system?.equipped ?? i.flags?.fourththing?.equipped ?? true));
@@ -426,6 +486,19 @@ function _grantWhenOk(actor, when) {
       return (Number(rawSys?.actions?.movementUsedFt) || 0) === 0;
     case "firstRound":
       return !!game.combat?.started && Number(game.combat?.round ?? 0) <= 1;
+    case "carryingSoul": case "carryingPackage":
+      return rawSys?.resources?.package?.carried === true;
+    case "airborne":
+      return !!rawSys?.conditions?.airborne;
+    case "targetDamaged":  { if (!tSys) return false; const { v, m } = integ(tSys); return m > 0 && v < m; }
+    case "targetBloodied": { if (!tSys) return false; const { v, m } = integ(tSys); return m > 0 && v <= m / 2; }
+    case "targetGrounded": return !!tSys && !tSys?.conditions?.airborne;
+    case "adjacentAlly":
+      return ftNearbyActors(actor, { radius: 1, who: "allies" }).length > 0;
+    case "allyAdjacentToTarget":
+      return !!target && ftNearbyActors(actor, { who: "allies" }).some(n => ftSquaresBetween(n.token, target) <= 1);
+    case "dimLightOrNearLight":
+      return _ftDimOrNearLight(actor);
     default:
       return true;
   }
@@ -452,7 +525,7 @@ export function collectRerolls(actor, query = {}) {
         || (g.context === "save" && wantContext === "defense")
         || (g.context === "defense" && wantContext === "save");
       if (!ctxMatch) continue;
-      if (g.when && !_grantWhenOk(actor, g.when)) continue;
+      if (g.when && !_grantWhenOk(actor, g.when, query)) continue;
       if (g.defense && query.defense && g.defense !== query.defense) continue;
       // narrowers: if grant specifies a skill, query must match (or no skill in query yet)
       if (g.skill     && wantSkill     && g.skill     !== wantSkill)     continue;
@@ -467,6 +540,24 @@ export function collectRerolls(actor, query = {}) {
         vs:   g.vs ?? null,
         note: g.note ?? null
       });
+    }
+  }
+  // AURAS (2026-10-07) — reroll grants radiated by nearby actors' items
+  // (flags.fourththing.passives.aura.rerolls). Same matching rules as own grants.
+  for (const src of collectAuraSources(actor)) {
+    for (const g of src.aura.rerolls ?? []) {
+      if (!g || !g.mode) continue;
+      const ctx = g.context || "check";
+      const ctxMatch = ctx === wantContext
+        || (ctx === "check" && (wantContext === "check" || wantContext === "save" || wantContext === "attack"))
+        || (ctx === "save" && wantContext === "defense") || (ctx === "defense" && wantContext === "save");
+      if (!ctxMatch) continue;
+      if (g.skill     && wantSkill     && g.skill     !== wantSkill)     continue;
+      if (g.attribute && wantAttribute && g.attribute !== wantAttribute) continue;
+      if (g.skill && !wantSkill) continue;
+      if (g.attribute && !wantAttribute) continue;
+      if (g.when && !_grantWhenOk(actor, g.when, query)) continue;
+      out.push({ mode: g.mode, sourceItemName: `${src.actor.name} · ${src.item.name}`, sourceItemId: null, vs: g.vs ?? null, note: g.note ?? null, _aura: true });
     }
   }
   // CL Annotation one-shot grants — pushed by Annotator's Edit dialog onto the
@@ -540,6 +631,94 @@ export function collectRerolls(actor, query = {}) {
       out.push({ mode: "reroll-lowest", sourceItemName: "Hard Lessons", sourceItemId: null });
     }
   }
+  return out;
+}
+
+
+// ─── Passive readers added 2026-10-07 (regimen pass 7) ────────────────────────
+// flags.fourththing.passives.aura = { radius, who:"allies"|"all"|"enemies", includeSelf?, requires?:{equipped?,active?},
+//   rerolls:[{context,skill?,attribute?,vs,mode,when?}], checkBonus:[{context?,skill?,attribute?,bonus,note}],
+//   defenseBonus:{guard?,evasion?,resolve?}, walkSquares?, ignoreForcedMovementSquares?, note }
+// flags.fourththing.passives.ranks = { <skill>: N }            → added to the SOURCE rank on every roll
+// flags.fourththing.passives.checkBonus = [{context?,skill?,attribute?,bonus,when?,note}] → flat, itemised on the card
+// actor.flags.fourththing.aidBanked[] may hold { kind:"bonus", bonus, context?, skill?, attribute?, from } — consumed at roll time
+function _auraRequiresOk(item, aura) {
+  const r = aura?.requires; if (!r) return true;
+  if (r.equipped && item.system?.equipped === false) return false;
+  if ((r.active || r.lit) && item.flags?.fourththing?.auraActive !== true) return false;
+  return true;
+}
+/** Every aura covering `actor` right now: [{ actor: source, item, aura, squares }]. */
+export function collectAuraSources(actor) {
+  const out = [];
+  if (!actor) return out;
+  const consider = (src, ally, squares) => {
+    for (const item of src.items ?? []) {
+      const aura = item.flags?.fourththing?.passives?.aura;
+      if (!aura || !_auraRequiresOk(item, aura)) continue;
+      if (squares > (Number(aura.radius) || 2)) continue;
+      const who = aura.who || "allies";
+      if (src.id !== actor.id) {
+        if (who === "allies" && !ally) continue;
+        if (who === "enemies" && ally) continue;
+      } else if (!aura.includeSelf) continue;
+      out.push({ actor: src, item, aura, squares });
+    }
+  };
+  consider(actor, true, 0);
+  for (const n of ftNearbyActors(actor)) consider(n.actor, n.ally, n.squares);
+  return out;
+}
+const _bonusCtxOk = (ctx, want) => !ctx || ctx === want
+  || (ctx === "check" && (want === "check" || want === "save" || want === "attack"))
+  || (ctx === "save" && want === "defense") || (ctx === "defense" && want === "save");
+/** Flat roll bonuses for this roll: own passives.checkBonus, aura checkBonus, banked bonuses. */
+export function collectCheckBonuses(actor, query = {}) {
+  const out = [];
+  if (!actor) return out;
+  const want = query.context || "check", skill = query.skill ?? null, attribute = query.attribute ?? null;
+  const match = (g) => {
+    if (!g || !Number(g.bonus)) return false;
+    if (!_bonusCtxOk(g.context, want)) return false;
+    if (g.skill && skill && g.skill !== skill) return false;
+    if (g.attribute && attribute && g.attribute !== attribute) return false;
+    if (g.skill && !skill) return false;
+    if (g.attribute && !attribute) return false;
+    if (g.when && !_grantWhenOk(actor, g.when, query)) return false;
+    return true;
+  };
+  for (const item of actor.items ?? []) for (const g of item.flags?.fourththing?.passives?.checkBonus ?? []) if (match(g)) out.push({ bonus: Number(g.bonus), source: item.name, note: g.note ?? null });
+  for (const src of collectAuraSources(actor)) for (const g of src.aura.checkBonus ?? []) if (match(g)) out.push({ bonus: Number(g.bonus), source: `${src.actor.name} · ${src.item.name}`, note: g.note ?? null, _aura: true });
+  const banked = actor.flags?.fourththing?.aidBanked;
+  if (Array.isArray(banked)) banked.forEach((b, i) => { if (b?.kind === "bonus" && match({ ...b, when: null })) out.push({ bonus: Number(b.bonus), source: `Banked: ${b.from || b.source || "ally"}`, note: b.note ?? null, _bankedIndex: i }); });
+  return out;
+}
+/** Drop the banked bonus entries that were just applied. */
+export async function consumeBankedBonus(actor, applied) {
+  const idx = (applied ?? []).map(a => a?._bankedIndex).filter(i => Number.isInteger(i)).sort((a, b) => b - a);
+  if (!idx.length) return;
+  const banked = Array.isArray(actor.flags?.fourththing?.aidBanked) ? [...actor.flags.fourththing.aidBanked] : [];
+  for (const i of idx) banked.splice(i, 1);
+  try { await actor.update({ "flags.fourththing.aidBanked": banked }); } catch (e) { console.warn("banked bonus consume failed", e); }
+}
+/** Aura-granted defense bonus for one defense ("guard" | "evasion" | "resolve"). */
+export function auraDefenseBonus(actor, which) {
+  let n = 0;
+  for (const s of collectAuraSources(actor)) n += Number(s.aura.defenseBonus?.[which]) || (which === "guard" ? Number(s.aura.guardBonus) || 0 : 0);
+  return n;
+}
+/** Aura-granted extra walk, in squares. */
+export function auraWalkSquares(actor) {
+  let n = 0; for (const s of collectAuraSources(actor)) n += Number(s.aura.walkSquares) || 0; return n;
+}
+/** Squares of forced movement an aura lets this actor shrug off. */
+export function auraIgnoreForcedSquares(actor) {
+  let n = 0; for (const s of collectAuraSources(actor)) n += Number(s.aura.ignoreForcedMovementSquares) || 0; return n;
+}
+/** Skill rank grants from items (passives.ranks) — { skill: N }. */
+export function rankGrantsOf(actor) {
+  const out = {};
+  for (const item of actor?.items ?? []) for (const [k, v] of Object.entries(item.flags?.fourththing?.passives?.ranks ?? {})) if (Number(v)) out[k] = (out[k] || 0) + Number(v);
   return out;
 }
 
@@ -784,19 +963,36 @@ export async function fireResourceGrants(actor, cadence) {
   return { fired, skipped, cadence };
 }
 
-// ─── Triggers engine (Phase C) ───────────────────────────────────────────────
+// ─── Triggers engine (Phase C; events + kinds widened 2026-10-07, regimen pass 7) ───────────
 // Items declare triggers under flags.fourththing.triggers = [{
-//   event:    "on-attack-hit"|"on-damage-taken"|"on-skill-fail"
-//          |"on-self-or-ally-hit"|"on-would-drop-to-zero"|"on-soma-break"
-//          |"on-move"|"on-delivery"|"on-agreement"|"on-cast"|... (closed enum, see survey),
-//   predicate?: { tag?:[...], dieMin?:N, scope?:"self"|"ally"|"enemy", typeMatch?:"melee"|"radiant"|... },
+//   event:    see TRIGGER_EVENTS below. Fired by module.js:
+//             on-attack-hit / on-attack-miss (attacker; payload.target) · on-missed-by (the one missed; target = attacker)
+//             on-incoming-damage (victim, PRE-write; kinds may return data.newAmount) · on-ally-incoming-damage (allies in radius)
+//             on-damage-taken / on-self-or-ally-hit (victim, post-write) · on-ally-hit / on-self-or-ally-hit (allies; target = victim)
+//             on-would-drop-to-zero (pre-write; data.holdAt1) · on-drop-to-zero · on-adjacent-drop (everyone within 1 sq; target = fallen)
+//             on-skill-fail / on-skill-success (payload.rollArgs, target) · on-agreement (passed social check) · on-search (Perception/Investigation)
+//             on-save-fail / on-save-success (the saver; target = caster) · on-soma-break · on-move · on-forced-movement (data.resist)
+//             on-delivery · on-cast · on-turn-start · on-turn-end · on-enemy-turn-end-adjacent / on-ally-turn-end-adjacent · on-help-action (Aid; target = ally)
+//   predicate?: { tag?:[...], dieMin?:N, amountMin?:N, scope?:"self"|"ally"|"enemy", movedMinFt?:N, when?: <reroll when vocab, string|array> },
 //   limit?:    { window:"turn"|"round"|"scene"|"soma-break"|"short-rest"|"session", uses:N },
-//   effect:    { kind, args } where kind ∈ {
-//                "grant-resource"     args:{resource, amount, target?}
-//                "extra-damage"       args:{dieFormula, type}
-//                "queued-reroll"      args:{context, mode}    // queued for next matching roll
-//                "spend-and-survive"  args:{resource, amount}
-//                "add-temp-integrity" args:{amount, target?, radius?}
+//   radius?:   squares, for the ally events (default 6),
+//   offer?:    true → an Offer card with a button; the limit is consumed only when the player accepts,
+//   effect:    { kind, args } where kind ∈ TRIGGER_EFFECT_KINDS:
+//                "grant-resource"     {resource, amount, target?:"self"|"target"|"allies"|"faction"}
+//                "extra-damage"       {dieFormula, type, ignoreResists?}            (needs payload.target)
+//                "add-temp-integrity" {amount, target?, radius?}   "heal" {amount, track?, target?, radius?}
+//                "apply-state"        {key, duration?, save?:{attr,dc}, target?}
+//                "modify-incoming-damage" {mode:"half"|"minus"|"zero"|"multiply", amount?, multiplier?}  (on-incoming-damage events; offer → refund)
+//                "survive-at-1" / "spend-and-survive" {resource?, amount?}          (on-would-drop-to-zero)
+//                "resist-forced-movement" {}                                         (on-forced-movement)
+//                "bank-reroll"        {target?, radius?, count?, context?, skill?, attribute?, note?}
+//                "bank-bonus"         {bonus, target?, radius?, context?, skill?, attribute?, note?}
+//                "impose"             {target?:"target"}        "remove-condition" {keys:[...], target?}
+//                "displace-token"     {who:"target"|"self", squares, mode:"push"|"pull"|"shift"}
+//                "apply-ae"           {name?, rounds?|minutes?, changes?:[{key,value,mode?}], surge?:{kind,resistType?,drFlat?}, target?}
+//                "bank-counter"       {counter, delta?, max?}   "spend-counter" {counter, per:{dieFormula?|flat?}, type?, max?}
+//                "reroll-failed-check" {}   (offer-only; on-skill-fail)   "reaction-attack" {reachSquares?} (offer-only; on-missed-by etc.)
+//                "queued-reroll"      args:{context, mode}      // still a GM whisper
 //                "chat-prompt"        args:{templateKey, body?}  // GM-resolves manually
 //              }
 // }]
@@ -851,7 +1047,7 @@ export function collectTriggers(actor, event) {
   return out;
 }
 
-function _matchPredicate(t, payload) {
+function _matchPredicate(t, payload, actor = null) {
   const p = t.predicate;
   if (!p) return true;
   // Tag match — predicate.tag is an array; payload.tags is an array. Any-overlap.
@@ -877,6 +1073,13 @@ function _matchPredicate(t, payload) {
   }
   // Scope (self/ally/enemy of the trigger subject)
   if (p.scope && payload?.scope && p.scope !== payload.scope) return false;
+  // 2026-10-07 — "moved ≥ N ft this turn AND <event>" (Avalanche Kinetic Inversion / Shockwave Arrival).
+  if (Number.isFinite(p.movedMinFt)) {
+    const used = Number((actor?.system?.system ?? actor?.system)?.actions?.movementUsedFt) || 0;
+    if (used < p.movedMinFt) return false;
+  }
+  // 2026-10-07 — the reroll `when` vocabulary works on triggers too (string or array; target-aware).
+  if (p.when && actor && !_grantWhenOk(actor, p.when, { target: payload?.target ?? null })) return false;
   return true;
 }
 
@@ -887,7 +1090,9 @@ async function _checkAndConsumeLimit(actor, sourceItemId, triggerIndex, limit, c
   const windowKey = _ftWindowKey(limit.window);
   const current = usage[key];
   const usedInWindow = (current?.windowKey === windowKey) ? Number(current.count) || 0 : 0;
-  if (usedInWindow >= Number(limit.uses ?? 1)) return { allowed: false, reason: `${limit.uses}/${limit.window} used` };
+  // uses may be "tier" (2026-10-07): tier-many uses per window.
+  const maxUses = limit.uses === "tier" ? Math.max(1, Number((actor.system?.system ?? actor.system)?.details?.tier) || 1) : Number(limit.uses ?? 1);
+  if (usedInWindow >= maxUses) return { allowed: false, reason: `${maxUses}/${limit.window} used` };
   // Reserve a use
   if (!consume) return { allowed: true, consume: async () => { const u2 = actor.getFlag("fourththing", _TRIGGER_USAGE_FLAG) || {}; await actor.setFlag("fourththing", _TRIGGER_USAGE_FLAG, { ...u2, [key]: { windowKey, count: usedInWindow + 1, at: Date.now() } }); } };
   const updated = { ...usage, [key]: { windowKey, count: usedInWindow + 1, at: Date.now() } };
@@ -901,9 +1106,43 @@ function _gmAndMe() {
   return [...new Set([...gms, game.user.id])];
 }
 
+// Self-resource paths shared by grant-resource / survive-at-1 / spend-and-survive.
+const _TRIGGER_SELF_PATH = {
+  "frame-die":   "system.resources.frameDice.current",
+  "ruin-charge": "system.resources.ruinCharges.current",
+  "pace":        "system.resources.pace.current",
+  "surge":       "system.resources.surge.value",
+  "clarity":     "system.magic.clarity.value",
+  "integrity":   "system.derived.integrity.value",
+  "stress":      "system.derived.stress.value",
+  "temp-integrity": "system.derived.integrity.temp"
+};
+// Kinds that only make sense as a player's choice AFTER the fact: they always post an Offer card.
+const OFFER_ONLY_KINDS = new Set(["reroll-failed-check", "reaction-attack"]);
+export const TRIGGER_EFFECT_KINDS = ["grant-resource", "add-temp-integrity", "apply-state", "heal", "extra-damage", "queued-reroll", "spend-and-survive", "chat-prompt",
+  "modify-incoming-damage", "survive-at-1", "resist-forced-movement", "bank-reroll", "bank-bonus", "impose", "displace-token", "apply-ae", "remove-condition",
+  "bank-counter", "spend-counter", "reroll-failed-check", "reaction-attack", "negate-condition"];
+export const TRIGGER_EVENTS = ["on-ally-turn-end-adjacent", "on-attack-hit", "on-attack-miss", "on-missed-by", "on-damage-taken", "on-incoming-damage", "on-ally-incoming-damage", "on-ally-hit", "on-self-or-ally-hit",
+  "on-skill-fail", "on-skill-success", "on-agreement", "on-search", "on-save-fail", "on-save-success", "on-would-drop-to-zero", "on-drop-to-zero", "on-adjacent-drop",
+  "on-soma-break", "on-move", "on-forced-movement", "on-delivery", "on-cast", "on-turn-start", "on-turn-end", "on-enemy-turn-end-adjacent", "on-help-action", "on-would-gain-condition", "on-ally-forced-movement"];
+
+// Resolve who an effect lands on. "self" (default) · "target" (payload.target) · "allies" (allies within args.radius squares, incl. self unless excludeSelf).
+function _effectTargets(actor, args, payload) {
+  const t = args?.target ?? "self";
+  if (t === "target") { const tg = payload?.target?.actor ?? payload?.target ?? null; return tg ? [tg] : []; }
+  if (t === "allies") {
+    const list = ftNearbyActors(actor, { radius: Number(args.radius) || 6, who: "allies" }).map(n => n.actor);
+    return args.excludeSelf ? list : [actor, ...list];
+  }
+  if (t === "enemies") return ftNearbyActors(actor, { radius: Number(args.radius) || 6, who: "enemies" }).map(n => n.actor);
+  return [actor];
+}
+const _rollTotal = async (v) => (typeof v === "number" ? v : (await new Roll(String(v || "0")).evaluate()).total);
+
 async function _dispatchEffect(actor, effect, source, payload, sourceItemId = null) {
   const kind = effect?.kind;
   const args = effect?.args ?? {};
+  const srcItem = (sourceItemId && actor.items?.get?.(sourceItemId)) || null;
   switch (kind) {
     case "grant-resource": {
       // Faction OP grants share _applyOneGrant (marks conversion, caps, GM relay).
@@ -913,68 +1152,66 @@ async function _dispatchEffect(actor, effect, source, payload, sourceItemId = nu
         if (!r.ok) return { ok:false, reason: r.reason };
         return { ok:true, summary:`+${r.marks} ${r.pool} marks → ${r.target.replace(/^faction:/, "")}` };
       }
-      if (target === "self") {
-        const SELF_PATH = {
-          "frame-die":"system.resources.frameDice.current",
-          "ruin-charge":"system.resources.ruinCharges.current",
-          "pace":"system.resources.pace.current",
-          "package":"system.resources.package.current",
-          "surge":"system.resources.surge.value",
-          "clarity":"system.magic.clarity.value",
-          "integrity":"system.derived.integrity.value",
-          "stress":"system.derived.stress.value"
-        };
-        const path = SELF_PATH[args.resource];
-        if (!path) return { ok:false, reason:`unknown self resource ${args.resource}` };
-        const before = Number(foundry.utils.getProperty(actor, path)) || 0;
-        await actor.update({ [path]: before + Number(args.amount) });
-        return { ok:true, summary:`+${args.amount} ${args.resource} → self` };
+      const path = _TRIGGER_SELF_PATH[args.resource];
+      if (!path) return { ok:false, reason:`unknown resource ${args.resource}` };
+      const who = _effectTargets(actor, { target: target === "self" ? "self" : target, radius: args.radius }, payload);
+      if (!who.length) return { ok:false, reason:`no ${target} for grant-resource` };
+      for (const a of who) {
+        const before = Number(foundry.utils.getProperty(a, path)) || 0;
+        const maxV = Number(foundry.utils.getProperty(a, path.replace(/\.(current|value)$/, ".max")));
+        let next = before + Number(args.amount);
+        if (Number.isFinite(maxV) && maxV > 0 && next > maxV) next = maxV;
+        if (next < 0) next = 0;
+        if (next === before) return { ok:false, reason:`${args.resource} already at ${before}` };
+        if (a.id === actor.id || a.isOwner || game.user.isGM) await a.update({ [path]: next });
+        else { const gx = game.bbttcc?.api?.gmExec; if (gx?.call) await gx.call("ft-set-path", { targetUuid: a.uuid, path, value: next }); }
       }
-      return { ok:false, reason:`unsupported target ${target}` };
+      return { ok:true, summary:`+${args.amount} ${args.resource} → ${who.map(a => a.name).join(", ")}` };
     }
     case "add-temp-integrity": {
-      const path = "system.derived.integrity.temp";
-      const before = Number(foundry.utils.getProperty(actor, path)) || 0;
-      await actor.update({ [path]: before + Number(args.amount) });
-      return { ok:true, summary:`+${args.amount} temp Integrity` };
+      const who = _effectTargets(actor, args, payload);
+      if (!who.length) return { ok:false, reason:"no target for temp Integrity" };
+      const amt = await _rollTotal(args.amount);
+      for (const a of who) { try { await game.fourththing.tempIntegrity.grant(a, amt, source, { quiet: true }); } catch (_e) {} }
+      return { ok:true, summary:`+${amt} temp Integrity → ${who.map(a => a.name).join(", ")}` };
     }
     // ── REGIMEN step 3 (2026-10-06): kinds that used to only whisper the GM now EXECUTE when the event carries a target
     //    (attackTest's on-attack-hit payload now includes `target`). Without a target they fall through to the whisper.
     case "apply-state": {
-      const tgt = payload?.target ?? (args.target === "self" ? actor : null);
+      const tgt = payload?.target?.actor ?? payload?.target ?? (args.target === "self" ? actor : null);
       if (!tgt || !args.key) break;
       const mf = { appliedStates: { states: [args.key], duration: args.duration || "1-round", saveEachRound: args.duration === "until-saved", saveAttribute: args.save?.attr } };
       if (args.save?.attr) {
         mf.resolution = { saveAttribute: args.save.attr, saveDcMode: "fixed", saveDcFixed: Number(args.save.dc) || 13, onSave: "negate", statesOnFail: true };
-        const srcItem = (sourceItemId && actor.items?.get?.(sourceItemId)) || null, post = game.fourththing?._postSavePromptCard;
+        const post = game.fourththing?._postSavePromptCard;
         if (post && srcItem) { await post(actor, tgt, srcItem, mf, { op: "none" }, { castDc: mf.resolution.saveDcFixed }); return { ok:true, summary:`${args.key} save card → ${tgt.name}` }; }
       }
-      await game.fourththing.applyManifestationStates(actor, tgt, (sourceItemId && actor.items?.get?.(sourceItemId)) || { name: source }, mf, { castDc: 15 });
+      await game.fourththing.applyManifestationStates(actor, tgt, srcItem || { name: source }, mf, { castDc: 15 });
       return { ok:true, summary:`${args.key} → ${tgt.name}` };
     }
     case "heal": {
-      const amt = typeof args.amount === "number" ? args.amount : (await new Roll(String(args.amount || "0")).evaluate()).total;
-      await game.fourththing.rolls._applyDamageToActor(args.target === "target" && payload?.target ? payload.target : actor, amt, { op: "heal", track: args.track || "integrity" });
-      return { ok:true, summary:`+${amt} ${args.track || "Integrity"}` };
+      const who = _effectTargets(actor, args, payload);
+      if (!who.length) return { ok:false, reason:"no target to heal" };
+      const amt = await _rollTotal(args.amount);
+      for (const a of who) await game.fourththing.rolls._applyDamageToActor(a, amt, { op: "heal", track: args.track || "integrity" });
+      return { ok:true, summary:`+${amt} ${args.track || "Integrity"} → ${who.map(a => a.name).join(", ")}` };
     }
     case "extra-damage": {
-      const tgt = payload?.target;
+      const tgt = payload?.target?.actor ?? payload?.target;
       if (tgt && args.dieFormula) {
         const roll = await new Roll(String(args.dieFormula)).evaluate();
         const type = String(args.type || "kinetic").toLowerCase();
-        await game.fourththing.rolls._applyDamageToActor(tgt, roll.total, { op: "damage", track: ["psychic", "qliphothic"].includes(type) ? "stress" : "integrity", damageType: type });
+        await game.fourththing.rolls._applyDamageToActor(tgt, roll.total, { op: "damage", track: ["psychic", "qliphothic"].includes(type) ? "stress" : "integrity", damageType: type, ignoreResists: !!args.ignoreResists });
         return { ok:true, summary:`+${roll.total} ${type} → ${tgt.name}` };
       }
     }
     // falls through to the GM whisper when there is no target to hit
-    case "queued-reroll":
-    case "spend-and-survive": {
+    case "queued-reroll": {
       // These need integration into the live roll/damage flow — for v1 we
       // surface as a chat prompt so the GM can apply manually. Engine will
       // route them properly in Phase 2.
       const desc = kind === "extra-damage"   ? `Extra damage: ${args.dieFormula} ${args.type ?? ""}`
                  : kind === "queued-reroll"  ? `Reroll queued: ${args.mode} on next ${args.context}`
-                 : kind === "spend-and-survive" ? `Spend ${args.amount} ${args.resource} → survive at 1`
                  : kind;
       ChatMessage.create({
         user: game.user.id,
@@ -993,17 +1230,214 @@ async function _dispatchEffect(actor, effect, source, payload, sourceItemId = nu
       });
       return { ok:true, summary:`chat-prompt fired` };
     }
+    // ── 2026-10-07 (regimen pass 7) — kinds that EXECUTE ──────────────────────────────────────────────
+    case "modify-incoming-damage": {
+      // Fired from the damage pipeline BEFORE the write (on-incoming-damage / on-ally-incoming-damage).
+      // payload.amount is the post-resistance damage; data.newAmount is what the pipeline writes.
+      const amount = Number(payload?.amount) || 0;
+      if (!(amount > 0)) return { ok:false, reason:"no damage to modify" };
+      let next = amount;
+      const mode = args.mode || "half";
+      if (mode === "half") next = Math.floor(amount / 2);
+      else if (mode === "zero") next = 0;
+      else if (mode === "minus") {
+        const tier = Math.max(1, Number((actor.system?.system ?? actor.system)?.details?.tier) || 1);
+        const minus = typeof args.amount === "number" ? args.amount : (await new Roll(String(args.amount || "0").replace(/@tier/g, String(tier))).evaluate()).total;
+        next = Math.max(0, amount - (Number(minus) || 0));
+      }
+      else if (mode === "multiply") next = Math.floor(amount * (Number(args.multiplier) || 1));
+      if (next === amount) return { ok:false, reason:"no change" };
+      // Offer mode (post-hoc): the damage already landed — refund the difference as healing.
+      if (payload?._accepted) {
+        const victim = payload?.target?.actor ?? payload?.target ?? actor;
+        await game.fourththing.rolls._applyDamageToActor(victim, amount - next, { op: "heal", track: payload?.track || "integrity" });
+        return { ok:true, summary:`${victim.name}: ${amount} → ${next} (${amount - next} refunded)` };
+      }
+      return { ok:true, summary:`incoming ${amount} → ${next}`, data: { newAmount: next } };
+    }
+    case "survive-at-1":
+    case "spend-and-survive": {
+      // on-would-drop-to-zero: optionally spend a self resource, then hold the track at 1 (data.holdAt1 → pipeline).
+      if (args.resource) {
+        const path = _TRIGGER_SELF_PATH[args.resource];
+        if (!path) return { ok:false, reason:`unknown resource ${args.resource}` };
+        const have = Number(foundry.utils.getProperty(actor, path)) || 0, cost = Number(args.amount) || 1;
+        if (have < cost) return { ok:false, reason:`needs ${cost} ${args.resource} (has ${have})` };
+        await actor.update({ [path]: have - cost });
+        return { ok:true, summary:`spent ${cost} ${args.resource} → holds at 1`, data: { holdAt1: true } };
+      }
+      return { ok:true, summary:`holds at 1`, data: { holdAt1: true } };
+    }
+    case "resist-forced-movement":
+    case "negate-condition": {
+      // on-forced-movement / on-would-gain-condition: data.resist → the caller refuses the shove / skips the condition.
+      return { ok:true, summary: kind === "negate-condition" ? `condition refused` : `forced movement refused`, data: { resist: true } };
+    }
+    case "bank-reroll": {
+      const who = _effectTargets(actor, args, payload);
+      if (!who.length) return { ok:false, reason:"no one to bank a reroll for" };
+      const n = Math.max(1, Number(args.count) || 1);
+      for (const a of who) for (let i = 0; i < n; i++) await game.fourththing.aid.bank(a, { from: actor.name, source, mode: args.mode || "reroll-lowest", context: args.context ?? null, skill: args.skill ?? null, attribute: args.attribute ?? null, note: args.note ?? null });
+      return { ok:true, summary:`${n > 1 ? n + " rerolls" : "a reroll"} banked → ${who.map(a => a.name).join(", ")}` };
+    }
+    case "bank-bonus": {
+      const who = _effectTargets(actor, args, payload);
+      if (!who.length) return { ok:false, reason:"no one to bank a bonus for" };
+      for (const a of who) await game.fourththing.aid.bank(a, { kind: "bonus", from: actor.name, source, bonus: Number(args.bonus) || 1, context: args.context ?? null, skill: args.skill ?? null, attribute: args.attribute ?? null, note: args.note ?? null });
+      return { ok:true, summary:`+${args.bonus} banked → ${who.map(a => a.name).join(", ")}` };
+    }
+    case "impose": {
+      const who = _effectTargets(actor, { target: args.target || "target" }, payload);
+      if (!who.length) return { ok:false, reason:"no target to impose on" };
+      for (const a of who) await game.fourththing.impose.apply(a, { source, note: args.note || "" });
+      return { ok:true, summary:`Imposed → ${who.map(a => a.name).join(", ")}` };
+    }
+    case "displace-token": {
+      const r = await game.fourththing.triggers.displace(actor, payload?.target?.actor ?? payload?.target ?? null, args, source);
+      return r?.ok ? { ok:true, summary: r.summary } : { ok:false, reason: r?.reason || "displace failed" };
+    }
+    case "apply-ae": {
+      const who = _effectTargets(actor, args, payload);
+      if (!who.length) return { ok:false, reason:"no target for the effect" };
+      const ae = {
+        name: args.name || source, img: srcItem?.img || "icons/svg/aura.svg", origin: srcItem?.uuid ?? actor.uuid,
+        duration: args.minutes ? { seconds: Number(args.minutes) * 60 } : { rounds: Math.max(1, Number(args.rounds) || 1) },
+        changes: (args.changes ?? []).map(c => ({ key: c.key, mode: Number(c.mode ?? CONST.ACTIVE_EFFECT_MODES.ADD), value: String(c.value), priority: 20 })),
+        flags: { fourththing: { ...(args.flags ?? {}), ...(args.surge ? { surge: args.surge } : {}), fromTrigger: source } }
+      };
+      for (const a of who) {
+        if (a.id === actor.id && (a.isOwner || game.user.isGM)) await a.createEmbeddedDocuments("ActiveEffect", [ae]);
+        else await game.fourththing.applyEffectsToTarget(a, [ae], []);
+      }
+      return { ok:true, summary:`${ae.name} → ${who.map(a => a.name).join(", ")}` };
+    }
+    case "remove-condition": {
+      const who = _effectTargets(actor, args, payload);
+      const keys = Array.isArray(args.keys) ? args.keys : [args.key].filter(Boolean);
+      if (!who.length || !keys.length) return { ok:false, reason:"nothing to remove" };
+      const cleared = [];
+      for (const a of who) for (const k of keys) {
+        const sys = a.system?.system ?? a.system;
+        if (!sys?.conditions?.[k]) continue;
+        if (k === "imposed") await game.fourththing.impose.clear(a, source);
+        else if (a.isOwner || game.user.isGM) await game.fourththing.toggleCondition(a, k);
+        else await game.fourththing.applyEffectsToTarget(a, [], [], { flags: {} });   // non-owner: GM relay handles conditions via the standard path
+        cleared.push(`${a.name}: ${k}`);
+      }
+      return cleared.length ? { ok:true, summary:`cleared ${cleared.join(", ")}` } : { ok:false, reason:"no such condition" };
+    }
+    case "bank-counter": {
+      if (!srcItem || !args.counter) return { ok:false, reason:"bank-counter needs its item + counter name" };
+      const cur = Number(srcItem.flags?.fourththing?.counters?.[args.counter]) || 0;
+      const max = Number.isFinite(Number(args.max)) ? Number(args.max) : Infinity;
+      const next = Math.max(0, Math.min(max, cur + (Number(args.delta) || 1)));
+      if (next === cur) return { ok:false, reason:`${args.counter} already at ${cur}` };
+      await srcItem.update({ [`flags.fourththing.counters.${args.counter}`]: next });
+      return { ok:true, summary:`${args.counter} ${cur} → ${next}` };
+    }
+    case "spend-counter": {
+      if (!srcItem || !args.counter) return { ok:false, reason:"spend-counter needs its item + counter name" };
+      const tgt = payload?.target?.actor ?? payload?.target ?? null;
+      const cur = Number(srcItem.flags?.fourththing?.counters?.[args.counter]) || 0;
+      if (!(cur > 0)) return { ok:false, reason:`${args.counter} is empty` };
+      if (!tgt) return { ok:false, reason:"no target to spend on" };
+      const spend = Math.min(cur, Number(args.max) || cur);
+      const per = args.per ?? {};
+      const formula = per.dieFormula ? Array.from({ length: spend }, () => String(per.dieFormula)).join(" + ") : String((Number(per.flat) || 1) * spend);
+      const roll = await new Roll(formula).evaluate();
+      const type = String(args.type || "kinetic").toLowerCase();
+      await game.fourththing.rolls._applyDamageToActor(tgt, roll.total, { op: "damage", track: ["psychic", "qliphothic"].includes(type) ? "stress" : "integrity", damageType: type });
+      await srcItem.update({ [`flags.fourththing.counters.${args.counter}`]: cur - spend });
+      return { ok:true, summary:`spent ${spend} ${args.counter}: +${roll.total} ${type} → ${tgt.name}` };
+    }
+    case "reroll-failed-check": {
+      // Offer-only: re-run the check that just failed with the same arguments (payload.rollArgs from attributeTest).
+      const ra = payload?.rollArgs;
+      if (!ra) return { ok:false, reason:"no roll to retry" };
+      const tgt = ra.targetUuid ? await fromUuid(ra.targetUuid).catch(() => null) : null;
+      await game.fourththing.rolls.attributeTest(actor, { attribute: ra.attribute, skill: ra.skill || null, label: `${ra.label || "Check"} — ${source} reroll`, dc: ra.dc ?? null, target: tgt?.actor ?? tgt ?? null, kind: ra.kind || "tactical", _noFailTriggers: true });
+      return { ok:true, summary:`${ra.label || "check"} rerolled` };
+    }
+    case "reaction-attack": {
+      const tgt = payload?.target?.actor ?? payload?.target ?? null;
+      if (!tgt) return { ok:false, reason:"no one to strike" };
+      const r = await game.fourththing.triggers.reactionStrike(actor, tgt, args, source);
+      return r?.ok ? { ok:true, summary: r.summary } : { ok:false, reason: r?.reason || "no strike" };
+    }
     default:
       return { ok:false, reason:`unknown effect kind ${kind}` };
   }
+  return { ok:false, reason:`${kind}: nothing to apply` };
+}
+
+// ── Offer cards (2026-10-07) ───────────────────────────────────────────────────
+// A trigger with `offer:true` (or an offer-only kind) does not auto-fire: the owner (or GM) gets a
+// chat card with a button. Accepting re-checks the limit, dispatches the effect and only THEN burns
+// the use — declining costs nothing (the pass-5 "consume-on-accept" gap).
+function _serialisePayload(payload = {}) {
+  const out = {};
+  for (const [k, v] of Object.entries(payload)) {
+    if (k === "target") { const a = v?.actor ?? v; out.targetUuid = a?.uuid ?? null; continue; }
+    if (v === undefined || typeof v === "function") continue;
+    try { JSON.stringify(v); out[k] = v; } catch (_e) {}
+  }
+  return out;
+}
+async function _postOfferCard(actor, m, payload, event) {
+  const eff = m.trigger.effect ?? {};
+  const what = m.trigger.offerText || eff.args?.body || ({
+    "reroll-failed-check": "Reroll the check you just failed",
+    "reaction-attack": "Make a reaction Strike",
+    "modify-incoming-damage": "Reduce the damage you just took",
+    "displace-token": "Shift position",
+    "bank-reroll": "Bank a reroll", "bank-bonus": "Bank a bonus", "impose": "Impose on the target",
+    "apply-ae": "Apply the effect", "remove-condition": "Shake the condition", "heal": "Heal", "add-temp-integrity": "Gain temporary Integrity",
+    "grant-resource": "Gain the resource", "spend-counter": "Spend the banked points", "survive-at-1": "Hold at 1 Integrity"
+  }[eff.kind] ?? eff.kind);
+  const limitNote = m.trigger.limit ? ` <span style="opacity:0.65">(${m.trigger.limit.uses ?? 1}/${m.trigger.limit.window})</span>` : "";
+  const owners = Object.entries(actor.ownership ?? {}).filter(([, l]) => l >= 3).map(([id]) => id).filter(id => id !== "default");
+  const msg = await ChatMessage.create({
+    user: game.user.id,
+    speaker: ChatMessage.getSpeaker({ actor }),
+    whisper: [...new Set([...owners, ..._gmAndMe()])],
+    content: `<div class="fourththing-roll ft-trigger-offer" style="border-left:4px solid #6b3fa0;padding:0.45rem 0.6rem;background:#ede0f5;border-radius:3px;color:#1a1a1a">
+      <div style="font-size:0.82rem;color:#6b3fa0;font-weight:700">⚡ ${m.sourceItemName}${limitNote}</div>
+      <div style="font-size:0.78rem;margin:0.2rem 0">${what}</div>
+      <button type="button" class="ft-trigger-accept" style="font-size:0.78rem;line-height:1.6;margin-top:0.15rem">Use ${m.sourceItemName}</button>
+    </div>`,
+    flags: { fourththing: { triggerOffer: { actorUuid: actor.uuid, itemId: m.sourceItemId, triggerIndex: m.triggerIndex, event, payload: _serialisePayload(payload), used: false } } }
+  });
+  return msg;
+}
+/** Accept an Offer card (button handler lives in module.js). */
+export async function acceptTriggerOffer(message) {
+  const off = message?.flags?.fourththing?.triggerOffer;
+  if (!off) return { ok:false, reason:"not an offer" };
+  if (off.used) return { ok:false, reason:"already used" };
+  const actor = (await fromUuid(off.actorUuid).catch(() => null)); const a = actor?.actor ?? actor;
+  if (!a) return { ok:false, reason:"actor gone" };
+  if (!(game.user.isGM || a.isOwner)) return { ok:false, reason:"not yours to accept" };
+  const item = a.items.get(off.itemId); const t = item?.flags?.fourththing?.triggers?.[off.triggerIndex];
+  if (!t) return { ok:false, reason:"trigger gone" };
+  const limitCheck = await _checkAndConsumeLimit(a, off.itemId, off.triggerIndex, t.limit, false);
+  if (!limitCheck.allowed) return { ok:false, reason: limitCheck.reason };
+  const payload = { ...off.payload, _accepted: true };
+  if (off.payload?.targetUuid) { const tg = await fromUuid(off.payload.targetUuid).catch(() => null); payload.target = tg?.actor ?? tg ?? null; }
+  let result; try { result = await _dispatchEffect(a, t.effect, item.name, payload, off.itemId); } catch (e) { result = { ok:false, reason: e?.message || "threw" }; }
+  if (result.ok) {
+    try { await limitCheck.consume?.(); } catch (_e) {}
+    try { await message.update({ "flags.fourththing.triggerOffer.used": true, content: message.content.replace(/<button[\s\S]*?<\/button>/, `<div style="font-size:0.78rem;color:#2f6b2f">✔ ${result.summary}</div>`) }); } catch (_e) {}
+  } else ui.notifications?.warn?.(`${item.name}: ${result.reason}`);
+  return result;
 }
 
 export async function fireTriggers(actor, event, payload = {}) {
   const matches = collectTriggers(actor, event);
   const fired   = [];
   const skipped = [];
+  const offered = [];
   for (const m of matches) {
-    if (!_matchPredicate(m.trigger, payload)) {
+    if (!_matchPredicate(m.trigger, payload, actor)) {
       skipped.push({ source: m.sourceItemName, reason: "predicate failed" });
       continue;
     }
@@ -1013,8 +1447,14 @@ export async function fireTriggers(actor, event, payload = {}) {
       skipped.push({ source: m.sourceItemName, reason: limitCheck.reason });
       continue;
     }
+    // Offers: post the card and move on — nothing fires until the player accepts.
+    if (m.trigger.offer === true || OFFER_ONLY_KINDS.has(m.trigger.effect?.kind)) {
+      try { await _postOfferCard(actor, m, payload, event); offered.push({ source: m.sourceItemName }); }
+      catch (e) { skipped.push({ source: m.sourceItemName, reason: e?.message || "offer failed" }); }
+      continue;
+    }
     let result; try { result = await _dispatchEffect(actor, m.trigger.effect, m.sourceItemName, payload, m.sourceItemId); } catch (e) { result = { ok: false, reason: e?.message || "threw" }; }
-    if (result.ok) { fired.push({ source: m.sourceItemName, summary: result.summary }); try { await limitCheck.consume?.(); } catch (_e) {} }
+    if (result.ok) { fired.push({ source: m.sourceItemName, summary: result.summary, data: result.data ?? null }); try { await limitCheck.consume?.(); } catch (_e) {} }
     else skipped.push({ source: m.sourceItemName, reason: result.reason });
   }
   // Centralized chat surface — post a single purple "Triggers fired" card per
@@ -1034,7 +1474,27 @@ export async function fireTriggers(actor, event, payload = {}) {
                 </div>`
     });
   }
-  return { fired, skipped, event };
+  // Merged data for the caller: the LOWEST newAmount wins; holdAt1 / resist are ORs.
+  const data = {};
+  for (const f of fired) for (const [k, v] of Object.entries(f.data ?? {})) {
+    if (k === "newAmount") data.newAmount = Math.min(data.newAmount ?? Infinity, Number(v));
+    else data[k] = data[k] || v;
+  }
+  return { fired, skipped, offered, event, data };
+}
+
+/** Fire `event` on every ally of `victim` within `radius` squares (per-trigger `radius` wins), with the victim as the payload target. */
+export async function fireAllyTriggers(victim, event, payload = {}, { radius = 6 } = {}) {
+  const results = [];
+  if (!victim || !canvas?.ready) return results;
+  for (const n of ftNearbyActors(victim, { who: "allies" })) {
+    const mine = collectTriggers(n.actor, event);
+    if (!mine.length) continue;
+    const reach = Math.max(...mine.map(m => Number(m.trigger.radius) || radius));
+    if (n.squares > reach) continue;
+    results.push(await fireTriggers(n.actor, event, { ...payload, target: victim, scope: "ally", squares: n.squares }));
+  }
+  return results;
 }
 
 // Reset all soma-break-windowed trigger usage on an actor (called from somaBreak).

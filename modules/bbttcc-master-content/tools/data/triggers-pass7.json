@@ -1,0 +1,906 @@
+{
+ "generated": "2026-10-07",
+ "entries": [
+  {
+   "pack": "co-npc-callings",
+   "id": "becallingkpr0t02",
+   "name": "Keeper — Initiate (Tier II)",
+   "triggers": [
+    {
+     "event": "on-ally-incoming-damage",
+     "radius": 6,
+     "predicate": {
+      "tag": [
+       "psychic",
+       "qliphothic"
+      ]
+     },
+     "limit": {
+      "window": "scene",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "modify-incoming-damage",
+      "args": {
+       "mode": "minus",
+       "amount": 2
+      }
+     }
+    }
+   ],
+   "why": "Warding Sign (1/scene): reaction — an ally within 6 squares takes 2 less from one psychic/qliphothic hit (on-ally-incoming-damage, pre-write)."
+  },
+  {
+   "pack": "classes",
+   "id": "BlwkAvalFtL01abc",
+   "name": "Avalanche L1: Kinetic Inversion",
+   "triggers": [
+    {
+     "event": "on-attack-hit",
+     "predicate": {
+      "movedMinFt": 15,
+      "tag": [
+       "violence"
+      ]
+     },
+     "limit": {
+      "window": "turn",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "grant-resource",
+      "args": {
+       "resource": "frame-die",
+       "amount": 1
+      }
+     }
+    }
+   ],
+   "why": "Moved ≥ 15 ft this turn AND a Violence hit → +1 Frame Die (capped at the pool max), 1/turn."
+  },
+  {
+   "pack": "classes",
+   "id": "BlwkAvalFtL05abc",
+   "name": "Avalanche L5: Shockwave Arrival",
+   "triggers": [
+    {
+     "event": "on-attack-hit",
+     "predicate": {
+      "movedMinFt": 10
+     },
+     "offer": true,
+     "offerText": "Shockwave Arrival — spend 1 Ruin Charge: the target is pushed 2 squares in your direction of travel; GM applies the strike's damage to the 1-square line behind it (Body DC 12 + tier×2 for half).",
+     "effect": {
+      "kind": "displace-token",
+      "args": {
+       "who": "target",
+       "squares": 2,
+       "mode": "push"
+      }
+     }
+    }
+   ],
+   "why": "Moved ≥ 10 ft this turn AND a hit → Offer: push the target 2 squares (the Ruin Charge and the line damage behind are the player's/GM's)."
+  },
+  {
+   "pack": "items",
+   "id": "5NMHaJsuIJhmKS7R",
+   "name": "Combat Intuition",
+   "triggers": [
+    {
+     "event": "on-missed-by",
+     "limit": {
+      "window": "round",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "reaction-attack",
+      "args": {
+       "reachSquares": 1
+      }
+     }
+    }
+   ],
+   "why": "When a creature misses YOU (on-missed-by) — Offer: a reaction melee Strike against it, 1/round."
+  },
+  {
+   "pack": "items",
+   "id": "dJAoJ1cXbBR7miaX",
+   "name": "Last Exit",
+   "triggers": [
+    {
+     "event": "on-would-gain-condition",
+     "predicate": {
+      "tag": [
+       "restrained",
+       "prone"
+      ]
+     },
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "negate-condition",
+      "args": {}
+     }
+    },
+    {
+     "event": "on-would-gain-condition",
+     "predicate": {
+      "tag": [
+       "restrained",
+       "prone"
+      ]
+     },
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "displace-token",
+      "args": {
+       "who": "self",
+       "squares": 2,
+       "mode": "shift"
+      }
+     }
+    }
+   ],
+   "why": "1/SB: when you would be Restrained or Prone, refuse it (on-would-gain-condition → negate-condition) and shift 2 squares free."
+  },
+  {
+   "pack": "items",
+   "id": "3nDzp74afkbXVpMw",
+   "name": "Reactor Shield Cape",
+   "triggers": [
+    {
+     "event": "on-incoming-damage",
+     "predicate": {
+      "tag": [
+       "electrical",
+       "thermal"
+      ]
+     },
+     "limit": {
+      "window": "session",
+      "uses": 3
+     },
+     "offer": true,
+     "offerText": "Reactor Shield Cape — reaction: resist this energy hit (halved; the difference is refunded).",
+     "effect": {
+      "kind": "modify-incoming-damage",
+      "args": {
+       "mode": "half"
+      }
+     }
+    }
+   ],
+   "why": "3/day (session window; GM clears): reaction to electrical/thermal damage — Offer: halve that hit (refunded after the write)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "7PoKPowb37ZTjDL7",
+   "name": "Territorial",
+   "triggers": [
+    {
+     "event": "on-enemy-turn-end-adjacent",
+     "limit": {
+      "window": "round",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "reaction-attack",
+      "args": {
+       "reachSquares": 2
+      }
+     }
+    }
+   ],
+   "why": "A creature ends its turn within 2 squares (on-enemy-turn-end-adjacent) — Offer to the GM: a reaction bite, 1/round."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "VAmHqj31Km8ybNwW",
+   "name": "Hex-Itch",
+   "triggers": [
+    {
+     "event": "on-adjacent-drop",
+     "effect": {
+      "kind": "add-temp-integrity",
+      "args": {
+       "amount": 5
+      }
+     }
+    },
+    {
+     "event": "on-adjacent-drop",
+     "effect": {
+      "kind": "bank-reroll",
+      "args": {
+       "context": "attack",
+       "note": "Hex-Itch"
+      }
+     }
+    }
+   ],
+   "why": "A creature within 1 square drops to 0 (on-adjacent-drop): +5 temp Integrity and a banked reroll-lowest on the next attack."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "qXHUDkgrDxQmcg11",
+   "name": "Gathers, Reports, Dies Anonymously",
+   "triggers": [
+    {
+     "event": "on-drop-to-zero",
+     "effect": {
+      "kind": "bank-reroll",
+      "args": {
+       "target": "allies",
+       "radius": 12,
+       "excludeSelf": true,
+       "context": "attack",
+       "note": "the initiate's last sight — vs the killer"
+      }
+     }
+    }
+   ],
+   "why": "On death (on-drop-to-zero): allied Witnesses within 12 squares bank a reroll-lowest on their next attack."
+  },
+  {
+   "pack": "ancestries",
+   "id": "ZLxRHhqoktj9a8rz",
+   "name": "Human (Neanderthal): Protective Instinct",
+   "triggers": [
+    {
+     "event": "on-ally-incoming-damage",
+     "radius": 2,
+     "limit": {
+      "window": "soma-break",
+      "uses": "tier"
+     },
+     "offer": true,
+     "offerText": "Protective Instinct — reaction: reduce the hit on your ally by 1d6 + your tier.",
+     "effect": {
+      "kind": "modify-incoming-damage",
+      "args": {
+       "mode": "minus",
+       "amount": "1d6 + @tier"
+      }
+     }
+    }
+   ],
+   "why": "Reaction (tier uses / SB): an ally within 2 squares is hit — Offer: reduce it by 1d6 + tier (refunded after the write)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "4k4E7fkJnZ76JACZ",
+   "name": "Oldenborn (Stormborn Nomad): Weatherwise",
+   "triggers": [
+    {
+     "event": "on-incoming-damage",
+     "predicate": {
+      "tag": [
+       "electrical",
+       "lightning",
+       "cold",
+       "thunder"
+      ]
+     },
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "offer": true,
+     "offerText": "Wind-Read — reaction: halve this weather damage.",
+     "effect": {
+      "kind": "modify-incoming-damage",
+      "args": {
+       "mode": "half"
+      }
+     }
+    }
+   ],
+   "why": "Wind-Read (1/SB): reaction to electrical/lightning/cold/thunder damage — Offer: halve it (refunded after the write)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "nKHhfdL3U98tJj6r",
+   "name": "Oldenborn Heritage: Stormborn Nomad",
+   "triggers": [],
+   "why": "Mirror card: the Tier-I Weatherwise feat now executes Wind-Read, so the duplicate prompt is removed."
+  },
+  {
+   "pack": "ancestries",
+   "id": "76e7b97d5e1e5e35",
+   "name": "Oldenborn (Stormborn Nomad): Ward of the Gale",
+   "triggers": [
+    {
+     "event": "on-incoming-damage",
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "offer": true,
+     "offerText": "Ward of the Gale — reaction: wrap yourself in whirling air and halve this hit.",
+     "effect": {
+      "kind": "modify-incoming-damage",
+      "args": {
+       "mode": "half"
+      }
+     }
+    }
+   ],
+   "why": "1/SB: reaction to any damage — Offer: halve it (refunded after the write)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "TDAzTMQwQQlQyoi5",
+   "name": "Menhirkin (Igneous): Magma Memory",
+   "triggers": [
+    {
+     "event": "on-damage-taken",
+     "predicate": {
+      "tag": [
+       "thermal",
+       "hot",
+       "fire"
+      ]
+     },
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "bank-counter",
+      "args": {
+       "counter": "heat",
+       "delta": 1,
+       "max": 1
+      }
+     }
+    },
+    {
+     "event": "on-attack-hit",
+     "offer": true,
+     "offerText": "Magma Memory — spend the banked heat: +2d10 exploding thermal (fire) on this hit.",
+     "effect": {
+      "kind": "spend-counter",
+      "args": {
+       "counter": "heat",
+       "per": {
+        "dieFormula": "2d10x10"
+       },
+       "type": "thermal"
+      }
+     }
+    }
+   ],
+   "why": "Thermal damage banks 1 heat (1/SB); on a hit — Offer: spend it for +2d10 exploding thermal."
+  },
+  {
+   "pack": "ancestries",
+   "id": "mL93g5CgA2LbacFT",
+   "name": "Menhirkin Heritage: Igneous",
+   "triggers": [
+    {
+     "event": "on-damage-taken",
+     "predicate": {
+      "tag": [
+       "thermal",
+       "hot",
+       "fire"
+      ]
+     },
+     "effect": {
+      "kind": "bank-counter",
+      "args": {
+       "counter": "heat",
+       "delta": 1,
+       "max": 1
+      }
+     }
+    },
+    {
+     "event": "on-attack-hit",
+     "offer": true,
+     "offerText": "Heat Memory — spend the banked heat: +1d10 exploding thermal (fire) on this hit.",
+     "effect": {
+      "kind": "spend-counter",
+      "args": {
+       "counter": "heat",
+       "per": {
+        "dieFormula": "1d10x10"
+       },
+       "type": "thermal"
+      }
+     }
+    }
+   ],
+   "why": "Heat Memory: thermal damage banks 1 heat (max 1); on a hit — Offer: spend it for +1d10 exploding thermal."
+  },
+  {
+   "pack": "ancestries",
+   "id": "CKCORETRAITPLACE",
+   "name": "Cryptidkin: Folklore & Frame",
+   "triggers": [
+    {
+     "event": "on-would-drop-to-zero",
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "survive-at-1",
+      "args": {}
+     }
+    },
+    {
+     "event": "on-would-drop-to-zero",
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "grant-resource",
+      "args": {
+       "resource": "stress",
+       "amount": 1
+      }
+     }
+    }
+   ],
+   "why": "Survivor's Instinct (1/SB): would drop to 0 → held at 1 and +1 Stress (executes pre-write)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "09IqdCAcL2F1Y8xy",
+   "name": "Sephirotic Scion Heritage: Ophanic",
+   "triggers": [
+    {
+     "event": "on-agreement",
+     "effect": {
+      "kind": "add-temp-integrity",
+      "args": {
+       "amount": 1,
+       "target": "self"
+      }
+     }
+    },
+    {
+     "event": "on-agreement",
+     "effect": {
+      "kind": "add-temp-integrity",
+      "args": {
+       "amount": 1,
+       "target": "target"
+      }
+     }
+    }
+   ],
+   "why": "Light of Harmony: a passed social check (on-agreement) gives you and the one who agreed 1 temp Integrity each."
+  },
+  {
+   "pack": "ancestries",
+   "id": "Lk2uVTVkzWJEUG9l",
+   "name": "Sephirotic Scion Heritage: Seraphic",
+   "triggers": [
+    {
+     "event": "on-agreement",
+     "effect": {
+      "kind": "add-temp-integrity",
+      "args": {
+       "amount": 1,
+       "target": "self"
+      }
+     }
+    },
+    {
+     "event": "on-agreement",
+     "effect": {
+      "kind": "add-temp-integrity",
+      "args": {
+       "amount": 1,
+       "target": "target"
+      }
+     }
+    }
+   ],
+   "why": "Light of Harmony: a passed social check (on-agreement) gives you and the one who agreed 1 temp Integrity each."
+  },
+  {
+   "pack": "ancestries",
+   "id": "ZF8oThFRx2gPqn7y",
+   "name": "Sephirotic Scion Heritage: Cherubic",
+   "triggers": [
+    {
+     "event": "on-agreement",
+     "effect": {
+      "kind": "add-temp-integrity",
+      "args": {
+       "amount": 1,
+       "target": "self"
+      }
+     }
+    },
+    {
+     "event": "on-agreement",
+     "effect": {
+      "kind": "add-temp-integrity",
+      "args": {
+       "amount": 1,
+       "target": "target"
+      }
+     }
+    }
+   ],
+   "why": "Light of Harmony: a passed social check (on-agreement) gives you and the one who agreed 1 temp Integrity each."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "Kxp2WkAT88IlZKn6",
+   "name": "Sephirotic Scion Heritage: Seraphic",
+   "triggers": [
+    {
+     "event": "on-agreement",
+     "effect": {
+      "kind": "add-temp-integrity",
+      "args": {
+       "amount": 1,
+       "target": "self"
+      }
+     }
+    },
+    {
+     "event": "on-agreement",
+     "effect": {
+      "kind": "add-temp-integrity",
+      "args": {
+       "amount": 1,
+       "target": "target"
+      }
+     }
+    }
+   ],
+   "why": "Light of Harmony: a passed social check (on-agreement) gives you and the one who agreed 1 temp Integrity each."
+  },
+  {
+   "pack": "ancestries",
+   "id": "60MZEDvlJZr1oZPg",
+   "name": "Qliph-Scarred Heritage: Chthonic",
+   "triggers": [
+    {
+     "event": "on-skill-fail",
+     "predicate": {
+      "tag": [
+       "soul"
+      ]
+     },
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "offerText": "Qliphothic Saturation — reroll the failed Soul check. The scene's Darkness-gain count rises by 1 (GM notes it).",
+     "effect": {
+      "kind": "reroll-failed-check",
+      "args": {}
+     }
+    }
+   ],
+   "why": "Qliphothic Saturation (1/SB): a failed Soul check — Offer: reroll it (the limit is consumed on accept; GM raises the scene's Darkness-gain count by 1)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "iDcPvxKbW6YAD9NF",
+   "name": "Qliph-Scarred Heritage: Husk",
+   "triggers": [
+    {
+     "event": "on-skill-fail",
+     "predicate": {
+      "tag": [
+       "soul"
+      ]
+     },
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "offerText": "Qliphothic Saturation — reroll the failed Soul check. The scene's Darkness-gain count rises by 1 (GM notes it).",
+     "effect": {
+      "kind": "reroll-failed-check",
+      "args": {}
+     }
+    }
+   ],
+   "why": "Qliphothic Saturation (1/SB): a failed Soul check — Offer: reroll it (the limit is consumed on accept; GM raises the scene's Darkness-gain count by 1)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "vgjf6l5eVpI5yl9l",
+   "name": "Qliph-Scarred Heritage: Diabolic",
+   "triggers": [
+    {
+     "event": "on-skill-fail",
+     "predicate": {
+      "tag": [
+       "soul"
+      ]
+     },
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "offerText": "Qliphothic Saturation — reroll the failed Soul check. The scene's Darkness-gain count rises by 1 (GM notes it).",
+     "effect": {
+      "kind": "reroll-failed-check",
+      "args": {}
+     }
+    }
+   ],
+   "why": "Qliphothic Saturation (1/SB): a failed Soul check — Offer: reroll it (the limit is consumed on accept; GM raises the scene's Darkness-gain count by 1)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "6C4TjG04YUwSGg9k",
+   "name": "Echo-Diver Heritage: Abyssal",
+   "triggers": [
+    {
+     "event": "on-self-or-ally-hit",
+     "radius": 2,
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "offer": true,
+     "offerText": "Temporal Flinch — shift the one who was hit 1 square. GM: if that breaks the attack's range or line, the attack misses (refund the damage).",
+     "effect": {
+      "kind": "displace-token",
+      "args": {
+       "squares": 1,
+       "mode": "shift"
+      }
+     }
+    }
+   ],
+   "why": "Temporal Flinch (1/SB): you or an ally within 2 squares is hit — Offer: shift the one hit 1 square (GM: if that breaks range, the hit misses and is refunded)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "I63j6iSiB7jWsmmt",
+   "name": "Echo-Diver Heritage: Tellurian",
+   "triggers": [
+    {
+     "event": "on-self-or-ally-hit",
+     "radius": 2,
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "offer": true,
+     "offerText": "Temporal Flinch — shift the one who was hit 1 square. GM: if that breaks the attack's range or line, the attack misses (refund the damage).",
+     "effect": {
+      "kind": "displace-token",
+      "args": {
+       "squares": 1,
+       "mode": "shift"
+      }
+     }
+    }
+   ],
+   "why": "Temporal Flinch (1/SB): you or an ally within 2 squares is hit — Offer: shift the one hit 1 square (GM: if that breaks range, the hit misses and is refunded)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "Uryua7cj6XkhMzgl",
+   "name": "Echo-Diver Heritage: Empyrean",
+   "triggers": [
+    {
+     "event": "on-self-or-ally-hit",
+     "radius": 2,
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "offer": true,
+     "offerText": "Temporal Flinch — shift the one who was hit 1 square. GM: if that breaks the attack's range or line, the attack misses (refund the damage).",
+     "effect": {
+      "kind": "displace-token",
+      "args": {
+       "squares": 1,
+       "mode": "shift"
+      }
+     }
+    }
+   ],
+   "why": "Temporal Flinch (1/SB): you or an ally within 2 squares is hit — Offer: shift the one hit 1 square (GM: if that breaks range, the hit misses and is refunded)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "0030cd75eb3ea792",
+   "name": "Circuitborn Heritage: Synapse",
+   "triggers": [
+    {
+     "event": "on-turn-start",
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "offerText": "Predictive Cache — an enemy you can see acted: bank a reroll-lowest for your next attack or reaction against them this round.",
+     "effect": {
+      "kind": "bank-reroll",
+      "args": {
+       "context": "attack",
+       "note": "Predictive Cache"
+      }
+     }
+    }
+   ],
+   "why": "Predictive Cache (1/SB): the always-on attack reroll is retired; at the start of your turn an Offer banks a reroll-lowest for your next attack vs the enemy you read."
+  },
+  {
+   "pack": "ancestries",
+   "id": "a3057e55a2fc1026",
+   "name": "Human",
+   "triggers": [
+    {
+     "event": "on-save-fail",
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "chat-prompt",
+      "args": {
+       "body": "Adaptive (1/Soma Break). You failed a defense check: you may choose to succeed instead."
+      }
+     }
+    },
+    {
+     "event": "on-skill-fail",
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "offerText": "Adaptive — you failed a check: choose to succeed instead (reroll; the GM may simply rule it a success).",
+     "effect": {
+      "kind": "reroll-failed-check",
+      "args": {}
+     }
+    }
+   ],
+   "why": "Adaptive (1/SB): a failed check — Offer: reroll it (GM may rule outright success). The failed-save half keeps its prompt (the save engine already has Adaptive's auto-succeed one-shot)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "h4Q4skT4ohrKa6z3",
+   "name": "Human (Denisovan): Peak-Anchor",
+   "triggers": [
+    {
+     "event": "on-forced-movement",
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "resist-forced-movement",
+      "args": {}
+     }
+    },
+    {
+     "event": "on-ally-forced-movement",
+     "radius": 6,
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "resist-forced-movement",
+      "args": {}
+     }
+    }
+   ],
+   "why": "1/SB: forced movement on you (on-forced-movement) or an ally within 6 squares (on-ally-forced-movement) is refused. The psychic backlash stays prose (no aggressor in the event)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "piBIsF55Raz8NBNz",
+   "name": "Oldenborn (Earthbound): World-Anchor",
+   "triggers": [
+    {
+     "event": "on-forced-movement",
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "resist-forced-movement",
+      "args": {}
+     }
+    },
+    {
+     "event": "on-ally-forced-movement",
+     "radius": 6,
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "resist-forced-movement",
+      "args": {}
+     }
+    }
+   ],
+   "why": "1/SB: forced movement on you (on-forced-movement) or an ally within 6 squares (on-ally-forced-movement) is refused. The psychic backlash stays prose (no aggressor in the event)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "kLmFqDPpLUBzqgR2",
+   "name": "Menhirkin",
+   "why": "Living Rampart: dead event on-ally-targeted → on-ally-hit within 1 square (the prompt now fires on a real event; the 3d10kl2 is the GM's post-hoc call).",
+   "triggers": [
+    {
+     "event": "on-ally-hit",
+     "radius": 1,
+     "limit": {
+      "window": "soma-break",
+      "uses": 1
+     },
+     "effect": {
+      "kind": "chat-prompt",
+      "args": {
+       "body": "Living Rampart (1/Soma Break). Reaction — an ally adjacent to you was just attacked: the attacker rolls 3d10 keep lowest 2 on that attack roll (GM re-reads the roll)."
+      }
+     }
+    }
+   ]
+  },
+  {
+   "pack": "ancestries",
+   "id": "trMSR7JDKSI0tXB9",
+   "name": "Oldenborn (Lumenwrought): Moonlit Ward",
+   "why": "Dead event on-self-or-ally-condition → on-would-gain-condition (Charmed/Shaken on you; the ally case stays the GM's). Prompt fires BEFORE the condition lands.",
+   "triggers": [
+    {
+     "event": "on-would-gain-condition",
+     "predicate": {
+      "tag": [
+       "charmed",
+       "shaken"
+      ]
+     },
+     "limit": {
+      "window": "soma-break",
+      "uses": "tier"
+     },
+     "effect": {
+      "kind": "chat-prompt",
+      "args": {
+       "body": "Moonlit Ward (tier uses / Soma Break). Reaction — you (or an ally within 6 squares) would be Charmed or Shaken: grant reroll-lowest on the defense check. On a success, the aggressor rolls 3d10 keep lowest 2 on their next attack."
+      }
+     }
+    }
+   ]
+  },
+  {
+   "pack": "classes",
+   "id": "ShdwBlkFtL05abcd",
+   "name": "Black Stair L5: The Threshold Is A Lie",
+   "why": "Dead event on-feature-use removed — the card is rules text for The Crossing (no engine event).",
+   "triggers": []
+  },
+  {
+   "pack": "classes",
+   "id": "ShdwBlkFtL09abcd",
+   "name": "Black Stair L9: Extraction",
+   "why": "Dead event on-package-take removed — narrative protection, no engine event.",
+   "triggers": []
+  },
+  {
+   "pack": "classes",
+   "id": "ShdwWayFtL05abcd",
+   "name": "Wayfarer Tongue L5: Preceding Rumor",
+   "why": "Dead event on-scene-start removed — scene-entry rules text, no engine event.",
+   "triggers": []
+  }
+ ]
+}

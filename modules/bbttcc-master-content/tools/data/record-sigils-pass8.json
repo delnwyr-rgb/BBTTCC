@@ -1,0 +1,266 @@
+{
+ "generated": "2026-10-07",
+ "pack": "fourththing.starter-manifestations",
+ "frame": {
+  "intent": "presence",
+  "channel": "soul",
+  "sephirah": "tiferet",
+  "mode": "hermetic",
+  "clarity": 1,
+  "activation": "action",
+  "target": "single",
+  "range": "near",
+  "tier": 1
+ },
+ "entries": [
+  {
+   "id": "CKB5WrfhSO6HYr83",
+   "name": "Canonize the Outcome",
+   "effect": "Enter what just happened into the record as official. Target: Soul defense vs Cast DC. On fail: Imposed — their next roll is made 3d10 keep-lowest, because contradicting the minutes is expensive.",
+   "flavor": "A rubber stamp comes down somewhere nobody can see. The ink is already dry.",
+   "concept": "One outcome made official; contradiction now costs.",
+   "function": "command",
+   "mechanicalHook": "Imposed on a failed Soul defense: the target's next roll takes the worse result.",
+   "targetText": "One creature whose last success or failure you intend to make permanent.",
+   "riskText": "Canonize the wrong thing and the record will hold you to it too.",
+   "states": [
+    "imposed"
+   ],
+   "save": "soul",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "A line of gray-gold minutes writes itself in the air behind the target."
+  },
+  {
+   "id": "6P9iu397fCugZ6JL",
+   "name": "Contain the Breach",
+   "effect": "Box the incident inside procedure. Target: Body defense vs Cast DC. On fail: Restrained for 1 round — paperwork has a perimeter, and they are standing inside it.",
+   "flavor": "Four lines of light draw a square on the floor. Nobody drew them. Everybody obeys them.",
+   "concept": "A procedural perimeter around one breach.",
+   "function": "press",
+   "mechanicalHook": "Restrained for 1 round on a failed Body defense.",
+   "targetText": "One creature, construct, or spill of something that should not be spreading.",
+   "riskText": "A contained breach is not a resolved one; the clock on it is now yours.",
+   "states": [
+    "restrained"
+   ],
+   "save": "body",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "Hazard-tape light, humming faintly, at exactly the height of the knee."
+  },
+  {
+   "id": "4wdmmZQYjODubzNM",
+   "name": "Edit the Record",
+   "effect": "Amend the minutes so the target was always on your side. Target: Mind defense vs Cast DC. On fail: Charmed for 1 round — they remember agreeing with you, and they are fairly sure they meant it.",
+   "flavor": "A pen scratch in a book that is not open. The target blinks, and the blink has a footnote.",
+   "concept": "A small amendment to what the target remembers agreeing to.",
+   "function": "transform",
+   "mechanicalHook": "Charmed for 1 round on a failed Mind defense.",
+   "targetText": "One creature who can hear you and has a memory worth editing.",
+   "riskText": "Edits leave marks. A Records Pactkeeper who reads the margin will know your hand.",
+   "states": [
+    "charmed"
+   ],
+   "save": "mind",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "The target's shadow nods a half-second before they do."
+  },
+  {
+   "id": "a0ER1kblUcFeF6Sx",
+   "name": "Erase Concept",
+   "effect": "Strike one word from the target's reality — a name, a plan, the thing they were about to reach for. Target: Mind defense vs Cast DC. On fail: 1d6 psychic damage to Stress as the concept tears out with its roots.",
+   "flavor": "A black bar falls across a word only the target can see. The word was load-bearing.",
+   "concept": "Surgical removal of one idea, briefly.",
+   "function": "harm",
+   "mechanicalHook": "1d6 psychic Stress on a failed Mind defense.",
+   "targetText": "One creature holding a word, a plan, or a certainty.",
+   "riskText": "Concepts grow back. Sometimes they grow back angry.",
+   "states": [],
+   "save": "mind",
+   "damage": {
+    "number": 1,
+    "die": "d6"
+   },
+   "triggerText": "",
+   "duration": "instant",
+   "signature": "The air where the word was goes briefly, politely blank."
+  },
+  {
+   "id": "pnZGXDcw8TMz7UwV",
+   "name": "File the Incident",
+   "effect": "Open a file on the target. The file is looking at them. Target: Soul defense vs Cast DC. On fail: Shaken for 1 round — it is very hard to be brave in triplicate.",
+   "flavor": "A manila folder nobody is holding opens to a page with their name on it.",
+   "concept": "The weight of being officially noticed.",
+   "function": "press",
+   "mechanicalHook": "Shaken for 1 round on a failed Soul defense.",
+   "targetText": "One creature who has done something, or is about to.",
+   "riskText": "Files are permanent. The Long Quiet keeps copies.",
+   "states": [
+    "shaken"
+   ],
+   "save": "soul",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "A reference number appears over the target's head, legible only to clerks and gods."
+  },
+  {
+   "id": "yxBbKYJVT48AETWZ",
+   "name": "Invoke Civic Authority",
+   "effect": "Stand down. You have been served. Target: Soul defense vs Cast DC. On fail: Compelled for 1 round — they carry out the one plain instruction you give as the sigil lands (drop it, kneel, step back, be quiet).",
+   "flavor": "Your voice acquires a seal. The seal acquires a bailiff.",
+   "concept": "One lawful instruction, enforced by mandate rather than muscle.",
+   "function": "command",
+   "mechanicalHook": "Compelled for 1 round on a failed Soul defense; the instruction must be one plain sentence.",
+   "targetText": "One creature within the sound of your voice.",
+   "riskText": "Authority spent outside your Jurisdiction is Noise. Invoke it where you are licensed.",
+   "states": [
+    "compelled"
+   ],
+   "save": "soul",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "Gray-gold letters of a warrant hang in the air for one breath."
+  },
+  {
+   "id": "tXzXCU4v3a9KicpA",
+   "name": "Precedent Lock",
+   "effect": "Every step the target takes must now match the last one. Target: Body defense vs Cast DC. On fail: Staggered for 1 round — movement halved, −2 to attacks, because improvisation has been ruled out of order.",
+   "flavor": "Their footprints repeat themselves. The second set is slightly wrong.",
+   "concept": "Consistency enforced on a body that wanted to be clever.",
+   "function": "press",
+   "mechanicalHook": "Staggered for 1 round on a failed Body defense.",
+   "targetText": "One creature mid-motion.",
+   "riskText": "Precedent cuts both ways: lock a pattern you share and you share the lock.",
+   "states": [
+    "staggered"
+   ],
+   "save": "body",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "A faint ledger-line follows the target's heels."
+  },
+  {
+   "id": "dXxud1chIFo6fLhM",
+   "name": "Reassign Authority",
+   "effect": "The floor is no longer theirs. Target: Body defense vs Cast DC. On fail: Prone — the ground read the memo before they did.",
+   "flavor": "A chair is pulled out from under a reality that was sitting on it.",
+   "concept": "Standing is revoked, briefly and literally.",
+   "function": "press",
+   "mechanicalHook": "Prone on a failed Body defense.",
+   "targetText": "One creature currently holding the floor, the high ground, or the room.",
+   "riskText": "Reassigning authority you do not hold is a breach. The record notices.",
+   "states": [
+    "prone"
+   ],
+   "save": "body",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "Their shadow sits down first."
+  },
+  {
+   "id": "gGFTO5zJ9s8KmB6c",
+   "name": "Redact Entity",
+   "effect": "Drop a black bar over the target's eyes. Target: Mind defense vs Cast DC. On fail: Blinded for 1 round — the world is still there; it has simply been classified.",
+   "flavor": "A censor's bar, matte black, hovering exactly where their sight line was.",
+   "concept": "One creature's perception redacted for one round.",
+   "function": "bind",
+   "mechanicalHook": "Blinded for 1 round on a failed Mind defense.",
+   "targetText": "One creature that is looking at something you would rather it did not.",
+   "riskText": "Redactions are logged. Someone with clearance will eventually read what you hid.",
+   "states": [
+    "blinded"
+   ],
+   "save": "mind",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "The bar reads [REDACTED] in a typeface older than the Shattering."
+  },
+  {
+   "id": "Stkwn03qVTKVJz1D",
+   "name": "Restore the Quiet",
+   "effect": "Return the Long Quiet to one creature. Target: Soul defense vs Cast DC. On fail: Calmed for 1 round — the violence in them is filed, not felt. A willing ally may simply decline the defense.",
+   "flavor": "The room's noise floor drops a notch. Somewhere a fluorescent light stops buzzing.",
+   "concept": "Institutional calm delivered to one person.",
+   "function": "bind",
+   "mechanicalHook": "Calmed for 1 round on a failed Soul defense (allies may decline the save).",
+   "targetText": "One creature too loud for the moment — a panicking ally, a raging foe.",
+   "riskText": "Quiet imposed on grief is not healing. It is a hold.",
+   "states": [
+    "calmed"
+   ],
+   "save": "soul",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "A hush with the texture of a closed door."
+  },
+  {
+   "id": "L8vLslTUG9Hai2U6",
+   "name": "Rewrite the Draft",
+   "effect": "Send the target's next action back for revision. Target: Mind defense vs Cast DC. On fail: Staggered for 1 round — movement halved, −2 to attacks, while they reconsider the wording.",
+   "flavor": "A red pencil hovers over the next thing they were going to do.",
+   "concept": "One action returned with notes.",
+   "function": "transform",
+   "mechanicalHook": "Staggered for 1 round on a failed Mind defense.",
+   "targetText": "One creature about to act.",
+   "riskText": "Drafts you return may come back better.",
+   "states": [
+    "staggered"
+   ],
+   "save": "mind",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "Marginalia flickers at the edge of the target's vision: see me."
+  },
+  {
+   "id": "IAaPcgebmem9XW2E",
+   "name": "Semantic Cut",
+   "effect": "Cut the meaning out of one word the target is standing on — their title, their threat, their name for you. Target: Soul defense vs Cast DC. On fail: 1d6 psychic damage to Stress as the word goes hollow under them.",
+   "flavor": "A clean incision through a sentence. The sentence keeps talking; it no longer means anything.",
+   "concept": "Meaning removed from one load-bearing word.",
+   "function": "harm",
+   "mechanicalHook": "1d6 psychic Stress on a failed Soul defense.",
+   "targetText": "One creature whose words are doing work.",
+   "riskText": "Words heal slower than skin. Cut carefully.",
+   "states": [],
+   "save": "soul",
+   "damage": {
+    "number": 1,
+    "die": "d6"
+   },
+   "triggerText": "",
+   "duration": "instant",
+   "signature": "The word hangs in the air a moment, unglossed, then falls."
+  },
+  {
+   "id": "S3GyAZ9F7QyblGMx",
+   "name": "Stabilize Narrative",
+   "effect": "Hold one ally's story steady. Target: Soul defense vs Cast DC — a willing ally simply declines it. On fail (or on consent): Calmed for 1 round — panic, fear, and chaos have to apply in writing, and the office is closed.",
+   "flavor": "You put a hand on the moment and it stops shaking.",
+   "concept": "One ally's thread held against fear and chaos.",
+   "function": "protect",
+   "mechanicalHook": "Calmed for 1 round; the engine posts a Soul save card, which a willing ally declines (the GM applies the state).",
+   "targetText": "One ally whose story is about to come apart.",
+   "riskText": "A stabilized narrative is a loan from the Long Quiet. It comes due.",
+   "states": [
+    "calmed"
+   ],
+   "save": "soul",
+   "damage": null,
+   "triggerText": "",
+   "duration": "1-round",
+   "signature": "A hairline of gray-gold runs along the ally's silhouette, like a binding thread."
+  }
+ ]
+}

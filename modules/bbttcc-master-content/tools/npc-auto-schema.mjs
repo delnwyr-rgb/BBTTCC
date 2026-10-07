@@ -6,8 +6,8 @@ export const CONDITIONS = ["staggered", "scarred", "calmed", "blinded", "prone",
 export const ATTRS = ["violence", "intrigue", "presence", "body", "mind", "soul"];
 export const DAMAGE_TYPES = ["kinetic", "electrical", "thermal", "chemical", "poison", "sephirotic", "psychic", "qliphothic", "radiation"];
 const ON = ["attack", "hit", "turnStart", "selfTurnStart", "bloodied", "zero", "allyDamaged", "use", "saveFail", "struck", "damaged", "attacked"];
-const IF = ["firstRound", "targetNotActed", "allyAdjacentToTarget", "targetTag", "targetCondition", "weapon", "damageType", "ownerNotAttacked", "ownerBloodied", "targetBloodied"];
-const DO = ["reroll", "condition", "save", "damage", "dot", "radiation", "noReactions", "tempIntegrity", "heal", "morale", "ward", "prompt"];
+const IF = ["firstRound", "targetNotActed", "allyAdjacentToTarget", "targetTag", "targetCondition", "weapon", "damageType", "ownerNotAttacked", "ownerBloodied", "targetBloodied", "ownerNotBloodied", "ownerAirborne", "targetNotAirborne", "ownerMovedSquares"];
+const DO = ["reroll", "condition", "save", "damage", "dot", "radiation", "noReactions", "tempIntegrity", "heal", "morale", "ward", "prompt", "bankReroll", "bankBonus", "removeCondition", "impose"];
 const DURATIONS = ["1-round", "2-rounds", "3-rounds", "until-saved", "scene"];
 const FORMULA = /^\d+(d\d+)?([+-]\d+)?$/;
 // ftPlaceAreaTemplate's vocabulary (module.js SHAPE_MAP) — NOT Foundry's circle/ray/rect
@@ -35,7 +35,10 @@ export function validateNpcAuto(na, where = "") {
     if (d.reroll && d.reroll !== "attack-highest" && r.on !== "attack") err(`${w}reroll needs on:"attack"`);
     if (d.reroll === "attack-highest" && r.on !== "attacked") err(`${w}attack-highest needs on:"attacked"`);
     if (r.on === "attacked" && d.reroll !== "attack-highest") err(`${w}on:"attacked" only supports do.reroll:"attack-highest"`);
-    if (r.on === "damaged" && (d.condition || d.save || d.damage || d.dot || d.radiation || d.noReactions)) err(`${w}on:"damaged" has no target — self effects only (heal/tempIntegrity/prompt)`);
+    if (r.on === "damaged" && (d.condition || d.save || d.damage || d.dot || d.radiation || d.noReactions || d.impose || d.removeCondition || d.bankReroll || d.bankBonus)) err(`${w}on:"damaged" has no target — self effects only (heal/tempIntegrity/prompt)`);
+    if (d.bankBonus && !(Number(d.bankBonus.bonus) !== 0)) err(`${w}bankBonus needs a bonus`);
+    if (d.removeCondition && (!Array.isArray(d.removeCondition) || d.removeCondition.some(k => !CONDITIONS.includes(k)))) err(`${w}removeCondition ${JSON.stringify(d.removeCondition)}`);
+    if (r.if?.ownerMovedSquares !== undefined && !(Number(r.if.ownerMovedSquares) > 0)) err(`${w}if.ownerMovedSquares must be > 0`);
     if (r.who && r.on === "use" && !["self", "targets"].includes(r.who)) err(`${w}use who "${r.who}"`);
     for (const k of ["damageType"]) if (r.if?.[k] && !Array.isArray(r.if[k])) err(`${w}if.${k} must be an array`);
     if (r.if?.damageType) for (const t of r.if.damageType) if (!DAMAGE_TYPES.includes(t)) err(`${w}if.damageType "${t}"`);

@@ -1,0 +1,921 @@
+{
+ "generated": "2026-10-07",
+ "entries": [
+  {
+   "pack": "ancestries",
+   "id": "DViThQoRpsEri1Ta",
+   "name": "Human: Stubborn Spark",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.rerolls": [
+     {
+      "context": "check",
+      "mode": "reroll-lowest",
+      "when": "atOneIntegrity",
+      "note": "Tenacious — at 1 Integrity (one check per round; declare before rolling)"
+     }
+    ]
+   },
+   "why": "Tenacious: reroll-lowest on checks only while at exactly 1 Integrity (when:atOneIntegrity)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "a3057e55a2fc1026",
+   "name": "Human",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.rerolls": [
+     {
+      "context": "check",
+      "mode": "reroll-lowest",
+      "when": "atOneIntegrity",
+      "note": "Tenacious — at 1 Integrity (one check per round; declare before rolling)"
+     }
+    ]
+   },
+   "why": "Tenacious was stamped unconditioned (always-on reroll); now gated on atOneIntegrity."
+  },
+  {
+   "pack": "classes",
+   "id": "ShdwLstFtL01abcd",
+   "name": "Last Mile L1: The Weight You Carry",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.rerolls": [
+     {
+      "context": "check",
+      "skill": "stealth",
+      "mode": "reroll-lowest",
+      "when": "carryingSoul",
+      "vs": "protecting or concealing the Soul",
+      "note": "The Weight You Carry — while carrying a Soul"
+     },
+     {
+      "context": "check",
+      "skill": "athletics",
+      "mode": "reroll-lowest",
+      "when": "carryingSoul",
+      "vs": "protecting or concealing the Soul",
+      "note": "The Weight You Carry — while carrying a Soul"
+     }
+    ]
+   },
+   "why": "Stealth/Athletics rerolls gated on carrying a Soul (when:carryingSoul). Movement ±1 square and the delivery OP/Darkness effects stay prose."
+  },
+  {
+   "pack": "items",
+   "id": "WDhyIG2Canwwa3kB",
+   "name": "Neon Spirit Armor",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.rerolls": [
+     {
+      "context": "check",
+      "attribute": "intrigue",
+      "mode": "reroll-lowest",
+      "when": "dimLightOrNearLight",
+      "vs": "tumble, balance, slip past — avoiding opportunity attacks",
+      "note": "Neon Afterimage — in dim light or near artificial light"
+     }
+    ]
+   },
+   "why": "Neon Afterimage: Intrigue reroll gated on dim light / artificial light within 30 ft (when:dimLightOrNearLight)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "PPRLI8Wspd1FUGJh",
+   "name": "Blood Frenzy",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.rerolls": [
+     {
+      "context": "attack",
+      "mode": "reroll-lowest",
+      "when": "targetDamaged",
+      "note": "Blood Frenzy — the target is missing Integrity"
+     }
+    ]
+   },
+   "why": "Attack reroll vs any target missing Integrity (when:targetDamaged; attackTest now passes the target)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "anR8O0K1GHl7ONVQ",
+   "name": "Discipline of the Line",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.rerolls": [
+     {
+      "context": "attack",
+      "mode": "reroll-lowest",
+      "when": "adjacentAlly",
+      "note": "Discipline of the Line — an allied Marauder within 1 square"
+     }
+    ]
+   },
+   "why": "Attack reroll while an ally is within 1 square (when:adjacentAlly)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "hwUv2PtKLBPCQTWr",
+   "name": "Pack Tactics",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.rerolls": [
+     {
+      "context": "attack",
+      "mode": "reroll-lowest",
+      "when": "allyAdjacentToTarget",
+      "note": "Pack Tactics — an ally within 1 square of the target"
+     }
+    ]
+   },
+   "why": "Attack reroll vs a target adjacent to an ally (when:allyAdjacentToTarget)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "y7QQwNoKVmkfyxyA",
+   "name": "Aerial Dominance",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.rerolls": [
+     {
+      "context": "attack",
+      "mode": "reroll-lowest",
+      "when": [
+       "airborne",
+       "targetGrounded"
+      ],
+      "note": "Aerial Dominance — airborne vs a grounded target"
+     }
+    ],
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "attacked",
+       "if": {
+        "ownerAirborne": true,
+        "targetNotAirborne": true
+       },
+       "do": {
+        "reroll": "attack-highest"
+       },
+       "label": "Aerial Dominance — ground-based attackers reroll their highest die"
+      }
+     ]
+    }
+   },
+   "why": "Attack reroll while airborne vs grounded targets; grounded attackers reroll their highest die vs her (npcAuto attacked + targetNotAirborne)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "S3pShhbY5iTyyqLD",
+   "name": "Swarm",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "attacked",
+       "if": {
+        "ownerNotBloodied": true
+       },
+       "do": {
+        "reroll": "attack-highest"
+       },
+       "label": "Swarm — above half Integrity"
+      }
+     ]
+    }
+   },
+   "why": "Attacks against it reroll highest while above half Integrity (npcAuto attacked + ownerNotBloodied)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "nCwG4A6FZ4LatNfK",
+   "name": "Half-Real",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "attacked",
+       "if": {
+        "ownerNotAttacked": true
+       },
+       "do": {
+        "reroll": "attack-highest"
+       },
+       "label": "Half-Real — until the first strike manifests it"
+      }
+     ]
+    }
+   },
+   "why": "Attacks against it reroll highest until it has attacked (npcAuto attacked + ownerNotAttacked)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "Dg42CgpKKlL0L4iw",
+   "name": "Crystal Carapace",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "attacked",
+       "do": {
+        "reroll": "attack-highest"
+       },
+       "limit": {
+        "per": "combat",
+        "uses": 1
+       },
+       "label": "Crystal Carapace — the carapace turns the first blow"
+      }
+     ]
+    }
+   },
+   "why": "First attack each combat rerolls highest (npcAuto attacked, 1/combat). The +1 after the crack stays prose."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "YjizstQaGEskq9p7",
+   "name": "Temporal Afterimage",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "attacked",
+       "if": {
+        "ownerMovedSquares": 2
+       },
+       "do": {
+        "reroll": "attack-highest"
+       },
+       "label": "Temporal Afterimage — it moved 2+ squares"
+      }
+     ]
+    }
+   },
+   "why": "Attacks against it reroll highest after it moved ≥ 2 squares this turn (npcAuto attacked + ownerMovedSquares:2)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "HPGwPF8cqsF7SJ5g",
+   "name": "Pre-Fall Diagnostics",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "attacked",
+       "do": {
+        "reroll": "attack-highest"
+       },
+       "limit": {
+        "per": "round",
+        "uses": 1
+       },
+       "label": "Pre-Fall Diagnostics — targeting solution recalibrates"
+      }
+     ]
+    }
+   },
+   "why": "1/round: the incoming attack rerolls its highest die (npcAuto attacked, 1/round)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "SXDO1u9sIF17GBoP",
+   "name": "Slip the Frame",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "attacked",
+       "do": {
+        "reroll": "attack-highest"
+       },
+       "limit": {
+        "per": "round",
+        "uses": 1
+       },
+       "label": "Slip the Frame — the wraith teleports up to 3 squares (GM moves it); the attack rolls 3 keep lowest"
+      }
+     ]
+    }
+   },
+   "why": "Reaction when attacked: the attack rerolls its highest die (npcAuto attacked, 1/round); the 3-square teleport is the GM's move."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "6OBoepZcUxDHR9X2",
+   "name": "Slipped Through",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "struck",
+       "do": {
+        "impose": true,
+        "prompt": "The Wraith may displace 1 square (GM moves it)."
+       },
+       "label": "Slipped Through"
+      }
+     ]
+    }
+   },
+   "why": "When struck, the attacker is Imposed (their next attack suffers) — npcAuto struck → impose; the 1-square displacement is the GM's move."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "zHyQXrOOdbP9QeoK",
+   "name": "Hex-Iron Heart",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "zero",
+       "do": {
+        "prompt": "Hex-Iron Heart: the champion keeps acting for 1 more round (attacks reroll their highest die), then falls."
+       },
+       "limit": {
+        "per": "scene",
+        "uses": 1
+       }
+      }
+     ]
+    }
+   },
+   "why": "Prompt on the real event: at 0 Integrity, one more round (npcAuto zero, 1/scene)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "bldzOyptmyp6zCLC",
+   "name": "Minor Ward",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "allyDamaged",
+       "radius": 6,
+       "do": {
+        "ward": 0.5
+       },
+       "limit": {
+        "per": "round",
+        "uses": 1
+       },
+       "label": "Minor Ward"
+      }
+     ]
+    }
+   },
+   "why": "Reaction: an ally within 6 squares about to take damage takes half (npcAuto allyDamaged ward 0.5, 1/round)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "IpH5YnkELogyOyQw",
+   "name": "Circuitborn (Salvage Line): Built-In Tools",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "ranks": {
+      "tinkering": 1
+     }
+    }
+   },
+   "why": "+1 Tinkering rank (passives.ranks — added to the source rank on every roll)."
+  },
+  {
+   "pack": "ancestries",
+   "id": "KGKE4OFLm1YKA1X6",
+   "name": "Human (Denisovan): Stone-Singer",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "ranks": {
+      "plating": 1
+     }
+    }
+   },
+   "why": "+1 Plating rank (passives.ranks)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "TInJabpzrAYUIJtq",
+   "name": "Crew Type: Ashbound Survivors (Tier 1)",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "ranks": {
+      "athletics": 1,
+      "lore": 1
+     }
+    }
+   },
+   "why": "+1 Athletics and +1 Lore rank (passives.ranks). Strategic terrain effect stays faction-side."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "jmIdAMLZUOLgSJ1P",
+   "name": "Archetype: The Devil (Exploiter) (Tier 1)",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "ranks": {
+      "stealth": 1,
+      "diplomacy": 1
+     }
+    }
+   },
+   "why": "+1 Stealth and +1 Diplomacy rank (passives.ranks)."
+  },
+  {
+   "pack": "items",
+   "id": "ooEjOFD1J4Hl2Van",
+   "name": "Buc-ee's Beaver Talisman (Tarnished Gold)",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "checkBonus": [
+      {
+       "context": "check",
+       "skill": "diplomacy",
+       "bonus": 1,
+       "note": "Cleanest Bathrooms in the Wasteland — GM: wasteland-market negotiation only"
+      }
+     ]
+    }
+   },
+   "why": "+1 to Diplomacy checks, itemised on the card with a GM note (market negotiation only)."
+  },
+  {
+   "pack": "classes",
+   "id": "MRKlOrjt0N6zb6nu",
+   "name": "Hold the Line",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "aura": {
+      "radius": 2,
+      "who": "allies",
+      "ignoreForcedMovementSquares": 1,
+      "note": "Hold the Line — allies within 2 squares ignore 1 square of forced movement; +1 to Clarity-hold checks (GM applies)"
+     }
+    }
+   },
+   "why": "Aura: allies within 2 squares shrug off the first square of forced movement each round. The +1 to Clarity-hold checks stays prose (no hold-check tag in the engine)."
+  },
+  {
+   "pack": "classes",
+   "id": "CwwBcnUZyKZPRDXG",
+   "name": "Marchwork",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "aura": {
+      "radius": 2,
+      "who": "allies",
+      "walkSquares": 2,
+      "note": "Marchwork — +2 squares walk at turn start"
+     }
+    }
+   },
+   "why": "Aura: allies within 2 squares get +2 squares of walk at turn start (movement budget)."
+  },
+  {
+   "pack": "items",
+   "id": "XhKIDuz578PgNYrp",
+   "name": "Wardstone of Gevurah",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "aura": {
+      "radius": 6,
+      "who": "allies",
+      "includeSelf": true,
+      "requires": {
+       "equipped": true
+      },
+      "defenseBonus": {
+       "guard": 1
+      },
+      "note": "Wardstone of Gevurah — +1 Guard while defending a hex (GM)"
+     }
+    }
+   },
+   "why": "Aura: allies within 6 squares +1 Guard (defense value) while the stone is equipped; 'defending a hex' is the GM's call."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "3CloZbuDEdWdWokX",
+   "name": "Scion: Light of Harmony",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "aura": {
+      "radius": 2,
+      "who": "allies",
+      "rerolls": [
+       {
+        "context": "defense",
+        "mode": "reroll-lowest",
+        "vs": "vs:frightened",
+        "note": "Light of Harmony — vs being frightened"
+       }
+      ]
+     }
+    }
+   },
+   "why": "Aura: allies within 2 squares reroll lowest on defense checks (vs being frightened). calm emotions 1/SB + hex-tilt sense stay prose."
+  },
+  {
+   "pack": "items",
+   "id": "HlvNlhDr9F2COugT",
+   "name": "Lantern of Unforgotten Light",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "aura": {
+      "radius": 4,
+      "who": "allies",
+      "includeSelf": true,
+      "requires": {
+       "equipped": true
+      },
+      "rerolls": [
+       {
+        "context": "defense",
+        "mode": "reroll-lowest",
+        "vs": "fear / despair sourced from Darkness",
+        "note": "Lantern of Unforgotten Light — while lit"
+       }
+      ]
+     }
+    }
+   },
+   "why": "Aura while equipped (lit): allies within 4 squares reroll lowest on defense checks vs Darkness fear/despair. Purge Pulse stays prose."
+  },
+  {
+   "pack": "classes",
+   "id": "ZqVbVGaQyFUkAufx",
+   "name": "Stillheart: Centered Breath",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "aura": {
+      "radius": 2,
+      "who": "allies",
+      "rerolls": [
+       {
+        "context": "defense",
+        "mode": "reroll-lowest",
+        "vs": "vs fear or charm (first check each round)",
+        "note": "Centered Breath"
+       }
+      ]
+     }
+    }
+   },
+   "why": "Aura: allies within 2 squares reroll lowest on defense checks (vs fear or charm). Burn reduction stays prose (Burn engine)."
+  },
+  {
+   "pack": "npc-abilities",
+   "id": "VMlCOxI9Y0Xmz5kP",
+   "name": "Reports Up",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.passives": {
+     "aura": {
+      "radius": 1056,
+      "who": "allies",
+      "rerolls": [
+       {
+        "context": "attack",
+        "mode": "reroll-lowest",
+        "note": "Reports Up — the lieutenant relays"
+       }
+      ],
+      "note": "Initiate minions cannot be surprised (GM)"
+     }
+    }
+   },
+   "why": "Aura (1 mile = 1056 squares): allied Witnesses reroll lowest on attacks while the lieutenant stands."
+  },
+  {
+   "pack": "ancestries",
+   "id": "251244de8d810ccf",
+   "name": "Human (Cro-Magnon): Ritual Memory",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.rerolls": [],
+    "flags.fourththing.passives": {
+     "aura": {
+      "radius": 1,
+      "who": "allies",
+      "rerolls": [
+       {
+        "context": "defense",
+        "mode": "reroll-lowest",
+        "vs": "vs:frightened",
+        "note": "Coalition Calm — an ally within 1 square"
+       }
+      ]
+     }
+    }
+   },
+   "why": "Coalition Calm is an aura on allies within 1 square (defense reroll vs frightened) — the self-reroll stamped earlier was the wrong recipient. Ritual d4s stay a Soma Break prompt."
+  },
+  {
+   "pack": "classes",
+   "id": "Fk2oPWk2GDeDEVls",
+   "name": "Auditor: Compliance Action",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "use",
+       "who": "targets",
+       "do": {
+        "impose": true,
+        "prompt": "Compliance Action — or the target loses its action (GM's call)."
+       },
+       "limit": {
+        "per": "scene",
+        "uses": 1
+       }
+      }
+     ]
+    }
+   },
+   "why": "▶ Use (1/scene): the target is Imposed — its next roll takes the worse result (npcAuto use → impose). Action loss is the GM's alternative."
+  },
+  {
+   "pack": "classes",
+   "id": "L4lvU04xw7AliIK3",
+   "name": "Reverse-Anvil",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "use",
+       "who": "targets",
+       "do": {
+        "save": {
+         "attr": "body",
+         "dc": 14,
+         "onSave": "negate"
+        }
+       },
+       "limit": {
+        "per": "scene",
+        "uses": 2
+       }
+      },
+      {
+       "on": "saveFail",
+       "do": {
+        "impose": true
+       },
+       "label": "Reverse-Anvil — internal backlash"
+      }
+     ]
+    }
+   },
+   "why": "▶ Use (bonus action, tier uses/SB ≈ 2/scene): target makes a Body save DC 14; on a failure it is Imposed (disadvantage on its next attack)."
+  },
+  {
+   "pack": "classes",
+   "id": "RYn8gGHhLR9LvjJO",
+   "name": "Mask of Accord",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "use",
+       "who": "targets",
+       "do": {
+        "removeCondition": [
+         "imposed"
+        ],
+        "bankReroll": {
+         "context": "check",
+         "note": "Mask of Accord — borrowed face"
+        }
+       },
+       "limit": {
+        "per": "scene",
+        "uses": 1
+       }
+      }
+     ]
+    }
+   },
+   "why": "▶ Use (1/SB ≈ 1/scene) on the ally: their Imposed ends and they bank a reroll-lowest for the social check."
+  },
+  {
+   "pack": "classes",
+   "id": "r5lQWwb7IfP9t8zm",
+   "name": "Signal Boost",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "use",
+       "who": "targets",
+       "do": {
+        "bankReroll": {
+         "context": "check",
+         "attribute": "presence",
+         "note": "Signal Boost — Diplomacy / Intimidation"
+        },
+        "prompt": "If the check shifts a crowd or faction, your faction gains +1 Soft Power OP next Strategic Turn (1/scene)."
+       }
+      }
+     ]
+    }
+   },
+   "why": "▶ Use (bonus action) on the ally: a banked reroll-lowest on their next Presence check. The Soft Power OP stays a prompt."
+  },
+  {
+   "pack": "items",
+   "id": "FzUAhtbprcrlSzbJ",
+   "name": "Hex-Tuner Cassette Player",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "use",
+       "who": "targets",
+       "do": {
+        "bankReroll": {
+         "context": "defense",
+         "note": "Hex-Tuner Side A — GENERIC MOTIVATIONAL"
+        }
+       },
+       "limit": {
+        "per": "scene",
+        "uses": 1
+       }
+      }
+     ]
+    }
+   },
+   "why": "▶ Use (Side A, 1/scene) on yourself and one ally: a banked reroll-lowest on the next Resolve (defense) check. Side B stays prose."
+  },
+  {
+   "pack": "co-npc-callings",
+   "id": "becallingkpr0t01",
+   "name": "Keeper — Apprentice (Tier I)",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "use",
+       "who": "targets",
+       "do": {
+        "removeCondition": [
+         "shaken"
+        ],
+        "bankReroll": {
+         "context": "defense",
+         "note": "Steady the Soul"
+        }
+       },
+       "limit": {
+        "per": "scene",
+        "uses": 1
+       }
+      }
+     ]
+    }
+   },
+   "why": "Trick ▶ Use (1/scene) on an ally: shake fear (Shaken ends) and bank a reroll-lowest on a Resolve defense."
+  },
+  {
+   "pack": "co-npc-callings",
+   "id": "becallingkpr0t03",
+   "name": "Keeper — Master (Tier III)",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "use",
+       "who": "targets",
+       "do": {
+        "removeCondition": [
+         "shaken",
+         "charmed",
+         "compelled",
+         "calmed"
+        ]
+       },
+       "limit": {
+        "per": "scene",
+        "uses": 1
+       }
+      }
+     ]
+    }
+   },
+   "why": "Trick ▶ Use (1/scene): Rite of Passage ends one spiritual affliction (Shaken / Charmed / Compelled / Calmed). The threshold ward stays prose."
+  },
+  {
+   "pack": "co-npc-callings",
+   "id": "becallingbrv0t03",
+   "name": "Bravo — Master (Tier III)",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "use",
+       "who": "targets",
+       "do": {
+        "bankBonus": {
+         "bonus": 2,
+         "context": "defense",
+         "note": "Veteran's Read — vs the called move"
+        }
+       },
+       "limit": {
+        "per": "scene",
+        "uses": 1
+       }
+      }
+     ]
+    }
+   },
+   "why": "Trick ▶ Use (1/scene) on the allies: +2 banked on their next defense check (Veteran's Read)."
+  },
+  {
+   "pack": "co-npc-callings",
+   "id": "becallingsav0t01",
+   "name": "Savant — Apprentice (Tier I)",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.npcAuto": {
+     "v": 1,
+     "rules": [
+      {
+       "on": "use",
+       "who": "targets",
+       "do": {
+        "bankBonus": {
+         "bonus": 2,
+         "context": "check",
+         "note": "I've Read About This"
+        }
+       },
+       "limit": {
+        "per": "scene",
+        "uses": 1
+       }
+      }
+     ]
+    }
+   },
+   "why": "Trick ▶ Use (1/scene) on one ally: +2 banked on their next check."
+  },
+  {
+   "pack": "ancestries",
+   "id": "0030cd75eb3ea792",
+   "name": "Circuitborn Heritage: Synapse",
+   "verdict": "stamp",
+   "set": {
+    "flags.fourththing.rerolls": []
+   },
+   "why": "Retire the unconditioned attack reroll (Predictive Cache is now the on-turn-start Offer)."
+  }
+ ]
+}
