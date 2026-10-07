@@ -158,7 +158,7 @@ function powerDoc(p, folderId) {
   const act = {
     _id: aid, type, name: "", img: "", sort: 0,
     activation: { type: p.activation ?? "action", value: p.activationValue ?? null, condition: p.condition ?? "", override: false },
-    consumption: { targets: [], scaling: { allowed: p.level > 0 && p.scaling !== "none", max: "" }, spellSlot: p.level > 0 },
+    consumption: { targets: [], scaling: { allowed: p.level > 0 && p.scaling !== "none", max: "" }, spellSlot: false },  // the engine charges points; dnd5e never touches slots
     description: { chatFlavor: "" },
     duration: { concentration: !!p.concentration, ...duration, override: false },
     effects: [], range: { ...range, override: false }, target: { ...target, prompt: true, override: false },

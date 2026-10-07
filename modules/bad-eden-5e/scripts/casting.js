@@ -333,6 +333,13 @@ function onRenderSheet(app, element) {
 }
 
 export function activateCasting() {
+  // dnd5e builds its spellcasting models at i18nInit from the base type, which has no
+  // getSpellSlotKey; a scalable spell's usage config calls it anyway. Answer with the
+  // method key, exactly as dnd5e falls back to elsewhere.
+  for (const trad of Object.values(TRADITIONS)) {
+    const model = CONFIG.DND5E?.spellcasting?.[trad.method];
+    if (model && typeof model.getSpellSlotKey !== "function") Object.defineProperty(model, "getSpellSlotKey", { value: () => trad.method, configurable: true });
+  }
   patchSpellbook();
   patchUsageDialog();
   Hooks.on("dnd5e.preUseActivity", onPreUseActivity);
