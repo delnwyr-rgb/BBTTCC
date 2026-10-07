@@ -1,0 +1,204 @@
+{
+  "_about": "Flow powers, batch D: the 7th-, 8th- and 9th-level powers (19). Mechanics carried over from the SW5E force powers named in each entry's `sw5e`; every word and every name is Bad Eden's own. Built by tools/build-packs.mjs.",
+  "_renames": [
+    { "sw5e": "Force Lightning Cone", "new": "Fan of Lightning" },
+    { "sw5e": "Ruin", "new": "The Breaking" },
+    { "sw5e": "Force Mend", "new": "Knit" },
+    { "sw5e": "Improved Revitalize", "new": "Call Back" },
+    { "sw5e": "Force Project", "new": "Sending" },
+    { "sw5e": "Whirlwind", "new": "Twister" },
+    { "sw5e": "Master Pyrokinesis", "new": "Wildfire" },
+    { "sw5e": "Dominate Monster", "new": "Hold the Beast" },
+    { "sw5e": "Maddening Darkness", "new": "The Dark That Talks" },
+    { "sw5e": "Stasis Field", "new": "Freeze Frame" },
+    { "sw5e": "Telekinetic Wave", "new": "Breaker" },
+    { "sw5e": "Earthquake", "new": "Groundswell" },
+    { "sw5e": "Mind Blank", "new": "Closed Door" },
+    { "sw5e": "Force Storm", "new": "The Storm Itself" },
+    { "sw5e": "Kill", "new": "Full Stop" },
+    { "sw5e": "Master Heal", "new": "Whole" },
+    { "sw5e": "Master Revitalize", "new": "Come Home" },
+    { "sw5e": "Precognition", "new": "Already Happened" },
+    { "sw5e": "Will of the Force", "new": "The Current Decides" }
+  ],
+  "_unsure": [
+    "Groundswell: the three SW5E damage parts (50 to structures, 5d6 collapse, 1d10 fissure depth) are kept as two parts — 50 and 5d6 bludgeoning; the fissure depth (1d10 × 10 ft) lives in the text only.",
+    "The Storm Itself: a 60-ft-diameter, 120-ft-high cylinder — the template is a 30-ft-radius cylinder; the height is text only (the shape has no height field).",
+    "Freeze Frame: the SW5E text says 'within range of that point' with a potency line about a cube growing to 40 ft, so the base area is written as a 20-foot cube (template cube 20) and the 9th-level cast makes it 40 ft.",
+    "The Current Decides: the self-targeted 1d10 necrotic damage activity is the stress damage per power level cast afterward (roll it per power, multiply by the power's level by hand); 'sonic' damage became thunder.",
+    "Whole and Come Home are utility activities (full hit points / return to life), not heal rolls, since there is no number to roll."
+  ],
+  "powers": [
+    {
+      "slug": "fan-of-lightning", "name": "Fan of Lightning", "sw5e": "Force Lightning Cone", "level": 7, "school": "qliph",
+      "img": "icons/magic/lightning/bolts-forked-large-teal-purple.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "template": { "type": "cone", "size": 60 } },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [{ "number": 12, "denomination": 6, "bonus": "", "types": ["lightning"], "scaling": { "mode": "whole", "number": 2 } }],
+      "scaling": "level",
+      "description": "<p>You open both hands and the current comes out of them, white and forked and wide. Each creature in a 60-foot cone must make a Dexterity saving throw. A creature takes [[/r 12d6]] lightning damage on a failed save, or half as much on a successful one.</p><p><strong>At higher levels.</strong> When you cast this power at 8th level or higher, the damage increases by [[/r 2d6]] for each level above 7th.</p>"
+    },
+    {
+      "slug": "the-breaking", "name": "The Breaking", "sw5e": "Ruin", "level": 7, "school": "qliph",
+      "img": "icons/magic/unholy/strike-beam-blood-red-purple.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You reach downstream and put the pit into one creature you can see within range, and it comes in as pain: all of it, everywhere, at once. If the target has 100 hit points or fewer, it is broken. Otherwise the power does nothing to it.</p><p>While the target is broken, its speed can't be higher than 10 feet, and it has disadvantage on attack rolls, ability checks, and saving throws other than Constitution saving throws. If it tries to cast a power, it must first succeed on a Constitution saving throw, or the casting fails and the power is wasted.</p><p>A broken creature can make a Constitution saving throw at the end of each of its turns. On a success, the pain lets go.</p>"
+    },
+    {
+      "slug": "knit", "name": "Knit", "sw5e": "Force Mend", "level": 7, "school": "seph",
+      "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+      "activation": "minute", "activationValue": 1, "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "hour" }, "concentration": false,
+      "activity": "heal", "heal": { "formula": "4d8 + 15", "type": "healing" }, "scaling": "none",
+      "description": "<p>You lay hands on a creature and remind its body how it was put together. The target regains [[/r 4d8 + 15]] hit points, and for the duration it regains 1 hit point at the start of each of its turns (10 hit points a minute).</p><p>If the creature has lost a limb and you hold the limb to the stump, it knits back on, there and then.</p><p>This power has no effect on drones or constructs. There is nothing in them to remind.</p>"
+    },
+    {
+      "slug": "call-back", "name": "Call Back", "sw5e": "Improved Revitalize", "level": 7, "school": "seph",
+      "img": "icons/magic/life/heart-cross-strong-blue.webp",
+      "activation": "minute", "activationValue": 1, "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You touch a creature that has been dead no longer than 1 hour and call it back up the current. If its soul is willing and free to come, it returns to life with all its hit points. This power has no effect on drones or constructs.</p><p>Any poison or disease that was in the creature when it died is gone. Every mortal wound is closed, and anything it was missing is back.</p><p>Coming back is hard on a person. The target has a −4 penalty to attack rolls, saving throws, and ability checks. Each time it finishes a long rest the penalty shrinks by 1, until it is gone.</p>"
+    },
+    {
+      "slug": "sending", "name": "Sending", "sw5e": "Force Project", "level": 7, "school": "unal",
+      "img": "icons/magic/defensive/illusion-evasion-echo-purple.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "day" }, "concentration": true,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You put a copy of yourself somewhere else. The copy lasts for the duration and can appear anywhere you have ever seen, whatever is in the way. It looks and sounds like you, and nothing can touch it. If the copy takes any damage it is gone, and the power ends.</p><p>You can use your action to move the copy up to twice your speed and have it gesture, speak, and carry itself however you like. It has your mannerisms down cold.</p><p>You can see through its eyes and hear through its ears as if you were standing in its space. As a bonus action on your turn you can switch from its senses to your own, or back. While you are using its senses you are blinded and deafened to your own surroundings.</p><p>Anything physical passes straight through the copy, which gives it away. A creature that uses its action to study the copy can tell what it is with a successful Intelligence (Investigation) check against your power save DC. Once a creature has seen through it, the copy is transparent to that creature and everything it says sounds hollow.</p>"
+    },
+    {
+      "slug": "twister", "name": "Twister", "sw5e": "Whirlwind", "level": 7, "school": "unal",
+      "img": "icons/magic/air/wind-tornado-funnel-gray.webp",
+      "activation": "action", "range": { "value": 300 }, "target": { "template": { "type": "cylinder", "size": 10 } },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [{ "number": 10, "denomination": 6, "bonus": "", "types": ["bludgeoning"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>A twister comes down out of a clear sky onto a point you can see on the ground within range. It is a cylinder 10 feet across in radius and 30 feet tall, centered on that point. Until the power ends, you can use your action to walk it up to 30 feet in any direction along the ground. It picks up any Medium or smaller object that isn't tied down, worn, or carried.</p><p>The first time on a turn that a creature enters the twister, or the twister enters its space (including the moment it first touches down), the creature must make a Dexterity saving throw. It takes [[/r 10d6]] bludgeoning damage on a failed save, or half as much on a successful one. A Large or smaller creature that fails must also succeed on a Strength saving throw or be restrained inside the twister until the power ends. A creature that starts its turn restrained this way is pulled 5 feet higher, unless it is already at the top. A restrained creature moves with the twister and falls when the power ends, unless it has some way to stay in the air.</p><p>A restrained creature can use an action to make a Strength or Dexterity check against your power save DC. On a success it is no longer restrained, and the twister throws it [[/r 3d6 * 10]] feet in a random direction.</p>"
+    },
+    {
+      "slug": "wildfire", "name": "Wildfire", "sw5e": "Master Pyrokinesis", "level": 7, "school": "unal",
+      "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
+      "activation": "action", "range": { "value": 150 }, "target": { "template": { "type": "cube", "size": 10 } },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [{ "number": 7, "denomination": 10, "bonus": "", "types": ["fire"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>You pull heat up out of the current until the air itself catches. Sheets of roaring fire fill an area you choose within range: up to ten 10-foot cubes, arranged however you like, each one sharing at least one face with another. Each creature in the area must make a Dexterity saving throw. It takes [[/r 7d10]] fire damage on a failed save, or half as much on a successful one. A creature standing in more than one cube is burned only once.</p><p>The fire damages objects in the area and sets light to anything flammable that isn't being worn or carried.</p>"
+    },
+    {
+      "slug": "hold-the-beast", "name": "Hold the Beast", "sw5e": "Dominate Monster", "level": 8, "school": "qliph",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "hour" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" }, "scaling": "level",
+      "description": "<p>You take the reins of one creature you can see within range, whatever it is. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or anyone friendly to you is fighting it, it has advantage on the save.</p><p>While it is charmed you have a telepathic link to it as long as you are within 1 mile of it. Through that link you can give it orders while you are conscious (no action required), and it does its best to carry them out. Keep the orders simple and general: \"Attack that one,\" \"Run over there,\" \"Bring me that.\" If it finishes the job and hears nothing further from you, it defends itself and looks after itself as best it can.</p><p>You can use your action to take complete, precise control of the target. Until the end of your next turn it takes only the actions you choose and does nothing you don't allow. During that time you can make it use its reaction, but that costs you your own reaction too.</p><p>Each time the target takes damage, it makes a new Wisdom saving throw against the power. On a success, the power ends. This power has no effect on drones or constructs.</p><p><strong>At higher levels.</strong> When you cast this power at 9th level, the duration is concentration, up to 8 hours.</p>"
+    },
+    {
+      "slug": "the-dark-that-talks", "name": "The Dark That Talks", "sw5e": "Maddening Darkness", "level": 8, "school": "qliph",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "activation": "action", "range": { "value": 150 }, "target": { "template": { "type": "sphere", "size": 60 } },
+      "duration": { "value": "10", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "half" },
+      "damage": [{ "number": 8, "denomination": 8, "bonus": "", "types": ["psychic"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>A darkness spreads out from a point you choose within range and fills a 60-foot-radius sphere until the power ends. It goes around corners. A creature with darkvision can't see through it, and no ordinary light, nor light made by a power of 8th level or lower, can brighten it.</p><p>The dark isn't quiet. There are shrieks in it, and muttering, and somebody laughing who shouldn't be. Whenever a creature starts its turn inside the sphere, it must make a Wisdom saving throw, taking [[/r 8d8]] psychic damage on a failed save, or half as much on a successful one.</p>"
+    },
+    {
+      "slug": "freeze-frame", "name": "Freeze Frame", "sw5e": "Stasis Field", "level": 8, "school": "seph",
+      "img": "icons/magic/time/clock-spinning-gold-pink.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "template": { "type": "cube", "size": 20 } },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" }, "scaling": "level",
+      "description": "<p>You pick a point you can see within range and tell the current to hold still there. Each creature in a 20-foot cube centered on that point must succeed on a Wisdom saving throw or be paralyzed for the duration. At the end of each of its turns a paralyzed target can make another Wisdom saving throw; on a success, the power ends for it. This power has no effect on drones or constructs.</p><p><strong>At higher levels.</strong> When you cast this power at 9th level, the cube grows to 40 feet.</p>"
+    },
+    {
+      "slug": "breaker", "name": "Breaker", "sw5e": "Telekinetic Wave", "level": 8, "school": "seph",
+      "img": "icons/magic/water/vortex-water-whirlpool.webp",
+      "activation": "action", "range": { "value": 150 }, "target": { "template": { "type": "radius", "size": 60 } },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [{ "number": 12, "denomination": 6, "bonus": "", "types": ["force"], "scaling": { "mode": "whole", "number": 2 } }],
+      "scaling": "level",
+      "description": "<p>You heave the current up like a wave and let it break on a point you choose within range, 60 feet in every direction. Each creature in that area must make a Constitution saving throw. On a failed save, a creature takes [[/r 12d6]] force damage, is knocked prone, and is shoved 5 feet in a direction you choose. On a successful save it takes half as much damage and stays on its feet where it was.</p><p><strong>At higher levels.</strong> When you cast this power at 9th level, the damage increases by [[/r 2d6]].</p>"
+    },
+    {
+      "slug": "groundswell", "name": "Groundswell", "sw5e": "Earthquake", "level": 8, "school": "unal",
+      "img": "icons/magic/earth/barrier-stone-explosion-debris.webp",
+      "activation": "action", "range": { "value": 500 }, "target": { "template": { "type": "radius", "size": 100 } },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" },
+      "damage": [
+        { "formula": "50", "bonus": "", "types": ["bludgeoning"], "scaling": { "mode": "", "number": 1 } },
+        { "number": 5, "denomination": 6, "bonus": "", "types": ["bludgeoning"], "scaling": { "mode": "", "number": 1 } }
+      ],
+      "scaling": "none",
+      "description": "<p>You put your weight on the current where it runs under the ground, and the ground answers. For the duration, a tremor tears through a 100-foot-radius circle centered on a point you can see within range, shaking every creature and structure in contact with the ground there.</p><p>The ground in the area is difficult terrain. Each creature on the ground that is concentrating must make a Constitution saving throw; on a failed save its concentration breaks.</p><p>When you cast the power, and at the end of each turn you spend concentrating on it, each creature on the ground in the area must make a Dexterity saving throw. On a failed save it is knocked prone.</p><p>Depending on what the ground is made of, the GM may rule extra effects.</p><p><strong>Fissures.</strong> At the start of your next turn after you cast the power, fissures open across the area: [[/r 1d6]] of them, where the GM chooses. Each is [[/r 1d10 * 10]] feet deep and 10 feet wide, and runs from one edge of the area to the other. A creature standing where a fissure opens must succeed on a Dexterity saving throw or fall in. A creature that saves moves with the fissure's edge as it opens. A fissure that opens under a structure brings it down (see below).</p><p><strong>Structures.</strong> The tremor deals 50 bludgeoning damage to any structure in contact with the ground in the area when you cast the power and at the start of each of your turns until it ends. A structure that drops to 0 hit points collapses, and may take people with it: each creature within half the structure's height of it must make a Dexterity saving throw. On a failed save the creature takes [[/r 5d6]] bludgeoning damage, is knocked prone, and is buried in the rubble; getting out takes an action and a DC 20 Strength (Athletics) check, which the GM can raise or lower for the kind of rubble it is. On a successful save the creature takes half as much damage, keeps its feet, and isn't buried.</p>"
+    },
+    {
+      "slug": "closed-door", "name": "Closed Door", "sw5e": "Mind Blank", "level": 8, "school": "unal",
+      "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "24", "units": "hour" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You shut the door on one willing creature's mind and lock it from the inside. Until the power ends, the creature is immune to psychic and thunder damage, to any effect that would read its thoughts or feel its emotions, and to the charmed condition. The power also turns aside powers and other effects of similar strength that would reach into the target's mind or learn anything about it.</p>"
+    },
+    {
+      "slug": "the-storm-itself", "name": "The Storm Itself", "sw5e": "Force Storm", "level": 9, "school": "qliph",
+      "img": "icons/magic/lightning/bolt-strike-explosion-blue.webp",
+      "activation": "action", "range": { "value": 150 }, "target": { "template": { "type": "cylinder", "size": 30 } },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [{ "number": 30, "denomination": 6, "bonus": "", "types": ["lightning"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>You stop calling lightning and become the place it comes from. A crackling storm 60 feet across and 120 feet tall appears where you choose within range. Whenever a creature enters the storm or starts its turn inside it, it must make a Dexterity saving throw. On a failed save it takes [[/r 30d6]] lightning damage, or half as much on a successful one.</p><p>The storm damages objects in the area and sets light to anything flammable that isn't being worn or carried.</p>"
+    },
+    {
+      "slug": "full-stop", "name": "Full Stop", "sw5e": "Kill", "level": 9, "school": "qliph",
+      "img": "icons/magic/death/skull-humanoid-crown-white-blue.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You look at one creature you can see within range and tell it to stop. All of it. If the creature has 100 hit points or fewer, it dies. Otherwise the power has no effect.</p>"
+    },
+    {
+      "slug": "whole", "name": "Whole", "sw5e": "Master Heal", "level": 9, "school": "seph",
+      "img": "icons/magic/life/heart-cross-green.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>The current goes through the creature you touch like a river through a dry bed, and when it has passed, nothing is wrong anymore. The target regains all its hit points. If it is charmed, frightened, paralyzed, or stunned, the condition ends. If it is prone, it can use its reaction to stand up. This power has no effect on drones or constructs.</p>"
+    },
+    {
+      "slug": "come-home", "name": "Come Home", "sw5e": "Master Revitalize", "level": 9, "school": "seph",
+      "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
+      "activation": "hour", "activationValue": 1, "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You touch a creature that has been dead no longer than 1 day and walk it home. If its soul is willing and free to come, it returns to life with all its hit points. This power has no effect on drones or constructs.</p><p>Every wound closes. Any poison is neutralized, any disease cured, any curse that lay on the creature when it died lifted. Organs and limbs that were damaged or missing are replaced, and it comes back whole, with no penalty for the trip.</p>"
+    },
+    {
+      "slug": "already-happened", "name": "Already Happened", "sw5e": "Precognition", "level": 9, "school": "unal",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "activation": "minute", "activationValue": 1, "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "8", "units": "hour" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You stand far enough upstream to watch the next few seconds arrive before anyone else does. For the duration you can't be surprised, and you have advantage on attack rolls, ability checks, and saving throws. Other creatures have disadvantage on attack rolls against you. You have, after all, already seen them try.</p>"
+    },
+    {
+      "slug": "the-current-decides", "name": "The Current Decides", "sw5e": "Will of the Force", "level": 9, "school": "seph",
+      "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "damage",
+      "damage": [{ "number": 1, "denomination": 10, "bonus": "", "types": ["necrotic"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>You stop steering. You give yourself over to the Flow entirely and ask it to change the world, and sometimes it does.</p><p>The plain use of this power is to duplicate any other Sephirotic or Unaligned power of 8th level or lower. You don't need to meet any requirement that power has; it simply happens. Or you can ask for one of the following instead:</p><ul><li>You call one object to you worth up to 250,000 marks that isn't an enhanced item. It can be no bigger than 300 feet in any direction, and it appears in an unoccupied space you can see on the ground.</li><li>You let up to twenty creatures you can see regain all their hit points, and you end on each of them every exhaustion, charm, petrification, curse, and reduction to an ability score or hit point maximum.</li><li>You grant up to ten creatures you can see resistance to a damage type of your choice.</li><li>You grant up to ten creatures you can see immunity to one particular power or other specific enhanced effect for 8 hours. You could, for instance, make yourself and everyone with you immune to a Qliphothic horror's signature ability.</li><li>You undo one recent thing. Any roll made within the last round, your own last turn included, is rerolled, and the world rearranges itself to fit the new result: an enemy's successful save, a critical hit against a friend, a friend's failed save. You can make the reroll with advantage or disadvantage, and you choose whether the new roll or the old one stands.</li></ul><p>You might manage something beyond these examples. Say exactly what you want to the GM, who has wide latitude to rule what happens; the bigger the ask, the more likely something goes sideways. The power might simply fail, or half-work, or work in a way your wording didn't cover. Wish a villain dead and you may find yourself carried forward in time to a year when they are, which takes you out of the game. Wish for a legendary enhanced item and you may be delivered to whoever holds it now.</p><p>Asking the current for anything but a duplicated power costs you. After that stress, until you finish a long rest, every power you cast deals you [[/r 1d10]] necrotic damage per level of that power, which can't be reduced or prevented in any way. Your Strength drops to 3, if it isn't 3 or lower already, for [[/r 2d4]] days; each of those days you spend resting and doing nothing more than light activity takes 2 days off what's left. There is also a 33 percent chance you can never cast this power again. And if the necrotic damage drops you to 0 hit points, or you reach 0 at any point before the Strength has come back, you die at once and can't be brought back. The current takes you, and keeps you.</p>"
+    }
+  ]
+}

@@ -1,0 +1,337 @@
+{
+  "_about": "Flow powers, batch C: 4th, 5th and 6th level (30). Mechanics carried over from SW5E force powers; every word and every name is Bad Eden's own. Built by tools/build-packs.mjs.",
+  "_renames": [
+    { "sw5e": "Drain Life", "new": "Pull the Plug" },
+    { "sw5e": "Shocking Shield", "new": "Live Fence" },
+    { "sw5e": "Shroud of Darkness", "new": "Blackwater" },
+    { "sw5e": "Dominate Beast", "new": "Lead the Animal" },
+    { "sw5e": "Aura of Purity", "new": "Clean Water" },
+    { "sw5e": "Disable Droid", "new": "Pull the Breaker" },
+    { "sw5e": "Force Immunity", "new": "Levee" },
+    { "sw5e": "Freedom of Movement", "new": "Nothing Holds" },
+    { "sw5e": "Locate Creature", "new": "Downstream of You" },
+    { "sw5e": "Mind Trap", "new": "Locked Room" },
+    { "sw5e": "Dominate Mind", "new": "Hold the Reins" },
+    { "sw5e": "Greater Feedback", "new": "Burst Main" },
+    { "sw5e": "Siphon Life", "new": "Bleed the Line" },
+    { "sw5e": "Insanity", "new": "Bad Water" },
+    { "sw5e": "Improved Heal", "new": "Rain on the Town" },
+    { "sw5e": "Stasis", "new": "Still as Stone" },
+    { "sw5e": "Revitalize", "new": "Pull Them Back" },
+    { "sw5e": "Control Pain", "new": "Not Yet" },
+    { "sw5e": "Force Meld", "new": "Party Line" },
+    { "sw5e": "Telekinesis", "new": "Heavy Hand" },
+    { "sw5e": "Force Breach", "new": "Break the Dam" },
+    { "sw5e": "Crush", "new": "The Press" },
+    { "sw5e": "Force Chain Lightning", "new": "Fork Lightning" },
+    { "sw5e": "Scourge", "new": "The Look" },
+    { "sw5e": "Mind Prison", "new": "The Cellar" },
+    { "sw5e": "Greater Heal", "new": "Whole Again" },
+    { "sw5e": "Wall of Light", "new": "Daybreak Wall" },
+    { "sw5e": "Mass Coerce Mind", "new": "Crowd Sway" },
+    { "sw5e": "True Sight", "new": "Clear Water" },
+    { "sw5e": "Eruption", "new": "The Ground Objects" }
+  ],
+  "_unsure": [
+    "Pull the Breaker (Disable Droid): the per-turn damage is 'your casting ability modifier' — written as a custom formula @mod on the save activity; onSave none (the save ends the effect, no damage halving).",
+    "Bleed the Line (Siphon Life): three damage parts as in the source (2d8 on a success, 4d8 on a fail, 4d8 per repeat action); only the first scales per level in the data, the text scales all of them as the source did.",
+    "The Cellar (Mind Prison): three damage parts (5d10 save, 5d10 fail, 10d10 break-out) kept as data; onSave none because the text handles each case.",
+    "Rain on the Town (Improved Heal): heal formula 3d8 + @mod with 'whole' scaling; the six-target cap is text only.",
+    "Lead the Animal / Hold the Reins / Crowd Sway / Locked Room / Levee / Heavy Hand / Break the Dam / Fork Lightning / The Ground Objects: the higher-level growth is not a dice bump, so scaling is 'level' with the rule in the text only.",
+    "Not Yet (Control Pain): no activity beyond utility; the death-save penalty ladder is text only.",
+    "The Look (Scourge): save activity with no damage; the three effects are text only."
+  ],
+  "powers": [
+    {
+      "slug": "pull-the-plug", "name": "Pull the Plug", "sw5e": "Drain Life", "level": 4, "school": "qliph",
+      "img": "icons/magic/death/hand-dirt-undead-zombie.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [{ "number": 8, "denomination": 8, "bonus": "", "types": ["necrotic"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>You find the place where a creature's life is plugged into the current, and you pull. One creature you can see within range makes a Constitution saving throw. It takes 8d8 necrotic damage on a failed save, or half as much on a success. If this drops a hostile creature to 0 hit points, you gain temporary hit points equal to half the damage you dealt.</p><p>Drones and other mindless machines have nothing to pull; the power does nothing to them.</p><p><strong>At higher levels.</strong> When you cast this power at 5th level or higher, the damage increases by 1d8 for each level above 4th.</p>"
+    },
+    {
+      "slug": "live-fence", "name": "Live Fence", "sw5e": "Shocking Shield", "level": 4, "school": "qliph",
+      "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "10", "units": "minute" }, "concentration": false,
+      "activity": "damage",
+      "damage": [{ "number": 2, "denomination": 8, "bonus": "", "types": ["lightning"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>You wrap yourself in a crackling sheath of lightning. It throws bright light for 10 feet around you and dim light for 10 feet past that, and it lasts 10 minutes. You can use your action to switch it off early.</p><p>Whenever a creature within 5 feet of you hits you with a melee attack, it takes 2d8 lightning damage. Most of them only do it once.</p>"
+    },
+    {
+      "slug": "blackwater", "name": "Blackwater", "sw5e": "Shroud of Darkness", "level": 4, "school": "qliph",
+      "img": "icons/magic/unholy/silhouette-robe-evil-power.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "damage",
+      "damage": [{ "number": 2, "denomination": 8, "bonus": "", "types": ["necrotic"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>The dark comes up around you like a river in flood. You are heavily obscured to everyone else. Within 10 feet of you, dim light becomes darkness and bright light becomes dim.</p><p>Until the power ends, you have resistance to force damage, and whenever a creature within 10 feet of you hits you with an attack, it takes 2d8 necrotic damage.</p>"
+    },
+    {
+      "slug": "lead-the-animal", "name": "Lead the Animal", "sw5e": "Dominate Beast", "level": 4, "school": "qliph",
+      "img": "icons/magic/control/hypnosis-mesmerism-pendulum.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" },
+      "scaling": "level",
+      "description": "<p>You take hold of an animal's will the way you'd take hold of a halter. One beast you can see within range must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or your friends are fighting it, it has advantage on the save.</p><p>While it's charmed, you share a thread of thought with it anywhere on this side of the sky, and you can give it orders along that thread while you're conscious, no action required. It does its best to obey. A simple, general instruction is enough: guard this, go there, bring that back. If it finishes the job and hears nothing more from you, it looks after itself.</p><p>You can use your action to take the reins entirely. Until the end of your next turn, the beast takes only the actions you choose and does nothing you don't allow. You can make it use its reaction, but that costs your reaction too.</p><p>Each time the beast takes damage, it makes another Wisdom saving throw. On a success, the power ends.</p><p><strong>At higher levels.</strong> Cast at 5th level, the power lasts up to 10 minutes. At 6th, up to 1 hour. At 7th or higher, up to 8 hours.</p>"
+    },
+    {
+      "slug": "clean-water", "name": "Clean Water", "sw5e": "Aura of Purity", "level": 4, "school": "seph",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "template": { "type": "radius", "size": 30 } },
+      "duration": { "value": "10", "units": "minute" }, "concentration": true,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>Clean water runs out from you in a 30-foot radius, and it moves with you, centered on you, for the duration. Each creature in the aura that isn't hostile to you (you included) can't become diseased, has resistance to poison damage, and has advantage on saving throws against effects that would leave it blinded, charmed, deafened, frightened, paralyzed, poisoned, or stunned.</p>"
+    },
+    {
+      "slug": "pull-the-breaker", "name": "Pull the Breaker", "sw5e": "Disable Droid", "level": 4, "school": "seph",
+      "img": "icons/magic/lightning/bolt-blue.webp",
+      "activation": "action", "range": { "value": 90 }, "target": { "type": "creature", "count": 0, "special": "each drone or mindless machine you choose within range" },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" },
+      "damage": [{ "formula": "@mod", "types": ["lightning"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>Choose a point you can see within range. Every drone and mindless machine of your choice near that point must succeed on a Constitution saving throw or be paralyzed for the duration. At the start of each of its turns, an affected machine takes lightning damage equal to your casting ability modifier and then repeats the save; on a success, the power ends for it.</p><p>A Circuitborn is a person, not a machine. This power does nothing to them.</p>"
+    },
+    {
+      "slug": "levee", "name": "Levee", "sw5e": "Force Immunity", "level": 4, "school": "unal",
+      "img": "icons/magic/defensive/barrier-shield-dome-deflect-blue.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "utility",
+      "scaling": "level",
+      "description": "<p>You raise a levee in the current, a faint shimmer in the air around you that moves with you for the duration. No power of 3rd level or lower cast from outside the levee can affect you, even if it was cast at a higher level. Such a power can still target you; it just doesn't do anything. The space inside the levee is likewise cut out of any area those powers would cover.</p><p><strong>At higher levels.</strong> When you cast this power at 5th level or higher, the levee holds back powers one level higher for each level above 4th.</p>"
+    },
+    {
+      "slug": "nothing-holds", "name": "Nothing Holds", "sw5e": "Freedom of Movement", "level": 4, "school": "unal",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "hour" }, "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You touch a willing creature and the world stops getting in its way. For 1 hour, difficult terrain doesn't slow it, and no power or other magical effect can reduce its speed or leave it paralyzed or restrained.</p><p>It can spend 5 feet of movement to slip free of any ordinary restraint, and being underwater costs it nothing on movement or attacks.</p>"
+    },
+    {
+      "slug": "downstream-of-you", "name": "Downstream of You", "sw5e": "Locate Creature", "level": 4, "school": "unal",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-large-teal.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>Name or describe a creature you know. For the duration, you feel which way it lies, as long as it's within 1,000 feet of you, and if it's moving, you feel which way it's going. The power finds one specific creature you know, or the nearest of a kind you've seen from within 30 feet. If the creature is wearing another shape, the power can't find it.</p><p>Running water at least 10 feet wide between you and the creature cuts the thread. The current keeps its own secrets.</p>"
+    },
+    {
+      "slug": "locked-room", "name": "Locked Room", "sw5e": "Mind Trap", "level": 4, "school": "unal",
+      "img": "icons/magic/control/debuff-energy-hold-levitate-yellow.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "cha", "onSave": "none" },
+      "scaling": "level",
+      "description": "<p>You shut a mind in a room with no door. One creature you can see within range makes a Charisma saving throw. On a failure it's incapacitated for the duration: it can think, but it can't reach, see, or hear the world outside. Each time it takes damage, it makes another Charisma save, and on a success the power ends.</p><p>Drones and other mindless machines have no room to lock. The power does nothing to them.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, after you've held your concentration for 1 minute the door stays shut on its own: the duration becomes 24 hours and no longer needs your concentration.</p>"
+    },
+
+    {
+      "slug": "hold-the-reins", "name": "Hold the Reins", "sw5e": "Dominate Mind", "level": 5, "school": "qliph",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye-tan.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" },
+      "scaling": "level",
+      "description": "<p>You take the reins of a person's will. One humanoid you can see within range must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or anyone friendly to you is fighting it, it has advantage on the save.</p><p>While it's charmed, you share a thread of thought with it as long as you're within a mile, and you can give it orders along that thread while you're conscious, no action required. It does its best to obey. A simple, general instruction is enough: attack that one, run over there, fetch that. If it finishes the job and hears nothing more from you, it defends itself and looks after its own skin as best it can.</p><p>You can use your action to take total and exact control. Until the end of your next turn, the creature takes only the actions you choose and does nothing you don't allow. You can make it use its reaction, but that costs your reaction too.</p><p>Each time the creature takes damage, it makes another Wisdom saving throw. On a success, the power ends.</p><p><strong>At higher levels.</strong> Cast at 6th level, the power lasts 10 minutes. At 7th, 1 hour. At 8th or higher, 8 hours.</p>"
+    },
+    {
+      "slug": "burst-main", "name": "Burst Main", "sw5e": "Greater Feedback", "level": 5, "school": "qliph",
+      "img": "icons/magic/sonic/explosion-impact-shock-wave.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "template": { "type": "sphere", "size": 20 } },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "int", "onSave": "half" },
+      "damage": [{ "number": 8, "denomination": 6, "bonus": "", "types": ["psychic"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>You pick a point within range and let the current blow out there, the way a water main goes. Each creature in a 20-foot-radius sphere centered on that point makes an Intelligence saving throw. A creature with an Intelligence of 2 or lower can't be affected. On a failed save a creature takes 8d6 psychic damage, or half as much on a success.</p><p>A creature that fails is muddled for 1 minute. While muddled, it rolls a d6 and subtracts the result from its attack rolls, its ability checks, and its Constitution saving throws to keep concentration. It can make an Intelligence saving throw at the end of each of its turns, ending the effect on itself on a success.</p>"
+    },
+    {
+      "slug": "bleed-the-line", "name": "Bleed the Line", "sw5e": "Siphon Life", "level": 5, "school": "qliph",
+      "img": "icons/magic/unholy/hand-claw-fire-blue.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "dex", "onSave": "none" },
+      "damage": [
+        { "number": 2, "denomination": 8, "bonus": "", "types": ["necrotic"], "scaling": { "mode": "whole", "number": 1 } },
+        { "number": 4, "denomination": 8, "bonus": "", "types": ["necrotic"], "scaling": { "mode": "", "number": 1 } },
+        { "number": 4, "denomination": 8, "bonus": "", "types": ["necrotic"], "scaling": { "mode": "", "number": 1 } }
+      ],
+      "scaling": "level",
+      "description": "<p>A line of black water runs from you to a creature you can see within range and starts to drink. The target makes a Dexterity saving throw. On a success it takes 2d8 necrotic damage and the line snaps. On a failure it takes 4d8 necrotic damage, and until the power ends you can use your action on each of your turns to deal another 4d8 necrotic damage to it, no roll needed. The line snaps if you use your action for anything else, if the target gets outside the power's range, or if it has total cover from you.</p><p>Whenever this power deals damage, you regain hit points equal to half the necrotic damage the target took.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, each of its damage rolls increases by 1d8 for each level above 5th.</p>"
+    },
+    {
+      "slug": "bad-water", "name": "Bad Water", "sw5e": "Insanity", "level": 5, "school": "qliph",
+      "img": "icons/magic/control/fear-fright-mask-orange.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "template": { "type": "radius", "size": 30 } },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" },
+      "scaling": "level",
+      "description": "<p>Something gets into the water, and everyone drinks. Each creature in a 30-foot-radius sphere centered on you must succeed on a Wisdom saving throw when you cast the power or be affected by it. Drones and other mindless machines don't drink; the power does nothing to them.</p><p>An affected creature can't take reactions, and at the start of each of its turns it rolls a d8 to find out what it does with the turn:</p><table><thead><tr><th>d8</th><th>Behaviour</th></tr></thead><tbody><tr><td>1</td><td>It uses all its movement to go in a random direction (roll a d8 and assign a direction to each face). It takes no action this turn.</td></tr><tr><td>2–6</td><td>It doesn't move or take an action this turn.</td></tr><tr><td>7–8</td><td>It uses its action to make a melee attack against a random creature within its reach. If there's nobody in reach, it does nothing this turn.</td></tr></tbody></table><p>At the end of each of its turns, an affected creature can make a Wisdom saving throw. On a success, the effect ends for it.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, the radius grows by 5 feet for each level above 5th.</p>"
+    },
+    {
+      "slug": "rain-on-the-town", "name": "Rain on the Town", "sw5e": "Improved Heal", "level": 5, "school": "seph",
+      "img": "icons/magic/life/heart-cross-green.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "template": { "type": "sphere", "size": 30 } },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "heal", "heal": { "formula": "3d8 + @mod", "type": "healing", "scaling": "whole" },
+      "scaling": "level",
+      "description": "<p>You call the rain down on a point of your choice within range, and it falls on the people who need it. Choose up to six creatures in a 30-foot-radius sphere centered on that point. Each one regains hit points equal to 3d8 + your casting ability modifier.</p><p>Drones and other mindless machines don't mend this way; the power does nothing for them.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, the healing increases by 1d8 for each level above 5th.</p>"
+    },
+    {
+      "slug": "still-as-stone", "name": "Still as Stone", "sw5e": "Stasis", "level": 5, "school": "seph",
+      "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+      "activation": "action", "range": { "value": 90 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" },
+      "scaling": "level",
+      "description": "<p>You tell the current to stop moving through someone, and it listens. One creature you can see within range must succeed on a Wisdom saving throw or be paralyzed for the duration. At the end of each of its turns it can make another Wisdom save; on a success, the power ends for it.</p><p>Drones and other mindless machines were never moving with the current to begin with. The power does nothing to them.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, you can target one additional creature for each level above 5th. The creatures must be within 30 feet of each other when you target them.</p>"
+    },
+    {
+      "slug": "pull-them-back", "name": "Pull Them Back", "sw5e": "Revitalize", "level": 5, "school": "seph",
+      "img": "icons/magic/life/cross-worn-green.webp",
+      "activation": "minute", "activationValue": 1, "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You touch a creature that has been dead no longer than 10 minutes and reach into the current after it. If its soul is willing and free to come back, it returns to life with 1 hit point.</p><p>The power clears any poison and cures any disease that was on the creature when it died. It closes every mortal wound, but it doesn't grow back what's missing: if the body lacks a part it can't live without (its head, for instance), the power simply fails.</p><p>Coming back is an ordeal. The creature takes a −4 penalty to attack rolls, saving throws, and ability checks. Each time it finishes a long rest the penalty shrinks by 1, until it's gone.</p><p>Drones and other mindless machines don't die this way and don't come back this way.</p>"
+    },
+    {
+      "slug": "not-yet", "name": "Not Yet", "sw5e": "Control Pain", "level": 5, "school": "unal",
+      "img": "icons/magic/control/buff-strength-muscle-damage-red.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You put the Flow where your blood should be and keep going. While this power is in effect you can't die from damage or from failed death saving throws, but the current charges for the loan.</p><p>If you're at 0 hit points under this power, you don't fall unconscious; you keep acting and fighting as normal. While you stay at 0, you make a death saving throw at the start of each of your turns. Each failure gives you a cumulative −1 penalty to attack rolls, ability checks, and saving throws (death saves included) that lasts until you regain hit points. Successes do nothing, except that a natural 20 restores 1 hit point as usual.</p><p>If you're still at 0 hit points when the power ends, you die on the spot. Not yet, you said. Now it's yet.</p>"
+    },
+    {
+      "slug": "party-line", "name": "Party Line", "sw5e": "Force Meld", "level": 5, "school": "unal",
+      "img": "icons/magic/control/energy-stream-link-spiral-teal.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 8 },
+      "duration": { "value": "1", "units": "hour" }, "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You open a party line in the current among up to eight willing creatures of your choice within range, each linked to all the others for 1 hour. Drones, mindless machines, and creatures with an Intelligence of 2 or lower can't pick up.</p><p>Until the power ends, everyone on the line can talk mind to mind, shared language or not, at any distance on this side of the sky.</p>"
+    },
+    {
+      "slug": "heavy-hand", "name": "Heavy Hand", "sw5e": "Telekinesis", "level": 5, "school": "unal",
+      "img": "icons/magic/control/debuff-energy-hold-levitate-pink.webp",
+      "activation": "action", "range": { "value": 90 }, "target": { "type": "creature", "count": 1, "special": "one creature or object you can see" },
+      "duration": { "value": "10", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "str", "onSave": "none" },
+      "scaling": "level",
+      "description": "<p>You put a hand on the world without touching it. When you cast this power, and as your action on each of your turns for the duration, you can push your will against one creature or object you can see within range. You can keep working the same target round after round, or pick a new one whenever you like; when you switch, the old target is released.</p><p><strong>Creature.</strong> You can try to move a creature of Huge size or smaller. It makes a Strength saving throw. On a failure, you move it up to 30 feet in any direction, up included, but not beyond the power's range, and it is restrained in your grip until the end of your next turn. A creature lifted into the air hangs there. On later turns you can use your action to keep hold of it by repeating the contest.</p><p><strong>Object.</strong> You move an object that nobody is wearing or carrying and that weighs up to 2,500 pounds up to 30 feet in any direction, but not beyond the power's range. Your grip can be delicate when it needs to be: work a simple tool, open a door or a box, fetch something out of an open container, pour out a bottle.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, the weight you can move increases by 2,500 pounds for each level above 5th.</p>"
+    },
+    {
+      "slug": "break-the-dam", "name": "Break the Dam", "sw5e": "Force Breach", "level": 5, "school": "unal",
+      "img": "icons/magic/water/barrier-ice-crystal-wall-faceted.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "type": "", "special": "one creature, object, or effect you can see" },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "utility",
+      "scaling": "level",
+      "description": "<p>Choose a spot within range. Every power of 5th level or lower working there ends. For each power of 6th level or higher, make an ability check with your casting ability against a DC of 10 + that power's level; on a success, it ends too.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, any power on the target ends automatically if its level is equal to or lower than the level you cast at.</p>"
+    },
+
+    {
+      "slug": "the-press", "name": "The Press", "sw5e": "Crush", "level": 6, "school": "qliph",
+      "img": "icons/magic/control/voodoo-doll-pain-damage-tan.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [{ "number": 10, "denomination": 8, "bonus": "", "types": ["force"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>You close your hand, and the current closes with it. One creature within range makes a Constitution saving throw. On a failure it takes 10d8 force damage and is paralyzed until the end of your next turn. On a success it takes half the damage and stays on its feet.</p><p>While the target is paralyzed, you can use a bonus action to move it up to 10 feet in any direction.</p><p><strong>At higher levels.</strong> When you cast this power at 7th level or higher, the damage increases by 1d8 for each level above 6th.</p>"
+    },
+    {
+      "slug": "fork-lightning", "name": "Fork Lightning", "sw5e": "Force Chain Lightning", "level": 6, "school": "qliph",
+      "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
+      "activation": "action", "range": { "value": 150 }, "target": { "type": "creature", "count": 4, "special": "one target, then up to three more within 30 feet of it" },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [{ "number": 10, "denomination": 8, "bonus": "", "types": ["lightning"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>You throw one bolt at a target you can see within range, and it forks. Three more bolts jump from that target to as many as three others, each within 30 feet of the first. A target can be a creature or an object, and no target gets hit by more than one bolt.</p><p>Each target makes a Dexterity saving throw, taking 10d8 lightning damage on a failure or half as much on a success.</p><p><strong>At higher levels.</strong> When you cast this power at 7th level or higher, one more bolt jumps from the first target for each level above 6th.</p>"
+    },
+    {
+      "slug": "the-look", "name": "The Look", "sw5e": "Scourge", "level": 6, "school": "qliph",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "creature", "count": 1, "special": "one creature you can see within 60 feet, and another each turn" },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" },
+      "scaling": "none",
+      "description": "<p>For the duration, your eyes go to black water, and nobody wants to meet them. One creature of your choice that you can see within 60 feet must succeed on a Constitution saving throw or suffer one of the effects below, your choice, for the duration. On each of your turns until the power ends, you can use your action to give the Look to another creature, but you can't give it twice to anyone who has already saved against this casting.</p><p><strong>Asleep.</strong> The target drops unconscious. It wakes if it takes any damage or if someone uses their action to shake it.</p><p><strong>Panicked.</strong> The target is frightened of you. On each of its turns it must take the Dash action and move away from you by the safest, shortest route, unless there's nowhere to go. If it gets at least 60 feet from you to a place where it can't see you, the effect ends.</p><p><strong>Sick.</strong> The target has disadvantage on attack rolls and ability checks. At the end of each of its turns it can make another Constitution saving throw; on a success, the effect ends.</p>"
+    },
+    {
+      "slug": "the-cellar", "name": "The Cellar", "sw5e": "Mind Prison", "level": 6, "school": "qliph",
+      "img": "icons/magic/death/skull-energy-light-purple.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "int", "onSave": "none" },
+      "damage": [
+        { "number": 5, "denomination": 10, "bonus": "", "types": ["psychic"], "scaling": { "mode": "", "number": 1 } },
+        { "number": 5, "denomination": 10, "bonus": "", "types": ["psychic"], "scaling": { "mode": "", "number": 1 } },
+        { "number": 10, "denomination": 10, "bonus": "", "types": ["psychic"], "scaling": { "mode": "", "number": 1 } }
+      ],
+      "scaling": "none",
+      "description": "<p>You shut a creature in a cellar that only it can see. One creature you can see within range makes an Intelligence saving throw; a creature that can't be charmed succeeds automatically. On a success it takes 5d10 psychic damage and the power ends. On a failure it takes 5d10 psychic damage, and the ground around its space turns deadly in its eyes: fire, a hail of gunfire, a cloud of something that burns to breathe, whatever you like. Whatever the cellar looks like, the creature can't see or hear past its walls and is restrained for the duration. If the creature is moved out of the illusion, makes a melee attack through it, or reaches any part of itself through it, it takes 10d10 psychic damage and the power ends.</p><p>Drones and other mindless machines have no cellar to be shut in. The power does nothing to them.</p>"
+    },
+    {
+      "slug": "whole-again", "name": "Whole Again", "sw5e": "Greater Heal", "level": 6, "school": "seph",
+      "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "heal", "heal": { "formula": "70", "type": "healing" },
+      "scaling": "level",
+      "description": "<p>Choose a creature you can see within range. The current runs through it from the source, and it regains 70 hit points. The power also ends any blindness, deafness, or disease the creature was carrying.</p><p>Drones and other mindless machines don't mend this way; the power does nothing for them.</p><p><strong>At higher levels.</strong> When you cast this power at 7th level or higher, the healing increases by 10 for each level above 6th.</p>"
+    },
+    {
+      "slug": "daybreak-wall", "name": "Daybreak Wall", "sw5e": "Wall of Light", "level": 6, "school": "seph",
+      "img": "icons/magic/light/beams-rays-orange-purple-large.webp",
+      "activation": "action", "range": { "value": 90 }, "target": { "template": { "type": "wall", "size": 100, "width": 5 } },
+      "duration": { "value": "10", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [{ "number": 6, "denomination": 10, "bonus": "", "types": ["force"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>You stand a wall of daybreak up out of the ground, Sephirotic light too bright to argue with. It appears within range and lasts for the duration. You can make it straight (up to 100 feet long, 20 feet high, 5 feet thick) or a ring (up to 60 feet across, 20 feet high, 5 feet thick). The wall gives three-quarters cover, and its space is difficult terrain.</p><p>When a creature enters the wall's area for the first time on a turn or starts its turn there, it makes a Dexterity saving throw, taking 6d10 force damage on a failure or half as much on a success.</p>"
+    },
+    {
+      "slug": "crowd-sway", "name": "Crowd Sway", "sw5e": "Mass Coerce Mind", "level": 6, "school": "unal",
+      "img": "icons/magic/control/hypnosis-mesmerism-swirl.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 12 },
+      "duration": { "value": "24", "units": "hour" }, "concentration": false,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" },
+      "scaling": "level",
+      "description": "<p>You put a course of action into the current, a sentence or two, and let it carry to up to twelve creatures of your choice that you can see within range and that can hear and understand you. Creatures that can't be charmed are immune. The suggestion has to sound reasonable; ask a creature to harm itself and the power simply fails on it.</p><p>Each target makes a Wisdom saving throw. On a failure it follows the course of action you described as well as it can, for the whole duration if need be. If the task can be finished sooner, the power ends for that creature when it's done.</p><p>You can build a condition into the suggestion, something that sets off a particular act during the duration: a militia that hands its pay to the first beggar it meets, say. If the condition never comes up before the power ends, nothing happens. If you or any of your companions damage an affected creature, the power ends for it.</p><p>Drones and other mindless machines don't take suggestions. The power does nothing to them.</p><p><strong>At higher levels.</strong> Cast at 7th level, the power lasts 10 days. At 8th, 30 days. At 9th, a year and a day.</p>"
+    },
+    {
+      "slug": "clear-water", "name": "Clear Water", "sw5e": "True Sight", "level": 6, "school": "unal",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "hour" }, "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You stop looking with your eyes and look with the current instead, and the water runs clear. For 1 hour you have truesight out to 120 feet, and you notice any secret door hidden by a power within that range.</p>"
+    },
+    {
+      "slug": "the-ground-objects", "name": "The Ground Objects", "sw5e": "Eruption", "level": 6, "school": "unal",
+      "img": "icons/magic/earth/barrier-stone-explosion-debris.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "type": "", "count": 6, "special": "up to six points on the ground you can see" },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "none" },
+      "damage": [{ "number": 6, "denomination": 6, "bonus": "", "types": ["bludgeoning"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>You ask the ground a question and it stands up to answer. Up to six pillars of stone burst from places on the ground you can see within range. Each pillar is a cylinder 5 feet across and up to 30 feet tall; the ground where it rises has to be wide enough for it, and you can pick the ground under a creature of Medium size or smaller. Each pillar has AC 5 and 30 hit points. At 0 hit points it crumbles into rubble, which leaves difficult terrain in a 10-foot radius until it's cleared; each 5-foot patch takes at least a minute to clear by hand.</p><p>A creature standing where a pillar rises must succeed on a Dexterity saving throw or be carried up with it. A creature can choose to fail.</p><p>If a ceiling or some other obstacle stops a pillar short of its full height, a creature on it takes 6d6 bludgeoning damage and is restrained, pinched between stone and whatever stopped it. The restrained creature can use an action to make a Strength or Dexterity check (its choice) against your power save DC; on a success it's no longer restrained and must either climb off the pillar or fall off it.</p><p><strong>At higher levels.</strong> When you cast this power at 7th level or higher, you raise two more pillars for each level above 6th.</p>"
+    }
+  ]
+}

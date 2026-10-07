@@ -132,6 +132,74 @@ function featureDoc(f, folderId) {
   };
 }
 
+/* ── power (a spell item cast through a Bad Eden tradition) ──────────────── */
+const SCHOOL_TRADITION = { seph: "be5e-flow", qliph: "be5e-flow", unal: "be5e-flow", art: "be5e-artifice" };
+const DAMAGE_PART = p => ({
+  custom: { enabled: !!p.formula, formula: p.formula ?? "" },
+  number: p.number ?? null, denomination: p.denomination ?? 0, bonus: p.bonus ?? "", types: p.types ?? [],
+  scaling: { mode: p.scaling?.mode ?? "", number: p.scaling?.number ?? 1 }
+});
+function powerDoc(p, folderId) {
+  const key = `powers:${p.slug}`;
+  lint(`power ${p.slug}`, p.description);
+  lint(`power ${p.slug} (name)`, p.name);
+  const method = SCHOOL_TRADITION[p.school];
+  if (!method) { console.error(`power ${p.slug}: unknown school "${p.school}" (seph|qliph|unal|art)`); process.exit(1); }
+  const aid = id(`activity:${key}`);
+  const type = p.activity ?? "utility";
+  const range = p.range?.units && p.range.units !== "ft" ? { value: "", units: p.range.units, special: "" }
+    : { value: p.range?.value != null ? String(p.range.value) : "", units: p.range?.value != null ? "ft" : "self", special: "" };
+  const tmpl = p.target?.template ?? {};
+  const target = {
+    affects: { type: p.target?.type ?? (tmpl.type ? "" : (range.units === "self" ? "self" : "creature")), count: p.target?.count != null ? String(p.target.count) : "", choice: !!p.target?.choice, special: p.target?.special ?? "" },
+    template: { type: tmpl.type ?? "", size: tmpl.size != null ? String(tmpl.size) : "", width: tmpl.width != null ? String(tmpl.width) : "", height: "", units: tmpl.type ? "ft" : "", count: "", contiguous: false }
+  };
+  const duration = { value: p.duration?.value != null ? String(p.duration.value) : "", units: p.duration?.units ?? "inst", special: "" };
+  const act = {
+    _id: aid, type, name: "", img: "", sort: 0,
+    activation: { type: p.activation ?? "action", value: p.activationValue ?? null, condition: p.condition ?? "", override: false },
+    consumption: { targets: [], scaling: { allowed: p.level > 0 && p.scaling !== "none", max: "" }, spellSlot: p.level > 0 },
+    description: { chatFlavor: "" },
+    duration: { concentration: !!p.concentration, ...duration, override: false },
+    effects: [], range: { ...range, override: false }, target: { ...target, prompt: true, override: false },
+    uses: { spent: 0, recovery: [] }, appliedEffects: []
+  };
+  if (type === "utility") act.roll = { formula: p.roll ?? "", name: "", prompt: false, visible: false };
+  if (type === "save") act.save = { ability: p.save?.ability ? [].concat(p.save.ability) : [], dc: { calculation: "spellcasting", formula: "" } };
+  if (type === "attack") act.attack = { ability: "", bonus: "", critical: { threshold: null }, flat: false, type: { value: p.attack?.type ?? "ranged", classification: "spell" } };
+  if (type === "save" || type === "attack" || type === "damage") {
+    act.damage = { critical: { allow: false, bonus: "" }, parts: (p.damage ?? []).map(DAMAGE_PART) };
+    if (type === "save") act.damage.onSave = p.save?.onSave ?? (p.damage?.length ? "half" : "none");
+    if (type === "attack") act.damage.includeBase = false;
+  }
+  if (type === "heal") act.healing = { custom: { enabled: true, formula: p.heal?.formula ?? "" }, number: null, denomination: 0, bonus: "", types: [p.heal?.type ?? "healing"], scaling: { mode: p.heal?.scaling ?? "", number: 1 } };
+  const properties = [];
+  if (p.concentration) properties.push("concentration");
+  if (p.ritual) properties.push("ritual");
+  return {
+    _id: id(key), name: p.name, type: "spell", img: p.img ?? "icons/magic/water/orb-water-bubbles.webp",
+    folder: folderId ?? null, sort: p.level * 100000,
+    system: {
+      description: { value: link(p.description), chat: "" },
+      source: { ...SOURCE_META },
+      activation: { type: p.activation ?? "action", value: p.activationValue ?? null, condition: p.condition ?? "" },
+      duration, target, range,
+      uses: { max: "", spent: 0, recovery: [] },
+      level: p.level, school: p.school, properties,
+      materials: { value: "", consumed: false, cost: 0, supply: 0 },
+      method, prepared: 1, ability: "",
+      activities: { [aid]: act },
+      identifier: p.slug
+    },
+    effects: (p.effects ?? []).map((e, i) => {
+      const eid = /^[A-Za-z0-9]{16}$/.test(e._id ?? "") ? e._id : id(`effect:${key}:${i}`);
+      return { ...e, _id: eid, _key: `!items.effects!${id(key)}.${eid}` };
+    }),
+    flags: { [MOD]: { sw5e: p.sw5e ?? "" }, dnd5e: { riders: { activity: [], effect: [] } } },
+    _key: `!items!${id(key)}`
+  };
+}
+
 /* ── advancement helpers ─────────────────────────────────────────────────── */
 const adv = (docKey, tag, type, body) => ({ _id: id(`adv:${docKey}:${tag}`), type, ...body });
 const trait = (docKey, tag, level, title, grants, choices = [], extra = {}) => adv(docKey, tag, "Trait", {
@@ -238,7 +306,7 @@ function folderDoc(pack, name, parentName = null) {
 function main() {
   const files = readdirSync(CONTENT).filter(f => f.endsWith(".json")).sort();
   const docs = { classes: [], subclasses: [], features: [], powers: [] };
-  const folders = { features: new Map() };
+  const folders = { features: new Map(), powers: new Map() };
   const folderFor = (pack, name, parent) => {
     const k = `${parent ? parent + "/" : ""}${name}`;
     if (!folders[pack].has(k)) folders[pack].set(k, folderDoc(pack, name, parent));
@@ -254,6 +322,20 @@ function main() {
       if (f.folder && f.folderParent) folderFor("features", f.folderParent, null);
       docs.features.push(featureDoc(f, fid));
     }
+    for (const p of data.powers ?? []) {
+      const LEVEL = ["At-will", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"];
+      const trad = SCHOOL_TRADITION[p.school] === "be5e-artifice" ? "Artifice" : "The Flow";
+      docs.powers.push(powerDoc(p, folderFor("powers", `${LEVEL[p.level] ?? p.level} level`, trad)));
+      folderFor("powers", trad, null);
+    }
+  }
+  // a power's slug must be unique, and a feature's too
+  for (const pack of ["features", "powers"]) {
+    const slugs = new Map();
+    for (const d of docs[pack]) {
+      if (slugs.has(d.system.identifier)) { console.error(`DUPLICATE ${pack} slug "${d.system.identifier}"`); process.exit(1); }
+      slugs.set(d.system.identifier, d.name);
+    }
   }
 
   // sanity: every granted / pooled feature exists
@@ -264,6 +346,14 @@ function main() {
       const refs = [...(a.configuration?.items ?? []), ...(a.configuration?.pool ?? [])].map(r => r.uuid);
       for (const u of refs) if (u.includes(".features.") && !have.has(u.split(".").pop())) missing.push(`${d.name} → ${a.title ?? a.type} L${a.level ?? "-"}: ${u}`);
     }
+  }
+  // every @UUID link in prose must resolve to a doc we build
+  const all = new Set([...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers].map(d => d._id));
+  for (const d of [...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers]) {
+    for (const m of d.system.description.value.matchAll(/@UUID\[Compendium\.bad-eden-5e\.\w+\.Item\.(\w+)\]/g)) {
+      if (!all.has(m[1])) missing.push(`${d.name} (prose link): ${m[0]}`);
+    }
+    if (/\{\{uuid:/.test(d.system.description.value)) missing.push(`${d.name}: unresolved {{uuid}} token`);
   }
   if (missing.length) { console.error("MISSING feature references:\n  " + missing.join("\n  ")); process.exit(1); }
 

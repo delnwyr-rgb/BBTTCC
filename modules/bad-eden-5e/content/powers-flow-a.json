@@ -1,0 +1,306 @@
+{
+  "_about": "Flow powers, batch A: the twelve at-will powers and the eighteen 1st-level powers. Mechanics carried over from the SW5E force powers (sw5e field = the source, for traceability); every name and every line of text is Bad Eden's own. Built by tools/build-packs.mjs into the powers pack.",
+  "_renames": [
+    { "sw5e": "Denounce", "new": "Jinx" },
+    { "sw5e": "Feedback", "new": "Static" },
+    { "sw5e": "Shock", "new": "Spark" },
+    { "sw5e": "Rebuke", "new": "Reckoning" },
+    { "sw5e": "Spare the Dying", "new": "Hold On" },
+    { "sw5e": "Turbulence", "new": "Churn" },
+    { "sw5e": "Affect Mind", "new": "Soft Word" },
+    { "sw5e": "Battle Insight", "new": "Read the Stance" },
+    { "sw5e": "Force Push/Pull", "new": "Shove and Haul" },
+    { "sw5e": "Mind Trick", "new": "Look Away" },
+    { "sw5e": "Force Leap", "new": "Spring" },
+    { "sw5e": "Saber Ward", "new": "Brace" },
+    { "sw5e": "Curse", "new": "Bad Luck" },
+    { "sw5e": "Dark Side Tendrils", "new": "Black Reach" },
+    { "sw5e": "Fear", "new": "Dread" },
+    { "sw5e": "Sap Vitality", "new": "Draw Out" },
+    { "sw5e": "Sustained Lightning", "new": "Arc Lock" },
+    { "sw5e": "Wound", "new": "Rot" },
+    { "sw5e": "Cloud Mind", "new": "Fogged Mind" },
+    { "sw5e": "Heal", "new": "Mend" },
+    { "sw5e": "Heroism", "new": "Backbone" },
+    { "sw5e": "Sanctuary", "new": "Pass Over" },
+    { "sw5e": "Valor", "new": "Good Luck" },
+    { "sw5e": "Breath Control", "new": "Still Lungs" },
+    { "sw5e": "Force Body", "new": "Pay in Blood" },
+    { "sw5e": "Force Propel", "new": "Fling" },
+    { "sw5e": "Sense Emotion", "new": "Read the Room" },
+    { "sw5e": "Sense Force", "new": "Feel the Current" },
+    { "sw5e": "Slow Descent", "new": "Easy Down" },
+    { "sw5e": "Telepathic Link", "new": "Shared Line" }
+  ],
+  "_unsure": [
+    "Reckoning: the source rolls a different die by the target's alignment (d12 / d10 / d8). The activity carries the middle die (1d10 force); the ladder is in the text and the player adjusts the roll.",
+    "Rot: a ranged attack whose hit also forces a Constitution save (poisoned). The activity is the attack; the save is text only.",
+    "Arc Lock: the first hit is the attack activity; the automatic 1d12 on later turns is text only (roll it from the card).",
+    "Read the Stance, Spring, Brace, Pay in Blood, Still Lungs: no Active Effects attached; the sheet shows the card, the table tracks the state.",
+    "Backbone: temp HP each turn is a heal activity with formula @mod (temphp); the frightened immunity is text only."
+  ],
+  "powers": [
+    {
+      "slug": "jinx", "name": "Jinx", "sw5e": "Denounce", "level": 0, "school": "qliph",
+      "img": "icons/magic/control/buff-luck-fortune-green.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "cha", "onSave": "none" }, "scaling": "atwill",
+      "description": "<p>You put a thumb on the scale. One creature of your choice within range must make a Charisma saving throw. On a failed save, the next time it makes an attack roll or a saving throw it rolls a d4 and subtracts the number from the roll. The power then ends.</p><p>The die grows as you do: a d6 at 5th level, a d8 at 11th level, and a d10 at 17th level.</p>"
+    },
+    {
+      "slug": "static", "name": "Static", "sw5e": "Feedback", "level": 0, "school": "qliph",
+      "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "int", "onSave": "none" },
+      "damage": [{ "number": 1, "denomination": 4, "bonus": "", "types": ["psychic"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "atwill",
+      "description": "<p>You push a burst of noise straight into someone's head. Pick a creature within range that can hear you (it doesn't need to understand you). It must succeed on an Intelligence saving throw or take 1d4 psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn.</p><p>The damage increases by 1d4 when you reach 5th level (2d4), 11th level (3d4), and 17th level (4d4).</p>"
+    },
+    {
+      "slug": "spark", "name": "Spark", "sw5e": "Shock", "level": 0, "school": "qliph",
+      "img": "icons/magic/lightning/bolt-strike-streak-yellow.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "attack", "attack": { "type": "ranged" },
+      "damage": [{ "number": 1, "denomination": 10, "bonus": "", "types": ["lightning"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "atwill",
+      "description": "<p>You throw a bolt of lightning at a target within range. Make a ranged power attack. On a hit, the target takes 1d10 lightning damage. The bolt sets fire to anything flammable it passes that nobody is wearing or carrying.</p><p>The damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).</p>"
+    },
+    {
+      "slug": "reckoning", "name": "Reckoning", "sw5e": "Rebuke", "level": 0, "school": "seph",
+      "img": "icons/magic/holy/projectiles-blades-salvo-yellow.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "attack", "attack": { "type": "melee" },
+      "damage": [{ "number": 1, "denomination": 10, "bonus": "", "types": ["force"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "atwill",
+      "description": "<p>You lay a hand on someone and let the current decide what they're owed. Make a melee power attack against the target. On a hit, it takes force damage by how it stands with the Flow: a Qliphothic-aligned creature takes 1d12, an unaligned or balanced creature takes 1d10, and a Sephirotic-aligned creature takes 1d8.</p><p>The damage increases by one die when you reach 5th, 11th, and 17th level.</p>"
+    },
+    {
+      "slug": "hold-on", "name": "Hold On", "sw5e": "Spare the Dying", "level": 0, "school": "seph",
+      "img": "icons/magic/life/heart-cross-green.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You touch a living creature that has 0 hit points and tell it, in a way it can't argue with, to stay. The creature becomes stable.</p><p>This power has no effect on drones or other mindless machines.</p>"
+    },
+    {
+      "slug": "churn", "name": "Churn", "sw5e": "Turbulence", "level": 0, "school": "seph",
+      "img": "icons/magic/water/vortex-water-whirlpool.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 2 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "none" },
+      "damage": [{ "number": 1, "denomination": 6, "bonus": "", "types": ["force"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "atwill",
+      "description": "<p>You stir the current under someone's feet. Choose one creature within range, or two creatures within 5 feet of each other. Each target must succeed on a Dexterity saving throw or take 1d6 force damage.</p><p>The damage increases by 1d6 when you reach 5th, 11th, and 17th level.</p>"
+    },
+    {
+      "slug": "soft-word", "name": "Soft Word", "sw5e": "Affect Mind", "level": 0, "school": "unal",
+      "img": "icons/skills/social/diplomacy-handshake.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You lean on someone's mood the way you'd lean on a gate. Choose a creature within range that isn't hostile toward you. It must make a Wisdom saving throw. On a failed save, you have advantage on all Charisma checks directed at it for the duration.</p><p>On a successful save, the creature doesn't realize you tried to work the Flow on it, but it's immune to this power for one day.</p><p>This power has no effect on drones or other mindless machines.</p>"
+    },
+    {
+      "slug": "read-the-stance", "name": "Read the Stance", "sw5e": "Battle Insight", "level": 0, "school": "unal",
+      "img": "icons/magic/perception/eye-ringed-green.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "round" }, "concentration": true,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You watch how they hold their weight and the Flow tells you the rest. Choose a target within range. On your next turn, you have advantage on your first attack roll against it, as long as this power hasn't ended.</p><p>You read more as you level: the advantage covers two attacks at 5th level, three at 11th level, and four at 17th level.</p>"
+    },
+    {
+      "slug": "shove-and-haul", "name": "Shove and Haul", "sw5e": "Force Push/Pull", "level": 0, "school": "unal",
+      "img": "icons/magic/earth/strike-fist-stone-gray.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "str", "onSave": "none" },
+      "damage": [{ "number": 1, "denomination": 4, "bonus": "", "types": ["bludgeoning"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "atwill",
+      "description": "<p>The first thing anyone learns to do with the Flow: pick things up and put them somewhere else. You can work small things at a distance within range, with the care of a hand you aren't using: turn a key, open a door or a lid, take an item out of an open container or put one in, tip a bottle.</p><p>Or you can push or pull. Choose a Medium or smaller creature, or an object nobody is wearing or carrying, that you can see within range. The target must make a Strength saving throw; an object fails automatically. On a failed save it moves in a direction of your choice, a distance set by its size: Tiny up to 20 feet, Small up to 10 feet, Medium up to 5 feet. If it ends that movement by hitting another creature or object, the thing it hit must make a Dexterity saving throw (an object fails automatically); on a failed save, both of them take 1d4 bludgeoning damage.</p><p>Your grip strengthens as you level. At 5th level you can move Tiny up to 30 feet, Small up to 20, Medium up to 10, and the damage becomes 2d4. At 11th level, Small up to 30 feet, Medium up to 20, and 3d4. At 17th level, Medium up to 30 feet, and 4d4.</p>"
+    },
+    {
+      "slug": "look-away", "name": "Look Away", "sw5e": "Mind Trick", "level": 0, "school": "unal",
+      "img": "icons/magic/control/hypnosis-mesmerism-swirl.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You take a little of someone's attention and put it somewhere else. Choose a creature within range that isn't hostile toward you. It must make a Wisdom saving throw. On a failed save, it has disadvantage on Wisdom (Perception) and Intelligence (Investigation) checks for the duration.</p><p>On a successful save, the creature knows exactly what you just tried and turns hostile. The violent sort will come at you; the patient sort will find another way to settle it, at the GM's discretion.</p><p>This power has no effect on drones or other mindless machines.</p>"
+    },
+    {
+      "slug": "spring", "name": "Spring", "sw5e": "Force Leap", "level": 0, "school": "unal",
+      "img": "icons/skills/movement/arrow-upward-yellow.webp",
+      "activation": "bonus", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "round" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>The ground gives you a hand up. Until the end of your next turn, you can use your casting ability score instead of your Strength score when you jump, and you always count as having a running start.</p>"
+    },
+    {
+      "slug": "brace", "name": "Brace", "sw5e": "Saber Ward", "level": 0, "school": "unal",
+      "img": "icons/magic/defensive/shield-barrier-deflect-teal.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "round" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You set your feet and let the current take the edge off. Until the end of your next turn, you have resistance to bludgeoning, piercing, slashing, and lightning damage dealt by weapons.</p>"
+    },
+
+    {
+      "slug": "bad-luck", "name": "Bad Luck", "sw5e": "Curse", "level": 1, "school": "qliph",
+      "img": "icons/magic/unholy/orb-smoking-green.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 3 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "cha", "onSave": "none" }, "scaling": "level",
+      "description": "<p>You wish three people a bad day, and the Flow obliges. Up to three creatures of your choice that you can see within range must make Charisma saving throws. For the duration, the first time each turn that a creature who failed makes an attack roll or a saving throw, it rolls a d4 and subtracts the number from the roll.</p><p><strong>At higher levels.</strong> When you cast this power at 3rd level or higher, you can target one additional creature for every two levels above 1st. Cast at 3rd, 6th, or 9th level, the die becomes a d6, a d8, or a d10.</p>"
+    },
+    {
+      "slug": "black-reach", "name": "Black Reach", "sw5e": "Dark Side Tendrils", "level": 1, "school": "qliph",
+      "img": "icons/magic/unholy/hand-claw-fog-green.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "template": { "type": "radius", "size": 10 } },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "str", "onSave": "half" },
+      "damage": [{ "number": 2, "denomination": 6, "bonus": "", "types": ["necrotic"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>Something cold comes out of you in every direction at once. Each creature within 10 feet of you must make a Strength saving throw. On a failed save, a creature takes 2d6 necrotic damage and can't take reactions until its next turn. On a successful save, it takes half as much damage and nothing else.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, the damage increases by 1d6 for each level above 1st.</p>"
+    },
+    {
+      "slug": "dread", "name": "Dread", "sw5e": "Fear", "level": 1, "school": "qliph",
+      "img": "icons/magic/control/fear-fright-white.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You remind someone that they can die. One creature you can see within range must succeed on a Wisdom saving throw or be frightened for the duration. A target with 25 hit points or fewer makes the save with disadvantage. A frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on a success.</p><p>This power has no effect on drones or other mindless machines.</p>"
+    },
+    {
+      "slug": "draw-out", "name": "Draw Out", "sw5e": "Sap Vitality", "level": 1, "school": "qliph",
+      "img": "icons/magic/unholy/strike-beam-blood-red-purple.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "attack", "attack": { "type": "melee" },
+      "damage": [{ "number": 3, "denomination": 10, "bonus": "", "types": ["necrotic"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>You take hold of someone and pull the life out through the skin. Make a melee power attack against a creature you can reach. On a hit, the target takes 3d10 necrotic damage.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, the damage increases by 1d10 for each level above 1st.</p>"
+    },
+    {
+      "slug": "arc-lock", "name": "Arc Lock", "sw5e": "Sustained Lightning", "level": 1, "school": "qliph",
+      "img": "icons/magic/lightning/bolts-forked-large-teal.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "attack", "attack": { "type": "ranged" },
+      "damage": [{ "number": 1, "denomination": 12, "bonus": "", "types": ["lightning"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>You open a line of lightning to a creature within range and hold it there. Make a ranged power attack. On a hit, the target takes 1d12 lightning damage, and for the duration you can use your action on each of your turns to deal 1d12 lightning damage to it automatically. The power ends if you use your action for anything else, if the target leaves the power's range, or if it gets total cover from you.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, the first hit's damage increases by 1d12 for each level above 1st.</p>"
+    },
+    {
+      "slug": "rot", "name": "Rot", "sw5e": "Wound", "level": 1, "school": "qliph",
+      "img": "icons/skills/wounds/injury-body-pain-gray.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "attack", "attack": { "type": "ranged" },
+      "damage": [{ "number": 2, "denomination": 8, "bonus": "", "types": ["necrotic"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>You point, and something in them goes bad. Make a ranged power attack against a creature within range. On a hit, the target takes 2d8 necrotic damage and must make a Constitution saving throw. On a failed save, it's also poisoned until the end of your next turn.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, the damage increases by 1d8 for each level above 1st.</p>"
+    },
+    {
+      "slug": "fogged-mind", "name": "Fogged Mind", "sw5e": "Cloud Mind", "level": 1, "school": "seph",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "activation": "action", "range": { "value": 90 }, "target": { "template": { "type": "sphere", "size": 20 } },
+      "duration": { "value": "1", "units": "minute" }, "concentration": false,
+      "activity": "utility", "roll": "5d8", "scaling": "level",
+      "description": "<p>A fog rolls through the room and takes the fight out of everyone it touches. Roll 5d8; the total is how many hit points of creatures this power can put under. Creatures within 20 feet of a point you choose within range are affected in order of their current hit points, lowest first.</p><p>Starting with the creature with the fewest current hit points, each affected creature falls unconscious until the power ends, until it takes damage, or until someone uses an action to shake it awake. Subtract each creature's hit points from the total before moving on to the next lowest. A creature's hit points must be equal to or less than what's left of the total for it to be affected.</p><p>This power has no effect on drones or other mindless machines.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, roll an additional 2d8 for each level above 1st.</p>"
+    },
+    {
+      "slug": "mend", "name": "Mend", "sw5e": "Heal", "level": 1, "school": "seph",
+      "img": "icons/magic/life/cross-worn-green.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "heal", "heal": { "formula": "1d8 + @mod", "type": "healing" }, "scaling": "level",
+      "description": "<p>You put your hand where it hurts and let the current do the rest. A creature you touch regains hit points equal to 1d8 + your casting ability modifier.</p><p>This power has no effect on drones or other mindless machines.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, the healing increases by 1d8 for each level above 1st.</p>"
+    },
+    {
+      "slug": "backbone", "name": "Backbone", "sw5e": "Heroism", "level": 1, "school": "seph",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "heal", "heal": { "formula": "@mod", "type": "temphp" }, "scaling": "level",
+      "description": "<p>You lend someone a spine. A willing creature you touch can't be frightened for the duration, and at the start of each of its turns it gains temporary hit points equal to your casting ability modifier. When the power ends, it loses any temporary hit points it still has from this power.</p><p>This power has no effect on drones or other mindless machines.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, you can target one additional creature for each level above 1st.</p>"
+    },
+    {
+      "slug": "pass-over", "name": "Pass Over", "sw5e": "Sanctuary", "level": 1, "school": "seph",
+      "img": "icons/magic/holy/barrier-shield-winged-blue.webp",
+      "activation": "bonus", "range": { "value": 30 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": false,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You make someone hard to want to hurt. Choose a creature within range to ward. Until the power ends, any creature that targets the warded creature with an attack, a harmful power, or any hostile action must first make a Wisdom saving throw. On a failed save, it has to pick a new target or lose the attack or power. The ward doesn't protect against area effects.</p><p>If the warded creature makes an attack, casts a power that affects an enemy, or takes a hostile action, this power ends.</p>"
+    },
+    {
+      "slug": "good-luck", "name": "Good Luck", "sw5e": "Valor", "level": 1, "school": "seph",
+      "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "ally", "count": 3 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "utility", "scaling": "level",
+      "description": "<p>You wish three people a good day, and the Flow obliges. Choose up to three creatures within range. For the duration, whenever a target makes an attack roll or a saving throw, it can roll a d4 and add the number to the roll.</p><p><strong>At higher levels.</strong> When you cast this power at 3rd level or higher, you can target one additional creature for every two levels above 1st. Cast at 3rd, 6th, or 9th level, the die becomes a d6, a d8, or a d10.</p>"
+    },
+    {
+      "slug": "still-lungs", "name": "Still Lungs", "sw5e": "Breath Control", "level": 1, "school": "unal",
+      "img": "icons/magic/water/bubbles-air-water-blue.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "10", "units": "minute" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You slow yourself down until the body stops asking for things. If you're poisoned, you neutralize the poison; if more than one is in you, you neutralize one you know about, or one at random.</p><p>For the duration, you have advantage on saving throws against being poisoned, resistance to poison damage, and you don't need to breathe.</p>"
+    },
+    {
+      "slug": "pay-in-blood", "name": "Pay in Blood", "sw5e": "Force Body", "level": 1, "school": "unal",
+      "img": "icons/magic/life/heart-shadow-red.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "hour" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>The Flow takes marks, and it takes blood, and it isn't fussy which. For the duration, when you cast a Flow power, you can pay up to half its cost in hit points instead of Flow points. When you do, your hit point maximum is reduced by the same amount until you finish a long rest.</p><p>You can end this effect whenever you like. If a casting would reduce your hit points to 0, the power fails and the effect ends.</p>"
+    },
+    {
+      "slug": "fling", "name": "Fling", "sw5e": "Force Propel", "level": 1, "school": "unal",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [{ "number": 3, "denomination": 8, "bonus": "", "types": ["bludgeoning"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>You pick something up with the current and throw it, hard. Choose one or more creatures or objects within 60 feet, nobody wearing or carrying them, that weigh up to 15 pounds between them. They immediately move 60 feet in a direction of your choice; anything that ends that movement in the air falls. If what you threw collides with a target on the way, both it and the target take 3d8 bludgeoning damage. If the target is a creature, it makes a Dexterity saving throw first, taking the damage on a failed save or half as much on a success.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, the weight limit increases by 15 pounds and the damage by 1d8 for each level above 1st.</p>"
+    },
+    {
+      "slug": "read-the-room", "name": "Read the Room", "sw5e": "Sense Emotion", "level": 1, "school": "unal",
+      "img": "icons/magic/perception/hand-eye-pink.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "10", "units": "minute" }, "concentration": true,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You open yourself to what everyone else is feeling, which is a mixed blessing. For the duration, when you cast the power and as your action on each of your turns, you can focus on one humanoid you can see within 30 feet of you. You learn its prevailing emotion at once (love, anger, pain, fear, calm, or something else) and you have advantage on Wisdom (Insight) checks against it. If the target isn't really a humanoid, or it can't be charmed, you sense that it's calm.</p>"
+    },
+    {
+      "slug": "feel-the-current", "name": "Feel the Current", "sw5e": "Sense Force", "level": 1, "school": "unal",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "10", "units": "minute" }, "concentration": true,
+      "activity": "utility", "scaling": "level",
+      "description": "<p>You put your hand in the water and feel which way it's moving. For the duration, you sense the Flow being used, or sitting in an object, within 30 feet of you. When you sense it, you can use your action to learn the direction it comes from, and if it's in your line of sight you see a faint aura around the person or object it runs through.</p><p><strong>At higher levels.</strong> Cast at 3rd level, the range becomes 60 feet. At 5th level, 500 feet. At 7th level, 1 mile. At 9th level, 10 miles.</p>"
+    },
+    {
+      "slug": "easy-down", "name": "Easy Down", "sw5e": "Slow Descent", "level": 1, "school": "unal",
+      "img": "icons/magic/air/weather-wind-gust.webp",
+      "activation": "reaction", "condition": "when you or a creature within 60 feet of you falls",
+      "range": { "value": 60 }, "target": { "type": "creature", "count": 5 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>The air thickens under whoever's falling. Choose up to five falling creatures within range. Each one's descent slows to 60 feet per round until the power ends. A creature that lands before then takes no falling damage, lands on its feet, and the power ends for it.</p>"
+    },
+    {
+      "slug": "shared-line", "name": "Shared Line", "sw5e": "Telepathic Link", "level": 1, "school": "unal",
+      "img": "icons/magic/control/energy-stream-link-spiral-teal.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "10", "units": "minute" }, "concentration": true,
+      "activity": "utility", "scaling": "level",
+      "description": "<p>You run a line between two heads. Touch one willing creature. Until the power ends, whenever the two of you can see each other, you can talk mind to mind.</p><p>You don't need a shared language for it to understand you, and it understands even if it has no language at all. It can answer the same way, but only if it knows at least one language.</p><p>This power has no effect on drones or other mindless machines.</p><p><strong>At higher levels.</strong> When you cast this power at 3rd level or higher, the duration becomes concentration, up to 1 hour, and if one of you is surprised while the other isn't, and you can see each other, the surprised one can still act normally on its first turn as if it weren't surprised.</p>"
+    }
+  ]
+}
