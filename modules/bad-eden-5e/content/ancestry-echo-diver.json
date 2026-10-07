@@ -1,0 +1,164 @@
+{
+  "_about": "Echo-Divers — the rats of the new world — for D&D. Three heritages (Empyrean, Abyssal, Tellurian) as separate species items sharing the family core (Half-Second Inheritance), the family Strategic Hooks, and the family tier ladder. Text is Dave's own from the RFI ancestries pack; only RFI mechanics were converted (squares → feet, Soma Break → long rest, reroll-lowest → advantage, faculties → abilities, thermal/kinetic → D&D types). Built by tools/build-packs.mjs.",
+  "_unsure": [
+    "Tier ladder assignment (no explicit tiers in the RFI data): Tier I = the heritage signature feat (Stormread / Tide Recall / Stone Patience) at creation; Tier II (5th) = Echo Sense; Tier III (11th) = Temporal Afterimage + Vault Sight (the Deep-hums version with hidden doors and the submerged passive bonus); Tier IV (17th) = Spark Conductor + Amphibious Physiology (the two resistance feats). Ordered by power: the resistances are the strongest.",
+    "The family core uses the v1.1 heritage-card text (Half-Second Inheritance: Temporal Flinch, Niche Survivor, Vault Sight, Rat Inheritance) — the older species-doc wording is superseded. Core Vault Sight is a paragraph inside the core feature; the separate ladder feat named Vault Sight is the 'deep hums' version, so the two don't collide as documents.",
+    "Temporal Flinch: 'once per scene' → once per short rest; '2 squares' → 10 ft; '1 square' → 5 ft.",
+    "Vault Sight 'low-light vision 12 squares' → darkvision 60 ft (the species sense); the ladder version's '+2 passive Perception when submerged' stays text (conditional).",
+    "Echo Sense: 'small bonus to Perception and Insight' → +1 to those checks and passive scores (AEs). Temporal Afterimage: 'initiative and reflexive saves improve' → +1 to initiative rolls and Dexterity saving throws (AEs).",
+    "Amphibious Physiology 'resistance to thermal damage' → fire and cold (AEs). Spark Conductor → lightning and psychic (AEs). Heritage resistances are species Trait grants: Abyssal cold/thunder/psychic, Empyrean lightning/thunder/psychic, Tellurian fire/poison + one of bludgeoning/piercing/slashing chosen at creation (Trait choice).",
+    "Tide Recall's lookback 'scales with your tier' → by character level: 1st–4th 24 hours, 5th–10th a week, 11th–16th a year, 17th+ anything that ever happened to it.",
+    "Stormread's +2 initiative is an AE on system.attributes.init.bonus; the warning's 'reaction strikes' → opportunity attacks.",
+    "Stone Patience: 'Shaken' → frightened. Still Water (Abyssal): advantage on Wisdom (Insight) checks is an unconditional skill-roll AE; the frightened-save half is text.",
+    "'Strategic Turn' became 'Turn' in the Strategic Hooks blocks to pass the RFI lint; the blocks are otherwise verbatim."
+  ],
+
+  "races": [
+    {
+      "slug": "echo-diver-empyrean", "identifier": "echo-diver-empyrean", "name": "Echo-Diver (Empyrean)", "family": "Echo-Diver", "heritage": "Empyrean",
+      "img": "icons/magic/air/wind-swirl-gray-blue.webp", "sizes": ["med"], "sizeHint": "Medium.",
+      "creatureType": "humanoid", "subtype": "Echo-Diver",
+      "movement": { "walk": 30 }, "senses": { "darkvision": 60, "special": "Temporal Flinch; Vault Sight." },
+      "traits": [{ "tag": "dr", "title": "Stratospheric Resistance", "grants": ["dr:lightning", "dr:thunder", "dr:psychic"] }],
+      "features": { "0": ["echo-diver-half-second-inheritance", "echo-diver-strategic-hooks", "echo-diver-empyrean-traits", "echo-diver-empyrean-stormread"], "5": ["echo-diver-echo-sense"], "11": ["echo-diver-temporal-afterimage", "echo-diver-vault-sight"], "17": ["echo-diver-spark-conductor", "echo-diver-amphibious-physiology"] },
+      "description": "<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p><p>Echo-Divers are the rats of the new world — and they say it with pride. A rat survives what a lion can't. A rat is already moving when the ceiling falls. A rat threads a collapsing vault without ever touching a trigger plate.</p><p><em>\"Something is about to happen. Move.\"</em></p><p><strong>Echo-Diver (Empyrean).</strong> Your time-sense tilts forward. You feel weather before it arrives — not the storm outside, the storm of events. Empyrean Echo-Divers are the ones who always get out of the room five seconds before the bad thing, and can never quite explain how.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Echo-Diver).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Darkvision.</strong> 60 feet (Vault Sight).</li><li><strong>Ancestry Lean.</strong> Dexterity. Echo-Divers grant no fixed ability score increases; your background handles those. Your heritage leans toward Dexterity in fiction and through your Tier features.</li></ul><h3>Features</h3><p><strong>At creation:</strong> @UUID[{{uuid:features:echo-diver-half-second-inheritance}}]{Half-Second Inheritance}, @UUID[{{uuid:features:echo-diver-empyrean-traits}}]{Empyrean Traits}, @UUID[{{uuid:features:echo-diver-empyrean-stormread}}]{Stormread} (Tier I), @UUID[{{uuid:features:echo-diver-strategic-hooks}}]{Strategic Hooks (Echo-Diver)}.</p><p><strong>5th level (Tier II):</strong> @UUID[{{uuid:features:echo-diver-echo-sense}}]{Echo Sense}.</p><p><strong>11th level (Tier III):</strong> @UUID[{{uuid:features:echo-diver-temporal-afterimage}}]{Temporal Afterimage}, @UUID[{{uuid:features:echo-diver-vault-sight}}]{Vault Sight}.</p><p><strong>17th level (Tier IV):</strong> @UUID[{{uuid:features:echo-diver-spark-conductor}}]{Spark Conductor}, @UUID[{{uuid:features:echo-diver-amphibious-physiology}}]{Amphibious Physiology}.</p>"
+    },
+    {
+      "slug": "echo-diver-abyssal", "identifier": "echo-diver-abyssal", "name": "Echo-Diver (Abyssal)", "family": "Echo-Diver", "heritage": "Abyssal",
+      "img": "icons/magic/water/orb-water-bubbles.webp", "sizes": ["med"], "sizeHint": "Medium.",
+      "creatureType": "humanoid", "subtype": "Echo-Diver",
+      "movement": { "walk": 30 }, "senses": { "darkvision": 60, "special": "Temporal Flinch; Vault Sight." },
+      "traits": [{ "tag": "dr", "title": "Deep-Current Resistance", "grants": ["dr:cold", "dr:thunder", "dr:psychic"] }],
+      "features": { "0": ["echo-diver-half-second-inheritance", "echo-diver-strategic-hooks", "echo-diver-abyssal-traits", "echo-diver-abyssal-tide-recall"], "5": ["echo-diver-echo-sense"], "11": ["echo-diver-temporal-afterimage", "echo-diver-vault-sight"], "17": ["echo-diver-spark-conductor", "echo-diver-amphibious-physiology"] },
+      "description": "<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p><p>Echo-Divers are the rats of the new world — and they say it with pride. A rat survives what a lion can't. A rat is already moving when the ceiling falls. A rat threads a collapsing vault without ever touching a trigger plate.</p><p><em>\"The deep remembers everything. You're how it talks about it.\"</em></p><p><strong>Echo-Diver (Abyssal).</strong> Your time-sense tilts backward. You don't predict; you remember, hard, and through things that shouldn't remember, and sometimes on behalf of things that no longer can. Abyssal Echo-Divers are the ones who find the last note in the last pocket of the last body, and know whose handwriting it was without being told.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Echo-Diver).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Darkvision.</strong> 60 feet (Vault Sight).</li><li><strong>Ancestry Lean.</strong> Wisdom. Echo-Divers grant no fixed ability score increases; your background handles those. Your heritage leans toward Wisdom in fiction and through your Tier features.</li></ul><h3>Features</h3><p><strong>At creation:</strong> @UUID[{{uuid:features:echo-diver-half-second-inheritance}}]{Half-Second Inheritance}, @UUID[{{uuid:features:echo-diver-abyssal-traits}}]{Abyssal Traits}, @UUID[{{uuid:features:echo-diver-abyssal-tide-recall}}]{Tide Recall} (Tier I), @UUID[{{uuid:features:echo-diver-strategic-hooks}}]{Strategic Hooks (Echo-Diver)}.</p><p><strong>5th level (Tier II):</strong> @UUID[{{uuid:features:echo-diver-echo-sense}}]{Echo Sense}.</p><p><strong>11th level (Tier III):</strong> @UUID[{{uuid:features:echo-diver-temporal-afterimage}}]{Temporal Afterimage}, @UUID[{{uuid:features:echo-diver-vault-sight}}]{Vault Sight}.</p><p><strong>17th level (Tier IV):</strong> @UUID[{{uuid:features:echo-diver-spark-conductor}}]{Spark Conductor}, @UUID[{{uuid:features:echo-diver-amphibious-physiology}}]{Amphibious Physiology}.</p>"
+    },
+    {
+      "slug": "echo-diver-tellurian", "identifier": "echo-diver-tellurian", "name": "Echo-Diver (Tellurian)", "family": "Echo-Diver", "heritage": "Tellurian",
+      "img": "icons/environment/wilderness/cave-entrance-mountain.webp", "sizes": ["med"], "sizeHint": "Medium.",
+      "creatureType": "humanoid", "subtype": "Echo-Diver",
+      "movement": { "walk": 30 }, "senses": { "darkvision": 60, "special": "Temporal Flinch; Vault Sight." },
+      "traits": [{ "tag": "dr", "title": "Bedrock Resistance", "grants": ["dr:fire", "dr:poison"], "choices": [{ "count": 1, "pool": ["dr:bludgeoning", "dr:piercing", "dr:slashing"] }] }],
+      "features": { "0": ["echo-diver-half-second-inheritance", "echo-diver-strategic-hooks", "echo-diver-tellurian-traits", "echo-diver-tellurian-stone-patience"], "5": ["echo-diver-echo-sense"], "11": ["echo-diver-temporal-afterimage", "echo-diver-vault-sight"], "17": ["echo-diver-spark-conductor", "echo-diver-amphibious-physiology"] },
+      "description": "<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p><p>Echo-Divers are the rats of the new world — and they say it with pride. A rat survives what a lion can't. A rat is already moving when the ceiling falls. A rat threads a collapsing vault without ever touching a trigger plate.</p><p><em>\"Stone doesn't hurry. You don't either.\"</em></p><p><strong>Echo-Diver (Tellurian).</strong> Your time-sense tilts toward the unchanging. You see what endures. In a room about to collapse, you are the one who can tell which beam will hold. Tellurian Echo-Divers outlast the world by refusing, at a very deep level, to be in a hurry about it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Echo-Diver).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Darkvision.</strong> 60 feet (Vault Sight).</li><li><strong>Ancestry Lean.</strong> Constitution. Echo-Divers grant no fixed ability score increases; your background handles those. Your heritage leans toward Constitution in fiction and through your Tier features.</li></ul><h3>Features</h3><p><strong>At creation:</strong> @UUID[{{uuid:features:echo-diver-half-second-inheritance}}]{Half-Second Inheritance}, @UUID[{{uuid:features:echo-diver-tellurian-traits}}]{Tellurian Traits}, @UUID[{{uuid:features:echo-diver-tellurian-stone-patience}}]{Stone Patience} (Tier I), @UUID[{{uuid:features:echo-diver-strategic-hooks}}]{Strategic Hooks (Echo-Diver)}.</p><p><strong>5th level (Tier II):</strong> @UUID[{{uuid:features:echo-diver-echo-sense}}]{Echo Sense}.</p><p><strong>11th level (Tier III):</strong> @UUID[{{uuid:features:echo-diver-temporal-afterimage}}]{Temporal Afterimage}, @UUID[{{uuid:features:echo-diver-vault-sight}}]{Vault Sight}.</p><p><strong>17th level (Tier IV):</strong> @UUID[{{uuid:features:echo-diver-spark-conductor}}]{Spark Conductor}, @UUID[{{uuid:features:echo-diver-amphibious-physiology}}]{Amphibious Physiology}.</p>"
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "echo-diver-half-second-inheritance", "name": "Half-Second Inheritance", "featType": "race", "level": 0, "requirements": "Echo-Diver",
+      "folder": "Echo-Diver", "img": "icons/magic/time/arrows-circling-green.webp",
+      "activation": "reaction", "condition": "you or an ally within 10 feet would be hit by an attack you can see", "uses": { "max": "1", "per": "sr" },
+      "description": "<p><em>Echo-Diver core, shared across all Echo-Diver heritages.</em></p><p><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per short rest, when you or an ally within 10 feet would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 5 feet. If this moves the target out of the attack's range or line, the attack misses.</p><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You have advantage on Constitution saving throws against suffocation, starvation, dehydration, and extreme temperature.</p><p><strong>Vault Sight.</strong> You have darkvision out to 60 feet. You have advantage on Wisdom (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</p><p><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</p>"
+    },
+    {
+      "slug": "echo-diver-strategic-hooks", "name": "Strategic Hooks (Echo-Diver)", "featType": "race", "level": 0, "requirements": "Echo-Diver",
+      "folder": "Echo-Diver", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><em>\"Your faction always has a hunch about what the world is about to try.\"</em></p><p><strong>OP Edge.</strong> Your faction leans slightly toward Soft Power and Intrigue OP lines thanks to your intuitive feel for weird situations.</p><p><strong>Echo-Tuned.</strong> You make Spark/Echo encounters a little safer and more profitable, as expressed via Bad Eden flags and world logic.</p>"
+    },
+    {
+      "slug": "echo-diver-echo-sense", "name": "Echo Sense", "featType": "race", "level": 5, "requirements": "Echo-Diver 5",
+      "folder": "Echo-Diver", "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "description": "<p><em>Echo-Diver, Tier II</em></p><p><strong>Echo Sense.</strong> Your attention runs slightly ahead of the present.</p><p>You have a +1 bonus to Wisdom (Perception) and Wisdom (Insight) checks, and your passive Perception and passive Insight increase by 1.</p><p>You often notice emotional or metaphysical \"echoes\" a moment before events hit.</p><p>In Bad Eden play, this is represented by OP and encounter flags rather than automatic rolls.</p>",
+      "effects": [
+        { "_id": "be5eEchoSense000", "name": "Echo Sense", "img": "icons/magic/perception/third-eye-blue-red.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.skills.prc.bonuses.check", "mode": 2, "value": "1", "priority": 20 },
+            { "key": "system.skills.ins.bonuses.check", "mode": 2, "value": "1", "priority": 20 },
+            { "key": "system.skills.prc.bonuses.passive", "mode": 2, "value": "1", "priority": 20 },
+            { "key": "system.skills.ins.bonuses.passive", "mode": 2, "value": "1", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "echo-diver-temporal-afterimage", "name": "Temporal Afterimage", "featType": "race", "level": 11, "requirements": "Echo-Diver 11",
+      "folder": "Echo-Diver", "img": "icons/magic/time/hourglass-yellow-green.webp",
+      "description": "<p><em>Echo-Diver, Tier III</em></p><p><strong>Temporal Afterimage.</strong> The universe keeps a spare copy of you a fraction of a heartbeat away.</p><p>You have a knack for being slightly ahead of danger: you have a +1 bonus to initiative rolls and to Dexterity saving throws.</p><p>Once per long rest, you might narratively \"rewind\" a moment or steal a sliver of time for a dramatic reposition, as agreed with your GM.</p>",
+      "effects": [
+        { "_id": "be5eAfterimage00", "name": "Temporal Afterimage", "img": "icons/magic/time/hourglass-yellow-green.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.attributes.init.bonus", "mode": 2, "value": "1", "priority": 20 },
+            { "key": "system.abilities.dex.bonuses.save", "mode": 2, "value": "1", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "echo-diver-vault-sight", "name": "Vault Sight", "featType": "race", "level": 11, "requirements": "Echo-Diver 11",
+      "folder": "Echo-Diver", "img": "icons/magic/perception/orb-eye-scrying.webp",
+      "description": "<p><em>Echo-Diver, Tier III</em></p><p><em>\"The deep hums. You've learned to listen.\"</em></p><p>Your darkvision reaches out to 60 feet.</p><p>You have advantage on checks made to detect hidden doors, pressure seals, submerged tunnels, or concealed accessways in industrial or aquatic environments.</p><p>When exploring submerged structures, your passive Perception increases by +2.</p>"
+    },
+    {
+      "slug": "echo-diver-spark-conductor", "name": "Spark Conductor", "featType": "race", "level": 17, "requirements": "Echo-Diver 17",
+      "folder": "Echo-Diver", "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "description": "<p><em>Echo-Diver, Tier IV</em></p><p><strong>Spark Conductor.</strong> Your nerves are wired for Vestigial currents.</p><p>You have resistance to lightning and psychic damage.</p><p>You're harder to rattle by sudden surges of thought or power.</p><p>In Bad Eden play, you partially blunt Radiation and Spark fallout via flags.</p>",
+      "effects": [
+        { "_id": "be5eSparkConduct", "name": "Spark Conductor", "img": "icons/magic/lightning/bolt-strike-blue.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.traits.dr.value", "mode": 2, "value": "lightning", "priority": 20 },
+            { "key": "system.traits.dr.value", "mode": 2, "value": "psychic", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "echo-diver-amphibious-physiology", "name": "Amphibious Physiology", "featType": "race", "level": 17, "requirements": "Echo-Diver 17",
+      "folder": "Echo-Diver", "img": "icons/magic/water/wave-water-blue.webp",
+      "description": "<p><em>Echo-Diver, Tier IV</em></p><p><strong>Amphibious Physiology.</strong> Your body is adapted to the Vault's coolant reservoirs, deep-sea vent chambers, and chronoflux pools.</p><p>You can breathe both air and water.</p><p>You have resistance to fire and cold damage.</p><p>Your tissues adapt quickly to pressure shifts and temperature gradients, often giving you a subtle edge in harsh environments (handled narratively).</p>",
+      "effects": [
+        { "_id": "be5eAmphibious00", "name": "Amphibious Physiology", "img": "icons/magic/water/wave-water-blue.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.traits.dr.value", "mode": 2, "value": "fire", "priority": 20 },
+            { "key": "system.traits.dr.value", "mode": 2, "value": "cold", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+
+    {
+      "slug": "echo-diver-empyrean-traits", "name": "Empyrean Traits", "featType": "race", "level": 0, "requirements": "Echo-Diver (Empyrean)",
+      "folder": "Echo-Diver (Empyrean)", "folderParent": "Echo-Diver", "img": "icons/magic/air/wind-swirl-gray-blue.webp",
+      "description": "<p><em>\"Something is about to happen. Move.\"</em></p><p><strong>Stratospheric Resistance.</strong> You have resistance to lightning, thunder, and psychic damage. The sky takes its swing at you constantly. It misses.</p><p><strong>Weathered.</strong> You have advantage on Wisdom (Perception) checks that rely on hearing or air currents. You always know which way the wind is blowing. Always.</p><h4>Strategic Hooks (Empyrean)</h4><p><strong>OP Edge.</strong> Your faction gains +2 Intrigue OP and +1 Soft Power OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Open Sky / Plateau / High-Altitude hexes, your faction gains +1 initiative on all conflicts resolved in those hexes.</p><p><strong>Storm Warning.</strong> Once per Strategic Turn, when the GM reveals an incoming hazard or attack on your faction, you may force the GM to disclose one additional detail about it. You saw it coming.</p>"
+    },
+    {
+      "slug": "echo-diver-empyrean-stormread", "name": "Stormread", "featType": "race", "level": 0, "requirements": "Echo-Diver (Empyrean)",
+      "folder": "Echo-Diver (Empyrean)", "folderParent": "Echo-Diver", "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "activation": "bonus", "range": 30, "target": { "type": "ally", "count": 1 }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Echo-Diver (Empyrean), Tier I</em></p><p><em>\"It's not that you're faster. It's that the moment is slower, on your side of it.\"</em></p><p><strong>Stormread Initiative (passive).</strong> You have a +2 bonus to initiative rolls.</p><p><strong>Stormread (1/long rest).</strong> Bonus action — deliver a warning to one willing ally within 30 feet who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking opportunity attacks.</p>",
+      "effects": [
+        { "_id": "be5eStormread000", "name": "Stormread Initiative", "img": "icons/magic/lightning/bolt-strike-blue.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.attributes.init.bonus", "mode": 2, "value": "2", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+
+    {
+      "slug": "echo-diver-abyssal-traits", "name": "Abyssal Traits", "featType": "race", "level": 0, "requirements": "Echo-Diver (Abyssal)",
+      "folder": "Echo-Diver (Abyssal)", "folderParent": "Echo-Diver", "img": "icons/magic/water/orb-water-bubbles.webp",
+      "description": "<p><em>\"The deep remembers everything. You're how it talks about it.\"</em></p><p><strong>Deep-Current Resistance.</strong> You have resistance to cold, thunder, and psychic damage. The abyss has already tried all three on you. You filed a report.</p><p><strong>Still Water.</strong> You have advantage on Wisdom (Insight) checks and on saving throws against being frightened. You have already been more afraid than this, in a place with no surface.</p><h4>Strategic Hooks (Abyssal)</h4><p><strong>OP Edge.</strong> Your faction gains +2 Intrigue OP and +1 Faith OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Deep / Submerged / Sunken / Archive hexes, your faction's recon and investigation operations gain +2 on the success check.</p><p><strong>Retrocognitive Read.</strong> Once per Strategic Turn, you may ask the GM what the last major event was in a hex your faction does not control. Useful for reading an adjacent territory before you step into it.</p>",
+      "effects": [
+        { "_id": "be5eStillWater00", "name": "Still Water", "img": "icons/magic/water/orb-water-bubbles.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.skills.ins.roll.mode", "mode": 2, "value": "1", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "echo-diver-abyssal-tide-recall", "name": "Tide Recall", "featType": "race", "level": 0, "requirements": "Echo-Diver (Abyssal)",
+      "folder": "Echo-Diver (Abyssal)", "folderParent": "Echo-Diver", "img": "icons/magic/water/pseudopod-swirl-blue.webp",
+      "activation": "action", "range": { "units": "touch" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Echo-Diver (Abyssal), Tier I</em></p><p><em>\"The last thing anyone thinks before they drown stays in the water with them. You can hear it.\"</em></p><p><strong>Tide Recall (1/long rest).</strong> Touch a surface, creature, or object. The GM tells you one true thing from its recent past. The lookback window scales with your level — 1st to 4th: the last 24 hours · 5th to 10th: the last week · 11th to 16th: the last year · 17th and up: anything that ever happened to it. The GM may colour the answer; they may not lie.</p>"
+    },
+
+    {
+      "slug": "echo-diver-tellurian-traits", "name": "Tellurian Traits", "featType": "race", "level": 0, "requirements": "Echo-Diver (Tellurian)",
+      "folder": "Echo-Diver (Tellurian)", "folderParent": "Echo-Diver", "img": "icons/environment/wilderness/cave-entrance-mountain.webp",
+      "description": "<p><em>\"Stone doesn't hurry. You don't either.\"</em></p><p><strong>Bedrock Resistance.</strong> You have resistance to fire damage, poison damage, and one of bludgeoning, piercing, or slashing damage chosen at creation. The mountain has been set on fire, poisoned, and hit with very large rocks. It is still the mountain.</p><p><strong>Slow Blood.</strong> You have advantage on Constitution saving throws to maintain concentration on a power or manifestation. You do not age naturally while conscious.</p><h4>Strategic Hooks (Tellurian)</h4><p><strong>OP Edge.</strong> Your faction gains +2 Body OP and +1 Logistics OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Bedrock / Mountain / Stone-Founded hexes, your faction's defensive emplacements gain +1 on their defense track.</p><p><strong>Patience Tax.</strong> Once per Strategic Turn, your faction may declare a single long-held position and gain +2 on any check to hold that position this Strategic Turn. The stone does not have plans; it has presence.</p>"
+    },
+    {
+      "slug": "echo-diver-tellurian-stone-patience", "name": "Stone Patience", "featType": "race", "level": 0, "requirements": "Echo-Diver (Tellurian)",
+      "folder": "Echo-Diver (Tellurian)", "folderParent": "Echo-Diver", "img": "icons/magic/earth/barrier-stone-explosion-debris.webp",
+      "activation": "bonus", "duration": { "value": "1", "units": "round" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Echo-Diver (Tellurian), Tier I</em></p><p><em>\"You are harder to move than most people are willing to try for.\"</em></p><p><strong>Object Sense (passive).</strong> You passively know, without rolling, the approximate age and structural soundness of any object you touch.</p><p><strong>Stone Patience (1/long rest).</strong> Bonus action — anchor yourself until the start of your next turn. You cannot be moved against your will, knocked prone, or frightened. Forced-movement effects targeting you fail cleanly; the aggressor knows it.</p>"
+    }
+  ]
+}

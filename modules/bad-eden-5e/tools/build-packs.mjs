@@ -52,13 +52,20 @@ const BANNED = [
   /\bAshla\b/, /\bBendu\b/, /\bBogan\b/, /\blight side\b/i, /\bdark side\b/i, /\buniversal power/i,
   /\bconsular/i, /\bsentinel\b/i, /\bengineer\b/i, /\bsw5e\b/i, /Compendium\.sw5e/, /\bchapter \d+/i
 ];
+// RFI (fourththing) vocabulary that must not survive into D&D content either
+const RFI_TERMS = [
+  /\bSoma Break/i, /\bScene Break/i, /\bIntegrity\b/, /\breroll the lowest\b/i, /\breroll-lowest\b/i, /\breroll-highest\b/i, /\b\d+ squares?\b/i,
+  /\baptitude/i, /\bskill rank/i, /\bdefense check/i, /\b(Violence|Intrigue|Presence|Body|Mind|Soul) (check|defense|save)/,
+  /\b(VIO|INTR|PRE|BOD|MND|SOU)\b/, /\btier uses\b/i, /\+ ?tier\b/i, /\blevel of Stress\b/i, /\bStress damage\b/,
+  /\bkinetic damage\b/i, /\benergy damage\b/i, /Per-Use Ability/, /Click this feature/
+];
 const lintFindings = [];
 /** `{{uuid:<pack>:<slug>}}` inside prose → the deterministic compendium UUID. */
 const link = text => (text ?? "").replace(/\{\{uuid:([a-z]+):([a-z0-9-]+)\}\}/g, (_, p, s) => uuid(p, s));
 function lint(doc, text) {
   if (!text) return;
   const plain = text.replace(/<[^>]+>/g, " ");
-  for (const re of BANNED) {
+  for (const re of [...BANNED, ...RFI_TERMS]) {
     const m = plain.match(re);
     if (m) lintFindings.push(`${doc}: "${m[0]}"`);
   }
@@ -117,7 +124,7 @@ function featureDoc(f, folderId) {
       description: { value: link(f.description), chat: "" },
       source: { ...SOURCE_META },
       uses: usesFor(f),
-      type: { value: "class", subtype: f.subtype ?? "" },
+      type: { value: f.featType ?? "class", subtype: f.subtype ?? "" },
       requirements: f.requirements ?? "",
       prerequisites: { level: f.level ?? null, repeatable: false },
       properties: [], activities: activityFor(key, f), enchant: {}, identifier: f.slug
@@ -196,6 +203,34 @@ function powerDoc(p, folderId) {
       return { ...e, _id: eid, _key: `!items.effects!${id(key)}.${eid}` };
     }),
     flags: { [MOD]: { sw5e: p.sw5e ?? "" }, dnd5e: { riders: { activity: [], effect: [] } } },
+    _key: `!items!${id(key)}`
+  };
+}
+
+/* ── species (a dnd5e race item: one per heritage) ───────────────────────── */
+function raceDoc(r) {
+  const key = `species:${r.slug}`;
+  lint(`species ${r.slug}`, r.description);
+  lint(`species ${r.slug} (name)`, r.name);
+  const a = [];
+  a.push(adv(key, "size", "Size", { configuration: { sizes: r.sizes ?? ["med"] }, value: {}, level: 0, title: "", hint: r.sizeHint ?? "" }));
+  for (const [lvl, slugs] of Object.entries(r.features ?? {})) a.push(grant(key, Number(lvl), slugs, Number(lvl) === 0 ? "Traits" : `Tier ${["I", "II", "III", "IV"][[0, 5, 11, 17].indexOf(Number(lvl))] ?? lvl}`));
+  for (const t of r.traits ?? []) a.push(trait(key, `trait:${t.tag}`, t.level ?? 0, t.title ?? "", t.grants ?? [], t.choices ?? []));
+  const mv = r.movement ?? {};
+  const se = r.senses ?? {};
+  return {
+    _id: id(key), name: r.name, type: "race", img: r.img, folder: null, sort: 0,
+    system: {
+      description: { value: link(r.description), chat: "" },
+      source: { ...SOURCE_META },
+      identifier: r.identifier ?? r.slug,
+      advancement: a,
+      movement: { walk: mv.walk ?? 30, burrow: mv.burrow ?? null, climb: mv.climb ?? null, fly: mv.fly ?? null, swim: mv.swim ?? null, units: null, hover: !!mv.hover },
+      senses: { darkvision: se.darkvision ?? null, blindsight: se.blindsight ?? null, tremorsense: se.tremorsense ?? null, truesight: se.truesight ?? null, units: null, special: se.special ?? "" },
+      type: { value: r.creatureType ?? "humanoid", custom: "", subtype: r.subtype ?? "" }
+    },
+    effects: [],
+    flags: { [MOD]: { family: r.family ?? "", heritage: r.heritage ?? "" } },
     _key: `!items!${id(key)}`
   };
 }
@@ -306,8 +341,8 @@ function folderDoc(pack, name, parentName = null) {
 /* ── main ────────────────────────────────────────────────────────────────── */
 function main() {
   const files = readdirSync(CONTENT).filter(f => f.endsWith(".json")).sort();
-  const docs = { classes: [], subclasses: [], features: [], powers: [] };
-  const folders = { features: new Map(), powers: new Map() };
+  const docs = { classes: [], subclasses: [], features: [], powers: [], species: [] };
+  const folders = { features: new Map(), powers: new Map(), species: new Map() };
   const folderFor = (pack, name, parent) => {
     const k = `${parent ? parent + "/" : ""}${name}`;
     if (!folders[pack].has(k)) folders[pack].set(k, folderDoc(pack, name, parent));
@@ -318,6 +353,7 @@ function main() {
     const data = JSON.parse(readFileSync(join(CONTENT, file), "utf8"));
     for (const c of data.classes ?? []) docs.classes.push(classDoc(c));
     for (const s of data.subclasses ?? []) docs.subclasses.push(subclassDoc(s));
+    for (const r of data.races ?? []) { const d = raceDoc(r); if (r.family) d.folder = folderFor("species", r.family, null); docs.species.push(d); }
     for (const f of data.features ?? []) {
       const fid = f.folder ? folderFor("features", f.folder, f.folderParent ?? null) : null;
       if (f.folder && f.folderParent) folderFor("features", f.folderParent, null);
@@ -349,9 +385,15 @@ function main() {
     }
   }
   // every @UUID link in prose must resolve to a doc we build
-  const all = new Set([...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers].map(d => d._id));
+  const everything = [...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers, ...docs.species];
+  for (const d of docs.species) {
+    for (const a of d.system.advancement) for (const r of a.configuration?.items ?? []) {
+      if (r.uuid.includes(".features.") && !have.has(r.uuid.split(".").pop())) missing.push(`${d.name} → ${a.title} L${a.level}: ${r.uuid}`);
+    }
+  }
+  const all = new Set(everything.map(d => d._id));
   const proseMissing = [];
-  for (const d of [...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers]) {
+  for (const d of everything) {
     for (const m of d.system.description.value.matchAll(/@UUID\[Compendium\.bad-eden-5e\.\w+\.Item\.(\w+)\]/g)) {
       if (!all.has(m[1])) proseMissing.push(`${d.name} (prose link): ${m[0]}`);
     }

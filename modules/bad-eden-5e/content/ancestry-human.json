@@ -1,0 +1,184 @@
+{
+  "_about": "Human — the D&D version of the Bad Eden ancestry, converted from the RFI original (bbttcc-master-content.ancestries). Four heritages as species items: Neanderthal, Florensis, Cro-Magnon, Denisovan. Text is Dave's; only the RFI mechanics changed (rulebook in the build notes). Built by tools/build-packs.mjs.",
+  "_unsure": [
+    "Tier order per heritage (Tier I = the heritage card's grant): Neanderthal I Thick-Boned, II Hearth-Reader, III Protective Instinct, IV Old Hunt. Florensis I Little But Mighty, II Burrow Memory, III Opportunist, IV Living Folklore. Cro-Magnon (the card's Tier I grant was a dead UUID) I Coalition Tongue, II Ritual Memory, III Pattern-Mind, IV First Fire. Denisovan as the card itself lists: I High-Altitude Blood, II Stone-Singer, III Ancient Logic, IV Peak-Anchor.",
+    "Stubborn Spark / Adaptive: the RFI text says 'fail a check' and the engine trigger says 'on-save-fail'; written as 'fail an ability check or saving throw'.",
+    "Coalition Tongue: '+1 rank (max rank 5)' has no 5E analogue; written as +1d4 to the roll. Uses: the item's recovery field said short rest but the text says Soma Break; the text wins (long rest).",
+    "Coalition Instinct (Cro-Magnon heritage trait): 'the ally also recovers 1 point of Stress' — Stress is a points track in RFI, not levels; written as temporary hit points equal to your proficiency bonus.",
+    "First Fire: 'against being Shaken or Stressed' → frightened, or gaining a level of exhaustion; the banked reroll-lowest → one banked advantage on a d20 test.",
+    "Thick-Boned: thermal resistance → fire and cold (AE). Clan Memory's Insight-or-Athletics proficiency is text only (a player choice).",
+    "Emotion Emulator: the Stealth + Insight proficiency is an AE (skill value upgraded to 1); the 'expertise if already proficient' half is text only.",
+    "Hearth-Reader and Burrow Memory carry unconditional advantage AEs (Insight / Athletics); every conditional advantage is text.",
+    "Human has no Strategic Hooks block in the source; none written."
+  ],
+
+  "races": [
+    {
+      "slug": "human-neanderthal", "identifier": "human-neanderthal", "name": "Human (Neanderthal)", "family": "Human", "heritage": "Neanderthal",
+      "img": "icons/environment/people/infantry.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Human",
+      "movement": { "walk": 30 }, "senses": { "special": "Lineage Memory (ancient human adaptations)." },
+      "features": { "0": ["human-stubborn-spark", "human-neanderthal-heritage", "human-thick-boned"], "5": ["human-hearth-reader"], "11": ["human-protective-instinct"], "17": ["human-old-hunt"] },
+      "description": "<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Human Lineage.</strong> The branch that kept the strength. Heavy bone, deep lung, the ancestor who decided that an ice age is a problem you out-mass.</p><p><em>“The map says ‘stop.’ You keep walking. Slower. Heavier. The map gives up first.”</em></p><p><strong>Neanderthal.</strong> You are the broad lineage that survived by being the thing the cold couldn’t finish.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid.</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Strength — expressed primarily through Tier powers. No fixed score bonus; your background handles increases.</li><li><strong>Endurance Frame.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, and lift.</li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain @UUID[{{uuid:features:human-stubborn-spark}}]{Stubborn Spark} (Adaptive, Tenacious, Lineage Memory).</p><h3>Neanderthal Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5th level), Tier III (11th), Tier IV (17th).</p><ul><li><strong>Tier I.</strong> @UUID[{{uuid:features:human-thick-boned}}]{Thick-Boned}</li><li><strong>Tier II.</strong> @UUID[{{uuid:features:human-hearth-reader}}]{Hearth-Reader}</li><li><strong>Tier III.</strong> @UUID[{{uuid:features:human-protective-instinct}}]{Protective Instinct}</li><li><strong>Tier IV.</strong> @UUID[{{uuid:features:human-old-hunt}}]{Old Hunt}</li></ul>"
+    },
+    {
+      "slug": "human-florensis", "identifier": "human-florensis", "name": "Human (Florensis)", "family": "Human", "heritage": "Florensis",
+      "img": "icons/environment/people/commoner.webp", "sizes": ["sm", "med"], "sizeHint": "Small or Medium (choose at creation)", "creatureType": "humanoid", "subtype": "Human",
+      "movement": { "walk": 30 }, "senses": { "special": "Lineage Memory (ancient human adaptations)." },
+      "features": { "0": ["human-stubborn-spark", "human-florensis-heritage", "human-little-but-mighty"], "5": ["human-burrow-memory"], "11": ["human-opportunist"], "17": ["human-living-folklore"] },
+      "description": "<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Human Lineage.</strong> The branch that kept the reach. Small frames, far horizons, the ancestor who learned that an island is just a problem you can outlast.</p><p><em>“The map says ‘stop.’ You keep walking.”</em></p><p><strong>Florensis.</strong> You are the diminutive lineage that survived by being the thing the predators didn’t bother to chase.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid.</li><li><strong>Size.</strong> Small or Medium (choose at creation).</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Dexterity — expressed primarily through Tier powers. No fixed score bonus; your background handles increases.</li><li><strong>Little But Persistent.</strong> Your speed is not reduced by being Small. You can move through the space of any creature larger than you.</li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain @UUID[{{uuid:features:human-stubborn-spark}}]{Stubborn Spark} (Adaptive, Tenacious, Lineage Memory).</p><h3>Florensis Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5th level), Tier III (11th), Tier IV (17th).</p><ul><li><strong>Tier I.</strong> @UUID[{{uuid:features:human-little-but-mighty}}]{Little But Mighty}</li><li><strong>Tier II.</strong> @UUID[{{uuid:features:human-burrow-memory}}]{Burrow Memory}</li><li><strong>Tier III.</strong> @UUID[{{uuid:features:human-opportunist}}]{Opportunist}</li><li><strong>Tier IV.</strong> @UUID[{{uuid:features:human-living-folklore}}]{Living Folklore}</li></ul>"
+    },
+    {
+      "slug": "human-cro-magnon", "identifier": "human-cro-magnon", "name": "Human (Cro-Magnon)", "family": "Human", "heritage": "Cro-Magnon",
+      "img": "icons/environment/people/group.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Human",
+      "movement": { "walk": 30 }, "senses": { "special": "Lineage Memory (ancient human adaptations)." },
+      "features": { "0": ["human-stubborn-spark", "human-cro-magnon-heritage", "human-coalition-tongue"], "5": ["human-ritual-memory"], "11": ["human-pattern-mind"], "17": ["human-first-fire"] },
+      "description": "<p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Cro-Magnon).</strong> You are not a fantasy human. You are the cognitive, symbolic, cooperative inheritance of the lineage that first painted ancestors on cave walls, buried its dead with flowers, and traded ochre across a continent it had no map for.</p><p>Where Neanderthal is strength and Florensis is reach, Cro-Magnon is pattern. Language, ritual, coalition. You are the human branch that kept explaining things until the explanation started working.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid.</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Intelligence or Charisma — expressed through Tier powers. No fixed score bonus; your background handles increases.</li><li><strong>Coalition Instinct.</strong> When you use the Help action on an ally's check and they succeed, the ally also gains temporary hit points equal to your proficiency bonus.</li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain @UUID[{{uuid:features:human-stubborn-spark}}]{Stubborn Spark} (Adaptive, Tenacious, Lineage Memory).</p><h3>Cro-Magnon Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5th level), Tier III (11th), Tier IV (17th). Cro-Magnon powers emphasize: Symbolic Thought (ritual and language sensitivity), Coalition Instinct (cooperation bonuses with allies), Tool Mind (improvisational tool use), and Narrative Memory (lore retention that persists across generations).</p><ul><li><strong>Tier I.</strong> @UUID[{{uuid:features:human-coalition-tongue}}]{Coalition Tongue}</li><li><strong>Tier II.</strong> @UUID[{{uuid:features:human-ritual-memory}}]{Ritual Memory}</li><li><strong>Tier III.</strong> @UUID[{{uuid:features:human-pattern-mind}}]{Pattern-Mind}</li><li><strong>Tier IV.</strong> @UUID[{{uuid:features:human-first-fire}}]{First Fire}</li></ul>"
+    },
+    {
+      "slug": "human-denisovan", "identifier": "human-denisovan", "name": "Human (Denisovan)", "family": "Human", "heritage": "Denisovan",
+      "img": "icons/environment/wilderness/cave-entrance-mountain.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Human",
+      "movement": { "walk": 30 }, "senses": { "special": "Lineage Memory (ancient human adaptations); Stone-Sense (tremorsense 10 ft on stone or packed earth)." },
+      "features": { "0": ["human-stubborn-spark", "human-high-altitude-blood"], "5": ["human-stone-singer"], "11": ["human-ancient-logic"], "17": ["human-peak-anchor"] },
+      "description": "<p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid.</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Constitution — expressed through Tier powers. No fixed score bonus; your background handles increases.</li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain @UUID[{{uuid:features:human-stubborn-spark}}]{Stubborn Spark} (Adaptive, Tenacious, Lineage Memory).</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5th level), Tier III (11th), Tier IV (17th).</p><ul><li><strong>Tier I.</strong> @UUID[{{uuid:features:human-high-altitude-blood}}]{High-Altitude Blood}</li><li><strong>Tier II.</strong> @UUID[{{uuid:features:human-stone-singer}}]{Stone-Singer}</li><li><strong>Tier III.</strong> @UUID[{{uuid:features:human-ancient-logic}}]{Ancient Logic}</li><li><strong>Tier IV.</strong> @UUID[{{uuid:features:human-peak-anchor}}]{Peak-Anchor}</li></ul>"
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "human-stubborn-spark", "name": "Human: Stubborn Spark", "featType": "race", "level": 0, "requirements": "Human",
+      "folder": "Human", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> Once per long rest, when you fail an ability check or saving throw, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 hit point, you have advantage on one d20 test of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>"
+    },
+    {
+      "slug": "human-neanderthal-heritage", "name": "Human Heritage: Neanderthal", "featType": "race", "level": 0, "requirements": "Human (Neanderthal)",
+      "folder": "Human (Neanderthal)", "folderParent": "Human", "img": "icons/environment/people/infantry.webp",
+      "description": "<p><strong>Human Lineage.</strong> The branch that kept the strength. Heavy bone, deep lung, the ancestor who decided that an ice age is a problem you out-mass.</p><p><em>“The map says ‘stop.’ You keep walking. Slower. Heavier. The map gives up first.”</em></p><p><strong>Neanderthal.</strong> You are the broad lineage that survived by being the thing the cold couldn’t finish.</p><p><strong>Endurance Frame.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, and lift.</p>"
+    },
+    {
+      "slug": "human-thick-boned", "name": "Human (Neanderthal): Thick-Boned", "featType": "race", "level": 0, "requirements": "Human (Neanderthal)",
+      "folder": "Human (Neanderthal)", "folderParent": "Human", "img": "icons/magic/control/buff-strength-muscle-damage-orange.webp",
+      "description": "<p><em>“You are built for cold, conflict, and clan.”</em></p><p><strong>Thick-Boned.</strong> You have resistance to fire and cold damage, and you have advantage on saving throws against being knocked prone.</p><p><strong>Clan Memory.</strong> You gain proficiency in Insight or Athletics.</p>",
+      "effects": [
+        { "_id": "be5eThickBoned00", "name": "Thick-Boned", "img": "icons/magic/control/buff-strength-muscle-damage-orange.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.traits.dr.value", "mode": 2, "value": "fire", "priority": 20 },
+            { "key": "system.traits.dr.value", "mode": 2, "value": "cold", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "human-hearth-reader", "name": "Human (Neanderthal): Hearth-Reader", "featType": "race", "level": 5, "requirements": "Human (Neanderthal) 5",
+      "folder": "Human (Neanderthal)", "folderParent": "Human", "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "description": "<p><em>“You read a room the way others read a map.”</em></p><p><strong>Hearth-Reader.</strong> You have advantage on Insight checks, and you can’t be surprised by social betrayal if you have spoken to the betrayer for at least 1 minute (GM adjudicates).</p>",
+      "effects": [
+        { "_id": "be5eHearthReader", "name": "Hearth-Reader", "img": "icons/magic/perception/third-eye-blue-red.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.skills.ins.roll.mode", "mode": 2, "value": "1", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "human-protective-instinct", "name": "Human (Neanderthal): Protective Instinct", "featType": "race", "level": 11, "requirements": "Human (Neanderthal) 11",
+      "folder": "Human (Neanderthal)", "folderParent": "Human", "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "activation": "reaction", "condition": "an ally within 10 feet of you is hit", "range": 10, "target": { "type": "ally", "count": 1 }, "uses": { "max": "@prof", "per": "lr" }, "activity": "utility", "roll": "1d6 + @prof",
+      "description": "<p><em>“Someone moves toward your people. You move first.”</em></p><p><strong>Protective Instinct.</strong> When an ally within 10 feet of you is hit, you can use your reaction to reduce the damage by 1d6 + your proficiency bonus. You can use this feature a number of times equal to your proficiency bonus, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "human-old-hunt", "name": "Human (Neanderthal): Old Hunt", "featType": "race", "level": 17, "requirements": "Human (Neanderthal) 17",
+      "folder": "Human (Neanderthal)", "folderParent": "Human", "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "activation": "action", "target": { "type": "creature", "count": 1 }, "duration": { "value": "1", "units": "hour" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“Endurance predation, but metaphysical.”</em></p><p><strong>Old Hunt.</strong> Once per long rest, as an action, choose a target you can see and mark them for 1 hour. You always know the direction to them, and once per turn when you hit them you deal extra damage equal to your proficiency bonus.</p>"
+    },
+
+    {
+      "slug": "human-florensis-heritage", "name": "Human Heritage: Florensis", "featType": "race", "level": 0, "requirements": "Human (Florensis)",
+      "folder": "Human (Florensis)", "folderParent": "Human", "img": "icons/environment/people/commoner.webp",
+      "description": "<p><strong>Human Lineage.</strong> The branch that kept the reach. Small frames, far horizons, the ancestor who learned that an island is just a problem you can outlast.</p><p><em>“The map says ‘stop.’ You keep walking.”</em></p><p><strong>Florensis.</strong> You are the diminutive lineage that survived by being the thing the predators didn’t bother to chase.</p><p><strong>Little But Persistent.</strong> Your speed is not reduced by being Small. You can move through the space of any creature larger than you.</p>"
+    },
+    {
+      "slug": "human-little-but-mighty", "name": "Human (Florensis): Little But Mighty", "featType": "race", "level": 0, "requirements": "Human (Florensis)",
+      "folder": "Human (Florensis)", "folderParent": "Human", "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "activation": "bonus",
+      "description": "<p><em>“Small is not weak. Small is opportunity.”</em></p><p><strong>Little But Mighty.</strong> You may choose to be Small. You don’t suffer penalties for using weapons sized for Medium creatures.</p><p><strong>Hide In Plain Sight.</strong> If you do not move on your turn, you can take the Hide action as a bonus action.</p>"
+    },
+    {
+      "slug": "human-burrow-memory", "name": "Human (Florensis): Burrow Memory", "featType": "race", "level": 5, "requirements": "Human (Florensis) 5",
+      "folder": "Human (Florensis)", "folderParent": "Human", "img": "icons/environment/wilderness/cave-entrance.webp",
+      "description": "<p><em>“You can smell safe paths.”</em></p><p><strong>Burrow Memory.</strong> You have advantage on Athletics checks, and you ignore difficult terrain in caves, tunnels, and ruins.</p>",
+      "effects": [
+        { "_id": "be5eBurrowMemory", "name": "Burrow Memory", "img": "icons/environment/wilderness/cave-entrance.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.skills.ath.roll.mode", "mode": 2, "value": "1", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "human-opportunist", "name": "Human (Florensis): Opportunist", "featType": "race", "level": 11, "requirements": "Human (Florensis) 11",
+      "folder": "Human (Florensis)", "folderParent": "Human", "img": "icons/skills/melee/blade-tips-double-blue.webp",
+      "description": "<p><em>“You don’t fight fair. You fight alive.”</em></p><p><strong>Opportunist.</strong> You have advantage on attack rolls against distracted foes (GM: a target is distracted if it is engaged by an ally or suffering a condition).</p>"
+    },
+    {
+      "slug": "human-living-folklore", "name": "Human (Florensis): Living Folklore", "featType": "race", "level": 17, "requirements": "Human (Florensis) 17",
+      "folder": "Human (Florensis)", "folderParent": "Human", "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“People tell stories about you and then you do THIS to them.”</em></p><p><strong>Living Folklore.</strong> Once per long rest, as an action, you step sideways in the story for 1 minute: you cannot be targeted by opportunity attacks. Once per turn during the minute, you can use your reaction to force an enemy's attack to miss you by “being somewhere else in the story.”</p>"
+    },
+
+    {
+      "slug": "human-cro-magnon-heritage", "name": "Human Heritage: Cro-Magnon", "featType": "race", "level": 0, "requirements": "Human (Cro-Magnon)",
+      "folder": "Human (Cro-Magnon)", "folderParent": "Human", "img": "icons/environment/people/group.webp",
+      "description": "<p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Cro-Magnon).</strong> You are not a fantasy human. You are the cognitive, symbolic, cooperative inheritance of the lineage that first painted ancestors on cave walls, buried its dead with flowers, and traded ochre across a continent it had no map for.</p><p>Where Neanderthal is strength and Florensis is reach, Cro-Magnon is pattern. Language, ritual, coalition. You are the human branch that kept explaining things until the explanation started working.</p><p><strong>Coalition Instinct.</strong> When you use the Help action on an ally's check and they succeed, the ally also gains temporary hit points equal to your proficiency bonus.</p>"
+    },
+    {
+      "slug": "human-coalition-tongue", "name": "Human (Cro-Magnon): Coalition Tongue", "featType": "race", "level": 0, "requirements": "Human (Cro-Magnon)",
+      "folder": "Human (Cro-Magnon)", "folderParent": "Human", "img": "icons/skills/social/diplomacy-unity-alliance.webp",
+      "activation": "bonus", "range": 30, "target": { "type": "ally", "count": 1 }, "duration": { "value": "1", "units": "round" }, "uses": { "max": "1", "per": "lr" }, "activity": "utility", "roll": "1d4",
+      "description": "<p><em>“The first thing worth defending was a circle of people who had decided, against all sense, to defend each other.”</em></p><p><strong>Coalition Tongue.</strong> Once per long rest, as a bonus action, choose one ally within 30 feet who can hear and understand you. They add 1d4 to their next attack roll, ability check, or saving throw made before the start of your next turn. Name the thing you said, even if it was wordless.</p><p><strong>Symbolic Memory.</strong> After spending 10 minutes in any inhabited or formerly-inhabited space, ask the GM one of: Who lived here? · What did they fear? · What did they leave? The answer is at least one truth, even if the GM colours it.</p>"
+    },
+    {
+      "slug": "human-ritual-memory", "name": "Human (Cro-Magnon): Ritual Memory", "featType": "race", "level": 5, "requirements": "Human (Cro-Magnon) 5",
+      "folder": "Human (Cro-Magnon)", "folderParent": "Human", "img": "icons/skills/social/diplomacy-offering-ritual.webp",
+      "description": "<p><em>“The first ritual was just the second time anyone agreed to do something on purpose.”</em></p><p><strong>Ritual Memory.</strong> During a long rest, you can lead your party in a 30-minute coalition ritual — a song, a meal, a story, a marking. At the end of the rest, each willing creature who participated gains a single d4 they may add to one ability check, attack roll, or saving throw before the next long rest. Once the d4 is used or the next long rest begins, it is spent.</p><p><strong>Coalition Calm.</strong> While you are within 5 feet of an ally, that ally has advantage on saving throws against being frightened.</p>"
+    },
+    {
+      "slug": "human-pattern-mind", "name": "Human (Cro-Magnon): Pattern-Mind", "featType": "race", "level": 11, "requirements": "Human (Cro-Magnon) 11",
+      "folder": "Human (Cro-Magnon)", "folderParent": "Human", "img": "icons/magic/perception/orb-eye-scrying.webp",
+      "activation": "minute", "activationValue": 1, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“The first time anyone drew an antelope on a wall, they were already two thoughts ahead of the antelope.”</em></p><p><strong>Pattern-Mind.</strong> Once per long rest, spend 1 minute observing a situation — a battle line, a marketplace, a council, a storm system, a faction's public posture — then ask the GM one of: “What is the actual goal here?” · “What is being deliberately hidden?” · “Who is about to break first?” The GM gives at least one true answer. They may colour it; they may not lie about it.</p>"
+    },
+    {
+      "slug": "human-first-fire", "name": "Human (Cro-Magnon): First Fire", "featType": "race", "level": 17, "requirements": "Human (Cro-Magnon) 17",
+      "folder": "Human (Cro-Magnon)", "folderParent": "Human", "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
+      "activation": "minute", "activationValue": 10, "duration": { "value": "1", "units": "hour" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“The first thing worth defending was the circle of people who decided, against all sense, to keep each other warm through the night.”</em></p><p><strong>First Fire.</strong> Once per long rest, spend 10 minutes building a coalition fire — a real one, not a metaphor. While it burns and creatures shelter within 30 feet (up to 1 hour, longer if tended):</p><ul><li>Friendly creatures have advantage on saving throws against being frightened or gaining a level of exhaustion.</li><li>After a long rest taken at the fire, each friendly creature present banks one advantage they may spend on any d20 test before the next long rest.</li><li>The first time any hostile creature crosses within 30 feet, every friendly creature there knows it.</li><li>The fire counts as a defensible camp narratively.</li></ul>"
+    },
+
+    {
+      "slug": "human-high-altitude-blood", "name": "Human (Denisovan): High-Altitude Blood", "featType": "race", "level": 0, "requirements": "Human (Denisovan)",
+      "folder": "Human (Denisovan)", "folderParent": "Human", "img": "icons/environment/wilderness/cave-entrance-mountain.webp",
+      "description": "<p><em>“You remember mountains that no longer exist.”</em></p><p><strong>High-Altitude Blood.</strong> You have resistance to poison damage, and you have advantage on saving throws against poison and environmental suffocation. You can hold your breath for 10 minutes.</p><p><strong>Stone-Sense.</strong> You have tremorsense out to 10 feet while standing on stone or packed earth.</p>",
+      "effects": [
+        { "_id": "be5eHighAltBlood", "name": "High-Altitude Blood", "img": "icons/environment/wilderness/cave-entrance-mountain.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.traits.dr.value", "mode": 2, "value": "poison", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "human-stone-singer", "name": "Human (Denisovan): Stone-Singer", "featType": "race", "level": 5, "requirements": "Human (Denisovan) 5",
+      "folder": "Human (Denisovan)", "folderParent": "Human", "img": "icons/tools/smithing/hammer-sledge-steel-grey.webp",
+      "activation": "minute", "activationValue": 1, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“Walls are stories. You can read them.”</em></p><p><strong>Stone-Singer.</strong> You gain proficiency with mason's tools. Once per long rest, you can reinforce a structure or barrier over 1 minute, granting it temporary durability (GM adjudicates).</p>"
+    },
+    {
+      "slug": "human-ancient-logic", "name": "Human (Denisovan): Ancient Logic", "featType": "race", "level": 11, "requirements": "Human (Denisovan) 11",
+      "folder": "Human (Denisovan)", "folderParent": "Human", "img": "icons/magic/light/orb-lightbulb-gray.webp",
+      "description": "<p><em>“You solve geometry the way others solve feelings.”</em></p><p><strong>Ancient Logic.</strong> You have advantage on Investigation and Arcana checks involving structures, mechanisms, or ruins. When you succeed on such a check, you can share the insight to grant an ally advantage on one roll, once before your next short rest.</p>"
+    },
+    {
+      "slug": "human-peak-anchor", "name": "Human (Denisovan): Peak-Anchor", "featType": "race", "level": 17, "requirements": "Human (Denisovan) 17",
+      "folder": "Human (Denisovan)", "folderParent": "Human", "img": "icons/magic/earth/barrier-stone-explosion-debris.webp",
+      "activation": "reaction", "condition": "you or an ally within 30 feet would be moved or teleported against your will", "range": 30, "target": { "type": "creature", "count": 1 }, "uses": { "max": "1", "per": "lr" }, "activity": "damage", "damage": [{ "formula": "@prof", "types": ["psychic"] }],
+      "description": "<p><em>“Gravity listens to you.”</em></p><p><strong>Peak-Anchor.</strong> Once per long rest, when you or an ally within 30 feet would be moved or teleported against your will, you can use your reaction to negate it. The effect fails, and the aggressor takes psychic backlash equal to your proficiency bonus.</p>"
+    }
+  ]
+}

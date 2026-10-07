@@ -1,0 +1,147 @@
+{
+  "_about": "Menhirkin — the Hex-Giants — for D&D. Three heritages (Igneous, Sedimentary, Metamorphic) as separate species items sharing the family core (The Land Stood Up), the family Strategic Hooks, and the family tier ladder. Text is Dave's own from the RFI ancestries pack; only RFI mechanics were converted (squares → feet, Soma Break → long rest, reroll-lowest → advantage, faculties → abilities, kinetic → b/p/s). Built by tools/build-packs.mjs.",
+  "_unsure": [
+    "Tier ladder assignment (the RFI data has no explicit tiers): Tier I = the heritage signature feat (Magma Memory / Read the Strata / The Thing You Were) at creation; Tier II (5th) = Stonebound + Gravity Well; Tier III (11th) = Living Rampart + Stone Memory; Tier IV (17th) = Heartstone. Gravity Well and Stone Memory are the two 'small bonus' feats, paired with the bigger feat of their theme rather than dropped.",
+    "The family core uses the v1.1 heritage-card text (The Land Stood Up: Stone Soul, Hex Recognition, Slow to Wear, Heavy Presence). The older species-doc core (Heartstone passive, Land Memory, Living Rampart as creation grants) is superseded; Land Memory (1/long rest, touch a surface) is folded away because Hex Recognition does the same thing once per short rest.",
+    "Strategic Hooks: the species doc's fuller version (+2 Non-Lethal / +1 Violence, Fortify Hex, Logistics Frame, Sentient Land) is used over the Ancestry Features copy (+1/+1). 'Strategic Turn' became 'Turn' (the faction layer's own word) to pass the RFI lint.",
+    "Igneous: the RFI engine flags grant fire resistance on both the heritage and Magma Memory though neither text says so; the Igneous Traits feature now carries the resistance as a species Trait grant (dr:fire) and the text says it in one sentence.",
+    "Heartstone (Tier IV): '+1 bonus to Body' → Constitution +1 (AE); 'small general bonus to checks' → +1 to ability checks (AE); 'resistance to kinetic damage' → bludgeoning, piercing, slashing (AE); the Radiation-intake line stays as flag-driven text.",
+    "Stone Memory: 'small bonus to Perception and Insight' → +1 to those checks and to the passive scores (AEs).",
+    "Gravity Well's text is deliberately loose in the source ('handled via flags'); it is kept as written with no mechanics invented.",
+    "Exploding dice (Heat Memory, Magma Memory) are kept as a Bad Eden rule: on a 10 the d10 is rolled again and added.",
+    "Sedimentary 'Old Layer Resilience' choice (poison / qliphothic / one energy flavor) is a species Trait choice among dr:poison, dr:qliphothic, dr:fire, dr:cold, dr:lightning — qliphothic resolves because the module registers the damage type.",
+    "Metamorphic 'Pressure Remade' daily roll: (1) +1 AC, (2) resistance to b/p/s, (3) proficiency in one skill, (4) advantage on Constitution checks vs prone/grapple — text only, chosen at each long rest.",
+    "The Thing You Were: 'Burning' is kept (Bad Eden/2024 hazard); 'low-light vision 12 squares' → darkvision 60 ft (+30 ft if you already have it)."
+  ],
+
+  "races": [
+    {
+      "slug": "menhirkin-igneous", "identifier": "menhirkin-igneous", "name": "Menhirkin (Igneous)", "family": "Menhirkin", "heritage": "Igneous",
+      "img": "icons/magic/earth/barrier-lava-stone-orange.webp", "sizes": ["med"], "sizeHint": "Medium, but you count as Large for carrying capacity and for the size of creatures you can shove or grapple.",
+      "creatureType": "humanoid", "subtype": "Menhirkin",
+      "movement": { "walk": 30 }, "senses": { "tremorsense": 10, "special": "Tremorsense 10 ft while standing on natural ground." },
+      "traits": [{ "tag": "dr", "title": "Igneous Resistance", "grants": ["dr:fire"] }],
+      "features": { "0": ["menhirkin-the-land-stood-up", "menhirkin-strategic-hooks", "menhirkin-igneous-traits", "menhirkin-igneous-magma-memory"], "5": ["menhirkin-stonebound", "menhirkin-gravity-well"], "11": ["menhirkin-living-rampart", "menhirkin-stone-memory"], "17": ["menhirkin-heartstone"] },
+      "description": "<p><em>\"The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.\"</em></p><p>You are not descended from the land. You are the land. A hex decided to become a person and the person is you. The standing stones on the ridge are distant cousins. The bedrock under the bunker is a grandparent. Mortals call you a Hex-Giant. You don't correct them.</p><p><em>\"Some stone was born yelling.\"</em></p><p><strong>Menhirkin (Igneous).</strong> You are new rock. The Shattering was your birthday. The land that stood up and began answering chose you because it wanted a mouth that remembered being molten. You run hot, you cool slow, and you are, structurally, still furious about something.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium, but you count as Large for carrying capacity and for the size of creatures you can shove or grapple.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Tremorsense.</strong> 10 feet while you stand on natural ground.</li><li><strong>Ancestry Lean.</strong> Strength. Menhirkin grant no fixed ability score increases; your background handles those. Your heritage leans toward Strength in fiction and through your Tier features.</li></ul><h3>Features</h3><p><strong>At creation:</strong> @UUID[{{uuid:features:menhirkin-the-land-stood-up}}]{The Land Stood Up}, @UUID[{{uuid:features:menhirkin-igneous-traits}}]{Igneous Traits}, @UUID[{{uuid:features:menhirkin-igneous-magma-memory}}]{Magma Memory} (Tier I), @UUID[{{uuid:features:menhirkin-strategic-hooks}}]{Strategic Hooks (Menhirkin)}.</p><p><strong>5th level (Tier II):</strong> @UUID[{{uuid:features:menhirkin-stonebound}}]{Stonebound}, @UUID[{{uuid:features:menhirkin-gravity-well}}]{Gravity Well}.</p><p><strong>11th level (Tier III):</strong> @UUID[{{uuid:features:menhirkin-living-rampart}}]{Living Rampart}, @UUID[{{uuid:features:menhirkin-stone-memory}}]{Stone Memory}.</p><p><strong>17th level (Tier IV):</strong> @UUID[{{uuid:features:menhirkin-heartstone}}]{Heartstone}.</p>"
+    },
+    {
+      "slug": "menhirkin-sedimentary", "identifier": "menhirkin-sedimentary", "name": "Menhirkin (Sedimentary)", "family": "Menhirkin", "heritage": "Sedimentary",
+      "img": "icons/magic/earth/barrier-stone-brown-green.webp", "sizes": ["med"], "sizeHint": "Medium, but you count as Large for carrying capacity and for the size of creatures you can shove or grapple.",
+      "creatureType": "humanoid", "subtype": "Menhirkin",
+      "movement": { "walk": 30 }, "senses": { "tremorsense": 10, "special": "Tremorsense 10 ft while standing on natural ground." },
+      "traits": [{ "tag": "dr", "title": "Old Layer Resilience", "grants": [], "choices": [{ "count": 1, "pool": ["dr:poison", "dr:qliphothic", "dr:fire", "dr:cold", "dr:lightning"] }] }],
+      "features": { "0": ["menhirkin-the-land-stood-up", "menhirkin-strategic-hooks", "menhirkin-sedimentary-traits", "menhirkin-sedimentary-read-the-strata"], "5": ["menhirkin-stonebound", "menhirkin-gravity-well"], "11": ["menhirkin-living-rampart", "menhirkin-stone-memory"], "17": ["menhirkin-heartstone"] },
+      "description": "<p><em>\"The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.\"</em></p><p>You are not descended from the land. You are the land. A hex decided to become a person and the person is you. The standing stones on the ridge are distant cousins. The bedrock under the bunker is a grandparent. Mortals call you a Hex-Giant. You don't correct them.</p><p><em>\"The old stones remember what the new ones are pretending to be.\"</em></p><p><strong>Menhirkin (Sedimentary).</strong> You are laid-down stone. Every year of every century of every epoch stacked on top of the year before, pressed into a single body. Other Menhirkin are events. You are a record. The ground under the bunker may be a grandparent to other Menhirkin. It's your diary.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium, but you count as Large for carrying capacity and for the size of creatures you can shove or grapple.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Tremorsense.</strong> 10 feet while you stand on natural ground.</li><li><strong>Ancestry Lean.</strong> Intelligence. Menhirkin grant no fixed ability score increases; your background handles those. Your heritage leans toward Intelligence in fiction and through your Tier features.</li></ul><h3>Features</h3><p><strong>At creation:</strong> @UUID[{{uuid:features:menhirkin-the-land-stood-up}}]{The Land Stood Up}, @UUID[{{uuid:features:menhirkin-sedimentary-traits}}]{Sedimentary Traits}, @UUID[{{uuid:features:menhirkin-sedimentary-read-the-strata}}]{Read the Strata} (Tier I), @UUID[{{uuid:features:menhirkin-strategic-hooks}}]{Strategic Hooks (Menhirkin)}.</p><p><strong>5th level (Tier II):</strong> @UUID[{{uuid:features:menhirkin-stonebound}}]{Stonebound}, @UUID[{{uuid:features:menhirkin-gravity-well}}]{Gravity Well}.</p><p><strong>11th level (Tier III):</strong> @UUID[{{uuid:features:menhirkin-living-rampart}}]{Living Rampart}, @UUID[{{uuid:features:menhirkin-stone-memory}}]{Stone Memory}.</p><p><strong>17th level (Tier IV):</strong> @UUID[{{uuid:features:menhirkin-heartstone}}]{Heartstone}.</p>"
+    },
+    {
+      "slug": "menhirkin-metamorphic", "identifier": "menhirkin-metamorphic", "name": "Menhirkin (Metamorphic)", "family": "Menhirkin", "heritage": "Metamorphic",
+      "img": "icons/magic/earth/orb-stone-smoke-teal.webp", "sizes": ["med"], "sizeHint": "Medium, but you count as Large for carrying capacity and for the size of creatures you can shove or grapple.",
+      "creatureType": "humanoid", "subtype": "Menhirkin",
+      "movement": { "walk": 30 }, "senses": { "tremorsense": 10, "special": "Tremorsense 10 ft while standing on natural ground." },
+      "features": { "0": ["menhirkin-the-land-stood-up", "menhirkin-strategic-hooks", "menhirkin-metamorphic-traits", "menhirkin-metamorphic-the-thing-you-were"], "5": ["menhirkin-stonebound", "menhirkin-gravity-well"], "11": ["menhirkin-living-rampart", "menhirkin-stone-memory"], "17": ["menhirkin-heartstone"] },
+      "description": "<p><em>\"The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.\"</em></p><p>You are not descended from the land. You are the land. A hex decided to become a person and the person is you. The standing stones on the ridge are distant cousins. The bedrock under the bunker is a grandparent. Mortals call you a Hex-Giant. You don't correct them.</p><p><em>\"What you are now is not what you were. The pressure was the point.\"</em></p><p><strong>Menhirkin (Metamorphic).</strong> You are land that was buried, squeezed, heated, and came back up harder and more interesting. Every Metamorphic has a before-self — a softer version of themselves that got pressed into something else. You remember being that. You are not going back.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium, but you count as Large for carrying capacity and for the size of creatures you can shove or grapple.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Tremorsense.</strong> 10 feet while you stand on natural ground.</li><li><strong>Ancestry Lean.</strong> Constitution. Menhirkin grant no fixed ability score increases; your background handles those. Your heritage leans toward Constitution in fiction and through your Tier features.</li></ul><h3>Features</h3><p><strong>At creation:</strong> @UUID[{{uuid:features:menhirkin-the-land-stood-up}}]{The Land Stood Up}, @UUID[{{uuid:features:menhirkin-metamorphic-traits}}]{Metamorphic Traits}, @UUID[{{uuid:features:menhirkin-metamorphic-the-thing-you-were}}]{The Thing You Were} (Tier I), @UUID[{{uuid:features:menhirkin-strategic-hooks}}]{Strategic Hooks (Menhirkin)}.</p><p><strong>5th level (Tier II):</strong> @UUID[{{uuid:features:menhirkin-stonebound}}]{Stonebound}, @UUID[{{uuid:features:menhirkin-gravity-well}}]{Gravity Well}.</p><p><strong>11th level (Tier III):</strong> @UUID[{{uuid:features:menhirkin-living-rampart}}]{Living Rampart}, @UUID[{{uuid:features:menhirkin-stone-memory}}]{Stone Memory}.</p><p><strong>17th level (Tier IV):</strong> @UUID[{{uuid:features:menhirkin-heartstone}}]{Heartstone}.</p>"
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "menhirkin-the-land-stood-up", "name": "The Land Stood Up", "featType": "race", "level": 0, "requirements": "Menhirkin",
+      "folder": "Menhirkin", "img": "icons/magic/earth/barrier-stone-explosion-debris.webp",
+      "activation": "action", "uses": { "max": "1", "per": "sr" },
+      "description": "<p><em>Menhirkin core, shared across all Menhirkin heritages.</em></p><p><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You have advantage on checks to resist being forcibly moved.</p><p><strong>Hex Recognition.</strong> Once per short rest, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</p><p><strong>Slow to Wear.</strong> You have advantage on Constitution checks against exhaustion, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</p><p><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 10 feet of you know you are there even if they cannot see you; you have disadvantage on Dexterity (Stealth) checks unless you are on or in stone.</p>"
+    },
+    {
+      "slug": "menhirkin-strategic-hooks", "name": "Strategic Hooks (Menhirkin)", "featType": "race", "level": 0, "requirements": "Menhirkin",
+      "folder": "Menhirkin", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><em>\"Congratulations, the bunker took a level in you.\"</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Non-Lethal OP and +1 Violence OP at campaign start.</p><p><strong>Fortify Hex.</strong> Each Strategic Turn, the first Patch the Breach or structure-repair Siege activity your faction undertakes costs 1 fewer OP (minimum 0).</p><p><strong>Logistics Frame.</strong> Once per Strategic Turn, when your faction runs a raid or operation with a Logistics cost, you can treat that cost as Logistics −1 (minimum 0).</p><p><strong>Sentient Land.</strong> Once per Strategic Turn, consult the hex itself about a pending decision; you get a one-sentence honest answer from the land's perspective.</p>"
+    },
+    {
+      "slug": "menhirkin-stonebound", "name": "Stonebound", "featType": "race", "level": 5, "requirements": "Menhirkin 5",
+      "folder": "Menhirkin", "img": "icons/magic/earth/strike-fist-stone-gray.webp",
+      "description": "<p><em>Menhirkin, Tier II</em></p><p><strong>Stonebound.</strong> You have advantage on ability checks you make to resist being pushed, knocked prone, or otherwise forcibly moved. You also have advantage on checks you make to build, repair, or fortify structures, siegeworks, and defensive emplacements.</p>"
+    },
+    {
+      "slug": "menhirkin-gravity-well", "name": "Gravity Well", "featType": "race", "level": 5, "requirements": "Menhirkin 5",
+      "folder": "Menhirkin", "img": "icons/magic/earth/projectile-boulder-debris.webp",
+      "description": "<p><em>Menhirkin, Tier II</em></p><p><em>\"You don't just stand on the ground. You negotiate with it.\"</em></p><p>When you plant your feet, the world quietly updates its assumptions about where 'down' is.</p><p>You are exceptionally good at shoving, bracing, and making your presence felt physically.</p><p>Your melee attacks hit objects and structures harder.</p><p>In Bad Eden strategic play, your sheer bulk helps stabilize Slippage hexes and nudges Non-Lethal OP budgets (handled via flags). Your Gravity Well also supports an optional OP trigger when you successfully shove something — implemented as a 'Do you want to apply this OP change?' card, never automatic.</p>"
+    },
+    {
+      "slug": "menhirkin-living-rampart", "name": "Living Rampart", "featType": "race", "level": 11, "requirements": "Menhirkin 11",
+      "folder": "Menhirkin", "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "activation": "reaction", "condition": "a creature you can see targets an ally adjacent to you with an attack", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Menhirkin, Tier III</em></p><p><strong>Living Rampart.</strong> You have proficiency in the Athletics skill. As a reaction when a creature you can see targets an ally adjacent to you with an attack, you can interpose bulk and bad life choices, imposing disadvantage on that attack roll. Once you use this feature, you can't use it again until you finish a long rest.</p>",
+      "effects": [
+        { "_id": "be5eLivingRampar", "name": "Living Rampart", "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.skills.ath.value", "mode": 4, "value": "1", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "menhirkin-stone-memory", "name": "Stone Memory", "featType": "race", "level": 11, "requirements": "Menhirkin 11",
+      "folder": "Menhirkin", "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "description": "<p><em>Menhirkin, Tier III</em></p><p><em>\"You don't just see walls. You see what they remember.\"</em></p><p>Your mind thinks like a load-bearing structure: you notice stress, fault-lines, and the way pressure travels through stone, metal, and people.</p><p>You have a +1 bonus to Wisdom (Perception) and Wisdom (Insight) checks, and your passive Perception and passive Insight increase by 1.</p><p>You are especially good at spotting structural weakness, traps, and bad reinforcement.</p><p>In Bad Eden strategic play, your presence nudges Stabilize Landform and Patch-the-Breach type actions toward cheaper, smarter outcomes (handled via flags).</p>",
+      "effects": [
+        { "_id": "be5eStoneMemory0", "name": "Stone Memory", "img": "icons/magic/perception/third-eye-blue-red.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.skills.prc.bonuses.check", "mode": 2, "value": "1", "priority": 20 },
+            { "key": "system.skills.ins.bonuses.check", "mode": 2, "value": "1", "priority": 20 },
+            { "key": "system.skills.prc.bonuses.passive", "mode": 2, "value": "1", "priority": 20 },
+            { "key": "system.skills.ins.bonuses.passive", "mode": 2, "value": "1", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "menhirkin-heartstone", "name": "Heartstone", "featType": "race", "level": 17, "requirements": "Menhirkin 17",
+      "folder": "Menhirkin", "img": "icons/magic/earth/orb-stone-smoke-teal.webp",
+      "description": "<p><em>Menhirkin, Tier IV</em></p><p><em>\"Some bunkers built walls. Some bunkers built you.\"</em></p><p>Your chest houses a dense geomantic Heartstone, a knot of petrified Yesod and bad decisions. It reinforces your body, dampens hostile forces, and hums softly whenever the world is about to get weird.</p><p>Your Constitution score increases by 1.</p><p>You have resistance to bludgeoning, piercing, and slashing damage.</p><p>You are unusually steady; you instinctively brace against shocks and impacts (a +1 bonus to ability checks).</p><p>Your body filters metaphysical fallout; your Radiation intake is reduced (handled by Bad Eden flags).</p><p>While in any hex your faction controls or has claimed, you cannot be forcibly removed from the hex against your will (teleportation, banishment, forced march) without first being reduced to 0 hit points.</p>",
+      "effects": [
+        { "_id": "be5eHeartstone00", "name": "Heartstone", "img": "icons/magic/earth/orb-stone-smoke-teal.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.abilities.con.value", "mode": 2, "value": "1", "priority": 20 },
+            { "key": "system.traits.dr.value", "mode": 2, "value": "bludgeoning", "priority": 20 },
+            { "key": "system.traits.dr.value", "mode": 2, "value": "piercing", "priority": 20 },
+            { "key": "system.traits.dr.value", "mode": 2, "value": "slashing", "priority": 20 },
+            { "key": "system.bonuses.abilities.check", "mode": 2, "value": "1", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+
+    {
+      "slug": "menhirkin-igneous-traits", "name": "Igneous Traits", "featType": "race", "level": 0, "requirements": "Menhirkin (Igneous)",
+      "folder": "Menhirkin (Igneous)", "folderParent": "Menhirkin", "img": "icons/magic/earth/barrier-lava-stone-orange.webp",
+      "description": "<p><em>\"Some stone was born yelling.\"</em></p><p><strong>Heat Memory.</strong> You have resistance to fire damage. When you take fire damage, you may bank that damage. Before your next long rest, you may spend the banked heat as a bonus action to add +1d10 exploding fire damage (on a 10, roll the die again and add it) to your next weapon attack, unarmed strike, or grapple that connects.</p><p><strong>Molten Bearing.</strong> You count fire, smoke, ash, and heated terrain as normal ground for the purposes of difficult terrain and footing. Contact with your bare skin singes paper and warms metal.</p><h4>Strategic Hooks (Igneous)</h4><p><strong>OP Edge.</strong> Your faction gains +2 Violence OP and +1 Non-Lethal OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Volcanic / Thermal / Industrial-Furnace hexes, your faction's heat-based or smelting operations cost 1 fewer OP (minimum 0).</p><p><strong>Forge-Ready.</strong> Once per Strategic Turn, your faction may reroll one failed crafting or weapons-salvage check. The heat remembers the work.</p>"
+    },
+    {
+      "slug": "menhirkin-igneous-magma-memory", "name": "Magma Memory", "featType": "race", "level": 0, "requirements": "Menhirkin (Igneous)",
+      "folder": "Menhirkin (Igneous)", "folderParent": "Menhirkin", "img": "icons/magic/fire/orb-vortex.webp",
+      "activation": "reaction", "condition": "you take fire or cold damage from a single source", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Menhirkin (Igneous), Tier I</em></p><p><em>\"Some things you carry around because you haven't figured out where to put them yet.\"</em></p><p><strong>Magma Memory (1/long rest).</strong> Reaction — when you take fire or cold damage from a single source, bank a portion of the heat. Until your next long rest, spend the banked heat as a bonus action to add +2d10 exploding fire damage (on a 10, roll the die again and add it) to your next weapon attack or unarmed strike that hits.</p><p>While the heat is held, you have advantage on Constitution checks against environmental cold.</p>"
+    },
+
+    {
+      "slug": "menhirkin-sedimentary-traits", "name": "Sedimentary Traits", "featType": "race", "level": 0, "requirements": "Menhirkin (Sedimentary)",
+      "folder": "Menhirkin (Sedimentary)", "folderParent": "Menhirkin", "img": "icons/magic/earth/barrier-stone-brown-green.webp",
+      "description": "<p><em>\"The old stones remember what the new ones are pretending to be.\"</em></p><p><strong>Old Layer Resilience.</strong> At creation, pick one damage type: poison, qliphothic, or one of fire, cold, or lightning. You have resistance to that damage. The land under you is old. Old land has outlasted a lot.</p><p><strong>Layer Reading.</strong> You can touch any worked surface older than a century and tell, without a check, its approximate age, the most recent meaningful thing that happened there, and whether anyone you can currently see has also touched it.</p><h4>Strategic Hooks (Sedimentary)</h4><p><strong>OP Edge.</strong> Your faction gains +2 Intrigue OP and +1 Economy OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Ruins / Archaeological / Old-Record hexes, the first archival or recon operation your faction runs per Strategic Turn costs 1 fewer OP.</p><p><strong>Strata Witness.</strong> Once per Strategic Turn, while on a hex with recorded Lore, your faction may ask the GM one true thing about a past faction that held it. Useful on a contested claim.</p>"
+    },
+    {
+      "slug": "menhirkin-sedimentary-read-the-strata", "name": "Read the Strata", "featType": "race", "level": 0, "requirements": "Menhirkin (Sedimentary)",
+      "folder": "Menhirkin (Sedimentary)", "folderParent": "Menhirkin", "img": "icons/magic/time/hourglass-yellow-green.webp",
+      "activation": "minute", "activationValue": 10, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Menhirkin (Sedimentary), Tier I</em></p><p><em>\"The stones keep what the rest of us tried to throw away.\"</em></p><p><strong>Read the Strata (1/long rest).</strong> Spend 10 minutes with a structure, ruin, battlefield, or natural formation older than a century. The GM answers two true questions about it — one about how it was built or formed, and one about the last decade of its occupation or use.</p><p>This is a separate use from the ancestry's Hex Recognition; they do not share a pool.</p>"
+    },
+
+    {
+      "slug": "menhirkin-metamorphic-traits", "name": "Metamorphic Traits", "featType": "race", "level": 0, "requirements": "Menhirkin (Metamorphic)",
+      "folder": "Menhirkin (Metamorphic)", "folderParent": "Menhirkin", "img": "icons/magic/earth/orb-stone-smoke-teal.webp",
+      "description": "<p><em>\"What you are now is not what you were. The pressure was the point.\"</em></p><p><strong>Pressure Remade.</strong> At the end of each long rest, the day chooses what you are until your next long rest. Roll a d4 or pick (GM discretion): (1) +1 AC, (2) resistance to bludgeoning, piercing, and slashing damage, (3) proficiency in one skill of your choice, (4) advantage on Constitution checks to resist being knocked prone or grappled. You announce the result; you do not pre-pick.</p><p><strong>Unbreakable Core.</strong> You have advantage on saving throws against petrification, forced transmutation, and forced shape-change. You have been turned into something else once already; nobody does it twice without your say-so.</p><h4>Strategic Hooks (Metamorphic)</h4><p><strong>OP Edge.</strong> Your faction gains +2 Non-Lethal OP and +1 Intrigue OP at campaign start.</p><p><strong>Hex Synergy.</strong> In any hex your faction has held for 3+ Turns, your faction gains +1 on defense rolls in that hex.</p><p><strong>Second-Form Bearing.</strong> Once per Strategic Turn, your faction may treat one Morale or Loyalty check as if it had one additional track-band of headroom. The thing you became has held under pressure before.</p>"
+    },
+    {
+      "slug": "menhirkin-metamorphic-the-thing-you-were", "name": "The Thing You Were", "featType": "race", "level": 0, "requirements": "Menhirkin (Metamorphic)",
+      "folder": "Menhirkin (Metamorphic)", "folderParent": "Menhirkin", "img": "icons/magic/time/arrows-circling-green.webp",
+      "activation": "bonus", "duration": { "value": "1", "units": "round" }, "uses": { "max": "1", "per": "sr" },
+      "description": "<p><em>Menhirkin (Metamorphic), Tier I</em></p><p><em>\"The first shape was softer. The second shape remembers.\"</em></p><p><strong>The Thing You Were (1/short rest).</strong> Bonus action — briefly re-surface a trait of your pre-pressure self. Pick one of three options; it lasts until the end of your next turn:</p><ul><li><strong>Softer:</strong> your speed increases by 10 feet and you have advantage on Dexterity checks to squeeze or slip past.</li><li><strong>Older:</strong> you gain darkvision out to 60 feet if you don't already have it, or +30 feet if you do.</li><li><strong>Wetter:</strong> you become immune to the Burning and Prone conditions, and difficult terrain does not slow you.</li></ul><p>Each option refreshes on a long rest — you cannot pick the same option twice before a long rest.</p>"
+    }
+  ]
+}

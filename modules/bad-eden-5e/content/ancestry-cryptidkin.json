@@ -1,0 +1,122 @@
+{
+  "_about": "Cryptidkin for D&D: three subspecies (Chupacabra, Jackalope, Furrykin), each its own species item; the family core (Folklore & Frame) is level 0 on every one. Text is Dave's RFI text with the mechanics D&D-ified per the RFI→5E rulebook; nothing rewritten for voice. Tier ladder: I at creation, II at 5th, III at 11th, IV at 17th.",
+  "_unsure": [
+    "Tier order: Chupacabra I Blood-Drinker (named by the heritage card), II Skittering Night-Feeder — the source has NO Tier III or IV feats for Chupacabra (the card only lists themes: terror aura when spotted, a reputation that precedes you). Nothing invented; those two tiers are empty until written.",
+    "Jackalope I Startle Reflex (named), II Can't Catch Me, III Crossroads Hare — no Tier IV feat in the source. 'Horns of Bad Luck (Manifestation)' is an item in the RFI items pack (not this lane); mentioned in Startle Reflex's text, not linked.",
+    "Furrykin I Wildframe & Instinct (named), II Pack Tongue, III Apex Den, IV Folklore Echo.",
+    "Rulebook applied: squares ×5 ft; Soma Break → long rest; 'once per scene' → short rest; +tier → + proficiency bonus; reroll the lowest → advantage; 3d10 keep lowest 2 → disadvantage; Body defense check to resist Stress → Constitution saving throw against exhaustion; Diplomacy → Persuasion, Empathy → Insight; Integrity → hit points; a level of Stress → a level of exhaustion; 'Strategic Turn' → 'campaign turn' in Wasteland Adapted and the Jackalope faction hooks (the lint bans the RFI term); 'focused Clarity hold' → '1 minute of quiet focus'.",
+    "Chupacabra's base climb (5 squares) is 25 ft on the species item; Skittering Horror at Tier II raises it to equal walking speed with an Active Effect (override 30).",
+    "Blood-Drinker's bite is a damage activity (1d6 + Con, qliphothic); the temp HP equal to the damage dealt is applied by hand. Keen Sense, Frame Choice, Apex Den and Folklore Echo stay text (conditional advantages, player choices)."
+  ],
+  "races": [
+    {
+      "slug": "cryptidkin-chupacabra", "identifier": "cryptidkin-chupacabra", "name": "Cryptidkin (Chupacabra)", "family": "Cryptidkin", "heritage": "Chupacabra",
+      "img": "icons/creatures/abilities/fangs-teeth-bite.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Cryptidkin",
+      "movement": { "walk": 30, "climb": 25 }, "senses": { "darkvision": 60, "special": "Folklore Presence; Survivor's Instinct" },
+      "features": { "0": ["cryptidkin-folklore-and-frame", "chupacabra-trait", "chupacabra-blood-drinker"], "5": ["chupacabra-skittering-night-feeder"] },
+      "description": "<p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><p><strong>Cryptidkin Subspecies.</strong> You are the thing the farmers whisper about. The livestock go quiet, the dogs stop barking, and in the morning there is nothing left but a question the community doesn’t want to ask out loud.</p><p><em>“They didn’t mean anything by the name. They just needed something to blame.”</em></p><p><strong>Chupacabra.</strong> Lean, quick, and thirsty in a way that is not quite hunger. You move through the world as a persistent rumor that keeps turning out to be true.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Cryptidkin)</li><li><strong>Size.</strong> Medium</li><li><strong>Speed.</strong> 30 feet; climb 25 feet</li><li><strong>Darkvision.</strong> 60 feet</li><li><strong>Ancestry Lean.</strong> Dexterity. Your background determines your ability increases; Cryptidkin grants no fixed bonuses.</li><li>@UUID[{{uuid:features:cryptidkin-folklore-and-frame}}]{Folklore &amp; Frame} and @UUID[{{uuid:features:chupacabra-trait}}]{Chupacabra}</li></ul><h3>Tier Powers</h3><p>Chupacabra powers emphasize: night-stalker stealth, drain-bite for fluid and Spark, terror aura when spotted, and a reputation that precedes you like a warning sign.</p><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:chupacabra-blood-drinker}}]{Blood-Drinker}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:chupacabra-skittering-night-feeder}}]{Skittering Night-Feeder}</li><li><strong>Tier III (11th level) and Tier IV (17th level):</strong> not yet written.</li></ul>"
+    },
+    {
+      "slug": "cryptidkin-jackalope", "identifier": "cryptidkin-jackalope", "name": "Cryptidkin (Jackalope)", "family": "Cryptidkin", "heritage": "Jackalope",
+      "img": "icons/creatures/mammals/rabbit-movement-glowing-green.webp", "sizes": ["sm", "med"], "sizeHint": "Small or Medium", "creatureType": "humanoid", "subtype": "Cryptidkin",
+      "movement": { "walk": 35 }, "senses": { "darkvision": 60, "special": "Folklore Presence; Survivor's Instinct" },
+      "features": { "0": ["cryptidkin-folklore-and-frame", "jackalope-trait", "jackalope-strategic-hooks", "jackalope-startle-reflex"], "5": ["jackalope-cant-catch-me"], "11": ["jackalope-crossroads-hare"] },
+      "description": "<p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><p><em>“You don’t spot a Jackalope. You notice the world flinch, and then realize why.”</em></p><p><strong>Jackalope.</strong> Fast because they have to be. Twitchy because the world has trained them that stillness is how you die. Half-remembered pre-Shattering folklore, half radiation-assembled rumor, and fully people.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Cryptidkin)</li><li><strong>Size.</strong> Small or Medium</li><li><strong>Speed.</strong> 35 feet</li><li><strong>Darkvision.</strong> 60 feet</li><li><strong>Ancestry Lean.</strong> Dexterity. Your background determines your ability increases; Cryptidkin grants no fixed bonuses.</li><li>@UUID[{{uuid:features:cryptidkin-folklore-and-frame}}]{Folklore &amp; Frame}, @UUID[{{uuid:features:jackalope-trait}}]{Jackalope} and @UUID[{{uuid:features:jackalope-strategic-hooks}}]{Strategic Hooks (Jackalope)}</li></ul><h3>Tier Powers</h3><p>Jackalope powers emphasize: Startle Reflex (can’t-be-caught-flat burst), Wasteland Bound (long-distance run), Horns of Bad Luck (jinx aura), Can’t Catch Me (evasion), and strategic Bad Omen Runner faction hooks.</p><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:jackalope-startle-reflex}}]{Startle Reflex}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:jackalope-cant-catch-me}}]{Can’t Catch Me}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:jackalope-crossroads-hare}}]{Crossroads Hare}</li><li><strong>Tier IV (17th level):</strong> not yet written.</li></ul>"
+    },
+    {
+      "slug": "cryptidkin-furrykin", "identifier": "cryptidkin-furrykin", "name": "Cryptidkin (Furrykin)", "family": "Cryptidkin", "heritage": "Furrykin",
+      "img": "icons/creatures/mammals/wolf-howl-moon-black.webp", "sizes": ["sm", "med"], "sizeHint": "Small or Medium (choose at creation)", "creatureType": "humanoid", "subtype": "Cryptidkin",
+      "movement": { "walk": 30 }, "senses": { "darkvision": 60, "special": "Folklore Presence; Survivor's Instinct" },
+      "features": { "0": ["cryptidkin-folklore-and-frame", "furrykin-trait", "furrykin-wildframe-and-instinct"], "5": ["furrykin-pack-tongue"], "11": ["furrykin-apex-den"], "17": ["furrykin-folklore-echo"] },
+      "description": "<p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><p><em>“You are not an animal that learned to talk. You are a person the world made with fur because it needed you to survive.”</em></p><p><strong>Furrykin.</strong> You are anything fur-bearing the world decided to make people out of. Talking badger, cunning fox, stoic bear, watchful rabbit, the uncle-shaped thing the trappers call Bigfoot—all valid. Size and frame are flexible; the instinct is not.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Cryptidkin)</li><li><strong>Size.</strong> Small or Medium (choose at creation; Medium Furrykin can describe themselves as “large and shaggy” without mechanical change—Bigfoot-scale creatures still move and fight at Medium)</li><li><strong>Speed.</strong> 30 feet</li><li><strong>Darkvision.</strong> 60 feet</li><li><strong>Ancestry Lean.</strong> None. Your frame is your business—the Tier powers adapt to how you play it.</li><li>@UUID[{{uuid:features:cryptidkin-folklore-and-frame}}]{Folklore &amp; Frame} and @UUID[{{uuid:features:furrykin-trait}}]{Furrykin}</li></ul><h3>Tier Powers</h3><p>Tier powers previously split across Felid / Leporid / Mustelid / Ursid / Vulpin are unified; choose flavor at the table without mechanical separation.</p><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:furrykin-wildframe-and-instinct}}]{Wildframe &amp; Instinct}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:furrykin-pack-tongue}}]{Pack Tongue}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:furrykin-apex-den}}]{Apex Den}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:furrykin-folklore-echo}}]{Folklore Echo}</li></ul>"
+    }
+  ],
+  "features": [
+    {
+      "slug": "cryptidkin-folklore-and-frame", "name": "Cryptidkin: Folklore & Frame", "featType": "race", "level": 0, "requirements": "Cryptidkin",
+      "folder": "Cryptidkin", "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "description": "<p><em>“You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.”</em></p><p><strong>Folklore Presence (1/long rest).</strong> When you first meet a community, decide whether the rumors about you arrived first. If yes, you have advantage on your first Persuasion or Intimidation check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it. When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as omen, trophy, or legend. It is never neutral.</p><p><strong>Wasteland Adapted.</strong> You have advantage on Constitution saving throws against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh). You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 60 feet. You cannot be surprised while conscious. Once per long rest, when you would drop to 0 hit points, you may instead drop to 1 hit point and gain one level of exhaustion.</p>"
+    },
+
+    {
+      "slug": "chupacabra-trait", "name": "Chupacabra: Persistent Rumor", "featType": "race", "level": 0, "requirements": "Cryptidkin (Chupacabra)",
+      "folder": "Cryptidkin (Chupacabra)", "folderParent": "Cryptidkin", "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
+      "description": "<p><em>“They didn’t mean anything by the name. They just needed something to blame.”</em></p><p><strong>Chupacabra.</strong> Lean, quick, and thirsty in a way that is not quite hunger. You move through the world as a persistent rumor that keeps turning out to be true. You have a climbing speed of 25 feet.</p>"
+    },
+    {
+      "slug": "chupacabra-blood-drinker", "name": "Cryptidkin (Chupacabra): Blood-Drinker", "featType": "race", "level": 0, "requirements": "Cryptidkin (Chupacabra)",
+      "folder": "Cryptidkin (Chupacabra)", "folderParent": "Cryptidkin", "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" }, "activity": "damage", "damage": [{ "number": 1, "denomination": 6, "bonus": "@abilities.con.mod", "types": ["qliphothic"] }],
+      "description": "<p><em>“The goats are gone. So is the witness. So is the noise.”</em></p><p><strong>Blood-Drinker (1/long rest).</strong> When you hit a creature with a melee attack, you may bite. Deal 1d6 + your Constitution modifier qliphothic damage on top of the attack’s normal damage, and gain temporary hit points equal to the qliphothic damage dealt.</p><p><strong>Hex-Sense.</strong> You can smell magical residue the way most people smell rain. Once per short rest, when something supernatural has happened in a place within the last 24 hours, the GM tells you so — and roughly what colour it was.</p>"
+    },
+    {
+      "slug": "chupacabra-skittering-night-feeder", "name": "Cryptidkin (Chupacabra): Skittering Night-Feeder", "featType": "race", "level": 5, "requirements": "Cryptidkin (Chupacabra) 5",
+      "folder": "Cryptidkin (Chupacabra)", "folderParent": "Cryptidkin", "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" }, "activity": "damage", "damage": [{ "number": 1, "denomination": 6, "types": [] }],
+      "description": "<p><em>“By the time anyone says your name out loud, you’re already three farms over.”</em></p><p><strong>Skittering Horror.</strong> You gain a climbing speed equal to your walking speed. You have advantage on Stealth checks made in darkness, ruins, or confined environments such as bunkers, farmsteads, or dense structures.</p><p><strong>Night-Feeder.</strong> When you attack a creature that is surprised, unconscious, restrained, or isolated from its allies, you have advantage on the first attack roll you make against it this turn.</p><p><strong>First Strike (1/long rest).</strong> When you hit a creature meeting any of those conditions, the strike deals an additional 1d6 damage of the weapon’s type.</p>",
+      "effects": [
+        { "_id": "be5eSkitterClimb", "name": "Skittering Horror", "img": "icons/magic/perception/silhouette-stealth-shadow.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.attributes.movement.climb", "mode": 5, "value": "30", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+
+    {
+      "slug": "jackalope-trait", "name": "Jackalope: Bad Omen Runner", "featType": "race", "level": 0, "requirements": "Cryptidkin (Jackalope)",
+      "folder": "Cryptidkin (Jackalope)", "folderParent": "Cryptidkin", "img": "icons/creatures/mammals/rabbit-movement-glowing-green.webp",
+      "description": "<p><em>“You don’t spot a Jackalope. You notice the world flinch, and then realize why.”</em></p><p><strong>Jackalope.</strong> Fast because they have to be. Twitchy because the world has trained them that stillness is how you die. Half-remembered pre-Shattering folklore, half radiation-assembled rumor, and fully people. Your walking speed is 35 feet.</p>"
+    },
+    {
+      "slug": "jackalope-strategic-hooks", "name": "Strategic Hooks (Jackalope)", "featType": "race", "level": 0, "requirements": "Cryptidkin (Jackalope)",
+      "folder": "Cryptidkin (Jackalope)", "folderParent": "Cryptidkin", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><strong>Strategic Hooks (Foundry / Bad Eden)</strong></p><p>If you see Jackalope tracks circling your hex, you are not under attack. You are being advised.</p><p><strong>OP Edge.</strong> Your faction gains +1 Soft Power OP and +1 Non-Lethal OP at campaign start.</p><p><strong>Trail Whisper.</strong> Once per Strategic Turn, your faction can reroll a single Travel or Scout check made in a hex adjacent to your home territory.</p>"
+    },
+    {
+      "slug": "jackalope-startle-reflex", "name": "Cryptidkin (Jackalope): Startle Reflex", "featType": "race", "level": 0, "requirements": "Cryptidkin (Jackalope)",
+      "folder": "Cryptidkin (Jackalope)", "folderParent": "Cryptidkin", "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+      "activation": "reaction", "condition": "you are targeted by an attack roll or fail a Dexterity check", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“You aren’t fast because you’re fast. You’re fast because the world keeps deciding to miss.”</em></p><p><strong>Startle Reflex (1/long rest).</strong> Reaction when you are targeted by an attack roll or fail a Dexterity check — move up to 10 feet without provoking opportunity attacks.</p><p><strong>Horns of Bad Luck.</strong> Your natural horns ship as a Jackalope-only item when you take the heritage — ask the GM for it. When violence escalates around you, the GM may describe unsettling omens tied to your presence — a mirror crack, a dropped knife, a candle going out the wrong direction.</p>"
+    },
+    {
+      "slug": "jackalope-cant-catch-me", "name": "Cryptidkin (Jackalope): Can't Catch Me", "featType": "race", "level": 5, "requirements": "Cryptidkin (Jackalope) 5",
+      "folder": "Cryptidkin (Jackalope)", "folderParent": "Cryptidkin", "img": "icons/magic/movement/abstract-ribbons-red-orange.webp",
+      "activation": "bonus", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“By the time the rifle goes off, the rumor has already moved house.”</em></p><p><strong>Can’t Catch Me (1/long rest).</strong> Bonus action — take the Dash or Disengage action.</p><p><strong>Light-Footed.</strong> Difficult terrain caused by undergrowth, brush, snow drifts, or scrap-strewn ground does not slow you. You can move along narrow ledges, fences, branches, or rooftops at full speed without making a check unless they are actively crumbling.</p>"
+    },
+    {
+      "slug": "jackalope-crossroads-hare", "name": "Cryptidkin (Jackalope): Crossroads Hare", "featType": "race", "level": 11, "requirements": "Cryptidkin (Jackalope) 11",
+      "folder": "Cryptidkin (Jackalope)", "folderParent": "Cryptidkin", "img": "icons/magic/time/arrows-circling-green.webp",
+      "activation": "special", "uses": { "max": "2", "per": "lr" },
+      "description": "<p><em>“Of course you came back. You weren’t supposed to be there to begin with.”</em></p><p><strong>Crossroads Hare (1/long rest).</strong> When you would be reduced to 0 hit points, you may instead vanish into the place between places. At the start of your next turn, you reappear in any unoccupied space within 1 mile that you have personally visited and clearly remember, with 1 hit point and one level of exhaustion. You leave behind a single recognizable token at the spot you vanished from — a horn, a tuft of fur, a footprint that wasn’t there before.</p><p><strong>The Rumor Runs Faster (1/long rest).</strong> Spend 1 minute of quiet focus to ask the GM what one nearby community is currently afraid of. The answer is at least one truth.</p><p>The two uses are tracked together on this feature: one for each.</p>"
+    },
+
+    {
+      "slug": "furrykin-trait", "name": "Furrykin: Wildframe", "featType": "race", "level": 0, "requirements": "Cryptidkin (Furrykin)",
+      "folder": "Cryptidkin (Furrykin)", "folderParent": "Cryptidkin", "img": "icons/creatures/mammals/wolf-howl-moon-black.webp",
+      "description": "<p><em>“You are not an animal that learned to talk. You are a person the world made with fur because it needed you to survive.”</em></p><p><strong>Furrykin.</strong> You are anything fur-bearing the world decided to make people out of. Talking badger, cunning fox, stoic bear, watchful rabbit, the uncle-shaped thing the trappers call Bigfoot—all valid. Size and frame are flexible; the instinct is not.</p>"
+    },
+    {
+      "slug": "furrykin-wildframe-and-instinct", "name": "Cryptidkin (Furrykin): Wildframe & Instinct", "featType": "race", "level": 0, "requirements": "Cryptidkin (Furrykin)",
+      "folder": "Cryptidkin (Furrykin)", "folderParent": "Cryptidkin", "img": "icons/skills/wounds/injury-pain-body-orange.webp",
+      "description": "<p><em>“Your body is built for a world that bites back. So is your patience.”</em></p><p><strong>Wildframe.</strong> Add your proficiency bonus to Constitution saving throws made to resist exhaustion.</p><p><strong>Keen Sense.</strong> Choose one at character creation: Keen Smell, Keen Hearing, or Keen Sight. You have advantage on Wisdom (Perception) checks that rely on that sense.</p><p><strong>Frame Choice.</strong> Choose one narrative frame at character creation; it is permanent.</p><ul><li><strong>Predator.</strong> Your unarmed strikes (bite or claws) deal 1d6 instead of 1d4 and count as natural weapons.</li><li><strong>Forager.</strong> You gain proficiency in the Athletics skill. If you already have it, you may choose another skill from the Cryptidkin list (GM adjudicates).</li><li><strong>Brute.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, lift, shove, and grapple.</li></ul>"
+    },
+    {
+      "slug": "furrykin-pack-tongue", "name": "Cryptidkin (Furrykin): Pack Tongue", "featType": "race", "level": 5, "requirements": "Cryptidkin (Furrykin) 5",
+      "folder": "Cryptidkin (Furrykin)", "folderParent": "Cryptidkin", "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
+      "activation": "bonus", "uses": { "max": "1", "per": "lr" }, "range": 30, "target": { "type": "ally", "count": 1 },
+      "description": "<p><em>“The folklore in your blood is older than language. You don’t need to speak to be heard.”</em></p><p><strong>Pack Tongue (1/long rest).</strong> As a bonus action, choose one ally within 30 feet who can see or hear you. They have advantage on the next Persuasion, Intimidation, Stealth, or Animal Handling check they make before the start of your next turn.</p><p><strong>Den-Sign.</strong> You can leave a small mark — scent, claw notch, fur knot — that other Furrykin and most beasts will recognize. The GM tells you what kind of marks have already been left in any area you spend 10 minutes searching.</p>"
+    },
+    {
+      "slug": "furrykin-apex-den", "name": "Cryptidkin (Furrykin): Apex Den", "featType": "race", "level": 11, "requirements": "Cryptidkin (Furrykin) 11",
+      "folder": "Cryptidkin (Furrykin)", "folderParent": "Cryptidkin", "img": "icons/magic/nature/tree-animated-strike.webp",
+      "activation": "minute", "activationValue": 10,
+      "description": "<p><em>“The land knows whose teeth marks live here.”</em></p><p><strong>Apex Den.</strong> You can spend 10 minutes claiming a 30-foot-radius area as your den. Until you take a long rest or claim a new den, while you are within that area:</p><ul><li>You have advantage on initiative rolls.</li><li>The first time you hit a creature in your den each round, the attack deals an additional 1d6 damage of the weapon’s type.</li><li>You always know if any Medium or larger creature crosses the boundary while you are inside.</li></ul><p>You can have only one den at a time.</p>"
+    },
+    {
+      "slug": "furrykin-folklore-echo", "name": "Cryptidkin (Furrykin): Folklore Echo", "featType": "race", "level": 17, "requirements": "Cryptidkin (Furrykin) 17",
+      "folder": "Cryptidkin (Furrykin)", "folderParent": "Cryptidkin", "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "activation": "bonus", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>“For one minute, you are not a person. You are the thing the trappers warn each other about. The thing the children draw on the inside of a locker. The thing the radio operators swear they almost saw.”</em></p><p><strong>Folklore Echo (1/long rest).</strong> As a bonus action, you become a story for 1 minute or until you choose to end the effect. While in this state:</p><ul><li>You have advantage on Stealth checks and Charisma (Intimidation) checks.</li><li>Creatures that have not personally seen you act before have disadvantage on attack rolls against you.</li><li>You can move through the space of any creature larger than Tiny without triggering opportunity attacks.</li><li>The first time a creature observing you tries to describe you afterward, the GM may give them disadvantage or vague results — the rumor takes priority over the witness.</li></ul>"
+    }
+  ]
+}

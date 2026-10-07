@@ -1,0 +1,139 @@
+{
+  "_about": "Sephirotic Scion — three heritages (Seraphic, Cherubic, Ophanic) as dnd5e species items, the family core 'The Higher Register', per-heritage traits and Strategic Hooks, each heritage's Tier I signature, and the shared family ladder at 5/11/17. Converted from the RFI ancestries pack (v1.1 heritage cards); Dave's text kept, RFI mechanics mapped to 5E per the rulebook. Built by tools/build-packs.mjs.",
+  "_unsure": [
+    "Tier ladder (family-wide, same on all three heritages): Tier I = the heritage signature (Cleansing Breath / The Gate Knows You / The Wheel Never Stops) at level 0; Tier II (5th) = Sefirot Attunement (the older stand-alone doc: the Perception bonus); Tier III (11th) = Holy Conduit (the older doc: psychic resistance, stabilising turbulence); Tier IV (17th) = Light of Harmony (the older doc: calm emotions once per long rest, allies' advantage against fear, hex tilt sense). The older stand-alone Sephirotic Physiology doc duplicates the core and is superseded; the family-level Strategic Hooks doc is superseded by the per-heritage hooks on the v1.1 cards.",
+    "'Strategic Turn' → 'campaign turn' (the lint bans the RFI phrasing; the faction layer calls it a turn).",
+    "'+1 rank bonus' (core Sefirot Attunement) and 'a bonus to Perception and passive Perception' (Tier II) have no rulebook line: rendered as +2 (the Tier II one is an Active Effect on Perception check and passive).",
+    "Light of Harmony's calm emotions: the Flow pack's Cooler Heads is the Bad Eden version of that spell, so the feature casts it (linked); 'Presence is your manifestation aptitude' → Charisma is your casting ability for it. Coal-Song (Seraphic) is written as an at-will touch for 1 sephirotic damage with Charisma as the casting ability.",
+    "Holy Conduit's 'effective caster-attribute as +1' → the caster's casting ability modifier counts as 1 higher; 'Manifestations' → powers.",
+    "'1 temporary Integrity' (Light of Harmony, core) → 1 temporary hit point.",
+    "Cleansing Breath: 'Intrigue check vs your Resolve' → Dexterity saving throw against DC 8 + proficiency bonus + Charisma modifier; '2d10 exploding' → 2d10 where each 10 rolls again (the activity formula uses Foundry's 2d10x); tier scaling → 3d10 at 5th, 4d10 at 11th, 5d10 at 17th, in text (the activity rolls the base 2d10x).",
+    "Concentric Sight: 'Mind (Perception)' → Wisdom (Perception) (Perception is a Wisdom skill in 5E; the Mind→Intelligence rule yields to the skill's own ability). Its two halves are conditional (movement vs stillness), so text only.",
+    "The Wheel Never Stops: 'additional uses cost 1 Surge each' kept — Surge exists in the D&D build through surge-powers.",
+    "The Gate Knows You: '3d10 keep lowest 2 on any check or defense check' → disadvantage on any check or saving throw related to the crossing.",
+    "Unblinking: 'reroll the lowest die on defense checks against being calmed' → advantage on saving throws against effects that would calm you (Calmed is an RFI condition; no 5E one)."
+  ],
+  "races": [
+    {
+      "slug": "sephirotic-scion-seraphic", "identifier": "sephirotic-scion-seraphic", "name": "Sephirotic Scion (Seraphic)", "family": "Sephirotic Scion", "heritage": "Seraphic",
+      "img": "icons/magic/holy/angel-winged-humanoid-blue.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Sephirotic Scion",
+      "movement": { "walk": 30 }, "senses": { "special": "" },
+      "features": { "0": ["sephirotic-scion-the-higher-register", "sephirotic-scion-seraphic-traits", "sephirotic-scion-seraphic-strategic-hooks", "sephirotic-scion-cleansing-breath"], "5": ["sephirotic-scion-sefirot-attunement"], "11": ["sephirotic-scion-holy-conduit"], "17": ["sephirotic-scion-light-of-harmony"] },
+      "description": "<p><em>Sephirotic Scion.</em> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><p><em>“What the Seraphim did to the wicked was sing them clean. Try not to be wicked around one.”</em></p><p><strong>Sephirotic Scion (Seraphic).</strong> Your blood runs burning. The Seraphim are six-winged fire — the order closest to the throne, the order whose job is purification. You don’t run hot in the Igneous Menhirkin sense; you run hot in the moral sense. Things around you either align or combust. There is not a middle option.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Sephirotic Scion does not grant fixed ability score bonuses; your background handles increases. Your heritage leans toward Charisma in fiction and through Tier powers.</li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p>@UUID[{{uuid:features:sephirotic-scion-the-higher-register}}]{The Higher Register} — shared across all Sephirotic Scion heritages, gained at character creation.</p><h3>Seraphic Traits</h3><p>@UUID[{{uuid:features:sephirotic-scion-seraphic-traits}}]{Seraphic Traits} and @UUID[{{uuid:features:sephirotic-scion-seraphic-strategic-hooks}}]{Strategic Hooks (Seraphic)}.</p><h3>Tier Powers</h3><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:sephirotic-scion-cleansing-breath}}]{Cleansing Breath}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:sephirotic-scion-sefirot-attunement}}]{Sefirot Attunement}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:sephirotic-scion-holy-conduit}}]{Holy Conduit}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:sephirotic-scion-light-of-harmony}}]{Light of Harmony}</li></ul>"
+    },
+    {
+      "slug": "sephirotic-scion-cherubic", "identifier": "sephirotic-scion-cherubic", "name": "Sephirotic Scion (Cherubic)", "family": "Sephirotic Scion", "heritage": "Cherubic",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Sephirotic Scion",
+      "movement": { "walk": 30 }, "senses": { "special": "" },
+      "features": { "0": ["sephirotic-scion-the-higher-register", "sephirotic-scion-cherubic-traits", "sephirotic-scion-cherubic-strategic-hooks", "sephirotic-scion-the-gate-knows-you"], "5": ["sephirotic-scion-sefirot-attunement"], "11": ["sephirotic-scion-holy-conduit"], "17": ["sephirotic-scion-light-of-harmony"] },
+      "description": "<p><em>Sephirotic Scion.</em> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><p><em>“Cherubim guard with flaming swords. You guard with a look.”</em></p><p><strong>Sephirotic Scion (Cherubic).</strong> Your blood runs guardian. The Cherubim are the order that stands at the gate and decides who gets through; you are what that order looks like three thousand years downstream, wearing pants and carrying someone’s grocery list. Thresholds notice you. So do the things that were planning to cross them.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Sephirotic Scion does not grant fixed ability score bonuses; your background handles increases. Your heritage leans toward Wisdom in fiction and through Tier powers.</li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p>@UUID[{{uuid:features:sephirotic-scion-the-higher-register}}]{The Higher Register} — shared across all Sephirotic Scion heritages, gained at character creation.</p><h3>Cherubic Traits</h3><p>@UUID[{{uuid:features:sephirotic-scion-cherubic-traits}}]{Cherubic Traits} and @UUID[{{uuid:features:sephirotic-scion-cherubic-strategic-hooks}}]{Strategic Hooks (Cherubic)}.</p><h3>Tier Powers</h3><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:sephirotic-scion-the-gate-knows-you}}]{The Gate Knows You}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:sephirotic-scion-sefirot-attunement}}]{Sefirot Attunement}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:sephirotic-scion-holy-conduit}}]{Holy Conduit}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:sephirotic-scion-light-of-harmony}}]{Light of Harmony}</li></ul>"
+    },
+    {
+      "slug": "sephirotic-scion-ophanic", "identifier": "sephirotic-scion-ophanic", "name": "Sephirotic Scion (Ophanic)", "family": "Sephirotic Scion", "heritage": "Ophanic",
+      "img": "icons/magic/movement/pinwheel-turning-blue.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Sephirotic Scion",
+      "movement": { "walk": 30 }, "senses": { "special": "Wheel-and-Eye: you see invisible creatures and objects within 30 feet as dimly lit shapes." },
+      "features": { "0": ["sephirotic-scion-the-higher-register", "sephirotic-scion-ophanic-traits", "sephirotic-scion-ophanic-strategic-hooks", "sephirotic-scion-the-wheel-never-stops"], "5": ["sephirotic-scion-sefirot-attunement"], "11": ["sephirotic-scion-holy-conduit"], "17": ["sephirotic-scion-light-of-harmony"] },
+      "description": "<p><em>Sephirotic Scion.</em> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><p><em>“The wheels were full of eyes. You never stop turning. You never stop seeing.”</em></p><p><strong>Sephirotic Scion (Ophanic).</strong> Your blood runs rotating. The Ophanim are wheels-and-eyes — motion, sight, the order that is always already looking both ways. You are descended from a thing that could not be snuck up on because it had no back. You kept some of that. Not all. Enough.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Sephirotic Scion does not grant fixed ability score bonuses; your background handles increases. Your heritage leans toward Dexterity in fiction and through Tier powers.</li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p>@UUID[{{uuid:features:sephirotic-scion-the-higher-register}}]{The Higher Register} — shared across all Sephirotic Scion heritages, gained at character creation.</p><h3>Ophanic Traits</h3><p>@UUID[{{uuid:features:sephirotic-scion-ophanic-traits}}]{Ophanic Traits} and @UUID[{{uuid:features:sephirotic-scion-ophanic-strategic-hooks}}]{Strategic Hooks (Ophanic)}.</p><h3>Tier Powers</h3><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:sephirotic-scion-the-wheel-never-stops}}]{The Wheel Never Stops}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:sephirotic-scion-sefirot-attunement}}]{Sefirot Attunement}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:sephirotic-scion-holy-conduit}}]{Holy Conduit}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:sephirotic-scion-light-of-harmony}}]{Light of Harmony}</li></ul>"
+    }
+  ],
+  "features": [
+    {
+      "slug": "sephirotic-scion-the-higher-register", "name": "The Higher Register", "featType": "race", "level": 0, "requirements": "Sephirotic Scion",
+      "folder": "Sephirotic Scion", "img": "icons/magic/holy/projectiles-blades-salvo-yellow.webp",
+      "activation": "special", "uses": { "max": "1", "per": "sr" },
+      "description": "<p><em>Sephirotic Scion Core — shared across all Sephirotic Scion heritages, gained at character creation.</em></p><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per short rest, you can invoke its register and gain a +2 bonus to one check that falls clearly within that sephirah's domain.</p><p><strong>Holy Conduit.</strong> Powers, rituals, and other sephirotic-register effects that target you or pass through your space treat their caster's casting ability modifier as 1 higher for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p><p><strong>Light of Harmony.</strong> When two or more creatures within 30 feet of you are in active, explicit agreement (stated aloud), they each gain 1 temporary hit point. This refreshes when a new agreement is reached between different creatures.</p>",
+      "effects": [
+        { "_id": "be5eSSHigherReg0", "name": "Sephirotic Physiology", "img": "icons/magic/holy/projectiles-blades-salvo-yellow.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.traits.dr.value", "mode": 2, "value": "sephirotic", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "sephirotic-scion-seraphic-traits", "name": "Seraphic Traits", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Seraphic)",
+      "folder": "Sephirotic Scion (Seraphic)", "folderParent": "Sephirotic Scion", "img": "icons/magic/fire/flame-burning-creature-skeleton.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 }, "activity": "damage", "damage": [{ "formula": "1", "types": ["sephirotic"] }],
+      "description": "<p><em>Sephirotic Scion (Seraphic)</em></p><p><strong>Coal-Song.</strong> You know a minor at-will power: as an action, you deal a single point of sephirotic damage to a creature within reach (flavor: holy fire). Charisma is your casting ability for it.</p><p><strong>Unburning.</strong> You have resistance to fire damage, and to sephirotic damage. What you are is not flammable to itself.</p>",
+      "effects": [
+        { "_id": "be5eSSSeraphic00", "name": "Unburning", "img": "icons/magic/fire/flame-burning-creature-skeleton.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.traits.dr.value", "mode": 2, "value": "fire", "priority": 20 },
+            { "key": "system.traits.dr.value", "mode": 2, "value": "sephirotic", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "sephirotic-scion-seraphic-strategic-hooks", "name": "Strategic Hooks (Seraphic)", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Seraphic)",
+      "folder": "Sephirotic Scion (Seraphic)", "folderParent": "Sephirotic Scion", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Faith OP and +1 Violence OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Consecrated / Pyre-Marked / Witnessed hexes, your faction's cleansing, judgment, and pyre operations cost 1 fewer OP.</p><p><strong>Burning Witness.</strong> Once per Strategic Turn, when your faction confronts a rival faction in open negotiation, the rival must commit to one truth they would have preferred to conceal. The flame is close to the throne; lying hurts.</p>"
+    },
+    {
+      "slug": "sephirotic-scion-cleansing-breath", "name": "Cleansing Breath", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Seraphic)",
+      "folder": "Sephirotic Scion (Seraphic)", "folderParent": "Sephirotic Scion", "img": "icons/magic/fire/beam-jet-stream-embers.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "template": { "type": "cone", "size": 15 } }, "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [{ "formula": "2d10x", "types": ["sephirotic"] }], "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Tier I — Sephirotic Scion (Seraphic)</em></p><p><em>\"What couldn't stand the light was never going to last anyway.\"</em></p><p><strong>Cleansing Breath (once per long rest).</strong> Action — exhale a 15-foot cone of radiant fire. Each creature in the cone makes a Dexterity saving throw against a DC of 8 + your proficiency bonus + your Charisma modifier. On a failure, it takes 2d10 sephirotic damage (flavor: holy fire); each die that rolls a 10 is rolled again and added. Half on a success.</p><p>The damage grows with you: 3d10 at 5th level, 4d10 at 11th, 5d10 at 17th.</p>"
+    },
+    {
+      "slug": "sephirotic-scion-cherubic-traits", "name": "Cherubic Traits", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Cherubic)",
+      "folder": "Sephirotic Scion (Cherubic)", "folderParent": "Sephirotic Scion", "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
+      "description": "<p><em>Sephirotic Scion (Cherubic)</em></p><p><strong>Name-Held.</strong> Creatures you have spoken with for at least one minute cannot hide their true name from divination you cast or are targeted by. You remember the shape of names. That's the job.</p><p><strong>Unblinking.</strong> You are immune to magical sleep effects. You have advantage on saving throws against effects that would calm you. A Cherub does not rest at their post. Neither do you.</p>"
+    },
+    {
+      "slug": "sephirotic-scion-cherubic-strategic-hooks", "name": "Strategic Hooks (Cherubic)", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Cherubic)",
+      "folder": "Sephirotic Scion (Cherubic)", "folderParent": "Sephirotic Scion", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Faith OP and +1 Soft Power OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Consecrated / Warded / Gate-Adjacent hexes, your faction's diplomatic and witnessing operations gain +2 on the success check.</p><p><strong>Gate-Audit.</strong> Once per Strategic Turn, your faction may audit the movements in and out of a single hex you occupy. The GM tells you who crossed the boundary this turn, in what direction, and (if your faction rank is sufficient) with what intent.</p>"
+    },
+    {
+      "slug": "sephirotic-scion-the-gate-knows-you", "name": "The Gate Knows You", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Cherubic)",
+      "folder": "Sephirotic Scion (Cherubic)", "folderParent": "Sephirotic Scion", "img": "icons/magic/perception/orb-eye-scrying.webp",
+      "activation": "reaction", "condition": "a creature you can see within 30 feet attempts to open, close, lock, unlock, cross, or pass through a door, gate, threshold, ley-line gate, or named boundary", "range": 30, "target": { "type": "creature", "count": 1 }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Tier I — Sephirotic Scion (Cherubic)</em></p><p><em>\"Everything is a door if you can read the seams.\"</em></p><p><strong>The Gate Knows You (once per long rest).</strong> Reaction — when a creature you can see within 30 feet attempts to open, close, lock, unlock, cross, or pass through a door, gate, threshold, ley-line gate, or named boundary, the target has disadvantage on any check or saving throw related to that crossing. The boundary listens to you.</p>"
+    },
+    {
+      "slug": "sephirotic-scion-ophanic-traits", "name": "Ophanic Traits", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Ophanic)",
+      "folder": "Sephirotic Scion (Ophanic)", "folderParent": "Sephirotic Scion", "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "description": "<p><em>Sephirotic Scion (Ophanic)</em></p><p><strong>Wheel-and-Eye.</strong> You can see invisible creatures and objects within 30 feet as dimly lit shapes. You cannot be flanked.</p><p><strong>Concentric Sight.</strong> You have advantage on Wisdom (Perception) checks that involve noticing movement, pattern, or change over time. You have disadvantage on Wisdom (Perception) checks to notice things that have been perfectly still since before you started looking — you see motion, not furniture.</p>"
+    },
+    {
+      "slug": "sephirotic-scion-ophanic-strategic-hooks", "name": "Strategic Hooks (Ophanic)", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Ophanic)",
+      "folder": "Sephirotic Scion (Ophanic)", "folderParent": "Sephirotic Scion", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Intrigue OP and +1 Violence OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Battlefield / Procession / High-Traffic hexes, your faction's observation and counter-intel operations gain +2 on the success check.</p><p><strong>Turning Witness.</strong> Once per Strategic Turn, you may observe one exchange of goods, intelligence, or personnel between two rival factions within your field of influence. You learn that it happened and between whom, though not necessarily what was exchanged.</p>"
+    },
+    {
+      "slug": "sephirotic-scion-the-wheel-never-stops", "name": "The Wheel Never Stops", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Ophanic)",
+      "folder": "Sephirotic Scion (Ophanic)", "folderParent": "Sephirotic Scion", "img": "icons/magic/movement/pinwheel-turning-blue.webp",
+      "activation": "bonus", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Tier I — Sephirotic Scion (Ophanic)</em></p><p><em>\"There is no angle that is not a front, to a thing with no back.\"</em></p><p><strong>The Wheel Never Stops (once per long rest).</strong> When you move at least 10 feet on your turn, as a bonus action take either one weapon attack OR the Dash action. Additional uses per long rest cost 1 Surge each.</p>"
+    },
+    {
+      "slug": "sephirotic-scion-sefirot-attunement", "name": "Sefirot Attunement", "featType": "race", "level": 5, "requirements": "Sephirotic Scion 5",
+      "folder": "Sephirotic Scion", "img": "icons/magic/holy/yin-yang-balance-symbol.webp",
+      "description": "<p><em>Tier II — Sephirotic Scion, 5th level</em></p><p><strong>Sefirot Attunement.</strong> You perceive the harmonic structure beneath events.</p><p>You gain a +2 bonus to Wisdom (Perception) checks and passive Perception.</p><p>Your intuition occasionally warns you about moral or spiritual imbalances (GM discretion).</p>",
+      "effects": [
+        { "_id": "be5eSSAttunement", "name": "Sefirot Attunement", "img": "icons/magic/holy/yin-yang-balance-symbol.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.skills.prc.bonuses.check", "mode": 2, "value": "2", "priority": 20 },
+            { "key": "system.skills.prc.bonuses.passive", "mode": 2, "value": "2", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "sephirotic-scion-holy-conduit", "name": "Holy Conduit", "featType": "race", "level": 11, "requirements": "Sephirotic Scion 11",
+      "folder": "Sephirotic Scion", "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "description": "<p><em>Tier III — Sephirotic Scion, 11th level</em></p><p><strong>Holy Conduit.</strong> Your body routes excess metaphysical charge safely.</p><p>You have resistance to psychic damage.</p><p>Your presence stabilizes magically turbulent areas.</p><p>Bad Eden engines treat you as a low-level metaphysical conductor (see world logic).</p>",
+      "effects": [
+        { "_id": "be5eSSHolyCondui", "name": "Holy Conduit", "img": "icons/magic/holy/meditation-chi-focus-blue.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.traits.dr.value", "mode": 2, "value": "psychic", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "sephirotic-scion-light-of-harmony", "name": "Light of Harmony", "featType": "race", "level": 17, "requirements": "Sephirotic Scion 17",
+      "folder": "Sephirotic Scion", "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
+      "activation": "action", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Tier IV — Sephirotic Scion, 17th level</em></p><p><em>“You glow a little. Sometimes metaphorically. Sometimes not.”</em></p><p>You can cast @UUID[{{uuid:powers:cooler-heads}}]{Cooler Heads} once per long rest without spending Flow points (Charisma is your casting ability for it).</p><p>Allies within 10 feet have advantage on saving throws against being frightened.</p><p>You automatically sense the Sephirothic/Qliphothic tilt of any hex you enter.</p>"
+    }
+  ]
+}

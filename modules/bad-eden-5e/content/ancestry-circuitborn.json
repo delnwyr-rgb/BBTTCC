@@ -1,0 +1,183 @@
+{
+  "_about": "Circuitborn — the D&D version of the Bad Eden ancestry, converted from the RFI original (bbttcc-master-content.ancestries). Four Lines as species items: Exo-Knight, Parallax, Salvage, Synapse. Circuitborn are people: creature type humanoid, subtype Circuitborn. Text is Dave's; only the RFI mechanics changed. Built by tools/build-packs.mjs.",
+  "_unsure": [
+    "Tier order per Line (Tier I = the heritage card's grant): Exo-Knight I Shield Projector, II Bulwark Protocol, III Kinetic Overflow, IV Siegebreaker Frame. Parallax I Light-Bend Cloak, II Emotion Emulator, III Ghost-In-The-Wires, IV Perfect Misdirection. Salvage I Built-In Tools, II Scrap Alchemy, III Patch-Logic Field, IV Mobile Facility Node. Synapse I Yesod-Diver, II Memory-Print, III Noosphere Hook, IV Cognition Crown.",
+    "Creature type: the RFI root carried a custom type 'Construct-Living'; written as humanoid (Circuitborn) per the directive, with 'Construct-Living' kept in the prose only.",
+    "Firmware of Identity / Attention Resonance: 'regain Integrity equal to your tier' → hit points equal to your proficiency bonus; the OP half stays verbatim (the faction layer runs in both systems).",
+    "Kinetic Overflow: 'bank one point of Overflow (max tier)' → max equal to your proficiency bonus; '+1d6 kinetic damage' → 1d6 bludgeoning damage (the engine trigger text said force; bludgeoning per the rulebook).",
+    "Perfect Misdirection: '3d10 keep lowest 2' → disadvantage; 'Soul defense check (DC = 8 + tier + Intrigue)' → Wisdom saving throw, DC 8 + your proficiency bonus + your Dexterity modifier.",
+    "Emotion Emulator: Stealth + Insight proficiency is an AE (skill value upgraded to 1); 'expertise if already proficient' is text only.",
+    "Cognition Crown: psychic resistance and the Intelligence/Wisdom advantage are a 1-minute activity with the effect in text (no timed AE).",
+    "Bulwark Frame (Exo-Knight heritage trait) is a once-per-long-rest reaction imposing disadvantage; it lives in the heritage trait feature, not the species traits list, so it can be rolled from the sheet.",
+    "Circuitborn has no Strategic Hooks block in the source; none written."
+  ],
+
+  "races": [
+    {
+      "slug": "circuitborn-exo-knight", "identifier": "circuitborn-exo-knight", "name": "Circuitborn (Exo-Knight Line)", "family": "Circuitborn", "heritage": "Exo-Knight",
+      "img": "icons/environment/people/infantry-armored.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Circuitborn",
+      "movement": { "walk": 30 }, "senses": { "special": "Informational Matrix Sense (radio / signal / ritual / rumor networks)." },
+      "features": { "0": ["circuitborn-firmware-of-identity", "circuitborn-exo-knight-heritage", "circuitborn-shield-projector"], "5": ["circuitborn-bulwark-protocol"], "11": ["circuitborn-kinetic-overflow"], "17": ["circuitborn-siegebreaker-frame"] },
+      "description": "<p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Circuitborn Line.</strong> The war-plate. Made for impact, for holding the line, for being the thing the squad puts between itself and whatever just came through the gate.</p><p><em>“Captain Robot is not a robot. You are. Try not to make it weird about him.”</em></p><p><strong>Exo-Knight.</strong> You are a sentient chassis built around the principle of presence. When you stand somewhere, that ground belongs to your faction until something stronger walks you off it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Circuitborn, Construct-Living). Circuitborn are people.</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Strength — your chassis is built around it, expressed primarily through Tier powers. No fixed score bonus; your background handles increases.</li><li><strong>Bulwark Frame.</strong> When an ally within 5 feet of you is hit by an attack, you may use your reaction to impose disadvantage on the attack roll (once per long rest).</li></ul><h3>Core: Firmware of Identity</h3><p>At creation you gain @UUID[{{uuid:features:circuitborn-firmware-of-identity}}]{Firmware of Identity} (Firmware of Identity, Attention Resonance, Informational Matrix Sense, Glitch-Surge).</p><h3>Exo-Knight Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5th level), Tier III (11th), Tier IV (17th).</p><ul><li><strong>Tier I.</strong> @UUID[{{uuid:features:circuitborn-shield-projector}}]{Shield Projector}</li><li><strong>Tier II.</strong> @UUID[{{uuid:features:circuitborn-bulwark-protocol}}]{Bulwark Protocol}</li><li><strong>Tier III.</strong> @UUID[{{uuid:features:circuitborn-kinetic-overflow}}]{Kinetic Overflow}</li><li><strong>Tier IV.</strong> @UUID[{{uuid:features:circuitborn-siegebreaker-frame}}]{Siegebreaker Frame}</li></ul>"
+    },
+    {
+      "slug": "circuitborn-parallax", "identifier": "circuitborn-parallax", "name": "Circuitborn (Parallax Line)", "family": "Circuitborn", "heritage": "Parallax",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Circuitborn",
+      "movement": { "walk": 30 }, "senses": { "special": "Informational Matrix Sense (radio / signal / ritual / rumor networks)." },
+      "features": { "0": ["circuitborn-firmware-of-identity", "circuitborn-parallax-heritage", "circuitborn-light-bend-cloak"], "5": ["circuitborn-emotion-emulator"], "11": ["circuitborn-ghost-in-the-wires"], "17": ["circuitborn-perfect-misdirection"] },
+      "description": "<p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Circuitborn Line.</strong> The paradox-walking. Designed to be in the place no one expects, two seconds before the rest of the world catches up.</p><p><em>“Don’t look at where I am. Look at where I’m about to have already been.”</em></p><p><strong>Parallax.</strong> You are a sentient chassis built around the principle of positional doubt. The world keeps a fuzzy outline of where you are, and that fuzziness is your weapon.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Circuitborn, Construct-Living). Circuitborn are people.</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Dexterity — your chassis is built around it, expressed primarily through Tier powers. No fixed score bonus; your background handles increases.</li><li><strong>Phase Drift.</strong> When you take the Disengage action, your speed increases by 10 feet for that turn.</li></ul><h3>Core: Firmware of Identity</h3><p>At creation you gain @UUID[{{uuid:features:circuitborn-firmware-of-identity}}]{Firmware of Identity} (Firmware of Identity, Attention Resonance, Informational Matrix Sense, Glitch-Surge).</p><h3>Parallax Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5th level), Tier III (11th), Tier IV (17th).</p><ul><li><strong>Tier I.</strong> @UUID[{{uuid:features:circuitborn-light-bend-cloak}}]{Light-Bend Cloak}</li><li><strong>Tier II.</strong> @UUID[{{uuid:features:circuitborn-emotion-emulator}}]{Emotion Emulator}</li><li><strong>Tier III.</strong> @UUID[{{uuid:features:circuitborn-ghost-in-the-wires}}]{Ghost-In-The-Wires}</li><li><strong>Tier IV.</strong> @UUID[{{uuid:features:circuitborn-perfect-misdirection}}]{Perfect Misdirection}</li></ul>"
+    },
+    {
+      "slug": "circuitborn-salvage", "identifier": "circuitborn-salvage", "name": "Circuitborn (Salvage Line)", "family": "Circuitborn", "heritage": "Salvage",
+      "img": "icons/tools/hand/wrench-mechanical-heal-blue.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Circuitborn",
+      "movement": { "walk": 30 }, "senses": { "special": "Informational Matrix Sense (radio / signal / ritual / rumor networks)." },
+      "features": { "0": ["circuitborn-firmware-of-identity", "circuitborn-salvage-heritage", "circuitborn-built-in-tools"], "5": ["circuitborn-scrap-alchemy"], "11": ["circuitborn-patch-logic-field"], "17": ["circuitborn-mobile-facility-node"] },
+      "description": "<p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn’t make it. You carry their last instructions in your firmware.</p><p><em>“Nothing in this world is wasted. Some of it is just waiting to be re-purposed.”</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of recovery. Broken things speak to you. So do broken people, when they don’t know they’re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Circuitborn, Construct-Living). Circuitborn are people.</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Constitution — your chassis is built around it, expressed primarily through Tier powers. No fixed score bonus; your background handles increases.</li><li><strong>Scrap Memory.</strong> Once per long rest, you can identify the original purpose of any handheld broken object you touch (GM adjudicates depth of detail).</li></ul><h3>Core: Firmware of Identity</h3><p>At creation you gain @UUID[{{uuid:features:circuitborn-firmware-of-identity}}]{Firmware of Identity} (Firmware of Identity, Attention Resonance, Informational Matrix Sense, Glitch-Surge).</p><h3>Salvage Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5th level), Tier III (11th), Tier IV (17th).</p><ul><li><strong>Tier I.</strong> @UUID[{{uuid:features:circuitborn-built-in-tools}}]{Built-In Tools}</li><li><strong>Tier II.</strong> @UUID[{{uuid:features:circuitborn-scrap-alchemy}}]{Scrap Alchemy}</li><li><strong>Tier III.</strong> @UUID[{{uuid:features:circuitborn-patch-logic-field}}]{Patch-Logic Field}</li><li><strong>Tier IV.</strong> @UUID[{{uuid:features:circuitborn-mobile-facility-node}}]{Mobile Facility Node}</li></ul>"
+    },
+    {
+      "slug": "circuitborn-synapse", "identifier": "circuitborn-synapse", "name": "Circuitborn (Synapse Line)", "family": "Circuitborn", "heritage": "Synapse",
+      "img": "icons/commodities/tech/antenna-powered-purple.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Circuitborn",
+      "movement": { "walk": 30 }, "senses": { "special": "Informational Matrix Sense (radio / signal / ritual / rumor networks)." },
+      "features": { "0": ["circuitborn-firmware-of-identity", "circuitborn-synapse-heritage", "circuitborn-yesod-diver"], "5": ["circuitborn-memory-print"], "11": ["circuitborn-noosphere-hook"], "17": ["circuitborn-cognition-crown"] },
+      "description": "<p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Circuitborn Line.</strong> The ghost-in-the-protocol. The chassis that thinks faster than the network it’s plugged into, and feels the noosphere the way a swimmer feels the current.</p><p><em>“You don’t use the network. The network uses you, and that’s the only relationship that doesn’t collapse.”</em></p><p><strong>Synapse.</strong> You are a sentient chassis built around the principle of inference. Information is your home. Other people travel through it. You live there.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Circuitborn, Construct-Living). Circuitborn are people.</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Intelligence — your chassis is built around it, expressed primarily through Tier powers. No fixed score bonus; your background handles increases.</li><li><strong>Predictive Cache.</strong> Once per long rest, when an enemy you can see takes an action, you may have anticipated it: you have advantage on the next reaction or attack you make against that enemy this round.</li></ul><h3>Core: Firmware of Identity</h3><p>At creation you gain @UUID[{{uuid:features:circuitborn-firmware-of-identity}}]{Firmware of Identity} (Firmware of Identity, Attention Resonance, Informational Matrix Sense, Glitch-Surge).</p><h3>Synapse Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5th level), Tier III (11th), Tier IV (17th).</p><ul><li><strong>Tier I.</strong> @UUID[{{uuid:features:circuitborn-yesod-diver}}]{Yesod-Diver}</li><li><strong>Tier II.</strong> @UUID[{{uuid:features:circuitborn-memory-print}}]{Memory-Print}</li><li><strong>Tier III.</strong> @UUID[{{uuid:features:circuitborn-noosphere-hook}}]{Noosphere Hook}</li><li><strong>Tier IV.</strong> @UUID[{{uuid:features:circuitborn-cognition-crown}}]{Cognition Crown}</li></ul>"
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "circuitborn-firmware-of-identity", "name": "Circuitborn: Firmware of Identity", "featType": "race", "level": 0, "requirements": "Circuitborn",
+      "folder": "Circuitborn", "img": "icons/commodities/tech/blueprint.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“You are not a robot. You are a decision the world keeps making about itself.”</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter maintenance trance when you rest. You have advantage on saving throws against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> Once per long rest, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) hit points equal to your proficiency bonus.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You have advantage on checks to identify surveillance, hidden speakers, encoded messages, or noospheric “attention traps.”</p><p><strong>Glitch-Surge.</strong> When you drop to 0 hit points, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>"
+    },
+
+    {
+      "slug": "circuitborn-exo-knight-heritage", "name": "Circuitborn Heritage: Exo-Knight", "featType": "race", "level": 0, "requirements": "Circuitborn (Exo-Knight Line)",
+      "folder": "Circuitborn (Exo-Knight Line)", "folderParent": "Circuitborn", "img": "icons/environment/people/infantry-armored.webp",
+      "activation": "reaction", "condition": "an ally within 5 feet of you is hit by an attack", "range": 5, "target": { "type": "ally", "count": 1 }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><strong>Circuitborn Line.</strong> The war-plate. Made for impact, for holding the line, for being the thing the squad puts between itself and whatever just came through the gate.</p><p><em>“Captain Robot is not a robot. You are. Try not to make it weird about him.”</em></p><p><strong>Exo-Knight.</strong> You are a sentient chassis built around the principle of presence. When you stand somewhere, that ground belongs to your faction until something stronger walks you off it.</p><p><strong>Bulwark Frame.</strong> When an ally within 5 feet of you is hit by an attack, you may use your reaction to impose disadvantage on the attack roll (once per long rest).</p>"
+    },
+    {
+      "slug": "circuitborn-shield-projector", "name": "Circuitborn (Exo-Knight Line): Shield Projector", "featType": "race", "level": 0, "requirements": "Circuitborn (Exo-Knight Line)",
+      "folder": "Circuitborn (Exo-Knight Line)", "folderParent": "Circuitborn", "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "activation": "reaction", "condition": "a creature you can see within 30 feet is hit", "range": 30, "target": { "type": "creature", "count": 1 }, "uses": { "max": "@prof", "per": "lr" }, "activity": "utility", "roll": "1d6 + @prof",
+      "description": "<p><em>“If you stand near me, you’re harder to kill. That’s the point.”</em></p><p><strong>Shield Projector.</strong> When a creature you can see within 30 feet is hit, you can use your reaction to project a barrier. Reduce the damage by 1d6 + your proficiency bonus. You can use this feature a number of times equal to your proficiency bonus, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "circuitborn-bulwark-protocol", "name": "Circuitborn (Exo-Knight Line): Bulwark Protocol", "featType": "race", "level": 5, "requirements": "Circuitborn (Exo-Knight Line) 5",
+      "folder": "Circuitborn (Exo-Knight Line)", "folderParent": "Circuitborn", "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“You are the reason the line holds.”</em></p><p><strong>Bulwark Protocol.</strong> Once per long rest, as an action: for 1 minute, allies within 10 feet of you gain +1 AC and have advantage on saving throws against being moved or knocked prone. You must remain conscious.</p>"
+    },
+    {
+      "slug": "circuitborn-kinetic-overflow", "name": "Circuitborn (Exo-Knight Line): Kinetic Overflow", "featType": "race", "level": 11, "requirements": "Circuitborn (Exo-Knight Line) 11",
+      "folder": "Circuitborn (Exo-Knight Line)", "folderParent": "Circuitborn", "img": "icons/magic/control/buff-strength-muscle-damage-red.webp",
+      "activation": "special", "activity": "damage", "damage": [{ "number": 1, "denomination": 6, "types": ["bludgeoning"] }],
+      "description": "<p><em>“Unused force becomes stored anger.”</em></p><p><strong>Kinetic Overflow.</strong> When you spend Bad Eden OP on Violence during a scene, you may bank one point of Overflow (maximum equal to your proficiency bonus). When you hit with a weapon attack, you can spend 1 Overflow to deal an extra 1d6 bludgeoning damage.</p>"
+    },
+    {
+      "slug": "circuitborn-siegebreaker-frame", "name": "Circuitborn (Exo-Knight Line): Siegebreaker Frame", "featType": "race", "level": 17, "requirements": "Circuitborn (Exo-Knight Line) 17",
+      "folder": "Circuitborn (Exo-Knight Line)", "folderParent": "Circuitborn", "img": "icons/magic/earth/barrier-stone-explosion-debris.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“Walls are opinions.”</em></p><p><strong>Siegebreaker Frame.</strong> Once per long rest, as an action: for 1 minute, your attacks ignore resistance to bludgeoning, piercing, and slashing damage, and you deal double damage to objects and structures. In Bad Eden strategic play, your faction treats one Facility target as if its defense tier were 1 lower for a single Raid round (GM / system).</p>"
+    },
+
+    {
+      "slug": "circuitborn-parallax-heritage", "name": "Circuitborn Heritage: Parallax", "featType": "race", "level": 0, "requirements": "Circuitborn (Parallax Line)",
+      "folder": "Circuitborn (Parallax Line)", "folderParent": "Circuitborn", "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "description": "<p><strong>Circuitborn Line.</strong> The paradox-walking. Designed to be in the place no one expects, two seconds before the rest of the world catches up.</p><p><em>“Don’t look at where I am. Look at where I’m about to have already been.”</em></p><p><strong>Parallax.</strong> You are a sentient chassis built around the principle of positional doubt. The world keeps a fuzzy outline of where you are, and that fuzziness is your weapon.</p><p><strong>Phase Drift.</strong> When you take the Disengage action, your speed increases by 10 feet for that turn.</p>"
+    },
+    {
+      "slug": "circuitborn-light-bend-cloak", "name": "Circuitborn (Parallax Line): Light-Bend Cloak", "featType": "race", "level": 0, "requirements": "Circuitborn (Parallax Line)",
+      "folder": "Circuitborn (Parallax Line)", "folderParent": "Circuitborn", "img": "icons/magic/light/beam-rays-blue-small.webp",
+      "activation": "bonus", "duration": { "value": "1", "units": "round" }, "uses": { "max": "@prof", "per": "lr" },
+      "description": "<p><em>“You are where the camera says you are.”</em></p><p><strong>Light-Bend Cloak.</strong> As a bonus action, you become lightly obscured until the start of your next turn. Your first attack from this state has advantage, or you can instead Disengage without provoking. You can use this feature a number of times equal to your proficiency bonus, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "circuitborn-emotion-emulator", "name": "Circuitborn (Parallax Line): Emotion Emulator", "featType": "race", "level": 5, "requirements": "Circuitborn (Parallax Line) 5",
+      "folder": "Circuitborn (Parallax Line)", "folderParent": "Circuitborn", "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "description": "<p><em>“You can fake a heartbeat. You can fake a conscience. Dangerous.”</em></p><p><strong>Emotion Emulator.</strong> You gain proficiency in Stealth and Insight. If you already have one, you gain expertise in it.</p>",
+      "effects": [
+        { "_id": "be5eEmotionEmul0", "name": "Emotion Emulator", "img": "icons/magic/control/hypnosis-mesmerism-eye.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.skills.ste.value", "mode": 4, "value": "1", "priority": 20 },
+            { "key": "system.skills.ins.value", "mode": 4, "value": "1", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "circuitborn-ghost-in-the-wires", "name": "Circuitborn (Parallax Line): Ghost-In-The-Wires", "featType": "race", "level": 11, "requirements": "Circuitborn (Parallax Line) 11",
+      "folder": "Circuitborn (Parallax Line)", "folderParent": "Circuitborn", "img": "icons/commodities/tech/cable-armored-reticulated.webp",
+      "activation": "action", "range": 30, "duration": { "value": "10", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“Locks are polite requests.”</em></p><p><strong>Ghost-In-The-Wires.</strong> Once per long rest, as an action: for 10 minutes, you can interface with nearby mechanisms and simple electronics within 30 feet (doors, lights, locks, speakers). This is not mind control; it’s remote sabotage and mischief.</p>"
+    },
+    {
+      "slug": "circuitborn-perfect-misdirection", "name": "Circuitborn (Parallax Line): Perfect Misdirection", "featType": "race", "level": 17, "requirements": "Circuitborn (Parallax Line) 17",
+      "folder": "Circuitborn (Parallax Line)", "folderParent": "Circuitborn", "img": "icons/magic/control/debuff-energy-hold-teal-blue.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“Everyone is looking at the wrong thing. On purpose.”</em></p><p><strong>Perfect Misdirection.</strong> Once per long rest, as an action: for 1 minute, hostile creatures have disadvantage on attack rolls against you unless they succeed on a Wisdom saving throw at the start of their turn (DC = 8 + your proficiency bonus + your Dexterity modifier). Also, once during the minute you may force a ranged attack to miss you by “editing the frame.”</p>"
+    },
+
+    {
+      "slug": "circuitborn-salvage-heritage", "name": "Circuitborn Heritage: Salvage", "featType": "race", "level": 0, "requirements": "Circuitborn (Salvage Line)",
+      "folder": "Circuitborn (Salvage Line)", "folderParent": "Circuitborn", "img": "icons/tools/hand/wrench-mechanical-heal-blue.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn’t make it. You carry their last instructions in your firmware.</p><p><em>“Nothing in this world is wasted. Some of it is just waiting to be re-purposed.”</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of recovery. Broken things speak to you. So do broken people, when they don’t know they’re doing it.</p><p><strong>Scrap Memory.</strong> Once per long rest, you can identify the original purpose of any handheld broken object you touch (GM adjudicates depth of detail).</p>"
+    },
+    {
+      "slug": "circuitborn-built-in-tools", "name": "Circuitborn (Salvage Line): Built-In Tools", "featType": "race", "level": 0, "requirements": "Circuitborn (Salvage Line)",
+      "folder": "Circuitborn (Salvage Line)", "folderParent": "Circuitborn", "img": "icons/tools/hand/wrench-double.webp",
+      "description": "<p><em>“You were born with a wrench in your soul.”</em></p><p><strong>Built-In Tools.</strong> You gain proficiency with tinker's tools and one set of artisan's tools of your choice. As part of a long rest, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>"
+    },
+    {
+      "slug": "circuitborn-scrap-alchemy", "name": "Circuitborn (Salvage Line): Scrap Alchemy", "featType": "race", "level": 5, "requirements": "Circuitborn (Salvage Line) 5",
+      "folder": "Circuitborn (Salvage Line)", "folderParent": "Circuitborn", "img": "icons/commodities/tech/battery-chemical-blue.webp",
+      "activation": "minute", "activationValue": 10, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“Trash is only trash if you don’t understand it.”</em></p><p><strong>Scrap Alchemy.</strong> Once per long rest, over 10 minutes, convert junk into a useful component. Choose one: ammunition, a simple tool, a small explosive charge (nonlethal), or a single-use OP chit worth +1 Economy or +1 Logistics for this scene.</p>"
+    },
+    {
+      "slug": "circuitborn-patch-logic-field", "name": "Circuitborn (Salvage Line): Patch-Logic Field", "featType": "race", "level": 11, "requirements": "Circuitborn (Salvage Line) 11",
+      "folder": "Circuitborn (Salvage Line)", "folderParent": "Circuitborn", "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“If reality has seams, you brought thread.”</em></p><p><strong>Patch-Logic Field.</strong> Once per long rest, as an action: for 1 minute, allies within 10 feet of you reduce damage from hazards (fire, acid, falling debris, radiation bursts) by your proficiency bonus.</p>"
+    },
+    {
+      "slug": "circuitborn-mobile-facility-node", "name": "Circuitborn (Salvage Line): Mobile Facility Node", "featType": "race", "level": 17, "requirements": "Circuitborn (Salvage Line) 17",
+      "folder": "Circuitborn (Salvage Line)", "folderParent": "Circuitborn", "img": "icons/commodities/tech/blueprint.webp",
+      "activation": "minute", "activationValue": 1, "duration": { "value": "10", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“You are a workshop that learned to walk.”</em></p><p><strong>Mobile Facility Node.</strong> Once per long rest, over 1 minute, deploy a temporary station (a glowing fold-out altar of tools) that lasts 10 minutes. While active, you and allies within 10 feet have advantage on checks to craft, repair, and disable devices. In Bad Eden strategic play, your faction may treat one Repair Rig or Repair Facility activity as costing 1 less OP once per Strategic Turn (GM / system).</p>"
+    },
+
+    {
+      "slug": "circuitborn-synapse-heritage", "name": "Circuitborn Heritage: Synapse", "featType": "race", "level": 0, "requirements": "Circuitborn (Synapse Line)",
+      "folder": "Circuitborn (Synapse Line)", "folderParent": "Circuitborn", "img": "icons/commodities/tech/antenna-powered-purple.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><strong>Circuitborn Line.</strong> The ghost-in-the-protocol. The chassis that thinks faster than the network it’s plugged into, and feels the noosphere the way a swimmer feels the current.</p><p><em>“You don’t use the network. The network uses you, and that’s the only relationship that doesn’t collapse.”</em></p><p><strong>Synapse.</strong> You are a sentient chassis built around the principle of inference. Information is your home. Other people travel through it. You live there.</p><p><strong>Predictive Cache.</strong> Once per long rest, when an enemy you can see takes an action, you may have anticipated it: you have advantage on the next reaction or attack you make against that enemy this round.</p>"
+    },
+    {
+      "slug": "circuitborn-yesod-diver", "name": "Circuitborn (Synapse Line): Yesod-Diver", "featType": "race", "level": 0, "requirements": "Circuitborn (Synapse Line)",
+      "folder": "Circuitborn (Synapse Line)", "folderParent": "Circuitborn", "img": "icons/magic/perception/orb-eye-scrying.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“Reality is a database. You brought admin tools.”</em></p><p><strong>Yesod-Diver.</strong> You have advantage on checks to interpret metaphysical constructs (Sparks, slippage, noospheric entities). Once per long rest, you can ask the GM one direct question about a nearby “system,” and receive a truthful but incomplete answer.</p>"
+    },
+    {
+      "slug": "circuitborn-memory-print", "name": "Circuitborn (Synapse Line): Memory-Print", "featType": "race", "level": 5, "requirements": "Circuitborn (Synapse Line) 5",
+      "folder": "Circuitborn (Synapse Line)", "folderParent": "Circuitborn", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "activation": "bonus", "target": { "type": "ally", "count": 1 },
+      "description": "<p><em>“You do not remember. You archive.”</em></p><p><strong>Memory-Print.</strong> You perfectly recall the last 24 hours. As a bonus action, you may replay a scene fragment to an ally, granting them advantage on one Investigation, History, or Insight check about it.</p>"
+    },
+    {
+      "slug": "circuitborn-noosphere-hook", "name": "Circuitborn (Synapse Line): Noosphere Hook", "featType": "race", "level": 11, "requirements": "Circuitborn (Synapse Line) 11",
+      "folder": "Circuitborn (Synapse Line)", "folderParent": "Circuitborn", "img": "icons/magic/control/energy-stream-link-white.webp",
+      "activation": "action", "duration": { "value": "10", "units": "minute" }, "uses": { "max": "@prof", "per": "lr" },
+      "description": "<p><em>“Where attention goes, you can follow.”</em></p><p><strong>Noosphere Hook.</strong> As an action, you lock onto a creature, location, or faction you have observed. For 10 minutes, you know the general direction to it and have advantage on checks to track it (including digital and social tracking). You can use this feature a number of times equal to your proficiency bonus, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "circuitborn-cognition-crown", "name": "Circuitborn (Synapse Line): Cognition Crown", "featType": "race", "level": 17, "requirements": "Circuitborn (Synapse Line) 17",
+      "folder": "Circuitborn (Synapse Line)", "folderParent": "Circuitborn", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“You are not a person with thoughts. You are a thought with a body.”</em></p><p><strong>Cognition Crown.</strong> Once per long rest, as an action: for 1 minute, you have resistance to psychic damage and advantage on all Intelligence and Wisdom checks. In Bad Eden play, once during the minute you may convert a failed check into a success by “recompiling” (describe the glitch).</p>"
+    }
+  ]
+}

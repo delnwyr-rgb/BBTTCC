@@ -1,0 +1,207 @@
+{
+  "_about": "Oldenborn for D&D: five heritages (Earthbound, Lumenwrought, Rustland Scavenger, Stormborn Nomad, Tideborne), each its own species item; the family core (Old Memory, Old Flesh) is level 0 on every one. Text is Dave's RFI text with the mechanics D&D-ified per the RFI→5E rulebook; nothing rewritten for voice. Tier ladder: I at creation, II at 5th, III at 11th, IV at 17th.",
+  "_unsure": [
+    "Tier order (the source only names Tier I): Earthbound I Stonecall, II Deep-Blooded, III Mountain Stance, IV World-Anchor. Lumenwrought I Glamourfield, II Moonlit Ward, III Sovereign Mask, IV Mythic Recollection. Rustland Scavenger I Ruin-Sense, II Urban Scrounger, III Patch & Repurpose, IV Salvage King (the separate 'Toxic Lung Filters' feat duplicated Ruin-Sense; its passive became the heritage trait). Stormborn Nomad I Weatherwise (the 'feature' doc, merged with the 'technique' duplicate), II Nomad Networks, III Ward of the Gale, IV Skywalker. Tideborne (no Tier I named) I Memory Tide, II Undertow Grip, III Floodgate of Self, IV Ocean Judge.",
+    "Rulebook applied: squares ×5 ft; Soma Break → long rest; 1/Scene → short rest; tier uses → proficiency bonus per long rest; +tier → + proficiency bonus; reroll the lowest → advantage; 3d10 keep lowest → disadvantage; faculty checks → the mapped ability; kinetic → bludgeoning/piercing/slashing; Integrity → hit points; Stress → exhaustion. 'Strategic Turn' in the Rustland faction hooks became 'campaign turn' (the lint bans the RFI term).",
+    "Undertow Grip's 'Violence defense check against your DC' → Strength saving throw, DC 8 + proficiency bonus + Wisdom or Charisma modifier (the Tideborne lean is Wisdom).",
+    "Tideborne has no darkvision number in the source ('see normally in darkness') — set to 60 ft on the species item.",
+    "Veil-Sight, Dream-Flesh, You Are Remembered, Glamourcast, Dream Anchor, Ruin Sense, Route-Sense and the faction Strategic Hooks are text-only (table rulings, no sheet automation). Stonecall / Floodgate / Mythic Recollection resistances are in the activity text, not timed Active Effects."
+  ],
+  "races": [
+    {
+      "slug": "oldenborn-earthbound", "identifier": "oldenborn-earthbound", "name": "Oldenborn (Earthbound)", "family": "Oldenborn", "heritage": "Earthbound",
+      "img": "icons/environment/wilderness/cave-entrance-mountain.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "fey", "subtype": "Oldenborn",
+      "movement": { "walk": 30 }, "senses": { "special": "Veil-Sight (awareness of spirits, Spark echoes, noospheric constructs)" },
+      "features": { "0": ["oldenborn-old-memory-old-flesh", "earthbound-trait", "earthbound-stonecall"], "5": ["earthbound-deep-blooded"], "11": ["earthbound-mountain-stance"], "17": ["earthbound-world-anchor"] },
+      "description": "<p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p><p><strong>Oldenborn.</strong> You are a diminished god-fragment, an ancestor-spirit, a genius loci clawing back into embodiment. Folk might call you an elf, a dwarf, a sylph, a goblin—because mortals label what scares them. But you know the truth: you are a place-soul wearing legs.</p><p><strong>Oldenborn Heritage.</strong> The branch that stayed in the dirt. Bone of the bedrock, slow blood, slow grudge. The land remembers your name and answers when you call.</p><p><em>“The world remembered old names. You answered.”</em></p><p><strong>Earthbound.</strong> You are the place-soul that put down roots and refused to be moved. Folks call you a stout one—dwarf, gnome, hill spirit, depending on the dialect. The truth is older than any of those words.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Fey (Oldenborn)</li><li><strong>Size.</strong> Medium</li><li><strong>Speed.</strong> 30 feet</li><li><strong>Veil-Sight.</strong> You perceive the presence of spirits, ghosts, Spark echoes, and noospheric constructs. Awareness, not perfect sight.</li><li><strong>Ancestry Lean.</strong> Constitution. Oldenborn grants no fixed ability bonus; your background handles increases.</li><li>@UUID[{{uuid:features:oldenborn-old-memory-old-flesh}}]{Old Memory, Old Flesh} and @UUID[{{uuid:features:earthbound-trait}}]{Stoneborn}</li></ul><h3>Tier Powers</h3><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:earthbound-stonecall}}]{Stonecall}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:earthbound-deep-blooded}}]{Deep-Blooded}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:earthbound-mountain-stance}}]{Mountain Stance}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:earthbound-world-anchor}}]{World-Anchor}</li></ul>"
+    },
+    {
+      "slug": "oldenborn-lumenwrought", "identifier": "oldenborn-lumenwrought", "name": "Oldenborn (Lumenwrought)", "family": "Oldenborn", "heritage": "Lumenwrought",
+      "img": "icons/magic/light/orb-lightbulb-gray.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "fey", "subtype": "Oldenborn",
+      "movement": { "walk": 30 }, "senses": { "special": "Veil-Sight (awareness of spirits, Spark echoes, noospheric constructs)" },
+      "features": { "0": ["oldenborn-old-memory-old-flesh", "lumenwrought-trait", "lumenwrought-glamourfield"], "5": ["lumenwrought-moonlit-ward"], "11": ["lumenwrought-sovereign-mask"], "17": ["lumenwrought-mythic-recollection"] },
+      "description": "<p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p><p><strong>Oldenborn.</strong> You are a diminished god-fragment, an ancestor-spirit, a genius loci clawing back into embodiment. Folk might call you an elf, a dwarf, a sylph, a goblin—because mortals label what scares them. But you know the truth: you are a place-soul wearing legs.</p><p><strong>Oldenborn Heritage.</strong> The branch that lit up from inside. Festival-spirit, glamour-spirit, the ancestor that taught the people to call something beautiful before they had a word for sacred.</p><p><em>“The world remembered old names. You answered—and you were lit by the answering.”</em></p><p><strong>Lumenwrought.</strong> You are the place-soul that learned to wear a mask of light. Folks call you elf, sylph, faerie, depending on what scares them prettier than it scares them honestly. You are the first reason a candle is holy.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Fey (Oldenborn)</li><li><strong>Size.</strong> Medium</li><li><strong>Speed.</strong> 30 feet</li><li><strong>Veil-Sight.</strong> You perceive the presence of spirits, ghosts, Spark echoes, and noospheric constructs. Awareness, not perfect sight.</li><li><strong>Ancestry Lean.</strong> Charisma. Oldenborn grants no fixed ability bonus; your background handles increases.</li><li>@UUID[{{uuid:features:oldenborn-old-memory-old-flesh}}]{Old Memory, Old Flesh} and @UUID[{{uuid:features:lumenwrought-trait}}]{Glamourcast}</li></ul><h3>Tier Powers</h3><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:lumenwrought-glamourfield}}]{Glamourfield}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:lumenwrought-moonlit-ward}}]{Moonlit Ward}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:lumenwrought-sovereign-mask}}]{Sovereign Mask}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:lumenwrought-mythic-recollection}}]{Mythic Recollection}</li></ul>"
+    },
+    {
+      "slug": "oldenborn-rustland-scavenger", "identifier": "oldenborn-rustland-scavenger", "name": "Oldenborn (Rustland Scavenger)", "family": "Oldenborn", "heritage": "Rustland Scavenger",
+      "img": "icons/tools/hand/drill-steel-brown-grey.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "fey", "subtype": "Oldenborn",
+      "movement": { "walk": 30 }, "senses": { "special": "Veil-Sight (awareness of spirits, Spark echoes, noospheric constructs)" },
+      "traits": [{ "tag": "inv", "title": "Urban Scrounger", "grants": ["skills:inv"] }],
+      "features": { "0": ["oldenborn-old-memory-old-flesh", "rustland-trait", "rustland-strategic-hooks", "rustland-ruin-sense"], "5": ["rustland-urban-scrounger"], "11": ["rustland-patch-and-repurpose"], "17": ["rustland-salvage-king"] },
+      "description": "<p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn.</strong> You are a diminished god-fragment, an ancestor-spirit, a genius loci clawing back into embodiment. Folk might call you an elf, a dwarf, a sylph, a goblin—because mortals label what scares them. But you know the truth: you are a place-soul wearing legs.</p><p><strong>Oldenborn (Rustland Scavenger).</strong> Your place-soul is a dead city that refused to finish dying. You are the genius loci of collapsed transit hubs, rebar graveyards, and the smell of old oil. Every ruin you walk into recognizes you on arrival and, quietly, offers you what’s left.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Fey (Oldenborn, Rustland)</li><li><strong>Size.</strong> Medium</li><li><strong>Speed.</strong> 30 feet</li><li><strong>Veil-Sight.</strong> You perceive the presence of spirits, ghosts, Spark echoes, and noospheric constructs. Awareness, not perfect sight.</li><li><strong>Ancestry Lean.</strong> Intelligence or Dexterity. Oldenborn grants no fixed ability bonus; your background handles increases.</li><li><strong>Urban Scrounger.</strong> You gain proficiency in the Investigation skill.</li><li>@UUID[{{uuid:features:oldenborn-old-memory-old-flesh}}]{Old Memory, Old Flesh}, @UUID[{{uuid:features:rustland-trait}}]{Toxic Lung Filters} and @UUID[{{uuid:features:rustland-strategic-hooks}}]{Strategic Hooks (Rustland Scavenger)}</li></ul><h3>Tier Powers</h3><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:rustland-ruin-sense}}]{Ruin-Sense}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:rustland-urban-scrounger}}]{Urban Scrounger}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:rustland-patch-and-repurpose}}]{Patch &amp; Repurpose}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:rustland-salvage-king}}]{Salvage King}</li></ul>"
+    },
+    {
+      "slug": "oldenborn-stormborn-nomad", "identifier": "oldenborn-stormborn-nomad", "name": "Oldenborn (Stormborn Nomad)", "family": "Oldenborn", "heritage": "Stormborn Nomad",
+      "img": "icons/magic/air/wind-swirl-gray-blue.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "fey", "subtype": "Oldenborn",
+      "movement": { "walk": 30 }, "senses": { "special": "Veil-Sight (awareness of spirits, Spark echoes, noospheric constructs)" },
+      "features": { "0": ["oldenborn-old-memory-old-flesh", "stormborn-trait", "stormborn-weatherwise"], "5": ["stormborn-nomad-networks"], "11": ["stormborn-ward-of-the-gale"], "17": ["stormborn-skywalker"] },
+      "description": "<p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn.</strong> You are a diminished god-fragment, an ancestor-spirit, a genius loci clawing back into embodiment. Folk might call you an elf, a dwarf, a sylph, a goblin—because mortals label what scares them. But you know the truth: you are a place-soul wearing legs.</p><p><strong>Stormborn Nomad.</strong> Your place-soul is a weather front. You are the caravan memory of every tribe that crossed the ash squalls and came out the other side. When you walk, the wind remembers that you used to be the reason it had a name.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Fey (Oldenborn)</li><li><strong>Size.</strong> Medium</li><li><strong>Speed.</strong> 30 feet</li><li><strong>Veil-Sight.</strong> You perceive the presence of spirits, ghosts, Spark echoes, and noospheric constructs. Awareness, not perfect sight.</li><li><strong>Ancestry Lean.</strong> Wisdom. Oldenborn grants no fixed ability bonus; your background handles increases.</li><li>@UUID[{{uuid:features:oldenborn-old-memory-old-flesh}}]{Old Memory, Old Flesh} and @UUID[{{uuid:features:stormborn-trait}}]{Weather Front}</li></ul><h3>Tier Powers</h3><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:stormborn-weatherwise}}]{Weatherwise}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:stormborn-nomad-networks}}]{Nomad Networks}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:stormborn-ward-of-the-gale}}]{Ward of the Gale}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:stormborn-skywalker}}]{Skywalker}</li></ul>"
+    },
+    {
+      "slug": "oldenborn-tideborne", "identifier": "oldenborn-tideborne", "name": "Oldenborn (Tideborne)", "family": "Oldenborn", "heritage": "Tideborne",
+      "img": "icons/magic/water/wave-water-blue.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "fey", "subtype": "Oldenborn",
+      "movement": { "walk": 30 }, "senses": { "darkvision": 60, "special": "Depth-Sight; Veil-Sight (awareness of spirits, Spark echoes, noospheric constructs)" },
+      "features": { "0": ["oldenborn-old-memory-old-flesh", "tideborne-trait", "tideborne-memory-tide"], "5": ["tideborne-undertow-grip"], "11": ["tideborne-floodgate-of-self"], "17": ["tideborne-ocean-judge"] },
+      "description": "<p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Tideborne).</strong> You are a diminished god-fragment, an ancestor-spirit, a genius loci clawing back into embodiment. Folk might call you an elf, a dwarf, a sylph, a goblin—because mortals label what scares them. But you know the truth: you are a place-soul wearing legs.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Fey (Oldenborn)</li><li><strong>Size.</strong> Medium</li><li><strong>Speed.</strong> 30 feet</li><li><strong>Depth-Sight.</strong> Darkvision 60 feet, and you see normally underwater (your eyes read pressure and motion).</li><li><strong>Veil-Sight.</strong> You perceive the presence of spirits, ghosts, Spark echoes, and noospheric constructs. Awareness, not perfect sight.</li><li><strong>Ancestry Lean.</strong> Wisdom. Oldenborn grants no fixed ability bonus; your background handles increases.</li><li>@UUID[{{uuid:features:oldenborn-old-memory-old-flesh}}]{Old Memory, Old Flesh} and @UUID[{{uuid:features:tideborne-trait}}]{Tideborne}</li></ul><h3>Tier Powers</h3><p>You gain your Tier I power at creation, then additional Tier powers as you level (5th, 11th, 17th). These are intentionally light on automation—Bad Eden loves table truth more than rules-lawyering.</p><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:tideborne-memory-tide}}]{Memory Tide}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:tideborne-undertow-grip}}]{Undertow Grip}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:tideborne-floodgate-of-self}}]{Floodgate of Self}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:tideborne-ocean-judge}}]{Ocean Judge}</li></ul>"
+    }
+  ],
+  "features": [
+    {
+      "slug": "oldenborn-old-memory-old-flesh", "name": "Oldenborn: Old Memory, Old Flesh", "featType": "race", "level": 0, "requirements": "Oldenborn",
+      "folder": "Oldenborn", "img": "icons/environment/wilderness/tree-oak.webp",
+      "description": "<p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p><p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod—symbolic memory-space—unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p><p><strong>Old Memory, Old Paths.</strong> You have advantage on ability checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels remembered, abandoned, or contested (the GM answers vaguely).</p><p><strong>Veil-Sight.</strong> You perceive the presence of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p><p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It’s never neutral.</p>"
+    },
+
+    {
+      "slug": "earthbound-trait", "name": "Earthbound: Stoneborn", "featType": "race", "level": 0, "requirements": "Oldenborn (Earthbound)",
+      "folder": "Oldenborn (Earthbound)", "folderParent": "Oldenborn", "img": "icons/environment/wilderness/cave-entrance-mountain.webp",
+      "description": "<p><em>“The world remembered old names. You answered.”</em></p><p><strong>Earthbound.</strong> You are the place-soul that put down roots and refused to be moved. Folks call you a stout one—dwarf, gnome, hill spirit, depending on the dialect. The truth is older than any of those words.</p><p><strong>Stoneborn.</strong> You have advantage on saving throws and ability checks to resist being knocked prone or forcibly moved while you stand on natural ground.</p>"
+    },
+    {
+      "slug": "earthbound-stonecall", "name": "Oldenborn (Earthbound): Stonecall", "featType": "race", "level": 0, "requirements": "Oldenborn (Earthbound)",
+      "folder": "Oldenborn (Earthbound)", "folderParent": "Oldenborn", "img": "icons/magic/earth/barrier-stone-explosion-debris.webp",
+      "activation": "bonus", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "round" },
+      "description": "<p><em>“Stone remembers pressure. So do you.”</em></p><p><strong>Stonecall (1/long rest).</strong> When you plant your feet, the world updates its assumptions about where “down” is. Until the start of your next turn, you can’t be forcibly moved, you have resistance to bludgeoning, piercing, and slashing damage, and you ignore difficult terrain caused by earth, rubble, or broken masonry.</p>"
+    },
+    {
+      "slug": "earthbound-deep-blooded", "name": "Oldenborn (Earthbound): Deep-Blooded", "featType": "race", "level": 5, "requirements": "Oldenborn (Earthbound) 5",
+      "folder": "Oldenborn (Earthbound)", "folderParent": "Oldenborn", "img": "icons/environment/wilderness/cave-entrance-mountain.webp",
+      "description": "<p><em>“You were built for caves, collapse, and consequences.”</em></p><p><strong>Deep-Blooded.</strong> You have advantage on Constitution saving throws against poison and environmental hazards. You can’t be surprised by structural failure (collapsing ceilings, buckling catwalks) unless you are unconscious.</p><p><strong>Worksite Authority.</strong> You gain proficiency with smith’s tools or mason’s tools. If you already have both, you gain expertise with one.</p>"
+    },
+    {
+      "slug": "earthbound-mountain-stance", "name": "Oldenborn (Earthbound): Mountain Stance", "featType": "race", "level": 11, "requirements": "Oldenborn (Earthbound) 11",
+      "folder": "Oldenborn (Earthbound)", "folderParent": "Oldenborn", "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "activation": "bonus", "uses": { "max": "@prof", "per": "lr" }, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>“The mountain does not fall. It negotiates.”</em></p><p><strong>Mountain Stance (proficiency bonus uses / long rest).</strong> Bonus action — enter a stance for 1 minute. While in the stance: you have advantage on Strength checks, and creatures provoke opportunity attacks from you even when they Disengage.</p>"
+    },
+    {
+      "slug": "earthbound-world-anchor", "name": "Oldenborn (Earthbound): World-Anchor", "featType": "race", "level": 17, "requirements": "Oldenborn (Earthbound) 17",
+      "folder": "Oldenborn (Earthbound)", "folderParent": "Oldenborn", "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+      "activation": "reaction", "condition": "you or an ally within 30 feet would be teleported, displaced, banished, or forcibly moved", "uses": { "max": "1", "per": "lr" }, "range": 30, "target": { "type": "creature", "count": 1 },
+      "description": "<p><em>“Reality tries to slide. You say: no.”</em></p><p><strong>World-Anchor (1/long rest).</strong> Reaction — when you or an ally within 30 feet would be teleported, displaced, banished, or forcibly moved by a magical or metaphysical effect, anchor them. The effect fails; the attacker takes psychic backlash equal to your proficiency bonus.</p>"
+    },
+
+    {
+      "slug": "lumenwrought-trait", "name": "Lumenwrought: Glamourcast", "featType": "race", "level": 0, "requirements": "Oldenborn (Lumenwrought)",
+      "folder": "Oldenborn (Lumenwrought)", "folderParent": "Oldenborn", "img": "icons/magic/light/orb-lightbulb-gray.webp",
+      "description": "<p><em>“The world remembered old names. You answered—and you were lit by the answering.”</em></p><p><strong>Lumenwrought.</strong> You are the place-soul that learned to wear a mask of light. Folks call you elf, sylph, faerie, depending on what scares them prettier than it scares them honestly. You are the first reason a candle is holy.</p><p><strong>Glamourcast.</strong> You can shed dim light in a 5-foot radius at will, and snuff it out the same way. Your light is the colour of one specific moment in your past—the GM and you decide which.</p>"
+    },
+    {
+      "slug": "lumenwrought-glamourfield", "name": "Oldenborn (Lumenwrought): Glamourfield", "featType": "race", "level": 0, "requirements": "Oldenborn (Lumenwrought)",
+      "folder": "Oldenborn (Lumenwrought)", "folderParent": "Oldenborn", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action",
+      "description": "<p><em>“You were not beautiful. You were wanted.”</em></p><p><strong>Glamourfield (At Will, Minor).</strong> You can create subtle illusions affecting light, sound, scent, or emotional tone. It never overwhelms; it always influences.</p><p><strong>Dream Anchor.</strong> You have a +1 bonus to saving throws against metaphysical hazards (slippage, dream traps, Spark backlash).</p>"
+    },
+    {
+      "slug": "lumenwrought-moonlit-ward", "name": "Oldenborn (Lumenwrought): Moonlit Ward", "featType": "race", "level": 5, "requirements": "Oldenborn (Lumenwrought) 5",
+      "folder": "Oldenborn (Lumenwrought)", "folderParent": "Oldenborn", "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "activation": "reaction", "condition": "you or an ally within 30 feet would be charmed or frightened", "uses": { "max": "@prof", "per": "lr" }, "range": 30, "target": { "type": "creature", "count": 1 },
+      "description": "<p><em>“You can make a lie feel tired.”</em></p><p><strong>Moonlit Ward (proficiency bonus uses / long rest).</strong> Reaction — when you or an ally within 30 feet would be charmed or frightened, grant them advantage on the saving throw. On a success, the aggressor has disadvantage on their next attack roll.</p>"
+    },
+    {
+      "slug": "lumenwrought-sovereign-mask", "name": "Oldenborn (Lumenwrought): Sovereign Mask", "featType": "race", "level": 11, "requirements": "Oldenborn (Lumenwrought) 11",
+      "folder": "Oldenborn (Lumenwrought)", "folderParent": "Oldenborn", "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "activation": "minute", "activationValue": 1, "uses": { "max": "1", "per": "lr" }, "duration": { "value": "10", "units": "minute" },
+      "description": "<p><em>“You put on a story, and the world agrees.”</em></p><p><strong>Sovereign Mask (1/long rest).</strong> Over 1 minute, assume a mythic persona (King, Trickster, Saint, Monster, etc.). For 10 minutes, gain proficiency in Persuasion, Stealth, and Intimidation — or Mastery in each you are already proficient with (treat any d20 roll of 9 or lower on those checks as a 10). You cannot be magically identified or scryed while masked.</p>"
+    },
+    {
+      "slug": "lumenwrought-mythic-recollection", "name": "Oldenborn (Lumenwrought): Mythic Recollection", "featType": "race", "level": 17, "requirements": "Oldenborn (Lumenwrought) 17",
+      "folder": "Oldenborn (Lumenwrought)", "folderParent": "Oldenborn", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>“You remember yourself. And reality flinches.”</em></p><p><strong>Mythic Recollection (1/long rest).</strong> For 1 minute, you become painfully real. Gain resistance to all damage except force; hostile creatures within 10 feet have disadvantage on saving throws against your powers and abilities (caught in your gravity of meaning).</p>"
+    },
+
+    {
+      "slug": "rustland-trait", "name": "Rustland Scavenger: Toxic Lung Filters", "featType": "race", "level": 0, "requirements": "Oldenborn (Rustland Scavenger)",
+      "folder": "Oldenborn (Rustland Scavenger)", "folderParent": "Oldenborn", "img": "icons/magic/air/wind-swirl-gray-blue.webp",
+      "description": "<p><em>“You breathe what kills them.”</em></p><p><strong>Rustland Scavenger.</strong> Your place-soul is a dead city that refused to finish dying. You are the genius loci of collapsed transit hubs, rebar graveyards, and the smell of old oil. Every ruin you walk into recognizes you on arrival and, quietly, offers you what’s left.</p><p><strong>Toxic Lung Filters.</strong> You have advantage on Constitution saving throws against inhaled toxins, smoke, and industrial residue. You can function for up to 1 hour in atmospheres that would hospitalize a normal Medium creature.</p><p><strong>Urban Scrounger.</strong> You are proficient in the Investigation skill. You can always tell which structure in a ruin is load-bearing, which doorway is the real exit, and which pile of junk has something useful in it.</p>"
+    },
+    {
+      "slug": "rustland-strategic-hooks", "name": "Strategic Hooks (Rustland Scavenger)", "featType": "race", "level": 0, "requirements": "Oldenborn (Rustland Scavenger)",
+      "folder": "Oldenborn (Rustland Scavenger)", "folderParent": "Oldenborn", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><strong>Strategic Hooks (Foundry / Bad Eden)</strong></p><p><strong>OP Edge.</strong> Your faction gains +2 Economy OP and +1 Intrigue OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Ruins / Urban Wreckage hexes, faction travel Intrigue costs are reduced by 1 (minimum 0).</p><p><strong>Salvage Windfall.</strong> Once per Strategic Turn, your faction may perform an extra Salvage action in a controlled Ruins hex without consuming its action slot.</p>"
+    },
+    {
+      "slug": "rustland-ruin-sense", "name": "Oldenborn (Rustland Scavenger): Ruin-Sense", "featType": "race", "level": 0, "requirements": "Oldenborn (Rustland Scavenger)",
+      "folder": "Oldenborn (Rustland Scavenger)", "folderParent": "Oldenborn", "img": "icons/magic/perception/orb-eye-scrying.webp",
+      "activation": "minute", "activationValue": 10, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“The dead cities are not silent. They are mid-sentence.”</em></p><p><strong>Ruin-Sense.</strong> When you spend 10 minutes examining a broken or ruined object, you can ask the GM one of: What was its last use? Who broke it? What does it still want? The answer is at least one truth.</p><p><strong>Scavenger’s Eye (1/long rest).</strong> Spend 10 minutes searching a rubble pile, gutted building, or wreckage of any kind. You recover one minor useful item — the GM picks from a short list of plausible salvage (a half-charged battery, a length of usable wire, a sealed container of clean water, a still-edible ration, a tool of one trade). It is what the place actually had.</p><p><strong>Toxic-Lung Filters.</strong> You have advantage on saving throws against airborne poisons, toxic gas, and rad-dust. You can hold your breath for 10 minutes.</p>"
+    },
+    {
+      "slug": "rustland-urban-scrounger", "name": "Oldenborn (Rustland Scavenger): Urban Scrounger", "featType": "race", "level": 5, "requirements": "Oldenborn (Rustland Scavenger) 5",
+      "folder": "Oldenborn (Rustland Scavenger)", "folderParent": "Oldenborn", "img": "icons/tools/hand/drill-steel-brown-grey.webp",
+      "description": "<p><em>“Markets, junkyards, half-dead malls. Your habitat.”</em></p><p><strong>Urban Scrounger.</strong> When you spend at least 4 hours searching any market, junkyard, ruin, or scrap economy, you can find one specific reasonable item the GM rules is plausibly available there. The item must be something an attentive scavenger could realistically locate (no plot keys, no unique relics) and may cost trade goods or favours appropriate to the place.</p><p><strong>Reading the Rust.</strong> You have advantage on Investigation checks to find concealed compartments, hidden stashes, or pre-collapse infrastructure (vents, conduits, sub-tunnels) inside ruined or formerly-inhabited structures.</p>"
+    },
+    {
+      "slug": "rustland-patch-and-repurpose", "name": "Oldenborn (Rustland Scavenger): Patch & Repurpose", "featType": "race", "level": 11, "requirements": "Oldenborn (Rustland Scavenger) 11",
+      "folder": "Oldenborn (Rustland Scavenger)", "folderParent": "Oldenborn", "img": "icons/tools/hand/drill-steel-brown-grey.webp",
+      "activation": "minute", "activationValue": 10, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“You can make almost anything run long past its expiration date. Yourself included.”</em></p><p><strong>Patch &amp; Repurpose (1/long rest).</strong> During a long rest, spend 10 minutes on a single broken or low-charge item (weapon, tool, power cell, vehicle component, armour). Restore it to one more use, scene, or day. The GM rules how it dies for real after.</p>"
+    },
+    {
+      "slug": "rustland-salvage-king", "name": "Oldenborn (Rustland Scavenger): Salvage King", "featType": "race", "level": 17, "requirements": "Oldenborn (Rustland Scavenger) 17",
+      "folder": "Oldenborn (Rustland Scavenger)", "folderParent": "Oldenborn", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "activation": "special", "uses": { "max": "1", "per": "sr" },
+      "description": "<p><em>“If it isn’t nailed down, you can sell it. If it is nailed down, you can sell the nails.”</em></p><p><strong>Salvage King (1/short rest).</strong> When the party is in any ruin, junkyard, scrap field, abandoned facility, or wrecked vehicle, declare that one specific reasonable object exists somewhere within sight or one room over. The GM may set a brief search time, require a minor cost, or rule the object is in worse condition.</p>"
+    },
+
+    {
+      "slug": "stormborn-trait", "name": "Stormborn Nomad: Weather Front", "featType": "race", "level": 0, "requirements": "Oldenborn (Stormborn Nomad)",
+      "folder": "Oldenborn (Stormborn Nomad)", "folderParent": "Oldenborn", "img": "icons/magic/air/wind-swirl-gray-blue.webp",
+      "description": "<p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Stormborn Nomad.</strong> Your place-soul is a weather front. You are the caravan memory of every tribe that crossed the ash squalls and came out the other side. When you walk, the wind remembers that you used to be the reason it had a name.</p><p><strong>Weather Front.</strong> You have advantage on Charisma and Wisdom checks to locate water, shelter, or safe passage in Desert, Ash Wastes, Swamp, or Mire hexes.</p>"
+    },
+    {
+      "slug": "stormborn-weatherwise", "name": "Oldenborn (Stormborn Nomad): Weatherwise", "featType": "race", "level": 0, "requirements": "Oldenborn (Stormborn Nomad)",
+      "folder": "Oldenborn (Stormborn Nomad)", "folderParent": "Oldenborn", "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "activation": "reaction", "condition": "you would take lightning, thunder, fire, or cold damage", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>“The sky is a language. You were the first to learn the punctuation.”</em></p><p><strong>Weatherwise.</strong> You always know the upcoming weather for the next 12 hours within 1 mile, even underground. You have advantage on saving throws against weather effects (extreme cold, extreme heat, wind, lightning, storm).</p><p><strong>Wind-Read (1/long rest).</strong> When you would take lightning, thunder, fire, or cold damage, you may use your reaction to halve it. The wind shifts as you do.</p><p><strong>Ash-Walker.</strong> You ignore difficult terrain caused by snow, ash, dust, sand, or shifting earth.</p>"
+    },
+    {
+      "slug": "stormborn-nomad-networks", "name": "Oldenborn (Stormborn Nomad): Nomad Networks", "featType": "race", "level": 5, "requirements": "Oldenborn (Stormborn Nomad) 5",
+      "folder": "Oldenborn (Stormborn Nomad)", "folderParent": "Oldenborn", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><em>“You never really travel alone. Caravan chains, sky-routes, migrant camps — the map of where help should be is already in your head.”</em></p><p><strong>Nomad Networks.</strong> You have advantage on Charisma and Wisdom checks made to find shelter, guides, supplies, or black-market contacts along major travel routes, in caravan towns, or in any inhabited Desert / Ash Wastes / Swamp / Mire hex.</p><p><strong>Route-Sense.</strong> When you spend at least 1 hour in a settlement of any size, the GM tells you one true thing about a route in or out of that settlement that an outsider would not know.</p>"
+    },
+    {
+      "slug": "stormborn-ward-of-the-gale", "name": "Oldenborn (Stormborn Nomad): Ward of the Gale", "featType": "race", "level": 11, "requirements": "Oldenborn (Stormborn Nomad) 11",
+      "folder": "Oldenborn (Stormborn Nomad)", "folderParent": "Oldenborn", "img": "icons/magic/air/wind-swirl-gray-blue.webp",
+      "activation": "reaction", "condition": "you take damage from a visible attack, hazard, or effect", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "round" },
+      "description": "<p><em>“Storms have learned to lean around you instead of straight through you.”</em></p><p><strong>Ward of the Gale (1/long rest).</strong> Reaction — when you take damage from a visible attack, hazard, or effect, wrap yourself in whirling air and reduce that damage by half until the start of your next turn (apply resistance first, then halve the remainder).</p>"
+    },
+    {
+      "slug": "stormborn-skywalker", "name": "Oldenborn (Stormborn Nomad): Skywalker", "featType": "race", "level": 17, "requirements": "Oldenborn (Stormborn Nomad) 17",
+      "folder": "Oldenborn (Stormborn Nomad)", "folderParent": "Oldenborn", "img": "icons/magic/control/buff-flight-wings-runes-blue.webp",
+      "activation": "action", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>“The sky was the first road. You remember that road in the bones of your feet.”</em></p><p><strong>Skywalker (1/long rest).</strong> Action — call the wind to hold you up. For 1 minute, walk on air, ash, falling rain, or any equivalent surface as if it were solid ground. Move at your normal walking speed in any direction including straight up. Falling damage is negated for the duration. Ends early if you fall unconscious or dismiss it.</p>"
+    },
+
+    {
+      "slug": "tideborne-trait", "name": "Tideborne: Place-Soul of the Deep", "featType": "race", "level": 0, "requirements": "Oldenborn (Tideborne)",
+      "folder": "Oldenborn (Tideborne)", "folderParent": "Oldenborn", "img": "icons/magic/water/wave-water-blue.webp",
+      "description": "<p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Tideborne).</strong> You are a diminished god-fragment, an ancestor-spirit, a genius loci clawing back into embodiment. Folk might call you an elf, a dwarf, a sylph, a goblin—because mortals label what scares them. But you know the truth: you are a place-soul wearing legs.</p><p><strong>Depth-Sight.</strong> You can see normally in darkness (darkvision 60 feet) and underwater (your eyes read pressure and motion).</p>"
+    },
+    {
+      "slug": "tideborne-memory-tide", "name": "Oldenborn (Tideborne): Memory Tide", "featType": "race", "level": 0, "requirements": "Oldenborn (Tideborne)",
+      "folder": "Oldenborn (Tideborne)", "folderParent": "Oldenborn", "img": "icons/magic/water/orb-water-bubbles.webp",
+      "activation": "action", "uses": { "max": "1", "per": "lr" }, "range": 30, "target": { "type": "creature", "count": 1 },
+      "description": "<p><em>“Water remembers feeling. So do you.”</em></p><p><strong>Memory Tide (1/long rest).</strong> You flood a creature you can see within 30 feet with recall. Choose one: calm (ends hostility briefly), charm, or stun for 1 round (the GM may require a saving throw depending on the target).</p><p><strong>Depth-Sight.</strong> You can see normally in darkness and underwater (your eyes read pressure and motion).</p>"
+    },
+    {
+      "slug": "tideborne-undertow-grip", "name": "Oldenborn (Tideborne): Undertow Grip", "featType": "race", "level": 5, "requirements": "Oldenborn (Tideborne) 5",
+      "folder": "Oldenborn (Tideborne)", "folderParent": "Oldenborn", "img": "icons/magic/water/wave-water-blue.webp",
+      "activation": "reaction", "condition": "a creature within 10 feet moves willingly", "uses": { "max": "@prof", "per": "lr" }, "range": 10, "target": { "type": "creature", "count": 1 }, "activity": "save", "save": { "ability": "str", "onSave": "none" },
+      "description": "<p><em>“The tide does not argue. It collects.”</em></p><p><strong>Undertow Grip (proficiency bonus uses / long rest).</strong> When a creature within 10 feet moves willingly, you may use your reaction to slow them; their speed becomes 0 until the end of the turn unless they succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Wisdom or Charisma modifier, your choice).</p><p><strong>Fluid Form.</strong> You have advantage on saving throws and checks to avoid being knocked prone, and you can squeeze through tight spaces without squeezing penalties.</p>"
+    },
+    {
+      "slug": "tideborne-floodgate-of-self", "name": "Oldenborn (Tideborne): Floodgate of Self", "featType": "race", "level": 11, "requirements": "Oldenborn (Tideborne) 11",
+      "folder": "Oldenborn (Tideborne)", "folderParent": "Oldenborn", "img": "icons/magic/water/wave-water-blue.webp",
+      "activation": "bonus", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>“You can be calm. Or you can be the storm behind calm.”</em></p><p><strong>Floodgate of Self (1/long rest).</strong> As a bonus action, enter a state for 1 minute. While active, you have resistance to psychic damage, and when you deal damage you may push a creature 10 feet (water pressure made literal).</p>"
+    },
+    {
+      "slug": "tideborne-ocean-judge", "name": "Oldenborn (Tideborne): Ocean Judge", "featType": "race", "level": 17, "requirements": "Oldenborn (Tideborne) 17",
+      "folder": "Oldenborn (Tideborne)", "folderParent": "Oldenborn", "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "hour" },
+      "description": "<p><em>“Deep water is patient. Deep water is not merciful.”</em></p><p><strong>Ocean Judge (1/long rest).</strong> When a creature you can see lies to you, betrays a promise, or breaks a sworn agreement (GM adjudicates), you can mark them for 1 hour. While marked, you always know the direction to them, and your attacks against them deal extra psychic damage equal to your proficiency bonus once per turn.</p>"
+    }
+  ]
+}

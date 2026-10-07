@@ -1,0 +1,129 @@
+{
+  "_about": "Qliph-Scarred — three heritages (Husk, Diabolic, Chthonic) as dnd5e species items, the family core 'What Walked Out', per-heritage traits and Strategic Hooks, each heritage's Tier I signature, and the shared family ladder at 5/11/17. Converted from the RFI ancestries pack (v1.1 heritage cards); Dave's text kept, RFI mechanics mapped to 5E per the rulebook. Built by tools/build-packs.mjs.",
+  "_unsure": [
+    "Tier ladder (family-wide, same on all three heritages): Tier I = the heritage signature (What the Deep Dark Taught You / What's Inside You / The Quiet Inside) at level 0; Tier II (5th) = Hunger Mask; Tier III (11th) = Qliphothic Saturation; Tier IV (17th) = Shadow-Wake. These three are the older stand-alone family docs; their core-duplicate sentences are kept as written. The old stand-alone Shadow Resilience doc is superseded by the v1.1 core text — its one extra mechanic (the unsettling weight, a bonus to Intimidation) is folded into the core's Shadow Resilience line.",
+    "The family-level 'Strategic Hooks (Qliph-Scarred)' doc (no numbers) is superseded by the per-heritage Strategic Hooks blocks on the v1.1 cards, which carry the OP numbers; each heritage gets its own level-0 Strategic Hooks feature.",
+    "'Strategic Turn' → 'campaign turn' (the lint bans the RFI phrasing; the faction layer calls it a turn).",
+    "'small bonus' / '+1 rank bonus' on a check have no rulebook line: rendered as a +2 bonus (Intimidation in the core, Stealth in Hunger Mask and Shadow-Wake, Constitution checks in Root-Bound). Unconditional ones are Active Effects; conditional ones are text.",
+    "'Soul check' in Qliphothic Saturation → 'Wisdom check or saving throw' (RFI checks cover both); 'Darkness-gain count' kept as the Bad Eden Darkness term.",
+    "'Stress-class consequence' (Hunger Mask, core) → a level of exhaustion each; '1 point of Stress' (The Quiet Inside) is not a level, so it became 1d4 psychic damage.",
+    "'Calmed' (What's Inside You) is an RFI condition; rendered as charmed with the RFI wording of what it does. Save DC for the signature powers = 8 + proficiency bonus + the heritage's lean ability (Cha for Diabolic, Wis for Husk) — stated in text; the activity's DC uses the sheet's spellcasting ability if the character has one.",
+    "Old-Dark Vision 'low-light vision to 12 squares, colour in darkness' → darkvision 60 ft seeing in colour (set on the Chthonic species too).",
+    "What the Deep Dark Taught You: 'move through spaces 1 square wide' kept literal as 5 feet wide (what the RFI line said).",
+    "Splinter Tongue's Infernal is text only (no dnd5e language trait grant, to avoid a bad key); Cold Iron Cost is text only."
+  ],
+  "races": [
+    {
+      "slug": "qliph-scarred-husk", "identifier": "qliph-scarred-husk", "name": "Qliph-Scarred (Husk)", "family": "Qliph-Scarred", "heritage": "Husk",
+      "img": "icons/magic/air/fog-gas-smoke-dense-gray.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Qliph-Scarred",
+      "movement": { "walk": 30 }, "senses": { "special": "Shadow-Wake: creatures with qliphothic attunement can sense you within 60 feet." },
+      "features": { "0": ["qliph-scarred-what-walked-out", "qliph-scarred-husk-traits", "qliph-scarred-husk-strategic-hooks", "qliph-scarred-the-quiet-inside"], "5": ["qliph-scarred-hunger-mask"], "11": ["qliph-scarred-qliphothic-saturation"], "17": ["qliph-scarred-shadow-wake"] },
+      "description": "<p><em>Qliph-Scarred.</em> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><p><em>“What the void took, it didn’t replace. That’s the feature, not the bug.”</em></p><p><strong>Qliph-Scarred (Husk).</strong> Your scar is a hollow. Something was removed from you in a place that should have unmade you, and it never got put back. People who try to read you feel the draft. Powers that look inside find less to grab. You walked out emptier, and in this world, emptier can mean harder to kill.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Qliph-Scarred does not grant fixed ability score bonuses; your background handles increases. Your heritage leans toward Intelligence in fiction and through Tier powers.</li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p>@UUID[{{uuid:features:qliph-scarred-what-walked-out}}]{What Walked Out} — shared across all Qliph-Scarred heritages, gained at character creation.</p><h3>Husk Traits</h3><p>@UUID[{{uuid:features:qliph-scarred-husk-traits}}]{Husk Traits} and @UUID[{{uuid:features:qliph-scarred-husk-strategic-hooks}}]{Strategic Hooks (Husk)}.</p><h3>Tier Powers</h3><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:qliph-scarred-the-quiet-inside}}]{The Quiet Inside}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:qliph-scarred-hunger-mask}}]{Hunger Mask}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:qliph-scarred-qliphothic-saturation}}]{Qliphothic Saturation}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:qliph-scarred-shadow-wake}}]{Shadow-Wake}</li></ul>"
+    },
+    {
+      "slug": "qliph-scarred-diabolic", "identifier": "qliph-scarred-diabolic", "name": "Qliph-Scarred (Diabolic)", "family": "Qliph-Scarred", "heritage": "Diabolic",
+      "img": "icons/magic/unholy/silhouette-robe-evil-glow.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Qliph-Scarred",
+      "movement": { "walk": 30 }, "senses": { "special": "Shadow-Wake: creatures with qliphothic attunement can sense you within 60 feet." },
+      "features": { "0": ["qliph-scarred-what-walked-out", "qliph-scarred-diabolic-traits", "qliph-scarred-diabolic-strategic-hooks", "qliph-scarred-whats-inside-you"], "5": ["qliph-scarred-hunger-mask"], "11": ["qliph-scarred-qliphothic-saturation"], "17": ["qliph-scarred-shadow-wake"] },
+      "description": "<p><em>Qliph-Scarred.</em> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><p><em>“Something fell into you and it’s still awake in there.”</em></p><p><strong>Qliph-Scarred (Diabolic).</strong> Your scar is a splinter. Something with a will of its own got into you when you walked out of that place, and you didn’t kick it out so much as you negotiated with it. The tongue in your mouth is not always yours. The advice you give is not always what you meant to say. It is, however, useful.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ancestry Lean.</strong> Qliph-Scarred does not grant fixed ability score bonuses; your background handles increases. Your heritage leans toward Charisma in fiction and through Tier powers.</li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p>@UUID[{{uuid:features:qliph-scarred-what-walked-out}}]{What Walked Out} — shared across all Qliph-Scarred heritages, gained at character creation.</p><h3>Diabolic Traits</h3><p>@UUID[{{uuid:features:qliph-scarred-diabolic-traits}}]{Diabolic Traits} and @UUID[{{uuid:features:qliph-scarred-diabolic-strategic-hooks}}]{Strategic Hooks (Diabolic)}.</p><h3>Tier Powers</h3><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:qliph-scarred-whats-inside-you}}]{What's Inside You}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:qliph-scarred-hunger-mask}}]{Hunger Mask}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:qliph-scarred-qliphothic-saturation}}]{Qliphothic Saturation}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:qliph-scarred-shadow-wake}}]{Shadow-Wake}</li></ul>"
+    },
+    {
+      "slug": "qliph-scarred-chthonic", "identifier": "qliph-scarred-chthonic", "name": "Qliph-Scarred (Chthonic)", "family": "Qliph-Scarred", "heritage": "Chthonic",
+      "img": "icons/environment/wilderness/cave-entrance-mountain.webp", "sizes": ["med"], "sizeHint": "Medium", "creatureType": "humanoid", "subtype": "Qliph-Scarred",
+      "movement": { "walk": 30 }, "senses": { "darkvision": 60, "special": "Old-Dark Vision: you see in colour in darkness. Shadow-Wake: creatures with qliphothic attunement can sense you within 60 feet." },
+      "features": { "0": ["qliph-scarred-what-walked-out", "qliph-scarred-chthonic-traits", "qliph-scarred-chthonic-strategic-hooks", "qliph-scarred-what-the-deep-dark-taught-you"], "5": ["qliph-scarred-hunger-mask"], "11": ["qliph-scarred-qliphothic-saturation"], "17": ["qliph-scarred-shadow-wake"] },
+      "description": "<p><em>Qliph-Scarred.</em> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><p><em>“There is a place older than Hell. You remember being there. It remembers you back.”</em></p><p><strong>Qliph-Scarred (Chthonic).</strong> Your scar is a root. The unmaking that almost took you went down, not sideways — into strata of reality older than the gods that eventually got around to naming them. You walked out up through something that shouldn’t have had a staircase. Parts of that staircase are still in your legs.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Senses.</strong> Darkvision 60 feet (Old-Dark Vision).</li><li><strong>Ancestry Lean.</strong> Qliph-Scarred does not grant fixed ability score bonuses; your background handles increases. Your heritage leans toward Constitution in fiction and through Tier powers.</li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p>@UUID[{{uuid:features:qliph-scarred-what-walked-out}}]{What Walked Out} — shared across all Qliph-Scarred heritages, gained at character creation.</p><h3>Chthonic Traits</h3><p>@UUID[{{uuid:features:qliph-scarred-chthonic-traits}}]{Chthonic Traits} and @UUID[{{uuid:features:qliph-scarred-chthonic-strategic-hooks}}]{Strategic Hooks (Chthonic)}.</p><h3>Tier Powers</h3><ul><li><strong>Tier I (1st level):</strong> @UUID[{{uuid:features:qliph-scarred-what-the-deep-dark-taught-you}}]{What the Deep Dark Taught You}</li><li><strong>Tier II (5th level):</strong> @UUID[{{uuid:features:qliph-scarred-hunger-mask}}]{Hunger Mask}</li><li><strong>Tier III (11th level):</strong> @UUID[{{uuid:features:qliph-scarred-qliphothic-saturation}}]{Qliphothic Saturation}</li><li><strong>Tier IV (17th level):</strong> @UUID[{{uuid:features:qliph-scarred-shadow-wake}}]{Shadow-Wake}</li></ul>"
+    }
+  ],
+  "features": [
+    {
+      "slug": "qliph-scarred-what-walked-out", "name": "What Walked Out", "featType": "race", "level": 0, "requirements": "Qliph-Scarred",
+      "folder": "Qliph-Scarred", "img": "icons/magic/unholy/orb-glowing-purple.webp",
+      "activation": "special", "uses": { "max": "1", "per": "sr" },
+      "description": "<p><em>Qliph-Scarred Core — shared across all Qliph-Scarred heritages, gained at character creation.</em></p><p><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You have advantage on Constitution saving throws against effects that would drain, wither, or corrupt your body. Your presence carries a subtle, unsettling weight; you have a +2 bonus to Intimidation checks.</p><p><strong>Qliphothic Saturation.</strong> Once per short rest, when you fail a Wisdom check or saving throw, you may reroll it — but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</p><p><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each inflicting a level of exhaustion.</p><p><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 60 feet and know you have been marked. They may not know how to read the mark.</p>",
+      "effects": [
+        { "_id": "be5eQSWalkedOut0", "name": "What Walked Out", "img": "icons/magic/unholy/orb-glowing-purple.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.traits.dr.value", "mode": 2, "value": "qliphothic", "priority": 20 },
+            { "key": "system.skills.itm.bonuses.check", "mode": 2, "value": "2", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "qliph-scarred-husk-traits", "name": "Husk Traits", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Husk)",
+      "folder": "Qliph-Scarred (Husk)", "folderParent": "Qliph-Scarred", "img": "icons/magic/air/fog-gas-smoke-dense-gray.webp",
+      "description": "<p><em>Qliph-Scarred (Husk)</em></p><p><strong>Hollow Core.</strong> You have resistance to psychic damage. Creatures attempting to read your thoughts, detect your lies, or determine your emotional state do so at disadvantage. Divination-register effects that would reveal information about you have a 50% chance to return nothing — just the hollow echo of the question.</p><p><strong>No Weight Inside.</strong> You do not need to eat or drink, though you still may. The void is not demanding, once you learn to carry it.</p>",
+      "effects": [
+        { "_id": "be5eQSHuskTraits", "name": "Hollow Core", "img": "icons/magic/air/fog-gas-smoke-dense-gray.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.traits.dr.value", "mode": 2, "value": "psychic", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "qliph-scarred-husk-strategic-hooks", "name": "Strategic Hooks (Husk)", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Husk)",
+      "folder": "Qliph-Scarred (Husk)", "folderParent": "Qliph-Scarred", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Intrigue OP and +1 Non-Lethal OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Empty / Abandoned / Liminal hexes, your faction's infiltration and passage operations cost 1 fewer OP.</p><p><strong>Nothing to Grab.</strong> Once per Strategic Turn, when a rival faction attempts a divination, intelligence, or surveillance operation targeting your faction, you may force them to reroll that check. They find less than they expected.</p>"
+    },
+    {
+      "slug": "qliph-scarred-the-quiet-inside", "name": "The Quiet Inside", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Husk)",
+      "folder": "Qliph-Scarred (Husk)", "folderParent": "Qliph-Scarred", "img": "icons/magic/perception/eye-slit-pink.webp",
+      "activation": "reaction", "condition": "a divination, mind-reading, or truth-detection effect targets you", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Tier I — Qliph-Scarred (Husk)</em></p><p><em>\"They looked for you in all the usual places. None of them were the right shape.\"</em></p><p><strong>The Quiet Inside (once per long rest).</strong> Reaction — when you are targeted by a divination, mind-reading, or truth-detection effect, force the caster to make a Wisdom saving throw against a DC of 8 + your proficiency bonus + your Wisdom modifier, instead of the effect's normal check.</p><p><strong>Failure:</strong> the effect returns nothing — no partial information, no awareness that a target was present.</p><p><strong>Success:</strong> you take 1d4 psychic damage from the pressure of the probe.</p>"
+    },
+    {
+      "slug": "qliph-scarred-diabolic-traits", "name": "Diabolic Traits", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Diabolic)",
+      "folder": "Qliph-Scarred (Diabolic)", "folderParent": "Qliph-Scarred", "img": "icons/magic/unholy/silhouette-robe-evil-glow.webp",
+      "description": "<p><em>Qliph-Scarred (Diabolic)</em></p><p><strong>Splinter Tongue.</strong> You know Infernal as a bonus language. You have advantage on Charisma checks to persuade, deceive, or intimidate creatures who are already lying to themselves — the splinter knows its audience.</p><p><strong>Cold Iron Cost.</strong> You take 1 extra point of damage from any weapon forged of cold iron or blessed against fiends. The splinter does not like those things, and you share a body with the splinter.</p>"
+    },
+    {
+      "slug": "qliph-scarred-diabolic-strategic-hooks", "name": "Strategic Hooks (Diabolic)", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Diabolic)",
+      "folder": "Qliph-Scarred (Diabolic)", "folderParent": "Qliph-Scarred", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Presence OP and +1 Violence OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Black Market / Cult / Corrupted-Territory hexes, your faction's negotiation and recruitment operations gain +2 on the success check.</p><p><strong>Splinter Network.</strong> Once per Strategic Turn, when a rival faction has a member who is secretly compromised (GM determines), you may learn that such a person exists. You do not learn who. You learn they exist.</p>"
+    },
+    {
+      "slug": "qliph-scarred-whats-inside-you", "name": "What's Inside You", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Diabolic)",
+      "folder": "Qliph-Scarred (Diabolic)", "folderParent": "Qliph-Scarred", "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "activation": "action", "range": 30, "target": { "type": "creature", "count": 1 }, "duration": { "value": "1", "units": "minute" },
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Tier I — Qliph-Scarred (Diabolic)</em></p><p><em>\"It wasn't your voice. It was a voice you agreed to share.\"</em></p><p><strong>What's Inside You (once per long rest).</strong> Action — let the splinter speak. Choose one humanoid you can see within 30 feet who can hear and understand a language you know. They make a Wisdom saving throw against a DC of 8 + your proficiency bonus + your Charisma modifier.</p><p><strong>Failure:</strong> they are charmed by you — calmed, unwilling to attack you — for 1 minute, or until they take damage or witness you attack them or someone they consider an ally.</p><p><strong>Success:</strong> they know someone else briefly spoke through your mouth and can describe it to others — they are probably going to tell their friends.</p>"
+    },
+    {
+      "slug": "qliph-scarred-chthonic-traits", "name": "Chthonic Traits", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Chthonic)",
+      "folder": "Qliph-Scarred (Chthonic)", "folderParent": "Qliph-Scarred", "img": "icons/environment/wilderness/cave-entrance-mountain.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Qliph-Scarred (Chthonic)</em></p><p><strong>Old-Dark Vision.</strong> You have darkvision out to 60 feet, and in darkness you see in colour rather than greyscale. You have been in a dark older than eyes, and it taught you how.</p><p><strong>Root-Bound.</strong> Once per long rest, you may spend 10 minutes in physical contact with uncut earth or unworked stone. Until your next long rest, you gain a +2 bonus on all Constitution checks. The depth is lending you some of itself.</p>"
+    },
+    {
+      "slug": "qliph-scarred-chthonic-strategic-hooks", "name": "Strategic Hooks (Chthonic)", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Chthonic)",
+      "folder": "Qliph-Scarred (Chthonic)", "folderParent": "Qliph-Scarred", "img": "icons/sundries/books/book-open-turquoise.webp",
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Violence OP and +1 Faith OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Underground / Sunken / Primordial hexes, your faction's excavation, exhumation, and deep-passage operations cost 1 fewer OP.</p><p><strong>Downward Witness.</strong> Once per Strategic Turn, you may consult the depth beneath any hex your faction occupies. The GM answers one question about what lies structurally or historically below the surface. The depth does not lie; the depth is also not always relevant.</p>"
+    },
+    {
+      "slug": "qliph-scarred-what-the-deep-dark-taught-you", "name": "What the Deep Dark Taught You", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Chthonic)",
+      "folder": "Qliph-Scarred (Chthonic)", "folderParent": "Qliph-Scarred", "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "activation": "bonus", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Tier I — Qliph-Scarred (Chthonic)</em></p><p><em>\"There are ways to move that the sun never got to review.\"</em></p><p><strong>What the Deep Dark Taught You (once per long rest).</strong> Bonus action — sink partially into shadow, earth, or stone. For up to 1 minute, while sunken you gain:</p><ul><li>Advantage on Dexterity (Stealth) checks.</li><li>Difficult terrain costs you no extra movement.</li><li>You can move through spaces 5 feet wide.</li><li>Resistance to qliphothic damage.</li></ul><p>The effect ends early if you are fully submerged in running water or take sephirotic damage.</p>"
+    },
+    {
+      "slug": "qliph-scarred-hunger-mask", "name": "Hunger Mask", "featType": "race", "level": 5, "requirements": "Qliph-Scarred 5",
+      "folder": "Qliph-Scarred", "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "description": "<p><em>Tier II — Qliph-Scarred, 5th level</em></p><p><strong>Hunger Mask.</strong> You learned to wear your appetites like armor.</p><p>You have a +2 bonus to Dexterity (Stealth) checks when hiding fear, pain, or desire.</p><p>Your body handles starvation, deprivation, and toxic cravings slightly better than most (handled narratively).</p><p>In Qliphothic zones, your mask sometimes slips, revealing the hollow radiance beneath.</p>"
+    },
+    {
+      "slug": "qliph-scarred-qliphothic-saturation", "name": "Qliphothic Saturation", "featType": "race", "level": 11, "requirements": "Qliph-Scarred 11",
+      "folder": "Qliph-Scarred", "img": "icons/magic/unholy/orb-smoking-green.webp",
+      "description": "<p><em>Tier III — Qliph-Scarred, 11th level</em></p><p><strong>Qliphothic Saturation.</strong> The hollows in you are already full of poison light.</p><p>You have resistance to poison damage.</p><p>You often sense when a place is spiritually “overclocked” or unsafe; your scars hum in high-corruption zones.</p>",
+      "effects": [
+        { "_id": "be5eQSSaturation", "name": "Qliphothic Saturation", "img": "icons/magic/unholy/orb-smoking-green.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.traits.dr.value", "mode": 2, "value": "poison", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "qliph-scarred-shadow-wake", "name": "Shadow-Wake", "featType": "race", "level": 17, "requirements": "Qliph-Scarred 17",
+      "folder": "Qliph-Scarred", "img": "icons/magic/unholy/hand-claw-fog-green.webp",
+      "description": "<p><em>Tier IV — Qliph-Scarred, 17th level</em></p><p><strong>Shadow-Wake.</strong> Wherever you go, the shadows remember.</p><p>You leave behind subtle impressions in darkness and ruin; tracking you by mundane means is slightly harder.</p><p>You have a +2 bonus to Dexterity (Stealth) checks while in dim light or darkness.</p><p>Qliphothic entities may recognize the wake you leave, for better or worse (handled narratively).</p>"
+    }
+  ]
+}
