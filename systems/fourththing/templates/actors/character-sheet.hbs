@@ -48,6 +48,7 @@
   <div class="ft-tabs-bar">
     <nav class="ft-tabs" data-group="primary">
       <a class="item" data-tab="core">Steward</a>
+      <a class="item" data-tab="about">About</a>
       <a class="item" data-tab="combat">Engagement</a>
       <a class="item" data-tab="skills">Aptitudes</a>
       <a class="item" data-tab="powers">Manifestations</a>
@@ -60,6 +61,11 @@
   </div>
 
   <section class="ft-body">
+
+    {{!-- ── About (2026-10-06): who this is — open to anyone who can see the sheet ── --}}
+    <div class="tab about" data-tab="about">
+      {{> "systems/fourththing/templates/partials/about-panel.hbs"}}
+    </div>
 
     {{!-- ── Core ── --}}
     <div class="tab core" data-tab="core">

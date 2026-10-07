@@ -6503,3 +6503,15 @@
 .ft-character-sheet .ft-aff-op-pill.total { color: var(--be-structural, #ffcf5c); border-color: rgba(255,207,92,0.55); font-weight: 600; }
 .ft-character-sheet .ft-aff-op-total { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-top: 0.45rem; padding-top: 0.4rem; border-top: 1px solid rgba(255,255,255,0.08); }
 .ft-character-sheet .ft-aff-op-total small { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.6; }
+
+/* ── ABOUT panel (2026-10-06) — partials/about-panel.hbs on Steward, Figure (npc) and Rig sheets ─────────────── */
+.ft-about { display: flex; flex-direction: column; gap: 0.4rem; padding: 0.2rem 0; }
+.ft-about .ft-about-concept-input { width: 100%; font-weight: 600; }
+.ft-about .ft-about-notes-input { width: 100%; min-height: 7rem; resize: vertical; line-height: 1.45; font-family: var(--font-primary); }
+.ft-about .ft-about-concept { margin: 0; font-weight: 600; font-style: italic; color: var(--be-text, inherit); }
+.ft-about .ft-about-notes p { margin: 0 0 0.45rem; line-height: 1.5; }
+.ft-about .ft-about-empty { margin: 0; opacity: 0.55; font-style: italic; }
+.ft-npc-sheet .ft-about-fold > summary.ft-about-summary { cursor: pointer; font-weight: 700; letter-spacing: 0.02em; }
+.ft-npc-sheet .ft-about-fold > summary .ft-about-summary-concept { font-weight: 400; font-style: italic; opacity: 0.8; }
+.ft-npc-sheet .ft-about-fold[open] > summary .ft-about-summary-concept { display: none; }
+.ft-npc-sheet .ft-about-fold .ft-about > .ft-section-header { display: none; }

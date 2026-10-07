@@ -18,7 +18,7 @@
       "The Farm That Died :: rollPlus2 :: a Steward asks, with respect, where she farmed before Lyrenn :: Quotas, mandates, force-feeding the ground, and the ground DIED. Not failed. Died. A place where nothing argues back any more, and she can find it on a map without looking. She is in Lyrenn to farm as apology.",
       "Permissions Are Tests :: stirThePot :: a Steward asks whether she would LET them plant the red thread :: \"No one has agreed not to.\" She does not forbid it. She watches, hard, because some permissions are tests, and she has not yet decided which kind this one is."
     ],
-    "Rowan-of-the-Loam": [
+    "Rowan of the Loam": [
       "I Was Pressure :: rollPlus2 :: a Steward asks, with the right kind of quiet, whether Rowan was ever someone :: \"I don't think I was someone. I think I was pressure.\" Something the soil needed to say, wearing a person. They do not know what happens if the soil finishes the sentence.",
       "The Soil Stopped Talking :: oppRollMinus2 :: a Steward mentions statues or standing stones :: Rowan goes down on one knee, palm flat. The soil around the statues STOPPED TALKING — the opposite of Lyrenn, which will not shut up. The lean of the red-thread sprouts goes toward that silence."
     ]
@@ -116,7 +116,7 @@
   edit("lyrenn_green_ring", b => {
     if (!String(b.description || "").trim()) b.description = "The Green Ring is a radial field around the old grain elevator, furrows running out from it like a clock with too many hands, and every furrow bends, very slightly, around an empty plinth at the centre where something stood. Nobody says what. The bend is in the soil, not the planting; whoever ploughs here ploughs around it without deciding to. Rowan is on one knee at the plinth with a palm flat on the ground, and does not look up.";
     if (!(b.choices || []).some(c => /plinth/i.test(c.label))) b.choices = [ch("Ask Rowan about the plinth.", "lyrenn_rowan_of_the_loam_convo", { description: "They go very still. \"The soil around them stopped talking.\"" }), ...(b.choices || [])];
-    b.speakerActorId = b.speakerActorId || sp("Rowan-of-the-Loam") || null;
+    b.speakerActorId = b.speakerActorId || sp("Rowan of the Loam") || null;
   }, "a description, the plinth, Rowan speaks");
   edit("lyrenn_seed_vault_fail_reading", b => {
     b.inject = b.inject || {}; if (!b.inject.requires) b.inject.requires = [P2];
@@ -125,7 +125,7 @@
   }, "act gate + routes off the sealed Act 1 hub");
   const voice = (ids, name) => { for (const id of ids) edit(id, b => { if (!b.speakerActorId && sp(name)) b.speakerActorId = sp(name); }, `speaker ${name}`); };
   voice(["lyrenn_elsin_quade_convo_1", "lyrenn_elsin_quade_convo_2", "lyrenn_elsin_quade_convo_3", "lyrenn_elsin_quade_convo_echo", "lyrenn_seed_vault_inspect_arcana", "lyrenn_seed_vault_inspect_nature", "lyrenn_seed_vault_darkness_sensitivity", "lyrenn_seed_vault_fail_reading", "lyrenn_the_gentle_pest", "lyrenn_the_gentle_pest_acceptance", "lyrenn_the_gentle_pest_try_again", "lyrenn_gentle_pest_teach_fail"], "Elsin Quade");
-  voice(["lyrenn_rowan_of_the_loam_convo_1", "lyrenn_rowan_of_the_loam_convo_2", "lyrenn_rowan_of_the_loam_convo_3", "lyrenn_rowan_of_the_loam_convo_echo", "lyrenn_forest_will_not_be_fought", "lyrenn_forest_will_not_be_fought_quest_acceptance", "lyrenn_forest_will_not_be_fought_force", "lyrenn_forest_will_not_be_fought_negotiate_fail", "lyrenn_forest_will_not_be_fought_redirect_fail", "lyrenn_red_thread_planting", "lyrenn_red_thread_sprouted", "lyrenn_soil_keeps_books", "lyrenn_the_field_that_remembers_you", "lyrenn_the_field_that_remembers_you_intro"], "Rowan-of-the-Loam");
+  voice(["lyrenn_rowan_of_the_loam_convo_1", "lyrenn_rowan_of_the_loam_convo_2", "lyrenn_rowan_of_the_loam_convo_3", "lyrenn_rowan_of_the_loam_convo_echo", "lyrenn_forest_will_not_be_fought", "lyrenn_forest_will_not_be_fought_quest_acceptance", "lyrenn_forest_will_not_be_fought_force", "lyrenn_forest_will_not_be_fought_negotiate_fail", "lyrenn_forest_will_not_be_fought_redirect_fail", "lyrenn_red_thread_planting", "lyrenn_red_thread_sprouted", "lyrenn_soil_keeps_books", "lyrenn_the_field_that_remembers_you", "lyrenn_the_field_that_remembers_you_intro"], "Rowan of the Loam");
   voice(["lyrenn_water_choir", "lyrenn_water_choir_inspect_perception", "lyrenn_water_choir_inspect_insight", "lyrenn_water_choir_inspect_arcana", "lyrenn_water_choir_try_again", "lyrenn_water_choir_reading"], "Wren Ashby");
 
   const storyApi = game.bbttcc?.api?.campaign?.story?.data;

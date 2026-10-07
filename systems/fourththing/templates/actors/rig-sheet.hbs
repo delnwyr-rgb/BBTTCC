@@ -88,6 +88,11 @@
 
   <div class="ft-body">
 
+    {{!-- ABOUT TAB (2026-10-06): who/what this is — open to anyone who can see the sheet --}}
+    <div class="tab about{{#if (eq activeTab "about")}} active{{/if}}" data-tab="about">
+      {{> "systems/fourththing/templates/partials/about-panel.hbs"}}
+    </div>
+
     {{!-- IDENTITY TAB --------------------------------------------------- --}}
     <div class="tab identity{{#if (eq activeTab "identity")}} active{{/if}}" data-tab="identity">
       <section class="ft-tab-summary ft-rig-tab-summary">

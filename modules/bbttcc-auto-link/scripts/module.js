@@ -140,8 +140,8 @@ function injectButtons(html) {
     LOG("Injected Actors Directory button: Create NPC");
   }
 
-  // Create Monster (native fourththing NPC sheet — Apex Predator / Lisa Frank
-  // Elemental / Crystal Lurker form factor). Distinct from Create NPC which
+  // Create Monster (native fourththing NPC sheet — Apex Predator / CACA /
+  // Crystal Lurker form factor). Distinct from Create NPC which
   // produces classed PC-with-flag actors. See monster-builder.js.
   if (!header.querySelector("[data-bbttcc-create-monster]")) {
     const btn = document.createElement("button");

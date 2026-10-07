@@ -462,6 +462,10 @@
         "value": 0,
         "taint": 0,
         "fragments": []
+      },
+      "biography": {
+        "concept": "",
+        "notes": ""
       }
     },
     "rig": {
@@ -515,7 +519,11 @@
         "domains": ["land"],
         "depthRating": 0
       },
-      "tags": []
+      "tags": [],
+      "biography": {
+        "concept": "",
+        "notes": ""
+      }
     }
   },
   "Item": {

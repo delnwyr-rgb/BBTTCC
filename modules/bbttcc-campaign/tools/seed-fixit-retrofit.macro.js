@@ -134,7 +134,7 @@
     const next = { ...cur, topics: [String(cur.topics || "").trim(), p.topics].filter(Boolean).join(", "), notes: [String(cur.notes || "").trim(), p.notes].filter(Boolean).join("\n\n"), secretsRaw: [String(cur.secretsRaw || "").trim(), ...p.secrets].filter(Boolean).join("\n") };
     changes++; say(`✚ persona ${p.name} +${p.secrets.length} secret(s)`); if (!DRY_RUN) await actor.setFlag(MAL, "persona", next);
   }
-  for (const n of ["Dougan", "Pip", "Patter", "Mara Quickhands"]) { const a = (game.actors?.contents || []).find(x => x.name === n); if (a) actorIds[n] = a.id; }
+  for (const n of ["Dougan Marsh", "Pip", "Patter", "Mara Quickhands"]) { const a = (game.actors?.contents || []).find(x => x.name === n); if (a) actorIds[n] = a.id; }
   const sp = (n) => actorIds[n] || null;
 
   // ── 2. beats ───────────────────────────────────────────────────────────────
@@ -250,7 +250,7 @@
   }, "the Late Run: gates / routing-only / allied rows");
   // speakers
   const voice =(ids, name) => { for (const id of ids) edit(id, b => { if (!b.speakerActorId && sp(name)) b.speakerActorId = sp(name); }, `speaker ${name}`); };
-  voice(["fixit_gullywasher_interior_convo", "fixit_gullywasher_choice_1", "fixit_gullywasher_choice_2", "fixit_gullywasher_choice_3", "fixit_gullywasher_choice_4", "fixit_gullywasher_choice_1_fail", "fixit_gullywasher_choice_2_fail", "fixit_gullywasher_choice_3_fail", "fixit_gullywasher_choice_4_fail", "fixit_gullywasher_welcome", "fixit_gully_answer_name"], "Dougan");
+  voice(["fixit_gullywasher_interior_convo", "fixit_gullywasher_choice_1", "fixit_gullywasher_choice_2", "fixit_gullywasher_choice_3", "fixit_gullywasher_choice_4", "fixit_gullywasher_choice_1_fail", "fixit_gullywasher_choice_2_fail", "fixit_gullywasher_choice_3_fail", "fixit_gullywasher_choice_4_fail", "fixit_gullywasher_welcome", "fixit_gully_answer_name"], "Dougan Marsh");
   voice(["fixit_arc_bay_conversation", "fixit_arc_bay_conversation_1", "fixit_arc_bay_conversation_2", "fixit_arc_bay_conversation_3", "fixit_leyline_stabilizer", "fixit_no_spanner"], "Young Gearbox");
   voice(["fixit_power_station_conversation", "fixit_power_station_conversation_2"], "Old Gearbox");
   voice(["fixit_general_store_coversation", "fixit_general_store_coversation_1", "fixit_general_store_coversation_2", "fixit_general_store_coversation_3", "fixit_leyline_trade_fail"], "Mara Quickhands");

@@ -177,9 +177,12 @@ import {
 } from "./migrations/index.js";
 
 import {
+  actorKind,
   registerActorKindApi,
   registerActorKindHooks,
 } from "./actor-kind.js";
+import { threatFor, registerThreatChassisSetting, registerThreatChassisHooks } from "./threat-chassis.js";
+import { registerNpcAutomation } from "./npc-automation.js";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -1216,6 +1219,35 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
         }
       }
     } catch (e) { console.warn("Roll for Initiation | engage area template failed", e); }
+  }
+
+  // SAVE-FIRST STRIKE (2026-10-06, NPC Pack automation): "15 ft cone — Resolve DC 13, fail 1d10 psychic + Shaken, half on
+  // success". The weapon's manifestation.resolution.mode === "save": no attack roll — every target (the area template's
+  // catch, else the user's targets) gets the standard save-prompt card: damage halved/negated by resolution.onSave,
+  // states only on a failed save when resolution.statesOnFail. Damage = the weapon formula (+ threat-chassis tier damage
+  // for monsters); no faculty add (the authored DC already carries the creature's edge). Recharge/uses gates still apply
+  // upstream (npc-automation). Animation plays once, on the caster.
+  // NPC automation recharge gate (2026-10-06): "(Recharge 5–6)" / "1/Day" weapons are spent on use and roll back at turn start
+  if (item?.flags?.fourththing?.npcAuto?.recharge && !options.skipRecharge) {
+    try { if (!(await game.fourththing.npcAuto?.useRecharge?.(actor, item) ?? true)) return; } catch (_e) {}
+  }
+  const _saveFirst = item?.system?.manifestation?.resolution;
+  if (item?.type === "weapon" && _saveFirst?.mode === "save" && _saveFirst?.saveAttribute && !options.skipSaveFirst) {
+    const targets = Array.from(game.user?.targets ?? []).map(t => t.actor).filter(Boolean);
+    if (!targets.length) { ui.notifications?.warn(`${item.name}: target the creatures in the area first (or place the template).`); return; }
+    const f = String(item.system?.damage?.formula || "").replace(/\s+/g, "");
+    const m = f.match(/^(\d+)(d\d+)([+-]\d+)?$/);
+    const threatDmg = Number(actor.system?.derived?.threat?.damage) || 0;
+    const dr = m ? { op: "damage", number: Number(m[1]), die: m[2], bonus: (Number(m[3]) || 0) + threatDmg,
+                     type: item.system?.damage?.type || "kinetic", flavor: item.system?.damage?.damageFlavor || "" }
+                 : { op: "none" };
+    try { await ftPlayAutoAnimation(actor, item, { hit: true }); } catch (_e) {}
+    for (const tgt of targets) {
+      try { await _ftPostSavePromptCard(actor, tgt, item, item.system.manifestation, dr, { castDc: Number(_saveFirst.saveDcFixed) || 15, intent: item.system?.intent }); }
+      catch (e) { console.warn("Roll for Initiation | save-first strike card failed", tgt?.name, e); }
+    }
+    Hooks.callAll("fourththing:saveFirstStrike", { actor, item, targets });
+    return;
   }
 
   // B11.C rig-weapon detection. When item is a rig-weapon owned by a rig,
@@ -3130,7 +3162,10 @@ async function _ftHandleSavePromptClick(btn, message) {
     const _sts = ctx.appliedStates?.states;
     const _hasStates = Array.isArray(_sts) ? _sts.length > 0
       : !!(_sts && typeof _sts === "object" && Object.values(_sts).some(Boolean));
-    if (mult > 0 && (_hasStates || _hasWards)) {
+    // resolution.statesOnFail (2026-10-06, NPC riders): "half on success, NO Shaken" — conditions/wards land only on a
+    // failed save. Default false keeps the PC manifestation behaviour (half-success still applies states) unchanged.
+    const _statesGate = ctx.resolution?.statesOnFail ? !sav?.saved : mult > 0;
+    if (_statesGate && (_hasStates || _hasWards)) {
       // applyManifestationStates reads mf.appliedStates — pass a synthetic mf
       // shape with the snapshotted appliedStates so it doesn't re-read the
       // (potentially edited) item.
@@ -3140,6 +3175,8 @@ async function _ftHandleSavePromptClick(btn, message) {
         console.warn("Roll for Initiation | savePrompt applyManifestationStates failed", e);
       }
     }
+    // NPC automation: the caster's "saveFail" rules (no reactions, +Radiation, extra damage, push prompt…)
+    if (!sav?.saved) { try { await game.fourththing.npcAuto?.onSaveFail?.(caster, item, target); } catch (e) { console.warn("[fourththing] npc automation saveFail", e); } }
     btn.textContent   = sav?.saved ? `Saved (${sav.onSave === "negate" ? "negated" : "halved"})` : `Failed save`;
     btn.style.opacity = "0.5";
     await _ftMarkCardResolved(message, "savePromptContext", btn.textContent);
@@ -3240,7 +3277,10 @@ async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1 } = {
   if (!Number.isFinite(dr.number) || dr.number <= 0) return null;
   const sys = actor.system?.system ?? actor.system;
   const attrVal = dr.attribute ? Number(sys?.attributes?.[dr.attribute]?.value) || 0 : 0;
-  const baseFormula  = `${dr.number}${dr.die}`;
+  // dr.bonus (2026-10-06, NPC riders): a flat add — weapon riders like "2d8+2" and the threat chassis's tier damage on
+  // save-first strikes. Absent/0 for every legacy caller, so their formulas are unchanged.
+  const flatBonus    = Number(dr.bonus) || 0;
+  const baseFormula  = `${dr.number}${dr.die}${flatBonus ? (flatBonus > 0 ? ` + ${flatBonus}` : ` - ${Math.abs(flatBonus)}`) : ""}`;
   const finalFormula = attrVal !== 0
     ? `${baseFormula} ${attrVal >= 0 ? "+" : "−"} ${Math.abs(attrVal)}`
     : baseFormula;
@@ -14112,6 +14152,7 @@ Hooks.once("init", function () {
   // stored tag fresh on create/update. Migration v2 backfills existing actors.
   registerActorKindApi();
   registerActorKindHooks();
+  registerThreatChassisHooks();
 
   // Bad Eden Display font — registered so it appears in Foundry's font dropdowns
   // (Drawings, Scene text, journal rich-text editor). CSS usage is also wired
@@ -14398,6 +14439,7 @@ Hooks.once("init", function () {
     "systems/fourththing/templates/partials/powers-list.hbs",
     "systems/fourththing/templates/partials/item-effects.hbs",
     "systems/fourththing/templates/partials/on-use.hbs",
+    "systems/fourththing/templates/partials/about-panel.hbs",
     "systems/fourththing/templates/items/weapon-sheet.hbs",
   ]);
 
@@ -14505,6 +14547,10 @@ Hooks.once("init", function () {
   // (resolved GM-side to avoid permission races) instead of waiting for a manual
   // Apply click. Damage still uses the Apply Damage button. The manual button
   // stays as a fallback; a per-application guard flag prevents double-stacking.
+  registerThreatChassisSetting();   // bestiary threat chassis (2026-10-06) — see threat-chassis.js
+  // NPC ability automation engine (2026-10-06) — auras, morale, reactions, rerolls, DoT, recharge; see npc-automation.js
+  try { registerNpcAutomation({ actorKind, postSavePrompt: _ftPostSavePromptCard, playAnimation: ftPlayAutoAnimation, ftEscapeHtml }); }
+  catch (e) { console.error("Roll for Initiation | npc automation failed to register", e); }
   game.settings.register("fourththing", "autoApplyEffects", {
     name: "Auto-apply manifestation effects",
     hint: "Conditions / active effects apply automatically to the target on a hit or failed save (GM-resolved). Damage still uses the Apply button. Turn off to require a manual Apply click for everything.",
@@ -15652,7 +15698,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // exactly once, and the chat breakdown still itemises it.
     const srcSys  = ftSourceSystem(actor);
     const attrVal  = srcSys?.attributes?.[intent]?.value ?? 0;
-    const skillVal = srcSys?.skills?.[skill]?.value      ?? 0;
+    let   skillVal = srcSys?.skills?.[skill]?.value      ?? 0;
 
     // 2026-05-19 — Consume signal bonus on the attacker. Signaler (a crew
     // member's bonus action) sets flags.fourththing.combat.signalBonus on
@@ -15725,7 +15771,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // strikes — the tier IS their training. (PCs are unaffected; their tier
     // reaches attacks through skills, ranks, and Surge instead.)
     const foeTierBonus = (typeof _ftIsFoeActor === "function" && _ftIsFoeActor(actor)) ? tierVal : 0;
-    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus - echoPenalty - _radPen;
+    // Threat chassis (2026-10-06): a monster's innate rank stands in for the aptitude it never trains (flat +
+    // dice shape, exactly like a Steward's rank) and its tier×level growth arrives as a flat to-hit.
+    const _threatAtk = actor.system?.derived?.threat ?? null;
+    if (_threatAtk && (Number(skillVal) || 0) < _threatAtk.rank) skillVal = _threatAtk.rank;
+    const threatAttack = Number(_threatAtk?.attack) || 0;
+    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus + threatAttack - echoPenalty - _radPen;
     // ── Aptitude rank + roll mode → dice pool ────────────────────────────────
     // Strikes roll the SAME rank-aware pool as an Aptitude check so a weapon hit
     // benefits identically. The rank's flat +N is already in total_mod; here the
@@ -15783,6 +15834,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const rerollGrants = collectRerolls(actor, { context: "attack", skill, attribute: intent });
     if (_rankData.mechanic === "reroll_low") rerollGrants.push({ sourceItemName: `${ftCap(skill)} · Proficient`, mode: "reroll-lowest" });
     if (_surge.snapStrike) rerollGrants.push({ sourceItemName: "Surge: Snap Strike", mode: "reroll-lowest" });
+    // NPC automation (2026-10-06): "rerolls the lowest die on attacks against a creature that hasn't acted" & kin
+    let _npcAtkMods = { rerolls: [], damage: null };
+    try { _npcAtkMods = game.fourththing.npcAuto?.attackMods?.(actor, itemUuid ? fromUuidSync(itemUuid) : null, target?.actor ?? target) ?? _npcAtkMods; } catch (_e) {}
+    for (const g of _npcAtkMods.rerolls) rerollGrants.push(g);
+    // …and the DEFENDER's "attacked" rules (Half-Real: attacks against it reroll the highest until it attacks)
+    try {
+      const _defMods = game.fourththing.npcAuto?.defenseMods?.(target?.actor ?? target, actor, itemUuid ? fromUuidSync(itemUuid) : null);
+      for (const g of _defMods?.rerolls ?? []) rerollGrants.push(g);
+      await game.fourththing.npcAuto?.markAttacked?.(actor);
+    } catch (_e) {}
     // applyRerollGrants mutates the lowest base die in place. Its own _total
     // patch assumes a 2-die base; we recompute the pool total below, overriding it.
     const rerollResult = await applyRerollGrants(roll, rerollGrants, total_mod);
@@ -15897,10 +15958,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // adds to the damage roll on a hit. Skill is left out — proficiency drives
     // accuracy, raw faculty drives force. The +mod is baked straight into the
     // formula so the Apply button rolls the final number with no extra plumbing.
-    const damageFacultyMod = (Number(attrVal) || 0) + (Number(aeAttr) || 0) + aimedMod;
+    const damageFacultyMod = (Number(attrVal) || 0) + (Number(aeAttr) || 0) + aimedMod + (Number(_threatAtk?.damage) || 0);
     let finalDamageFormula = (damageFormula && damageFacultyMod !== 0)
       ? `${damageFormula} ${damageFacultyMod >= 0 ? "+" : "-"} ${Math.abs(damageFacultyMod)}`
       : (damageFormula || "");
+    // NPC automation: "the damage die rerolls the lowest/highest" → the first NdX gains a die and keeps N best/worst
+    try { if (_npcAtkMods?.damage) finalDamageFormula = game.fourththing.npcAuto.transformDamage(finalDamageFormula, _npcAtkMods); } catch (_e) {}
 
     // Doomstrike: tack on `+Td6x10` exploding bonus damage.
     if (_surge.doomstrike && finalDamageFormula) {
@@ -16067,6 +16130,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // Burn-on-hit auto-gen for Burn classes (playtest #8).
       await _ftBurnOnHitGen(actor);
 
+      // NPC automation (2026-10-06): the attacker's "on a hit" rules (DoT, +Radiation, no reactions, conditions, …)
+      try {
+        const _hitItem = itemUuid ? await fromUuid(itemUuid) : null, _hitTgt = target?.actor ?? target;
+        await game.fourththing.npcAuto?.onHit?.(actor, _hitItem, _hitTgt);
+        await game.fourththing.npcAuto?.onStruck?.(_hitTgt, actor, _hitItem);   // the defender's retaliation rules
+      } catch (e) { console.warn("[fourththing] npc automation on-hit failed", e); }
+
       // Auto-apply weapon-strike effects on a hit (playtest #6). Conditions/AEs
       // land immediately instead of waiting for the Apply Damage click. Damage
       // itself still uses the Apply button. applyManifestationStates de-dupes per
@@ -16077,7 +16147,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           const _strikeItem = await fromUuid(itemUuid);
           const _strikeMf   = _strikeItem?.system?.manifestation;
           const _strikeTgt  = target?.actor ?? target;
-          if (_strikeItem?.type === "weapon" && _strikeMf && _strikeTgt &&
+          // ON-HIT SAVE RIDER (2026-10-06, NPC Pack automation): "on a hit, Body DC 13 or Prone" — the weapon's
+          // manifestation carries resolution.saveAttribute (+ fixed DC); instead of landing the states outright, the
+          // target gets the standard save-prompt card (states on a failed save; optional rider damage in
+          // manifestation.riderDamage, halved/negated by resolution.onSave). Save-FIRST weapons never reach here.
+          if (_strikeItem?.type === "weapon" && _strikeMf?.resolution?.saveAttribute && _strikeMf.resolution.mode !== "save" && _strikeTgt) {
+            const _riderDr = _strikeMf.riderDamage?.number ? _strikeMf.riderDamage : { op: "none" };
+            await _ftPostSavePromptCard(actor, _strikeTgt, _strikeItem, _strikeMf, _riderDr, { castDc: Number(defenseValue) || 15, intent });
+          } else if (_strikeItem?.type === "weapon" && _strikeMf && _strikeTgt &&
               _ftHasManifestationApplicables(_strikeMf, _strikeItem)) {
             await game.fourththing.applyManifestationStates(actor, _strikeTgt, _strikeItem, _strikeMf, { castDc: Number(defenseValue) || 15 });
           }
@@ -16539,6 +16616,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (dmg > 0) {
       const trigTags = [damageType, damageFlavor].filter(Boolean);
       await fireTriggers(actor, "on-damage-taken", { amount: dmg, tags: trigTags, scope: "self" });
+      try { await game.fourththing.npcAuto?.onDamaged?.(actor, { amount: dmg, damageType }); } catch (_e) {}
     }
 
     // B11.B rig hooks + destruction cascade.
@@ -18465,6 +18543,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // Effect/mutation bonus to max Integrity — single-application aeBonus channel
       // (same pattern as the defenses below). Foundry applies the AE to .aeBonus
       // before derive; we fold it in and re-stamp so it survives the next cycle.
+      // THREAT CHASSIS (2026-10-06): bestiary monsters scale by tier × bracket — pools, defenses, Strikes.
+      // Authored faculties stay the monster's shape; see threat-chassis.js for the table and the why.
+      const _threat = threatFor(this, actorKind);
+      sys.derived.threat = _threat;
+      if (_threat) {
+        sys.derived.integrity.max = Math.max(1, Math.round(sys.derived.integrity.max * _threat.pool));
+        sys.derived.strikes = { value: _threat.strikes, striker: _threat.strikes > 1, tier: _threat.tier, legendary: _threat.legendary };
+      }
       const _aeIntMax = Number(sys.derived.integrity.aeBonus) || 0;
       if (_aeIntMax) sys.derived.integrity.max = Math.max(1, sys.derived.integrity.max + _aeIntMax);
       sys.derived.integrity.aeBonus = _aeIntMax;
@@ -18499,6 +18585,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const stressBase = ({ vanguard: 2, mid: 3, caster: 4 })[intBracket.bracket] ?? 3;
       const stressPerLevel = stressBase + Math.floor(m / 2);
       sys.derived.stress.max       = 10 + 2 * m + s + (charLevel - 1) * stressPerLevel;
+      if (_threat) sys.derived.stress.max = Math.max(1, Math.round(sys.derived.stress.max * _threat.pool));
       sys.derived.stress.bracket   = intBracket.bracket;
       sys.derived.stress.perLevel  = stressPerLevel;
       // Effect/mutation bonus to max Stress — single-application aeBonus channel.
@@ -18544,6 +18631,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         sys.derived.guard.value   += 2;
         sys.derived.evasion.value += 2;
         sys.derived.resolve.value += 2;
+      }
+
+      if (_threat?.defense) {
+        sys.derived.guard.value   += _threat.defense;
+        sys.derived.evasion.value += _threat.defense;
+        sys.derived.resolve.value += _threat.defense;
       }
 
       // Phase C — fold in AE-applied bonuses, then re-stamp so the field
@@ -21811,6 +21904,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (!item) { console.warn("[ftUseFeature] no item found for", itemId); return; }
       // Fire Automated Animations on feature/feat use (guarded: no-ops without
       // flags.autoanimations / autorec match). Mirrors the weapon-Strike hook.
+      // NPC automation (2026-10-06): a feature carrying "use" rules IS the action — run it and stop here
+      try { if (await game.fourththing.npcAuto?.onUse?.(this.actor, item)) return; } catch (e) { console.warn("[ftUseFeature] npcAuto.onUse", e); }
       ftPlayAutoAnimation(this.actor, item, { hit: true });
       try {
         const handled = await dispatchFeatureAction(this.actor, item);
@@ -23380,6 +23475,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
       const tabs = [
         { id: "identity", label: "Identity",  visible: true,                  active: activeTab === "identity" },
+        { id: "about",    label: "About",     visible: true,                  active: activeTab === "about" },
         { id: "crew",     label: "Crew",      visible: true,                  active: activeTab === "crew" },
         { id: "combat",   label: "Combat",    visible: true,                  active: activeTab === "combat" },
         { id: "gear",     label: "Gear",      visible: true,                  active: activeTab === "gear" },
@@ -24521,6 +24617,35 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       }
       return cloned;
     }
+  }
+
+  // ── ABOUT panel context (owner ruling 2026-10-06) ─────────────────────────
+  // Every actor sheet shows an About panel (templates/partials/about-panel.hbs): the one-line concept + the public bio,
+  // read by anyone who can open the sheet, edited by owners. Wrapped here once instead of threading `about` through each
+  // sheet's many _prepareContext return points. Values come from SOURCE (never AE-applied). Legacy HTML bios render as
+  // plain paragraphs and are edited as text.
+  const _ftAboutText = (v) => String(v ?? "")
+    .replace(/<\/(p|div|h\d|li)>|<br\s*\/?>/gi, "\n\n").replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+    .replace(/\n{3,}/g, "\n\n").trim();
+  function ftAboutContext(sheet) {
+    const src = sheet.actor?._source?.system ?? {};
+    const bio = src.system?.biography ?? src.biography ?? {};
+    const notes = _ftAboutText(bio.notes);
+    return {
+      editable: !!sheet.isEditable,
+      concept: _ftAboutText(bio.concept),
+      notes,
+      paragraphs: notes ? notes.split(/\n\s*\n/).map(t => t.trim()).filter(Boolean) : []
+    };
+  }
+  for (const C of [FourthThingCharacterSheet, FourthThingNPCSheet, FourthThingRigSheet]) {
+    const _orig = C.prototype._prepareContext;
+    C.prototype._prepareContext = async function (options) {
+      const ctx = await _orig.call(this, options);
+      try { if (ctx && typeof ctx === "object") ctx.about = ftAboutContext(this); } catch (e) { console.warn("[fourththing] about panel context failed", e); }
+      return ctx;
+    };
   }
 
   // ── Register document classes ─────────────────────────────────────────────

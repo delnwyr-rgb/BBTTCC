@@ -52,7 +52,7 @@
       "The Kettle Answers :: oppRollMinus2 :: a Steward says 'the kettle' to him, as a greeting or a question :: He answers as if to Tamsin: the schedule, the heading, the next collection. Tradecraft — the candle talks, not the men; he does not know Tamsin's name for certain and has never spoken to him. Then he recites pilgrimage scripture and asks to be allowed to continue on foot.",
       "Never Late :: rollPlus2 :: a Steward asks what he is proud of :: Nothing except this: he has never once been late. Not to St Gilliam's at dusk, not to the switchbacks by the second morning, not to the camp coastward on the third. Ask him what the camp is proud of and he does not understand the question."
     ],
-    "\"Doc\"Vess Greeley": [
+    "Doc Vess Greeley": [
       "The Good Room :: oppRollMinus2 :: a Steward asks what the back room is FOR now, not what happened in it :: A rematch. She keeps it surgical-clean because she expects the bad night to come back. The roster from that night is in the drawer under the suture kit; it lists who was hurt, and one man who was not on the shift.",
       "Who She'd Have Let Go :: rollPlus2 :: a Steward asks whether there was ever a night with two patients and one pair of hands :: She finished a stitch in the dark and the patient lived, and she had already chosen, in the dark, who she'd have let go if it came to two. The patient was Father Tamsin's brother. She changes the drink."
     ],
@@ -72,7 +72,7 @@
       "The Camp That Isn't on Any Map :: oppRollMinus2 :: a Steward asks WHICH stall buys forty pounds of salt and no meat, or candle wax in tallow country :: She has known for a season. Third stall from the east end, the rope stall that never sells rope; every third market a Jackalope wagon loads there for a camp two days coastward that is on no map. She has already adjusted inventory for it. She sells you preserves first; the question is answered when the jar is paid for.",
       "Which Two Doors :: rollPlus2 :: a Steward asks which two of the three doors (restore, redirect, break) she has already adjusted inventory for :: She smiles and sells you preserves. Behind the smile: she is Menhirkin, the 'old mistakes buried nearby' are KIN, and she has stocked for the two doors where somebody pays. Nobody has stocked for 'no one owes anyone anything', because nobody knows what that costs."
     ],
-    "Ondine Brakk": [
+    "Captain Ondine Brakk": [
       "The Real Number :: rollPlus2 :: a Steward who has PERSONALLY stood a wall shift asks how many hours the town can actually hold :: She tells them the number. It frightens her, which is why she drills farmers. The truck that doesn't run she could fix in an afternoon; the militia needs a shared enemy that can't fight back, and the truck volunteers."
     ]
   };
@@ -256,7 +256,7 @@
   voice(["allesh_gilliam_father_tamsin_conversation_1", "allesh_gilliam_father_tamsin_conversation_2", "allesh_gilliam_father_tamsin_conversation_3", "allesh_gilliam_father_tamsin_conversation_4"], "Father Tamsin");
   voice(["allesh_gilliam_etta_bloom_conversation_what_doing", "allesh_gilliam_etta_bloom_conversation_protecting", "allesh_gilliam_etta_bloom_conversation_hesitate", "allesh_gilliam_etta_bloom_conversation_echo", "allesh_gilliam_etta_brushoff"], "Etta Bloom");
   voice(["ag_leygate_visit"], "Garren, Leygate Engineer");
-  voice(["allesh_gilliam_muster_intro"], "Ondine Brakk");
+  voice(["allesh_gilliam_muster_intro"], "Captain Ondine Brakk");
 
   // ── 4. the story script (Layer 2 data) — the FULL AG script, code + retrofit ──
   const storyApi = game.bbttcc?.api?.campaign?.story?.data;

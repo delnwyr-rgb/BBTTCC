@@ -1,0 +1,21 @@
+{{!-- ABOUT panel (owner ruling 2026-10-06): every actor sheet — Steward, Figure (npc), Rig — shows who this is.
+     NO GM gating: anyone who can open the sheet reads it; owners edit it. Same two fields the AI NPC dialogue reads as
+     PUBLIC knowledge (bbttcc-mal-voice npc-dialogue _npcRole/_npcNotes): system.biography.concept + .notes.
+     Private roleplay notes stay in the 🧠 persona editor; the npc "GM Notes" box is unchanged. Context: `about` from
+     ftAboutContext() (module.js). --}}
+<section class="ft-about">
+  <div class="ft-section-header"><h3>About</h3></div>
+  {{#if about.editable}}
+    <input class="ft-about-concept-input" type="text" name="system.biography.concept" value="{{about.concept}}"
+           placeholder="Who they are, in one line — e.g. Usher of the Bad Eden Bijou, Hidden Vault"/>
+    <textarea class="ft-about-notes-input" name="system.biography.notes" rows="7"
+              placeholder="What anyone who meets them would know — look, job, place, reputation. Secrets go in the 🧠 persona notes.">{{about.notes}}</textarea>
+  {{else}}
+    {{#if about.concept}}<p class="ft-about-concept">{{about.concept}}</p>{{/if}}
+    {{#if about.paragraphs.length}}
+      <div class="ft-about-notes">{{#each about.paragraphs as |p|}}<p>{{p}}</p>{{/each}}</div>
+    {{else}}
+      <p class="ft-about-empty">No bio yet.</p>
+    {{/if}}
+  {{/if}}
+</section>

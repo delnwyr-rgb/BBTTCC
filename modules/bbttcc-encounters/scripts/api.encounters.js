@@ -490,12 +490,12 @@ const SCENARIOS = {
     // Qlipothic Shambler
     travel_qlipothic_shambler_t2: {
       key: "travel_qlipothic_shambler_t2",
-      label: "Qlipothic Shambler (Tier 2)",
+      label: "Qliphothic Shambler (Tier 3)",
       type: "travel",
       category: "travel",
       subcategory: "combat",
       scale: "hybrid",
-      tableTier: 2,
+      tableTier: 3,
       steps: [
         {
           kind: "scene",
@@ -509,12 +509,12 @@ const SCENARIOS = {
     // Geometry Serpent
     travel_geometry_serpent_t3: {
       key: "travel_geometry_serpent_t3",
-      label: "Geometry Serpent (Tier 3)",
+      label: "Geometry Serpent (Tier 1)",
       type: "travel",
       category: "travel",
       subcategory: "hazard",
       scale: "macro",
-      tableTier: 3,
+      tableTier: 1,
       steps: [
         {
           kind: "scene",
@@ -566,12 +566,12 @@ const SCENARIOS = {
     // Apex Predator
     travel_apex_predator_t4: {
       key: "travel_apex_predator_t4",
-      label: "Apex Predator (Tier 4)",
+      label: "Apex Predator (Tier 3)",
       type: "travel",
       category: "travel",
       subcategory: "combat",
       scale: "hybrid",
-      tableTier: 4,
+      tableTier: 3,
       steps: [
         {
           kind: "scene",

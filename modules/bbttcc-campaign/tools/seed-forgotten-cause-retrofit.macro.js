@@ -22,7 +22,7 @@
   let mt = (game.actors?.contents || []).find(a => a.name === MAITRE.name);
   if (!mt) { say(`✚ CREATE actor "${MAITRE.name}"`); changes++; if (!DRY_RUN) mt = await Actor.create({ name: MAITRE.name, type: "npc" }); }
   if (mt) { actorIds.maitre = mt.id; const cur = mt.getFlag(MAL, "persona") || {}; if (!String(cur.notes || "").includes(MARKER)) { changes++; say("✚ persona The Maître-D' +2 secrets"); if (!DRY_RUN) await mt.setFlag(MAL, "persona", { ...cur, topics: [String(cur.topics || "").trim(), MAITRE.topics].filter(Boolean).join(", "), notes: [String(cur.notes || "").trim(), MAITRE.notes].filter(Boolean).join("\n\n"), secretsRaw: [String(cur.secretsRaw || "").trim(), ...MAITRE.secrets].filter(Boolean).join("\n") }); } else say("· ok persona The Maître-D'"); }
-  const dougan = (game.actors?.contents || []).find(a => a.name === "Dougan"); if (dougan) actorIds.dougan = dougan.id;
+  const dougan = (game.actors?.contents || []).find(a => a.name === "Dougan Marsh"); if (dougan) actorIds.dougan = dougan.id;
   const MT = actorIds.maitre || null;
 
   let campsRaw = game.settings.get(NS, "campaigns"); const campsWasStr = typeof campsRaw === "string";

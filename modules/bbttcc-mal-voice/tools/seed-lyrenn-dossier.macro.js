@@ -25,7 +25,7 @@
   };
   const elsin = findActor(["Elsin Quade"]);
   const rowan = findActor(["Rowan of the Loam", "Rowan-of-the-Loam"]);
-  const tree = findActor(["Aggressive Tiferet Tree Person", "Tiferet Tree Person", "Tifaret Tree Person", "Early Tifaret"]);
+  const tree = findActor(["The Forest of Early Tifaret", "Aggressive Tiferet Tree Person", "Tiferet Tree Person", "Tifaret Tree Person", "Early Tifaret"]);
 
   const PERSONAS = [
     { actor: elsin, who: "Elsin",

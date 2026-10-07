@@ -45,7 +45,7 @@
     changes++; say(`✚ persona ${p.name} +${p.secrets.length} secret(s)`);
     if (!DRY_RUN) await actor.setFlag(MAL, "persona", { ...cur, topics: [String(cur.topics || "").trim(), p.topics].filter(Boolean).join(", "), notes: [String(cur.notes || "").trim(), p.notes].filter(Boolean).join("\n\n"), secretsRaw: [String(cur.secretsRaw || "").trim(), ...p.secrets].filter(Boolean).join("\n") });
   }
-  for (const n of ["Captain Robot", "Sable 9", "Pilgrim Wick"]) { const a = (game.actors?.contents || []).find(x => x.name === n); if (a) actorIds[n] = a.id; }
+  for (const n of ["Captain Robot", "Sable Nine", "Pilgrim Wick"]) { const a = (game.actors?.contents || []).find(x => x.name === n); if (a) actorIds[n] = a.id; }
   const sp = (n) => actorIds[n] || null;
 
   let campsRaw = game.settings.get(NS, "campaigns"); const campsWasStr = typeof campsRaw === "string";
@@ -113,10 +113,10 @@
       { type: "narration", story: MIRE, questId: Q_MIRE, requires: [P3], choices: [ch("Sing back.", "map_singing_mire_intro"), ch("Push through the static.", "map_singing_mire_partial")] }),
     beat("wt_reach_slip", "Anchor Reach — The Pattern Slips",
       "The tide comes in a hand's breadth and the diagram goes under. Sable, from the chair, does not look up from the chart. \"It comes back out,\" they say. \"That's what tides are for. Sit.\" There is, you notice, a second chair.",
-      { type: "narration", speaker: sp("Sable 9"), story: REACH, questId: Q_REACH, requires: [P3], choices: [ch("Wait for the tide.", "map_anchor_reach_intro"), ch("Break an anchor point instead.", "map_anchor_reach_break")] }),
+      { type: "narration", speaker: sp("Sable Nine"), story: REACH, questId: Q_REACH, requires: [P3], choices: [ch("Wait for the tide.", "map_anchor_reach_intro"), ch("Break an anchor point instead.", "map_anchor_reach_break")] }),
     beat("map_anchor_reach_marked", "Anchor Reach — Marked and Left",
       "You mark the site, three pilings and the one with shoulders, and you leave the diagram in the water where it can keep holding still for whoever needs it to. Sable folds the chair. The human logistics trail runs inland from here, and somebody is at the other end of it, floating on invoices.",
-      { type: "narration", speaker: sp("Sable 9"), story: { ...REACH, role: "ending", ending: "marked" }, questId: Q_REACH, requires: GATE_REACH_END, offer: false,
+      { type: "narration", speaker: sp("Sable Nine"), story: { ...REACH, role: "ending", ending: "marked" }, questId: Q_REACH, requires: GATE_REACH_END, offer: false,
         questEffects: [{ action: "complete", questId: Q_REACH, beatId: "", state: "completed", text: "Anchor Reach marked and left in the water." }],
         choices: [ch("Follow the trail to Port Kudzu.", "map_port_kudzu_intro")] }),
     beat("wt_kudzu_rebuff", "Port Kudzu — Rented by the Breath",
@@ -190,7 +190,7 @@
   // voices
   const voice = (ids, name) => { for (const id of ids) edit(id, b => { if (!b.speakerActorId && sp(name)) b.speakerActorId = sp(name); }, `speaker ${name}`); };
   voice(["map_legansus_waystation_verified", "map_legansus_waystation_flagged"], "Captain Robot");
-  voice(["map_anchor_reach_intro", "map_anchor_reach_stabilize", "map_anchor_reach_break"], "Sable 9");
+  voice(["map_anchor_reach_intro", "map_anchor_reach_stabilize", "map_anchor_reach_break"], "Sable Nine");
   voice(["map_rotating_chapel_approach", "map_rotating_chapel_map", "map_rotating_chapel_force", "map_rotating_chapel_harmonize"], "Brother Ansel Vey");
   voice(["map_port_kudzu_intro", "map_port_kudzu_partial"], "Harbourmaster Dot Pellew");
   // the wagon door hangs off the Reach's endings and the port

@@ -39,7 +39,7 @@
       "Proud Ore :: rollPlus2 :: a Steward helps him count a SECOND crate, all the way, out loud :: Yesodium is proud. It sat a hundred years under owners who sold it to one client and let the valley starve, and it has not forgotten. \"You don't have to like the stone. You have to notice it.\" He does not know the owners were his brother's family in another life.",
       "The Middle Brother :: stirThePot :: a Steward asks about his brother ONCE, and does not ask twice :: He tells it as a joke, once: the middle one leaned into the cage shaft after a dropped manifest on the night the mountain coughed, and is technically still on the manifest. He does not tell it again. He counts crates aloud instead. The plate he sets at the cookline is that man's."
     ],
-    "Sable 9": [
+    "Sable Nine": [
       "The Six Points :: rollPlus2 :: a Steward stands a deep watch with them, or brings them something the chart can't explain :: Everything on the deep chart drifts except six points that have never moved once. Sable believes they are not rock. Sable has never said the word 'statues' out loud, because saying it would make it a claim, and Sable only makes claims twice-verified.",
       "Ninety-Nine :: oppRollMinus2 :: after the Garden has been counted, a Steward asks what the chart tradition says the number is :: One hundred. The honest count says ninety-nine. They say it the way other people say a dead friend's name. \"The walking speed of stone. I only have one data point.\""
     ],
@@ -78,7 +78,7 @@
     changes++; say(`✚ persona ${name} +${fresh.length} secret(s)${name === "Brennig Tamsin" ? " + retcon" : ""}`);
     if (!DRY_RUN) await actor.setFlag(MAL, "persona", next);
   }
-  for (const n of ["\"Doc\"Vess Greeley"]) { const a = (game.actors?.contents || []).find(x => x.name === n); if (a) actorIds[n] = a.id; }
+  for (const n of ["Doc Vess Greeley"]) { const a = (game.actors?.contents || []).find(x => x.name === n); if (a) actorIds[n] = a.id; }
   const sp = (n) => actorIds[n] || null;
 
   // ── 2. registry ────────────────────────────────────────────────────────────
@@ -157,14 +157,14 @@
       { type: "narration", speaker: sp("Brennig Tamsin"), scene: SC.lift, requires: ACTIVE, offer: false, choices: [ch("Count with him.", "", { description: "Eleven. You get there." })] }),
     beat("kt_cage_shaft", "Khezek-Tor — Below Four",
       "Sable brings two chairs, which is how you know they've decided to like you. The cage shaft is a square of dark with a rope down it and a chart pinned beside it with one mark that has never moved. \"It's down there,\" Sable says. \"It has been down there the whole time. Nobody goes below Four except me, and I don't touch things. Charting isn't touching.\"",
-      { speaker: sp("Sable 9"), scene: SC.maw, requires: [...ACTIVE, { beatMark: "kt_brennig_desk" }], choices: [
+      { speaker: sp("Sable Nine"), scene: SC.maw, requires: [...ACTIVE, { beatMark: "kt_brennig_desk" }], choices: [
         ch("Climb down with the rope.", "kt_dropped_manifest", { checkStat: "body", checkDC: 12, failNext: "kt_cage_shaft_fail", description: "Four rungs below Four the rope goes slack in your hands and there is a hand, and in the hand, paper." }),
         ch("Read the chart first.", "kt_dropped_manifest", { checkStat: "mind", checkDC: 12, failNext: "kt_cage_shaft_fail", description: "The chart says where the cage stopped that night, to the rung. Sable has never told anyone that they know." }),
         ch("Send the cage down empty.", "kt_dropped_manifest", { description: "It comes back up with the manifest on its floor. Nobody put it there. Sable goes very still and writes down the time." })
       ] }),
     beat("kt_cage_shaft_fail", "Khezek-Tor — Better Rope",
       "\"We come back with better rope,\" Sable says, coiling it. \"The mountain isn't going anywhere, which is the one thing I can promise about it.\" They fold the second chair. They leave the first one, for next time.",
-      { type: "narration", speaker: sp("Sable 9"), scene: SC.maw, requires: ACTIVE, offer: false, choices: [ch("Come back with better rope.", "kt_cage_shaft")] }),
+      { type: "narration", speaker: sp("Sable Nine"), scene: SC.maw, requires: ACTIVE, offer: false, choices: [ch("Come back with better rope.", "kt_cage_shaft")] }),
     beat("kt_dropped_manifest", "Khezek-Tor — The Dropped Manifest",
       "Ore counts, in Brennig's hand, for a shift two years gone. Under them, a second list in a different hand: names, and beside the names a chamber number, and beside the chamber number, in a third hand that pressed hard, FORBIDDEN. The middle Tamsin brother went down for this. He is, technically, still holding it.",
       { type: "narration", scene: SC.maw, priority: "high", requires: ACTIVE,
@@ -173,14 +173,14 @@
         choices: [ch("Bring it up.", "")] }),
     beat("kt_good_room", "Khezek-Tor — The Good Room",
       "The Waiting Room's back room has been shut since the Cough, and it is the cleanest room in three hexes, and Doc Greeley does not look at the door. She never has to. The bar comes to her, and so do you.",
-      { speaker: sp("\"Doc\"Vess Greeley"), scene: SC.waiting, requires: [...ACTIVE, { beatMark: "kt_dropped_manifest" }], choices: [
+      { speaker: sp("Doc Vess Greeley"), scene: SC.waiting, requires: [...ACTIVE, { beatMark: "kt_dropped_manifest" }], choices: [
         ch("Ask what the room is FOR now.", "kt_back_room_roster", { checkStat: "presence", checkDC: 12, failNext: "kt_good_room_fail", description: "\"A rematch.\" She takes the key off the hook under the good whiskey." }),
         ch("Put the manifest on the bar.", "kt_back_room_roster", { description: "She reads it twice. Then she opens the room herself, and you understand that she has been waiting for someone to bring her a reason." }),
         ch("Joke about the room.", "kt_good_room_fail", { description: "She ejects you. Politely. Once." })
       ] }),
     beat("kt_good_room_fail", "Khezek-Tor — The Room Stays Shut",
       "She pours. Whatever it is, it is exactly the right thing for whoever you are, which is her whole trick. The room stays shut. \"Ask better,\" she says, not unkindly, \"or bring me something to read.\"",
-      { type: "narration", speaker: sp("\"Doc\"Vess Greeley"), scene: SC.waiting, requires: ACTIVE, offer: false, choices: [ch("Drink what she poured.", "", { description: "It's a sprain, not a break." })] }),
+      { type: "narration", speaker: sp("Doc Vess Greeley"), scene: SC.waiting, requires: ACTIVE, offer: false, choices: [ch("Drink what she poured.", "", { description: "It's a sprain, not a break." })] }),
     beat("kt_back_room_roster", "Khezek-Tor — The Back-Room Roster",
       "In the drawer under the suture kit, in her prescription hand: who was hurt on the Night the Mountain Coughed, in order, with what she did for each. And one man she treated who was not on the shift list at all. Cross it against the dropped manifest and the same name is on both, in different hands.",
       { type: "narration", scene: SC.waiting, priority: "high", requires: ACTIVE,
@@ -236,9 +236,9 @@
   const voice = (ids, name) => { for (const id of ids) edit(id, b => { if (!b.speakerActorId && sp(name)) b.speakerActorId = sp(name); }, `speaker ${name}`); };
   voice(["khezek_tor_the_lift_hall", "khezek_tor_darkness_shipment_quest_acceptance"], "Brennig Tamsin");
   voice(["khezek_tor_the_brace", "khezek_tor_drax_calder_convo_1", "khezek_tor_drax_calder_convo_2", "khezek_tor_drax_calder_convo_3", "khezek_tor_drax_calder_convo_echo", "khezek_tor_mine_that_answered_back_quest_acceptance", "khezek_brace_groans"], "Drax Calder");
-  voice(["khezek_tor_the_maw", "khezek_tor_sable_nine_convo_1", "khezek_tor_sable_nine_convo_2", "khezek_tor_sable_nine_convo_3", "khezek_tor_sable_nine_convo_echo", "khezek_sink_widens"], "Sable 9");
+  voice(["khezek_tor_the_maw", "khezek_tor_sable_nine_convo_1", "khezek_tor_sable_nine_convo_2", "khezek_tor_sable_nine_convo_3", "khezek_tor_sable_nine_convo_echo", "khezek_sink_widens"], "Sable Nine");
   voice(["khezek_tor_town_walk"], "Bez");
-  voice(["khezek_compound_cough"], "\"Doc\"Vess Greeley");
+  voice(["khezek_compound_cough"], "Doc Vess Greeley");
 
   // ── 4. story script ────────────────────────────────────────────────────────
   const storyApi = game.bbttcc?.api?.campaign?.story?.data;

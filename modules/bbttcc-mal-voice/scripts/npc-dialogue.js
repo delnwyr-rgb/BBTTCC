@@ -92,7 +92,9 @@ function _esc(s) {
 // Steward chassis via the NPC Builder (flags.fourththing.kind === "npc",
 // system.biography.concept/.notes, faction at flags["bbttcc-factions"]) —
 // read both.
-function _npcRole(sys)  { return String(sys.role || sys.biography?.concept || "").trim(); }
+// 2026-10-06: every actor type now carries system.biography {concept, notes} (the sheet's About panel). The concept is
+// the authored "who they are" line, so it wins over an npc's bare role word (brute/caster…); role stays the fallback.
+function _npcRole(sys)  { return String(sys.biography?.concept || sys.role || "").trim(); }
 function _npcNotes(sys) { return [sys.notes, sys.biography?.notes].filter(Boolean).join("\n\n"); }
 
 function _isTaggedNpc(actor) {

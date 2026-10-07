@@ -495,6 +495,11 @@
   {{/if}}
 
   <section class="ft-npc-body">
+    {{!-- About (2026-10-06): who this is — open to anyone who can see the sheet; fold to get it out of the way --}}
+    <details class="ft-npc-section ft-about-fold" open>
+      <summary class="ft-about-summary">About{{#if about.concept}} — <span class="ft-about-summary-concept">{{about.concept}}</span>{{/if}}</summary>
+      {{> "systems/fourththing/templates/partials/about-panel.hbs"}}
+    </details>
     {{#if hasStrikes}}
     <div class="ft-npc-section">
       <div class="ft-section-header"><h3>Strikes</h3><span class="ft-mini-count">{{strikeRows.length}}</span></div>
