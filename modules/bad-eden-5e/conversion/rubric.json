@@ -1,6 +1,6 @@
 {
   "_about": "THE conversion rubric: how a Bad Eden mechanic written for RFI (the fourththing system) becomes its D&D 5E (dnd5e 6) twin. Read by tools/build-packs.mjs (the lint), bin/ft-convert-5e (the converter) and bin/ft-lint-parity (the parity check). Rendered for humans as CONVERSION_RUBRIC.md — keep the two in step. Every entry marked ruling:true was ruled by Dave; ruling:'owed' is a draft awaiting one.",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "date": "2026-10-07",
   "direction": "rfi→5e",
   "sourceOfTruth": {
@@ -86,8 +86,8 @@
     },
     "small bonus / +1 rank (no rule behind it)": {
       "value": "+2",
-      "ruling": "owed",
-      "note": "the ancestry lane used +2; Coalition Tongue used +1d4"
+      "ruling": true,
+      "note": "Dave 2026-10-07: keep (+1d4 where the source rolls a die, e.g. Coalition Tongue)"
     }
   },
   "tracks": {
@@ -107,24 +107,25 @@
       "ruling": true
     },
     "stress points": {
-      "to": "1d4 psychic damage, or temp HP = prof when it is a gain",
-      "ruling": "owed",
-      "note": "older RFI text treats Stress as points; the current engine treats it as a track"
+      "to": "1d4 psychic damage when it bites; temp HP equal to your proficiency bonus when it heals",
+      "ruling": true
     },
     "strain": {
       "to": "a level of exhaustion",
       "ruling": true
     },
     "clarity": {
-      "to": "keep the word; a Clarity bonus becomes a Flow-point bonus (flags.bad-eden-5e.bonus.flow)",
-      "ruling": "owed"
+      "to": "keep the word; a Clarity bonus becomes a Flow-point bonus (ae flags.bad-eden-5e.bonus.flow ADD n, n = the Clarity amount)",
+      "ruling": true,
+      "scale": "Clarity is a 5-ish pool, Flow points are 4×level — see conditions.scarred for the bite scale"
     },
     "noise": {
       "to": "keep the word",
-      "ruling": "owed"
+      "ruling": true
     },
     "radiation": {
-      "to": "keep — bbttcc-radiation runs in both flavours"
+      "to": "keep — bbttcc-radiation runs in both flavours; NOT a dnd5e damage type",
+      "ruling": true
     }
   },
   "defenses": {
@@ -275,7 +276,7 @@
       "key": "mason",
       "text": "mason's tools"
     },
-    "_ruling": "owed — drafted in the ancestry lane; Dave confirms the table"
+    "_ruling": true
   },
   "ranks": {
     "0": {
@@ -388,9 +389,8 @@
       "note": "registered in CONFIG.DND5E.damageTypes by bad-eden-5e"
     },
     "radiation": {
-      "to": "radiation",
-      "ruling": "owed",
-      "note": "bbttcc-radiation owns the ladder; register as a damage type or keep as a hazard?"
+      "to": "the radiation ladder (bbttcc-radiation), never a damage type; 'radiation damage' in text → 'radiation exposure (one step on the ladder)'",
+      "ruling": true
     },
     "energy (legacy, by flavor)": {
       "to": "the flavor's D&D type: lightning / fire / cold"
@@ -411,8 +411,8 @@
       "to": "speed halved and −2 to attack rolls until the end of its next turn (text)"
     },
     "scarred": {
-      "to": "keep as a Bad Eden mark; the Clarity bite becomes −1 Flow point until the end of the scene",
-      "ruling": "owed"
+      "to": "keep the mark; the Clarity bite scales to the Flow pool: −1 Flow point per 5 points of your Flow maximum (minimum 1) until the end of the scene",
+      "ruling": "owed — Dave asked whether −1 flat is enough; this is the proportional answer (Clarity ≈ a 5-point pool, so −1 Clarity ≈ 20%)"
     },
     "calmed": {
       "to": "charmed (with the RFI wording: can't take violent action willingly)"
@@ -522,7 +522,7 @@
       "damage.type": "via damage",
       "damage.attribute": "violence → Str melee / Dex finesse; intrigue → Dex ranged",
       "range.short/long (squares)": "×5 ft; melee reach 1 → 5 ft",
-      "category melee/ranged": "weapon type simpleM/martialM/simpleR/martialR by tag (ruling owed: which RFI weapons are martial)",
+      "category melee/ranged": "weapon type simpleM/martialM/simpleR/martialR: martial = tagged heavy, two-handed, reach, or a firearm beyond a pistol; everything else simple (ruled 2026-10-07)",
       "tags": {
         "two-handed": "two",
         "finesse": "fin",
@@ -541,19 +541,19 @@
       "type": "equipment",
       "guardBonus": {
         "to": "AC = 10 + guardBonus for light, 12 + bonus for medium, 14 + bonus for heavy — band by armorSkill/tags",
-        "ruling": "owed"
+        "ruling": true
       },
       "evasionBonus": "Dex save bonus (text or AE)",
       "resolveBonus": "Wis save bonus",
       "resistances[]": "via damage → ae dr",
-      "armorSkill": "fitting → light, plating → medium/heavy, bracing → shield (ruling owed)"
+      "armorSkill": "fitting → light, plating → medium/heavy, bracing → shield (ruled)"
     },
     "gear / equipment / consumable": {
       "type": "loot | tool | consumable by category; 'potion' → consumable potion"
     },
     "price": {
       "marks": "keep marks (both flavours); dnd5e price field = marks with denomination 'gp' labelled marks",
-      "ruling": "owed"
+      "ruling": true
     },
     "rigGear / rigFrame": {
       "to": "vehicle lane — not drafted"
@@ -574,7 +574,7 @@
     "resolve": "Wis save (prof if ≥ base)",
     "attributes (1–5)": {
       "to": "ability score 10 + 2×value (1→12 … 5→20)",
-      "ruling": "owed"
+      "ruling": true
     },
     "skills (ranks)": "via skills + ranks",
     "actions / weapons": "dnd5e weapon items through gear",
@@ -849,5 +849,8 @@
       "@SQUARES": "the number in the match ×5"
     },
     "_order": "front: grammatical reroll/rank rows · middle: the mechanics table · tail: bare capitalised faculty names (Violence→Strength …) so phrases like 'Presence (Persuasion) check' and 'Violence or Dexterity' resolve"
+  },
+  "_rulings": {
+    "2026-10-07": "Dave ruled rubric lines 1–8 (small bonus +2, Stress points, Clarity/Noise kept with Flow-point bonus, radiation stays a ladder, the skill table, armor bands, martial weapons, marks, creature scores 10+2×value). Scarred's scale is the one open question."
   }
 }

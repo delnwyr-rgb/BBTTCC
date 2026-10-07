@@ -1,0 +1,35 @@
+{
+  "_about": "Roll tables. The Instability Table: what a Gearwright of the Instability shop gets when the Cannon surges — Mal keeps the book. Built by tools/build-packs.mjs into packs/tables.",
+  "tables": [
+    {
+      "slug": "instability",
+      "name": "The Instability Table",
+      "img": "icons/svg/explosion.svg",
+      "kind": "instability",
+      "formula": "1d20",
+      "description": "<p>What the Cannon does when it does something else. Mal keeps the book. Roll a d20 when a Gearwright of the Instability shop triggers a surge.</p>",
+      "results": [
+        "<p><strong>Backfire.</strong> The cannon fires the wrong way. You take the power's damage yourself (2d6 force if it dealt none). <em>“I'm not going to say I told you so. I'm going to let the bruise say it.”</em></p>",
+        "<p><strong>Hot Hiccup.</strong> Every creature within 10 feet of you, you included, takes one step up the radiation ladder. <em>“Glowing is a look. Not a good one.”</em></p>",
+        "<p><strong>The Flow Notices.</strong> One random creature within 30 feet gains 5 temporary hit points and a lasting grudge against you. <em>“Congratulations on your new friend. It hates you.”</em></p>",
+        "<p><strong>I Live Here Now.</strong> For 1 minute the cannon narrates your every action in my voice, at volume. You have disadvantage on Stealth checks and advantage on Intimidation checks. <em>“Hi. Don't mind me. Minding you.”</em></p>",
+        "<p><strong>Hex Static.</strong> If the power had an area, it is centred on you instead. If it didn't, you can't take reactions until the start of your next turn. <em>“The hex would like a word. The word is ouch.”</em></p>",
+        "<p><strong>Loose Scrip.</strong> 2d10 marks fall out of the cannon. Legal tender. Probably counterfeit. <em>“Don't spend it all in one town. Spend it in a town you're leaving.”</em></p>",
+        "<p><strong>Magnet Day.</strong> Everything metal within 20 feet of you is magnetised for 1 minute; attacks made with metal weapons in that area have disadvantage. <em>“Nobody move. Especially the cutlery.”</em></p>",
+        "<p><strong>Economical.</strong> The power goes off at its lowest level, and you keep the Artifice points. <em>“Wrong, but thrifty. I respect it, a little.”</em></p>",
+        "<p><strong>Holy Shitfuck.</strong> The power goes off two levels higher than you cast it (9th at most), and you don't pay for it. <em>“That worked. I mean — I ALWAYS BELIEVED IN YOU GUYS.”</em></p>",
+        "<p><strong>Somebody's Drone.</strong> A drone that isn't yours wakes up within 60 feet (AC 13, 10 hit points, fly 30 ft, a 1d6 lightning zap at +4 to hit) and attacks the nearest creature for 1 minute. It is not a person. It is a problem. <em>“There was something a bit OFF about it though…”</em></p>",
+        "<p><strong>Onwards!</strong> You and one random creature within 30 feet swap places. <em>“Onwards! In the wrong direction! Back to it!”</em></p>",
+        "<p><strong>Dead Battery.</strong> Your Artifice points drop to 0. You get them all back at the end of your next turn. <em>“And… hold. Hold. There we go.”</em></p>",
+        "<p><strong>Spark Leak.</strong> A Spark echo flickers over the cannon for 10 minutes. The next Artifice power you cast has advantage on its attack roll, or +2 to its save DC. <em>“Something old just winked at you. Wink back. Politely.”</em></p>",
+        "<p><strong>Smoke Show.</strong> A 20-foot-radius cloud of heavily obscuring smoke rolls out of the cannon, centred on you, for 1 minute. <em>“Atmosphere. Free of charge.”</em></p>",
+        "<p><strong>Awaiting Orders.</strong> Every drone and mindless machine within 60 feet turns to face you and waits for instructions until the start of your next turn. Circuitborn are unaffected. They just look at you. <em>“Awkward.”</em></p>",
+        "<p><strong>Dye Job.</strong> Your hair, fur, or plating turns the colour of the last power you cast until your next long rest. <em>“It's very you. It's very, very you.”</em></p>",
+        "<p><strong>Two for One.</strong> The cannon fires twice. Resolve the power again against the same targets at its lowest level. <em>“Two for one. The one is you.”</em></p>",
+        "<p><strong>Second Thoughts.</strong> You are frightened of the cannon until the end of your next turn. It is not a person either. Probably. <em>“I'd be scared of it too. I AM it, a little. Anyway.”</em></p>",
+        "<p><strong>Word Gets Around.</strong> A nearby hex (the GM's choice) feels it. Next Strategic Turn, that hex's faction hears your name, and the dice decide how fondly. <em>“Fame! The cheap kind.”</em></p>",
+        "<p><strong>Exactly as Asked.</strong> The cannon does precisely what you wanted. Nothing else happens, and you regain one spent override. <em>“… Anyway.”</em></p>"
+      ]
+    }
+  ]
+}

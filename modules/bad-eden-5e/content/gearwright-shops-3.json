@@ -1,164 +1,456 @@
 {
   "_about": "Gearwright Shops batch 3: Cybernetics (SW5E Cybertech Engineering), Gadgetry (Gadgeteer Engineering), Instability (Unstable Engineering). Mechanics carried over; every sentence Bad Eden's own. SW5E's modification-slot system has no Bad Eden equivalent — see _unsure for each flat rewrite.",
   "_renames": [
-    { "sw5e": "Cybertech Engineering", "new": "Cybernetics" },
-    { "sw5e": "Bonus Proficiencies (Cybertech)", "new": "Steady Hands" },
-    { "sw5e": "Cyberpad", "new": "Wired In" },
-    { "sw5e": "Insightful Casting", "new": "Trade Current" },
-    { "sw5e": "Quickslice", "new": "Clip the Signal" },
-    { "sw5e": "Severe Fallout", "new": "Hard Crash" },
-    { "sw5e": "Maximum Output", "new": "Maximum Output" },
-    { "sw5e": "Gadgeteer Engineering", "new": "Gadgetry" },
-    { "sw5e": "Bonus Proficiencies (Gadgeteer)", "new": "Handy" },
-    { "sw5e": "Gadgeteer Harness", "new": "The Harness" },
-    { "sw5e": "Projected Barrier", "new": "Field Barrier" },
-    { "sw5e": "Versatile Direction", "new": "Both Hands" },
-    { "sw5e": "Reinforced Barriers", "new": "Reinforced Barriers" },
-    { "sw5e": "Adaptive Barrier", "new": "Adaptive Barrier" },
-    { "sw5e": "Unstable Engineering", "new": "Instability" },
-    { "sw5e": "Bonus Proficiencies (Unstable)", "new": "Loose Screws" },
-    { "sw5e": "Modified Tinkercannon", "new": "The Cannon" },
-    { "sw5e": "Unstable Volley", "new": "Sticky Charge" },
-    { "sw5e": "Creative Destruction", "new": "Creative Destruction" },
-    { "sw5e": "Experimental Overrides", "new": "Experimental Overrides" },
-    { "sw5e": "Engineering Bombardment", "new": "Bombardment" }
+    {
+      "sw5e": "Cybertech Engineering",
+      "new": "Cybernetics"
+    },
+    {
+      "sw5e": "Bonus Proficiencies (Cybertech)",
+      "new": "Steady Hands"
+    },
+    {
+      "sw5e": "Cyberpad",
+      "new": "Wired In"
+    },
+    {
+      "sw5e": "Insightful Casting",
+      "new": "Trade Current"
+    },
+    {
+      "sw5e": "Quickslice",
+      "new": "Clip the Signal"
+    },
+    {
+      "sw5e": "Severe Fallout",
+      "new": "Hard Crash"
+    },
+    {
+      "sw5e": "Maximum Output",
+      "new": "Maximum Output"
+    },
+    {
+      "sw5e": "Gadgeteer Engineering",
+      "new": "Gadgetry"
+    },
+    {
+      "sw5e": "Bonus Proficiencies (Gadgeteer)",
+      "new": "Handy"
+    },
+    {
+      "sw5e": "Gadgeteer Harness",
+      "new": "The Harness"
+    },
+    {
+      "sw5e": "Projected Barrier",
+      "new": "Field Barrier"
+    },
+    {
+      "sw5e": "Versatile Direction",
+      "new": "Both Hands"
+    },
+    {
+      "sw5e": "Reinforced Barriers",
+      "new": "Reinforced Barriers"
+    },
+    {
+      "sw5e": "Adaptive Barrier",
+      "new": "Adaptive Barrier"
+    },
+    {
+      "sw5e": "Unstable Engineering",
+      "new": "Instability"
+    },
+    {
+      "sw5e": "Bonus Proficiencies (Unstable)",
+      "new": "Loose Screws"
+    },
+    {
+      "sw5e": "Modified Tinkercannon",
+      "new": "The Cannon"
+    },
+    {
+      "sw5e": "Unstable Volley",
+      "new": "Sticky Charge"
+    },
+    {
+      "sw5e": "Creative Destruction",
+      "new": "Creative Destruction"
+    },
+    {
+      "sw5e": "Experimental Overrides",
+      "new": "Experimental Overrides"
+    },
+    {
+      "sw5e": "Engineering Bombardment",
+      "new": "Bombardment"
+    }
   ],
   "_powerRefs": [],
   "_unsure": [
     "Wired In (was Cyberpad): the 4–9 modification slots became a list of six augments — pick two at 3rd, one more at 9th, 13th and 17th (four picks ≈ the slot line scaled to Bad Eden). The 'points lost per mod over proficiency' tax is dropped.",
     "The Harness (was Gadgeteer Harness): same treatment — four gadgets on the list, pick two at 3rd, one more at 9th, 13th and 17th; the harness also counts as the focus and gives +1 AC while attuned (the SW5E harness was an enhanced item). Tax dropped.",
-    "The Cannon (was Modified Tinkercannon): overrides became a flat pool equal to proficiency bonus per long rest (SW5E: 4–9 by the slot column). Bad Eden has NO Instability surge table yet — the text points the GM at 'the Instability table' and says to use the PHB Wild Magic Surge table until one is written.",
+    "The Cannon: overrides became a flat pool equal to proficiency bonus per long rest (SW5E: 4–9 by the slot column). The Instability Table now exists (content/tables.json, Mal's voice, ruled 2026-10-07).",
     "Clip the Signal: kept the source's 1/short-rest uses on the sheet; the text keeps the per-creature limit.",
     "Sticky Charge: damage part is a custom formula on class level ((1 + floor((@classes.gearwright.levels + 1) / 6))d6 → 1d6/2d6/3d6/4d6 at 3/5/11/17); the range growth (30/60/120) is text only; spending a Bright Idea use is text only (cross-item consumption).",
     "Both Hands: uses formula 3 + floor((@classes.gearwright.levels - 5) / 4) → 3/4/5/6 at 6/9/13/17."
   ],
-
   "subclasses": [
     {
-      "slug": "cybernetics", "identifier": "cybernetics", "name": "Cybernetics", "classIdentifier": "gearwright",
+      "slug": "cybernetics",
+      "identifier": "cybernetics",
+      "name": "Cybernetics",
+      "classIdentifier": "gearwright",
       "img": "icons/commodities/tech/cable-armored-reticulated.webp",
       "description": "<p><em>Shop of the Gearwright</em></p><p>Some Gearwrights fix the world. The Cybernetics shop starts closer to home. These are the ones who wired the pad straight into the arm and stopped thinking of their tools as something they carry. It isn't the same as being Circuitborn, and a Cybernetics Gearwright will tell you so, usually before you ask. They were born people and they stay people. They just stopped letting the body have the last word.</p>",
-      "features": [ { "level": 3, "slug": "cybernetics-steady-hands" }, { "level": 3, "slug": "cybernetics-wired-in" }, { "level": 3, "slug": "cybernetics-trade-current" }, { "level": 6, "slug": "cybernetics-clip-the-signal" }, { "level": 14, "slug": "cybernetics-hard-crash" }, { "level": 18, "slug": "cybernetics-maximum-output" } ]
+      "features": [
+        {
+          "level": 3,
+          "slug": "cybernetics-steady-hands"
+        },
+        {
+          "level": 3,
+          "slug": "cybernetics-wired-in"
+        },
+        {
+          "level": 3,
+          "slug": "cybernetics-trade-current"
+        },
+        {
+          "level": 6,
+          "slug": "cybernetics-clip-the-signal"
+        },
+        {
+          "level": 14,
+          "slug": "cybernetics-hard-crash"
+        },
+        {
+          "level": 18,
+          "slug": "cybernetics-maximum-output"
+        }
+      ]
     },
     {
-      "slug": "gadgetry", "identifier": "gadgetry", "name": "Gadgetry", "classIdentifier": "gearwright",
+      "slug": "gadgetry",
+      "identifier": "gadgetry",
+      "name": "Gadgetry",
+      "classIdentifier": "gearwright",
       "img": "icons/commodities/tech/cog-gear-crank-steel.webp",
       "description": "<p><em>Shop of the Gearwright</em></p><p>The Gadgetry shop never met a problem it couldn't solve with a pocket. These Gearwrights build small, reusable things and wear all of them at once: a harness of hooks, clips, and gadgets that lets them do three things at a time and put a shield on somebody from across the room. Ask one what's in the left-hand pouch and settle in.</p>",
-      "features": [ { "level": 3, "slug": "gadgetry-handy" }, { "level": 3, "slug": "gadgetry-the-harness" }, { "level": 3, "slug": "gadgetry-field-barrier" }, { "level": 6, "slug": "gadgetry-both-hands" }, { "level": 14, "slug": "gadgetry-reinforced-barriers" }, { "level": 18, "slug": "gadgetry-adaptive-barrier" } ]
+      "features": [
+        {
+          "level": 3,
+          "slug": "gadgetry-handy"
+        },
+        {
+          "level": 3,
+          "slug": "gadgetry-the-harness"
+        },
+        {
+          "level": 3,
+          "slug": "gadgetry-field-barrier"
+        },
+        {
+          "level": 6,
+          "slug": "gadgetry-both-hands"
+        },
+        {
+          "level": 14,
+          "slug": "gadgetry-reinforced-barriers"
+        },
+        {
+          "level": 18,
+          "slug": "gadgetry-adaptive-barrier"
+        }
+      ]
     },
     {
-      "slug": "instability", "identifier": "instability", "name": "Instability", "classIdentifier": "gearwright",
+      "slug": "instability",
+      "identifier": "instability",
+      "name": "Instability",
+      "classIdentifier": "gearwright",
       "img": "icons/magic/fire/explosion-embers-orange.webp",
       "description": "<p><em>Shop of the Gearwright</em></p><p>Every lodge has one, and the Instability shop is where they keep them. These Gearwrights mix what shouldn't be mixed and point it at the problem. The results are bigger than anybody else's and not always the results they ordered. They are a joy at a distance.</p>",
-      "features": [ { "level": 3, "slug": "instability-loose-screws" }, { "level": 3, "slug": "instability-the-cannon" }, { "level": 3, "slug": "instability-sticky-charge" }, { "level": 6, "slug": "instability-creative-destruction" }, { "level": 14, "slug": "instability-experimental-overrides" }, { "level": 18, "slug": "instability-bombardment" } ]
+      "features": [
+        {
+          "level": 3,
+          "slug": "instability-loose-screws"
+        },
+        {
+          "level": 3,
+          "slug": "instability-the-cannon"
+        },
+        {
+          "level": 3,
+          "slug": "instability-sticky-charge"
+        },
+        {
+          "level": 6,
+          "slug": "instability-creative-destruction"
+        },
+        {
+          "level": 14,
+          "slug": "instability-experimental-overrides"
+        },
+        {
+          "level": 18,
+          "slug": "instability-bombardment"
+        }
+      ]
     }
   ],
-
   "features": [
     {
-      "slug": "cybernetics-steady-hands", "name": "Steady Hands", "level": 3, "requirements": "Gearwright (Cybernetics) 3",
-      "folder": "Cybernetics", "folderParent": "Gearwright", "img": "icons/tools/hand/needle-thread-spool.webp",
+      "slug": "cybernetics-steady-hands",
+      "name": "Steady Hands",
+      "level": 3,
+      "requirements": "Gearwright (Cybernetics) 3",
+      "folder": "Cybernetics",
+      "folderParent": "Gearwright",
+      "img": "icons/tools/hand/needle-thread-spool.webp",
       "description": "<p><em>Cybernetics, 3rd level</em></p><p>You've done the work on yourself, which makes everyone else easy. You gain proficiency with one set of artisan's tools of your choice. When you craft cybernetic augments or wiring with any tools you're proficient with, you work at twice the usual rate.</p>"
     },
     {
-      "slug": "cybernetics-wired-in", "name": "Wired In", "level": 3, "requirements": "Gearwright (Cybernetics) 3",
-      "folder": "Cybernetics", "folderParent": "Gearwright", "img": "icons/equipment/wrist/bracer-armored-steel-blue.webp",
+      "slug": "cybernetics-wired-in",
+      "name": "Wired In",
+      "level": 3,
+      "requirements": "Gearwright (Cybernetics) 3",
+      "folder": "Cybernetics",
+      "folderParent": "Gearwright",
+      "img": "icons/equipment/wrist/bracer-armored-steel-blue.webp",
       "description": "<p><em>Cybernetics, 3rd level (more at 9th, 13th, and 17th)</em></p><p>Over the course of a long rest, with a wristpad and tools you're proficient with, you wire the pad into your arm. It requires attunement, nobody else can use it, and while you're attuned to it it counts as the focus for your Artifice powers.</p><p>Along with the pad you install augments in yourself. Choose two from the list below; you install one more at 9th, 13th, and 17th level. Over the course of a long rest you can swap one augment for another.</p><ul><li><strong>Night Eyes.</strong> You have darkvision out to 60 feet, or your darkvision extends by 60 feet if you already have it.</li><li><strong>Steel Grip.</strong> You have advantage on Strength checks made to grip, climb, or hold on, and you can't be disarmed.</li><li><strong>Governor.</strong> Your walking speed increases by 10 feet.</li><li><strong>Second Lung.</strong> You can hold your breath for an hour, and you have advantage on saving throws against poison and against being poisoned.</li><li><strong>Hardline.</strong> You can speak to any drone or mindless machine you touch, and it understands you, as far as it understands anything.</li><li><strong>Buffer.</strong> When you finish a short rest, you gain temporary hit points equal to your Gearwright level.</li></ul><p>Some augments and powers run off your body: when an effect from this class calls for a saving throw, the DC is your Artifice save DC.</p>"
     },
     {
-      "slug": "cybernetics-trade-current", "name": "Trade Current", "level": 3, "requirements": "Gearwright (Cybernetics) 3",
-      "folder": "Cybernetics", "folderParent": "Gearwright", "img": "icons/commodities/tech/battery-coil-tesla.webp",
+      "slug": "cybernetics-trade-current",
+      "name": "Trade Current",
+      "level": 3,
+      "requirements": "Gearwright (Cybernetics) 3",
+      "folder": "Cybernetics",
+      "folderParent": "Gearwright",
+      "img": "icons/commodities/tech/battery-coil-tesla.webp",
       "activation": "bonus",
       "description": "<p><em>Cybernetics, 3rd level</em></p><p>It's all one current to you now. You can turn uses of Bright Idea into Artifice points, and Artifice points into Bright Idea.</p><p><strong>Points from ideas.</strong> As a bonus action on your turn, you can spend one use of Bright Idea to gain 2 Artifice points. These can take you above your maximum. Any points you make this way are gone when you finish a short rest.</p><p><strong>Ideas from points.</strong> As a bonus action on your turn, you can spend 2 Artifice points to regain one use of Bright Idea.</p>"
     },
     {
-      "slug": "cybernetics-clip-the-signal", "name": "Clip the Signal", "level": 6, "requirements": "Gearwright (Cybernetics) 6",
-      "folder": "Cybernetics", "folderParent": "Gearwright", "img": "icons/commodities/tech/antenna-powered-purple.webp",
-      "activation": "reaction", "range": 60, "uses": { "max": "1", "per": "sr" },
+      "slug": "cybernetics-clip-the-signal",
+      "name": "Clip the Signal",
+      "level": 6,
+      "requirements": "Gearwright (Cybernetics) 6",
+      "folder": "Cybernetics",
+      "folderParent": "Gearwright",
+      "img": "icons/commodities/tech/antenna-powered-purple.webp",
+      "activation": "reaction",
+      "range": 60,
+      "uses": {
+        "max": "1",
+        "per": "sr"
+      },
       "description": "<p><em>Cybernetics, 6th level</em></p><p>If you can see it cast, you can record it. When a creature you can see casts an Artifice power of a level you can cast, you can use your reaction to try to pull the schematic down to your pad.</p><p>Make an ability check with your casting ability, adding your proficiency bonus. The DC is 10 + twice the power's level. On a success the power is stored on your pad; on a failure it isn't. You can cast a stored power as if you knew it, and it doesn't count against your powers known. You can hold stored powers whose levels add up to your Gearwright level at a time, and each time you use this feature you can drop or replace any you've stored.</p><p>Once you've clipped a power from a creature, you can't do it to that creature again until you finish a short or long rest.</p>"
     },
     {
-      "slug": "cybernetics-hard-crash", "name": "Hard Crash", "level": 14, "requirements": "Gearwright (Cybernetics) 14",
-      "folder": "Cybernetics", "folderParent": "Gearwright", "img": "icons/magic/lightning/bolt-forked-large-teal-purple.webp",
+      "slug": "cybernetics-hard-crash",
+      "name": "Hard Crash",
+      "level": 14,
+      "requirements": "Gearwright (Cybernetics) 14",
+      "folder": "Cybernetics",
+      "folderParent": "Gearwright",
+      "img": "icons/magic/lightning/bolt-forked-large-teal-purple.webp",
       "description": "<p><em>Cybernetics, 14th level</em></p><p>When it fails, it fails all the way. Whenever a creature rolls a natural 1 on a saving throw against one of your Artifice powers, it takes double damage from that power. If the power doesn't deal damage, the creature instead has disadvantage on its next saving throw against an Artifice power you cast.</p>"
     },
     {
-      "slug": "cybernetics-maximum-output", "name": "Maximum Output", "level": 18, "requirements": "Gearwright (Cybernetics) 18",
-      "folder": "Cybernetics", "folderParent": "Gearwright", "img": "icons/commodities/tech/coil-tesla-large.webp",
-      "activation": "special", "uses": { "max": "1", "per": "sr" },
+      "slug": "cybernetics-maximum-output",
+      "name": "Maximum Output",
+      "level": 18,
+      "requirements": "Gearwright (Cybernetics) 18",
+      "folder": "Cybernetics",
+      "folderParent": "Gearwright",
+      "img": "icons/commodities/tech/coil-tesla-large.webp",
+      "activation": "special",
+      "uses": {
+        "max": "1",
+        "per": "sr"
+      },
       "description": "<p><em>Cybernetics, 18th level</em></p><p>Every so often you open it all the way up. When you cast an Artifice power, you can choose to deal the maximum damage or restore the maximum hit points the power allows, instead of rolling.</p><p>Once you've used this feature, you can't use it again until you finish a short or long rest.</p>"
     },
-
     {
-      "slug": "gadgetry-handy", "name": "Handy", "level": 3, "requirements": "Gearwright (Gadgetry) 3",
-      "folder": "Gadgetry", "folderParent": "Gearwright", "img": "icons/tools/hand/pliers-shears-wire-cutters.webp",
+      "slug": "gadgetry-handy",
+      "name": "Handy",
+      "level": 3,
+      "requirements": "Gearwright (Gadgetry) 3",
+      "folder": "Gadgetry",
+      "folderParent": "Gearwright",
+      "img": "icons/tools/hand/pliers-shears-wire-cutters.webp",
       "description": "<p><em>Gadgetry, 3rd level</em></p><p>You've got a thing for that. You gain proficiency with one set of artisan's tools of your choice. When you craft gadgets or small devices with any tools you're proficient with, you work at twice the usual rate.</p>"
     },
     {
-      "slug": "gadgetry-the-harness", "name": "The Harness", "level": 3, "requirements": "Gearwright (Gadgetry) 3",
-      "folder": "Gadgetry", "folderParent": "Gearwright", "img": "icons/equipment/wrist/bracer-banded-leather-black.webp",
+      "slug": "gadgetry-the-harness",
+      "name": "The Harness",
+      "level": 3,
+      "requirements": "Gearwright (Gadgetry) 3",
+      "folder": "Gadgetry",
+      "folderParent": "Gearwright",
+      "img": "icons/equipment/wrist/bracer-banded-leather-black.webp",
       "effects": [
-        { "_id": "be5eGadgetHarnes", "name": "The Harness", "img": "icons/equipment/wrist/bracer-banded-leather-black.webp", "transfer": true, "disabled": false,
-          "changes": [ { "key": "system.attributes.ac.bonus", "mode": 2, "value": "1", "priority": 20 } ],
-          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+        {
+          "_id": "be5eGadgetHarnes",
+          "name": "The Harness",
+          "img": "icons/equipment/wrist/bracer-banded-leather-black.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
       ],
       "description": "<p><em>Gadgetry, 3rd level (more at 9th, 13th, and 17th)</em></p><p>Over the course of a long rest, with tools you're proficient with, you build your harness: straps, clips, pouches, and a dozen things that click. It's an enhanced item, it requires attunement, nobody else can use it, and while you're attuned to it it counts as the focus for your Artifice powers and gives you a +1 bonus to AC.</p><p>The harness holds gadgets. Choose two from the list below; you add one more at 9th, 13th, and 17th level. Over the course of a long rest you can swap one gadget for another.</p><ul><li><strong>Grapple Line.</strong> As a bonus action you can fire a line at a point you can see within 60 feet and pull yourself to it, or pull an unattended object of up to 50 pounds to you.</li><li><strong>Flash Pouch.</strong> As an action, each creature of your choice within 10 feet of you must succeed on a Constitution saving throw or be blinded until the end of its next turn. Once used, the pouch needs a short rest to refill.</li><li><strong>Spring Heels.</strong> Your jump distance is tripled, and you take no damage from a fall of 30 feet or less.</li><li><strong>Medkit Clip.</strong> As a bonus action you can use a healer's kit on a creature within 5 feet of you, and the creature regains 1d4 + your Intelligence modifier hit points as well as being stabilized.</li></ul><p>When a gadget calls for a saving throw, the DC is your Artifice save DC.</p>"
     },
     {
-      "slug": "gadgetry-field-barrier", "name": "Field Barrier", "level": 3, "requirements": "Gearwright (Gadgetry) 3",
-      "folder": "Gadgetry", "folderParent": "Gearwright", "img": "icons/magic/defensive/barrier-shield-dome-deflect-teal.webp",
-      "activation": "bonus", "range": 30, "target": { "type": "ally", "count": 1 },
+      "slug": "gadgetry-field-barrier",
+      "name": "Field Barrier",
+      "level": 3,
+      "requirements": "Gearwright (Gadgetry) 3",
+      "folder": "Gadgetry",
+      "folderParent": "Gearwright",
+      "img": "icons/magic/defensive/barrier-shield-dome-deflect-teal.webp",
+      "activation": "bonus",
+      "range": 30,
+      "target": {
+        "type": "ally",
+        "count": 1
+      },
       "description": "<p><em>Gadgetry, 3rd level</em></p><p>You carry shields for other people. While wearing your harness, as a bonus action you can spend one use of Bright Idea to throw a barrier onto a friendly creature you can see within 30 feet. A creature can have only one of your barriers at a time. The barrier lasts until the end of your next short or long rest. Choose which kind:</p><ul><li><strong>Weather barrier.</strong> Pick one of acid, cold, fire, force, lightning, necrotic, poison, psychic, or thunder. The barrier has hit points equal to a roll of your Bright Idea die + your Gearwright level. Whenever the creature takes damage of that type, the barrier takes it instead. If that drops the barrier to 0 hit points, the creature takes whatever is left.</li><li><strong>Plate barrier.</strong> Pick one of bludgeoning, piercing, or slashing. The barrier has hit points equal to a roll of your Bright Idea die + half your Gearwright level, and it works the same way.</li></ul>"
     },
     {
-      "slug": "gadgetry-both-hands", "name": "Both Hands", "level": 6, "requirements": "Gearwright (Gadgetry) 6",
-      "folder": "Gadgetry", "folderParent": "Gearwright", "img": "icons/commodities/tech/clock-stopwatch-brass.webp",
-      "activation": "bonus", "uses": { "max": "3 + floor((@classes.gearwright.levels - 5) / 4)", "per": "lr" },
+      "slug": "gadgetry-both-hands",
+      "name": "Both Hands",
+      "level": 6,
+      "requirements": "Gearwright (Gadgetry) 6",
+      "folder": "Gadgetry",
+      "folderParent": "Gearwright",
+      "img": "icons/commodities/tech/clock-stopwatch-brass.webp",
+      "activation": "bonus",
+      "uses": {
+        "max": "3 + floor((@classes.gearwright.levels - 5) / 4)",
+        "per": "lr"
+      },
       "description": "<p><em>Gadgetry, 6th level (more at 9th, 13th, and 17th)</em></p><p>You've never once done one thing at a time. You can take a second bonus action on each of your turns.</p><p>You can use this feature three times. You gain one more use at 9th, 13th, and 17th level, and you regain all spent uses when you finish a long rest.</p>"
     },
     {
-      "slug": "gadgetry-reinforced-barriers", "name": "Reinforced Barriers", "level": 14, "requirements": "Gearwright (Gadgetry) 14",
-      "folder": "Gadgetry", "folderParent": "Gearwright", "img": "icons/magic/defensive/shield-barrier-glowing-triangle-teal.webp",
+      "slug": "gadgetry-reinforced-barriers",
+      "name": "Reinforced Barriers",
+      "level": 14,
+      "requirements": "Gearwright (Gadgetry) 14",
+      "folder": "Gadgetry",
+      "folderParent": "Gearwright",
+      "img": "icons/magic/defensive/shield-barrier-glowing-triangle-teal.webp",
       "description": "<p><em>Gadgetry, 14th level</em></p><p>Every cast tops up the tank. When you cast an Artifice power while one of your barriers is active within 30 feet of you, the barrier regains hit points equal to twice the power's level, or 1 hit point for an at-will power. A barrier can't go above the hit points it started with. If you have more than one barrier active, split the hit points between them however you like.</p>"
     },
     {
-      "slug": "gadgetry-adaptive-barrier", "name": "Adaptive Barrier", "level": 18, "requirements": "Gearwright (Gadgetry) 18",
-      "folder": "Gadgetry", "folderParent": "Gearwright", "img": "icons/magic/defensive/shield-barrier-deflect-teal.webp",
-      "activation": "reaction", "range": 30,
+      "slug": "gadgetry-adaptive-barrier",
+      "name": "Adaptive Barrier",
+      "level": 18,
+      "requirements": "Gearwright (Gadgetry) 18",
+      "folder": "Gadgetry",
+      "folderParent": "Gearwright",
+      "img": "icons/magic/defensive/shield-barrier-deflect-teal.webp",
+      "activation": "reaction",
+      "range": 30,
       "description": "<p><em>Gadgetry, 18th level</em></p><p>The barrier can take one for the team, all at once. When a creature within 30 feet of you that you can see is carrying one of your barriers and takes damage of a type that barrier could absorb, you can use your reaction to give it resistance to the triggering damage. If the damage is the barrier's own chosen type, it gets immunity instead. Either way, the barrier drops to 0 hit points on the spot.</p>"
     },
-
     {
-      "slug": "instability-loose-screws", "name": "Loose Screws", "level": 3, "requirements": "Gearwright (Instability) 3",
-      "folder": "Instability", "folderParent": "Gearwright", "img": "icons/tools/hand/saw-hacksaw-brass-grey.webp",
+      "slug": "instability-loose-screws",
+      "name": "Loose Screws",
+      "level": 3,
+      "requirements": "Gearwright (Instability) 3",
+      "folder": "Instability",
+      "folderParent": "Gearwright",
+      "img": "icons/tools/hand/saw-hacksaw-brass-grey.webp",
       "description": "<p><em>Instability, 3rd level</em></p><p>You work fast and you don't read the label. You gain proficiency with one set of artisan's tools of your choice. When you craft with tinker's tools, you work at twice the usual rate.</p>"
     },
     {
-      "slug": "instability-the-cannon", "name": "The Cannon", "level": 3, "requirements": "Gearwright (Instability) 3",
-      "folder": "Instability", "folderParent": "Gearwright", "img": "icons/weapons/guns/gun-heavy-energy-blue.webp",
-      "description": "<p><em>Instability, 3rd level</em></p><p>Over the course of a long rest, with tinker's tools, you rebuild your kit into a harness with a cannon on it. Nobody asked for the cannon. It counts as the focus for your Artifice powers.</p><p>Whenever you cast an Artifice power of 1st level or higher while wielding the cannon, something may go sideways. Your GM can have you roll a d20; on a 1, roll on the Instability table for a random effect. (Until the lodge writes one, use the Wild Magic Surge table.)</p><p>The cannon has <strong>overrides</strong>: a number equal to your proficiency bonus. When you trigger a surge, you can spend an override to reroll on the table. You must take the new result, and you can do this only once per surge. You regain all spent overrides when you finish a long rest.</p>"
+      "slug": "instability-the-cannon",
+      "name": "The Cannon",
+      "level": 3,
+      "requirements": "Gearwright (Instability) 3",
+      "folder": "Instability",
+      "folderParent": "Gearwright",
+      "img": "icons/weapons/guns/gun-heavy-energy-blue.webp",
+      "description": "<p><em>Instability, 3rd level</em></p><p>Over the course of a long rest, with tinker's tools, you rebuild your kit into a harness with a cannon on it. Nobody asked for the cannon. It counts as the focus for your Artifice powers.</p><p>Whenever you cast an Artifice power of 1st level or higher while wielding the cannon, something may go sideways. Your GM can have you roll a d20; on a 1, roll on @UUID[{{uuid:tables:instability}}]{the Instability Table} for a random effect.</p><p>The cannon has <strong>overrides</strong>: a number equal to your proficiency bonus. When you trigger a surge, you can spend an override to reroll on the table. You must take the new result, and you can do this only once per surge. You regain all spent overrides when you finish a long rest.</p>"
     },
     {
-      "slug": "instability-sticky-charge", "name": "Sticky Charge", "level": 3, "requirements": "Gearwright (Instability) 3",
-      "folder": "Instability", "folderParent": "Gearwright", "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
-      "activation": "bonus", "range": 30, "target": { "template": { "type": "radius", "size": 5 } }, "duration": { "value": "1", "units": "minute" },
-      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
-      "damage": [ { "formula": "(1 + floor((@classes.gearwright.levels + 1) / 6))d6", "types": ["lightning"] } ],
+      "slug": "instability-sticky-charge",
+      "name": "Sticky Charge",
+      "level": 3,
+      "requirements": "Gearwright (Instability) 3",
+      "folder": "Instability",
+      "folderParent": "Gearwright",
+      "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
+      "activation": "bonus",
+      "range": 30,
+      "target": {
+        "template": {
+          "type": "radius",
+          "size": 5
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "formula": "(1 + floor((@classes.gearwright.levels + 1) / 6))d6",
+          "types": [
+            "lightning"
+          ]
+        }
+      ],
       "description": "<p><em>Instability, 3rd level (improves at 5th, 9th, 11th, and 17th)</em></p><p>While wielding your cannon, as a bonus action you can spend one use of Bright Idea to fire a glob of unstable charge at a surface you can see within 30 feet. It sticks there for 1 minute and then goes off. As part of the same bonus action, or as a bonus action on a later turn, you can set it off early.</p><p>When it goes off, each creature within 5 feet of it must make a Dexterity saving throw against your Artifice save DC, taking 1d6 lightning damage on a failed save or half as much on a success.</p><p>The range grows to 60 feet at 9th level and 120 feet at 17th. The damage grows to 2d6 at 5th level, 3d6 at 11th, and 4d6 at 17th.</p>"
     },
     {
-      "slug": "instability-creative-destruction", "name": "Creative Destruction", "level": 6, "requirements": "Gearwright (Instability) 6",
-      "folder": "Instability", "folderParent": "Gearwright", "img": "icons/magic/fire/blast-jet-stream-embers-orange.webp",
-      "description": "<p><em>Instability, 6th level</em></p><p>If a little works, more works better. You can add your Intelligence modifier (minimum of +1) to any damage you deal with an Artifice power or a Gearwright feature that doesn't already include it. If the power or feature damages more than one creature, you add the damage to only one of them.</p><p>Every time you do, your GM can have you roll on the Instability table.</p>"
+      "slug": "instability-creative-destruction",
+      "name": "Creative Destruction",
+      "level": 6,
+      "requirements": "Gearwright (Instability) 6",
+      "folder": "Instability",
+      "folderParent": "Gearwright",
+      "img": "icons/magic/fire/blast-jet-stream-embers-orange.webp",
+      "description": "<p><em>Instability, 6th level</em></p><p>If a little works, more works better. You can add your Intelligence modifier (minimum of +1) to any damage you deal with an Artifice power or a Gearwright feature that doesn't already include it. If the power or feature damages more than one creature, you add the damage to only one of them.</p><p>Every time you do, your GM can have you roll on @UUID[{{uuid:tables:instability}}]{the Instability Table}.</p>"
     },
     {
-      "slug": "instability-experimental-overrides", "name": "Experimental Overrides", "level": 14, "requirements": "Gearwright (Instability) 14",
-      "folder": "Instability", "folderParent": "Gearwright", "img": "icons/commodities/tech/cog-gear-steel-glass.webp",
-      "description": "<p><em>Instability, 14th level</em></p><p>You've started to steer it. Whenever you roll on the Instability table and spend an override to reroll, you can choose either result.</p>"
+      "slug": "instability-experimental-overrides",
+      "name": "Experimental Overrides",
+      "level": 14,
+      "requirements": "Gearwright (Instability) 14",
+      "folder": "Instability",
+      "folderParent": "Gearwright",
+      "img": "icons/commodities/tech/cog-gear-steel-glass.webp",
+      "description": "<p><em>Instability, 14th level</em></p><p>You've started to steer it. Whenever you roll on @UUID[{{uuid:tables:instability}}]{the Instability Table} and spend an override to reroll, you can choose either result.</p>"
     },
     {
-      "slug": "instability-bombardment", "name": "Bombardment", "level": 18, "requirements": "Gearwright (Instability) 18",
-      "folder": "Instability", "folderParent": "Gearwright", "img": "icons/magic/fire/explosion-fireball-large-blue.webp",
+      "slug": "instability-bombardment",
+      "name": "Bombardment",
+      "level": 18,
+      "requirements": "Gearwright (Instability) 18",
+      "folder": "Instability",
+      "folderParent": "Gearwright",
+      "img": "icons/magic/fire/explosion-fireball-large-blue.webp",
       "description": "<p><em>Instability, 18th level</em></p><p>Everything you make hits harder than the math says it should. When you roll damage for an Artifice power or a Gearwright feature and any die shows its highest number, you can roll that die again and add both results. You can do this once per power or feature.</p>"
     }
   ]

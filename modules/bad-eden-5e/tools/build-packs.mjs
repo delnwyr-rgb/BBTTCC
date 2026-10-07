@@ -58,7 +58,7 @@ const CASED = /^\\b(Integrity|\(Violence|\(VIO|Stress damage)/;
 const RFI_TERMS = RUBRIC.vocabulary.banned.map(p => new RegExp(p, CASED.test(p) ? "" : "i"));
 const lintFindings = [];
 /** `{{uuid:<pack>:<slug>}}` inside prose → the deterministic compendium UUID. */
-const link = text => (text ?? "").replace(/\{\{uuid:([a-z]+):([a-z0-9-]+)\}\}/g, (_, p, s) => uuid(p, s));
+const link = text => (text ?? "").replace(/\{\{uuid:([a-z]+):([a-z0-9-]+)\}\}/g, (_, p, s) => p === "tables" ? `Compendium.${MOD}.tables.RollTable.${id(`tables:${s}`)}` : uuid(p, s));
 function lint(doc, text) {
   if (!text) return;
   const plain = text.replace(/<[^>]+>/g, " ");
@@ -234,6 +234,22 @@ function raceDoc(r) {
   };
 }
 
+/* ── roll tables (e.g. the Instability table) ────────────────────────────── */
+function tableDoc(t) {
+  const key = `tables:${t.slug}`;
+  const tid = id(key);
+  const results = t.results.map((r, i) => {
+    const rid = id(`${key}:r${i}`);
+    lint(`table ${t.slug} #${i + 1}`, r);
+    return { _id: rid, type: "text", text: link(r), img: "icons/svg/d20-black.svg", weight: 1, range: [i + 1, i + 1], drawn: false, documentCollection: "", documentId: null, flags: {}, _key: `!tables.results!${tid}.${rid}` };
+  });
+  return {
+    _id: tid, name: t.name, img: t.img ?? "icons/svg/d20-grey.svg", description: link(t.description ?? ""), results,
+    formula: t.formula ?? `1d${t.results.length}`, replacement: true, displayRoll: true, folder: null, sort: 0, flags: { [MOD]: { kind: t.kind ?? "table" } },
+    _key: `!tables!${tid}`
+  };
+}
+
 /* ── advancement helpers ─────────────────────────────────────────────────── */
 const adv = (docKey, tag, type, body) => ({ _id: id(`adv:${docKey}:${tag}`), type, ...body });
 const trait = (docKey, tag, level, title, grants, choices = [], extra = {}) => adv(docKey, tag, "Trait", {
@@ -340,7 +356,7 @@ function folderDoc(pack, name, parentName = null) {
 /* ── main ────────────────────────────────────────────────────────────────── */
 function main() {
   const files = readdirSync(CONTENT).filter(f => f.endsWith(".json")).sort();
-  const docs = { classes: [], subclasses: [], features: [], powers: [], species: [] };
+  const docs = { classes: [], subclasses: [], features: [], powers: [], species: [], tables: [] };
   const folders = { features: new Map(), powers: new Map(), species: new Map() };
   const folderFor = (pack, name, parent) => {
     const k = `${parent ? parent + "/" : ""}${name}`;
@@ -352,6 +368,7 @@ function main() {
     const data = JSON.parse(readFileSync(join(CONTENT, file), "utf8"));
     for (const c of data.classes ?? []) docs.classes.push(classDoc(c));
     for (const s of data.subclasses ?? []) docs.subclasses.push(subclassDoc(s));
+    for (const t of data.tables ?? []) docs.tables.push(tableDoc(t));
     for (const r of data.races ?? []) { const d = raceDoc(r); if (r.family) d.folder = folderFor("species", r.family, null); docs.species.push(d); }
     for (const f of data.features ?? []) {
       const fid = f.folder ? folderFor("features", f.folder, f.folderParent ?? null) : null;
@@ -385,6 +402,7 @@ function main() {
   }
   // every @UUID link in prose must resolve to a doc we build
   const everything = [...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers, ...docs.species];
+  const tableIds = new Set(docs.tables.map(t => t._id));
   for (const d of docs.species) {
     for (const a of d.system.advancement) for (const r of a.configuration?.items ?? []) {
       if (r.uuid.includes(".features.") && !have.has(r.uuid.split(".").pop())) missing.push(`${d.name} → ${a.title} L${a.level}: ${r.uuid}`);
@@ -393,8 +411,8 @@ function main() {
   const all = new Set(everything.map(d => d._id));
   const proseMissing = [];
   for (const d of everything) {
-    for (const m of d.system.description.value.matchAll(/@UUID\[Compendium\.bad-eden-5e\.\w+\.Item\.(\w+)\]/g)) {
-      if (!all.has(m[1])) proseMissing.push(`${d.name} (prose link): ${m[0]}`);
+    for (const m of d.system.description.value.matchAll(/@UUID\[Compendium\.bad-eden-5e\.\w+\.(Item|RollTable)\.(\w+)\]/g)) {
+      if (!(m[1] === "RollTable" ? tableIds : all).has(m[2])) proseMissing.push(`${d.name} (prose link): ${m[0]}`);
     }
     if (/\{\{uuid:/.test(d.system.description.value)) missing.push(`${d.name}: unresolved {{uuid}} token`);
   }
@@ -425,7 +443,7 @@ function main() {
     const dir = join(SOURCE, pack);
     mkdirSync(dir, { recursive: true });
     for (const f of folders[pack]?.values() ?? []) writeFileSync(join(dir, `_folder_${f._id}.json`), JSON.stringify(f, null, 2));
-    for (const d of list) { writeFileSync(join(dir, `${d.system.identifier ?? d._id}_${d._id}.json`), JSON.stringify(d, null, 2)); total++; }
+    for (const d of list) { writeFileSync(join(dir, `${d.system?.identifier ?? d.name.replace(/[^A-Za-z0-9]+/g, "_")}_${d._id}.json`), JSON.stringify(d, null, 2)); total++; }
     console.log(`${pack}: ${list.length} doc(s)${folders[pack]?.size ? `, ${folders[pack].size} folder(s)` : ""}`);
   }
   console.log(`expanded ${total} document(s) → ${SOURCE}`);

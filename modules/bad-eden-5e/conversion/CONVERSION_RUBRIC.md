@@ -1,6 +1,6 @@
 # The Bad Eden conversion rubric (RFI → D&D 5E)
 
-**v1.0.0 · 2026-10-07.** This is the canonical rulebook for turning a Bad Eden mechanic written for RFI (the `fourththing` system) into its D&D 5E twin. The machine copy is `rubric.json` beside this file; the build lint, the converter (`bin/ft-convert-5e`) and the parity check (`bin/ft-lint-parity`) read that file. Change the JSON and this page together.
+**v1.3.0 · 2026-10-07.** This is the canonical rulebook for turning a Bad Eden mechanic written for RFI (the `fourththing` system) into its D&D 5E twin. The machine copy is `rubric.json` beside this file; the build lint, the converter (`bin/ft-convert-5e`) and the parity check (`bin/ft-lint-parity`) read that file. Change the JSON and this page together.
 
 ✅ = ruled by Dave · ⏳ = drafted, ruling owed.
 
@@ -19,7 +19,7 @@ Shared engines that need no conversion: factions and OP, hexes and travel, marks
 | Scene Break · 1/Scene | short rest | ✅ |
 | tier uses / Soma Break | uses = proficiency bonus, per long rest (`@prof` / `lr`) | ✅ |
 | +tier · = your tier · rank bonus | + your proficiency bonus | ✅ |
-| "a small bonus" / "+1 rank" with no rule behind it | +2 | ⏳ |
+| "a small bonus" / "+1 rank" with no rule behind it | +2 (+1d4 where the source rolls a die) | ✅ |
 | per campaign start · per Strategic Turn | unchanged | ✅ |
 
 ## Tracks and defenses
@@ -28,8 +28,8 @@ Shared engines that need no conversion: factions and OP, hexes and travel, marks
 | --- | --- | --- |
 | Integrity · temporary Integrity | hit points · temporary hit points | ✅ |
 | a level of Stress · Strain | a level of exhaustion | ✅ |
-| Stress as *points* (old text) | 1d4 psychic, or temp HP = prof when it is a gain | ⏳ |
-| Clarity · Noise | keep the words; a Clarity bonus becomes a Flow-point bonus | ⏳ |
+| Stress as *points* (old text) | 1d4 psychic, or temp HP = prof when it is a gain | ✅ |
+| Clarity · Noise | keep the words; a Clarity bonus becomes a Flow-point bonus | ✅ |
 | Radiation | keep — `bbttcc-radiation` runs in both | ✅ |
 | Guard | AC | ✅ |
 | Evasion · Resolve | Dexterity save · Wisdom save | ✅ |
@@ -62,7 +62,7 @@ Shared engines that need no conversion: factions and OP, hexes and travel, marks
 | Diplomacy | Persuasion | Empathy · Insight | Insight |
 | Intimidation | Intimidation | Investigation | Investigation |
 
-⏳ Drafted in the ancestry lane; confirm the table.
+✅ Ruled 2026-10-07.
 
 ## Ranks and rolls
 
@@ -87,7 +87,7 @@ Tier I at creation (level 0), Tier II at 5th, Tier III at 11th, Tier IV at 17th 
 | RFI | D&D | RFI | D&D |
 | --- | --- | --- | --- |
 | kinetic | bludgeoning, piercing, slashing (or the weapon's type) | sephirotic · qliphothic | kept — registered damage types |
-| electrical | lightning | radiation | ⏳ keep as the radiation ladder, or register? |
+| electrical | lightning | radiation | the radiation ladder only, never a damage type ✅ |
 | thermal | fire / cold by flavour | energy (legacy) | the flavour's type |
 | chemical | acid | sonic (SW5E) | thunder |
 | poison · psychic | the same | true | can't be reduced or prevented |
@@ -98,7 +98,7 @@ Tier I at creation (level 0), Tier II at 5th, Tier III at 11th, Tier IV at 17th 
 | Strained | exhaustion ✅ | Staggered | speed halved, −2 to attacks (text) |
 | Calmed | charmed, can't act violently | Compelled | charmed + must spend an action on the directive |
 | Burning | 1d4 fire at the start of each turn | Dying | 0 HP, death saves |
-| Scarred | keep the mark; −1 Flow point to end of scene ⏳ | Submerged / Drowning / Crushing | the 5E underwater and suffocation rules |
+| Scarred | keep the mark; −1 Flow point per 5 of your Flow maximum (min 1) to end of scene ⏳ scale | Submerged / Drowning / Crushing | the 5E underwater and suffocation rules |
 | blinded · prone · restrained · charmed · surprised | the same | jolted (SW5E) | no reactions until its next turn |
 
 ## Engine effects → sheet automation
@@ -120,12 +120,12 @@ Tier I at creation (level 0), Tier II at 5th, Tier III at 11th, Tier IV at 17th 
 
 ## Gear (drafted for the gear lane)
 
-Weapons: damage formula → a damage part (flat +N dropped unless enhanced), type through the damage table, Violence → Str (Dex if finesse), Intrigue → Dex ranged, ranges ×5 ft, tags → properties (two-handed, finesse, light, heavy, reach, thrown, loading, attunement), manifestation tier → rarity (uncommon / rare / very rare / legendary). ⏳ which RFI weapons count as martial.
-Armor: ⏳ Guard bonus → AC by band (light 10+, medium 12+, heavy 14+; `armorSkill` fitting / plating / bracing decides the band); Evasion / Resolve bonuses → save bonuses; resistances → Active Effects. Prices stay in marks ⏳ (dnd5e's price field labelled marks). Rigs → the vehicle lane, not drafted.
+Weapons: damage formula → a damage part (flat +N dropped unless enhanced), type through the damage table, Violence → Str (Dex if finesse), Intrigue → Dex ranged, ranges ×5 ft, tags → properties (two-handed, finesse, light, heavy, reach, thrown, loading, attunement), manifestation tier → rarity (uncommon / rare / very rare / legendary). Martial = tagged heavy, two-handed, reach, or a firearm beyond a pistol; the rest simple ✅.
+Armor: Guard bonus → AC by band (light 10+, medium 12+, heavy 14+; `armorSkill` fitting / plating / bracing decides the band) ✅; Evasion / Resolve bonuses → save bonuses; resistances → Active Effects. Prices stay in marks ✅ (dnd5e's price field labelled marks). Rigs → the vehicle lane, not drafted.
 
 ## Creatures (drafted for the monster lane)
 
-Tier 1–4 → CR bands 1–4 / 5–8 / 9–13 / 14+, bracket shifting inside the band; Integrity → HP; Guard → flat AC; Evasion / Resolve → Dex / Wis save proficiency; ⏳ attributes 1–5 → scores 10 + 2×value; skills through the rank table; attacks → weapon items through the gear table; lineage → creature type; `npcAuto` rules → activities and Active Effects, the rest feature text; bounties and hire stay in marks. Budgets are checked against `threat-chassis.js` and the table-kit encounter sim.
+Tier 1–4 → CR bands 1–4 / 5–8 / 9–13 / 14+, bracket shifting inside the band; Integrity → HP; Guard → flat AC; Evasion / Resolve → Dex / Wis save proficiency; attributes 1–5 → scores 10 + 2×value ✅; skills through the rank table; attacks → weapon items through the gear table; lineage → creature type; `npcAuto` rules → activities and Active Effects, the rest feature text; bounties and hire stay in marks. Budgets are checked against `threat-chassis.js` and the table-kit encounter sim.
 
 ## Vocabulary the lint refuses
 
