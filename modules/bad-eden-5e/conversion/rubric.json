@@ -1,6 +1,6 @@
 {
   "_about": "THE conversion rubric: how a Bad Eden mechanic written for RFI (the fourththing system) becomes its D&D 5E (dnd5e 6) twin. Read by tools/build-packs.mjs (the lint), bin/ft-convert-5e (the converter) and bin/ft-lint-parity (the parity check). Rendered for humans as CONVERSION_RUBRIC.md — keep the two in step. Every entry marked ruling:true was ruled by Dave; ruling:'owed' is a draft awaiting one.",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "date": "2026-10-07",
   "direction": "rfi→5e",
   "sourceOfTruth": {
@@ -585,6 +585,10 @@
   "vocabulary": {
     "_about": "text substitutions the converter applies before a human sees the draft, and the terms the lint refuses to ship",
     "replace": [
+      [
+        "\\brerolls the lowest die\\b",
+        "is made with advantage"
+      ],
       [
         "\\b(Resolve|Evasion|Guard) vs DC (\\d+)",
         "@SAVE saving throw, DC \\2"

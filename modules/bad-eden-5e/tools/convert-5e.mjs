@@ -223,8 +223,11 @@ function gearDescription(d, needs = []) {
     .replace(/<!-- BBTTCC:MECHANICS:START -->[\s\S]*?<!-- BBTTCC:MECHANICS:END -->/g, m => { const t = m.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(); needs.push(`RFI engine block dropped: "${t.replace(/^.*?⚙️ Mechanical Effects\s*/, "").slice(0, 110)}"`); return ""; })
     .replace(/(<hr\s*\/?>\s*)?<p>\s*<strong>\s*⚙️?[^<]*Mechanical Effects[\s\S]*?<\/ul>/g, m => { const t = m.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(); needs.push(`RFI engine block dropped: "${t.replace(/^.*?Mechanical Effects\s*/, "").slice(0, 110)}"`); return ""; });
   if (s.flavor) parts.push(`<p><em>${s.flavor}</em></p>`);
-  if (s.effect) parts.push(`<p>${s.effect}</p>`);
-  if (s.description?.value) parts.push(strip(s.description.value));
+  const desc = strip(s.description?.value ?? "");
+  const effPlain = String(s.effect ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  // the effect line is often repeated inside the description — keep it once
+  if (s.effect && !(effPlain && desc.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").includes(effPlain.slice(0, 60)))) parts.push(`<p>${s.effect}</p>`);
+  if (desc) parts.push(desc);
   return convertText(parts.join("")).replace(/\s+([.,;:])/g, "$1");
 }
 function convertWeapon(d, needs) {

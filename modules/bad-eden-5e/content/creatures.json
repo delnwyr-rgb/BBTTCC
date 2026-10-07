@@ -1,8 +1,8 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.6.0) — do not hand-edit; put fixes in content/overrides/creatures.json. The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.6.1) — do not hand-edit; put fixes in content/overrides/creatures.json. The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.6.0",
+    "rubric": "1.6.1",
     "at": "2026-10-07",
     "overridesApplied": 0
   },
@@ -2394,7 +2394,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p>On a hit, the target is Restrained in the jaws (escape: Strength check vs DC 15). While a creature is held, the predator's Claws hit it automatically.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>2d10</code> kinetic + violence. On a hit, the target is Restrained in the jaws (escape: Strength check vs DC 15). While a creature is held, the predator's Claws hit it automatically.</p>",
+              "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>2d10</code> kinetic + violence. On a hit, the target is Restrained in the jaws (escape: Strength check vs DC 15). While a creature is held, the predator's Claws hit it automatically.</p>",
               "chat": ""
             },
             "identified": true,
@@ -2738,7 +2738,7 @@
           "img": "icons/svg/aura.svg",
           "system": {
             "description": {
-              "value": "<p>The predator has advantage on melee attack rolls against any creature that isn't at full hit points.</p>",
+              "value": "<p>The predator is made with advantage on melee attack rolls against any creature that isn't at full hit points.</p>",
               "chat": ""
             },
             "type": {
@@ -2802,7 +2802,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
+              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat is made with advantage and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
@@ -4244,7 +4244,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>The coat smokes when angered. The bite carries the heat.</em></p><p>On a hit, the target's clothing or fur catches a slow burn — 1 fire or lightning damage at the start of its next turn unless it spends an action to put it out.</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> kinetic (bite) + violence. On a hit, the target's clothing or fur catches a slow burn — 1 fire or cold damage at the start of its next turn unless it spends an action to put it out.</p><p><em>The coat smokes when angered. The bite carries the heat.</em></p>",
+              "value": "<p><em>The coat smokes when angered. The bite carries the heat.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> kinetic (bite) + violence. On a hit, the target's clothing or fur catches a slow burn — 1 fire or cold damage at the start of its next turn unless it spends an action to put it out.</p><p><em>The coat smokes when angered. The bite carries the heat.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -4638,7 +4638,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
+              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat is made with advantage and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
@@ -5383,7 +5383,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>A part of you is no longer answering the rest of you. It is still there. It is just somewhere else now.</em></p><p>On a hit, the target also takes 2d6 psychic damage  as a piece of their identity is briefly disconnected. They cannot recover Stress until they rest.</p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>2d12</code> qliphothic (veil-cut) + soul. On a hit, the target also takes 2d6 psychic damage  as a piece of their identity is briefly disconnected. They cannot recover Stress until they rest.</p><p><em>A part of you is no longer answering the rest of you. It is still there. It is just somewhere else now.</em></p>",
+              "value": "<p><em>A part of you is no longer answering the rest of you. It is still there. It is just somewhere else now.</em></p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>2d12</code> qliphothic (veil-cut) + soul. On a hit, the target also takes 2d6 psychic damage  as a piece of their identity is briefly disconnected. They cannot recover Stress until they rest.</p><p><em>A part of you is no longer answering the rest of you. It is still there. It is just somewhere else now.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -6189,7 +6189,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>Nap time. For one of you.</em></p><p>Heavy two-handed chop. On a hit, target is slowed (speed halved, −2 to attack rolls) until the start of its next turn.</p><p>Heavy two-handed chop. On a hit, target is slowed (speed halved, −2 to attack rolls) until the start of its next turn.</p>",
+              "value": "<p><em>Nap time. For one of you.</em></p><p>Heavy two-handed chop. On a hit, target is slowed (speed halved, −2 to attack rolls) until the start of its next turn.</p>",
               "chat": ""
             },
             "identified": true,
@@ -6898,7 +6898,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>There is no first bite. There is only the realization of biting.</em></p><p>Auto-hits any creature sharing the swarm's space. On a hit, target must succeed a DC 12 Constitution save or have reroll-the-highest on its next action (venom haze).</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> poison (venom) + violence. Auto-hits any creature sharing the swarm's space. On a hit, target must succeed a DC 12 Constitution check or have reroll-the-highest on its next action (venom haze).</p><p><em>There is no first bite. There is only the realization of biting.</em></p>",
+              "value": "<p><em>There is no first bite. There is only the realization of biting.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> poison (venom) + violence. Auto-hits any creature sharing the swarm's space. On a hit, target must succeed a DC 12 Constitution check or have reroll-the-highest on its next action (venom haze).</p><p><em>There is no first bite. There is only the realization of biting.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -7070,7 +7070,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
+              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat is made with advantage and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
@@ -7663,7 +7663,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>A finger-bone, on a tendon, on a will. It does not need to be near you to find you.</em></p><p>On a hit, the target's Stress track increases by 1d4 (no save).</p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>1d10</code> qliphothic (bone-rot) + soul. On a hit, the target's Stress track increases by 1d4 (no save).</p><p><em>A finger-bone, on a tendon, on a will. It does not need to be near you to find you.</em></p>",
+              "value": "<p><em>A finger-bone, on a tendon, on a will. It does not need to be near you to find you.</em></p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>1d10</code> qliphothic (bone-rot) + soul. On a hit, the target's Stress track increases by 1d4 (no save).</p><p><em>A finger-bone, on a tendon, on a will. It does not need to be near you to find you.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -8454,7 +8454,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>When reduced to 0 hit points, the Elemental bursts into harmless glitter. Every creature present carries a cosmetic glitter effect that refuses to wash out for the rest of the arc, and has advantage on its next Soft Power interaction.</p>",
+              "value": "<p>When reduced to 0 hit points, the Elemental bursts into harmless glitter. Every creature present carries a cosmetic glitter effect that refuses to wash out for the rest of the arc, and is made with advantage on its next Soft Power interaction.</p>",
               "chat": ""
             },
             "type": {
@@ -9089,7 +9089,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>She is not above you for long. She is past you, and you are different now.</em></p><p>If used after a Dive (moves 30+ ft. straight toward target), damage rolls reroll-the-lowest and target is knocked prone on hit.</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d10</code> kinetic (talon-shred) + violence. If used after a Dive (moves 30+ ft. straight toward target), damage rolls reroll-the-lowest and target is knocked prone on hit.</p><p><em>She is not above you for long. She is past you, and you are different now.</em></p>",
+              "value": "<p><em>She is not above you for long. She is past you, and you are different now.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d10</code> kinetic (talon-shred) + violence. If used after a Dive (moves 30+ ft. straight toward target), damage rolls reroll-the-lowest and target is knocked prone on hit.</p><p><em>She is not above you for long. She is past you, and you are different now.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -9451,7 +9451,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p>",
+              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat is made with advantage and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
@@ -10377,7 +10377,7 @@
           "img": "icons/svg/aura.svg",
           "system": {
             "description": {
-              "value": "<p>In the first round of combat, the bandit has advantage on attack rolls against any creature that hasn't taken a turn yet.</p>",
+              "value": "<p>In the first round of combat, the bandit is made with advantage on attack rolls against any creature that hasn't taken a turn yet.</p>",
               "chat": ""
             },
             "type": {
@@ -10942,7 +10942,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>This is a verbal warning. The baton is the verbal warning.</em></p><p>On a hit against a Restrained target, deal +1d6 and the target is slowed (speed halved, −2 to attack rolls).</p><p>On a hit against a Restrained target, deal +1d6 and the target is slowed (speed halved, −2 to attack rolls).</p>",
+              "value": "<p><em>This is a verbal warning. The baton is the verbal warning.</em></p><p>On a hit against a Restrained target, deal +1d6 and the target is slowed (speed halved, −2 to attack rolls).</p>",
               "chat": ""
             },
             "identified": true,
@@ -11461,7 +11461,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>The lurker does not let go of the strike. The strike does not let go of you.</em></p><p>On a hit, the target takes 1 additional damage at the start of its next turn unless it spends an action to remove the embedded shard.</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> kinetic (shard-punch) + violence. On a hit, the target takes 1 additional damage at the start of its next turn unless it spends an action to remove the embedded shard.</p><p><em>The lurker does not let go of the strike. The strike does not let go of you.</em></p>",
+              "value": "<p><em>The lurker does not let go of the strike. The strike does not let go of you.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> kinetic (shard-punch) + violence. On a hit, the target takes 1 additional damage at the start of its next turn unless it spends an action to remove the embedded shard.</p><p><em>The lurker does not let go of the strike. The strike does not let go of you.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -12377,7 +12377,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>In the first round of combat, the raider has advantage on attack rolls against any creature that hasn't acted yet. If reduced below half hit points, they must succeed a DC 12 Wisdom check at the start of their turn or disengage and run.</p><p><em>They fight like people who have to eat tonight.</em></p><p><strong>When it attacks:</strong> the roll is at advantage.</p><p><strong>When it is bloodied:</strong> a morale check.</p>",
+              "value": "<p>In the first round of combat, the raider is made with advantage on attack rolls against any creature that hasn't acted yet. If reduced below half hit points, they must succeed a DC 12 Wisdom check at the start of their turn or disengage and run.</p><p><em>They fight like people who have to eat tonight.</em></p><p><strong>When it attacks:</strong> the roll is at advantage.</p><p><strong>When it is bloodied:</strong> a morale check.</p>",
               "chat": ""
             },
             "type": {
@@ -14470,7 +14470,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>Ka-CHUNK. You are now appendix C.</em></p><p>Fires a reality-stapler. On a hit, the target is pinned (Restrained) to the nearest surface until it spends an action to tear free.</p><p>Fires a reality-stapler. On a hit, the target is pinned (Restrained) to the nearest surface until it spends an action to tear free.</p>",
+              "value": "<p><em>Ka-CHUNK. You are now appendix C.</em></p><p>Fires a reality-stapler. On a hit, the target is pinned (Restrained) to the nearest surface until it spends an action to tear free.</p>",
               "chat": ""
             },
             "identified": true,
@@ -18637,7 +18637,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>The blade hums. The berserker hums back. Out of tune.</em></p><p>On a hit, the target takes 1 qliphothic damage  (the iron sings into the wound).</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d10</code> kinetic (hex-edge) + violence. On a hit, the target takes 1 qliphothic damage  (the iron sings into the wound).</p><p><em>The blade hums. The berserker hums back. Out of tune.</em></p>",
+              "value": "<p><em>The blade hums. The berserker hums back. Out of tune.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d10</code> kinetic (hex-edge) + violence. On a hit, the target takes 1 qliphothic damage  (the iron sings into the wound).</p><p><em>The blade hums. The berserker hums back. Out of tune.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -19593,7 +19593,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>The blade is older than them. It was waiting for someone to lose just right.</em></p><p>On a hit, the target also takes 1d4 psychic damage as the pact's wrongness brushes them.</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d8</code> qliphothic (pact-edge) + violence. On a hit, the target also takes 1d4 psychic damage as the pact's wrongness brushes them.</p><p><em>The blade is older than them. It was waiting for someone to lose just right.</em></p>",
+              "value": "<p><em>The blade is older than them. It was waiting for someone to lose just right.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d8</code> qliphothic (pact-edge) + violence. On a hit, the target also takes 1d4 psychic damage as the pact's wrongness brushes them.</p><p><em>The blade is older than them. It was waiting for someone to lose just right.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -20375,7 +20375,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>The teeth are fine. It's what comes off the teeth that lingers.</em></p><p>On a hit, the target's wound briefly smells of old fear — they have reroll-the-highest on their next Resolve check.</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> qliphothic (hex-pus) + violence. On a hit, the target's wound briefly smells of old fear — they have reroll-the-highest on their next Resolve check.</p><p><em>The teeth are fine. It's what comes off the teeth that lingers.</em></p>",
+              "value": "<p><em>The teeth are fine. It's what comes off the teeth that lingers.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> qliphothic (hex-pus) + violence. On a hit, the target's wound briefly smells of old fear — they have reroll-the-highest on their next Resolve check.</p><p><em>The teeth are fine. It's what comes off the teeth that lingers.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -21125,7 +21125,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>The blade has a name. The guard does not say it. The blade does its own introduction.</em></p><p>On a hit, damage die rerolls-the-lowest. On a critical hit, the target is also knocked prone.</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d12</code> kinetic (honored-edge) + violence. On a hit, damage die rerolls-the-lowest. On a critical hit, the target is also knocked prone.</p><p><em>The blade has a name. The guard does not say it. The blade does its own introduction.</em></p>",
+              "value": "<p><em>The blade has a name. The guard does not say it. The blade does its own introduction.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d12</code> kinetic (honored-edge) + violence. On a hit, damage die rerolls-the-lowest. On a critical hit, the target is also knocked prone.</p><p><em>The blade has a name. The guard does not say it. The blade does its own introduction.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -22940,7 +22940,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>Three guns in a trenchcoat pretending to be one gun.</em></p><p>Cobbled-together carbine. Fires whatever fits.</p><p>Cobbled-together carbine. Fires whatever fits.</p>",
+              "value": "<p><em>Three guns in a trenchcoat pretending to be one gun.</em></p><p>Cobbled-together carbine. Fires whatever fits.</p>",
               "chat": ""
             },
             "identified": true,
@@ -23460,7 +23460,7 @@
           "img": "icons/weapons/swords/swords-sharp-worn.webp",
           "system": {
             "description": {
-              "value": "<p>On a hit, the target is marked by scent until the end of the scene — this creature and its kin gain advantage when tracking it.</p><p>On a hit, the target is marked by scent until the end of the scene — this creature and its kin gain advantage when tracking it.</p>",
+              "value": "<p>On a hit, the target is marked by scent until the end of the scene — this creature and its kin gain advantage when tracking it.</p>",
               "chat": ""
             },
             "identified": true,
@@ -23669,7 +23669,7 @@
           "img": "icons/magic/unholy/orb-glowing-purple.webp",
           "system": {
             "description": {
-              "value": "<p>Move along an impossible chord; reappear at any point within near. The Serpent's next attack this turn rolls 2d10x10 with advantage.</p><p><strong>Working.</strong> <em>Travel along a line nobody drew.</em></p>\n<p>Move along an impossible chord and reappear at any point within near range without provoking opportunity attacks. The Serpent's next attack this turn rerolls the lowest die.</p>\n<p><strong>Cost.</strong> 1 Clarity · action · self / near.</p>\n<p><em>The room briefly grows a corner that wasn't drawn.</em></p><p><strong>When it uses this:</strong> Angle of Arrival (1 Clarity): teleport within near range; next attack rerolls the lowest..</p>",
+              "value": "<p>Move along an impossible chord; reappear at any point within near. The Serpent's next attack this turn rolls 2d10x10 with advantage.</p><p><strong>Working.</strong> <em>Travel along a line nobody drew.</em></p>\n<p>Move along an impossible chord and reappear at any point within near range without provoking opportunity attacks. The Serpent's next attack this turn is made with advantage.</p>\n<p><strong>Cost.</strong> 1 Clarity · action · self / near.</p>\n<p><em>The room briefly grows a corner that wasn't drawn.</em></p><p><strong>When it uses this:</strong> Angle of Arrival (1 Clarity): teleport within near range; next attack rerolls the lowest..</p>",
               "chat": ""
             },
             "type": {
@@ -23770,7 +23770,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p>",
+              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat is made with advantage and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
@@ -27934,7 +27934,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>A thought you didn't have, but in your voice, and very loud.</em></p><p>On a hit, the target loses their Bonus Action on their next turn (the spike interrupts the next plan).</p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>2d10</code> psychic (cognitive-bolt) + violence. On a hit, the target loses their Bonus Action on their next turn (the spike interrupts the next plan).</p><p><em>A thought you didn't have, but in your voice, and very loud.</em></p>",
+              "value": "<p><em>A thought you didn't have, but in your voice, and very loud.</em></p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>2d10</code> psychic (cognitive-bolt) + violence. On a hit, the target loses their Bonus Action on their next turn (the spike interrupts the next plan).</p><p><em>A thought you didn't have, but in your voice, and very loud.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -28108,7 +28108,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>The same swing was the optimal answer to three different problems.</em></p><p>The battlemind attacks all enemies within reach in a single calculated motion — make one attack roll, apply to all.</p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>2d10</code> kinetic (frame-arm) + violence. The battlemind attacks all enemies within reach in a single calculated motion — make one attack roll, apply to all.</p><p><em>The same swing was the optimal answer to three different problems.</em></p>",
+              "value": "<p><em>The same swing was the optimal answer to three different problems.</em></p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>2d10</code> kinetic (frame-arm) + violence. The battlemind attacks all enemies within reach in a single calculated motion — make one attack roll, apply to all.</p><p><em>The same swing was the optimal answer to three different problems.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -28889,7 +28889,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>It is not trying to hurt you. It is trying to file you.</em></p><p>Reveals one of the target's resistances or vulnerabilities to the drone's allies (GM choice).</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> kinetic (probing-needle) + violence. Reveals one of the target's resistances or vulnerabilities to the drone's allies (GM choice).</p><p><em>It is not trying to hurt you. It is trying to file you.</em></p>",
+              "value": "<p><em>It is not trying to hurt you. It is trying to file you.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> kinetic (probing-needle) + violence. Reveals one of the target's resistances or vulnerabilities to the drone's allies (GM choice).</p><p><em>It is not trying to hurt you. It is trying to file you.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -29061,7 +29061,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>A red dot, a brief warmth, and a small institutional whir.</em></p><p>On a hit, the drone marks the target — the next attack against that target by any source has reroll-the-lowest.</p><p><strong>Strike.</strong> range 12/240 feet, one target. Damage: <code>1d6</code> thermal (coherent-light) + violence. On a hit, the drone marks the target — the next attack against that target by any source has reroll-the-lowest.</p><p><em>A red dot, a brief warmth, and a small institutional whir.</em></p>",
+              "value": "<p><em>A red dot, a brief warmth, and a small institutional whir.</em></p><p><strong>Strike.</strong> range 12/240 feet, one target. Damage: <code>1d6</code> thermal (coherent-light) + violence. On a hit, the drone marks the target — the next attack against that target by any source has reroll-the-lowest.</p><p><em>A red dot, a brief warmth, and a small institutional whir.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -29783,7 +29783,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p><p>On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative — multiple scans deepen the flag.</p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>1d10</code> energy (scan-beam) + violence. On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative — multiple scans deepen the flag.</p><p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p>",
+              "value": "<p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>1d10</code> energy (scan-beam) + violence. On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative — multiple scans deepen the flag.</p><p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -30923,7 +30923,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><p>A splintered limb clubs the target and injects grave-rot.</p></p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> qliphothic + violence. Damage goes.</p><p><em>A splintered limb clubs the target and injects grave-rot.</em></p>",
+              "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> qliphothic + violence. Damage goes.</p><p><em>A splintered limb clubs the target and injects grave-rot.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -31699,7 +31699,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>Less about killing them and more about making them not stand up.</em></p><p>Reduced damage (1d6 instead of base) but on a hit, the target has reroll-the-highest on their next attack roll (suppressed).</p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>1d10</code> kinetic (slug-volley) + violence. Reduced damage (1d6 instead of base) but on a hit, the target has reroll-the-highest on their next attack roll (suppressed).</p><p><em>Less about killing them and more about making them not stand up.</em></p>",
+              "value": "<p><em>Less about killing them and more about making them not stand up.</em></p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>1d10</code> kinetic (slug-volley) + violence. Reduced damage (1d6 instead of base) but on a hit, the target has reroll-the-highest on their next attack roll (suppressed).</p><p><em>Less about killing them and more about making them not stand up.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -31873,7 +31873,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>Big single-edged blade. Designed to interrupt postures, not lives.</em></p><p>On a hit, if any adjacent ally Marauder hasn't acted this round, that ally may immediately move up to 5 ft. as a reaction (closing the line).</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d10</code> kinetic (cleaver) + violence. On a hit, if any adjacent ally Marauder hasn't acted this round, that ally may immediately move up to 5 feet as a reaction (closing the line).</p><p><em>Big single-edged blade. Designed to interrupt postures, not lives.</em></p>",
+              "value": "<p><em>Big single-edged blade. Designed to interrupt postures, not lives.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d10</code> kinetic (cleaver) + violence. On a hit, if any adjacent ally Marauder hasn't acted this round, that ally may immediately move up to 5 feet as a reaction (closing the line).</p><p><em>Big single-edged blade. Designed to interrupt postures, not lives.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -32045,7 +32045,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>In the first round of combat, the raider has advantage on attack rolls against any creature that hasn't acted yet. If reduced below half hit points, they must succeed a DC 12 Wisdom check at the start of their turn or disengage and run.</p><p><em>They fight like people who have to eat tonight.</em></p><p><strong>When it attacks:</strong> the roll is at advantage.</p><p><strong>When it is bloodied:</strong> a morale check.</p>",
+              "value": "<p>In the first round of combat, the raider is made with advantage on attack rolls against any creature that hasn't acted yet. If reduced below half hit points, they must succeed a DC 12 Wisdom check at the start of their turn or disengage and run.</p><p><em>They fight like people who have to eat tonight.</em></p><p><strong>When it attacks:</strong> the roll is at advantage.</p><p><strong>When it is bloodied:</strong> a morale check.</p>",
               "chat": ""
             },
             "type": {
@@ -32842,7 +32842,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>In the first round of combat, the raider has advantage on attack rolls against any creature that hasn't acted yet. If reduced below half hit points, they must succeed a DC 12 Wisdom check at the start of their turn or disengage and run.</p><p><em>They fight like people who have to eat tonight.</em></p><p><strong>When it attacks:</strong> the roll is at advantage.</p><p><strong>When it is bloodied:</strong> a morale check.</p>",
+              "value": "<p>In the first round of combat, the raider is made with advantage on attack rolls against any creature that hasn't acted yet. If reduced below half hit points, they must succeed a DC 12 Wisdom check at the start of their turn or disengage and run.</p><p><em>They fight like people who have to eat tonight.</em></p><p><strong>When it attacks:</strong> the roll is at advantage.</p><p><strong>When it is bloodied:</strong> a morale check.</p>",
               "chat": ""
             },
             "type": {
@@ -33588,7 +33588,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p>",
+              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat is made with advantage and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
@@ -34274,7 +34274,7 @@
           "img": "icons/svg/aura.svg",
           "system": {
             "description": {
-              "value": "<p>In the first round of combat, the bandit has advantage on attack rolls against any creature that hasn't taken a turn yet.</p>",
+              "value": "<p>In the first round of combat, the bandit is made with advantage on attack rolls against any creature that hasn't taken a turn yet.</p>",
               "chat": ""
             },
             "type": {
@@ -34852,7 +34852,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>Would you like to make that a meal? It wasn't a question.</em></p><p>Two fistfuls of laminated particleboard. Knocks Prone on a hit if the target is your size or smaller.</p><p>Two fistfuls of laminated particleboard. Knocks Prone on a hit if the target is your size or smaller.</p>",
+              "value": "<p><em>Would you like to make that a meal? It wasn't a question.</em></p><p>Two fistfuls of laminated particleboard. Knocks Prone on a hit if the target is your size or smaller.</p>",
               "chat": ""
             },
             "identified": true,
@@ -35374,7 +35374,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>It does not hate you. It just needs what you have.</em></p><p>On a hit, the target's Stress increases by 1d4 and the wraith regains that much hit points. The target feels cold for an hour.</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> qliphothic (warmth-theft) + soul. On a hit, the target's Stress increases by 1d4 and the wraith regains that much hit points. The target feels cold for an hour.</p><p><em>It does not hate you. It just needs what you have.</em></p>",
+              "value": "<p><em>It does not hate you. It just needs what you have.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> qliphothic (warmth-theft) + soul. On a hit, the target's Stress increases by 1d4 and the wraith regains that much hit points. The target feels cold for an hour.</p><p><em>It does not hate you. It just needs what you have.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -37659,7 +37659,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p>On a hit against a target below half hit points, the damage die rerolls the lowest — it can smell the opening.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit against a target below half hit points, the damage die rerolls the lowest — it can smell the opening.</p>",
+              "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit against a target below half hit points, the damage die rerolls the lowest — it can smell the opening.</p>",
               "chat": ""
             },
             "identified": true,
@@ -37831,7 +37831,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
+              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat is made with advantage and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
@@ -38373,7 +38373,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>Knotted prayer-cord. It hits whether you believe in it or not. (It hits harder if you should.)</em></p><p>On a hit against a creature with the qliphothic, undead, or fiend tag, damage die rerolls-the-lowest.</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> sephirotic (prayer-cord) + soul. On a hit against a creature with the qliphothic, undead, or fiend tag, damage die rerolls-the-lowest.</p><p><em>Knotted prayer-cord. It hits whether you believe in it or not. (It hits harder if you should.)</em></p>",
+              "value": "<p><em>Knotted prayer-cord. It hits whether you believe in it or not. (It hits harder if you should.)</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> sephirotic (prayer-cord) + soul. On a hit against a creature with the qliphothic, undead, or fiend tag, damage die rerolls-the-lowest.</p><p><em>Knotted prayer-cord. It hits whether you believe in it or not. (It hits harder if you should.)</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -38885,7 +38885,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>Whatever god they're addressing has stopped listening. Other things have not.</em></p><p>On a hit, the wanderer's Clarity refreshes by 1 (the broken prayer briefly works for the wrong reason).</p><p><strong>Strike.</strong> range 6/90 feet, one target. Damage: <code>1d6</code> qliphothic (broken-syllable) + soul. On a hit, the wanderer's Clarity refreshes by 1 (the broken prayer briefly works for the wrong reason).</p><p><em>Whatever god they're addressing has stopped listening. Other things have not.</em></p>",
+              "value": "<p><em>Whatever god they're addressing has stopped listening. Other things have not.</em></p><p><strong>Strike.</strong> range 6/90 feet, one target. Damage: <code>1d6</code> qliphothic (broken-syllable) + soul. On a hit, the wanderer's Clarity refreshes by 1 (the broken prayer briefly works for the wrong reason).</p><p><em>Whatever god they're addressing has stopped listening. Other things have not.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -39059,7 +39059,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>Half-blind, half-elsewhere. The arm still works.</em></p><p>No targeting required; the wanderer just swings. On a 1 on the damage die, also hits the nearest ally (if any).</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> kinetic (wild-strike) + soul. No targeting required; the wanderer just swings. On a 1 on the damage die, also hits the nearest ally (if any).</p><p><em>Half-blind, half-elsewhere. The arm still works.</em></p>",
+              "value": "<p><em>Half-blind, half-elsewhere. The arm still works.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> kinetic (wild-strike) + soul. No targeting required; the wanderer just swings. On a 1 on the damage die, also hits the nearest ally (if any).</p><p><em>Half-blind, half-elsewhere. The arm still works.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -40866,7 +40866,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>A wound that you don't notice until you try to wake up from it.</em></p><p>On a hit, target also loses 1d4 Clarity (the reaper harvests Soma-Break echoes from waking minds too).</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d8</code> psychic (sleep-edge) + violence. On a hit, target also loses 1d4 Clarity (the reaper harvests Soma-Break echoes from waking minds too).</p><p><em>A wound that you don't notice until you try to wake up from it.</em></p>",
+              "value": "<p><em>A wound that you don't notice until you try to wake up from it.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d8</code> psychic (sleep-edge) + violence. On a hit, target also loses 1d4 Clarity (the reaper harvests Soma-Break echoes from waking minds too).</p><p><em>A wound that you don't notice until you try to wake up from it.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -41038,7 +41038,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>It is not stealing memory. It is just reading the strand back. Backwards.</em></p><p>On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits — e.g., a buff just granted is missed).</p><p><strong>Strike.</strong> range 6/90 feet, one target. Damage: <code>2d8</code> psychic (memory-thread) + violence. On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits — e.g., a buff just granted is missed).</p><p><em>It is not stealing memory. It is just reading the strand back. Backwards.</em></p>",
+              "value": "<p><em>It is not stealing memory. It is just reading the strand back. Backwards.</em></p><p><strong>Strike.</strong> range 6/90 feet, one target. Damage: <code>2d8</code> psychic (memory-thread) + violence. On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits — e.g., a buff just granted is missed).</p><p><em>It is not stealing memory. It is just reading the strand back. Backwards.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -45520,7 +45520,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><p>A crushing limb strike infused with harmonic force.</p></p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>2d8</code> sephirotic + violence.</p><p><em>A crushing limb strike infused with harmonic force.</em></p>",
+              "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>2d8</code> sephirotic + violence.</p><p><em>A crushing limb strike infused with harmonic force.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -47434,7 +47434,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>The dots find you before you find cover.</em></p><p>Two beams; may target one or two creatures. Against a target hit by Coherent Breath this encounter, deal +1d10 (the lock holds).</p><p>Two beams; may target one or two creatures. Against a target hit by Coherent Breath this encounter, deal +1d10 (the lock holds).</p>",
+              "value": "<p><em>The dots find you before you find cover.</em></p><p>Two beams; may target one or two creatures. Against a target hit by Coherent Breath this encounter, deal +1d10 (the lock holds).</p>",
               "chat": ""
             },
             "identified": true,
@@ -48176,7 +48176,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p>",
+              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat is made with advantage and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
@@ -48562,7 +48562,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>The blade does not waver. The hand on the blade does not waver. Nothing about this is wavering.</em></p><p>Damage die rerolls-the-lowest when attacking the creature the thrall is sworn against (GM nominates one per short rest).</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> kinetic (vow-edge) + violence. Damage die rerolls-the-lowest when attacking the creature the thrall is sworn against (GM nominates one per short rest).</p><p><em>The blade does not waver. The hand on the blade does not waver. Nothing about this is wavering.</em></p>",
+              "value": "<p><em>The blade does not waver. The hand on the blade does not waver. Nothing about this is wavering.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> kinetic (vow-edge) + violence. Damage die rerolls-the-lowest when attacking the creature the thrall is sworn against (GM nominates one per short rest).</p><p><em>The blade does not waver. The hand on the blade does not waver. Nothing about this is wavering.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -50059,7 +50059,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p>On a hit against a Prone target, +1d6 bludgeoning.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d10</code> kinetic + violence. On a hit against a Prone target, +1d6 bludgeoning.</p>",
+              "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d10</code> kinetic + violence. On a hit against a Prone target, +1d6 bludgeoning.</p>",
               "chat": ""
             },
             "identified": true,
@@ -50263,7 +50263,7 @@
           "img": "icons/svg/aura.svg",
           "system": {
             "description": {
-              "value": "<p>The stalker has advantage on attack rolls against a creature if at least one ally stalker is within 5 feet of the target and not slowed (speed halved, −2 to attack rolls).</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
+              "value": "<p>The stalker is made with advantage on attack rolls against a creature if at least one ally stalker is within 5 feet of the target and not slowed (speed halved, −2 to attack rolls).</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
@@ -50295,7 +50295,7 @@
           "img": "icons/svg/aura.svg",
           "system": {
             "description": {
-              "value": "<p>The stalker has advantage on Dexterity checks to hide in rubble, brush, or ruined interiors.</p>",
+              "value": "<p>The stalker is made with advantage on Dexterity checks to hide in rubble, brush, or ruined interiors.</p>",
               "chat": ""
             },
             "type": {
@@ -50327,7 +50327,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
+              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat is made with advantage and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
@@ -51629,7 +51629,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>It has seen this ending. It is helping the ending arrive.</em></p><p>Only usable on a target the apotheon has hit at least once before this combat. On a hit, target loses any 'remaining-once-per' resources (one-shot abilities, last-stand triggers, etc. burn out). The apotheon has already seen them use those.</p><p><strong>Strike.</strong> range 6/30 feet, one target. Damage: <code>2d12</code> psychic (witnessed-end) + soul. Only usable on a target the apotheon has hit at least once before this combat. On a hit, target loses any 'remaining-once-per' resources (one-shot abilities, last-stand triggers, etc. burn out). The apotheon has already seen them use those.</p><p><em>It has seen this ending. It is helping the ending arrive.</em></p>",
+              "value": "<p><em>It has seen this ending. It is helping the ending arrive.</em></p><p><strong>Strike.</strong> range 6/30 feet, one target. Damage: <code>2d12</code> psychic (witnessed-end) + soul. Only usable on a target the apotheon has hit at least once before this combat. On a hit, target loses any 'remaining-once-per' resources (one-shot abilities, last-stand triggers, etc. burn out). The apotheon has already seen them use those.</p><p><em>It has seen this ending. It is helping the ending arrive.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -51803,7 +51803,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>It does not aim. It looks at the part of you that is wrong, and that part of you finds out it is wrong.</em></p><p>On a hit, the target also takes 2d6 psychic damage  as their self-image briefly disagrees with what the apotheon sees of them.</p><p><strong>Strike.</strong> range 12/240 feet, one target. Damage: <code>2d12</code> sephirotic (regard) + soul. On a hit, the target also takes 2d6 psychic damage  as their self-image briefly disagrees with what the apotheon sees of them.</p><p><em>It does not aim. It looks at the part of you that is wrong, and that part of you finds out it is wrong.</em></p>",
+              "value": "<p><em>It does not aim. It looks at the part of you that is wrong, and that part of you finds out it is wrong.</em></p><p><strong>Strike.</strong> range 12/240 feet, one target. Damage: <code>2d12</code> sephirotic (regard) + soul. On a hit, the target also takes 2d6 psychic damage  as their self-image briefly disagrees with what the apotheon sees of them.</p><p><em>It does not aim. It looks at the part of you that is wrong, and that part of you finds out it is wrong.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -52386,7 +52386,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>A small ringing tone in the back of your skull. Someone wrote your name down.</em></p><p>No damage on a miss, but the target still senses they were seen — reroll-the-highest on their next Resolve check.</p><p><strong>Strike.</strong> range 6/90 feet, one target. Damage: <code>1d8</code> psychic (observed) + violence. No damage on a miss, but the target still senses they were seen — reroll-the-highest on their next Resolve check.</p><p><em>A small ringing tone in the back of your skull. Someone wrote your name down.</em></p>",
+              "value": "<p><em>A small ringing tone in the back of your skull. Someone wrote your name down.</em></p><p><strong>Strike.</strong> range 6/90 feet, one target. Damage: <code>1d8</code> psychic (observed) + violence. No damage on a miss, but the target still senses they were seen — reroll-the-highest on their next Resolve check.</p><p><em>A small ringing tone in the back of your skull. Someone wrote your name down.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -52560,7 +52560,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>A glass disk on a chain. Looks fragile. Has cut steel.</em></p><p>On a hit, the target is briefly marked. Until the end of the initiate's next turn, the target cannot benefit from cover.</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> sephirotic (lens-line) + violence. On a hit, the target is briefly marked. Until the end of the initiate's next turn, the target cannot benefit from cover.</p><p><em>A glass disk on a chain. Looks fragile. Has cut steel.</em></p>",
+              "value": "<p><em>A glass disk on a chain. Looks fragile. Has cut steel.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> sephirotic (lens-line) + violence. On a hit, the target is briefly marked. Until the end of the initiate's next turn, the target cannot benefit from cover.</p><p><em>A glass disk on a chain. Looks fragile. Has cut steel.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -53304,7 +53304,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>She does not point. She just looks at you. Everyone else looks where she looked.</em></p><p>On a hit, the lieutenant designates the target as the priority for all friendly Witnesses this round (they gain reroll-the-lowest against this target).</p><p><strong>Strike.</strong> range 12/60 feet, one target. Damage: <code>2d8</code> psychic (weighing-look) + violence. On a hit, the lieutenant designates the target as the priority for all friendly Witnesses this round (they gain reroll-the-lowest against this target).</p><p><em>She does not point. She just looks at you. Everyone else looks where she looked.</em></p>",
+              "value": "<p><em>She does not point. She just looks at you. Everyone else looks where she looked.</em></p><p><strong>Strike.</strong> range 12/60 feet, one target. Damage: <code>2d8</code> psychic (weighing-look) + violence. On a hit, the lieutenant designates the target as the priority for all friendly Witnesses this round (they gain reroll-the-lowest against this target).</p><p><em>She does not point. She just looks at you. Everyone else looks where she looked.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -53881,7 +53881,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>A note that isn't supposed to exist, traveling at the wrong speed.</em></p><p>On a hit, the target's resistances are bypassed for this attack (the bolt threads under what protects them).</p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>2d8</code> qliphothic (channeled-yesodium) + soul. On a hit, the target's resistances are bypassed for this attack (the bolt threads under what protects them).</p><p><em>A note that isn't supposed to exist, traveling at the wrong speed.</em></p>",
+              "value": "<p><em>A note that isn't supposed to exist, traveling at the wrong speed.</em></p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>2d8</code> qliphothic (channeled-yesodium) + soul. On a hit, the target's resistances are bypassed for this attack (the bolt threads under what protects them).</p><p><em>A note that isn't supposed to exist, traveling at the wrong speed.</em></p>",
               "chat": ""
             },
             "identified": true,
@@ -54807,7 +54807,7 @@
           "img": "icons/weapons/swords/sword-guard-blue.webp",
           "system": {
             "description": {
-              "value": "<p><em>It's not the teeth you'll remember. It's the dosimeter.</em></p><p>On a hit, the target gains 1 Radiation Point (RP).</p><p>On a hit, the target gains 1 Radiation Point (RP).</p>",
+              "value": "<p><em>It's not the teeth you'll remember. It's the dosimeter.</em></p><p>On a hit, the target gains 1 Radiation Point (RP).</p>",
               "chat": ""
             },
             "identified": true,
@@ -54979,7 +54979,7 @@
           "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
-              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p>",
+              "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat is made with advantage and the creature is hidden until it acts. Pack: gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p>",
               "chat": ""
             },
             "type": {
