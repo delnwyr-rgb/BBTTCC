@@ -1,0 +1,295 @@
+{
+  "_about": "Artifice powers, batch B: 16 second-level + 13 third-level, rewritten for Bad Eden from the SW5E tech powers of the same mechanics. Every name and sentence is new; dice, saves, ranges, areas, durations and scaling carry over 1:1; prerequisites dropped. School art (Artifice, Intelligence). Built by tools/build-packs.mjs.",
+  "_renames": [
+    { "sw5e": "Alter Self", "new": "New Skin" },
+    { "sw5e": "Construct Droid", "new": "Scrap Drone" },
+    { "sw5e": "Darkvision", "new": "Night Lenses" },
+    { "sw5e": "Detect Traps", "new": "Tripwire Sense" },
+    { "sw5e": "Electromesh", "new": "Hot Mesh" },
+    { "sw5e": "Hold Droid", "new": "Off Switch" },
+    { "sw5e": "Irradiate", "new": "Hot Dose" },
+    { "sw5e": "Jump Pad", "new": "Springboard" },
+    { "sw5e": "Mirror Image", "new": "Three of Me" },
+    { "sw5e": "Overheat", "new": "Red Hot" },
+    { "sw5e": "Paralyze Humanoid", "new": "Lockjaw" },
+    { "sw5e": "Pyrotechnics", "new": "Fireworks" },
+    { "sw5e": "Shatter", "new": "Window Breaker" },
+    { "sw5e": "Translocate", "new": "Skip" },
+    { "sw5e": "Truth Serum", "new": "Straight Talk" },
+    { "sw5e": "Tune-up", "new": "Shop Visit" },
+    { "sw5e": "Bestow Virus", "new": "Bad Code" },
+    { "sw5e": "Cryogenic Suspension", "new": "Slush" },
+    { "sw5e": "Debilitating Gas", "new": "Knockout Gas" },
+    { "sw5e": "Destroy Tech", "new": "Fry" },
+    { "sw5e": "Explosion", "new": "Boom" },
+    { "sw5e": "Greater Hologram", "new": "Big Picture" },
+    { "sw5e": "Kolto Cloud", "new": "Field Spray" },
+    { "sw5e": "Protection from Energy", "new": "Insulation" },
+    { "sw5e": "Read Memory", "new": "Black Box" },
+    { "sw5e": "Sending", "new": "Wire Call (the Flow already has a power called Sending)" },
+    { "sw5e": "Tactical Advantage", "new": "Overclock" },
+    { "sw5e": "Tech Override", "new": "Jam" },
+    { "sw5e": "Tonal Translocate", "new": "Loud Exit" }
+  ],
+  "_unsure": [
+    "Night Lenses: the source carried no duration at all; written as 8 hours, the D&D standard for the same effect.",
+    "Scrap Drone: the whole stat block lives in the description (bold lines, no table); the drone's gun deals piercing and its blade slashing where the source said energy/kinetic, and its lightning weakness replaces the ion one. The source's hook to a drone-interface power was dropped (that power isn't in the Keep list). The utility activity targets a space; no summon activity (no drone actor exists yet).",
+    "Hot Mesh: the save activity carries the 2d4 fire burn as its damage part with onSave none; the restrained effect is text.",
+    "Slush: SW5E's '1 slowed level' rendered as 'speed halved' alongside the rest of the listed penalties.",
+    "Knockout Gas and Springboard: activities are saves with no damage; the per-turn / on-entry timing is text only.",
+    "Fry: drains Artifice points on a failed Intelligence save (the source drained tech points); the scaling +1 point per level is text.",
+    "Bad Code: the ending condition references 'a power that lifts curses' (the source named a remove-virus power that isn't in the Keep list).",
+    "Black Box: reads the memory of a drone or mindless machine; a Circuitborn's memory is their own and the power only reaches it with their consent (added as a Bad Eden ruling, not in the source).",
+    "Wire Call: range set to 'any' (no distance limit); the off-world 5% failure became 'past the edge of the map'."
+  ],
+  "powers": [
+    {
+      "slug": "new-skin", "name": "New Skin", "sw5e": "Alter Self", "level": 2, "school": "art",
+      "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "hour" }, "concentration": true, "ritual": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>A hypo, a graft, a bit of salvage under the skin: you rework your own body for an hour. When you cast this power, choose one of the options below. It lasts for the duration, and while the power lasts you can use an action to drop one option and take up another.</p><p><strong>Gills.</strong> You can breathe underwater, and you gain a swimming speed equal to your walking speed.</p><p><strong>Another Face.</strong> You decide what you look like: height, weight, face, voice, hair, coloring, scars or the lack of them. You can pass for a member of another people, though your statistics don't change, and a living body can't pass for a drone or a drone for a living body. You can rework your throat to speak a language you know but couldn't otherwise pronounce. You can't change your size, and your basic shape stays what it is; two legs don't become four. While the power lasts, you can use an action to change your look again.</p><p><strong>Claws.</strong> You grow claws, fangs, spines, horns, or some other natural weapon of your choice. Your unarmed strike's damage die goes up one step (1 to d4, d4 to d6, or d6 to d8), your unarmed strikes count as enhanced, and you have a +1 bonus to attack and damage rolls with them.</p>"
+    },
+    {
+      "slug": "scrap-drone", "name": "Scrap Drone", "sw5e": "Construct Droid", "level": 2, "school": "art",
+      "img": "icons/commodities/tech/claw-mechanical.webp",
+      "activation": "minute", "activationValue": 1, "range": { "value": 10 }, "target": { "type": "space", "count": 1 },
+      "duration": { "value": "1", "units": "hour" }, "concentration": true, "ritual": false,
+      "activity": "utility", "scaling": "level",
+      "description": "<p>Give you a minute and a pile of parts and something walks out of it. You build a drone in an unoccupied space you can see within range. It's a tool with no mind in it, nothing like a Circuitborn, and it uses the Scrap Drone stat block below. When you cast the power, choose a design: <strong>Scout</strong>, <strong>Torch</strong>, or <strong>Brawler</strong>. The design sets some of the stat block. The drone falls to pieces when it drops to 0 hit points or when the power ends.</p><p>The drone is an ally to you and your companions. In combat it shares your initiative count but takes its turn right after yours. It obeys the orders you send it through your focus (no action required). If you give it none, it takes the Dodge action and uses its movement to stay out of trouble.</p><p><em>At higher levels.</em> When you cast this power at 3rd level or higher, use the higher level wherever the power's level appears in the stat block.</p><h4>Scrap Drone</h4><p><em>Medium drone, unaligned</em></p><p><strong>Armor Class</strong> 11 + the power's level (plating)<br><strong>Hit Points</strong> 20 (Scout) or 30 (Torch and Brawler), + 10 for each power level above 2nd<br><strong>Speed</strong> 30 ft. (Torch and Brawler); 0 ft., fly 60 ft. (Scout)</p><p><strong>STR</strong> 18 (+4) <strong>DEX</strong> 14 (+2) <strong>CON</strong> 16 (+3) <strong>INT</strong> 18 (+4) <strong>WIS</strong> 14 (+2) <strong>CHA</strong> 8 (−1)</p><p><strong>Damage Vulnerabilities</strong> lightning<br><strong>Damage Resistances</strong> necrotic, poison, psychic<br><strong>Condition Immunities</strong> disease, poisoned<br><strong>Senses</strong> darkvision 60 ft., passive Perception 12<br><strong>Languages</strong> understands the languages you speak<br><strong>Proficiency Bonus</strong> equals yours</p><p><strong>Wiring.</strong> The drone has disadvantage on saving throws against effects that deal lightning damage.</p><p><strong>Eyes (Scout only).</strong> The drone is proficient in Perception and in one other skill or tool of your choice.</p><h5>Actions</h5><p><strong>Multiattack.</strong> The drone makes a number of attacks equal to half the power's level (rounded down).</p><p><strong>Gun.</strong> <em>Ranged Weapon Attack:</em> your power attack modifier to hit, range 60/240 ft., one target. <em>Hit:</em> 1d6 + 3 piercing damage, plus the power's level.</p><p><strong>Blade (Brawler only).</strong> <em>Melee Weapon Attack:</em> your power attack modifier to hit, reach 5 ft., one target. <em>Hit:</em> 1d12 + 3 slashing damage, plus the power's level.</p><p><strong>Flamethrower (Torch only).</strong> The drone sprays fire in a 15-foot cone. Each creature in the cone must make a Dexterity saving throw against your power save DC, taking 1d8 fire damage on a failed save, plus 1d8 for each power level above 2nd, or half as much on a success. It can't be used as part of a Multiattack.</p>"
+    },
+    {
+      "slug": "night-lenses", "name": "Night Lenses", "sw5e": "Darkvision", "level": 2, "school": "art",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "8", "units": "hour" }, "concentration": false, "ritual": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>A pair of lenses, a drop of something in each eye, and the dark stops being a problem. You touch a willing creature and give it the ability to see in the dark. For the duration, that creature has darkvision out to 60 feet.</p>"
+    },
+    {
+      "slug": "tripwire-sense", "name": "Tripwire Sense", "sw5e": "Detect Traps", "level": 2, "school": "art",
+      "img": "icons/magic/perception/orb-eye-scrying.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You sweep the room with a scanner and a bad feeling, and the two agree. For the duration you sense the presence, general location, and nature of any trap within 120 feet of you that you have line of sight to. A trap, for this power, is anything built on purpose to do something sudden and unpleasant to whoever sets it off.</p><p>While the power lasts, you have advantage on Wisdom (Perception) and Intelligence (Investigation) checks to find any trap you have line of sight to.</p>"
+    },
+    {
+      "slug": "hot-mesh", "name": "Hot Mesh", "sw5e": "Electromesh", "level": 2, "school": "art",
+      "img": "icons/magic/control/debuff-chains-ropes-net-white.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "template": { "type": "cube", "size": 20 } },
+      "duration": { "value": "1", "units": "hour" }, "concentration": true, "ritual": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "none" },
+      "damage": [{ "number": 2, "denomination": 4, "bonus": "", "types": ["fire"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "none",
+      "description": "<p>You fire a canister that bursts into a tangle of sticky, humming mesh at a point you choose within range. The mesh fills a 20-foot cube from that point for the duration. It's difficult terrain and it lightly obscures its area.</p><p>If the mesh isn't strung between two solid things (two walls, say) or laid across a floor, wall, or ceiling, it collapses on itself and the power ends at the start of your next turn. Mesh laid over a flat surface is 5 feet deep.</p><p>Each creature that starts its turn in the mesh, or enters it during its turn, must make a Dexterity saving throw. On a failed save the creature is restrained for as long as it stays in the mesh or until it breaks free. A restrained creature can use its action to make a Strength check against your power save DC; on a success, it's no longer restrained.</p><p>The mesh burns. Any 5-foot cube of it that touches fire burns away in 1 round and deals 2d4 fire damage to any creature that starts its turn in the flames.</p>"
+    },
+    {
+      "slug": "off-switch", "name": "Off Switch", "sw5e": "Hold Droid", "level": 2, "school": "art",
+      "img": "icons/commodities/tech/cog-steel-grey.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" }, "scaling": "level",
+      "description": "<p>Every machine has a switch somewhere, and you've got a dart that finds it. Choose a drone or other mindless machine you can see within range. It must succeed on a Constitution saving throw or be paralyzed for the duration. At the end of each of its turns it can make another Constitution saving throw; on a success, the power ends on it.</p><p>This power has no hold on Circuitborn. They're people, not switches.</p><p><em>At higher levels.</em> When you cast this power at 3rd level or higher, you can target one additional drone or machine for each level above 2nd. The targets must be within 30 feet of each other when you target them.</p>"
+    },
+    {
+      "slug": "hot-dose", "name": "Hot Dose", "sw5e": "Irradiate", "level": 2, "school": "art",
+      "img": "icons/magic/unholy/orb-glowing-purple.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [{ "number": 3, "denomination": 10, "bonus": "", "types": ["necrotic"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>Everything that came out of the Shattering is a little hot, and you've learned to point it. You crack a salvaged core at a creature you can see within range and give it a dose nobody walks off. The creature must make a Constitution saving throw. On a failed save it takes 3d10 necrotic damage and gains one level of exhaustion, which lasts for the duration. On a successful save it takes half as much damage and isn't exhausted.</p><p>A creature exhausted by this power can make a Constitution saving throw at the end of each of its turns. On a success, the power ends on it.</p><p><em>At higher levels.</em> When you cast this power at 3rd level or higher, the damage increases by 1d10 for each level above 2nd.</p>"
+    },
+    {
+      "slug": "springboard", "name": "Springboard", "sw5e": "Jump Pad", "level": 2, "school": "art",
+      "img": "icons/magic/movement/abstract-ribbons-red-orange.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "template": { "type": "square", "size": 5 } },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You lay down a plate that doesn't believe in gravity. Pick a 5-foot square on a surface within range; for the duration it's a springboard. When you cast the power, you can name the creatures who are allowed to use it.</p><p>Whenever a creature you didn't name enters the square, it must succeed on a Dexterity saving throw or be thrown 10 feet straight up and 5 feet sideways in a random direction (roll a d8 and give each face a direction).</p><p>While a creature you named (or one that made its save) is in the square, it can use its reaction to jump off the plate. Its jump distance for that jump is multiplied by 5.</p>"
+    },
+    {
+      "slug": "three-of-me", "name": "Three of Me", "sw5e": "Mirror Image", "level": 2, "school": "art",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "minute" }, "concentration": false, "ritual": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>Three projected copies of you flicker into your space. Until the power ends they move when you move and do what you do, swapping places so nobody can tell which one bleeds. You can use your action to switch them off.</p><p>Each time a creature targets you with an attack while the power lasts, roll a d20 to see whether it hits a copy instead. With three copies you need a 6 or higher to send the attack to a copy; with two, an 8 or higher; with one, an 11 or higher.</p><p>A copy's AC is 10 + your Dexterity modifier. An attack that hits a copy destroys it. Nothing else can; a copy ignores all other damage and effects. The power ends when all three copies are gone.</p><p>A creature isn't fooled if it can't see, if it gets by on senses other than sight (blindsight, say), or if it can tell illusions from the real thing, as with truesight.</p>"
+    },
+    {
+      "slug": "red-hot", "name": "Red Hot", "sw5e": "Overheat", "level": 2, "school": "art",
+      "img": "icons/magic/fire/barrier-wall-flame-ring-yellow.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "object", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" },
+      "damage": [{ "number": 2, "denomination": 8, "bonus": "", "types": ["fire"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>Metal remembers the forge if you remind it hard enough. Choose a manufactured metal object you can see within range, like a gun or a suit of medium or heavy metal armor, and make it glow cherry red. Any creature in contact with the object takes 2d8 fire damage when you cast the power. Until the power ends, you can use a bonus action on each of your later turns to deal the damage again.</p><p>If the object is held, worn, or built in, a creature that takes the damage must succeed on a Constitution saving throw or drop the object if it can. If it doesn't, or can't, it has disadvantage on attack rolls and ability checks until the start of your next turn.</p><p><em>At higher levels.</em> When you cast this power at 3rd level or higher, the damage increases by 1d8 for each level above 2nd.</p>"
+    },
+    {
+      "slug": "lockjaw", "name": "Lockjaw", "sw5e": "Paralyze Humanoid", "level": 2, "school": "art",
+      "img": "icons/magic/control/debuff-energy-hold-teal-blue.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" }, "scaling": "level",
+      "description": "<p>One dart, one dose, and every muscle they own forgets its job. Choose a humanoid you can see within range. It must succeed on a Constitution saving throw or be poisoned for the duration, and while it's poisoned this way it's paralyzed. At the end of each of its turns it can make another Constitution saving throw; on a success, the power ends on it.</p><p><em>At higher levels.</em> When you cast this power at 3rd level or higher, you can target one additional humanoid for each level above 2nd. They must be within 30 feet of each other when you target them.</p>"
+    },
+    {
+      "slug": "fireworks", "name": "Fireworks", "sw5e": "Pyrotechnics", "level": 2, "school": "art",
+      "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "template": { "type": "radius", "size": 20 } },
+      "duration": { "units": "inst" }, "concentration": false, "ritual": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" }, "scaling": "none",
+      "description": "<p>Any fire will do; you've got the powder for the rest. Choose an area of ordinary flame you can see that fits in a 5-foot cube within range. You put it out, and as you do, you get one of the following.</p><p><strong>Fireworks.</strong> The fire goes up in a blaze of color. Each creature within 10 feet of it must succeed on a Constitution saving throw or be blinded until the end of your next turn.</p><p><strong>Smoke.</strong> Thick black smoke rolls out from the fire in a 20-foot radius, around corners and all. The area is heavily obscured. The smoke hangs for 1 minute or until a strong wind clears it.</p>"
+    },
+    {
+      "slug": "window-breaker", "name": "Window Breaker", "sw5e": "Shatter", "level": 2, "school": "art",
+      "img": "icons/magic/sonic/explosion-impact-shock-wave.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "template": { "type": "sphere", "size": 10 } },
+      "duration": { "units": "inst" }, "concentration": false, "ritual": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [{ "number": 3, "denomination": 8, "bonus": "", "types": ["thunder"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>A sound like the world's biggest bell struck with the world's biggest hammer goes off at a point you choose within range. Each creature in a 10-foot-radius sphere centered on that point must make a Constitution saving throw, taking 3d8 thunder damage on a failed save or half as much on a success. A creature made of stone, crystal, metal, or other inorganic stuff has disadvantage on the save.</p><p>An unenhanced object in the area that nobody is wearing or carrying also takes the damage.</p><p><em>At higher levels.</em> When you cast this power at 3rd level or higher, the damage increases by 1d8 for each level above 2nd.</p>"
+    },
+    {
+      "slug": "skip", "name": "Skip", "sw5e": "Translocate", "level": 2, "school": "art",
+      "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+      "activation": "bonus", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "units": "inst" }, "concentration": false, "ritual": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You flicker like a bad projection and come back somewhere else. You teleport up to 30 feet to an unoccupied space you can see.</p>"
+    },
+    {
+      "slug": "straight-talk", "name": "Straight Talk", "sw5e": "Truth Serum", "level": 2, "school": "art",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "10", "units": "minute" }, "concentration": false, "ritual": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You dose a creature you touch with something that takes the lying out of them. The creature must make a Constitution saving throw. On a success, nothing happens. On a failure, it can't tell a deliberate lie until the power ends.</p><p>The creature knows what you've done to it, so it can decline to answer anything it would normally lie about. It can be as slippery as it likes, so long as it stays inside the truth.</p>"
+    },
+    {
+      "slug": "shop-visit", "name": "Shop Visit", "sw5e": "Tune-up", "level": 2, "school": "art",
+      "img": "icons/tools/hand/wrench-steel-grey.webp",
+      "activation": "minute", "activationValue": 1, "range": { "value": 30 }, "target": { "type": "creature", "count": 6 },
+      "duration": { "units": "inst" }, "concentration": false, "ritual": false,
+      "activity": "heal", "heal": { "formula": "2d8 + @mod", "type": "healing", "scaling": "whole" }, "scaling": "level",
+      "description": "<p>A minute with your tools and everybody made of metal leaves running better. Up to six drones, mindless machines, or Circuitborn of your choice that you can see within range each regain hit points equal to 2d8 + your casting ability modifier. Circuitborn are people; the parts just happen to be ones you understand.</p><p><em>At higher levels.</em> When you cast this power at 3rd level or higher, the healing increases by 1d8 for each level above 2nd.</p>"
+    },
+    {
+      "slug": "bad-code", "name": "Bad Code", "sw5e": "Bestow Virus", "level": 3, "school": "art",
+      "img": "icons/commodities/tech/bulb-plasma-blue.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "save", "save": { "ability": "int", "onSave": "none" },
+      "damage": [{ "number": 1, "denomination": 8, "bonus": "", "types": ["lightning"], "scaling": { "mode": "", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>You touch a drone, a machine, or a creature carrying an Artifice focus and leave something running in it that shouldn't be. The target must succeed on an Intelligence saving throw or carry your bad code for the duration. When you cast the power, choose what the code does from the options below.</p><ul><li>Choose one ability score. While the code runs, the target has disadvantage on ability checks and saving throws made with that ability.</li><li>While the code runs, the target has disadvantage on attack rolls against you.</li><li>While the code runs, the target must make an Intelligence saving throw at the start of each of its turns. If it fails, it wastes its action that turn doing nothing.</li><li>While the code runs, your attacks and powers deal an extra 1d8 lightning damage to the target.</li></ul><p>A power that lifts curses wipes the code. With the GM's say-so you can write a different effect, but no stronger than the ones above; the GM has the final word on what it does.</p><p><em>At higher levels.</em> If you cast this power at 4th level or higher, the duration is concentration, up to 10 minutes. At 5th level or higher, the duration is 8 hours. At 7th level or higher, 24 hours. At 9th level, the code runs until it's wiped. Casting at 5th level or higher gives a duration that doesn't need concentration.</p>"
+    },
+    {
+      "slug": "slush", "name": "Slush", "sw5e": "Cryogenic Suspension", "level": 3, "school": "art",
+      "img": "icons/magic/water/snowflake-ice-blue.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "template": { "type": "cube", "size": 40 } },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You vent a coolant tank and a whole stretch of ground drops forty degrees in a breath. Choose up to six creatures in a 40-foot cube within range. Each must succeed on a Constitution saving throw or be affected by this power for the duration.</p><p>An affected creature's speed is halved, it takes a −2 penalty to AC and Dexterity saving throws, and it can't use reactions. On its turn it can use an action or a bonus action, not both, and no matter what it has or can do, it can't make more than one melee or ranged attack during its turn.</p><p>If the creature tries to cast a power with a casting time of 1 action, roll a d20. On an 11 or higher, the power doesn't take effect until the creature's next turn, and the creature must use its action on that turn to finish it. If it can't, the power is wasted.</p><p>An affected creature makes another Constitution saving throw at the end of each of its turns. On a success, the effect ends for it.</p>"
+    },
+    {
+      "slug": "knockout-gas", "name": "Knockout Gas", "sw5e": "Debilitating Gas", "level": 3, "school": "art",
+      "img": "icons/magic/air/fog-gas-smoke-dense-gray.webp",
+      "activation": "action", "range": { "value": 90 }, "target": { "template": { "type": "sphere", "size": 20 } },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You lob a canister and a 20-foot-radius sphere of yellow gas blooms around the point where it lands. The cloud rolls around corners and its area is heavily obscured. It hangs in the air for the duration.</p><p>Each creature fully inside the cloud at the start of its turn must make a Constitution saving throw against poison. On a failure, the creature does nothing that turn. Creatures that don't need to breathe, or are immune to poison, pass automatically.</p><p>A 10-mile-an-hour wind clears the cloud after 4 rounds. A 20-mile-an-hour wind clears it in 1.</p>"
+    },
+    {
+      "slug": "fry", "name": "Fry", "sw5e": "Destroy Tech", "level": 3, "school": "art",
+      "img": "icons/magic/lightning/bolt-forked-large-teal.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false, "ritual": false,
+      "activity": "attack", "attack": { "type": "ranged" },
+      "damage": [{ "number": 4, "denomination": 8, "bonus": "", "types": ["lightning"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>A capacitor the size of a fist and a bolt that smells like burnt wiring. Make a ranged power attack against a creature within range. On a hit, the target takes 4d8 lightning damage. If the target has Artifice points, it must also make an Intelligence saving throw; on a failed save, it loses 5 Artifice points as if it had spent them.</p><p><em>At higher levels.</em> When you cast this power at 4th level or higher, the lightning damage increases by 1d8, and the Artifice points lost increase by 1, for each level above 3rd.</p>"
+    },
+    {
+      "slug": "boom", "name": "Boom", "sw5e": "Explosion", "level": 3, "school": "art",
+      "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
+      "activation": "action", "range": { "value": 150 }, "target": { "template": { "type": "sphere", "size": 20 } },
+      "duration": { "units": "inst" }, "concentration": false, "ritual": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [{ "number": 8, "denomination": 6, "bonus": "", "types": ["fire"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>There's a reason the lodges keep the recipe quiet. You set off an explosion at a point within range. Each creature in a 20-foot-radius sphere centered on that point must make a Dexterity saving throw, taking 8d6 fire damage on a failed save or half as much on a success.</p><p>The fire goes around corners. It sets light to anything flammable in the area that nobody is wearing or carrying.</p><p><em>At higher levels.</em> When you cast this power at 4th level or higher, the damage increases by 1d6 for each level above 3rd.</p>"
+    },
+    {
+      "slug": "big-picture", "name": "Big Picture", "sw5e": "Greater Hologram", "level": 3, "school": "art",
+      "img": "icons/commodities/tech/antenna-powered-purple.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "type": "space", "count": 1 },
+      "duration": { "value": "10", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "utility", "scaling": "level",
+      "description": "<p>You throw a hologram big enough to argue with. You create an image no larger than a 20-foot cube at a spot you can see within range; it lasts for the duration. It looks real, sounds real, and carries the other senses with it, though you can't make a sensory effect strong enough to deal damage or impose a condition.</p><p>As long as you're within range of the image, you can use your action to move it to any other spot within range, and as it moves you can change it so the movement looks natural for whatever it's showing.</p><p>Touching the image gives it away. A creature can use its action to make an Intelligence (Investigation) check against your power save DC; on a success it knows the image for what it is, can see through it, and the rest of its sensory effects fade for that creature.</p><p><em>At higher levels.</em> When you cast this power at 6th level or higher, the image lasts until dispelled and doesn't need concentration.</p>"
+    },
+    {
+      "slug": "field-spray", "name": "Field Spray", "sw5e": "Kolto Cloud", "level": 3, "school": "art",
+      "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+      "activation": "bonus", "range": { "value": 60 }, "target": { "type": "creature", "count": 6 },
+      "duration": { "units": "inst" }, "concentration": false, "ritual": false,
+      "activity": "heal", "heal": { "formula": "1d4 + @mod", "type": "healing", "scaling": "whole" }, "scaling": "level",
+      "description": "<p>One canister, one wide spray, a lot of people coughing and standing up. Up to six creatures of your choice that you can see within range each regain hit points equal to 1d4 + your casting ability modifier. The salve does nothing for drones or other mindless machines. Circuitborn are people, and it works on them fine.</p><p><em>At higher levels.</em> When you cast this power at 4th level or higher, the healing increases by 1d4 for each level above 3rd.</p>"
+    },
+    {
+      "slug": "insulation", "name": "Insulation", "sw5e": "Protection from Energy", "level": 3, "school": "art",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "hour" }, "concentration": true, "ritual": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>A coat of the right stuff, sprayed on where it counts. For the duration, the willing creature you touch has resistance to one damage type of your choice: acid, cold, fire, lightning, or thunder.</p>"
+    },
+    {
+      "slug": "black-box", "name": "Black Box", "sw5e": "Read Memory", "level": 3, "school": "art",
+      "img": "icons/commodities/tech/blueprint.webp",
+      "activation": "action", "range": { "value": 10 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "10", "units": "minute" }, "concentration": false, "ritual": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>Every machine keeps a record, and you know where it's kept. You pull the memory of an incapacitated drone or other mindless machine within range. Its memory core (or whatever it keeps its records in) has to be intact.</p><p>Until the power ends, you can ask it up to five questions. Depending on what it knew or witnessed, it answers with images, sound, or text. It can't tell you anything new, and it can't guess about what hasn't happened yet.</p><p>A Circuitborn's memory is their own. This power reaches it only if they let you in, and it still takes an intact core.</p>"
+    },
+    {
+      "slug": "wire-call", "name": "Wire Call", "sw5e": "Sending", "level": 3, "school": "art",
+      "img": "icons/commodities/tech/coil-tesla-large.webp",
+      "activation": "action", "range": { "units": "any" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "round" }, "concentration": false, "ritual": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You squeeze a message of twenty-five words or fewer down whatever wire or wave will carry it to a creature you know who has a radio. The creature hears the message, knows it's you if it knows you, and can answer the same way right then.</p><p>Distance doesn't matter. If the creature is past the edge of any map you've got, there's a 5 percent chance the message never arrives.</p>"
+    },
+    {
+      "slug": "overclock", "name": "Overclock", "sw5e": "Tactical Advantage", "level": 3, "school": "art",
+      "img": "icons/magic/time/arrows-circling-green.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "ritual": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You hit somebody with a shot that turns the dial past the stop. Choose a willing creature you can see within range. Until the power ends, its speed is doubled, it gains a +2 bonus to AC, it has advantage on Dexterity saving throws, and it gains an additional action on each of its turns. That action can only be used to Attack (one weapon attack), Dash, Disengage, Hide, or Use an Object.</p><p>When the power ends, the bill comes due: the target can't move or take actions until after its next turn.</p>"
+    },
+    {
+      "slug": "jam", "name": "Jam", "sw5e": "Tech Override", "level": 3, "school": "art",
+      "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+      "activation": "reaction", "condition": "when you see a creature within 60 feet of you casting an Artifice power", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false, "ritual": false,
+      "activity": "utility", "scaling": "level",
+      "description": "<p>You flood the right frequency at the right second and somebody's gadget dies in their hand. You try to interrupt a creature in the middle of casting an Artifice power. If the creature is casting a power of 3rd level or lower, its power fails and does nothing. If it's casting a power of 4th level or higher, make an ability check using your casting ability against a DC of 10 + the power's level. On a success, the creature's power fails and does nothing.</p><p><em>At higher levels.</em> When you cast this power at 4th level or higher, the interrupted power fails automatically if its level is equal to or less than the level you cast Jam at.</p>"
+    },
+    {
+      "slug": "loud-exit", "name": "Loud Exit", "sw5e": "Tonal Translocate", "level": 3, "school": "art",
+      "img": "icons/magic/sonic/explosion-shock-wave-teal.webp",
+      "activation": "action", "range": { "value": 90 }, "target": { "template": { "type": "radius", "size": 10 } },
+      "duration": { "units": "inst" }, "concentration": false, "ritual": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [{ "number": 3, "denomination": 10, "bonus": "", "types": ["thunder"], "scaling": { "mode": "whole", "number": 1 } }],
+      "scaling": "level",
+      "description": "<p>You leave, and the air slams shut behind you. You teleport to an unoccupied space you can see within range. The instant you vanish, a thunderclap goes off where you were, and each creature within 10 feet of the space you left must make a Constitution saving throw, taking 3d10 thunder damage on a failed save or half as much on a success. The bang can be heard from 300 feet away.</p><p>You can bring objects along so long as their weight doesn't exceed what you can carry. You can also bring one willing creature of your size or smaller who is carrying no more than its carrying capacity. It must be within 5 feet of you when you cast the power, and there must be an unoccupied space within 5 feet of where you land for it to appear in; otherwise it stays behind.</p><p><em>At higher levels.</em> When you cast this power at 4th level or higher, the damage increases by 1d10 for each level above 3rd.</p>"
+    }
+  ]
+}

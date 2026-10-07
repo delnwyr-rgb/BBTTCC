@@ -1,0 +1,240 @@
+{
+  "_about": "Gearwright Shops, batch 1: Armorsmithing (SW5E Armormech), Gunsmithing (Armstech), Enhancement (Artificer Engineering), Dronecraft (Astrotech, non-companion). Mechanics carried over; SW5E's modification-slot system replaced by flat equivalents (see _unsure); every line of text is Bad Eden's own.",
+  "_renames": [
+    { "sw5e": "Bonus Proficiencies (Armormech)", "new": "Heavy Trade" },
+    { "sw5e": "Modified Armor", "new": "Shop Armor" },
+    { "sw5e": "Damage Absorption", "new": "Take It on the Plate" },
+    { "sw5e": "Armormech's Celerity", "new": "Servo Assist" },
+    { "sw5e": "Suit Reliability", "new": "Second Skin" },
+    { "sw5e": "Bonus Proficiencies (Armstech)", "new": "Gun Trade" },
+    { "sw5e": "Modified Weaponry", "new": "Shop Gun" },
+    { "sw5e": "Armstech's Strike", "new": "Clean Hit" },
+    { "sw5e": "Targeting Matrix", "new": "Dead Sight" },
+    { "sw5e": "Armstech's Salvo", "new": "Full Spread" },
+    { "sw5e": "Bonus Proficiencies (Artificer)", "new": "Blade Trade" },
+    { "sw5e": "Modified Lightsaber", "new": "Shop Blade" },
+    { "sw5e": "Force Resonance", "new": "Resonance" },
+    { "sw5e": "Forcecasting Secrets", "new": "Flow-Touched" },
+    { "sw5e": "Disruptive Resonance", "new": "Static Edge" },
+    { "sw5e": "Resonating Recovery", "new": "Momentum" },
+    { "sw5e": "Bonus Proficiencies (Astrotech)", "new": "Drone Trade" },
+    { "sw5e": "Electronic Warfare Platform", "new": "Jammer Rig" },
+    { "sw5e": "Potent Electromagnetism", "new": "Machine Breaker" },
+    { "sw5e": "Direct Controller", "new": "Remote Control" },
+    { "sw5e": "Systems Hijack", "new": "Long Reach" },
+    { "sw5e": "Electromagnetic Burst", "new": "Overload" }
+  ],
+  "_powerRefs": [],
+  "_unsure": [
+    "Modification slots (Shop Armor / Shop Gun / Shop Blade): the SW5E 4–9 slot ladder is replaced by a flat rule — the shop piece permanently carries the Gearwright's Field Mod bonus (+1/+2/+3 by level, `@scale.gearwright.field-mod`) and the Field Mod feature is freed to go on something else; the 9th-level second item is kept.",
+    "Jammer Rig: the rig's modification slots became a sensor suite (advantage on Investigation to understand machines; drones and mindless machines within 60 ft can't hide from you).",
+    "SW5E 'armormech's / armstech's / artificer's / astrotech's implements' → smith's tools, smith's tools, jeweler's tools, thieves' tools (dnd5e tool ids smith / jeweler / thief). Arc-blade proficiency is text only (no dnd5e weapon id).",
+    "Flow-Touched (Enhancement 6th): the chosen Flow powers must be cast with Artifice points and Intelligence — the engine keys on a power's casting method, so the GM sets the copied power's method to Artifice on the item sheet (engine seam; noted for later automation).",
+    "'4 slowed levels' (Ionizing Field) rendered as speed halved + no reactions + disadvantage on Dexterity saves; 'minimum roll threshold' (Second Skin) rendered as treating a d20 roll of 9 or lower as a 10; ion → lightning.",
+    "Growing dice (Clean Hit, Resonance, Machine Breaker) use custom formulas that step with class level so the sheet rolls the right size; the text states the ladder."
+  ],
+
+  "subclasses": [
+    {
+      "slug": "armorsmithing", "identifier": "armorsmithing", "name": "Armorsmithing", "classIdentifier": "gearwright",
+      "img": "icons/equipment/chest/breastplate-banded-steel-grey.webp",
+      "description": "<p><em>Shop of the Gearwright</em></p><p>Some Gearwrights build a thing and hand it over. The Armorsmithing shop builds a thing and climbs inside it. They work hard metal and salvaged shielding into armor that fits one person and answers to one person, and then they walk into the fight the rest of the crew was keeping them out of.</p>",
+      "traits": [{ "tag": "heavy-trade", "level": 3, "title": "Heavy Trade", "grants": ["armor:med", "armor:hvy", "tool:smith"] }],
+      "features": [
+        { "level": 3, "slug": "armorsmithing-heavy-trade" },
+        { "level": 3, "slug": "armorsmithing-shop-armor" },
+        { "level": 3, "slug": "armorsmithing-take-it-on-the-plate" },
+        { "level": 6, "slug": "armorsmithing-extra-attack" },
+        { "level": 14, "slug": "armorsmithing-servo-assist" },
+        { "level": 18, "slug": "armorsmithing-second-skin" }
+      ]
+    },
+    {
+      "slug": "gunsmithing", "identifier": "gunsmithing", "name": "Gunsmithing", "classIdentifier": "gearwright",
+      "img": "icons/weapons/guns/gun-blunderbuss-steel.webp",
+      "description": "<p><em>Shop of the Gearwright</em></p><p>Every gun that still fires on this side of the Shattering has been through somebody's hands, and the Gunsmithing shop wants it to be theirs. They rebuild guns and blades from the receiver up until the weapon knows its owner, and they shoot like the weapon is doing half the work. It is.</p>",
+      "traits": [{ "tag": "gun-trade", "level": 3, "title": "Gun Trade", "grants": ["armor:med", "weapon:mar", "tool:smith"] }],
+      "features": [
+        { "level": 3, "slug": "gunsmithing-gun-trade" },
+        { "level": 3, "slug": "gunsmithing-shop-gun" },
+        { "level": 3, "slug": "gunsmithing-close-call" },
+        { "level": 6, "slug": "gunsmithing-clean-hit" },
+        { "level": 14, "slug": "gunsmithing-dead-sight" },
+        { "level": 18, "slug": "gunsmithing-full-spread" }
+      ]
+    },
+    {
+      "slug": "enhancement", "identifier": "enhancement", "name": "Enhancement", "classIdentifier": "gearwright",
+      "img": "icons/weapons/swords/scimitar-blue.webp",
+      "description": "<p><em>Shop of the Gearwright</em></p><p>An arc-blade runs on a crystal core, and a crystal core, if you grow it right, runs on the Flow. The Enhancement shop is where Artifice and the current meet: Gearwrights who build blades that hum, and who find, somewhere around the tenth core they cut, that the hum has started answering them back.</p>",
+      "traits": [{ "tag": "blade-trade", "level": 3, "title": "Blade Trade", "grants": ["tool:jeweler"] }],
+      "features": [
+        { "level": 3, "slug": "enhancement-blade-trade" },
+        { "level": 3, "slug": "enhancement-shop-blade" },
+        { "level": 3, "slug": "enhancement-resonance" },
+        { "level": 6, "slug": "enhancement-flow-touched" },
+        { "level": 14, "slug": "enhancement-static-edge" },
+        { "level": 18, "slug": "enhancement-momentum" }
+      ]
+    },
+    {
+      "slug": "dronecraft", "identifier": "dronecraft", "name": "Dronecraft", "classIdentifier": "gearwright",
+      "img": "icons/commodities/tech/antenna-powered-purple.webp",
+      "description": "<p><em>Shop of the Gearwright</em></p><p>The Dronecraft shop knows machines from the inside: what they listen for, what they can't ignore, where the wire is that makes them stop. They carry a rig that confuses, jams, and burns out any drone or mindless machine that gets close. A drone is a tool with no mind in it. A Circuitborn is a person, and a Dronecraft Gearwright is usually the first to say so, because they can tell the difference from across the room.</p>",
+      "traits": [{ "tag": "drone-trade", "level": 3, "title": "Drone Trade", "grants": ["tool:thief"] }],
+      "features": [
+        { "level": 3, "slug": "dronecraft-drone-trade" },
+        { "level": 3, "slug": "dronecraft-jammer-rig" },
+        { "level": 3, "slug": "dronecraft-machine-breaker" },
+        { "level": 6, "slug": "dronecraft-remote-control" },
+        { "level": 14, "slug": "dronecraft-long-reach" },
+        { "level": 18, "slug": "dronecraft-overload" }
+      ]
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "armorsmithing-heavy-trade", "name": "Heavy Trade", "level": 3, "requirements": "Gearwright (Armorsmithing) 3",
+      "folder": "Armorsmithing", "folderParent": "Gearwright", "img": "icons/tools/smithing/anvil.webp",
+      "description": "<p><em>Armorsmithing, 3rd level</em></p><p>You've put in the hours at the anvil. You gain proficiency with smith's tools, medium armor, and heavy armor. When you craft with smith's tools, you work twice as fast.</p>"
+    },
+    {
+      "slug": "armorsmithing-shop-armor", "name": "Shop Armor", "level": 3, "requirements": "Gearwright (Armorsmithing) 3",
+      "folder": "Armorsmithing", "folderParent": "Gearwright", "img": "icons/equipment/chest/breastplate-banded-steel-grey.webp",
+      "description": "<p><em>Armorsmithing, 3rd and 9th level</em></p><p>Every piece of armor is a draft until you've had it on the bench. Over the course of a long rest, with smith's tools and one unenhanced suit of armor or shield in front of you, you can rebuild it into your shop armor. It becomes an enhanced item that requires attunement, only you can use it, and it counts as a focus for your Artifice powers while you're attuned to it.</p><p>Your shop armor carries your Field Mod bonus at all times (+1 to AC, rising with your Field Mod feature), and it doesn't use up your Field Mod: that can go on something else. If any effect of your shop armor calls for a saving throw, the DC is your power save DC.</p><p>At 9th level you can keep both a shop suit of armor and a shop shield.</p>"
+    },
+    {
+      "slug": "armorsmithing-take-it-on-the-plate", "name": "Take It on the Plate", "level": 3, "requirements": "Gearwright (Armorsmithing) 3",
+      "folder": "Armorsmithing", "folderParent": "Gearwright", "img": "icons/magic/defensive/armor-shield-barrier-steel.webp",
+      "activation": "reaction", "roll": "@scale.gearwright.bright-idea + max(@abilities.int.mod, 1)",
+      "description": "<p><em>Armorsmithing, 3rd level</em></p><p>You know where the plate is thickest and you turn it toward the blow. When you take damage while wearing your shop armor or wielding your shop shield, you can use your reaction and spend one use of Bright Idea to absorb some of it. Roll your Bright Idea die: the damage is reduced by the result plus your Intelligence modifier (minimum of 1).</p>"
+    },
+    {
+      "slug": "armorsmithing-extra-attack", "name": "Extra Attack", "level": 6, "requirements": "Gearwright (Armorsmithing) 6",
+      "folder": "Armorsmithing", "folderParent": "Gearwright", "img": "icons/skills/melee/blade-tip-orange.webp",
+      "description": "<p><em>Armorsmithing, 6th level</em></p><p>The suit does some of the swinging. You can attack twice, instead of once, whenever you take the Attack action on your turn, as long as you're wearing your shop armor or wielding your shop shield.</p>"
+    },
+    {
+      "slug": "armorsmithing-servo-assist", "name": "Servo Assist", "level": 14, "requirements": "Gearwright (Armorsmithing) 14",
+      "folder": "Armorsmithing", "folderParent": "Gearwright", "img": "icons/commodities/tech/bearing-steel-green.webp",
+      "activation": "bonus", "uses": { "max": "min(6, 5 + floor(max(@classes.gearwright.levels - 14, 0) / 3))", "per": "lr" },
+      "description": "<p><em>Armorsmithing, 14th and 17th level</em></p><p>The servos learn your rhythm and add a beat to it. When you take the Attack action, or use your action to cast an Artifice power of 1st level or higher, you can make one weapon attack as a bonus action.</p><p>You can use this feature five times. You gain one more use at 17th level, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "armorsmithing-second-skin", "name": "Second Skin", "level": 18, "requirements": "Gearwright (Armorsmithing) 18",
+      "folder": "Armorsmithing", "folderParent": "Gearwright", "img": "icons/magic/defensive/armor-stone-skin.webp",
+      "description": "<p><em>Armorsmithing, 18th level</em></p><p>You stopped noticing the suit a long time ago. While you're wearing your shop armor or wielding your shop shield, whenever you make an ability check or saving throw that uses Strength, Dexterity, or Constitution, you can treat a d20 roll of 9 or lower as a 10.</p>"
+    },
+
+    {
+      "slug": "gunsmithing-gun-trade", "name": "Gun Trade", "level": 3, "requirements": "Gearwright (Gunsmithing) 3",
+      "folder": "Gunsmithing", "folderParent": "Gearwright", "img": "icons/weapons/guns/gun-barrel.webp",
+      "description": "<p><em>Gunsmithing, 3rd level</em></p><p>You've stripped and rebuilt more weapons than you've fired. You gain proficiency with smith's tools, medium armor, and martial weapons. When you craft with smith's tools, you work twice as fast.</p>"
+    },
+    {
+      "slug": "gunsmithing-shop-gun", "name": "Shop Gun", "level": 3, "requirements": "Gearwright (Gunsmithing) 3",
+      "folder": "Gunsmithing", "folderParent": "Gearwright", "img": "icons/weapons/guns/gun-blunderbuss-steel.webp",
+      "description": "<p><em>Gunsmithing, 3rd and 9th level</em></p><p>One weapon gets the full treatment. Over the course of a long rest, with smith's tools and one unenhanced weapon you're proficient with in front of you, you can rebuild it into your shop gun (it can be a blade, if that's your trade; the name stuck anyway). It becomes an enhanced item that requires attunement, only you can use it, and it counts as a focus for your Artifice powers while you're attuned to it.</p><p>Your shop gun carries your Field Mod bonus at all times (+1 to attack and damage rolls, rising with your Field Mod feature), and it doesn't use up your Field Mod: that can go on something else. If any effect of your shop gun calls for a saving throw, the DC is your power save DC.</p><p>At 9th level you can keep two shop guns.</p>"
+    },
+    {
+      "slug": "gunsmithing-close-call", "name": "Close Call", "level": 3, "requirements": "Gearwright (Gunsmithing) 3",
+      "folder": "Gunsmithing", "folderParent": "Gearwright", "img": "icons/skills/ranged/arrow-flying-spiral-blue.webp",
+      "activation": "special", "roll": "@scale.gearwright.bright-idea",
+      "description": "<p><em>Gunsmithing, 3rd level</em></p><p>You know exactly how far off it went, and that's a number you can fix. When you make an attack roll with your shop gun and miss, you can spend one use of Bright Idea to try to turn the miss into a hit: roll your Bright Idea die and add it to the attack roll.</p>"
+    },
+    {
+      "slug": "gunsmithing-clean-hit", "name": "Clean Hit", "level": 6, "requirements": "Gearwright (Gunsmithing) 6",
+      "folder": "Gunsmithing", "folderParent": "Gearwright", "img": "icons/skills/melee/blade-tip-energy-green.webp",
+      "activation": "special", "activity": "damage",
+      "damage": [{ "formula": "(1 + floor(max(@classes.gearwright.levels - 5, 0) / 6))d6", "types": [] }],
+      "description": "<p><em>Gunsmithing, 6th, 11th, and 17th level</em></p><p>A weapon you built hits the way you meant it to. Once per round, when you deal damage to a creature with your shop gun, you can add 1d6 to the damage. The extra damage is the same type as the weapon's.</p><p>The extra damage rises to 2d6 at 11th level and 3d6 at 17th.</p>"
+    },
+    {
+      "slug": "gunsmithing-dead-sight", "name": "Dead Sight", "level": 14, "requirements": "Gearwright (Gunsmithing) 14",
+      "folder": "Gunsmithing", "folderParent": "Gearwright", "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+      "activation": "special", "uses": { "max": "min(6, 5 + floor(max(@classes.gearwright.levels - 14, 0) / 3))", "per": "lr" },
+      "description": "<p><em>Gunsmithing, 14th and 17th level</em></p><p>Why fill a room with it when one bullet will do. When you cast an Artifice power that forces creatures in an area to make a saving throw, you can instead make an attack roll with your shop gun against one creature that would be in the area. On a hit, the target suffers the power's effects as if it had failed its saving throw, and nobody else is affected.</p><p>You can use this feature five times. You gain one more use at 17th level, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "gunsmithing-full-spread", "name": "Full Spread", "level": 18, "requirements": "Gearwright (Gunsmithing) 18",
+      "folder": "Gunsmithing", "folderParent": "Gearwright", "img": "icons/weapons/guns/gun-chain-gatling-belt.webp",
+      "description": "<p><em>Gunsmithing, 18th level</em></p><p>Or several bullets. When you use Dead Sight on a power that would affect more than one creature, you can instead attack every creature that would be in the area, with a separate attack roll for each. On a hit, that target suffers the power's effects as if it had failed its saving throw.</p>"
+    },
+
+    {
+      "slug": "enhancement-blade-trade", "name": "Blade Trade", "level": 3, "requirements": "Gearwright (Enhancement) 3",
+      "folder": "Enhancement", "folderParent": "Gearwright", "img": "icons/commodities/tech/battery-arcane-crystal-green.webp",
+      "description": "<p><em>Enhancement, 3rd level</em></p><p>You cut cores. You gain proficiency with jeweler's tools and with the arc-blade. When you craft with jeweler's tools, you work twice as fast.</p>"
+    },
+    {
+      "slug": "enhancement-shop-blade", "name": "Shop Blade", "level": 3, "requirements": "Gearwright (Enhancement) 3",
+      "folder": "Enhancement", "folderParent": "Gearwright", "img": "icons/weapons/swords/scimitar-blue.webp",
+      "description": "<p><em>Enhancement, 3rd and 9th level</em></p><p>Over the course of a long rest, with jeweler's tools and one unenhanced arc-blade in front of you, you can regrow its core into your shop blade. It becomes an enhanced item that requires attunement, only you can use it, and it counts as a focus for your Artifice powers while you're attuned to it.</p><p>Your shop blade carries your Field Mod bonus at all times (+1 to attack and damage rolls, rising with your Field Mod feature), and it doesn't use up your Field Mod: that can go on something else. If any effect of your shop blade calls for a saving throw, the DC is your power save DC.</p><p>At 9th level you can keep two shop blades.</p>"
+    },
+    {
+      "slug": "enhancement-resonance", "name": "Resonance", "level": 3, "requirements": "Gearwright (Enhancement) 3",
+      "folder": "Enhancement", "folderParent": "Gearwright", "img": "icons/magic/lightning/bolt-beam-strike-blue.webp",
+      "activation": "special", "activity": "damage",
+      "damage": [{ "formula": "(2 + min(1, max(@classes.gearwright.levels - 4, 0)) + 2 * min(1, max(@classes.gearwright.levels - 10, 0)) + 3 * min(1, max(@classes.gearwright.levels - 16, 0)))d6", "types": [] }],
+      "description": "<p><em>Enhancement, 3rd, 5th, 11th, and 17th level</em></p><p>The core sings when it bites, and you can make it sing louder. Once per round, when you hit a creature with your shop blade, you can spend one use of Bright Idea to deal an extra 2d6 damage to it. The extra damage is the same type as the blade's.</p><p>The extra damage rises to 3d6 at 5th level, 5d6 at 11th, and 8d6 at 17th.</p>"
+    },
+    {
+      "slug": "enhancement-flow-touched", "name": "Flow-Touched", "level": 6, "requirements": "Gearwright (Enhancement) 6",
+      "folder": "Enhancement", "folderParent": "Gearwright", "img": "icons/magic/water/wave-water-blue.webp",
+      "description": "<p><em>Enhancement, 6th, 7th, 13th, and 17th level</em></p><p>Somewhere around the tenth core you cut, the hum started answering. Choose two Flow powers of 1st level. You know them, and for you they count as Artifice powers: you cast them with Artifice points and Intelligence, and they don't count against your Powers Known.</p><p>At 7th level you learn two more Flow powers of 1st or 2nd level; at 13th, two of 1st to 3rd level; at 17th, two of 1st to 4th level. Whenever you gain a Gearwright level, you can swap one of these Flow powers for another of the same level.</p>"
+    },
+    {
+      "slug": "enhancement-static-edge", "name": "Static Edge", "level": 14, "requirements": "Gearwright (Enhancement) 14",
+      "folder": "Enhancement", "folderParent": "Gearwright", "img": "icons/magic/lightning/bolt-forked-blue.webp",
+      "activation": "special", "activity": "damage",
+      "damage": [{ "formula": "@classes.gearwright.levels + @abilities.int.mod", "types": ["psychic"] }],
+      "description": "<p><em>Enhancement, 14th level</em></p><p>Nobody holds a thought through that noise. When you hit a creature that is concentrating on a power with your shop blade, it has disadvantage on the Constitution saving throw to keep its concentration. If it fails, it immediately takes psychic damage equal to your Gearwright level plus your Intelligence modifier.</p>"
+    },
+    {
+      "slug": "enhancement-momentum", "name": "Momentum", "level": 18, "requirements": "Gearwright (Enhancement) 18",
+      "folder": "Enhancement", "folderParent": "Gearwright", "img": "icons/magic/control/buff-flight-wings-runes-blue.webp",
+      "description": "<p><em>Enhancement, 18th level</em></p><p>Every one you put down sharpens the next idea. Once per turn, when you reduce a hostile creature to 0 hit points, you regain one use of Bright Idea. Your uses of Bright Idea can't exceed your Intelligence modifier this way.</p>"
+    },
+
+    {
+      "slug": "dronecraft-drone-trade", "name": "Drone Trade", "level": 3, "requirements": "Gearwright (Dronecraft) 3",
+      "folder": "Dronecraft", "folderParent": "Gearwright", "img": "icons/tools/hand/pliers-shears-wire-cutters.webp",
+      "description": "<p><em>Dronecraft, 3rd level</em></p><p>There isn't a casing you can't get into. You gain proficiency with thieves' tools. When you craft with tinker's tools, you work twice as fast.</p>"
+    },
+    {
+      "slug": "dronecraft-jammer-rig", "name": "Jammer Rig", "level": 3, "requirements": "Gearwright (Dronecraft) 3",
+      "folder": "Dronecraft", "folderParent": "Gearwright", "img": "icons/commodities/tech/antenna-powered-purple.webp",
+      "activation": "bonus", "range": 5, "duration": { "value": "1", "units": "minute" },
+      "uses": { "max": "@prof", "per": "lr" }, "activity": "damage",
+      "damage": [{ "formula": "floor(@classes.gearwright.levels / 2)", "types": ["lightning"] }],
+      "description": "<p><em>Dronecraft, 3rd, 9th, and 17th level</em></p><p>Over the course of a long rest, you can build your tinker's tools into a jammer rig: antennas, a coil, a sensor dish that used to be a colander. The rig is an enhanced item that requires attunement, only you can use it, and it counts as a focus for your Artifice powers while you're attuned to it. While you carry it, you have advantage on Intelligence (Investigation) checks to understand a machine, and no drone or other mindless machine within 60 feet of you can hide from you.</p><p>The rig projects three fields: <strong>ionizing</strong>, <strong>jamming</strong>, and <strong>targeting</strong>. As a bonus action, you can raise one field, which lasts for 1 minute. Only one field can be up at a time, and you can drop it at any time on your turn, no action required. The fields reach 5 feet from you; they reach 15 feet at 9th level and 30 feet at 17th. You can raise a field a number of times equal to your proficiency bonus, and you regain all spent uses when you finish a long rest.</p><p><strong>Ionizing Field.</strong> Whenever a drone or other mindless machine starts its turn within the field, its speed is halved, it can't take reactions, it has disadvantage on Dexterity saving throws until the start of its next turn, and it takes lightning damage equal to half your Gearwright level. Circuitborn are people and aren't machines for this purpose.</p><p><strong>Jamming Field.</strong> Whenever you or a friendly creature within the field has to make a saving throw against an Artifice power, that creature adds your Intelligence modifier (minimum of +1) to the save.</p><p><strong>Targeting Field.</strong> You and friendly creatures within the field add your Intelligence modifier (minimum of +1) to the first ranged weapon damage roll each of you makes each round.</p>"
+    },
+    {
+      "slug": "dronecraft-machine-breaker", "name": "Machine Breaker", "level": 3, "requirements": "Gearwright (Dronecraft) 3",
+      "folder": "Dronecraft", "folderParent": "Gearwright", "img": "icons/commodities/tech/blade-mechanical-cutter.webp",
+      "activation": "special", "activity": "damage",
+      "damage": [{ "formula": "(2 + min(1, max(@classes.gearwright.levels - 4, 0)) + 2 * min(1, max(@classes.gearwright.levels - 9, 0)) + 3 * min(1, max(@classes.gearwright.levels - 14, 0)))d6", "types": [] }],
+      "description": "<p><em>Dronecraft, 3rd, 5th, 10th, and 15th level</em></p><p>You know where the wire is. Once per round, when you deal damage to a drone or other mindless machine, you can spend one use of Bright Idea to deal an extra 2d6 damage to it. The extra damage is the same type as whatever did the damage. Circuitborn are people, not machines, and this doesn't apply to them.</p><p>The extra damage rises to 3d6 at 5th level, 5d6 at 10th, and 8d6 at 15th.</p>"
+    },
+    {
+      "slug": "dronecraft-remote-control", "name": "Remote Control", "level": 6, "requirements": "Gearwright (Dronecraft) 6",
+      "folder": "Dronecraft", "folderParent": "Gearwright", "img": "icons/commodities/tech/battery-coil-tesla.webp",
+      "activation": "special", "uses": { "max": "3 + floor(max(@classes.gearwright.levels - 5, 0) / 4)", "per": "lr" },
+      "description": "<p><em>Dronecraft, 6th, 9th, 13th, and 17th level</em></p><p>Machines do what you tell them, and you've learned to tell them firmly. When you cast a power that can affect only drones or other mindless machines, and you use it only on machines, you can treat the power as if you'd cast it at your Max Power Level without spending the extra Artifice points.</p><p>You can use this feature three times. You gain one more use at 9th, 13th, and 17th level, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "dronecraft-long-reach", "name": "Long Reach", "level": 14, "requirements": "Gearwright (Dronecraft) 14",
+      "folder": "Dronecraft", "folderParent": "Gearwright", "img": "icons/commodities/tech/cable-armored-reticulated.webp",
+      "description": "<p><em>Dronecraft, 14th level</em></p><p>Anything with a receiver is close enough to touch. Any drone or other mindless machine within 120 feet of you, and any creature within 120 feet that is wearing or holding an Artifice focus, is a valid target for an Artifice power you cast with a range of touch.</p>"
+    },
+    {
+      "slug": "dronecraft-overload", "name": "Overload", "level": 18, "requirements": "Gearwright (Dronecraft) 18",
+      "folder": "Dronecraft", "folderParent": "Gearwright", "img": "icons/magic/lightning/bolt-forked-large-blue-yellow.webp",
+      "activation": "action", "range": 60, "target": { "type": "creature", "count": 10 }, "duration": { "value": "1", "units": "minute" },
+      "uses": { "max": "1", "per": "lr" }, "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [{ "number": 14, "denomination": 6, "types": ["lightning"] }],
+      "description": "<p><em>Dronecraft, 18th level</em></p><p>Every field has a setting past the last one. As an action, you can drop the field you're projecting in a burst, with an effect that depends on the field.</p><p><strong>Ionizing Burst.</strong> Choose up to 10 creatures you can see within 60 feet of you. Each must make a Constitution saving throw. On a failed save, a target takes 14d6 lightning damage and is stunned until the start of your next turn; on a success, it takes half as much damage and isn't stunned.</p><p><strong>Jamming Burst.</strong> Choose up to 10 creatures you can see within 60 feet of you. Once in the next minute, when a chosen creature fails a saving throw against an Artifice power or is hit by an Artifice power's attack, it can choose to succeed on the save or have the attack miss instead.</p><p><strong>Targeting Burst.</strong> Choose up to 10 creatures you can see within 60 feet of you. Each must succeed on a Constitution saving throw against your power save DC or be blinded for 1d4 + 1 turns.</p><p>Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    }
+  ]
+}

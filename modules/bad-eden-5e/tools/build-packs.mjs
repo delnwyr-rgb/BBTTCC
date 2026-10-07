@@ -212,7 +212,7 @@ const grant = (docKey, level, slugs, title = "Features") => adv(docKey, `grant:$
 });
 const scale = (docKey, s) => adv(docKey, `scale:${s.identifier}`, "ScaleValue", {
   configuration: { identifier: s.identifier, type: s.type ?? "number", distance: { units: "" },
-    scale: Object.fromEntries(Object.entries(s.scale).map(([l, v]) => [l, { value: v }])) },
+    scale: Object.fromEntries(Object.entries(s.scale).map(([l, v]) => [l, typeof v === "object" ? v : { value: v }])) },
   value: {}, title: s.title
 });
 const asi = (docKey, level, points = 2, extra = {}) => adv(docKey, `asi:${level}`, "AbilityScoreImprovement", {
@@ -349,11 +349,17 @@ function main() {
   }
   // every @UUID link in prose must resolve to a doc we build
   const all = new Set([...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers].map(d => d._id));
+  const proseMissing = [];
   for (const d of [...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers]) {
     for (const m of d.system.description.value.matchAll(/@UUID\[Compendium\.bad-eden-5e\.\w+\.Item\.(\w+)\]/g)) {
-      if (!all.has(m[1])) missing.push(`${d.name} (prose link): ${m[0]}`);
+      if (!all.has(m[1])) proseMissing.push(`${d.name} (prose link): ${m[0]}`);
     }
     if (/\{\{uuid:/.test(d.system.description.value)) missing.push(`${d.name}: unresolved {{uuid}} token`);
+  }
+  // a prose link to a doc not built yet is a warning in --dry (content lands in batches), fatal in a real build
+  if (proseMissing.length) {
+    if (args.has("--dry")) console.warn(`WARN: ${proseMissing.length} prose link(s) to docs not built yet:\n  ` + proseMissing.join("\n  "));
+    else missing.push(...proseMissing);
   }
   if (missing.length) { console.error("MISSING feature references:\n  " + missing.join("\n  ")); process.exit(1); }
 

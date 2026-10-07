@@ -1,0 +1,544 @@
+{
+  "_about": "Artifice powers, batch D — 15 powers (6 seventh, 4 eighth, 5 ninth). Mechanics carried over from SW5E tech powers 1:1; every name and sentence is Bad Eden's own. School art (Intelligence). Built by tools/build-packs.mjs.",
+  "_renames": [
+    {
+      "sw5e": "Cage",
+      "new": "Lockup"
+    },
+    {
+      "sw5e": "Delayed Explosion",
+      "new": "Long Fuse"
+    },
+    {
+      "sw5e": "Neurotoxin",
+      "new": "Needle Rain"
+    },
+    {
+      "sw5e": "Project Hologram",
+      "new": "Long Distance"
+    },
+    {
+      "sw5e": "Squad Shield",
+      "new": "Storm Cellar"
+    },
+    {
+      "sw5e": "Tactical Superiority",
+      "new": "Double Time"
+    },
+    {
+      "sw5e": "Energizing Aura",
+      "new": "Floodlight"
+    },
+    {
+      "sw5e": "Incendiary Cloud",
+      "new": "Ember Storm"
+    },
+    {
+      "sw5e": "Scrambling Field",
+      "new": "Dead Zone"
+    },
+    {
+      "sw5e": "Stun Dart",
+      "new": "Lights Out"
+    },
+    {
+      "sw5e": "Carbonite Explosion",
+      "new": "Deep Freeze"
+    },
+    {
+      "sw5e": "Greater Explosion",
+      "new": "The Big One"
+    },
+    {
+      "sw5e": "Invulnerability",
+      "new": "Bulletproof"
+    },
+    {
+      "sw5e": "Kolto Waves",
+      "new": "Everybody Up"
+    },
+    {
+      "sw5e": "Predictive AI",
+      "new": "Backseat Driver"
+    }
+  ],
+  "_unsure": [
+    "Lockup: save activity (Cha) models only the teleport-out check; cage 20 ft / box 10 ft dimensions are text only (no template, since the area is chosen on cast).",
+    "Long Fuse: two damage parts as the source had (12d6 base, +1d6 accumulator); the base part scales +1d6 per upcast level, the per-turn growth is text only.",
+    "Needle Rain: the hit-point ladder is text only; save activity with no damage (the kill at 20 HP or fewer can't be an activity).",
+    "Storm Cellar: 'tech power or force power dealing energy/lightning' rendered as 'any Artifice power, or any Flow power that deals fire or lightning damage'; radius grows +10 ft and blocked level +1 per upcast level, text only (radius template fixed at 10).",
+    "Dead Zone: 'tech slot' wording became Artifice points; '+1 lightsaber' example became a +1 arc-blade; 'Tech Override / Diminish Tech' became 'powers that shut other powers down'.",
+    "Deep Freeze: 'carbonite' became a flash-freeze; damage part 8d6 + 20 cold kept as a dice part with bonus 20.",
+    "Everybody Up: 700 HP divided among targets is a utility activity (no single heal roll fits); text carries the number.",
+    "Backseat Driver: the SW5E duration field was blank and the text says it runs until you cast it again — data says instantaneous, the text carries the rule (flag for Dave)."
+  ],
+  "powers": [
+    {
+      "slug": "lockup",
+      "name": "Lockup",
+      "sw5e": "Cage",
+      "level": 7,
+      "school": "art",
+      "img": "icons/magic/control/debuff-energy-snare-blue.webp",
+      "activation": "action",
+      "range": {
+        "value": 100
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "cha",
+        "onSave": "none"
+      },
+      "scaling": "none",
+      "description": "<p>You throw up a holding cell where you point: an invisible cube of hard field, fixed in place, that doesn't go anywhere for an hour. Build it as a cage or as a box.</p><p>A <strong>cage</strong> can be up to 20 feet on a side, bars half an inch thick and half an inch apart. A <strong>box</strong> can be up to 10 feet on a side: a solid wall nothing gets through, and no power cast into it or out of it works.</p><p>When you cast it, every creature completely inside the area is caught. A creature only partway in, or too big to fit, is shoved out from the center until it's clear.</p><p>Nothing inside leaves by ordinary means. A creature that tries to teleport out must make a Charisma saving throw first. On a success it goes; on a failure it stays put and the teleport is wasted.</p><p>This power can't be dispelled.</p>"
+    },
+    {
+      "slug": "long-fuse",
+      "name": "Long Fuse",
+      "sw5e": "Delayed Explosion",
+      "level": 7,
+      "school": "art",
+      "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
+      "activation": "action",
+      "range": {
+        "value": 150
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 20
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 12,
+          "denomination": 6,
+          "bonus": "",
+          "types": [
+            "fire"
+          ],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        },
+        {
+          "number": 1,
+          "denomination": 6,
+          "bonus": "",
+          "types": [
+            "fire"
+          ],
+          "scaling": {
+            "mode": "",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "level",
+      "description": "<p>You set a charge at a point within range and hold the fuse. It goes off when the power ends, whether because you let go of your concentration or because you decide it's time. When it does, every creature in a 20-foot-radius sphere centered on that point makes a Dexterity saving throw, taking fire damage equal to everything the charge has built up on a failed save, or half as much on a success.</p><p>The charge starts at 12d6. If it still hasn't gone off at the end of your turn, it grows by 1d6.</p><p>If anybody touches it before then, they make a Dexterity saving throw. On a failure the power ends right there and the charge goes off in their hand.</p><p>The fire spreads around corners and lights anything flammable in the area that nobody is wearing or carrying.</p><p><strong>At higher levels.</strong> When you cast this power at 8th level or higher, the starting charge is 1d6 bigger for each level above 7th.</p>"
+    },
+    {
+      "slug": "needle-rain",
+      "name": "Needle Rain",
+      "sw5e": "Neurotoxin",
+      "level": 7,
+      "school": "art",
+      "img": "icons/skills/toxins/poison-bottle-corked-fire-green.webp",
+      "activation": "bonus",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": "",
+        "special": "any number you can see"
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "none"
+      },
+      "scaling": "none",
+      "description": "<p>You let fly a spread of needles loaded with something you cooked up and shouldn't have. Choose any number of creatures you can see within range. Each one makes a Constitution saving throw. On a failure, what happens depends on how much is left in it:</p><ul><li><strong>60 hit points or fewer:</strong> poisoned for 1 minute.</li><li><strong>50 or fewer:</strong> poisoned and deafened for 1 minute.</li><li><strong>40 or fewer:</strong> poisoned, deafened, and blinded for 10 minutes.</li><li><strong>30 or fewer:</strong> poisoned, blinded, deafened, and stunned for 1 hour.</li><li><strong>20 or fewer:</strong> dead.</li></ul><p>This power has no effect on drones or other mindless machines. Circuitborn are people, and it works on them the same as anyone.</p>"
+    },
+    {
+      "slug": "long-distance",
+      "name": "Long Distance",
+      "sw5e": "Project Hologram",
+      "level": 7,
+      "school": "art",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "activation": "action",
+      "range": {
+        "value": 500,
+        "units": "mi"
+      },
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "24",
+        "units": "hour"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You put a hologram of yourself somewhere else and go for a visit. The copy appears anywhere within range that you've seen before, walls or no walls, and lasts for the duration. It looks and sounds like you and has no body to speak of. If it takes any damage it flickers out and the power ends.</p><p>As an action you can move it up to twice your speed and have it gesture, talk, and carry on however you like. It has your mannerisms down cold.</p><p>You see through its eyes and hear through its ears as if you were standing in its space. On your turn, as a bonus action, you can switch between its senses and your own. While you're using its senses, you're blinded and deafened to what's around your actual body.</p><p>Anything that touches the image goes straight through it. A creature that uses its action to study the image can tell it's a hologram with a successful Intelligence (Investigation) check against your power save DC; once it knows, it can see through the image, and everything the image says sounds hollow to it.</p>"
+    },
+    {
+      "slug": "storm-cellar",
+      "name": "Storm Cellar",
+      "sw5e": "Squad Shield",
+      "level": 7,
+      "school": "art",
+      "img": "icons/magic/defensive/barrier-shield-dome-deflect-blue.webp",
+      "activation": "reaction",
+      "condition": "when something is about to hit you or the people around you",
+      "range": {
+        "units": "self"
+      },
+      "target": {
+        "template": {
+          "type": "radius",
+          "size": 10
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "scaling": "level",
+      "description": "<p>When it all starts coming down, you put a roof over everybody. A faintly glowing sphere of protection, 10 feet in radius, springs up around you and lasts for the duration.</p><p>Any Artifice power of 7th level or lower, or any Flow power of 7th level or lower that deals fire or lightning damage, cast from outside the sphere can't affect creatures or objects inside it, even if it was cast at a higher level. Such a power can still target them; it just does nothing to them. Likewise, the inside of the sphere is cut out of any area such a power covers.</p><p>The sphere also stops the following cold, and nothing inside is touched by them:</p><ul><li>Bullets, shells, and other physical or energy projectiles.</li><li>A particular effect, like a grenade going off.</li><li>An environmental hazard, like falling rock or a lava flow.</li></ul><p><strong>At higher levels.</strong> When you cast this power at 8th level or higher, the sphere's radius grows by 10 feet and it blocks powers one level higher, for each level above 7th.</p>"
+    },
+    {
+      "slug": "double-time",
+      "name": "Double Time",
+      "sw5e": "Tactical Superiority",
+      "level": 7,
+      "school": "art",
+      "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "ally",
+        "count": 2
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "scaling": "level",
+      "description": "<p>You dose the crew with something that makes the world move slow around them. Choose up to two willing creatures you can see within range. Until the power ends, each target's speed is doubled, it gains a +2 bonus to AC, it has advantage on Dexterity saving throws, and it gets one extra action on each of its turns. That action can only be used to Attack (one weapon attack only), Dash, Disengage, Hide, or Use an Object.</p><p>When the power ends, the bill comes due: each target can't move or take actions until after its next turn, as the lethargy rolls over it.</p><p><strong>At higher levels.</strong> When you cast this power at 8th level or higher, you can choose one more target for each level above 7th.</p>"
+    },
+    {
+      "slug": "floodlight",
+      "name": "Floodlight",
+      "sw5e": "Energizing Aura",
+      "level": 8,
+      "school": "art",
+      "img": "icons/magic/light/beam-rays-blue-small.webp",
+      "activation": "action",
+      "range": {
+        "units": "self"
+      },
+      "target": {
+        "template": {
+          "type": "radius",
+          "size": 30
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You light up like a stadium at kickoff. A charged glow radiates out from you in a 30-foot radius. Creatures of your choice in that radius when you cast this power have advantage on all saving throws, and other creatures have disadvantage on attack rolls against them, until the power ends.</p>"
+    },
+    {
+      "slug": "ember-storm",
+      "name": "Ember Storm",
+      "sw5e": "Incendiary Cloud",
+      "level": 8,
+      "school": "art",
+      "img": "icons/magic/fire/explosion-embers-orange.webp",
+      "activation": "action",
+      "range": {
+        "value": 150
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 20
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 10,
+          "denomination": 8,
+          "bonus": "",
+          "types": [
+            "fire"
+          ],
+          "scaling": {
+            "mode": "",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "none",
+      "description": "<p>You loose a churning cloud of smoke shot through with white-hot embers in a 20-foot-radius sphere centered on a point within range. The cloud spreads around corners and is heavily obscured. It lasts for the duration, or until a wind of moderate or greater speed (at least 10 miles an hour) blows it apart.</p><p>When the cloud appears, each creature in it makes a Dexterity saving throw, taking 10d8 fire damage on a failed save or half as much on a success. A creature also makes this save when it enters the area for the first time on a turn or ends its turn there.</p><p>At the start of each of your turns, the cloud drifts 10 feet directly away from you in a direction you choose.</p>"
+    },
+    {
+      "slug": "dead-zone",
+      "name": "Dead Zone",
+      "sw5e": "Scrambling Field",
+      "level": 8,
+      "school": "art",
+      "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+      "activation": "action",
+      "range": {
+        "units": "self"
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 10
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You switch on a jammer that nothing works around. A shimmering 10-foot-radius sphere of suppression surrounds you. Inside it, powers can't be cast and enhanced items are just items. Until the power ends, the sphere moves with you, centered on you.</p><p>Powers and other enhanced effects are suppressed in the sphere and can't reach into it. Points spent to cast a suppressed power are spent all the same. A suppressed effect doesn't function, but the time it spends suppressed still counts against its duration.</p><p><strong>Targeted effects.</strong> Powers and enhanced effects that target a creature or object in the sphere have no effect on that target.</p><p><strong>Areas.</strong> The area of another power or enhanced effect can't extend into the sphere. If the sphere overlaps such an area, the overlap is suppressed.</p><p><strong>Powers already running.</strong> Any active power or enhanced effect on a creature or object in the sphere is suppressed while it's in there.</p><p><strong>Enhanced items.</strong> The properties and powers of enhanced items are suppressed in the sphere. A +1 arc-blade in the sphere is an ordinary arc-blade.</p><p>An enhanced weapon's properties are suppressed if it's used against a target in the sphere or swung by somebody standing in it. If an enhanced weapon or piece of enhanced ammunition leaves the sphere entirely (you fire an enhanced round or throw an enhanced spear at somebody outside), its enhancement wakes back up the moment it's out.</p><p><strong>Travel.</strong> Teleportation fails inside the sphere, whether the sphere is where you're leaving from or where you're headed. A portal to somewhere else closes for as long as it's in the sphere.</p><p><strong>Creatures and objects.</strong> A creature or object summoned or built by a power blinks out of existence inside the sphere, and blinks back in the instant its space is no longer covered.</p><p><strong>Other jammers.</strong> Powers that shut other powers down have no effect on the sphere, and the spheres of two Dead Zones don't cancel each other.</p>"
+    },
+    {
+      "slug": "lights-out",
+      "name": "Lights Out",
+      "sw5e": "Stun Dart",
+      "level": 8,
+      "school": "art",
+      "img": "icons/magic/control/debuff-energy-hold-teal-blue.webp",
+      "activation": "action",
+      "range": {
+        "value": 60
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "none"
+      },
+      "scaling": "none",
+      "description": "<p>One tiny dart, one very large nap. You fire it at a target within range. If the target has 150 hit points or fewer, it's stunned. Otherwise nothing happens and you've wasted a good dart.</p><p>The stunned target makes a Constitution saving throw at the end of each of its turns. On a success, the stun ends.</p>"
+    },
+    {
+      "slug": "deep-freeze",
+      "name": "Deep Freeze",
+      "sw5e": "Carbonite Explosion",
+      "level": 9,
+      "school": "art",
+      "img": "icons/magic/water/barrier-ice-wall-explosion.webp",
+      "activation": "action",
+      "range": {
+        "value": 250
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 60
+        }
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 8,
+          "denomination": 6,
+          "bonus": "20",
+          "types": [
+            "cold"
+          ],
+          "scaling": {
+            "mode": "",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "none",
+      "description": "<p>You set off a flash-freeze charge in a 60-foot-radius sphere centered on a point you can see within range, and winter arrives all at once. Each creature in the area makes a Constitution saving throw. On a failed save, a creature takes 8d6 + 20 cold damage and is restrained for 1 minute, locked solid in the ice. On a success, it takes half as much damage and is restrained only until the end of its next turn.</p><p>As an action, a restrained creature can make a Strength check against your power save DC, breaking free on a success.</p><p>A creature reduced to 0 hit points by this power dies on the spot and shatters.</p>"
+    },
+    {
+      "slug": "the-big-one",
+      "name": "The Big One",
+      "sw5e": "Greater Explosion",
+      "level": 9,
+      "school": "art",
+      "img": "icons/magic/fire/explosion-fireball-large-purple-orange.webp",
+      "activation": "action",
+      "range": {
+        "value": 150
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 40
+        }
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 40,
+          "denomination": 6,
+          "bonus": "",
+          "types": [
+            "fire"
+          ],
+          "scaling": {
+            "mode": "",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "none",
+      "description": "<p>You've been saving this one. A blast goes off at a point within range, and each creature in a 40-foot-radius sphere centered on it makes a Dexterity saving throw. On a failed save, a creature takes 40d6 fire damage and is knocked prone. On a success, it takes half as much and keeps its feet.</p><p>The fire spreads around corners and lights anything flammable in the area that nobody is wearing or carrying.</p>"
+    },
+    {
+      "slug": "bulletproof",
+      "name": "Bulletproof",
+      "sw5e": "Invulnerability",
+      "level": 9,
+      "school": "art",
+      "img": "icons/magic/defensive/shield-barrier-flaming-diamond-blue.webp",
+      "activation": "action",
+      "range": {
+        "units": "self"
+      },
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "10",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>A flickering blue field settles over you like a second skin. Until the power ends, you're immune to all damage. All of it.</p>"
+    },
+    {
+      "slug": "everybody-up",
+      "name": "Everybody Up",
+      "sw5e": "Kolto Waves",
+      "level": 9,
+      "school": "art",
+      "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+      "activation": "action",
+      "range": {
+        "value": 60
+      },
+      "target": {
+        "type": "creature",
+        "count": "",
+        "special": "any number you can see"
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You open every medpac you own at once and the whole room gets better. You restore up to 700 hit points, divided however you choose among any number of creatures you can see within range. Anyone healed this way is also cured of every disease and of anything keeping it blinded or deafened.</p><p>This power has no effect on drones or other mindless machines. Circuitborn are people; it works on them.</p>"
+    },
+    {
+      "slug": "backseat-driver",
+      "name": "Backseat Driver",
+      "sw5e": "Predictive AI",
+      "level": 9,
+      "school": "art",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "activation": "minute",
+      "activationValue": 1,
+      "range": {
+        "units": "touch"
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You wire a willing creature up to a little predictive engine that whispers in its ear about what's coming next. The target can't be surprised, and it has advantage on attack rolls, ability checks, and saving throws. Other creatures have disadvantage on attack rolls against it.</p><p>The engine runs until you cast this power again, at which point the old one goes quiet.</p>"
+    }
+  ]
+}

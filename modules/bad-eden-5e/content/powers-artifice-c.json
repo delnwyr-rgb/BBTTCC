@@ -1,0 +1,275 @@
+{
+  "_about": "Artifice powers, batch C: 4th–6th level (9 + 9 + 8). Mechanics carried 1:1 from the SW5E tech powers named in `sw5e`; every name and sentence is Bad Eden's own. Prerequisites dropped. Built by tools/build-packs.mjs.",
+  "_renames": [
+    { "sw5e": "Ballistic Shield", "new": "Flak Jacket" },
+    { "sw5e": "Cloaking Screen", "new": "Ghost Signal" },
+    { "sw5e": "Corrosive Sphere", "new": "Battery Acid" },
+    { "sw5e": "Defibrillate", "new": "Clear!" },
+    { "sw5e": "Fabricate", "new": "Shop Night" },
+    { "sw5e": "Holding Cell", "new": "Drunk Tank" },
+    { "sw5e": "Radiation", "new": "Hot Zone" },
+    { "sw5e": "Sensor Probe", "new": "Little Bird" },
+    { "sw5e": "Wire Bind", "new": "Baling Wire" },
+    { "sw5e": "Cryogenic Spray", "new": "Cold Snap" },
+    { "sw5e": "Greater Analyze", "new": "Pull the File" },
+    { "sw5e": "Immolate", "new": "Burn Barrel" },
+    { "sw5e": "Mislead", "new": "Decoy Duck" },
+    { "sw5e": "Paralyze Creature", "new": "Horse Dose" },
+    { "sw5e": "Reprogram Droid", "new": "New Orders" },
+    { "sw5e": "Rewrite Memory", "new": "Factory Reset" },
+    { "sw5e": "Shutdown", "new": "Kill Switch" },
+    { "sw5e": "Toxic Cloud", "new": "Bad Air" },
+    { "sw5e": "Carbonite", "new": "Cold Storage" },
+    { "sw5e": "Contingency", "new": "Dead Man's Switch" },
+    { "sw5e": "Disintegrate", "new": "Nothing Left" },
+    { "sw5e": "Find the Path", "new": "As the Crow Flies" },
+    { "sw5e": "Firestorm", "new": "Backdraft" },
+    { "sw5e": "Kolto Infusion", "new": "The Good Stuff" },
+    { "sw5e": "Programmed Illusion", "new": "Jack-in-the-Box" },
+    { "sw5e": "Scrambling Barrier", "new": "Jammer" }
+  ],
+  "_unsure": [
+    "Flak Jacket: SW5E 'kinetic, energy, and ion' resistance rendered as bludgeoning, piercing, slashing, fire, and lightning.",
+    "Cold Snap: '1 slowed level' rendered as 'speed halved until the start of your next turn'; 'frozen in carbonite' on death became flash-frozen solid.",
+    "Hot Zone: no half-on-save in the source, so the save activity uses onSave none; the exhaustion level and the green glow are text only.",
+    "Burn Barrel / Battery Acid: the recurring damage is the second damage part (the sheet rolls both; the text says which applies when).",
+    "New Orders: the 5d10 lightning is the disobedience penalty, rolled by hand when it triggers; onSave none. The dismissal 'remove virus' power isn't in the kept list, so the text says any power that clears a machine's programming (e.g. the Flow's Set Right) ends it.",
+    "Factory Reset: kept to drones and mindless machines with a memory; Circuitborn are explicitly excluded (people, not resets).",
+    "Jack-in-the-Box: no duration in the source → 'perm' units (it lasts until it's used up or dispelled).",
+    "Jammer / Backdraft / Horse Dose / The Good Stuff / Nothing Left: upcast growth that isn't a plain dice bump is `scaling: level` with the rule in text (Nothing Left's +3d6 per level and The Good Stuff's +10 per level ride on the parts)."
+  ],
+  "powers": [
+    {
+      "slug": "flak-jacket", "name": "Flak Jacket", "sw5e": "Ballistic Shield", "level": 4, "school": "art",
+      "img": "icons/equipment/chest/breastplate-banded-steel-grey.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "hour" }, "concentration": true,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>A blue flicker settles over you like a second coat, and the world has to hit harder to get through it. Until the power ends, you have resistance to bludgeoning, piercing, slashing, fire, and lightning damage.</p>"
+    },
+    {
+      "slug": "ghost-signal", "name": "Ghost Signal", "sw5e": "Cloaking Screen", "level": 4, "school": "art",
+      "img": "icons/commodities/tech/antenna-powered-purple.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You tune somebody out of the picture. You or a creature you touch becomes invisible until the power ends, and it stays that way whatever the target does. Anything the target is wearing or carrying is invisible too, as long as it stays on them.</p>"
+    },
+    {
+      "slug": "battery-acid", "name": "Battery Acid", "sw5e": "Corrosive Sphere", "level": 4, "school": "art",
+      "img": "icons/magic/acid/orb-bubble-smoke-drip.webp",
+      "activation": "action", "range": { "value": 150 }, "target": { "template": { "type": "sphere", "size": 20 } },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [
+        { "number": 10, "denomination": 4, "types": ["acid"], "scaling": { "mode": "whole", "number": 2 } },
+        { "number": 5, "denomination": 4, "types": ["acid"], "scaling": { "mode": "", "number": 1 } }
+      ],
+      "scaling": "level",
+      "description": "<p>You lob a jar of something that used to be a car battery at a point within range, and it bursts in a 20-foot-radius sphere. Each creature in the area must make a Dexterity saving throw. On a failed save, a creature takes 10d4 acid damage, and another 5d4 acid damage at the end of its next turn as it keeps eating. On a successful save, a creature takes half the first damage and none of the second.</p><p><strong>At higher levels.</strong> When you cast this power at 5th level or higher, the first damage increases by 2d4 for each level above 4th.</p>"
+    },
+    {
+      "slug": "clear", "name": "Clear!", "sw5e": "Defibrillate", "level": 4, "school": "art",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>Two paddles, a charge, and a word everybody steps back from. You touch a creature that died within the last minute and put the current through it. It comes back with 1 hit point.</p><p>This power can't bring back anyone who died of old age, and it can't grow back what's missing. If the body is short a part it needs to live, the head for instance, the power fails. Once this power has brought a creature back, that creature can't benefit from it again until it finishes a short or long rest.</p>"
+    },
+    {
+      "slug": "shop-night", "name": "Shop Night", "sw5e": "Fabricate", "level": 4, "school": "art",
+      "img": "icons/tools/smithing/anvil.webp",
+      "activation": "minute", "activationValue": 10, "range": { "value": 10 }, "target": { "template": { "type": "cube", "size": 10 } },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>Give you ten minutes and a pile of the right stuff and you'll hand back the thing it should have been. You turn raw materials into finished goods of the same material: a bridge from a stand of trees, rope from a patch of hemp, a coat from a hide.</p><p>Choose raw materials you can see within range. You can make a Large or smaller object (one that fits in a 10-foot cube, or eight connected 5-foot cubes), as long as there's enough material. If you're working metal, stone, or anything else mined, the object can be no larger than Medium (one 5-foot cube). The quality of what you make matches the quality of what you started with.</p><p>You can't make creatures or enhanced items this way. You also can't make anything that normally takes real craft, such as jewelry, weapons, glass, or armor, unless you have proficiency with the tools that craft usually needs.</p>"
+    },
+    {
+      "slug": "drunk-tank", "name": "Drunk Tank", "sw5e": "Holding Cell", "level": 4, "school": "art",
+      "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "dex", "onSave": "none" }, "scaling": "none",
+      "description": "<p>A shimmering sphere of energy snaps shut around one creature or object of Large size or smaller within range. An unwilling creature must make a Dexterity saving throw. On a failed save, it's inside for the duration, and it can sit there and think about what it did.</p><p>Nothing passes the wall in either direction: not objects, not energy, not other powers. A creature inside can breathe. The sphere is immune to all damage, and nothing inside can be hurt by attacks or effects from outside, nor can a creature inside hurt anything outside it.</p><p>The sphere weighs nothing and is just big enough for what's in it. A creature inside can use its action to push against the wall and roll the sphere at up to half its speed. Other creatures can pick it up and carry it. A power that disintegrates its target destroys the sphere without harming what's inside.</p>"
+    },
+    {
+      "slug": "hot-zone", "name": "Hot Zone", "sw5e": "Radiation", "level": 4, "school": "art",
+      "img": "icons/commodities/tech/battery-arcane-crystal-green.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "template": { "type": "sphere", "size": 30 } },
+      "duration": { "value": "10", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" },
+      "damage": [ { "number": 4, "denomination": 10, "types": ["necrotic"], "scaling": { "mode": "", "number": 1 } } ],
+      "scaling": "none",
+      "description": "<p>You crack something open that should have stayed sealed, and a sick green light spreads through a 30-foot-radius sphere centered on a point you choose within range. The light goes around corners, and it lasts until the power ends. Everybody who grew up out here knows what that color means.</p><p>When a creature moves into the area for the first time on a turn or starts its turn there, it must succeed on a Constitution saving throw or take 4d10 necrotic damage, suffer one level of exhaustion, and give off a dim green glow in a 5-foot radius. A creature glowing this way can't benefit from being invisible. The glow and any exhaustion this power caused go away when the power ends.</p>"
+    },
+    {
+      "slug": "little-bird", "name": "Little Bird", "sw5e": "Sensor Probe", "level": 4, "school": "art",
+      "img": "icons/magic/perception/orb-eye-scrying.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "hour" }, "concentration": true,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You flick a camera the size of a wasp into the air and it goes where you tell it. For the duration the probe hovers, invisible, and you see what it sees. It has darkvision out to 30 feet and can look in any direction.</p><p>As an action, you can move the probe up to 30 feet in any direction. There's no limit on how far from you it can go. A solid barrier stops it, but it can slip through any opening at least an inch across.</p>"
+    },
+    {
+      "slug": "baling-wire", "name": "Baling Wire", "sw5e": "Wire Bind", "level": 4, "school": "art",
+      "img": "icons/commodities/metal/chain-steel.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 4 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "none" }, "scaling": "none",
+      "description": "<p>Baling wire holds the whole county together; it can hold a few people too. You spit out up to four wires at creatures of your choice you can see within range. A creature can be picked by more than one wire.</p><p>Each target makes a Dexterity saving throw for each wire that picked it. On a failed save, the wire wraps it tight: the creature is restrained and falls prone.</p><p>A creature restrained by a wire can use its action to make a Strength or Dexterity check (its choice) against your power save DC; on a success, that wire no longer holds it. A wire can also be cut: each has AC 15 and 10 hit points, and is immune to all damage except from melee weapons.</p><p>A wire that misses or is escaped goes slack and falls apart, and so do the rest when the power ends.</p>"
+    },
+
+    {
+      "slug": "cold-snap", "name": "Cold Snap", "sw5e": "Cryogenic Spray", "level": 5, "school": "art",
+      "img": "icons/magic/water/barrier-ice-crystal-wall-jagged-blue.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "template": { "type": "cone", "size": 60 } },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [ { "number": 8, "denomination": 8, "types": ["cold"], "scaling": { "mode": "whole", "number": 1 } } ],
+      "scaling": "level",
+      "description": "<p>You open the valve on something that was never meant to be opened indoors. Each creature in a 60-foot cone must make a Constitution saving throw. On a failed save, a creature takes 8d8 cold damage and its speed is halved until the start of your next turn. On a successful save, it takes half as much damage and isn't slowed.</p><p>A creature killed by this power is flash-frozen solid where it stands.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, the damage increases by 1d8 for each level above 5th.</p>"
+    },
+    {
+      "slug": "pull-the-file", "name": "Pull the File", "sw5e": "Greater Analyze", "level": 5, "school": "art",
+      "img": "icons/sundries/documents/document-sealed-brown-red.webp",
+      "activation": "minute", "activationValue": 10, "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>Somewhere, somebody wrote it down, and your wristpad knows where. Name or describe a person, a place, or an object, and the power hands you a summary of everything worth knowing about it. If the thing you named isn't known beyond its own back forty, you get nothing. The more you already know, the better the file.</p>"
+    },
+    {
+      "slug": "burn-barrel", "name": "Burn Barrel", "sw5e": "Immolate", "level": 5, "school": "art",
+      "img": "icons/magic/fire/flame-burning-campfire-orange.webp",
+      "activation": "action", "range": { "value": 90 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [
+        { "number": 8, "denomination": 6, "types": ["fire"], "scaling": { "mode": "", "number": 1 } },
+        { "number": 4, "denomination": 6, "types": ["fire"], "scaling": { "mode": "", "number": 1 } }
+      ],
+      "scaling": "none",
+      "description": "<p>You pick one creature you can see within range and light it like trash on a Tuesday. The target must make a Dexterity saving throw. It takes 8d6 fire damage on a failed save, or half as much on a successful one. On a failed save it also keeps burning for the duration: it sheds bright light in a 30-foot radius and dim light for another 30 feet, and at the end of each of its turns it repeats the save, taking 4d6 fire damage on a failure or putting the fire out on a success. These flames can't be put out by ordinary means.</p><p>If this power kills the target, there's nothing left but ash.</p>"
+    },
+    {
+      "slug": "decoy-duck", "name": "Decoy Duck", "sw5e": "Mislead", "level": 5, "school": "art",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "hour" }, "concentration": true,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You step out of sight at the same moment a perfectly good copy of you steps into it. You become invisible and a holographic double of you appears where you were standing. The double lasts for the duration, but your invisibility ends if you attack or cast a power.</p><p>You can use your action to move the double up to twice your speed and make it gesture, speak, and carry on however you like. You can see through its eyes and hear through its ears as if you were standing where it is. On each of your turns, as a bonus action, you can switch between its senses and your own. While you're using its senses, you're blinded and deafened to your own surroundings.</p>"
+    },
+    {
+      "slug": "horse-dose", "name": "Horse Dose", "sw5e": "Paralyze Creature", "level": 5, "school": "art",
+      "img": "icons/consumables/potions/vial-cork-green.webp",
+      "activation": "action", "range": { "value": 90 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" }, "scaling": "level",
+      "description": "<p>You fire a dart with enough in it to drop a horse. One creature you can see within range must succeed on a Constitution saving throw or be poisoned for the duration, and while it's poisoned this way it's paralyzed. At the end of each of its turns it can make another Constitution saving throw; on a success, the power ends on it.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, you can target one additional creature for each level above 5th. The creatures must be within 30 feet of each other when you target them.</p>"
+    },
+    {
+      "slug": "new-orders", "name": "New Orders", "sw5e": "Reprogram Droid", "level": 5, "school": "art",
+      "img": "icons/commodities/tech/blueprint.webp",
+      "activation": "minute", "activationValue": 1, "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "30", "units": "day" }, "concentration": false,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" },
+      "damage": [ { "number": 5, "denomination": 10, "types": ["lightning"], "scaling": { "mode": "", "number": 1 } } ],
+      "scaling": "level",
+      "description": "<p>You get into a drone's head, such as it is, and leave it a new job. This power works on drones and other mindless machines you can see within range. It does nothing to Circuitborn: they're people, and people don't take orders from a wristpad.</p><p>The machine must succeed on a Wisdom saving throw or be charmed by you for the duration, bound to carry out some task or keep away from some activity as you decide. While it's charmed this way, it takes 5d10 lightning damage each time it acts directly against your instructions, though it can only do so once a day.</p><p>You can give any order short of one that means certain destruction; if you do give a suicidal order, the power ends. You can end it early by using an action to dismiss it. Any power that clears a machine's programming ends it too.</p><p><strong>At higher levels.</strong> When you cast this power at 7th or 8th level, the duration is 1 year. When you cast it at 9th level, it lasts until something clears the programming.</p>"
+    },
+    {
+      "slug": "factory-reset", "name": "Factory Reset", "sw5e": "Rewrite Memory", "level": 5, "school": "art",
+      "img": "icons/commodities/tech/cog-gear-steel-glass.webp",
+      "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "wis", "onSave": "none" }, "scaling": "level",
+      "description": "<p>Every machine with a memory has a way to change it, and you've found the port. Choose one drone or other mindless machine you can see that keeps a memory. It must make a Wisdom saving throw; if you're fighting it, it has advantage. On a failed save it's charmed by you for the duration, incapacitated and unaware of its surroundings, though it can still hear you. If it takes any damage or is targeted by another power, this power ends and nothing is changed. This power never works on Circuitborn. They're people, and you don't reset people.</p><p>While the charm lasts, you can work on the machine's record of one event it experienced in the last 24 hours that lasted no more than 10 minutes. You can wipe the event entirely, let the machine recall it in perfect detail, change the details, or write in a memory of some other event altogether.</p><p>The machine fills any gaps in the altered record on its own. If the power ends before you've finished describing the new memory, nothing changes. Otherwise the new memory takes hold when the power ends.</p><p>A changed memory doesn't necessarily change how the machine behaves, especially if it contradicts its core programming or purpose. A memory that makes no sense, such as how much it enjoyed being dropped in acid, gets thrown out as a glitch. The GM may rule a changed memory too absurd to matter.</p><p>Any power that clears a machine's programming restores its true memory.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, you can work on an event from up to 7 days ago (6th level), 30 days ago (7th), 1 year ago (8th), or any time in the machine's past (9th).</p>"
+    },
+    {
+      "slug": "kill-switch", "name": "Kill Switch", "sw5e": "Shutdown", "level": 5, "school": "art",
+      "img": "icons/commodities/tech/bulb-dome.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "int", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You let out a pulse that puts every electronic thing within range to sleep. Every electronic device in range shuts down, except your own focus and anything a creature is holding or directly controlling. A creature holding a device must succeed on an Intelligence saving throw to keep it from going dark. While the power lasts, no electronic device in range can be started or restarted.</p><p>This power works on drones and other mindless machines. It does nothing to Circuitborn: they're people, and you can't switch a person off.</p>"
+    },
+    {
+      "slug": "bad-air", "name": "Bad Air", "sw5e": "Toxic Cloud", "level": 5, "school": "art",
+      "img": "icons/magic/death/skull-poison-green.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "template": { "type": "sphere", "size": 20 } },
+      "duration": { "value": "10", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [ { "number": 5, "denomination": 8, "types": ["poison"], "scaling": { "mode": "whole", "number": 1 } } ],
+      "scaling": "level",
+      "description": "<p>You pop a canister and a yellow-green fog rolls out in a 20-foot-radius sphere centered on a point you choose within range. The fog spreads around corners, lasts for the duration or until a strong wind clears it (which ends the power), and its area is heavily obscured.</p><p>When a creature enters the area for the first time on a turn or starts its turn there, it must make a Constitution saving throw. It takes 5d8 poison damage on a failed save, or half as much on a successful one. Holding your breath doesn't help, and neither does not needing to breathe.</p><p>At the start of each of your turns the fog moves 10 feet away from you, rolling along the ground. It's heavier than air, so it sinks to the lowest ground it can find and pours down any opening.</p><p><strong>At higher levels.</strong> When you cast this power at 6th level or higher, the damage increases by 1d8 for each level above 5th.</p>"
+    },
+
+    {
+      "slug": "cold-storage", "name": "Cold Storage", "sw5e": "Carbonite", "level": 6, "school": "art",
+      "img": "icons/magic/water/ice-crystal-white.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "save", "save": { "ability": "con", "onSave": "none" }, "scaling": "none",
+      "description": "<p>You try to put one creature you can see within range into the deep freeze, all the way down. The creature must make a Constitution saving throw. On a failed save it's restrained as the cold takes hold. On a successful save, nothing happens.</p><p>A creature restrained this way makes another Constitution saving throw at the end of each of its turns. If it succeeds three times, the power ends. If it fails three times, it's frozen solid and petrified for the duration. The successes and failures don't have to be in a row; keep count of both until the target has three of one kind.</p><p>If the creature is broken while frozen, it's still broken when it thaws.</p><p>If you keep your concentration on this power for the whole duration, the creature stays frozen until something ends the effect.</p>"
+    },
+    {
+      "slug": "dead-mans-switch", "name": "Dead Man's Switch", "sw5e": "Contingency", "level": 6, "school": "art",
+      "img": "icons/commodities/tech/clock-stopwatch-brass.webp",
+      "activation": "minute", "activationValue": 10, "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "10", "units": "day" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You wire one of your own powers to a trigger and forget about it until it fires. Choose an Artifice power of 5th level or lower that you can cast, that has a casting time of 1 action, and that can target you. You cast that power, the stored power, as part of casting Dead Man's Switch, paying Artifice points for both, but it doesn't take effect. Instead, it goes off when a circumstance you name occurs. You describe that circumstance when you cast the two powers.</p><p>The stored power takes effect the first time the circumstance is met, whether you want it to or not, and then Dead Man's Switch ends.</p><p>The stored power affects only you, even if it could normally target others. You can have only one Dead Man's Switch at a time; casting it again ends the previous one. It also ends if your focus is ever off your person.</p>"
+    },
+    {
+      "slug": "nothing-left", "name": "Nothing Left", "sw5e": "Disintegrate", "level": 6, "school": "art",
+      "img": "icons/magic/acid/dissolve-bone-skull.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "none" },
+      "damage": [ { "number": 10, "denomination": 6, "bonus": "40", "types": ["acid"], "scaling": { "mode": "whole", "number": 3 } } ],
+      "scaling": "level",
+      "description": "<p>A stream of something that eats everything comes out of your hands. Choose a target within range.</p><p>A creature targeted by this power must make a Dexterity saving throw. On a failed save, it takes 10d6 + 40 acid damage. If that drops it to 0 hit points, there's nothing left of it.</p><p>A creature destroyed this way, and everything unenhanced it was wearing or carrying, is reduced to a heap of fine grey dust. A creature that dies this way can't be brought back.</p><p>This power automatically destroys an unenhanced Large or smaller object. If the target is a Huge or larger object, it destroys a 10-foot-cube portion of it.</p><p><strong>At higher levels.</strong> When you cast this power at 7th level or higher, the damage increases by 3d6 for each level above 6th.</p>"
+    },
+    {
+      "slug": "as-the-crow-flies", "name": "As the Crow Flies", "sw5e": "Find the Path", "level": 6, "school": "art",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "activation": "minute", "activationValue": 1, "range": { "units": "self" }, "target": { "type": "self" },
+      "duration": { "value": "1", "units": "day" }, "concentration": true,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>Your wristpad works out the shortest, most direct way to a specific, fixed place you know. If you name a destination that moves (a hovercraft, say), or one that isn't specific (\"a raider camp\"), the power fails.</p><p>For the duration, as long as you and the destination are on the same side of the sky, you know how far it is and in which direction. While you're traveling there, whenever the way forks, you automatically know which path is the shortest and most direct route to the destination. Not the safest. The shortest.</p>"
+    },
+    {
+      "slug": "backdraft", "name": "Backdraft", "sw5e": "Firestorm", "level": 6, "school": "art",
+      "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "template": { "type": "radius", "size": 15 } },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" },
+      "damage": [ { "number": 8, "denomination": 8, "types": ["fire"], "scaling": { "mode": "", "number": 1 } } ],
+      "scaling": "level",
+      "description": "<p>Choose a point on the ground within range. Everything in a 15-foot radius of it goes up at once. Each creature in the area must make a Dexterity saving throw, taking 8d8 fire damage on a failed save or half as much on a successful one. Every Large or smaller creature in the area is thrown to the edge of the radius.</p><p>You can pick one creature to be at the very center of it. If you do, that creature has disadvantage on its saving throw and is knocked prone on a failure.</p><p><strong>At higher levels.</strong> When you cast this power at 7th level or higher, the damage increases by 1d8 and the radius by 5 feet for each level above 6th.</p>"
+    },
+    {
+      "slug": "the-good-stuff", "name": "The Good Stuff", "sw5e": "Kolto Infusion", "level": 6, "school": "art",
+      "img": "icons/magic/nature/root-vine-caduceus-healing.webp",
+      "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false,
+      "activity": "heal", "heal": { "formula": "70", "type": "healing" }, "scaling": "level",
+      "description": "<p>You keep one dose of the good stuff for when it really counts, and this is when. Choose a creature you can see within range. A surge of medicine floods through it and it regains 70 hit points. The power also ends blindness, deafness, and any disease affecting the target. It has no effect on drones or other mindless machines.</p><p><strong>At higher levels.</strong> When you cast this power at 7th level or higher, the healing increases by 10 for each level above 6th.</p>"
+    },
+    {
+      "slug": "jack-in-the-box", "name": "Jack-in-the-Box", "sw5e": "Programmed Illusion", "level": 6, "school": "art",
+      "img": "icons/commodities/tech/bulb-plasma-blue.webp",
+      "activation": "action", "range": { "value": 120 }, "target": { "template": { "type": "cube", "size": 30 } },
+      "duration": { "units": "perm" }, "concentration": false,
+      "activity": "utility", "scaling": "none",
+      "description": "<p>You leave a hologram wound up and waiting. You create an illusion of an object, a creature, or some other visible thing within range that switches on when a condition you set occurs. Until then, there's nothing to see. The illusion can be no bigger than a 30-foot cube, and you decide when you cast the power how it behaves and what sounds it makes. The show can run up to 5 minutes.</p><p>When your condition occurs, the illusion appears and performs the way you described. When it's done, it vanishes and sits dormant for 10 minutes. After that it's ready to go off again.</p><p>The trigger can be as broad or as particular as you like, as long as it's something seen or heard within 30 feet of the area. You could set a copy of yourself to appear and warn off anyone who touches a trapped door, or set it to play only when somebody says the right words.</p><p>Anything that touches the image goes straight through it, which gives it away. A creature that uses its action to study the image can tell it's an illusion with a successful Intelligence (Investigation) check against your power save DC. A creature that sees through it can see through it for good, and any sound it makes rings hollow to them.</p>"
+    },
+    {
+      "slug": "jammer", "name": "Jammer", "sw5e": "Scrambling Barrier", "level": 6, "school": "art",
+      "img": "icons/magic/defensive/barrier-shield-dome-deflect-blue.webp",
+      "activation": "action", "range": { "units": "self" }, "target": { "template": { "type": "radius", "size": 10 } },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true,
+      "activity": "utility", "scaling": "level",
+      "description": "<p>You throw up a jammer and nothing anybody else builds gets through. A faint, shimmering barrier springs up in a 10-foot radius around you. It doesn't move, and it lasts for the duration.</p><p>Any Artifice power of 5th level or lower cast from outside the barrier can't affect creatures or objects inside it, even if it was cast at a higher level. Such a power can target things inside the barrier, but it has no effect on them, and the barrier's area is cut out of any area such a power covers.</p><p><strong>At higher levels.</strong> When you cast this power at 7th level or higher, the barrier blocks powers of one level higher for each level above 6th.</p>"
+    }
+  ]
+}

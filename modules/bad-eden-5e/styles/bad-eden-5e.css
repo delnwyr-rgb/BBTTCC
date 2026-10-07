@@ -11,3 +11,8 @@
 .be5e-points-value input { width: 3em; height: 18px; padding: 0 2px; text-align: right; background: transparent;
   border: none; color: inherit; font: inherit; }
 .be5e-points-value input:focus { background: rgba(0, 0, 0, .5); }
+
+/* Bad Eden 5E — the character sheet wears the Order's sigil, not the dragon. */
+.dnd5e2.sheet.actor.character .sheet-header {
+  background: url("../assets/sheet-banner-character.webp") no-repeat center / cover !important;
+}

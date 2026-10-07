@@ -1,0 +1,78 @@
+{
+  "_about": "Gearwright — the class and its features. Mechanics carried over from the SW5E Engineer (full Artifice caster, d8); every line of text is Bad Eden's own. SW5E's modification-slot system is dropped (Bad Eden has no item-mod engine); Infuse Item became Field Mod. The eleven disciplines live in gearwright-shops-*.json. Built by tools/build-packs.mjs.",
+
+  "classes": [
+    {
+      "slug": "gearwright",
+      "identifier": "gearwright",
+      "name": "Gearwright",
+      "img": "icons/tools/hand/wrench-steel-grey.webp",
+      "hd": "d8",
+      "primaryAbility": ["int"],
+      "saves": ["con", "int"],
+      "skills": { "count": 3, "pool": ["arc", "his", "inv", "med", "nat", "sur"] },
+      "weapons": ["sim"],
+      "armor": ["lgt"],
+      "tools": ["tinker"],
+      "multiclass": { "armor": ["lgt"] },
+      "casting": { "tradition": "artifice", "progression": "full" },
+      "subclassLevel": 3,
+      "subclassTitle": "Shop",
+      "asi": [4, 8, 12, 16, 19],
+      "scales": [
+        { "identifier": "powers-known", "title": "Powers Known", "scale": { "1": 4, "2": 5, "3": 6, "4": 7, "5": 8, "6": 9, "7": 10, "8": 11, "9": 12, "10": 13, "11": 13, "12": 14, "13": 14, "14": 15, "15": 15, "16": 16, "17": 16, "18": 17, "19": 17, "20": 17 } },
+        { "identifier": "bright-idea", "title": "Bright Idea Die", "type": "dice", "scale": { "1": { "number": 1, "faces": 4 }, "5": { "number": 1, "faces": 6 }, "9": { "number": 1, "faces": 8 }, "13": { "number": 1, "faces": 10 }, "17": { "number": 1, "faces": 12 } } },
+        { "identifier": "bright-idea-uses", "title": "Bright Idea Uses", "scale": { "1": 2, "5": 3, "9": 4, "13": 5, "17": 6 } },
+        { "identifier": "field-mod", "title": "Field Mod Bonus", "scale": { "2": 1, "10": 2, "15": 3 } }
+      ],
+      "features": {
+        "1": ["artificing", "bright-idea"],
+        "2": ["field-mod", "right-tool"],
+        "20": ["nothing-left-to-learn"]
+      },
+      "choices": [],
+      "description": "<p><em>A woman in welding goggles lies on her back under a dead truck in the middle of a firefight, soldering a wire by the light of the muzzle flashes. Somebody is shouting her name. The engine turns over on the third try and she is out from under it and in the cab before the shouting stops.</em></p><p><em>In a clinic that used to be a feed store, a man with a drone hovering at his shoulder runs a salvaged scanner over a child's chest, reads the numbers twice, and mixes a dose from three bottles that have never been in the same room before. The fever is gone by morning. He writes the recipe on the wall for the next one.</em></p><p><em>A girl on a rooftop keys a sequence into the pad strapped to her wrist. Plates of scrap armor come up off the roof around her, click into place, and the jets in her boots light. She goes over the wall at forty feet up with a grin nobody below can see.</em></p><p>Every machine needs somebody who understands it, and a crew is no different. Gearwrights are the ones who keep things running on the far side of the Shattering: fixers, medics, armorers, and tinkers who took the world's leftovers apart and learned to put them back together in ways nobody intended. They don't call themselves fighters. The people who travel with them call them indispensable.</p><h3>Artifice</h3><p>What a Gearwright does with a wristpad, a bag of salvage, and a half-remembered schematic looks a lot like casting. The lodges call it Artifice: a gadget built in the moment, used once, and gone. A Gearwright carries dozens of them in their head and pays for each one in Artifice points, their own reserve of patience and parts, and gets them back with a short rest and a cup of something hot.</p><h3>Unflappable</h3><p>It takes nerve to walk into a fight. It takes more to walk into one unarmed, with a toolbox, because the thing that needs fixing is on the other side of it. Gearwrights do that for a living. Some came up through a lodge school with proper tools; most learned on a dead car in a dead town with nobody to ask. Either way, they stopped flinching a long time ago.</p><h3>Making a Gearwright</h3><p>When you make a Gearwright, decide what you're known for. The one who can fix anything with a motor? The one who stitched up the sheriff on the bar top? The one who built the thing nobody should have built? What do you carry in your pockets that you'd never explain? Why do you walk into fights with no combat training, and what do the fighters in your crew think of you for it?</p><h4>Quick Build</h4><p>Make Intelligence your highest ability score, then Constitution. Pick the Guild Artisan or Sage background.</p><h3>Class Features</h3><p>As a Gearwright, you gain the following class features.</p><h4>Hit Points</h4><p><strong>Hit Dice:</strong> 1d8 per Gearwright level<br><strong>Hit Points at 1st Level:</strong> 8 + your Constitution modifier<br><strong>Hit Points at Higher Levels:</strong> 1d8 (or 5) + your Constitution modifier per Gearwright level after 1st</p><h4>Proficiencies</h4><p><strong>Armor:</strong> Light armor<br><strong>Weapons:</strong> Simple weapons<br><strong>Tools:</strong> Tinker's tools, and one other set of tools of your choice<br><strong>Saving Throws:</strong> Constitution, Intelligence<br><strong>Skills:</strong> Choose three from Arcana, History, Investigation, Medicine, Nature, and Survival</p><h4>Equipment</h4><p>You start with the following equipment, in addition to the equipment granted by your background:</p><ul><li>(a) a light crossbow and 20 bolts or (b) any simple weapon</li><li>(a) a scholar's pack or (b) a dungeoneer's pack</li><li>Leather armor, tinker's tools, and a wristpad full of schematics</li></ul><h3>The Shops</h3><p>At 3rd level you choose a Shop, the lodge's word for the trade a Gearwright gives their life to. Your Shop grants you features at 3rd, 6th, 14th, and 18th level.</p><ul><li>@UUID[{{uuid:subclasses:armorsmithing}}]{Armorsmithing}</li><li>@UUID[{{uuid:subclasses:gunsmithing}}]{Gunsmithing}</li><li>@UUID[{{uuid:subclasses:enhancement}}]{Enhancement}</li><li>@UUID[{{uuid:subclasses:dronecraft}}]{Dronecraft}</li><li>@UUID[{{uuid:subclasses:soundcraft}}]{Soundcraft}</li><li>@UUID[{{uuid:subclasses:alchemy}}]{Alchemy}</li><li>@UUID[{{uuid:subclasses:fleshcraft}}]{Fleshcraft}</li><li>@UUID[{{uuid:subclasses:construction}}]{Construction}</li><li>@UUID[{{uuid:subclasses:cybernetics}}]{Cybernetics}</li><li>@UUID[{{uuid:subclasses:gadgetry}}]{Gadgetry}</li><li>@UUID[{{uuid:subclasses:instability}}]{Instability}</li></ul>"
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "artificing", "name": "Artificing", "level": 1, "requirements": "Gearwright",
+      "folder": "Gearwright", "img": "icons/tools/hand/wrench-steel-grey.webp",
+      "description": "<p><em>Gearwright, 1st level</em></p><p>You've learned to build the thing you need out of the things you have, fast enough that it counts as casting. The powers you know are schematics: a gadget, a dose, a trick with a wire, each one built in the moment from the salvage in your pockets and gone when it's done.</p><h4>Powers Known</h4><p>You know four Artifice powers of your choice at 1st level, and you learn more as you gain levels, as shown in the Powers Known column of the Gearwright table. You can't learn a power whose level is higher than your Max Power Level. Whenever you gain a Gearwright level, you can also swap one power you know for another you qualify for.</p><h4>Artifice Points</h4><p>You have a pool of Artifice points equal to twice your Gearwright level, plus your Intelligence modifier. You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Artifice points when you finish a short or long rest.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Artifice point per level, up to your Max Power Level as shown on the Gearwright table. Powers of 6th level and higher take parts you don't have twice: you can cast each of them once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Intelligence is your casting ability for Artifice powers. Use your Intelligence modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your Intelligence modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your Intelligence modifier</p><h4>Focus</h4><p>You use a wristpad, or any set of tools you're proficient with through this class, as the focus for your Artifice powers.</p>"
+    },
+    {
+      "slug": "bright-idea", "name": "Bright Idea", "level": 1, "requirements": "Gearwright",
+      "folder": "Gearwright", "img": "icons/magic/light/orb-lightbulb-gray.webp",
+      "activation": "bonus", "range": 60, "target": { "type": "creature", "count": 1 }, "duration": { "value": "10", "units": "minute" },
+      "uses": { "max": "@scale.gearwright.bright-idea-uses", "per": "sr" }, "roll": "@scale.gearwright.bright-idea",
+      "description": "<p><em>Gearwright, 1st level</em></p><p>You see the angle nobody else does, and you say so. As a bonus action on your turn, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bright Idea die, a d4. The die grows as you gain Gearwright levels, as shown in the Bright Idea column of the Gearwright table.</p><p>Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. Once the die is rolled, it's spent. A creature can hold only one Bright Idea die at a time.</p><p>You can use this feature twice. You gain one more use at 5th, 9th, 13th, and 17th level, and you regain all spent uses when you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "field-mod", "name": "Field Mod", "level": 2, "requirements": "Gearwright 2",
+      "folder": "Gearwright", "img": "icons/tools/smithing/hammer-sledge-steel-grey.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Gearwright, 2nd level</em></p><p>Give you a long rest and a workbench and something leaves it better than it arrived. At the end of a long rest, you can touch one unenhanced object that is a suit of armor, a shield, or a simple or martial weapon. Until the end of your next long rest, or until you die, the object counts as enhanced: it grants a +1 bonus to AC if it's armor or a shield, or a +1 bonus to attack and damage rolls if it's a weapon.</p><p>Once you've used this feature, you can't use it again until you finish a long rest. The bonus rises to +2 at 10th level and +3 at 15th.</p>"
+    },
+    {
+      "slug": "right-tool", "name": "Right Tool", "level": 2, "requirements": "Gearwright 2",
+      "folder": "Gearwright", "img": "icons/tools/hand/drill-steel-brown-grey.webp",
+      "description": "<p><em>Gearwright, 2nd level</em></p><p>There's a right tool for every job, and you own it. You have expertise in every tool proficiency you gain from this class: your proficiency bonus is doubled for any ability check you make with those tools.</p>"
+    },
+    {
+      "slug": "nothing-left-to-learn", "name": "Nothing Left to Learn", "level": 20, "requirements": "Gearwright 20",
+      "folder": "Gearwright", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "description": "<p><em>Gearwright, 20th level</em></p><p>You've taken the world apart and put it back together enough times that it has stopped surprising you. Your Constitution and Intelligence scores each increase by 2, and your maximum for each of those scores increases by 2.</p><p>Also, when you roll initiative and have no uses of Bright Idea left, you regain one use.</p>",
+      "effects": [
+        { "_id": "be5eNothingLeft0", "name": "Nothing Left to Learn", "img": "icons/magic/light/explosion-star-glow-silhouette.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.abilities.con.max", "mode": 2, "value": "2", "priority": 10 },
+            { "key": "system.abilities.con.value", "mode": 2, "value": "2", "priority": 20 },
+            { "key": "system.abilities.int.max", "mode": 2, "value": "2", "priority": 10 },
+            { "key": "system.abilities.int.value", "mode": 2, "value": "2", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    }
+  ]
+}

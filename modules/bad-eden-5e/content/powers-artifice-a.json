@@ -1,0 +1,1073 @@
+{
+  "_about": "Artifice powers, batch A: the 12 at-will and 18 first-level powers. Mechanics carried over from the SW5E tech powers named in each entry's sw5e field; every name and sentence is Bad Eden's own. School art = Artifice (Intelligence). Built by tools/build-packs.mjs.",
+  "_renames": [
+    {
+      "sw5e": "Acid Splash",
+      "new": "Leaky Battery"
+    },
+    {
+      "sw5e": "Cryogenic Burst",
+      "new": "Freezer Burn"
+    },
+    {
+      "sw5e": "Detonator",
+      "new": "Firecracker"
+    },
+    {
+      "sw5e": "Electroshock",
+      "new": "Jumper Cables"
+    },
+    {
+      "sw5e": "Haywire",
+      "new": "Gremlins"
+    },
+    {
+      "sw5e": "Jet of Flame",
+      "new": "Blowtorch"
+    },
+    {
+      "sw5e": "Light",
+      "new": "Worklight"
+    },
+    {
+      "sw5e": "Mending",
+      "new": "Patch Job"
+    },
+    {
+      "sw5e": "Minor Hologram",
+      "new": "Parlor Trick"
+    },
+    {
+      "sw5e": "On/Off",
+      "new": "The Switch"
+    },
+    {
+      "sw5e": "Storming Shot",
+      "new": "Live Round"
+    },
+    {
+      "sw5e": "Temporary Boost",
+      "new": "Shot in the Arm"
+    },
+    {
+      "sw5e": "Absorb Energy",
+      "new": "Capacitor"
+    },
+    {
+      "sw5e": "Adrenaline",
+      "new": "Jump Start"
+    },
+    {
+      "sw5e": "Alarm",
+      "new": "Tripwire"
+    },
+    {
+      "sw5e": "Analyze",
+      "new": "Teardown"
+    },
+    {
+      "sw5e": "Bacta Pack",
+      "new": "Medpac"
+    },
+    {
+      "sw5e": "Energy Shield",
+      "new": "Pop-Up Shield"
+    },
+    {
+      "sw5e": "Expeditious Retreat",
+      "new": "Afterburner"
+    },
+    {
+      "sw5e": "Flash",
+      "new": "Flashbang"
+    },
+    {
+      "sw5e": "Holographic Disguise",
+      "new": "False Face"
+    },
+    {
+      "sw5e": "Homing Rockets",
+      "new": "Bottle Rockets"
+    },
+    {
+      "sw5e": "Jump Jet",
+      "new": "Boot Jets"
+    },
+    {
+      "sw5e": "Oil Slick",
+      "new": "Slick"
+    },
+    {
+      "sw5e": "Poison Dart",
+      "new": "Needle"
+    },
+    {
+      "sw5e": "Repair Droid",
+      "new": "Quick Fix"
+    },
+    {
+      "sw5e": "Smoke Cloud",
+      "new": "Smoke Screen"
+    },
+    {
+      "sw5e": "Stack the Deck",
+      "new": "Loaded Dice"
+    },
+    {
+      "sw5e": "Target Lock",
+      "new": "Painted"
+    },
+    {
+      "sw5e": "Tranquilizer",
+      "new": "Sleep Dart"
+    }
+  ],
+  "_unsure": [
+    "Freezer Burn: SW5E's '1 slowed level' has no D&D equivalent; rendered as 'speed halved until the start of your next turn'.",
+    "Firecracker: the two damage parts (1d6 to the target, 1d4 to the splash) sit on one ranged attack activity; the splash's Dexterity save is text only.",
+    "Live Round: a damage activity (1d6 lightning) riding on the gun attack; the jolted rider and the arc between jolted creatures are text only.",
+    "Capacitor: SW5E's source text omitted the reaction trigger; written as 'when you take acid, cold, fire, lightning, or thunder damage' (the damage types the power stores).",
+    "Tripwire: SW5E's duration field was blank; written as 8 hours (the only duration the text supports).",
+    "Flashbang / Sleep Dart: the hit-point pools (6d10, 5d8) are utility rolls; the sorting by current hit points is text.",
+    "Bottle Rockets: one damage activity of 1d4 + 1 fire; the three-rocket count and the extra rocket per level are text (target count 3).",
+    "Slick: one Dexterity-save activity carrying the 3d6 fire of the lit oil; the prone save on entering the oil is text.",
+    "Worklight: kept as a Dexterity-save activity with no damage (the save only matters against a hostile creature's gear)."
+  ],
+  "powers": [
+    {
+      "slug": "leaky-battery",
+      "name": "Leaky Battery",
+      "sw5e": "Acid Splash",
+      "level": 0,
+      "school": "art",
+      "img": "icons/magic/acid/projectile-faceted-glob.webp",
+      "activation": "action",
+      "range": {
+        "value": 60
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "none"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "bonus": "",
+          "types": [
+            "acid"
+          ],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "atwill",
+      "description": "<p>You crack a cell and throw what's inside. Choose one creature you can see within range, or two creatures you can see within range that are within 5 feet of each other. Each target must succeed on a Dexterity saving throw or take 1d6 acid damage.</p><p>The damage increases by 1d6 when you reach 5th level (2d6), 11th level (3d6), and 17th level (4d6).</p>"
+    },
+    {
+      "slug": "freezer-burn",
+      "name": "Freezer Burn",
+      "sw5e": "Cryogenic Burst",
+      "level": 0,
+      "school": "art",
+      "img": "icons/magic/water/projectile-ice-shard.webp",
+      "activation": "action",
+      "range": {
+        "value": 60
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "attack",
+      "attack": {
+        "type": "ranged"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 8,
+          "bonus": "",
+          "types": [
+            "cold"
+          ],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "atwill",
+      "description": "<p>You vent a coolant line at somebody. Make a ranged power attack against a creature within range. On a hit, it takes 1d8 cold damage, and its speed is halved until the start of your next turn.</p><p>The damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).</p>"
+    },
+    {
+      "slug": "firecracker",
+      "name": "Firecracker",
+      "sw5e": "Detonator",
+      "level": 0,
+      "school": "art",
+      "img": "icons/weapons/thrown/bomb-fuse-red-black.webp",
+      "activation": "action",
+      "range": {
+        "value": 60
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "attack",
+      "attack": {
+        "type": "ranged"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "bonus": "",
+          "types": [
+            "fire"
+          ],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        },
+        {
+          "number": 1,
+          "denomination": 4,
+          "bonus": "",
+          "types": [
+            "fire"
+          ],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "atwill",
+      "description": "<p>You lob something small with a short fuse. Make a ranged power attack against a creature you can see within range. On a hit, the target takes 1d6 fire damage, and each creature within 5 feet of it must succeed on a Dexterity saving throw or take 1d4 fire damage.</p><p>Both dice grow when you reach 5th level (2d6 and 2d4), 11th level (3d6 and 3d4), and 17th level (4d6 and 4d4).</p>"
+    },
+    {
+      "slug": "jumper-cables",
+      "name": "Jumper Cables",
+      "sw5e": "Electroshock",
+      "level": 0,
+      "school": "art",
+      "img": "icons/commodities/tech/cable-end.webp",
+      "activation": "action",
+      "range": {
+        "units": "touch"
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "attack",
+      "attack": {
+        "type": "melee"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 8,
+          "bonus": "",
+          "types": [
+            "lightning"
+          ],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "atwill",
+      "description": "<p>Two clamps, one bad idea. Make a melee power attack against a creature you can reach. You have advantage on the roll if the target is made of metal or is wearing metal armor. On a hit, the target takes 1d8 lightning damage and is jolted until the start of its next turn: it can't take reactions.</p><p>The damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).</p>"
+    },
+    {
+      "slug": "gremlins",
+      "name": "Gremlins",
+      "sw5e": "Haywire",
+      "level": 0,
+      "school": "art",
+      "img": "icons/commodities/tech/electronics-button-skull-red.webp",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "none"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "bonus": "",
+          "types": [
+            "lightning"
+          ],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "atwill",
+      "description": "<p>For one bad second, nothing around the target works right: static in the ears, a flicker that isn't there, a floor that moves. One creature you can see within range must succeed on an Intelligence saving throw or take 1d6 lightning damage and stumble 5 feet in a random direction, if it can move and its speed is at least 5 feet. Roll a d4 for the direction: 1, north; 2, south; 3, east; 4, west. The stumble doesn't provoke opportunity attacks, and if that way is blocked, the target stays put.</p><p>The damage increases by 1d6 when you reach 5th level (2d6), 11th level (3d6), and 17th level (4d6).</p>"
+    },
+    {
+      "slug": "blowtorch",
+      "name": "Blowtorch",
+      "sw5e": "Jet of Flame",
+      "level": 0,
+      "school": "art",
+      "img": "icons/weapons/guns/flamethrower-spray-fire-orange.webp",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "10",
+        "units": "minute"
+      },
+      "concentration": false,
+      "activity": "attack",
+      "attack": {
+        "type": "ranged"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 8,
+          "bonus": "",
+          "types": [
+            "fire"
+          ],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "atwill",
+      "description": "<p>A tongue of flame lights in your hand and stays there for the duration without harming you or anything you're carrying. It sheds bright light in a 10-foot radius and dim light for another 10 feet. The power ends if you dismiss it as an action or cast it again.</p><p>You can also throw it, which ends the power. When you cast this power, or as an action on a later turn, hurl the flame at a creature within 30 feet of you and make a ranged power attack. On a hit, the target takes 1d8 fire damage, and anything flammable nearby that nobody is wearing or carrying catches.</p><p>The damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).</p>"
+    },
+    {
+      "slug": "worklight",
+      "name": "Worklight",
+      "sw5e": "Light",
+      "level": 0,
+      "school": "art",
+      "img": "icons/sundries/lights/lamp-tech-blue.webp",
+      "activation": "action",
+      "range": {
+        "units": "touch"
+      },
+      "target": {
+        "type": "object",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "none"
+      },
+      "damage": [],
+      "scaling": "none",
+      "description": "<p>You clip a light to something. Touch one object no larger than 10 feet in any dimension. Until the power ends, the object sheds bright light in a 20-foot radius and dim light for another 20 feet, in any color you like. Covering the object with something opaque blocks the light. The power ends if you cast it again or dismiss it as an action.</p><p>If the object is held or worn by a hostile creature, that creature must succeed on a Dexterity saving throw or wear the light.</p>"
+    },
+    {
+      "slug": "patch-job",
+      "name": "Patch Job",
+      "sw5e": "Mending",
+      "level": 0,
+      "school": "art",
+      "img": "icons/tools/hand/pliers-shears-wire-cutters.webp",
+      "activation": "minute",
+      "activationValue": 1,
+      "range": {
+        "units": "touch"
+      },
+      "target": {
+        "type": "object",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You fix one break or tear in an object you touch: a snapped chain link, the two halves of a key, a torn strap, a cup that won't hold water. As long as the damage is no bigger than a foot in any dimension, it's mended and you can't tell it was ever broken.</p><p>You can do the same for a drone, or for a Circuitborn, who is a person and not a machine but appreciates a good mechanic all the same: the target can spend and roll one of its Hit Dice and regain that many hit points.</p>"
+    },
+    {
+      "slug": "parlor-trick",
+      "name": "Parlor Trick",
+      "sw5e": "Minor Hologram",
+      "level": 0,
+      "school": "art",
+      "img": "icons/commodities/tech/bulb-plasma.webp",
+      "activation": "action",
+      "range": {
+        "value": 10
+      },
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>A gadget with no purpose but showing off. Make one of the following happen within range:</p><ul><li>A harmless, instant bit of theater: a shower of sparks, a puff of wind, a few notes of music, a smell that doesn't belong.</li><li>A light source, lit or snuffed, instantly.</li><li>An object no bigger than a cubic foot, cleaned or dirtied, instantly.</li><li>Up to a cubic foot of nonliving material, chilled, warmed, or flavored for 1 hour.</li><li>A color, a small mark, or a symbol on an object or surface for 1 hour.</li><li>A trinket or a projected image small enough to fit in your hand, lasting until the end of your next turn.</li></ul><p>If you cast this more than once, you can have up to three of its lasting effects going at a time, and you can dismiss one as an action.</p>"
+    },
+    {
+      "slug": "the-switch",
+      "name": "The Switch",
+      "sw5e": "On/Off",
+      "level": 0,
+      "school": "art",
+      "img": "icons/commodities/tech/electronics-battery-energy-white-green.webp",
+      "activation": "action",
+      "range": {
+        "value": 60
+      },
+      "target": {
+        "type": "object",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>Everything has a switch, and you don't have to be standing next to it. You turn on or turn off one electronic device within range, as long as nobody is holding it and it has a plain on/off control you could reach from the outside. A device that needs a software shutdown to power down, or a start-up sequence to come back, is out of reach of this power.</p>"
+    },
+    {
+      "slug": "live-round",
+      "name": "Live Round",
+      "sw5e": "Storming Shot",
+      "level": 0,
+      "school": "art",
+      "img": "icons/magic/lightning/bolt-strike-sparks-blue.webp",
+      "activation": "action",
+      "range": {
+        "units": "self"
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "damage",
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "bonus": "",
+          "types": [
+            "lightning"
+          ],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "atwill",
+      "description": "<p>You chamber a round with a charge packed behind the slug. As part of the action you use to cast this power, make a ranged weapon attack with a gun against one creature within the weapon's range; if you don't, the power fails. On a hit, the target takes the attack's normal effects and is jolted until the end of your next turn: it can't take reactions.</p><p>When the shot hits, if another creature within 30 feet of the target is already jolted, lightning arcs between the two and each takes 1d6 lightning damage. If more than one creature is jolted, the arc jumps to the closest.</p><p>At 5th level the gun attack and the arc each deal an extra 1d6 lightning damage, and both rise by another 1d6 at 11th and 17th level.</p>"
+    },
+    {
+      "slug": "shot-in-the-arm",
+      "name": "Shot in the Arm",
+      "sw5e": "Temporary Boost",
+      "level": 0,
+      "school": "art",
+      "img": "icons/consumables/potions/flask-corked-blue-glow.webp",
+      "activation": "action",
+      "range": {
+        "units": "touch"
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "roll": "1d4",
+      "scaling": "atwill",
+      "description": "<p>You jab a willing creature with something from the kit that it probably didn't want to know the name of. Once before the power ends, the target can roll a d4 and add the result to one ability check of its choice. The power then ends.</p><p>The die grows as you do: a d6 at 5th level, a d8 at 11th, and a d10 at 17th.</p>"
+    },
+    {
+      "slug": "capacitor",
+      "name": "Capacitor",
+      "sw5e": "Absorb Energy",
+      "level": 1,
+      "school": "art",
+      "img": "icons/commodities/tech/battery-coil-tesla.webp",
+      "activation": "reaction",
+      "condition": "when you take acid, cold, fire, lightning, or thunder damage",
+      "range": {
+        "units": "self"
+      },
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "damage",
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "bonus": "",
+          "types": [],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "level",
+      "description": "<p>You catch some of what was meant for you and hold it for later. You have resistance to the triggering damage type until the start of your next turn. The first time you hit with a melee attack on your next turn, the target takes an extra 1d6 damage of that type, and the power ends.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, the extra damage increases by 1d6 for each level above 1st.</p>"
+    },
+    {
+      "slug": "jump-start",
+      "name": "Jump Start",
+      "sw5e": "Adrenaline",
+      "level": 1,
+      "school": "art",
+      "img": "icons/magic/movement/acceleration-speed-tech-blue.webp",
+      "activation": "reaction",
+      "condition": "when you or a creature within 30 feet of you rolls initiative",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You hit one creature within range with a jittery surge that runs its senses hot for a second, so it sees the fight coming before the fight does. The creature rolls initiative with advantage.</p>"
+    },
+    {
+      "slug": "tripwire",
+      "name": "Tripwire",
+      "sw5e": "Alarm",
+      "level": 1,
+      "school": "art",
+      "img": "icons/magic/sonic/bell-alarm-red-purple.webp",
+      "activation": "minute",
+      "activationValue": 1,
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "cube",
+          "size": 20
+        }
+      },
+      "duration": {
+        "value": "8",
+        "units": "hour"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>You rig a door, a window, or an area within range no bigger than a 20-foot cube so nothing crosses it without you knowing. Until the power ends, you're alerted whenever a Tiny or larger creature touches or enters the rigged area. When you cast it, you can name creatures that won't trip it, and you choose whether the alert is silent or loud.</p><p>A silent alert is a ping in your head, if you're within a mile. It wakes you if you're asleep.</p><p>A loud alert rings like a hand bell for 10 seconds, audible out to 60 feet.</p>"
+    },
+    {
+      "slug": "teardown",
+      "name": "Teardown",
+      "sw5e": "Analyze",
+      "level": 1,
+      "school": "art",
+      "img": "icons/commodities/tech/blueprint.webp",
+      "activation": "minute",
+      "activationValue": 1,
+      "range": {
+        "units": "touch"
+      },
+      "target": {
+        "type": "object",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>Give you a minute with a thing in your hands and you know what it is. Choose one object and keep hold of it for the whole casting. If it's an enhanced or modified item, you learn what it does and how to use it, whether it needs attunement, and how many charges it has, if any. You learn whether any powers are affecting it and which ones. If a power made it, you learn which.</p><p>If you keep hold of a creature instead, you learn which Artifice powers, if any, are affecting it.</p>"
+    },
+    {
+      "slug": "medpac",
+      "name": "Medpac",
+      "sw5e": "Bacta Pack",
+      "level": 1,
+      "school": "art",
+      "img": "icons/magic/life/heart-cross-blue.webp",
+      "activation": "action",
+      "range": {
+        "value": 60
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": false,
+      "activity": "heal",
+      "heal": {
+        "formula": "1d6 + @mod",
+        "type": "healing"
+      },
+      "scaling": "level",
+      "description": "<p>You toss a glowing medpac into any space within range, occupied or not. It sits there until a creature you choose cracks it. If the space is occupied by a creature you've named, it can use its reaction to crack the pack at once; otherwise a creature within 5 feet of it can use a bonus action to reach over and do so.</p><p>When a named creature cracks the pack, it regains hit points equal to 1d6 + your casting ability modifier, and the pack is used up. If the power ends before anyone cracks it, the pack goes inert and falls apart. It does nothing for drones or other mindless machines.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, you can either raise one pack's healing by 1d6 for each level above 1st, or throw one more pack into a different space for each level above 1st.</p>"
+    },
+    {
+      "slug": "pop-up-shield",
+      "name": "Pop-Up Shield",
+      "sw5e": "Energy Shield",
+      "level": 1,
+      "school": "art",
+      "img": "icons/magic/defensive/shield-barrier-deflect-teal.webp",
+      "activation": "reaction",
+      "condition": "when you are hit by an attack",
+      "range": {
+        "units": "self"
+      },
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>A panel on your forearm snaps open into a shield of humming light. Until the start of your next turn you have a +5 bonus to AC, and it counts against the attack that hit you.</p>"
+    },
+    {
+      "slug": "afterburner",
+      "name": "Afterburner",
+      "sw5e": "Expeditious Retreat",
+      "level": 1,
+      "school": "art",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "activation": "bonus",
+      "range": {
+        "units": "self"
+      },
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "10",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>Something in the kit kicks your legs into a gear they didn't have. When you cast this power, and as a bonus action on each of your turns until it ends, you can take the Dash action.</p>"
+    },
+    {
+      "slug": "flashbang",
+      "name": "Flashbang",
+      "sw5e": "Flash",
+      "level": 1,
+      "school": "art",
+      "img": "icons/weapons/thrown/grenade-tech-stun-cannister.webp",
+      "activation": "action",
+      "range": {
+        "value": 90
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 20
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "roll": "6d10",
+      "scaling": "level",
+      "description": "<p>You pitch a canister at a point within range and it goes off like the sun clearing its throat. Roll 6d10; the total is how many hit points' worth of creatures this power can blind. Creatures within 20 feet of the point are affected in order of their current hit points, lowest first, skipping anyone already unconscious.</p><p>Starting with the creature with the fewest current hit points, each affected creature is blinded until the end of your next turn. Subtract each creature's hit points from the total before moving to the next. A creature is only affected if its hit points are equal to or less than what's left of the total.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, roll an extra 2d10 for each level above 1st.</p>"
+    },
+    {
+      "slug": "false-face",
+      "name": "False Face",
+      "sw5e": "Holographic Disguise",
+      "level": 1,
+      "school": "art",
+      "img": "icons/magic/perception/mask-stone-eyes-orange.webp",
+      "activation": "action",
+      "range": {
+        "units": "self"
+      },
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "none",
+      "description": "<p>A hologram emitter on your collar dresses you as somebody else. Until the power ends or you dismiss it as an action, you can look about a foot shorter or taller, heavier or lighter, and wearing whatever you like, but you can't change the basic shape of your body. The hologram can cover your clothes, armor, weapons, and anything else on you.</p><p>It's only light. Anything that touches you finds the real you underneath. A creature can use its action to make an Intelligence (Investigation) check against your power save DC, and sees through it on a success.</p>"
+    },
+    {
+      "slug": "bottle-rockets",
+      "name": "Bottle Rockets",
+      "sw5e": "Homing Rockets",
+      "level": 1,
+      "school": "art",
+      "img": "icons/weapons/thrown/rocket.webp",
+      "activation": "action",
+      "range": {
+        "value": 120
+      },
+      "target": {
+        "type": "creature",
+        "count": 3
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "damage",
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 4,
+          "bonus": "1",
+          "types": [
+            "fire"
+          ],
+          "scaling": {
+            "mode": "",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "level",
+      "description": "<p>You let fly three small rockets that know where they're going. Each one hits a creature of your choice you can see within range, for 1d4 + 1 fire damage. They all land at once, and you can send them at one creature or split them up.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, you fire one more rocket for each level above 1st.</p>"
+    },
+    {
+      "slug": "boot-jets",
+      "name": "Boot Jets",
+      "sw5e": "Jump Jet",
+      "level": 1,
+      "school": "art",
+      "img": "icons/magic/fire/beam-jet-stream-yellow.webp",
+      "activation": "bonus",
+      "range": {
+        "units": "self"
+      },
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "scaling": "level",
+      "description": "<p>A short, loud burn from the jets on your boots. You can rise a number of feet equal to 20 times your casting ability modifier, and at any point in that movement you can also travel a number of feet sideways equal to 5 times your casting ability modifier. If you're still in the air at the end of the turn you cast this, you drift gently to the ground.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, you can rise 20 feet further and travel 5 feet further sideways for each level above 1st.</p>"
+    },
+    {
+      "slug": "slick",
+      "name": "Slick",
+      "sw5e": "Oil Slick",
+      "level": 1,
+      "school": "art",
+      "img": "icons/magic/acid/pouring-gas-smoke-liquid.webp",
+      "activation": "action",
+      "range": {
+        "value": 60
+      },
+      "target": {
+        "template": {
+          "type": "square",
+          "size": 10
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 3,
+          "denomination": 6,
+          "bonus": "",
+          "types": [
+            "fire"
+          ],
+          "scaling": {
+            "mode": "",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "none",
+      "description": "<p>You dump oil across a 10-foot square within range. For the duration, the square is difficult terrain.</p><p>When the oil lands, each creature standing in it must succeed on a Dexterity saving throw or fall prone. A creature that enters the square or ends its turn there must make the same save.</p><p>It burns, of course. Any 5-foot square of oil that meets fire burns off in one round. A creature that enters the fire or starts its turn in it must make a Dexterity saving throw, taking 3d6 fire damage on a failed save or half as much on a success. The fire lights anything flammable in the area that nobody is wearing or carrying.</p>"
+    },
+    {
+      "slug": "needle",
+      "name": "Needle",
+      "sw5e": "Poison Dart",
+      "level": 1,
+      "school": "art",
+      "img": "icons/tools/hand/needle-grey.webp",
+      "activation": "action",
+      "range": {
+        "value": 60
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "attack",
+      "attack": {
+        "type": "ranged"
+      },
+      "damage": [
+        {
+          "number": 2,
+          "denomination": 8,
+          "bonus": "",
+          "types": [
+            "poison"
+          ],
+          "scaling": {
+            "mode": "whole",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "level",
+      "description": "<p>A dart from the wrist, loaded with something from the back shelf. Make a ranged power attack against a creature within range. On a hit, the target takes 2d8 poison damage and must make a Constitution saving throw; on a failed save, it's also poisoned until the end of your next turn.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, the damage increases by 1d8 for each level above 1st.</p>"
+    },
+    {
+      "slug": "quick-fix",
+      "name": "Quick Fix",
+      "sw5e": "Repair Droid",
+      "level": 1,
+      "school": "art",
+      "img": "icons/commodities/tech/cog-gear-crank-steel.webp",
+      "activation": "action",
+      "range": {
+        "units": "touch"
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "units": "inst"
+      },
+      "concentration": false,
+      "activity": "heal",
+      "heal": {
+        "formula": "1d8 + @mod",
+        "type": "healing"
+      },
+      "scaling": "level",
+      "description": "<p>Pliers, solder, a part you had in your pocket. A drone or a Circuitborn you touch regains hit points equal to 1d8 + your casting ability modifier. A Circuitborn is a person, not a machine, but the fix is the fix.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, the healing increases by 1d8 for each level above 1st.</p>"
+    },
+    {
+      "slug": "smoke-screen",
+      "name": "Smoke Screen",
+      "sw5e": "Smoke Cloud",
+      "level": 1,
+      "school": "art",
+      "img": "icons/magic/air/fog-gas-smoke-dense-gray.webp",
+      "activation": "action",
+      "range": {
+        "value": 120
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 20
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "scaling": "level",
+      "description": "<p>A canister pops at a point within range and thick smoke boils out of it, filling a 20-foot-radius sphere. The smoke spreads around corners, and its area is heavily obscured. It lasts for the duration, or until a moderate wind (10 miles an hour or better) tears it apart.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, the radius grows by 20 feet for each level above 1st.</p>"
+    },
+    {
+      "slug": "loaded-dice",
+      "name": "Loaded Dice",
+      "sw5e": "Stack the Deck",
+      "level": 1,
+      "school": "art",
+      "img": "icons/magic/control/buff-luck-fortune-green.webp",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 3
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "roll": "1d4",
+      "scaling": "level",
+      "description": "<p>You tilt the table for your people. Choose up to three creatures within range. Whenever a target makes an attack roll or a saving throw before the power ends, it can roll a d4 and add the number to the roll.</p><p><strong>At higher levels.</strong> When you cast this power at 3rd level or higher, you can pick one more target for every two levels above 1st. Cast at 3rd, 6th, or 9th level, the die becomes a d6, a d8, or a d10.</p>"
+    },
+    {
+      "slug": "painted",
+      "name": "Painted",
+      "sw5e": "Target Lock",
+      "level": 1,
+      "school": "art",
+      "img": "icons/commodities/tech/electronics-sensor-eye.webp",
+      "activation": "bonus",
+      "range": {
+        "value": 90
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": true,
+      "activity": "damage",
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "bonus": "",
+          "types": [],
+          "scaling": {
+            "mode": "",
+            "number": 1
+          }
+        }
+      ],
+      "scaling": "level",
+      "description": "<p>You put a dot on somebody and your gear won't let you lose it. Choose a creature you can see within range. Until the power ends, you deal an extra 1d6 damage to it whenever you hit it with a weapon attack, it gets no benefit from quarter, half, or three-quarters cover against you, and if it's invisible, you see it anyway. If the target drops to 0 hit points before the power ends, you can use a bonus action on a later turn to paint a new one.</p><p><strong>At higher levels.</strong> When you cast this power at 3rd or 4th level, you can hold your concentration on it for up to 8 hours. At 5th level or higher, up to 24 hours.</p>"
+    },
+    {
+      "slug": "sleep-dart",
+      "name": "Sleep Dart",
+      "sw5e": "Tranquilizer",
+      "level": 1,
+      "school": "art",
+      "img": "icons/weapons/thrown/dart-feathered.webp",
+      "activation": "action",
+      "range": {
+        "value": 90
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "roll": "5d8",
+      "scaling": "level",
+      "description": "<p>A dart with enough in it to put down a mule. Choose a creature you can see within range and roll 5d8. If the creature's current hit points are less than the total, it falls unconscious until the power ends, until it takes damage, or until someone uses an action to shake or slap it awake. It does nothing to drones or other mindless machines.</p><p><strong>At higher levels.</strong> When you cast this power at 2nd level or higher, you can dart one more creature for each level above 1st. Roll 5d8 separately for each.</p>"
+    }
+  ]
+}

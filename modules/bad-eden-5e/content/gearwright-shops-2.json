@@ -1,0 +1,247 @@
+{
+  "_about": "Gearwright Shops, batch 2: Soundcraft (SW5E Audiotech), Alchemy (Biochem), Fleshcraft (Biotech), Construction (Construction Engineering). Mechanics carried over; every line of text is Bad Eden's own. SW5E's modification-slot system has no Bad Eden equivalent — see _unsure for each flat replacement.",
+  "_renames": [
+    { "sw5e": "Audiotech Engineering", "new": "Soundcraft" },
+    { "sw5e": "Bonus Proficiencies (Audiotech)", "new": "An Ear for It" },
+    { "sw5e": "Modified Instrument", "new": "The Rig" },
+    { "sw5e": "Potent Amplitude", "new": "The Set" },
+    { "sw5e": "Song of Battle / Support / Disruption", "new": "Fight Song / Hold-Together Song / Wrong Note" },
+    { "sw5e": "Concussive Blast", "new": "Turn It Up" },
+    { "sw5e": "Smooth Rhythm", "new": "In the Pocket" },
+    { "sw5e": "Legendary Coda", "new": "Last Chord" },
+    { "sw5e": "Battle / Support / Disruption Crescendo", "new": "the Big Finish / the Long Note / the Drop" },
+    { "sw5e": "Biochem Engineering", "new": "Alchemy" },
+    { "sw5e": "Bonus Proficiencies (Biochem)", "new": "Bedside Manner" },
+    { "sw5e": "Modified Biochemist's Pack", "new": "The Bag" },
+    { "sw5e": "Corrosive / Invigorating / Noxious Mixture", "new": "the Burner / the Shot / the Stink" },
+    { "sw5e": "Biochemist's Touch", "new": "Extra Measure" },
+    { "sw5e": "Potent Mixtures", "new": "Strong Batch" },
+    { "sw5e": "Epicenter", "new": "Drop the Bag" },
+    { "sw5e": "Masterful Mixtures", "new": "Nothing Builds a Tolerance" },
+    { "sw5e": "Biotech Engineering", "new": "Fleshcraft" },
+    { "sw5e": "Bonus Proficiencies (Biotech)", "new": "Steady Hands" },
+    { "sw5e": "Modified Self", "new": "Under the Skin" },
+    { "sw5e": "Quick-Release Stimulant", "new": "Dump Valve" },
+    { "sw5e": "Overclock Body", "new": "Run Hot" },
+    { "sw5e": "More Machine Than Man", "new": "Mostly Hardware" },
+    { "sw5e": "Focused Augmentation", "new": "Hardwired" },
+    { "sw5e": "Construction Engineering", "new": "Construction" },
+    { "sw5e": "Bonus Proficiencies (Construction)", "new": "Union Card" },
+    { "sw5e": "Portable Structure", "new": "The Kit" },
+    { "sw5e": "Potent Fortifications", "new": "Duck Behind It" },
+    { "sw5e": "Build and Destroy", "new": "Load-Bearing" },
+    { "sw5e": "Structural Knowledge", "new": "Read the Building" },
+    { "sw5e": "Master Builder", "new": "Foreman" }
+  ],
+  "_powerRefs": [],
+  "_unsure": [
+    "Modification slots (The Rig, The Bag, Under the Skin): no item-mod engine in Bad Eden. The Rig instead lets you re-tune one at-will power per long rest; The Bag instead lets you swap one Artifice power you know per long rest; Under the Skin instead grants one chosen built-in augmentation (darkvision 60 ft, +5 ft speed, advantage on saves against poison and disease, or a built-in set of tools), swappable over a long rest.",
+    "The Kit (Construction): SW5E's deploy uses came from the Modification Slots column (4 at 3rd rising to 9 at 17th, with a point-max penalty past proficiency). Replaced by a flat `@prof + 2` uses per long rest (4/5/6/7/8), no penalty.",
+    "The Set: the three songs share one feature; the Con save to keep playing and the thunder-conversion rule are text only (utility activity with 2 uses per short rest).",
+    "The Bag's Dispenser is one save activity (Dex, 1d6 + Int acid, cantrip-style scaling at 5/11/17); the poison (Con save) and temp-HP mixtures are in the text.",
+    "Dump Valve / Duck Behind It: the reduction roll is the activity's roll formula (`1d10 + mod + @classes.gearwright.levels`); spending the Bright Idea use is text only.",
+    "'kinetic, energy and ion damage dealt by weapons' (Load-Bearing) → bludgeoning, piercing, slashing and lightning damage from weapons.",
+    "Read the Building's 'what company or species built it' → 'who built it and roughly when'."
+  ],
+
+  "subclasses": [
+    {
+      "slug": "soundcraft", "identifier": "soundcraft", "name": "Soundcraft", "classIdentifier": "gearwright",
+      "img": "icons/tools/instruments/horn-megaphone-loudspeaker.webp",
+      "description": "<p><em>Shop of the Gearwright</em></p><p>Somebody has to play the music. Gearwrights of the Soundcraft shop build an instrument out of salvage and amplifier wire, and when they play it the whole fight listens: your side hits harder and shrugs things off, the other side flinches at the wrong moment, and the last chord of the night brings the roof down.</p>",
+      "features": [
+        { "level": 3, "slug": "soundcraft-an-ear-for-it" },
+        { "level": 3, "slug": "soundcraft-the-rig" },
+        { "level": 3, "slug": "soundcraft-the-set" },
+        { "level": 6, "slug": "soundcraft-turn-it-up" },
+        { "level": 14, "slug": "soundcraft-in-the-pocket" },
+        { "level": 18, "slug": "soundcraft-last-chord" }
+      ]
+    },
+    {
+      "slug": "alchemy", "identifier": "alchemy", "name": "Alchemy", "classIdentifier": "gearwright",
+      "img": "icons/tools/laboratory/alembic-glass-ball-blue.webp",
+      "description": "<p><em>Shop of the Gearwright</em></p><p>Medicine and chemistry got rebuilt from the same shelf after the Shattering, and the Alchemy shop never saw a reason to separate them again. These Gearwrights carry a bag that can put a body back on its feet or take one off them, and they know to the drop which bottle does which.</p>",
+      "features": [
+        { "level": 3, "slug": "alchemy-bedside-manner" },
+        { "level": 3, "slug": "alchemy-the-bag" },
+        { "level": 3, "slug": "alchemy-extra-measure" },
+        { "level": 6, "slug": "alchemy-strong-batch" },
+        { "level": 14, "slug": "alchemy-drop-the-bag" },
+        { "level": 18, "slug": "alchemy-nothing-builds-a-tolerance" }
+      ],
+      "traits": [
+        { "tag": "bedside", "level": 3, "title": "Bedside Manner", "grants": ["skills:med", "tool:herb", "tool:pois"] }
+      ]
+    },
+    {
+      "slug": "fleshcraft", "identifier": "fleshcraft", "name": "Fleshcraft", "classIdentifier": "gearwright",
+      "img": "icons/commodities/tech/claw-mechanical.webp",
+      "description": "<p><em>Shop of the Gearwright</em></p><p>The Fleshcraft shop works on the one machine you always have with you. These Gearwrights wire salvage into their own bodies, a little at a time, until the line between the tinker and the toolkit is a matter of opinion. They are not Circuitborn, who were born that way and are people in their own right; a Fleshcrafter is a person who keeps adding parts.</p>",
+      "features": [
+        { "level": 3, "slug": "fleshcraft-steady-hands" },
+        { "level": 3, "slug": "fleshcraft-under-the-skin" },
+        { "level": 3, "slug": "fleshcraft-dump-valve" },
+        { "level": 6, "slug": "fleshcraft-run-hot" },
+        { "level": 14, "slug": "fleshcraft-mostly-hardware" },
+        { "level": 18, "slug": "fleshcraft-hardwired" }
+      ],
+      "traits": [
+        { "tag": "steady", "level": 3, "title": "Steady Hands", "grants": ["skills:med"] }
+      ]
+    },
+    {
+      "slug": "construction", "identifier": "construction", "name": "Construction", "classIdentifier": "gearwright",
+      "img": "icons/environment/settlement/house-construction.webp",
+      "description": "<p><em>Shop of the Gearwright</em></p><p>A fight is mostly about where you're standing. The Construction shop builds the ground: a wall where there wasn't one, a bridge over the gap, a tower to see from, a shelter against the night, a cage around the thing that needs caging. The kit folds up and follows you home.</p>",
+      "features": [
+        { "level": 3, "slug": "construction-union-card" },
+        { "level": 3, "slug": "construction-the-kit" },
+        { "level": 3, "slug": "construction-duck-behind-it" },
+        { "level": 6, "slug": "construction-load-bearing" },
+        { "level": 14, "slug": "construction-read-the-building" },
+        { "level": 18, "slug": "construction-foreman" }
+      ],
+      "traits": [
+        { "tag": "union", "level": 3, "title": "Union Card", "grants": ["tool:mason", "tool:carp"] }
+      ]
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "soundcraft-an-ear-for-it", "name": "An Ear for It", "level": 3, "requirements": "Gearwright (Soundcraft) 3",
+      "folder": "Soundcraft", "folderParent": "Gearwright", "img": "icons/tools/instruments/microphone-headset-wired.webp",
+      "description": "<p><em>Soundcraft, 3rd level</em></p><p>You can play, and you can build what you play. You gain proficiency with three musical instruments of your choice. When you craft with a musical instrument or with tinker's tools, you work twice as fast.</p>"
+    },
+    {
+      "slug": "soundcraft-the-rig", "name": "The Rig", "level": 3, "requirements": "Gearwright (Soundcraft) 3",
+      "folder": "Soundcraft", "folderParent": "Gearwright", "img": "icons/tools/instruments/lute-gold-brown.webp",
+      "description": "<p><em>Soundcraft, 3rd level</em></p><p>Over a long rest, with an instrument and tinker's tools, you build your rig: an instrument wired for things instruments were never meant to do. Your rig is an enhanced item that requires attunement, works only for you, and counts as a focus for your Artifice powers while you're attuned to it.</p><p>The rig is never finished. Whenever you finish a long rest, you can re-tune it and swap one at-will Artifice power you know for another at-will Artifice power.</p><p>When an effect of this Shop calls for a saving throw, the DC is your Artifice save DC.</p>"
+    },
+    {
+      "slug": "soundcraft-the-set", "name": "The Set", "level": 3, "requirements": "Gearwright (Soundcraft) 3",
+      "folder": "Soundcraft", "folderParent": "Gearwright", "img": "icons/tools/instruments/drum-snare-red.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "2", "per": "sr" },
+      "description": "<p><em>Soundcraft, 3rd level</em></p><p>As an action while holding your rig, you start a set: a song that lasts 1 minute. While you play, your Bright Idea has a new use, decided by the song. You can end the set at any time, no action required.</p><p>Whenever you take damage while playing, make a Constitution saving throw to keep going. The DC is 10 or half the damage you took, whichever is higher; damage from several sources means a save for each. The set also ends if you're incapacitated, die, or let go of the rig.</p><p>While you play, when you cast an Artifice power that deals damage and calls for an attack roll or a saving throw, you can have it deal thunder damage instead. If you do, it calls for a Constitution saving throw instead of its attack roll or usual save.</p><p>You can start a set twice. You regain all spent sets when you finish a short or long rest.</p><p><strong>Fight Song.</strong> When an ally within 60 feet of you who can hear you deals damage to a creature, you can use your reaction and spend one use of Bright Idea to roll the die and add it to the damage.</p><p><strong>Hold-Together Song.</strong> When an ally within 60 feet of you who can hear you makes a saving throw against a harmful effect, you can use your reaction and spend one use of Bright Idea to roll the die and add it to their save.</p><p><strong>Wrong Note.</strong> When an enemy within 60 feet of you that can hear you makes a saving throw, you can use your reaction and spend one use of Bright Idea to roll the die and subtract it from their save.</p>"
+    },
+    {
+      "slug": "soundcraft-turn-it-up", "name": "Turn It Up", "level": 6, "requirements": "Gearwright (Soundcraft) 6",
+      "folder": "Soundcraft", "folderParent": "Gearwright", "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
+      "description": "<p><em>Soundcraft, 6th level</em></p><p>Louder is a kind of better. You add your Intelligence modifier (minimum +1) to any thunder damage you deal with an Artifice power or a class feature.</p>"
+    },
+    {
+      "slug": "soundcraft-in-the-pocket", "name": "In the Pocket", "level": 14, "requirements": "Gearwright (Soundcraft) 14",
+      "folder": "Soundcraft", "folderParent": "Gearwright", "img": "icons/tools/instruments/chimes-wood-brown.webp",
+      "description": "<p><em>Soundcraft, 14th level</em></p><p>When the set is going right, the ideas come free. Whenever you would use Bright Idea while playing a set, you can roll a d6 and use it instead of spending a Bright Idea die.</p>"
+    },
+    {
+      "slug": "soundcraft-last-chord", "name": "Last Chord", "level": 18, "requirements": "Gearwright (Soundcraft) 18",
+      "folder": "Soundcraft", "folderParent": "Gearwright", "img": "icons/magic/sonic/explosion-shock-wave-teal.webp",
+      "activation": "action", "uses": { "max": "1", "per": "lr" }, "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [{ "number": 14, "denomination": 6, "bonus": "", "types": ["thunder"], "scaling": { "mode": "", "number": 1 } }],
+      "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>Soundcraft, 18th level</em></p><p>Every set has an ending, and yours brings the house down. As an action, you can end your set with a finish decided by the song you were playing. Once you've used this feature, you can't use it again until you finish a long rest.</p><p><strong>The Big Finish (Fight Song).</strong> Choose up to ten creatures you can see that can hear your set. Each must make a Constitution saving throw. On a failure, a creature takes 14d6 thunder damage and is stunned for 1d4 + 1 turns; on a success, it takes half the damage and isn't stunned. Anything this kills comes apart.</p><p><strong>The Long Note (Hold-Together Song).</strong> Choose up to ten creatures you can see that can hear your set. Once in the next minute, each of them can, as a free action when it takes damage, halve that damage. If the damage would drop it to 0 hit points, it drops to 1 instead.</p><p><strong>The Drop (Wrong Note).</strong> Choose up to ten creatures you can see that can hear your set. Each must succeed on a Constitution saving throw or be paralyzed for 1d4 + 1 turns. Damage of any kind ends the effect on that creature.</p>"
+    },
+
+    {
+      "slug": "alchemy-bedside-manner", "name": "Bedside Manner", "level": 3, "requirements": "Gearwright (Alchemy) 3",
+      "folder": "Alchemy", "folderParent": "Gearwright", "img": "icons/tools/laboratory/microscope.webp",
+      "description": "<p><em>Alchemy, 3rd level</em></p><p>You know what's wrong with them before they finish describing it. You gain proficiency in the Medicine skill, and with the herbalism kit and the poisoner's kit. When you craft with either kit, you work twice as fast.</p>"
+    },
+    {
+      "slug": "alchemy-the-bag", "name": "The Bag", "level": 3, "requirements": "Gearwright (Alchemy) 3",
+      "folder": "Alchemy", "folderParent": "Gearwright", "img": "icons/tools/laboratory/vials-blue-pink.webp",
+      "activation": "action", "range": 30, "target": { "type": "creature", "count": 1 }, "activity": "save", "save": { "ability": "dex", "onSave": "none" },
+      "damage": [{ "number": 1, "denomination": 6, "bonus": "@abilities.int.mod", "types": ["acid"], "scaling": { "mode": "whole", "number": 1 } }],
+      "description": "<p><em>Alchemy, 3rd level</em></p><p>Over a long rest, with an herbalism kit, a poisoner's kit, and some materials, you build your bag: a field lab that fits over one shoulder. Your bag is an enhanced item that requires attunement, works only for you, and counts as a focus for your Artifice powers while you're attuned to it. Whenever you finish a long rest, you can restock it and swap one Artifice power you know for another you qualify for.</p><p>When an effect of this Shop calls for a saving throw, the DC is your Artifice save DC.</p><p>The bag has a dispenser loaded with three mixtures. As an action, you can target a creature within 30 feet of you with one of them:</p><p><strong>The Burner.</strong> A spit of acid. The target must make a Dexterity saving throw, taking 1d6 + your Intelligence modifier acid damage on a failure.</p><p><strong>The Shot.</strong> A jolt of something good. The target gains 1d6 + your Intelligence modifier temporary hit points, which last until the end of your next turn.</p><p><strong>The Stink.</strong> A puff of poison. The target must make a Constitution saving throw, taking 1d6 + your Intelligence modifier poison damage on a failure.</p><p>Each mixture's die count rises by one when you reach 5th level (2d6), 11th level (3d6), and 17th level (4d6).</p>"
+    },
+    {
+      "slug": "alchemy-extra-measure", "name": "Extra Measure", "level": 3, "requirements": "Gearwright (Alchemy) 3",
+      "folder": "Alchemy", "folderParent": "Gearwright", "img": "icons/tools/laboratory/injector-needle-syringe-plunger.webp",
+      "description": "<p><em>Alchemy, 3rd level</em></p><p>A little more never hurt. Or it did, which was the point. Whenever you grant temporary hit points, or deal acid or poison damage, with an Artifice power or a class feature, you can spend one use of Bright Idea to roll the die and add it to the temporary hit points or the damage. Added damage is the same type as the original.</p>"
+    },
+    {
+      "slug": "alchemy-strong-batch", "name": "Strong Batch", "level": 6, "requirements": "Gearwright (Alchemy) 6",
+      "folder": "Alchemy", "folderParent": "Gearwright", "img": "icons/tools/laboratory/burner-steel-grey.webp",
+      "description": "<p><em>Alchemy, 6th level</em></p><p>You've stopped measuring with the little spoon. When you cast an Artifice power of 1st level or higher that grants temporary hit points or deals acid or poison damage, add your Intelligence modifier (minimum +1) to the roll.</p>"
+    },
+    {
+      "slug": "alchemy-drop-the-bag", "name": "Drop the Bag", "level": 14, "requirements": "Gearwright (Alchemy) 14",
+      "folder": "Alchemy", "folderParent": "Gearwright", "img": "icons/magic/acid/pouring-gas-smoke-liquid.webp",
+      "activation": "reaction", "uses": { "max": "1", "per": "sr" }, "target": { "template": { "type": "radius", "size": 15 } }, "duration": { "value": "1", "units": "turn" },
+      "description": "<p><em>Alchemy, 14th level</em></p><p>When somebody gets close enough to hurt you, the whole bag goes. As a reaction when you take damage from a creature you can see within 15 feet of you, you can set off one of your mixtures in a 15-foot-radius sphere centered on you. Everything in the sphere gets the mixture's effect; if it calls for a saving throw, you automatically succeed on yours. The area is difficult terrain for creatures other than you until the end of your next turn.</p><p>Once you've used this feature, you can't use it again until you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "alchemy-nothing-builds-a-tolerance", "name": "Nothing Builds a Tolerance", "level": 18, "requirements": "Gearwright (Alchemy) 18",
+      "folder": "Alchemy", "folderParent": "Gearwright", "img": "icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp",
+      "description": "<p><em>Alchemy, 18th level</em></p><p>They've seen acid before. They haven't seen yours. When you deal acid or poison damage with an Artifice power or a class feature, you ignore resistance to it, and you treat immunity to it as resistance.</p>"
+    },
+
+    {
+      "slug": "fleshcraft-steady-hands", "name": "Steady Hands", "level": 3, "requirements": "Gearwright (Fleshcraft) 3",
+      "folder": "Fleshcraft", "folderParent": "Gearwright", "img": "icons/tools/laboratory/injector-needle-steel-green.webp",
+      "description": "<p><em>Fleshcraft, 3rd level</em></p><p>You've done surgery on yourself with a mirror and a flashlight. Nothing shakes you now. You gain proficiency in the Medicine skill, and when you craft with tinker's tools you work twice as fast.</p>"
+    },
+    {
+      "slug": "fleshcraft-under-the-skin", "name": "Under the Skin", "level": 3, "requirements": "Gearwright (Fleshcraft) 3",
+      "folder": "Fleshcraft", "folderParent": "Gearwright", "img": "icons/commodities/tech/cable-armored-reticulated.webp",
+      "description": "<p><em>Fleshcraft, 3rd level</em></p><p>Over a long rest, with tinker's tools, you wire salvage into your own body. While you have at least one augmentation installed, your body counts as a focus for your Artifice powers, and you don't need your hands free to cast them.</p><p>Choose one augmentation when you install it; you can swap it for another whenever you finish a long rest:</p><ul><li><strong>Night Eyes.</strong> You have darkvision out to 60 feet, or your darkvision extends 30 feet further if you already have it.</li><li><strong>Long Stride.</strong> Your walking speed increases by 5 feet.</li><li><strong>Filtered Blood.</strong> You have advantage on saving throws against poison and disease.</li><li><strong>Built-In Kit.</strong> One set of tools you're proficient with is part of you. You can't lose it, and you always have it to hand.</li></ul><p>When an effect of this Shop calls for a saving throw, the DC is your Artifice save DC.</p>"
+    },
+    {
+      "slug": "fleshcraft-dump-valve", "name": "Dump Valve", "level": 3, "requirements": "Gearwright (Fleshcraft) 3",
+      "folder": "Fleshcraft", "folderParent": "Gearwright", "img": "icons/commodities/tech/canister-steel.webp",
+      "activation": "reaction", "roll": "1d10 + @abilities.con.mod + @classes.gearwright.levels",
+      "description": "<p><em>Fleshcraft, 3rd level</em></p><p>There's a valve in you for the bad moments. When an attack deals damage to you while you have at least one augmentation installed, you can use your reaction and spend one use of Bright Idea to reduce the damage by 1d10 + your Constitution modifier + your Gearwright level. If that brings the damage to 0, you gain temporary hit points equal to whatever reduction was left over.</p>"
+    },
+    {
+      "slug": "fleshcraft-run-hot", "name": "Run Hot", "level": 6, "requirements": "Gearwright (Fleshcraft) 6",
+      "folder": "Fleshcraft", "folderParent": "Gearwright", "img": "icons/commodities/tech/battery-coil-tesla.webp",
+      "description": "<p><em>Fleshcraft, 6th level</em></p><p>Your body is a battery, if you don't mind the smell. When you cast an Artifice power, you can pay up to half its cost in hit points instead of Artifice points. When you do, your hit point maximum is reduced by the same amount until you finish a long rest.</p>"
+    },
+    {
+      "slug": "fleshcraft-mostly-hardware", "name": "Mostly Hardware", "level": 14, "requirements": "Gearwright (Fleshcraft) 14",
+      "folder": "Fleshcraft", "folderParent": "Gearwright", "img": "icons/commodities/tech/bearing-steel-green.webp",
+      "description": "<p><em>Fleshcraft, 14th level</em></p><p>At some point the parts outnumbered the rest. While you have temporary hit points, when an effect lets you make a saving throw to take only half damage, you take no damage on a success and only half on a failure.</p>"
+    },
+    {
+      "slug": "fleshcraft-hardwired", "name": "Hardwired", "level": 18, "requirements": "Gearwright (Fleshcraft) 18",
+      "folder": "Fleshcraft", "folderParent": "Gearwright", "img": "icons/commodities/tech/cable-end.webp",
+      "description": "<p><em>Fleshcraft, 18th level</em></p><p>The power runs through you with nothing in the way. You add your Intelligence modifier to Constitution saving throws you make to keep concentration.</p><p>Also, when you cast a power that requires concentration and would affect only one target, you can give it one more target.</p>"
+    },
+
+    {
+      "slug": "construction-union-card", "name": "Union Card", "level": 3, "requirements": "Gearwright (Construction) 3",
+      "folder": "Construction", "folderParent": "Gearwright", "img": "icons/tools/hand/hammer-construction-claw.webp",
+      "description": "<p><em>Construction, 3rd level</em></p><p>You've put up more walls than you've knocked down, but it's close. You gain proficiency with mason's tools and carpenter's tools. When you craft with either, you work twice as fast.</p>"
+    },
+    {
+      "slug": "construction-the-kit", "name": "The Kit", "level": 3, "requirements": "Gearwright (Construction) 3",
+      "folder": "Construction", "folderParent": "Gearwright", "img": "icons/commodities/tech/blueprint.webp",
+      "activation": "action", "range": 30, "uses": { "max": "@prof + 2", "per": "lr" },
+      "description": "<p><em>Construction, 3rd level (improves at 11th and 17th)</em></p><p>Over a long rest, you build your kit: a folding fortification that follows you around and becomes whatever the ground needs. Only you can direct it, and you need a focus to direct it from a distance; without one, you can direct it while it's within 5 feet of you.</p><p><strong>What it's made of.</strong> The kit's AC equals your Artifice save DC, and it has hit points equal to 5 times your Gearwright level. At 0 hit points it collapses and can't be used until you spend 1 hour repairing it, which you can do during a short or long rest. An Artifice power that repairs objects restores hit points to it equal to your Intelligence modifier (minimum 1), but no higher than half its maximum that way; a short rest restores it to half its maximum, and a long rest restores it fully.</p><p><strong>Folded and deployed.</strong> Folded, the kit hovers 5 feet off the ground, moves at your speed, fills a 5-foot cube, and weighs 500 pounds. At 11th level it's a 10-foot cube and 1,000 pounds; at 17th a 15-foot cube and 2,000 pounds. Deployed, its speed is 0 and it fills whatever shape you built.</p><p><strong>Deploying.</strong> As an action, you can deploy the kit on the ground at a spot you can see within 30 feet of you, if there's room for it. The range is 60 feet at 11th level and 120 feet at 17th. Folding it back up takes 1 minute and starts on your turn, no action required. You can deploy the kit a number of times equal to your proficiency bonus + 2, and you regain all spent uses when you finish a long rest.</p><p><strong>Bridge.</strong> A span up to 30 feet long, 10 feet wide, and 3 feet thick, running from the deploy point in a direction you choose; folding it draws it back to that point. Both ends need something under them. It bears 1,000 pounds; more drops it to 0 hit points at once. A creature on the bridge when it collapses or folds makes a Dexterity saving throw against your Artifice save DC: on a success it reaches the nearest solid footing or rides the span back; on a failure it falls. At 11th level: 45 feet long, 15 wide, 2,000 pounds. At 17th: 60 feet long, 20 wide, 4,000 pounds.</p><p><strong>Cage.</strong> A box up to 10 feet on a side centered on the spot, walled and roofed with 2-foot-thick panels, open only at the floor. The walls are solid to sight; you choose when you deploy it whether there's a light inside, and otherwise it's pitch dark. Air, water, and sound get through. If you deploy it on an unwilling Medium or smaller creature, it must make a Dexterity saving throw against your Artifice save DC; on a success it steps to the nearest open space outside, and on a failure it's shut in. At 11th level: 15 feet on a side, holds Large or smaller. At 17th: 20 feet on a side, holds Huge or smaller.</p><p><strong>Shelter.</strong> A building up to 15 feet long, 10 feet wide, and 10 feet tall, with foot-thick walls, a roof, a floor, and a door where you want it. It's lit, heated and cooled, and stands up to hard wind, rain, and snow; anyone inside is safe from the weather outside, extreme heat and cold included, though it makes no air of its own. It sleeps five Medium creatures comfortably; each Medium berth fits two Small creatures instead, and each Small berth two Tiny ones. At 11th level: 30 by 15 by 15 feet, ten Medium berths, and a creature that finishes a long rest inside regains all its spent Hit Dice instead of half. At 17th: 45 by 20 by 20 feet, ten Large berths (each fitting two Medium, and so on down), and a long rest inside reduces exhaustion by 2 levels instead of 1.</p><p><strong>Tower.</strong> A 5-foot-square platform centered on the spot that rises up to 30 feet, with a ladder to the top. If it comes up under a creature, that creature must succeed on a Dexterity saving throw or go up with it; it can choose to fail. At 11th level: a 5-by-10-foot platform, up to 40 feet. At 17th: a 10-foot-square platform, up to 50 feet, and anyone on top has advantage on Wisdom (Perception) checks that rely on sight.</p><p><strong>Wall.</strong> A wall up to 30 feet long, 10 feet high, and 3 feet thick, or a ring up to 10 feet across, 10 feet high, and 3 feet thick. It has a walkway on top wide enough for Medium creatures, which gives them one-quarter cover, and a ladder on the side you choose; you decide whether it has openings, and anything you open can be seen through from both sides. A creature without a climbing speed can climb it with a Strength (Athletics) check against your Artifice save DC, once per turn. At 11th level: 45 feet long and 15 high (a ring 15 across and 15 high), half cover on the walkway. At 17th: 60 feet long and 20 high (a ring 20 across and 20 high), three-quarters cover.</p>"
+    },
+    {
+      "slug": "construction-duck-behind-it", "name": "Duck Behind It", "level": 3, "requirements": "Gearwright (Construction) 3",
+      "folder": "Construction", "folderParent": "Gearwright", "img": "icons/environment/settlement/city-wall.webp",
+      "activation": "reaction", "range": 5, "roll": "1d10 + @abilities.int.mod + @classes.gearwright.levels",
+      "description": "<p><em>Construction, 3rd level</em></p><p>That's what it's there for. When a friendly creature other than you that you can see is hit by a ranged attack while within 5 feet of your deployed kit, you can use your reaction and spend one use of Bright Idea to have the kit take the hit instead. The damage is reduced by 1d10 + your Intelligence modifier + your Gearwright level, and the kit's resistance or immunity to that damage doesn't apply to this attack.</p>"
+    },
+    {
+      "slug": "construction-load-bearing", "name": "Load-Bearing", "level": 6, "requirements": "Gearwright (Construction) 6",
+      "folder": "Construction", "folderParent": "Gearwright", "img": "icons/tools/smithing/hammer-maul-steel-grey.webp",
+      "description": "<p><em>Construction, 6th level</em></p><p>You know where a building keeps its weight. Your Artifice powers and your weapon attacks have the siege property: they deal double damage to objects and structures. Your kit has resistance to bludgeoning, piercing, slashing, and lightning damage dealt by weapons.</p>"
+    },
+    {
+      "slug": "construction-read-the-building", "name": "Read the Building", "level": 14, "requirements": "Gearwright (Construction) 14",
+      "folder": "Construction", "folderParent": "Gearwright", "img": "icons/environment/settlement/house-two-stories.webp",
+      "activation": "hour", "activationValue": 1,
+      "description": "<p><em>Construction, 14th level</em></p><p>Give you an hour and a building, and the building will tell you about itself. Spend 1 hour looking over a structure you can see from every side you can reach, checking it against what you know. At the end of the hour you have its blueprints in your head, including:</p><ul><li>Its total hit points.</li><li>What it's mostly made of.</li><li>Whether anyone is using it or it's been left.</li><li>How many floors it has, and what each was for if it was built for something.</li><li>Every way in that isn't hidden: doors, windows, vents, pipes, and where to find them.</li><li>A rough map of every floor and the ductwork.</li><li>Who built it and roughly when.</li><li>Where it's weak.</li></ul><p>When you make an Intelligence (Investigation) check to search that structure for hidden doors, passages, or the like while you have mason's tools, treat a d20 roll of 9 or lower as a 10.</p>"
+    },
+    {
+      "slug": "construction-foreman", "name": "Foreman", "level": 18, "requirements": "Gearwright (Construction) 18",
+      "folder": "Construction", "folderParent": "Gearwright", "img": "icons/environment/settlement/castle-gatehouse.webp",
+      "description": "<p><em>Construction, 18th level</em></p><p>Nobody builds faster, and nobody builds it to last like you do. You gain the following benefits:</p><ul><li>You can have two structures deployed at a time instead of one.</li><li>Your structures no longer take double damage from the siege property.</li><li>Your structures no longer automatically fail Strength, Dexterity, and Constitution saving throws. Instead, a structure adds your proficiency bonus to the d20 when it makes one of those saves.</li></ul>"
+    }
+  ]
+}
