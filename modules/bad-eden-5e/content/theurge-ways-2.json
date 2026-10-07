@@ -1,0 +1,205 @@
+{
+  "_about": "Flow Wolf: Theurge — the Ways, batch 2: Manipulation, Negation, Suggestion, Technology. Mechanics carried over from the SW5E Consular archetypes; every line of text is Bad Eden's own. Built by tools/build-packs.mjs.",
+
+  "_renames": [
+    { "sw5e": "Saber Storm", "new": "Orbit" },
+    { "sw5e": "Sapping Storm", "new": "Sapping Orbit" },
+    { "sw5e": "Force Deflection", "new": "Turn Aside" },
+    { "sw5e": "Power Surge (and the stored 'power surges')", "new": "Eddy (you hold 'eddies')" },
+    { "sw5e": "Tutaminis Mastery", "new": "Dead Calm" },
+    { "sw5e": "Fundamentals of Mechu-deru", "new": "Wire Sense" },
+    { "sw5e": "Techcasting Secrets", "new": "Borrowed Artifice" },
+    { "sw5e": "Ionized Weave (ion damage)", "new": "Hot Wire (lightning damage)" },
+    { "sw5e": "Force Circuitry", "new": "Flow Circuitry" },
+    { "sw5e": "Mechu-Deru Mastery", "new": "Ghost in the Machine" },
+    { "sw5e": "Technology skill + simple blasters (Wire Sense proficiencies)", "new": "tinker's tools + simple guns" }
+  ],
+
+  "_powerRefs": [
+    { "sw5e": "Force Suppression", "draft": "Stem the Current", "way": "Way of Negation" },
+    { "sw5e": "Sever Force", "draft": "Cut the Current", "way": "Way of Negation" },
+    { "sw5e": "Sense Force", "draft": "Feel the Current", "way": "Way of Suggestion" },
+    { "sw5e": "Force Sight", "draft": "Current Sight", "way": "Way of Suggestion" },
+    { "sw5e": "Cloud Mind", "draft": "Fogged Mind", "way": "Way of Suggestion" },
+    { "sw5e": "Dominate Mind", "draft": "Hold the Reins", "way": "Way of Suggestion" },
+    { "sw5e": "Mass Coerce Mind", "draft": "Crowd Sway", "way": "Way of Suggestion" },
+    { "sw5e": "Dominate Monster", "draft": "Hold the Beast", "way": "Way of Suggestion" }
+  ],
+
+  "subclasses": [
+    {
+      "slug": "way-of-manipulation", "identifier": "way-of-manipulation", "name": "Way of Manipulation",
+      "classIdentifier": "theurge", "img": "icons/magic/movement/pinwheel-turning-blue.webp",
+      "description": "<p>The Flow is wide and it doesn't care what you do with it. Theurges of the Way of Manipulation put it to the plainest use there is: they pick up a blade without touching it and send it where it's needed. Your weapons walk the field for you and come home when you call.</p>",
+      "features": [
+        { "level": 3, "slug": "manipulation-orbit" },
+        { "level": 6, "slug": "manipulation-deceptive-strike" },
+        { "level": 10, "slug": "manipulation-guarding-weapon" },
+        { "level": 14, "slug": "manipulation-isolate" },
+        { "level": 18, "slug": "manipulation-sapping-orbit" }
+      ]
+    },
+    {
+      "slug": "way-of-negation", "identifier": "way-of-negation", "name": "Way of Negation",
+      "classIdentifier": "theurge", "img": "icons/magic/defensive/barrier-shield-dome-deflect-blue.webp",
+      "description": "<p>Some Theurges study what the Flow builds. These study what it undoes. The Way of Negation is the discipline of the stilled current: you learn to turn another caster's work aside, to drink what they threw at you, and to keep the damage they meant to do from ever arriving.</p>",
+      "features": [
+        { "level": 3, "slug": "negation-turn-aside" },
+        { "level": 6, "slug": "negation-eddy" },
+        { "level": 10, "slug": "negation-enduring-focus" },
+        { "level": 14, "slug": "negation-conflux" },
+        { "level": 18, "slug": "negation-still-water" }
+      ]
+    },
+    {
+      "slug": "way-of-suggestion", "identifier": "way-of-suggestion", "name": "Way of Suggestion",
+      "classIdentifier": "theurge", "img": "icons/magic/control/hypnosis-mesmerism-swirl.webp",
+      "description": "<p>There is power in a light touch, and nobody knows it better than a Theurge. Those who follow the Way of Suggestion have tuned themselves to the current so finely that they can step out of a room without leaving it. People forget you were there. Sometimes they forget what they saw.</p>",
+      "features": [
+        { "level": 3, "slug": "suggestion-subtle-control" },
+        { "level": 6, "slug": "suggestion-out-of-mind" },
+        { "level": 10, "slug": "suggestion-delicate-potency" },
+        { "level": 14, "slug": "suggestion-delayed-effect" },
+        { "level": 18, "slug": "suggestion-subtle-presence" }
+      ]
+    },
+    {
+      "slug": "way-of-technology", "identifier": "way-of-technology", "name": "Way of Technology",
+      "classIdentifier": "theurge", "img": "icons/commodities/tech/coil-tesla.webp",
+      "description": "<p>Plenty of Theurges won't touch a wire. Those of the Way of Technology run the Flow straight through one. They pair the current with Artifice, the salvage-and-gadget casting of the Gearwrights, and work the two in tandem to do things neither does alone. A drone is a tool with no mind in it; a Circuitborn is a person. A Theurge of this Way never confuses the two, and can reach both.</p>",
+      "features": [
+        { "level": 3, "slug": "technology-wire-sense" },
+        { "level": 6, "slug": "technology-borrowed-artifice" },
+        { "level": 10, "slug": "technology-live-wire" },
+        { "level": 14, "slug": "technology-flow-circuitry" },
+        { "level": 18, "slug": "technology-ghost-in-the-machine" }
+      ]
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "manipulation-orbit", "name": "Orbit", "level": 3, "requirements": "Flow Wolf: Theurge (Way of Manipulation) 3",
+      "folder": "Way of Manipulation", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/movement/pinwheel-turning-blue.webp",
+      "activation": "action", "activity": "attack", "attack": { "value": "melee" }, "range": 5, "duration": { "value": "1", "units": "minute" },
+      "uses": { "max": "2", "per": "sr" },
+      "damage": [{ "custom": { "enabled": false, "formula": "" }, "number": 1, "denomination": 8, "bonus": "@mod", "types": [], "scaling": { "mode": "", "number": 1 } }],
+      "description": "<p><em>Way of Manipulation, 3rd level (improves at 5th, 11th, and 17th)</em></p><p>You've learned to hold a weapon the way the current holds a leaf. As an action, you can set your Orbit going: choose a melee weapon within 5 feet of you that isn't being worn or carried by a conscious creature other than you, and lift it with the Flow. For 1 minute it moves as your will does. When you start the Orbit, you can send the weapon up to 10 feet and make a melee power attack against a creature within 5 feet of it. On a hit, the target takes 1d8 + your casting ability modifier damage of the weapon's normal type. The weapon then returns to your side.</p><p>The weapon moves with you. While your Orbit is active and you have a weapon lifted, on each of your turns you can use an action to send a weapon up to 10 feet and repeat the attack against a creature within 5 feet of it; it returns to your side afterward. Your Orbit ends early if you're incapacitated. You can end it at any time and call the weapon back into your hand.</p><p>While your Orbit is active and at least one lifted weapon is within 5 feet of you:</p><ul><li>You gain a bonus to your AC equal to your Wisdom or Charisma modifier (your choice, minimum of +1), if your AC doesn't already include that modifier.</li><li>You gain a bonus to any Constitution saving throw you make to keep concentration on a power, equal to your Wisdom or Charisma modifier (your choice, minimum of +1).</li></ul><p>At higher levels your Orbit holds more: two weapons at 5th level, three at 11th, and four at 17th. When you use your action to attack with your weapons you can send them at one target or several; make a separate attack roll for each. The distance a weapon can travel rises to 20 feet at 5th level, 30 feet at 11th, and 40 feet at 17th.</p><p>You can use this feature twice, and you regain all spent uses when you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "manipulation-deceptive-strike", "name": "Deceptive Strike", "level": 6, "requirements": "Flow Wolf: Theurge (Way of Manipulation) 6",
+      "folder": "Way of Manipulation", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/control/energy-stream-link-blue.webp",
+      "description": "<p><em>Way of Manipulation, 6th level</em></p><p>Touch doesn't have to mean your hand. When you cast a power with a range of touch while your Orbit is active, a lifted weapon can travel up to its Orbit distance and deliver the power as if it had cast it.</p>"
+    },
+    {
+      "slug": "manipulation-guarding-weapon", "name": "Guarding Weapon", "level": 10, "requirements": "Flow Wolf: Theurge (Way of Manipulation) 10",
+      "folder": "Way of Manipulation", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/defensive/shield-barrier-blades-teal.webp",
+      "activation": "reaction",
+      "description": "<p><em>Way of Manipulation, 10th level</em></p><p>A blade that moves on its own can move into harm's way. While your Orbit is active, when you take damage you can use your reaction and spend a number of Flow points up to your proficiency bonus to have a lifted weapon get in front of it. The damage you take is reduced by five times the number of Flow points you spent.</p>"
+    },
+    {
+      "slug": "manipulation-isolate", "name": "Isolate", "level": 14, "requirements": "Flow Wolf: Theurge (Way of Manipulation) 14",
+      "folder": "Way of Manipulation", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/control/debuff-chains-orb-movement-blue.webp",
+      "duration": { "value": "1", "units": "turn" },
+      "description": "<p><em>Way of Manipulation, 14th level</em></p><p>If a caster can't hold onto a power, you can. When you deal damage to a creature while your Orbit is active and that creature fails a Constitution saving throw to keep concentration on a power, you can take the power from it and point it where you like. Until the end of your next turn, either you or the creature that failed the save gains the power's effects (your choice).</p>"
+    },
+    {
+      "slug": "manipulation-sapping-orbit", "name": "Sapping Orbit", "level": 18, "requirements": "Flow Wolf: Theurge (Way of Manipulation) 18",
+      "folder": "Way of Manipulation", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/unholy/orb-colllecting-energy-green.webp",
+      "description": "<p><em>Way of Manipulation, 18th level</em></p><p>What the blades take, you keep. When you reduce a hostile creature to 0 hit points while your Orbit is active, you gain temporary Flow points equal to your Wisdom or Charisma modifier (your choice, minimum of one). You can't hold more temporary Flow points than that modifier at once. Whenever you'd spend a Flow point while you have temporary Flow points, the temporary ones go first. When your Orbit ends, any temporary Flow points you still have are gone.</p>"
+    },
+
+    {
+      "slug": "negation-turn-aside", "name": "Turn Aside", "level": 3, "requirements": "Flow Wolf: Theurge (Way of Negation) 3",
+      "folder": "Way of Negation", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/defensive/shield-barrier-deflect-teal.webp",
+      "activation": "reaction", "uses": { "max": "2 + floor((@classes.theurge.levels - 1) / 4)", "per": "lr" },
+      "description": "<p><em>Way of Negation, 3rd level (improves at 5th, 9th, 13th, and 17th)</em></p><p>The first thing the Way teaches is that a thing coming at you can be made to miss. When you fail a saving throw, you can use your reaction to add your Wisdom or Charisma modifier (your choice, minimum of +1) to the roll.</p><p>You can use this feature twice. You gain one more use at 5th, 9th, 13th, and 17th level, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "negation-eddy", "name": "Eddy", "level": 6, "requirements": "Flow Wolf: Theurge (Way of Negation) 6",
+      "folder": "Way of Negation", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/water/orb-water-bubbles.webp",
+      "activation": "special", "uses": { "max": "max(@abilities.wis.mod, @abilities.cha.mod, 1)", "per": "lr" },
+      "description": "<p><em>Way of Negation, 6th level</em></p><p>When you stop a power, the current it was riding doesn't vanish. It turns, and you learn to hold the turn. You can hold a number of eddies equal to your Wisdom or Charisma modifier (your choice, minimum of one). Whenever you end another creature's power with a power of your own, such as <em>Stem the Current</em> or <em>Cut the Current</em>, or whenever your Flow Ward turns an attack into a miss or your Turn Aside turns a failed save into a success, you gain one eddy.</p><p>Once per turn, when you deal damage to a creature or object with a power, you can spend one eddy to deal extra damage to that target. The extra damage is of the same type as the power's damage and equals half your Theurge level.</p><p>When you finish a long rest, you have one eddy. If you finish a short rest with no eddies, you gain one.</p>"
+    },
+    {
+      "slug": "negation-enduring-focus", "name": "Enduring Focus", "level": 10, "requirements": "Flow Wolf: Theurge (Way of Negation) 10",
+      "folder": "Way of Negation", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/defensive/shield-hex-blue.webp",
+      "range": 5,
+      "description": "<p><em>Way of Negation, 10th level</em></p><p>You can keep a power running with one hand and turn blows with the other. While you're concentrating on a power, you have a +2 bonus to your AC and to all saving throws.</p><p>You can also extend your Turn Aside to a creature within 5 feet of you when it fails a saving throw.</p>"
+    },
+    {
+      "slug": "negation-conflux", "name": "Conflux", "level": 14, "requirements": "Flow Wolf: Theurge (Way of Negation) 14",
+      "folder": "Way of Negation", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/sonic/explosion-shock-wave-teal.webp",
+      "activation": "special", "activity": "damage", "range": 60, "target": { "count": "3", "type": "creature" },
+      "damage": [{ "custom": { "enabled": true, "formula": "floor(@classes.theurge.levels / 2)" }, "number": null, "denomination": null, "bonus": "", "types": ["force"], "scaling": { "mode": "", "number": 1 } }],
+      "description": "<p><em>Way of Negation, 14th level</em></p><p>What you turn aside has to go somewhere. When you use your Turn Aside feature, you can let the turn ripple out from you. Up to three creatures of your choice that you can see within 60 feet of you each take force damage equal to half your Theurge level.</p>"
+    },
+    {
+      "slug": "negation-still-water", "name": "Dead Calm", "level": 18, "requirements": "Flow Wolf: Theurge (Way of Negation) 18",
+      "folder": "Way of Negation", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/defensive/barrier-shield-dome-deflect-teal.webp",
+      "description": "<p><em>Way of Negation, 18th level</em></p><p>You've held enough of the current in reserve that you can shape with it instead of paying for it. When you put a Shape on a power, you can spend one eddy to use the Shape without spending the extra Flow points.</p>"
+    },
+
+    {
+      "slug": "suggestion-subtle-control", "name": "Subtle Control", "level": 3, "requirements": "Flow Wolf: Theurge (Way of Suggestion) 3",
+      "folder": "Way of Suggestion", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "activation": "action", "activity": "save", "save": { "ability": "wis" }, "range": 30,
+      "description": "<p><em>Way of Suggestion, 3rd level</em></p><p>You can muddy a mind with nothing but a gesture. As an action, choose a creature you can see within 30 feet of you; it must make a Wisdom saving throw against your Unaligned power save DC. On a failed save, you make it believe or forget one detail of a conversation, observation, or encounter it had in the last 10 minutes that you were present for. Succeed or fail, you can't use this feature on that creature again until you finish a long rest.</p><p>You're also hard to catch at it. Creatures trying to detect your use of the Flow have disadvantage on ability checks to do so, and a creature with <em>Feel the Current</em> or <em>Current Sight</em> running must succeed on a casting ability check against your Unaligned power save DC to notice that you're using the Flow, which way it runs through you, or how deep it goes.</p>"
+    },
+    {
+      "slug": "suggestion-out-of-mind", "name": "Out of Mind", "level": 6, "requirements": "Flow Wolf: Theurge (Way of Suggestion) 6",
+      "folder": "Way of Suggestion", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "activation": "bonus", "activity": "save", "save": { "ability": "wis" }, "range": 60, "target": { "count": "1", "type": "creature" },
+      "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "sr" },
+      "description": "<p><em>Way of Suggestion, 6th level</em></p><p>You can step out of one person's sight without moving. As a bonus action, choose a creature within 60 feet of you that you're aware of. It must make a Wisdom saving throw against your Unaligned power save DC. On a failed save, you're invisible to that creature for 1 minute, or until you deal damage to it.</p><p>Once you've used this feature, you can't use it again until you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "suggestion-delicate-potency", "name": "Delicate Potency", "level": 10, "requirements": "Flow Wolf: Theurge (Way of Suggestion) 10",
+      "folder": "Way of Suggestion", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/control/control-influence-puppet.webp",
+      "activation": "special", "uses": { "max": "4 + floor(max(0, @classes.theurge.levels - 9) / 4)", "per": "lr" },
+      "description": "<p><em>Way of Suggestion, 10th level (improves at 13th and 17th)</em></p><p>Your touch on a mind goes deep without pressing hard. When you cast <em>Fogged Mind</em>, <em>Hold the Reins</em>, <em>Crowd Sway</em>, or <em>Hold the Beast</em>, you can treat the power as if you'd cast it at your Max Power Level.</p><p>You can use this feature four times. You gain one more use at 13th and 17th level, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "suggestion-delayed-effect", "name": "Delayed Effect", "level": 14, "requirements": "Flow Wolf: Theurge (Way of Suggestion) 14",
+      "folder": "Way of Suggestion", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/time/hourglass-yellow-green.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Way of Suggestion, 14th level</em></p><p>A power doesn't have to land when you cast it. When you cast a power, you can hold its effect back for up to a number of rounds equal to half your Theurge level. If you do, the power takes effect at the start of your turn once that many rounds have passed.</p><p>Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "suggestion-subtle-presence", "name": "Subtle Presence", "level": 18, "requirements": "Flow Wolf: Theurge (Way of Suggestion) 18",
+      "folder": "Way of Suggestion", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
+      "activation": "action", "activity": "save", "save": { "ability": "wis" }, "range": 60,
+      "duration": { "value": "10", "units": "minute" }, "uses": { "max": "3", "per": "lr" },
+      "description": "<p><em>Way of Suggestion, 18th level</em></p><p>You've learned to wear the Flow like a coat, and you own three. As an action, you gather the current around you for 10 minutes and choose one of the following cloaks.</p><p>You can use each cloak once, and you regain all spent uses when you finish a long rest.</p><p><strong>Cloak of Fright.</strong> Each creature of your choice within 60 feet of you must succeed on a Wisdom saving throw against your Unaligned power save DC or be frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p><p><strong>Cloak of Invisibility.</strong> You and everything you're wearing or carrying become invisible to creatures of your choice. If you damage a creature or affect it with a power, it can make a Wisdom saving throw against your Unaligned power save DC; on a success, you're no longer invisible to it.</p><p><strong>Cloak of Memory.</strong> Creatures that see you, or any allies within 30 feet of you, during this time can't recall your appearance, your manner, or anything else that would pick you out. A creature that deals with you must make a Wisdom saving throw against your Unaligned power save DC when the dealing is done (you can exempt a creature if you like). On a failed save, it forgets every detail of the interaction and explains away whatever came of it.</p>"
+    },
+
+    {
+      "slug": "technology-wire-sense", "name": "Wire Sense", "level": 3, "requirements": "Flow Wolf: Theurge (Way of Technology) 3",
+      "folder": "Way of Technology", "folderParent": "Flow Wolf: Theurge", "img": "icons/commodities/tech/electronics-sensor-eye.webp",
+      "activation": "special", "uses": { "max": "2 + floor((@classes.theurge.levels - 1) / 4)", "per": "lr" },
+      "description": "<p><em>Way of Technology, 3rd level (improves at 5th, 9th, 13th, and 17th)</em></p><p>You've found where the current runs through a circuit. You gain proficiency with tinker's tools and with simple guns. When you cast a power that calls for a melee weapon attack while you're holding a gun you're proficient with, you can make a ranged weapon attack with it instead.</p><p>You've also learned to push the Flow into places it won't normally go. When you cast a power that can't affect drones or constructs, you can choose to have it affect them anyway. If the power would hit more than one such target, spend one more use of this feature for each extra target. (A Circuitborn is a person, not a machine; powers already treat them as one.)</p><p>You can use this feature twice. You gain one more use at 5th, 9th, 13th, and 17th level, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "technology-borrowed-artifice", "name": "Borrowed Artifice", "level": 6, "requirements": "Flow Wolf: Theurge (Way of Technology) 6",
+      "folder": "Way of Technology", "folderParent": "Flow Wolf: Theurge", "img": "icons/commodities/tech/blueprint.webp",
+      "description": "<p><em>Way of Technology, 6th level (improves at 7th, 13th, and 17th)</em></p><p>You've picked up tricks from the Gearwrights and learned to do them with the current instead of a toolkit. Choose two Artifice powers of 1st level. For you they count as Unaligned Flow powers, and they don't count against the number in the Powers Known column of the Theurge table.</p><p>At 7th level you learn two more Artifice powers of 1st or 2nd level. At 13th level you learn two of 1st to 3rd level, and at 17th level two of 1st to 4th level. Whenever you gain a level in this class, you can swap one Artifice power you know for another of the same level.</p>"
+    },
+    {
+      "slug": "technology-live-wire", "name": "Hot Wire", "level": 10, "requirements": "Flow Wolf: Theurge (Way of Technology) 10",
+      "folder": "Way of Technology", "folderParent": "Flow Wolf: Theurge", "img": "icons/magic/lightning/bolt-strike-sparks-blue.webp",
+      "description": "<p><em>Way of Technology, 10th level</em></p><p>You can put a charge on anything you cast. When you cast a damaging power that calls for a power attack or a saving throw, you can spend Flow points to make it deal lightning damage instead of its usual type. The cost is half the power's level (rounded down, minimum of one). If the power calls for a saving throw other than Dexterity, it calls for a Dexterity saving throw instead.</p>"
+    },
+    {
+      "slug": "technology-flow-circuitry", "name": "Flow Circuitry", "level": 14, "requirements": "Flow Wolf: Theurge (Way of Technology) 14",
+      "folder": "Way of Technology", "folderParent": "Flow Wolf: Theurge", "img": "icons/commodities/tech/wire-spliced.webp",
+      "activation": "bonus",
+      "description": "<p><em>Way of Technology, 14th level</em></p><p>Two currents, one circuit. When you use your action to cast a power and use your Wire Sense feature as part of that casting, you can use your bonus action to cast one of the Artifice powers you know, as long as it has a casting time of 1 action or 1 bonus action.</p>"
+    },
+    {
+      "slug": "technology-ghost-in-the-machine", "name": "Ghost in the Machine", "level": 18, "requirements": "Flow Wolf: Theurge (Way of Technology) 18",
+      "folder": "Way of Technology", "folderParent": "Flow Wolf: Theurge", "img": "icons/commodities/tech/robotics-frame-steel-blue.webp",
+      "activation": "special", "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Way of Technology, 18th level</em></p><p>There's no longer a seam between the current and the circuit. Choose one 5th-level Artifice power. You can cast it at its base level without spending any points, and for you it counts as an Unaligned Flow power. Once you've done so, you can't do so again until you finish a long rest.</p>"
+    }
+  ]
+}

@@ -95,7 +95,10 @@ export function castingFor(actor) {
     const maxPowerLevel = classesCount === 1 ? MAX_LEVEL[single.prog][single.levels]
       : Math.min(maxOf20, MAX_LEVEL.full[Math.min(20, casterLevel)] ?? 0);
     const ability = bestOf(actor, trad.attrs);
-    const max = Math.max(0, Math.round(points) + (classesCount ? abilityMod(actor, ability) : 0) + bonus);
+    // Midstream (Set of the Current): both Flow abilities count, not just the better one.
+    const midstream = key === "flow" && classesCount && actor.flags?.[MOD]?.midstream
+      ? trad.attrs.filter(a => a !== ability).reduce((s, a) => s + abilityMod(actor, a), 0) : 0;
+    const max = Math.max(0, Math.round(points) + (classesCount ? abilityMod(actor, ability) : 0) + midstream + bonus);
     const state = actor.flags?.[MOD]?.points?.[key] ?? {};
     const value = Number.isFinite(state.value) ? Math.min(state.value, max) : max;
     out[key] = {

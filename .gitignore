@@ -77,3 +77,6 @@
 **/packs/**/MANIFEST-*
 **/packs/**/*.log
 **/packs/**/*.ldb
+
+# bad-eden-5e: packs are built from content/*.json by tools/build-packs.mjs
+modules/bad-eden-5e/packs/

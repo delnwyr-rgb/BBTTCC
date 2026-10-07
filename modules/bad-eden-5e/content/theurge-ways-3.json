@@ -1,0 +1,372 @@
+{
+  "_about": "Flow Wolf: Theurge — four Ways: Telekinetics, Tutelage, the Sage, the Seer. Mechanics carried over from the SW5E Consular archetypes; every line of text is Bad Eden's own. Built by tools/build-packs.mjs. Way of Tutelage dropped 2026-10-06 (Dave: no companion rules in Bad Eden 5E).",
+  "_renames": [
+    {
+      "sw5e": "Size Matters Not",
+      "new": "Weight Is a Rumor"
+    },
+    {
+      "sw5e": "My Ally is the Force",
+      "new": "The Current Takes Your Side"
+    },
+    {
+      "sw5e": "Blessed by the Force",
+      "new": "Carried by the Current"
+    },
+    {
+      "sw5e": "Force Visions",
+      "new": "Foretelling"
+    }
+  ],
+  "_powerRefs": [
+    {
+      "sw5e": "coerce mind",
+      "draft": "Bend the Will",
+      "way": "Way of the Seer",
+      "feature": "seer-powerful-mind"
+    }
+  ],
+  "subclasses": [
+    {
+      "slug": "way-of-telekinetics",
+      "identifier": "way-of-telekinetics",
+      "name": "Way of Telekinetics",
+      "classIdentifier": "theurge",
+      "img": "icons/magic/control/debuff-energy-hold-levitate-pink.webp",
+      "description": "<p><em>Way of the Flow Wolf: Theurge</em></p><p>Everything has weight, and the Flow is under all of it. Theurges who walk the Way of Telekinetics learn to get a grip on that weight and move it: a truck, a wall, a man who thought he was standing still. They don't win arguments so much as end them with the furniture.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "telekinetics-staggering-stratagem"
+        },
+        {
+          "level": 6,
+          "slug": "telekinetics-mighty-blast"
+        },
+        {
+          "level": 10,
+          "slug": "telekinetics-weight-is-a-rumor"
+        },
+        {
+          "level": 14,
+          "slug": "telekinetics-repulsing-wave"
+        },
+        {
+          "level": 18,
+          "slug": "telekinetics-the-current-takes-your-side"
+        }
+      ]
+    },
+    {
+      "slug": "way-of-the-sage",
+      "identifier": "way-of-the-sage",
+      "name": "Way of the Sage",
+      "classIdentifier": "theurge",
+      "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+      "description": "<p><em>Way of the Flow Wolf: Theurge</em></p><p>The Flow mends what it runs through, if you let it, and nobody lets it like a Sage. Theurges who walk this Way stand a little back from the fight and keep everyone else in it: the sealed wound, the second wind, the friend who was not going to make it and did. A town with a Sage in it buries fewer people.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "sage-disciple-of-life"
+        },
+        {
+          "level": 6,
+          "slug": "sage-preserve-life"
+        },
+        {
+          "level": 10,
+          "slug": "sage-blessed-healer"
+        },
+        {
+          "level": 14,
+          "slug": "sage-carried-by-the-current"
+        },
+        {
+          "level": 18,
+          "slug": "sage-supreme-healing"
+        }
+      ]
+    },
+    {
+      "slug": "way-of-the-seer",
+      "identifier": "way-of-the-seer",
+      "name": "Way of the Seer",
+      "classIdentifier": "theurge",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
+      "description": "<p><em>Way of the Flow Wolf: Theurge</em></p><p>Stand in a river long enough and you start to feel what's coming down it. Theurges who walk the Way of the Seer get the visions whether they asked or not, and spend their lives learning to steer by them toward the best of the futures they've seen. They are rarely surprised and rarely at ease.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "seer-foretelling"
+        },
+        {
+          "level": 6,
+          "slug": "seer-powerful-mind"
+        },
+        {
+          "level": 10,
+          "slug": "seer-visions-of-the-past"
+        },
+        {
+          "level": 14,
+          "slug": "seer-shielded-thoughts"
+        },
+        {
+          "level": 18,
+          "slug": "seer-clarity-of-vision"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "telekinetics-staggering-stratagem",
+      "name": "Staggering Stratagem",
+      "level": 3,
+      "requirements": "Flow Wolf: Theurge (Way of Telekinetics) 3",
+      "folder": "Way of Telekinetics",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/control/debuff-energy-hold-levitate-teal-blue.webp",
+      "description": "<p><em>Way of Telekinetics, 3rd level</em></p><p>Your grip on the current gets heavier. You can move creatures of Large size or smaller with your powers and your Way of Telekinetics features.</p><p>Also, once per turn, when you deal force, bludgeoning, piercing, or slashing damage to a Large or smaller creature with a power or a class feature, you can shove it up to 10 feet away from you or haul it up to 10 feet closer.</p>"
+    },
+    {
+      "slug": "telekinetics-mighty-blast",
+      "name": "Mighty Blast",
+      "level": 6,
+      "requirements": "Flow Wolf: Theurge (Way of Telekinetics) 6",
+      "folder": "Way of Telekinetics",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/earth/barrier-stone-explosion-debris.webp",
+      "activation": "special",
+      "activity": "save",
+      "save": {
+        "ability": "str"
+      },
+      "description": "<p><em>Way of Telekinetics, 6th, 11th, and 17th level</em></p><p>Your powers hit like weather. When you cast a power of 1st level or higher that deals force, bludgeoning, piercing, or slashing damage, one creature of your choice that the power damaged must make a Strength saving throw against your Unaligned power save DC or be knocked prone.</p><p>At 11th level you can pick two creatures, and at 17th level three.</p>"
+    },
+    {
+      "slug": "telekinetics-weight-is-a-rumor",
+      "name": "Weight Is a Rumor",
+      "level": 10,
+      "requirements": "Flow Wolf: Theurge (Way of Telekinetics) 10",
+      "folder": "Way of Telekinetics",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/control/buff-flight-wings-runes-blue.webp",
+      "activation": "bonus",
+      "description": "<p><em>Way of Telekinetics, 10th level</em></p><p>You can move creatures of Huge size or smaller with your powers and your Way of Telekinetics features.</p><p>Also, on a turn when you use your action to cast a power, you can use a bonus action to fly up to 10 feet. That movement doesn't provoke opportunity attacks.</p>"
+    },
+    {
+      "slug": "telekinetics-repulsing-wave",
+      "name": "Repulsing Wave",
+      "level": 14,
+      "requirements": "Flow Wolf: Theurge (Way of Telekinetics) 14",
+      "folder": "Way of Telekinetics",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/air/fog-gas-smoke-swirling-gray.webp",
+      "activation": "reaction",
+      "uses": {
+        "max": "@attributes.prof",
+        "per": "sr"
+      },
+      "range": 5,
+      "activity": "save",
+      "save": {
+        "ability": "str"
+      },
+      "damage": [
+        {
+          "custom": {
+            "enabled": true,
+            "formula": "@classes.theurge.levels + max(@abilities.wis.mod, @abilities.cha.mod, 1)"
+          },
+          "number": null,
+          "denomination": null,
+          "bonus": "",
+          "types": [
+            "force"
+          ],
+          "scaling": {
+            "mode": "",
+            "number": 1
+          }
+        }
+      ],
+      "description": "<p><em>Way of Telekinetics, 14th level</em></p><p>Get close enough to hurt you and the current answers for you. When a creature within 5 feet of you deals damage to you, you can use your reaction to deal force damage to it equal to your Theurge level plus your Wisdom or Charisma modifier (your choice, minimum of +1). If the attacker is Huge or smaller, it must also make a Strength saving throw against your Unaligned power save DC. On a failed save it is shoved in a straight line up to 20 feet away from you.</p><p>You can use this feature a number of times equal to your proficiency bonus. You regain all spent uses when you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "telekinetics-the-current-takes-your-side",
+      "name": "The Current Takes Your Side",
+      "level": 18,
+      "requirements": "Flow Wolf: Theurge (Way of Telekinetics) 18",
+      "folder": "Way of Telekinetics",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/water/wave-water-blue.webp",
+      "description": "<p><em>Way of Telekinetics, 18th level</em></p><p>You can move creatures of Gargantuan size or smaller with your powers and your Way of Telekinetics features.</p><p>Also, whenever a power you cast shoves or hauls a creature, you can add 20 feet to the distance.</p>"
+    },
+    {
+      "slug": "sage-disciple-of-life",
+      "name": "Disciple of Life",
+      "level": 3,
+      "requirements": "Flow Wolf: Theurge (Way of the Sage) 3",
+      "folder": "Way of the Sage",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+      "description": "<p><em>Way of the Sage, 3rd level</em></p><p>Mending is the first thing the Flow wants to do, and you've stopped getting in its way. When you cast a power that restores hit points, you can use Wisdom or Charisma as your casting ability for it, whichever way the power runs.</p><p>Also, whenever you use a power of 1st level or higher to restore hit points to a creature, it regains extra hit points equal to 2 + the power's level.</p>"
+    },
+    {
+      "slug": "sage-preserve-life",
+      "name": "Preserve Life",
+      "level": 6,
+      "requirements": "Flow Wolf: Theurge (Way of the Sage) 6",
+      "folder": "Way of the Sage",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/life/cross-worn-green.webp",
+      "activation": "action",
+      "uses": {
+        "max": "3",
+        "per": "lr"
+      },
+      "range": 30,
+      "target": {
+        "type": "creature",
+        "count": ""
+      },
+      "description": "<p><em>Way of the Sage, 6th, 9th, 13th, and 17th level</em></p><p>You open your hands and let it out. As an action, you call up healing from the current equal to five times your Theurge level. Choose any creatures within 30 feet of you and divide those hit points among them as you like. This feature can't bring a creature above half its hit point maximum, and it does nothing for drones or constructs. A Circuitborn is a person, not a drone, and it works on them fine.</p><p>You can use this feature three times. You gain one more use at 9th, 13th, and 17th level, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "sage-blessed-healer",
+      "name": "Blessed Healer",
+      "level": 10,
+      "requirements": "Flow Wolf: Theurge (Way of the Sage) 10",
+      "folder": "Way of the Sage",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/nature/root-vine-caduceus-healing.webp",
+      "description": "<p><em>Way of the Sage, 10th level</em></p><p>Some of what passes through you stays. When you cast a power that restores hit points to a creature other than you, you regain hit points equal to 2 + the power's level.</p>"
+    },
+    {
+      "slug": "sage-carried-by-the-current",
+      "name": "Carried by the Current",
+      "level": 14,
+      "requirements": "Flow Wolf: Theurge (Way of the Sage) 14",
+      "folder": "Way of the Sage",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/water/wave-water-blue.webp",
+      "activation": "bonus",
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Way of the Sage, 14th level</em></p><p>You've been on the wrong side of worse. As a bonus action, while you have fewer than half your hit points left, you can regain hit points equal to half your hit point maximum.</p><p>Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "sage-supreme-healing",
+      "name": "Supreme Healing",
+      "level": 18,
+      "requirements": "Flow Wolf: Theurge (Way of the Sage) 18",
+      "folder": "Way of the Sage",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/holy/projectiles-blades-salvo-yellow.webp",
+      "description": "<p><em>Way of the Sage, 18th level</em></p><p>You don't roll for it anymore. Whenever you would roll one or more dice to restore hit points with a power, use the highest number possible on each die instead. Where another Sage would roll 2d6, you restore 12.</p>"
+    },
+    {
+      "slug": "seer-foretelling",
+      "name": "Foretelling",
+      "level": 3,
+      "requirements": "Flow Wolf: Theurge (Way of the Seer) 3",
+      "folder": "Way of the Seer",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "description": "<p><em>Way of the Seer, 3rd level</em></p><p>What's coming downstream starts arriving early. When you finish a long rest, roll two d20s and write the numbers down. These are your foretelling rolls. You can replace any attack roll, saving throw, or ability check made by you or by a creature you can see with one of them. You must choose to do so before the roll is made, you can replace only one roll per turn this way, and each foretelling roll can be used once.</p><p>When you finish a long rest, any foretelling rolls you didn't use are gone.</p>"
+    },
+    {
+      "slug": "seer-powerful-mind",
+      "name": "Powerful Mind",
+      "level": 6,
+      "requirements": "Flow Wolf: Theurge (Way of the Seer) 6",
+      "folder": "Way of the Seer",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "activation": "action",
+      "uses": {
+        "max": "3",
+        "per": "lr"
+      },
+      "range": 60,
+      "target": {
+        "type": "creature",
+        "count": "1"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "activity": "save",
+      "save": {
+        "ability": "wis"
+      },
+      "description": "<p><em>Way of the Seer, 6th, 9th, 13th, and 17th level</em></p><p>You can read what's on top of a mind, and then you can lean on it.</p><p>As an action, choose one creature you can see within 60 feet of you. It must make a Wisdom saving throw against your Unaligned power save DC. If it succeeds, you can't use this feature on it again until you finish a long rest. If it fails, for 1 minute you can read its surface thoughts (whatever is foremost in its mind: what it feels right now and what it's actively thinking about) while it is within 60 feet of you. At any point during that minute you can use your action to end the effect and cast <em>Bend the Will</em> on the creature at its base level without spending Flow points. The target automatically fails its saving throw against the power.</p><p>You can use this feature three times. You gain one more use at 9th, 13th, and 17th level, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "seer-visions-of-the-past",
+      "name": "Visions of the Past",
+      "level": 10,
+      "requirements": "Flow Wolf: Theurge (Way of the Seer) 10",
+      "folder": "Way of the Seer",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/time/hourglass-tilted-gray.webp",
+      "activation": "special",
+      "uses": {
+        "max": "1",
+        "per": "sr"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "description": "<p><em>Way of the Seer, 10th level</em></p><p>The current runs backward too, if you sit still enough to feel it. You can call up visions of the past tied to an object you're holding or to the place you're standing. You spend at least 1 minute in meditation and receive dreamlike, half-lit glimpses of recent events. You can keep it up for a number of minutes equal to your Wisdom score, and you must maintain concentration the whole time, as if concentrating on a power.</p><p>Once you've used this feature, you can't use it again until you finish a short or long rest.</p><p><strong>Reading an object.</strong> Holding an object as you meditate, you see its last owner. After 1 minute you learn how that owner came by the object and how they lost it, and the most recent significant event involving the object and that owner. If another creature owned it in the recent past (within a number of days equal to your Wisdom score), you can spend 1 more minute per owner to learn the same about them.</p><p><strong>Reading a place.</strong> As you meditate, you see recent events in your immediate surroundings (a room, a street, a tunnel, a clearing, anything up to a 50-foot cube), going back a number of days equal to your Wisdom score. For each minute you meditate, you learn about one significant event, starting with the most recent. Significant usually means strong feeling: fights and betrayals, weddings and murders, births and burials. It can also mean something ordinary that happens to matter to you right now.</p>"
+    },
+    {
+      "slug": "seer-shielded-thoughts",
+      "name": "Shielded Thoughts",
+      "level": 14,
+      "requirements": "Flow Wolf: Theurge (Way of the Seer) 14",
+      "folder": "Way of the Seer",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "description": "<p><em>Way of the Seer, 14th level</em></p><p>Nobody reads you unless you let them. Your thoughts can't be read by telepathy or any other means without your permission. You also have resistance to psychic damage, and whenever a creature deals psychic damage to you, it takes the same amount of damage you do.</p>",
+      "effects": [
+        {
+          "_id": "be5eSeerShield00",
+          "name": "Shielded Thoughts",
+          "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.traits.dr.value",
+              "mode": 2,
+              "value": "psychic",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ]
+    },
+    {
+      "slug": "seer-clarity-of-vision",
+      "name": "Clarity of Vision",
+      "level": 18,
+      "requirements": "Flow Wolf: Theurge (Way of the Seer) 18",
+      "folder": "Way of the Seer",
+      "folderParent": "Flow Wolf: Theurge",
+      "img": "icons/magic/perception/orb-eye-scrying.webp",
+      "description": "<p><em>Way of the Seer, 18th level</em></p><p>The pictures come in sharper now. You roll three d20s for your Foretelling feature instead of two.</p>"
+    }
+  ]
+}
