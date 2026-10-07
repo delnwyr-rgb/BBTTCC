@@ -1,0 +1,1764 @@
+{
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.2.0) — do not hand-edit; put fixes in content/overrides/techniques.json. The 75 Bad Eden Core techniques as dnd5e feats.",
+  "_generated": {
+    "by": "tools/convert-5e.mjs",
+    "rubric": "1.2.0",
+    "at": "2026-10-07",
+    "overridesApplied": 0
+  },
+  "features": [
+    {
+      "slug": "feat-adaptive-defense",
+      "name": "Adaptive Defense",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_defense.png",
+      "description": "<p><em>Defense is not denial. It is management.</em></p><p>When you are hit by an attack you can see, you may use your reaction to reduce the damage by an amount equal to your proficiency bonus + your Strength or Dexterity modifier (your choice).</p>",
+      "activation": "reaction",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "i3Mh6Mxk5zv8uNoE",
+            "pack": "items",
+            "identifier": "bbttcc_feat_adaptive_defense",
+            "hash": "1505b7a56d5b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-anchor-point",
+      "name": "Anchor Point",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_anchor_point.png",
+      "description": "<p><em>The world pushes. You remain.</em></p><p>You have advantage on checks or saves made to resist being pushed, pulled, knocked prone, frightened, or charmed.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4oCP5wTvihYjMsYM",
+            "pack": "items",
+            "identifier": "bbttcc_feat_anchor_point",
+            "hash": "41609f607275"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-backline-commander",
+      "name": "Backline Commander",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_backline_commander.png",
+      "description": "<p><em>You don’t need to be closest to steer the fight.</em></p><p>As a Bonus action, choose one ally who can see or hear you within 30 feet That ally may immediately move up to 10 feet without provoking opportunity attacks.</p><p>You can use this feat a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p>",
+      "uses": {
+        "max": "@prof",
+        "per": "lr"
+      },
+      "activation": "bonus",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "eoz92v7bIszZoopP",
+            "pack": "items",
+            "identifier": "bbttcc_feat_backline_commander",
+            "hash": "c7547b807812"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-battlefield-presence",
+      "name": "Battlefield Presence",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_battlefied_presence.png",
+      "description": "<p><em>People fight better when you are near.</em></p><p>Allies within 10 feet of you have advantage on the first saving throws they make against being frightened or charmed each combat.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "rpt6sZMxSpXGZykt",
+            "pack": "items",
+            "identifier": "bbttcc_feat_battlefield_presence",
+            "hash": "901ce6b8e81a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-bladed-tempo",
+      "name": "Bladed Tempo",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_bladed_tempo.png",
+      "description": "<p><em>Your weapons are punctuation.</em></p><p>When you hit with a melee weapon attack, you may immediately draw or stow a weapon, or shift 5 feet without provoking opportunity attacks.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "kNk6jUeMx2OxHN3n",
+            "pack": "items",
+            "identifier": "bbttcc_feat_bladed_tempo",
+            "hash": "f23081ef1eb8"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-bound-and-bargained",
+      "name": "Bound and Bargained",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "Path of the Pactkeeper",
+      "folder": "Techniques",
+      "img": "icons/magic/symbols/runes-carved-stone-purple.webp",
+      "description": "<p><em>A sealed pact holds itself; you need only keep the terms.</em></p><p>While your <strong>Sealed Pact</strong> stance is active, the bindings carry their own weight: the <strong>upkeep</strong> cost of your sustained powers is <strong>halved</strong>.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "RjwisInxBL2Uiv7p",
+            "pack": "items",
+            "identifier": "bbttcc_feat_bound_and_bargained",
+            "hash": "f96d8a233d39"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-breach-specialist",
+      "name": "Breach Specialist",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_breach_specialist.png",
+      "description": "<p><em>Everything has a seam. Most people just don’t look.</em></p><p>You gain a rank in Tinkering (thieves’ tools). If you already have it, you gain expertise with it instead.</p><p>When you hit an object, door, barrier, or construct with a weapon attack, you may treat the attack as dealing maximum damage to the target’s objects-only resistances (GM adjudication). Once you do, you can’t do so again until the start of your next turn.</p>",
+      "traits": [
+        {
+          "tag": "tinkering",
+          "title": "Proficiency",
+          "grants": [
+            "tool:tinker"
+          ]
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "UoMYdLZRAG52Y1dz",
+            "pack": "items",
+            "identifier": "bbttcc_feat_breach_specialist",
+            "hash": "38874a629acb"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-calculated-risk",
+      "name": "Calculated Risk",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_calculated_risk.png",
+      "description": "<p><em>You open yourself on purpose.</em></p><p>Once per turn, you may choose to have advantage on an attack roll. If you do, attack rolls against you gain advantage until the start of your next turn.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Rst7wYHeDxYMFrI0",
+            "pack": "items",
+            "identifier": "bbttcc_feat_calculated_risk",
+            "hash": "4a8f71d70d88"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-calm-the-mob",
+      "name": "Calm the Mob",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_cal%2C_the_mob.png",
+      "description": "<p><em>Crowds don’t think. They feel. So you give them something else to feel.</em></p><p>You gain proficiency in Persuasion or Intimidation (your choice). If you already have it, you gain expertise with it instead.</p><p>When you spend at least 1 minute addressing a group of non-hostile or uncertain creatures, you may make a Charisma (Persuasion or Intimidation) check (DC set by the GM). On a success, you reduce immediate hostility: the crowd hesitates, disperses, or agrees to hear terms. On a failure, you still buy time, but a complication occurs (a challenger steps forward, guards arrive, a rumor spreads).</p>",
+      "traits": [
+        {
+          "tag": "choice",
+          "title": "Proficiency",
+          "choices": [
+            {
+              "count": 1,
+              "pool": [
+                "skills:per",
+                "skills:itm"
+              ]
+            }
+          ]
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4835mv5YGcHEmqZt",
+            "pack": "items",
+            "identifier": "bbttcc_feat_calm_the_mob",
+            "hash": "ad5b1f55f65c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-combat-instinct",
+      "name": "Combat Instinct",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_combat_instinct.png",
+      "description": "<p><em>You are already moving when the noise begins.</em></p><p>You have advantage on initiative rolls. You cannot be surprised while conscious. During the first round of combat, you may draw or stow any number of weapons as part of your movement.</p>",
+      "effects": [
+        {
+          "_id": "be5edba2da516f3e",
+          "name": "Combat Instinct",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_combat_instinct.png",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.attributes.init.roll.mode",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "XUe79LAOnCNHkdlk",
+            "pack": "items",
+            "identifier": "bbttcc_feat_combat_instinct",
+            "hash": "c8e80ad6d39c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-combat-intuition",
+      "name": "Combat Intuition",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_combat-Intuition.png",
+      "description": "<p><em>You feel the mistake before you see it.</em></p><p>Once per round, when a creature within 5 feet of you misses an attack, you may use your reaction to make a melee weapon attack against it.</p>",
+      "activation": "reaction",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "5NMHaJsuIJhmKS7R",
+            "pack": "items",
+            "identifier": "bbttcc_feat_combat_intuition",
+            "hash": "a5830f4b46b0"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-combat-logistics",
+      "name": "Combat Logistics",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_combat_logistic.jpeg",
+      "description": "<p><em>Wars are won before the first swing.</em></p><p>At the start of combat, choose one ally. That ally gains temporary hit points equal to your proficiency bonus.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "O3ox21QkblL6C0Kl",
+            "pack": "items",
+            "identifier": "bbttcc_feat_combat_logistics",
+            "hash": "d70cbcf9f150"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-controlled-aggression",
+      "name": "Controlled Aggression",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_controlled_aggression.png",
+      "description": "<p><em>Sometimes restraint hurts more.</em></p><p>Once per turn, when you hit with a weapon attack, you may choose to deal minimum damage and the target has disadvantage on its next attack roll.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "mue3ysZjdVf3gngT",
+            "pack": "items",
+            "identifier": "bbttcc_feat_controlled_aggression",
+            "hash": "29addff3f6b9"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-controlled-collapse",
+      "name": "Controlled Collapse",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_controlled_collapse.png",
+      "description": "<p><em>Things fall apart. Professionals choose the direction.</em></p><p>Once per long rest, when an environmental hazard, trap, or structural failure would affect an area, you may reduce the affected area by half and choose where the danger concentrates.</p>",
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "activation": "special",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "uyeVV3g4Q9qsFIoQ",
+            "pack": "items",
+            "identifier": "bbttcc_feat_controlled_collapse",
+            "hash": "fa94eec87ed9"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-danger-close",
+      "name": "Danger Close",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_danger_close.png",
+      "description": "<p><em>Clarity comes when options narrow.</em></p><p>While you are below half your hit points maximum, you have advantage on initiative and Dexterity checks.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "PEps4klgMtVDquBH",
+            "pack": "items",
+            "identifier": "bbttcc_feat_danger_close",
+            "hash": "267a9de8c03b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-darkness-hardened",
+      "name": "Darkness Hardened",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_darkness_hardened.png",
+      "description": "<p><em>The Dark doesn’t scare you. It negotiates.</em></p><p>You have advantage on saving throws against being frightened.</p><p>Additionally, when you fail a saving throw against fear or horror, you may choose to succeed instead. If you do, you gain one level of exhaustion after the effect ends. Once you use this feat, you can’t use it again until you finish a long rest.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "XeSQLXvQFDdiynkW",
+            "pack": "items",
+            "identifier": "bbttcc_feat_darkness_hardened",
+            "hash": "0b97f5ec3b4d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-decisive-momentum",
+      "name": "Decisive Momentum",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_decisive_momentum.png",
+      "description": "<p><em>You do not pause when the fight turns. You ride the turn.</em></p><p>When you reduce a hostile creature to 0 hit points or land a critical hit, you may immediately move up to half your movement without provoking opportunity attacks <strong>or</strong> make one weapon attack against a different creature within reach. You can use this feat once per round.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "kq1ruu2fUdzNAjho",
+            "pack": "items",
+            "identifier": "bbttcc_feat_decisive_momentum",
+            "hash": "4abcef79ef90"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-deep-well",
+      "name": "Deep Well",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/water/orb-water-bubbles.webp",
+      "description": "<p><em>Your reservoir of will runs deeper than most stewards'.</em></p><p>Your maximum <strong>Clarity</strong> increases by <strong>2</strong>. A deeper reservoir lets you hold more powers at once and absorb a bad misfire without running dry.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ZX4ngttxL8JYuvqS",
+            "pack": "items",
+            "identifier": "bbttcc_feat_deep_well",
+            "hash": "dab23f3f23ed"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-deliberate-tempo",
+      "name": "Deliberate Tempo",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_deliberate_tempo.png",
+      "description": "<p><em>Timing is a weapon.</em></p><p>Once per turn, you may delay one attack you make until later in the round. When you do, that attack gain advantage.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "q9iV4JZUm71Enwim",
+            "pack": "items",
+            "identifier": "bbttcc_feat_deliberate_tempo",
+            "hash": "9611b4bf086b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-desperate-measure",
+      "name": "Desperate Measure",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_desperate_measure.png",
+      "description": "<p><em>When you are out of options, you become one.</em></p><p>When you miss with an attack roll, you may choose to turn the miss into a glancing blow. The attack deals damage equal to your proficiency bonus (of the same type as the weapon or powers) and does not trigger additional effects.</p><p>Once you use this feat, you can’t use it again until you finish a short rest or long rest.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "9OLE0siNPQFVSVM6",
+            "pack": "items",
+            "identifier": "bbttcc_feat_desperate_measure",
+            "hash": "4d973bdaf976"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-disciplined-fire",
+      "name": "Disciplined Fire",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_disciplined_fire.png",
+      "description": "<p><em>It’s not about more shots. It’s about the right shot.</em></p><p>Once per turn when you hit with a ranged weapon attack, you may choose one:</p><ul><li><strong>Pin:</strong> The target’s movement is reduced by 10 feet until the start of your next turn.</li><li><strong>Disrupt:</strong> The next attack roll the target makes before the end of its next turn is at disadvantage (3d10 keep-lowest-2).</li></ul><p>A creature can be affected by this feat only once per round.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "o2BssJu9XhrDFBgV",
+            "pack": "items",
+            "identifier": "bbttcc_feat_disciplined_fire",
+            "hash": "b14aa1976656"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-drawing-deep",
+      "name": "Drawing Deep",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "Path of the Cosmic Linguist",
+      "folder": "Techniques",
+      "img": "icons/magic/symbols/runes-star-blue.webp",
+      "description": "<p><em>You hold the Sentence open and let the meaning pour in.</em></p><p>While your <strong>Sentence</strong> stance is active, your maximum <strong>Clarity</strong> increases by <strong>3</strong> — but the open channel costs you <strong>+1 Noise per scene</strong> for as long as the stance is held.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "n2PgLKzhSeyuOWrd",
+            "pack": "items",
+            "identifier": "bbttcc_feat_drawing_deep",
+            "hash": "822672214415"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-edge-of-control",
+      "name": "Edge of Control",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_edge_of_control.png",
+      "description": "<p><em>You don’t just strike enemies. You place them.</em></p><p>Once per turn when you deal damage with a weapon or powers, choose one: push the target 5 feet, pull the target 5 feet, or knock the target prone if it is your size or smaller.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "qpliosuOqU1qGtyb",
+            "pack": "items",
+            "identifier": "bbttcc_feat_edge_of_control",
+            "hash": "a6e04dfdb61b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-enduring-focus",
+      "name": "Enduring Focus",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_enduring_focus.png",
+      "description": "<p><em>You hold your will together when others lose it.</em></p><p>You have advantage on Constitution checks made to maintain Clarity hold. Additionally, you can perform somatic components even when holding weapons or a shield.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "1WtbzowA25xZlRWj",
+            "pack": "items",
+            "identifier": "bbttcc_feat_enduring_focus",
+            "hash": "eda998c8bfa9"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-environmental-opportunist",
+      "name": "Environmental Opportunist",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_environmental_opportunist.png",
+      "description": "<p><em>The ground is complicit.</em></p><p>Once per turn, when an enemy enters or leaves difficult terrain within your reach, you may make a melee attack against it as a reaction.</p>",
+      "activation": "reaction",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "POyLpZMfqulCClg1",
+            "pack": "items",
+            "identifier": "bbttcc_feat_environmental_opportunist",
+            "hash": "bbcbd812d5c0"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-fluid-footwork",
+      "name": "Fluid Footwork",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_fluid_footwork.png",
+      "description": "<p><em>You move like the fight is trying to catch up with you.</em></p><p>Your movement increases by 10 feet Additionally, when you make a melee attack against a creature, that creature can’t make opportunity attacks against you for the rest of the turn (hit or miss).</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "aZPLxt6FjcNY1GsA",
+            "pack": "items",
+            "identifier": "bbttcc_feat_fluid_footwork",
+            "hash": "5f346254afe6"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-focused-execution",
+      "name": "Focused Shot",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_focused_shot.png",
+      "description": "<p><em>You take your time. Just long enough to matter.</em></p><p>Before making a ranged weapon attack, declare a Focused Shot: you ignore half cover, and if the attack hits you add your proficiency bonus to the damage roll. If the attack misses, your movement is reduced by 10 feet until the end of your next turn.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "XzlQh5x0mqtrV4Cx",
+            "pack": "items",
+            "identifier": "bbttcc_feat_focused_execution",
+            "hash": "fcd99ee52742"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-frugal-caster",
+      "name": "Frugal Caster",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/light/explosion-star-glow-blue.webp",
+      "description": "<p><em>You wring every drop of meaning from a working.</em></p><p>Reduce the <strong>Clarity</strong> cost of any <strong>Tier&nbsp;1</strong> powers you cast by <strong>1</strong> (minimum&nbsp;0).</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "oW5nIfO5G7iwnHZA",
+            "pack": "items",
+            "identifier": "bbttcc_feat_frugal_caster",
+            "hash": "ad1913f3892a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-grave-calm",
+      "name": "Grave Calm",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_grave_calm.jpeg",
+      "description": "<p><em>Panic spreads. So does steadiness.</em></p><p>You have advantage on saving throws against being frightened. If you succeed, choose one ally within 10 feet to gain the same benefit on their next save.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "400eyTBdXTDXybIk",
+            "pack": "items",
+            "identifier": "bbttcc_feat_grave_calm",
+            "hash": "f28a32fb58f5"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-grim-persistence",
+      "name": "Grim Persistence",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_grim_persistence.png",
+      "description": "<p><em>You are difficult to kill because you do not stop.</em></p><p>Your hit points maximum increases by an amount equal to twice your level. Additionally, once per long rest, when you are reduced to 0 hit points but not killed outright, you may remain at 1 hit points instead.</p>",
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "activation": "special",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "OonzlK3QUyvTFRUX",
+            "pack": "items",
+            "identifier": "bbttcc_feat_grim_persistence",
+            "hash": "e910ad99c5f5"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-hard-lessons",
+      "name": "Hard Lessons",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_hard_lessons.png",
+      "description": "<p><em>Mistakes are expensive. You make sure they only cost once.</em></p><p>When you fail a saving throw, you have advantage on the next saving throws you make before the end of your next turn.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "KpDIrJsv0gRopzdj",
+            "pack": "items",
+            "identifier": "bbttcc_feat_hard_lessons",
+            "hash": "65436b3d00b4"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-hold-the-line",
+      "name": "Hold the Line",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_hold_the_line.png",
+      "description": "<p><em>Here is where we stand.</em></p><p>While you are conscious, allies within 5 feet of you cannot be forcibly moved unless you are also moved.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "94DcvlkD246YkU9L",
+            "pack": "items",
+            "identifier": "bbttcc_feat_hold_the_line",
+            "hash": "2b68e2712d5e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-improvised-engineer",
+      "name": "Improvised Engineer",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_improvised_engineer.png",
+      "description": "<p><em>If you can’t fix it, you can at least make it dangerous.</em></p><p>You gain a rank in Tinkering (artisan’s tools). If you already have it, you gain expertise with it instead.</p><p>During a short rest, you can craft one improvised device from scrap (choose one):</p><ul><li><strong>Flash-burn:</strong> A thrown device (20/60) that sheds bright light in a 10 feet radius for 1 minute; creatures that rely on invisibility have their invisibility suppressed while in the light (GM adjudication).</li><li><strong>Snareline:</strong> A 10 feet tripline trap you can set in 1 minute; the first creature to cross it must succeed on a Dexterity check (DC = 8 + your proficiency bonus + your Intelligence modifier) or fall prone.</li><li><strong>Signal Screamer:</strong> A noisemaker you can place; it triggers on contact, audible out to 300 feet</li></ul><p>A device becomes inert after 8 hours or after triggering once.</p>",
+      "traits": [
+        {
+          "tag": "tinkering",
+          "title": "Proficiency",
+          "grants": [
+            "tool:tinker"
+          ]
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "nmO1GPJJb6QVG6RX",
+            "pack": "items",
+            "identifier": "bbttcc_feat_improvised_engineer",
+            "hash": "1159656d5252"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-iron-nerves",
+      "name": "Iron Nerves",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_iron_nerves.png",
+      "description": "<p><em>Panic is contagious. So is control.</em></p><p>When you roll initiative, you gain temporary hit points equal to your proficiency bonus.</p><p>Additionally, when you make a saving throw against being frightened or charmed, you may roll a d4 and add it to the save. Once you use this bonus, you can’t use it again until you finish a short rest or long rest.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "3Bx70MfaL4F9APDO",
+            "pack": "items",
+            "identifier": "bbttcc_feat_iron_nerves",
+            "hash": "0f8d5f85a2b4"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-iron-will",
+      "name": "Iron Will",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_iron_will.png",
+      "description": "<p><em>Your mind—or your body—has learned how to say no.</em></p><p>Choose Wisdom or Constitution: saving throws keyed to it gain +1 (Constitution → AC, Wisdom → Resolve). Once per long rest, you may reroll a failed saving throw using that attribute.</p>",
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "activation": "special",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "9qquKLVG0GTjCO4C",
+            "pack": "items",
+            "identifier": "bbttcc_feat_iron_will",
+            "hash": "e8843ca5c230"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-ironclad-training",
+      "name": "Ironclad Training",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_ironclad_training.png",
+      "description": "<p><em>Armor isn’t weight. It’s permission.</em></p><p>While you are wearing armor or wielding a shield, you have advantage on saving throws against being knocked prone.</p><p>Additionally, when you would be pushed or pulled, you may reduce the distance moved by 5 feet You can do so once per turn.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "q8F7HDBIeM1GFiNR",
+            "pack": "items",
+            "identifier": "bbttcc_feat_ironclad_training",
+            "hash": "1994bc061b07"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-last-exit",
+      "name": "Last Exit",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_last_exit.png",
+      "description": "<p><em>Panic is optional if you plan ahead.</em></p><p>Once per long rest, when you would be restrained, grappled, or knocked prone, you may ignore that effect and move up to 10 feet immediately.</p>",
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "activation": "special",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "dJAoJ1cXbBR7miaX",
+            "pack": "items",
+            "identifier": "bbttcc_feat_last_exit",
+            "hash": "187941097a41"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-leyline-attunement",
+      "name": "Leyline Attunement",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_leyline_attunement.png",
+      "description": "<p><em>You don’t just cross the world. You listen to it.</em></p><p>When you take a short rest, you may attune to the local flow. Until your next long rest, you gain one of the following benefits (choose when you attune):</p><ul><li><strong>Guidance of the Current:</strong> You have advantage on one Athletics checks you make each hour of travel.</li><li><strong>Quiet Step:</strong> You have advantage on one Stealth checks you make each hour of travel.</li><li><strong>Resonant Warning:</strong> You have advantage on initiative rolls made in the first combat after you begin travel.</li></ul><p>You can change the chosen benefit each time you attune.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "6AVSK4jCoGlGzevR",
+            "pack": "items",
+            "identifier": "bbttcc_feat_leyline_attunement",
+            "hash": "4b52a964aac2"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-light-footprint",
+      "name": "Light Footprint",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "description": "<p><em>Your sustained workings sit lightly on the world.</em></p><p>The ongoing <strong>upkeep</strong> cost of maintaining your sustained powers is <strong>halved</strong>.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "WBLGGnfoBCuALb7Z",
+            "pack": "items",
+            "identifier": "bbttcc_feat_light_footprint",
+            "hash": "8b6546aef564"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-linebreaker",
+      "name": "Linebreaker",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_linebreaker.png",
+      "description": "<p><em>Formations exist to be disrespected.</em></p><p>When you move at least 15 feet straight toward an enemy and hit with a melee attack, that enemy is at disadvantage: its opportunity attacks roll 3d10 keep-lowest-2 until the end of its next turn.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "wPupELTaHtIHTcdP",
+            "pack": "items",
+            "identifier": "bbttcc_feat_linebreaker",
+            "hash": "e6b8bc29b4ef"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-lucid-footing",
+      "name": "Lucid Footing",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "Path of the Dreamwalker",
+      "folder": "Techniques",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "description": "<p><em>In the Lane, the dream cushions your mistakes.</em></p><p>While you walk the <strong>Lane</strong>, misfires land <strong>two bands safer</strong> and the <strong>Blood-Debt</strong> cost of reaching is reduced by <strong>1</strong>.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "WaHoqMhccdGwtGPQ",
+            "pack": "items",
+            "identifier": "bbttcc_feat_lucid_footing",
+            "hash": "feb078e18e76"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-many-hands",
+      "name": "Many Hands",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "description": "<p><em>You keep more plates spinning than anyone has a right to.</em></p><p>You can sustain <strong>one additional powers</strong> before upkeep begins charging you for the overflow. Increases your powers <strong>concurrency by 1</strong>.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "jlUqwcW26u8HMOwb",
+            "pack": "items",
+            "identifier": "bbttcc_feat_many_hands",
+            "hash": "9eaf890141d3"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-medic-of-the-wastes",
+      "name": "Medic of the Wastes",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_medic_of_the_wastes.png",
+      "description": "<p><em>Out here, healing is logistics.</em></p><p>You gain proficiency in Religion. If you already have it, you gain expertise with it instead.</p><p>When you use a medkit to stabilize a creature, it also regains hit points equal to your proficiency bonus.</p><p>Additionally, during a short rest, you may allow up to two creatures to regain additional hit points equal to your proficiency bonus. A creature can benefit from this feat only once per short rest.</p>",
+      "uses": {
+        "max": "1",
+        "per": "sr"
+      },
+      "activation": "special",
+      "traits": [
+        {
+          "tag": "faith",
+          "title": "Proficiency",
+          "grants": [
+            "skills:rel"
+          ]
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Zrv0q6PgygEWtxta",
+            "pack": "items",
+            "identifier": "bbttcc_feat_medic_of_the_wastes",
+            "hash": "27d331f93f80"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-overreach",
+      "name": "Overreach",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/fire/flame-burning-hand-purple.webp",
+      "description": "<p><em>You stretch a working past where it ought to reach.</em></p><p>When you cast a powers, you may treat your tier as <strong>one higher</strong> for determining its <strong>footprint and scale only</strong> (range, area, and number of targets). Its Clarity cost and Cast DC remain those of your actual tier.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Rk0u6ys68zm1im9j",
+            "pack": "items",
+            "identifier": "bbttcc_feat_overreach",
+            "hash": "a98cb346e280"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-overwatch-discipline",
+      "name": "Overwatch Discipline",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_overwatch_discipline.png",
+      "description": "<p><em>Patience sharpens the blade.</em></p><p>If you have not moved on your turn, you have advantage on opportunity attacks until the start of your next turn.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "GBxCyqshZnEIL1ZC",
+            "pack": "items",
+            "identifier": "bbttcc_feat_overwatch_discipline",
+            "hash": "fdb35c9ab96a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-pay-the-toll",
+      "name": "Pay the Toll",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/death/skull-energy-light-purple.webp",
+      "description": "<p><em>You have made your peace with the price of reaching.</em></p><p>The <strong>Blood-Debt</strong> cost of reaching beyond your grasp is reduced by <strong>1</strong> (minimum&nbsp;0).</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "JDyAHWnRzcJOiEbh",
+            "pack": "items",
+            "identifier": "bbttcc_feat_pay_the_toll",
+            "hash": "7898e50c61d9"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-last-ritual",
+      "name": "Penultimate Rites",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_penultimate_rites.png",
+      "description": "<p><em>If you can’t save them, you can at least keep them here.</em></p><p>When a creature you can reach drops to 0 hit points, you may use your reaction to stabilize it. If you do, it also gains temporary hit points equal to your proficiency bonus.</p><p>Once you use this feat, you can’t use it again until you finish a short rest or long rest.</p>",
+      "activation": "reaction",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "CmO8Q6nr21zzgXjv",
+            "pack": "items",
+            "identifier": "bbttcc_feat_last_ritual",
+            "hash": "b96d9f2af1bd"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-pressure-tested",
+      "name": "Pressure Tested",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_pressure_tested.png",
+      "description": "<p><em>Surviving the hit gives you leverage.</em></p><p>When you succeed on a saving throw against an effect that would impose a condition, you may choose to ignore the effect entirely or gain advantage on your next attack or checks before the end of your next turn. Once per short rest.</p>",
+      "uses": {
+        "max": "1",
+        "per": "sr"
+      },
+      "activation": "special",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "vX7HEVQMT4n3c1WH",
+            "pack": "items",
+            "identifier": "bbttcc_feat_pressure_tested",
+            "hash": "7eb3ae653529"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-pressure-transference",
+      "name": "Pressure Transference",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_pressure_transference.png",
+      "description": "<p><em>If someone must suffer, at least let it matter.</em></p><p>When you would take damage, you may use your reaction to give an ally within 10 feet gain advantage on their next roll before the end of their next turn. Once per round.</p>",
+      "activation": "reaction",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "2bZYOIwDSLJuBJfn",
+            "pack": "items",
+            "identifier": "bbttcc_feat_pressure_transference",
+            "hash": "368ae2040c14"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-quickdraw-protocol",
+      "name": "Quickdraw Protocol",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_quickdraw_protocol.png",
+      "description": "<p><em>The first second decides who gets a second.</em></p><p>You may draw or stow a weapon as part of rolling initiative.</p><p>Additionally, during the first round of combat, you have advantage on your first attack roll made with a weapon you drew this way.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "J61K3pME3vjUeXF8",
+            "pack": "items",
+            "identifier": "bbttcc_feat_quickdraw_protocol",
+            "hash": "a676203a2039"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-quiet-casting",
+      "name": "Quiet Casting",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/air/wind-vortex-swirl-gray.webp",
+      "description": "<p><em>Your workings leave a fainter signature on the world.</em></p><p>Reduce the <strong>Noise</strong> you generate on each cast by <strong>1</strong> (minimum&nbsp;0).</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "vHQbEjpnERYJY5i4",
+            "pack": "items",
+            "identifier": "bbttcc_feat_quiet_casting",
+            "hash": "99fea7c00841"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-reclamation",
+      "name": "Reclamation",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/control/buff-flight-wings-blue.webp",
+      "description": "<p><em>You tear reserve will out of your own composure.</em></p><p>Once per scene, you may take <strong>1 Stress</strong> to immediately recover <strong>2 Clarity</strong>, up to your maximum.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "y5n7kupZ6OYuA1QI",
+            "pack": "items",
+            "identifier": "bbttcc_feat_reclamation",
+            "hash": "c969e1e0a0cf"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-refracted-attention",
+      "name": "Refracted Attention",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "Path of the Wyrdlens Adept",
+      "folder": "Techniques",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-blue.webp",
+      "description": "<p><em>Through the lens, one mind looks out of many windows.</em></p><p>While your <strong>Refraction</strong> stance is active, you split your focus across more threads: hold <strong>+1 powers</strong> and pay only <strong>three-quarters</strong> upkeep on what you sustain.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "sRlow24HYNfaPaE5",
+            "pack": "items",
+            "identifier": "bbttcc_feat_refracted_attention",
+            "hash": "ec6e4da47bf2"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-refuse-the-narrative",
+      "name": "Refuse the Narrative",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_refuse_the_narative.png",
+      "description": "<p><em>No. That is not how this ends.</em></p><p>Once per long rest, after rolling but before the result is resolved, you may treat a roll of 9 or lower on a 2d10x10 as a 10.</p>",
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "activation": "special",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "L4LgC7GaLg56ET0X",
+            "pack": "items",
+            "identifier": "bbttcc_feat_refuse_the_narrative",
+            "hash": "185e24bd3a84"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-relentless-advance",
+      "name": "Relentless Advance",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_relentless_advance.png",
+      "description": "<p><em>You do not circle. You close.</em></p><p>Once per turn, when you move at least 10 feet straight toward a creature before hitting it with a melee attack, you gain temporary hit points equal to your proficiency bonus.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "gAEdwjTv0hK1LaMS",
+            "pack": "items",
+            "identifier": "bbttcc_feat_relentless_advance",
+            "hash": "6368ce25902c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-rig-hand",
+      "name": "Rig Hand",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_rig_hand.png",
+      "description": "<p><em>You know what keeps a moving fortress from becoming a coffin.</em></p><p>You gain a rank in Tinkering (tinker’s tools). If you already have it, you gain expertise with it instead.</p><p>During a short rest, you can perform emergency maintenance on a vehicle, rig, or facility. Choose one:</p><ul><li>Restore 1d6 hit points to a construct/vehicle/rig under the GM’s control rules, or</li><li>Remove one non-magical malfunction or minor condition (stuck mechanism, seized hatch, jammed lock, fouled intake) at the GM’s discretion.</li></ul><p>Once you use this feat, you can’t use it again until you finish a long rest.</p>",
+      "traits": [
+        {
+          "tag": "tinkering",
+          "title": "Proficiency",
+          "grants": [
+            "tool:tinker"
+          ]
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "5NgRfhPWkCDM4Vvh",
+            "pack": "items",
+            "identifier": "bbttcc_feat_rig_hand",
+            "hash": "4d59cb2cb32f"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-scavenged-insight",
+      "name": "Scavenged Insight",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_scavenged_insight.png",
+      "description": "<p><em>Debris tells stories.</em></p><p>After a combat encounter, you may ask the GM one factual question about what the enemies were carrying, guarding, or afraid of.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "24g8mxNy4iJ6bcxE",
+            "pack": "items",
+            "identifier": "bbttcc_feat_scavenged_insight",
+            "hash": "833477de5ca9"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-scavenger-savant",
+      "name": "Scavenger Savant",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_scavnger_savant.png",
+      "description": "<p><em>Every ruin is a pantry if you know where to pry.</em></p><p>You gain proficiency in Investigation. If you already have it, you gain expertise with it instead.</p><p>When you spend at least 10 minutes searching a wreck, ruin, or battlefield, you may declare what you are looking for (ammo, medicine, parts, food, trade goods). You then make an Investigation check. On a success (DC set by the GM), you find something relevant and useful; on a failure, you still find something, but it comes with a complication (noise, contamination, time loss, or unwanted attention).</p>",
+      "traits": [
+        {
+          "tag": "investigation",
+          "title": "Proficiency",
+          "grants": [
+            "skills:inv"
+          ]
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "UE8685tG2ZJL0wr8",
+            "pack": "items",
+            "identifier": "bbttcc_feat_scavenger_savant",
+            "hash": "dd191ff7da6e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-shadow-advantage",
+      "name": "Shadow Advantage",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_shadow_advantage.png",
+      "description": "<p><em>Before the fight finds its shape, you strike.</em></p><p>Once per round, when you attack a creature that has not yet acted this round, you have advantage on the attack roll.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "qXhBL3xEe5iLclay",
+            "pack": "items",
+            "identifier": "bbttcc_feat_shadow_advantage",
+            "hash": "2a50a88e29d3"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-signature-ascendant",
+      "name": "Signature Ascendant",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/symbols/star-solid-gold.webp",
+      "description": "<p><em>The working that defines you grows as you do.</em></p><p>Your <strong>signature powers</strong> counts as <strong>one tier higher</strong> for all effects (damage, healing, footprint, scale), though its Clarity cost is unchanged. If you have not yet designated a signature powers, you may do so when you take this Technique.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "V3qRPM7SJLkpnfpb",
+            "pack": "items",
+            "identifier": "bbttcc_feat_signature_ascendant",
+            "hash": "95cda702c687"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-situational-mastery",
+      "name": "Situational Mastery",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_situational_mastery.png",
+      "description": "<p><em>Every fight begins with a choice.</em></p><p>At the start of each combat, choose one: gain advantage on your first attack roll, gain advantage on your first saving throws, or +10 feet movement until the end of your first turn.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "QLJG4Tuxz5anMNEi",
+            "pack": "items",
+            "identifier": "bbttcc_feat_situational_mastery",
+            "hash": "0d6d96810dc0"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-spark-sense",
+      "name": "Spark Sense",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_spark_sense.png",
+      "description": "<p><em>Some truths are louder than sound.</em></p><p>You gain proficiency in Arcana. If you already have it, you gain expertise with it instead.</p><p>As an action, you may focus on the unseen and learn one of the following about a creature, object, or place within 30 feet (choose one):</p><ul><li>Whether it is suffused with magic-like resonance</li><li>Whether it feels aligned toward Renewal or toward Corruption (GM adjudication)</li><li>Whether it bears an active ward, curse, or binding</li></ul><p>You can use this feat a number of times equal to your proficiency bonus, regaining all uses on a long rest.</p>",
+      "uses": {
+        "max": "@prof",
+        "per": "lr"
+      },
+      "activation": "action",
+      "traits": [
+        {
+          "tag": "occult",
+          "title": "Proficiency",
+          "grants": [
+            "skills:arc"
+          ]
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "hWJWokdPW2Pp6st3",
+            "pack": "items",
+            "identifier": "bbttcc_feat_spark_sense",
+            "hash": "5a4cc0ccee6c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-steady-hand",
+      "name": "Steady Hand",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "description": "<p><em>When it goes wrong, your discipline pulls the backlash short.</em></p><p>When a powers misfires, the result lands <strong>one band safer</strong> — your control biases the backlash toward the mild end of the table.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "0sxfGlJrM9adbJqH",
+            "pack": "items",
+            "identifier": "bbttcc_feat_steady_hand",
+            "hash": "6e0895b1c67a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-strike-and-fade",
+      "name": "Strike and Fade",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_strike_and_fade.png",
+      "description": "<p><em>You don’t win by standing still. You win by leaving.</em></p><p>Once per turn, when you hit a creature with an attack, you may move 10 feet without provoking opportunity attacks from that creature.</p><p>If you end this movement in dim light, darkness, or behind cover, you have advantage on your next Dexterity (Stealth) checks made before the end of your next turn.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "UGRfQS9baV3ceN74",
+            "pack": "items",
+            "identifier": "bbttcc_feat_strike_and_fade",
+            "hash": "353aabc6fd21"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-sure-recitation",
+      "name": "Sure Recitation",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "General — Tier 2+",
+      "folder": "Techniques",
+      "img": "icons/magic/symbols/runes-triangle-orange.webp",
+      "description": "<p><em>You speak your workings cleanly, even under pressure.</em></p><p>On any powers <strong>cast roll</strong>, you may <strong>gain advantage</strong>, keeping the new result if it is higher.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "MSPLVWKCOBZFXqZm",
+            "pack": "items",
+            "identifier": "bbttcc_feat_sure_recitation",
+            "hash": "0e667d077f52"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-tactical-reserve",
+      "name": "Tactical Reserve",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_tactical_reserve.png",
+      "description": "<p><em>You plan for the moment when the plan fails.</em></p><p>At each long rest you bank 2 rerolls. When you or a creature you can see within 30 feet makes an attack roll, attribute check, or saving throw, you may spend one to gain advantage of that roll (keep the higher). Unspent rerolls are replaced at the next long rest.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "6GAYCuzHJ0559hOh",
+            "pack": "items",
+            "identifier": "bbttcc_feat_tactical_reserve",
+            "hash": "c709af538858"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-threat-assessment",
+      "name": "Threat Assessment",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_threat_assessment.png",
+      "description": "<p><em>You don’t look at enemies. You read them.</em></p><p>You gain proficiency in Perception or Investigation (your choice). If you already have it, you gain expertise with it instead. Additionally, at the start of combat you may ask the GM: which enemy appears most dangerous, most injured, or is controlling the battlefield?</p>",
+      "traits": [
+        {
+          "tag": "choice",
+          "title": "Proficiency",
+          "choices": [
+            {
+              "count": 1,
+              "pool": [
+                "skills:prc",
+                "skills:inv"
+              ]
+            }
+          ]
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "3oHuzmwjKYMbBByQ",
+            "pack": "items",
+            "identifier": "bbttcc_feat_threat_assessment",
+            "hash": "368aa559c450"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-threatening-silence",
+      "name": "Threatening Silence",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_threatening_silence.png",
+      "description": "<p><em>Sometimes the quiet is the threat.</em></p><p>As a Bonus action once per short rest, choose one creature that can see you within 30 feet That creature is at disadvantage: its next attack roll against a target other than you is 3d10 keep-lowest-2.</p>",
+      "uses": {
+        "max": "1",
+        "per": "sr"
+      },
+      "activation": "bonus",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4jCeY0iHWA3KKak0",
+            "pack": "items",
+            "identifier": "bbttcc_feat_threatening_silence",
+            "hash": "195112be158e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-unbroken-guard",
+      "name": "Unbroken Guard",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_unbroken_guard.png",
+      "description": "<p><em>You stand where others would rather not.</em></p><p>When a creature within 5 feet of you targets an ally with an attack, you may use your reaction to Impose the attacker (that attack rolls 3d10 keep-lowest-2) and reduce the attacker’s movement to 0 until the end of its current turn.</p>",
+      "activation": "reaction",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "xFmnZHrmzKGGMk0N",
+            "pack": "items",
+            "identifier": "bbttcc_feat_unbroken_guard",
+            "hash": "d53a67039f44"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-unsettling-precision",
+      "name": "Unsettling Precision",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_unsettling_precision.png",
+      "description": "<p><em>They start wondering when the next one lands.</em></p><p>When you hit the same creature twice in a round, it is at disadvantage: its next saving throw before the end of its next turn is 3d10 keep-lowest-2.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "STCAtbtJ2KY9dSdt",
+            "pack": "items",
+            "identifier": "bbttcc_feat_unsettling_precision",
+            "hash": "a4158ef1c6d9"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-unyielding-finish",
+      "name": "Unyielding Finish",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_unyielding_finish.png",
+      "description": "<p><em>Momentum should not be wasted.</em></p><p>When you reduce a creature to 0 hit points, you may immediately gain advantage on your next roll before the end of your next turn. Once per round.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "lQJnB8Y8dYRv0Dsq",
+            "pack": "items",
+            "identifier": "bbttcc_feat_unyielding_finish",
+            "hash": "99436253e0e6"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-vaultbreaker",
+      "name": "Vaultbreaker",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_vault_breaker.png",
+      "description": "<p><em>Locks are promises made by people who never met you.</em></p><p>You have advantage on checks made to locate hidden doors, panels, caches, and secret compartments.</p><p>Additionally, when you attempt to open a lock or disable a trap, you may treat a 2d10x10 roll of 9 or lower as a 10. Once you use this feat, you can’t use it again until you finish a short rest or long rest.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "w6VpwbAJcOJq1uYU",
+            "pack": "items",
+            "identifier": "bbttcc_feat_vaultbreaker",
+            "hash": "2ecdd0464906"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-weapon-familiarity",
+      "name": "Weapon Familiarity",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_weapon_familiarity.png",
+      "description": "<p><em>A handle is a handle if you know leverage.</em></p><p>When you attack with a weapon you are not trained with, you do not suffer disadvantage.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Om4cXPYondma8XIZ",
+            "pack": "items",
+            "identifier": "bbttcc_feat_weapon_familiarity",
+            "hash": "def19e4d514e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-weatherwise",
+      "name": "Weatherwise",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_weatherwise.png",
+      "description": "<p><em>Storms are honest. People are not.</em></p><p>You gain proficiency in Athletics or History (your choice). If you already have it, you gain expertise with it instead.</p><p>When you finish a long rest, you may ask the GM one question about the next day’s travel conditions (wind, precipitation, visibility, or temperature extremes). The GM answers truthfully, in broad terms.</p>",
+      "traits": [
+        {
+          "tag": "choice",
+          "title": "Proficiency",
+          "choices": [
+            {
+              "count": 1,
+              "pool": [
+                "skills:ath",
+                "skills:his"
+              ]
+            }
+          ]
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "iNzKOYz5EHmJLScb",
+            "pack": "items",
+            "identifier": "bbttcc_feat_weatherwise",
+            "hash": "2dfd5824f1c3"
+          }
+        }
+      }
+    },
+    {
+      "slug": "feat-wide-working",
+      "name": "Wide Working",
+      "featType": "feat",
+      "subtype": "general",
+      "level": null,
+      "requirements": "",
+      "folder": "Techniques",
+      "img": "icons/magic/light/explosion-star-glow-orange.webp",
+      "description": "<p><em>What you shape, you shape broadly.</em></p><p>Increase the <strong>area size</strong> of any area-of-effect powers you cast by one step (e.g. a 10 ft burst becomes 15 ft; a 15 ft cone becomes 20 ft).</p><p><span style=\"opacity: 0.7; margin: 0.5rem 0 0; font-size: 0.74rem\">✍ Applied by the GM/player — no automatic engine effect.</span></p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "pz32DyjV69BILwss",
+            "pack": "items",
+            "identifier": "bbttcc_feat_wide_working",
+            "hash": "b3a4c625ca46"
+          }
+        }
+      }
+    }
+  ]
+}

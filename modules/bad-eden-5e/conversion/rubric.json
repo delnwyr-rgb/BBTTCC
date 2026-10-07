@@ -1,227 +1,853 @@
 {
   "_about": "THE conversion rubric: how a Bad Eden mechanic written for RFI (the fourththing system) becomes its D&D 5E (dnd5e 6) twin. Read by tools/build-packs.mjs (the lint), bin/ft-convert-5e (the converter) and bin/ft-lint-parity (the parity check). Rendered for humans as CONVERSION_RUBRIC.md — keep the two in step. Every entry marked ruling:true was ruled by Dave; ruling:'owed' is a draft awaiting one.",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "date": "2026-10-07",
   "direction": "rfi→5e",
-
   "sourceOfTruth": {
     "rule": "Mechanics are authored ONCE. Anything shared by both flavours is authored in RFI canon (bbttcc-master-content/packs/_source + the fourththing engine banks) and flows through the converter into modules/bad-eden-5e/content/. Content that exists only in D&D (the SW5E-derived classes and powers) is authored in content/ and marked origin: 5e.",
     "link": "every converted document carries flags.bad-eden-5e.rfi = { id: <source _id>, pack: <source pack>, hash: <rubric-output hash> } so the parity lint can tell missing / stale / orphaned",
-    "exempt": { "origin5e": ["classes", "subclasses", "powers"], "sharedEngines": ["factions and OP", "hexes and travel", "marks", "radiation", "Spark", "Surge and Paths", "Strategic Turn"] }
+    "exempt": {
+      "origin5e": [
+        "classes",
+        "subclasses",
+        "powers"
+      ],
+      "sharedEngines": [
+        "factions and OP",
+        "hexes and travel",
+        "marks",
+        "radiation",
+        "Spark",
+        "Surge and Paths",
+        "Strategic Turn"
+      ]
+    }
   },
-
   "units": {
-    "square": { "feet": 5, "note": "1 square = 5 ft; '6 squares' → 30 ft; 'within 2 squares' → within 10 ft" },
-    "rangeWords": { "touch": "touch", "near": 30, "far": 120, "sight": "sight" }
+    "square": {
+      "feet": 5,
+      "note": "1 square = 5 ft; '6 squares' → 30 ft; 'within 2 squares' → within 10 ft"
+    },
+    "rangeWords": {
+      "touch": "touch",
+      "near": 30,
+      "far": 120,
+      "sight": "sight"
+    }
   },
-
   "recovery": {
-    "soma-break": { "period": "lr", "text": "long rest", "ruling": true },
-    "scene-break": { "period": "sr", "text": "short rest", "ruling": true },
-    "scene": { "period": "sr", "text": "short rest", "note": "'1/Scene' and 'per scene' — a scene ≈ an encounter; short rest is the nearest 5E window", "ruling": true },
-    "tier-uses": { "max": "@prof", "period": "lr", "text": "a number of uses equal to your proficiency bonus, regained on a long rest", "ruling": true },
-    "per-campaign-start": { "keep": true, "note": "faction resource grants (Strategic Hooks) run in both flavours" },
-    "strategic-turn": { "keep": true }
+    "soma-break": {
+      "period": "lr",
+      "text": "long rest",
+      "ruling": true
+    },
+    "scene-break": {
+      "period": "sr",
+      "text": "short rest",
+      "ruling": true
+    },
+    "scene": {
+      "period": "sr",
+      "text": "short rest",
+      "note": "'1/Scene' and 'per scene' — a scene ≈ an encounter; short rest is the nearest 5E window",
+      "ruling": true
+    },
+    "tier-uses": {
+      "max": "@prof",
+      "period": "lr",
+      "text": "a number of uses equal to your proficiency bonus, regained on a long rest",
+      "ruling": true
+    },
+    "per-campaign-start": {
+      "keep": true,
+      "note": "faction resource grants (Strategic Hooks) run in both flavours"
+    },
+    "strategic-turn": {
+      "keep": true
+    }
   },
-
   "scalars": {
-    "tier": { "formula": "@prof", "text": "your proficiency bonus", "note": "'+tier', '= your tier', 'tier uses'", "ruling": true },
-    "rank bonus": { "formula": "@prof", "text": "your proficiency bonus" },
-    "level": { "formula": "@details.level", "text": "your level" },
-    "half level": { "formula": "floor(@details.level / 2)" },
-    "small bonus / +1 rank (no rule behind it)": { "value": "+2", "ruling": "owed", "note": "the ancestry lane used +2; Coalition Tongue used +1d4" }
+    "tier": {
+      "formula": "@prof",
+      "text": "your proficiency bonus",
+      "note": "'+tier', '= your tier', 'tier uses'",
+      "ruling": true
+    },
+    "rank bonus": {
+      "formula": "@prof",
+      "text": "your proficiency bonus"
+    },
+    "level": {
+      "formula": "@details.level",
+      "text": "your level"
+    },
+    "half level": {
+      "formula": "floor(@details.level / 2)"
+    },
+    "small bonus / +1 rank (no rule behind it)": {
+      "value": "+2",
+      "ruling": "owed",
+      "note": "the ancestry lane used +2; Coalition Tongue used +1d4"
+    }
   },
-
   "tracks": {
-    "integrity": { "to": "hit points", "field": "hp", "ruling": true },
-    "temporary integrity": { "to": "temporary hit points", "activity": "heal", "healType": "temphp", "ruling": true },
-    "stress level": { "to": "a level of exhaustion", "ruling": true },
-    "stress points": { "to": "1d4 psychic damage, or temp HP = prof when it is a gain", "ruling": "owed", "note": "older RFI text treats Stress as points; the current engine treats it as a track" },
-    "strain": { "to": "a level of exhaustion", "ruling": true },
-    "clarity": { "to": "keep the word; a Clarity bonus becomes a Flow-point bonus (flags.bad-eden-5e.bonus.flow)", "ruling": "owed" },
-    "noise": { "to": "keep the word", "ruling": "owed" },
-    "radiation": { "to": "keep — bbttcc-radiation runs in both flavours" }
+    "integrity": {
+      "to": "hit points",
+      "field": "hp",
+      "ruling": true
+    },
+    "temporary integrity": {
+      "to": "temporary hit points",
+      "activity": "heal",
+      "healType": "temphp",
+      "ruling": true
+    },
+    "stress level": {
+      "to": "a level of exhaustion",
+      "ruling": true
+    },
+    "stress points": {
+      "to": "1d4 psychic damage, or temp HP = prof when it is a gain",
+      "ruling": "owed",
+      "note": "older RFI text treats Stress as points; the current engine treats it as a track"
+    },
+    "strain": {
+      "to": "a level of exhaustion",
+      "ruling": true
+    },
+    "clarity": {
+      "to": "keep the word; a Clarity bonus becomes a Flow-point bonus (flags.bad-eden-5e.bonus.flow)",
+      "ruling": "owed"
+    },
+    "noise": {
+      "to": "keep the word",
+      "ruling": "owed"
+    },
+    "radiation": {
+      "to": "keep — bbttcc-radiation runs in both flavours"
+    }
   },
-
   "defenses": {
-    "guard": { "to": "AC", "ruling": true },
-    "evasion": { "to": "Dexterity saving throw", "ruling": true },
-    "resolve": { "to": "Wisdom saving throw", "ruling": true },
-    "defense check vs X": { "to": "a saving throw of the mapped ability (see abilities); poison / disease / environmental → Constitution", "ruling": true },
-    "your DC": { "to": "8 + your proficiency bonus + the feature's ability modifier (the ancestry lean, or the casting ability)" }
+    "guard": {
+      "to": "AC",
+      "ruling": true
+    },
+    "evasion": {
+      "to": "Dexterity saving throw",
+      "ruling": true
+    },
+    "resolve": {
+      "to": "Wisdom saving throw",
+      "ruling": true
+    },
+    "defense check vs X": {
+      "to": "a saving throw of the mapped ability (see abilities); poison / disease / environmental → Constitution",
+      "ruling": true
+    },
+    "your DC": {
+      "to": "8 + your proficiency bonus + the feature's ability modifier (the ancestry lean, or the casting ability)"
+    }
   },
-
   "abilities": {
-    "violence": "str", "intrigue": "dex", "body": "con", "mind": "int", "soul": "wis", "presence": "cha",
-    "_abbrev": { "VIO": "str", "INTR": "dex", "INT": "dex", "BOD": "con", "MND": "int", "MIN": "int", "SOU": "wis", "SOUL": "wis", "PRE": "cha" },
+    "violence": "str",
+    "intrigue": "dex",
+    "body": "con",
+    "mind": "int",
+    "soul": "wis",
+    "presence": "cha",
+    "_abbrev": {
+      "VIO": "str",
+      "INTR": "dex",
+      "INT": "dex",
+      "BOD": "con",
+      "MND": "int",
+      "MIN": "int",
+      "SOU": "wis",
+      "SOUL": "wis",
+      "PRE": "cha"
+    },
     "_lineageLean": "'Lineage Lean toward X' → 'Ancestry Lean: <ability>' — no fixed score bonus in either flavour (backgrounds carry the increases)",
     "_ruling": true
   },
-
   "skills": {
-    "brawl": { "kind": "attack", "key": "melee", "text": "melee attack rolls" },
-    "melee": { "kind": "attack", "key": "melee", "text": "melee attack rolls" },
-    "firearms": { "kind": "attack", "key": "ranged", "text": "ranged attack rolls" },
-    "athletics": { "kind": "skill", "key": "ath" },
-    "stealth": { "kind": "skill", "key": "ste" },
-    "hacking": { "kind": "tool", "key": "tinker", "text": "tinker's tools (or Arcana, for machines)" },
-    "tinkering": { "kind": "tool", "key": "tinker" },
-    "piloting": { "kind": "tool", "key": "vehicle", "text": "vehicles (land or water)" },
-    "streetwise": { "kind": "skill", "key": "inv", "text": "Investigation (Persuasion in a town)" },
-    "diplomacy": { "kind": "skill", "key": "per" },
-    "intimidation": { "kind": "skill", "key": "itm" },
-    "empathy": { "kind": "skill", "key": "ins" },
-    "insight": { "kind": "skill", "key": "ins" },
-    "investigation": { "kind": "skill", "key": "inv" },
-    "lore": { "kind": "skill", "key": "his" },
-    "occult": { "kind": "skill", "key": "arc" },
-    "faith": { "kind": "skill", "key": "rel" },
-    "ritual": { "kind": "skill", "key": "rel" },
-    "meditation": { "kind": "skill", "key": "rel" },
-    "perception": { "kind": "skill", "key": "prc" },
-    "performance": { "kind": "skill", "key": "prf" },
-    "plating": { "kind": "tool", "key": "smith", "text": "smith's tools" },
-    "fitting": { "kind": "tool", "key": "carpenter", "text": "carpenter's tools" },
-    "bracing": { "kind": "tool", "key": "mason", "text": "mason's tools" },
+    "brawl": {
+      "kind": "attack",
+      "key": "melee",
+      "text": "melee attack rolls"
+    },
+    "melee": {
+      "kind": "attack",
+      "key": "melee",
+      "text": "melee attack rolls"
+    },
+    "firearms": {
+      "kind": "attack",
+      "key": "ranged",
+      "text": "ranged attack rolls"
+    },
+    "athletics": {
+      "kind": "skill",
+      "key": "ath"
+    },
+    "stealth": {
+      "kind": "skill",
+      "key": "ste"
+    },
+    "hacking": {
+      "kind": "tool",
+      "key": "tinker",
+      "text": "tinker's tools (or Arcana, for machines)"
+    },
+    "tinkering": {
+      "kind": "tool",
+      "key": "tinker"
+    },
+    "piloting": {
+      "kind": "tool",
+      "key": "vehicle",
+      "text": "vehicles (land or water)"
+    },
+    "streetwise": {
+      "kind": "skill",
+      "key": "inv",
+      "text": "Investigation (Persuasion in a town)"
+    },
+    "diplomacy": {
+      "kind": "skill",
+      "key": "per"
+    },
+    "intimidation": {
+      "kind": "skill",
+      "key": "itm"
+    },
+    "empathy": {
+      "kind": "skill",
+      "key": "ins"
+    },
+    "insight": {
+      "kind": "skill",
+      "key": "ins"
+    },
+    "investigation": {
+      "kind": "skill",
+      "key": "inv"
+    },
+    "lore": {
+      "kind": "skill",
+      "key": "his"
+    },
+    "occult": {
+      "kind": "skill",
+      "key": "arc"
+    },
+    "faith": {
+      "kind": "skill",
+      "key": "rel"
+    },
+    "ritual": {
+      "kind": "skill",
+      "key": "rel"
+    },
+    "meditation": {
+      "kind": "skill",
+      "key": "rel"
+    },
+    "perception": {
+      "kind": "skill",
+      "key": "prc"
+    },
+    "performance": {
+      "kind": "skill",
+      "key": "prf"
+    },
+    "plating": {
+      "kind": "tool",
+      "key": "smith",
+      "text": "smith's tools"
+    },
+    "fitting": {
+      "kind": "tool",
+      "key": "carpenter",
+      "text": "carpenter's tools"
+    },
+    "bracing": {
+      "kind": "tool",
+      "key": "mason",
+      "text": "mason's tools"
+    },
     "_ruling": "owed — drafted in the ancestry lane; Dave confirms the table"
   },
-
   "ranks": {
-    "0": { "label": "Untrained", "to": "nothing" },
-    "1": { "label": "Trained", "to": "proficiency", "ae": null },
-    "2": { "label": "Expert", "to": "expertise" },
-    "3": { "label": "Master", "to": "expertise + Mastery", "ae": { "key": "flags.bad-eden-5e.mastery.<key>", "mode": 5, "value": "1" } },
+    "0": {
+      "label": "Untrained",
+      "to": "nothing"
+    },
+    "1": {
+      "label": "Trained",
+      "to": "proficiency",
+      "ae": null
+    },
+    "2": {
+      "label": "Expert",
+      "to": "expertise"
+    },
+    "3": {
+      "label": "Master",
+      "to": "expertise + Mastery",
+      "ae": {
+        "key": "flags.bad-eden-5e.mastery.<key>",
+        "mode": 5,
+        "value": "1"
+      }
+    },
     "gain a skill rank": "proficiency; if already proficient → expertise; if already expert → Mastery",
-    "mastery": { "text": "Mastery: on checks with that skill or tool, treat any d20 roll of 9 or lower as a 10", "engine": "scripts/mastery.js (dnd5e reliableTalent floor, per key)", "ruling": true }
+    "mastery": {
+      "text": "Mastery: on checks with that skill or tool, treat any d20 roll of 9 or lower as a 10",
+      "engine": "scripts/mastery.js (dnd5e reliableTalent floor, per key)",
+      "ruling": true
+    }
   },
-
   "rolls": {
-    "2d10 / 2d10x10": { "to": "d20" },
-    "reroll-lowest": { "to": "advantage", "ae": { "skill": "system.skills.<key>.roll.mode ADD 1", "save": "system.abilities.<abl>.save.roll.mode ADD 1", "check": "system.abilities.<abl>.check.roll.mode ADD 1" }, "note": "unconditional → AE; conditional ('vs poison', 'while unmoved') → text", "ruling": true },
-    "reroll-highest": { "to": "disadvantage" },
-    "3d10 keep lowest 2 / Imposed": { "to": "disadvantage on the target's next attack roll or saving throw", "ruling": true },
-    "banked reroll (_tq.bank)": { "to": "banked advantage: the next d20 roll you make (or hand to an ally) has advantage", "rider": "dnd5e-table-kit / surge-powers `arm` one-shot (advAttack / bonusDie)", "note": "automation is a follow-up; text first" },
-    "exploding d10": { "to": "keep as a stated rule: 'on a 10, roll again and add'" },
-    "minimum roll threshold": { "to": "treat any 1 on the die as a 2" }
+    "2d10 / 2d10x10": {
+      "to": "d20"
+    },
+    "reroll-lowest": {
+      "to": "advantage",
+      "ae": {
+        "skill": "system.skills.<key>.roll.mode ADD 1",
+        "save": "system.abilities.<abl>.save.roll.mode ADD 1",
+        "check": "system.abilities.<abl>.check.roll.mode ADD 1"
+      },
+      "note": "unconditional → AE; conditional ('vs poison', 'while unmoved') → text",
+      "ruling": true
+    },
+    "reroll-highest": {
+      "to": "disadvantage"
+    },
+    "3d10 keep lowest 2 / Imposed": {
+      "to": "disadvantage on the target's next attack roll or saving throw",
+      "ruling": true
+    },
+    "banked reroll (_tq.bank)": {
+      "to": "banked advantage: the next d20 roll you make (or hand to an ally) has advantage",
+      "rider": "dnd5e-table-kit / surge-powers `arm` one-shot (advAttack / bonusDie)",
+      "note": "automation is a follow-up; text first"
+    },
+    "exploding d10": {
+      "to": "keep as a stated rule: 'on a 10, roll again and add'"
+    },
+    "minimum roll threshold": {
+      "to": "treat any 1 on the die as a 2"
+    }
   },
-
   "tiers": {
-    "I": 0, "II": 5, "III": 11, "IV": 17,
+    "I": 0,
+    "II": 5,
+    "III": 11,
+    "IV": 17,
     "tierForLevel": "1–4 → I, 5–10 → II, 11–16 → III, 17+ → IV (RFI's own ladder; D&D's tiers of play)",
     "ruling": true
   },
-
   "damage": {
-    "kinetic": { "to": ["bludgeoning", "piercing", "slashing"], "weaponRider": "the weapon's type" },
-    "electrical": { "to": "lightning" },
-    "thermal": { "to": { "fire": "fire", "cold": "cold", "default": ["fire", "cold"] } },
-    "chemical": { "to": "acid" },
-    "poison": { "to": "poison" },
-    "psychic": { "to": "psychic" },
-    "sephirotic": { "to": "sephirotic", "note": "registered in CONFIG.DND5E.damageTypes by bad-eden-5e" },
-    "qliphothic": { "to": "qliphothic", "note": "registered in CONFIG.DND5E.damageTypes by bad-eden-5e" },
-    "radiation": { "to": "radiation", "ruling": "owed", "note": "bbttcc-radiation owns the ladder; register as a damage type or keep as a hazard?" },
-    "energy (legacy, by flavor)": { "to": "the flavor's D&D type: lightning / fire / cold" },
-    "ion (SW5E)": { "to": "lightning" },
-    "sonic": { "to": "thunder" },
-    "true": { "to": "damage that can't be reduced or prevented" },
+    "kinetic": {
+      "to": [
+        "bludgeoning",
+        "piercing",
+        "slashing"
+      ],
+      "weaponRider": "the weapon's type"
+    },
+    "electrical": {
+      "to": "lightning"
+    },
+    "thermal": {
+      "to": {
+        "fire": "fire",
+        "cold": "cold",
+        "default": [
+          "fire",
+          "cold"
+        ]
+      }
+    },
+    "chemical": {
+      "to": "acid"
+    },
+    "poison": {
+      "to": "poison"
+    },
+    "psychic": {
+      "to": "psychic"
+    },
+    "sephirotic": {
+      "to": "sephirotic",
+      "note": "registered in CONFIG.DND5E.damageTypes by bad-eden-5e"
+    },
+    "qliphothic": {
+      "to": "qliphothic",
+      "note": "registered in CONFIG.DND5E.damageTypes by bad-eden-5e"
+    },
+    "radiation": {
+      "to": "radiation",
+      "ruling": "owed",
+      "note": "bbttcc-radiation owns the ladder; register as a damage type or keep as a hazard?"
+    },
+    "energy (legacy, by flavor)": {
+      "to": "the flavor's D&D type: lightning / fire / cold"
+    },
+    "ion (SW5E)": {
+      "to": "lightning"
+    },
+    "sonic": {
+      "to": "thunder"
+    },
+    "true": {
+      "to": "damage that can't be reduced or prevented"
+    },
     "_ruling": true
   },
-
   "conditions": {
-    "staggered": { "to": "speed halved and −2 to attack rolls until the end of its next turn (text)" },
-    "scarred": { "to": "keep as a Bad Eden mark; the Clarity bite becomes −1 Flow point until the end of the scene", "ruling": "owed" },
-    "calmed": { "to": "charmed (with the RFI wording: can't take violent action willingly)" },
-    "blinded": { "to": "blinded" },
-    "prone": { "to": "prone" },
-    "shaken": { "to": "frightened", "ruling": true },
-    "burning": { "to": "1d4 fire damage at the start of each of its turns until it uses an action to put it out" },
-    "restrained": { "to": "restrained" },
-    "charmed": { "to": "charmed" },
-    "compelled": { "to": "charmed, and it must spend at least one action each turn on the directive" },
-    "dying": { "to": "0 hit points and death saving throws" },
-    "surprised": { "to": "surprised (can't act on the first round)" },
-    "imposed": { "to": "disadvantage on its next attack roll or saving throw", "ruling": true },
-    "strained": { "to": "exhaustion (same ladder)", "ruling": true },
-    "submerged / drowning / crushing": { "to": "the 5E underwater and suffocation rules; crushing → 1d4 bludgeoning per turn unrated" },
-    "jolted (SW5E shocked)": { "to": "can't take reactions until the start of its next turn" }
+    "staggered": {
+      "to": "speed halved and −2 to attack rolls until the end of its next turn (text)"
+    },
+    "scarred": {
+      "to": "keep as a Bad Eden mark; the Clarity bite becomes −1 Flow point until the end of the scene",
+      "ruling": "owed"
+    },
+    "calmed": {
+      "to": "charmed (with the RFI wording: can't take violent action willingly)"
+    },
+    "blinded": {
+      "to": "blinded"
+    },
+    "prone": {
+      "to": "prone"
+    },
+    "shaken": {
+      "to": "frightened",
+      "ruling": true
+    },
+    "burning": {
+      "to": "1d4 fire damage at the start of each of its turns until it uses an action to put it out"
+    },
+    "restrained": {
+      "to": "restrained"
+    },
+    "charmed": {
+      "to": "charmed"
+    },
+    "compelled": {
+      "to": "charmed, and it must spend at least one action each turn on the directive"
+    },
+    "dying": {
+      "to": "0 hit points and death saving throws"
+    },
+    "surprised": {
+      "to": "surprised (can't act on the first round)"
+    },
+    "imposed": {
+      "to": "disadvantage on its next attack roll or saving throw",
+      "ruling": true
+    },
+    "strained": {
+      "to": "exhaustion (same ladder)",
+      "ruling": true
+    },
+    "submerged / drowning / crushing": {
+      "to": "the 5E underwater and suffocation rules; crushing → 1d4 bludgeoning per turn unrated"
+    },
+    "jolted (SW5E shocked)": {
+      "to": "can't take reactions until the start of its next turn"
+    }
   },
-
   "effects": {
     "_about": "what each RFI engine effect kind becomes on the 5E side. 'ae' = a transfer Active Effect on the feature; 'activity' = a dnd5e activity; 'text' = prose only (rider automation is a later pass)",
-    "rerolls[]": { "fields": "{context: check|save|defense|attack|initiative|forced-movement|opportunity-attack, mode, attribute?, skill?, vs?, when?}", "to": "unconditional (no vs/when) → advantage AE per rolls.reroll-lowest.ae; initiative → system.attributes.init.roll.mode ADD 1; conditional → text" },
-    "grants.resistances[]": { "to": "ae system.traits.dr.value ADD <type>", "flavor": "a flavored entry ('energy'+'fire') maps through damage" },
-    "grants.immunities[]": { "to": "ae system.traits.di.value ADD <type>" },
-    "grants.conditionImmunities[]": { "to": "ae system.traits.ci.value ADD <condition>" },
-    "grants.skills / ITEM_APTITUDE_GRANTS": { "to": "proficiency via a Trait advancement (skills:<key> / tool:<key>); 'choice' → a Trait choice" },
-    "passives.movement.climbEqualsWalk": { "to": "ae system.attributes.movement.climb = walk" },
-    "discipline.passive.clarityMaxBonus": { "to": "ae flags.bad-eden-5e.bonus.flow ADD n", "ruling": "owed" },
-    "triggers[] (chat-prompt)": { "to": "text — the prompt body is already the rule" },
-    "resourceGrants[] (OP)": { "to": "text, verbatim, as a 'Strategic Hooks' feature — the faction layer runs in both flavours" },
-    "_tq.note": { "to": "text" },
-    "_tq.temp(n)": { "to": "heal activity, healType temphp, formula per scalars" },
-    "_tq.bank(n)": { "to": "banked advantage ×n (text; rider later)" },
-    "_tq.impose": { "to": "disadvantage on the target's next attack roll or saving throw (text; rider later)" },
-    "strain.gain(n)": { "to": "gain n levels of exhaustion" },
-    "tempIntegrity.grant": { "to": "temp HP" },
-    "uses (RFI uses/recovery)": { "to": "dnd5e uses {max, recovery[{period}]} via recovery" }
+    "rerolls[]": {
+      "fields": "{context: check|save|defense|attack|initiative|forced-movement|opportunity-attack, mode, attribute?, skill?, vs?, when?}",
+      "to": "unconditional (no vs/when) → advantage AE per rolls.reroll-lowest.ae; initiative → system.attributes.init.roll.mode ADD 1; conditional → text"
+    },
+    "grants.resistances[]": {
+      "to": "ae system.traits.dr.value ADD <type>",
+      "flavor": "a flavored entry ('energy'+'fire') maps through damage"
+    },
+    "grants.immunities[]": {
+      "to": "ae system.traits.di.value ADD <type>"
+    },
+    "grants.conditionImmunities[]": {
+      "to": "ae system.traits.ci.value ADD <condition>"
+    },
+    "grants.skills / ITEM_APTITUDE_GRANTS": {
+      "to": "proficiency via a Trait advancement (skills:<key> / tool:<key>); 'choice' → a Trait choice"
+    },
+    "passives.movement.climbEqualsWalk": {
+      "to": "ae system.attributes.movement.climb = walk"
+    },
+    "discipline.passive.clarityMaxBonus": {
+      "to": "ae flags.bad-eden-5e.bonus.flow ADD n",
+      "ruling": "owed"
+    },
+    "triggers[] (chat-prompt)": {
+      "to": "text — the prompt body is already the rule"
+    },
+    "resourceGrants[] (OP)": {
+      "to": "text, verbatim, as a 'Strategic Hooks' feature — the faction layer runs in both flavours"
+    },
+    "_tq.note": {
+      "to": "text"
+    },
+    "_tq.temp(n)": {
+      "to": "heal activity, healType temphp, formula per scalars"
+    },
+    "_tq.bank(n)": {
+      "to": "banked advantage ×n (text; rider later)"
+    },
+    "_tq.impose": {
+      "to": "disadvantage on the target's next attack roll or saving throw (text; rider later)"
+    },
+    "strain.gain(n)": {
+      "to": "gain n levels of exhaustion"
+    },
+    "tempIntegrity.grant": {
+      "to": "temp HP"
+    },
+    "uses (RFI uses/recovery)": {
+      "to": "dnd5e uses {max, recovery[{period}]} via recovery"
+    }
   },
-
   "gear": {
     "_about": "RFI item → dnd5e item (the gear lane; drafted, not yet run)",
     "weapon": {
       "type": "weapon",
       "damage.formula": "dnd5e damage part (dice + bonus); '+N' flat bonuses are dropped unless the item is enhanced",
-      "damage.type": "via damage", "damage.attribute": "violence → Str melee / Dex finesse; intrigue → Dex ranged",
+      "damage.type": "via damage",
+      "damage.attribute": "violence → Str melee / Dex finesse; intrigue → Dex ranged",
       "range.short/long (squares)": "×5 ft; melee reach 1 → 5 ft",
       "category melee/ranged": "weapon type simpleM/martialM/simpleR/martialR by tag (ruling owed: which RFI weapons are martial)",
-      "tags": { "two-handed": "two", "finesse": "fin", "light": "lgt", "heavy": "hvy", "reach": "rch", "thrown": "thr", "loading": "rel", "attunement": "attunement required", "resonant / yesodic / etc.": "keep as a Bad Eden property in text" },
+      "tags": {
+        "two-handed": "two",
+        "finesse": "fin",
+        "light": "lgt",
+        "heavy": "hvy",
+        "reach": "rch",
+        "thrown": "thr",
+        "loading": "rel",
+        "attunement": "attunement required",
+        "resonant / yesodic / etc.": "keep as a Bad Eden property in text"
+      },
       "effect / flavor": "description",
       "manifestation.tier": "rarity: 1 uncommon, 2 rare, 3 very rare, 4 legendary"
     },
     "armor": {
       "type": "equipment",
-      "guardBonus": { "to": "AC = 10 + guardBonus for light, 12 + bonus for medium, 14 + bonus for heavy — band by armorSkill/tags", "ruling": "owed" },
-      "evasionBonus": "Dex save bonus (text or AE)", "resolveBonus": "Wis save bonus",
-      "resistances[]": "via damage → ae dr", "armorSkill": "fitting → light, plating → medium/heavy, bracing → shield (ruling owed)"
+      "guardBonus": {
+        "to": "AC = 10 + guardBonus for light, 12 + bonus for medium, 14 + bonus for heavy — band by armorSkill/tags",
+        "ruling": "owed"
+      },
+      "evasionBonus": "Dex save bonus (text or AE)",
+      "resolveBonus": "Wis save bonus",
+      "resistances[]": "via damage → ae dr",
+      "armorSkill": "fitting → light, plating → medium/heavy, bracing → shield (ruling owed)"
     },
-    "gear / equipment / consumable": { "type": "loot | tool | consumable by category; 'potion' → consumable potion" },
-    "price": { "marks": "keep marks (both flavours); dnd5e price field = marks with denomination 'gp' labelled marks", "ruling": "owed" },
-    "rigGear / rigFrame": { "to": "vehicle lane — not drafted" }
+    "gear / equipment / consumable": {
+      "type": "loot | tool | consumable by category; 'potion' → consumable potion"
+    },
+    "price": {
+      "marks": "keep marks (both flavours); dnd5e price field = marks with denomination 'gp' labelled marks",
+      "ruling": "owed"
+    },
+    "rigGear / rigFrame": {
+      "to": "vehicle lane — not drafted"
+    }
   },
-
   "creatures": {
     "_about": "RFI NPC/monster → dnd5e npc (the monster lane; drafted, not yet run). Budgets come from systems/fourththing/threat-chassis.js and the dnd5e-table-kit sim",
-    "tier": { "1": "CR 1–4", "2": "CR 5–8", "3": "CR 9–13", "4": "CR 14+", "bracket": "light/medium/heavy/boss shifts within the band" },
-    "integrity.max": "hp.max", "guard": "ac.flat", "evasion": "Dex save (prof if ≥ base)", "resolve": "Wis save (prof if ≥ base)",
-    "attributes (1–5)": { "to": "ability score 10 + 2×value (1→12 … 5→20)", "ruling": "owed" },
+    "tier": {
+      "1": "CR 1–4",
+      "2": "CR 5–8",
+      "3": "CR 9–13",
+      "4": "CR 14+",
+      "bracket": "light/medium/heavy/boss shifts within the band"
+    },
+    "integrity.max": "hp.max",
+    "guard": "ac.flat",
+    "evasion": "Dex save (prof if ≥ base)",
+    "resolve": "Wis save (prof if ≥ base)",
+    "attributes (1–5)": {
+      "to": "ability score 10 + 2×value (1→12 … 5→20)",
+      "ruling": "owed"
+    },
     "skills (ranks)": "via skills + ranks",
     "actions / weapons": "dnd5e weapon items through gear",
     "lineage / creatureType": "dnd5e creature type (humanoid, construct, fey, fiend, celestial, beast, monstrosity, aberration)",
     "npcAuto rules": "activities + AEs; what can't be modelled → feature text",
     "price (bounty/hire)": "keep marks"
   },
-
   "vocabulary": {
     "_about": "text substitutions the converter applies before a human sees the draft, and the terms the lint refuses to ship",
     "replace": [
-      ["\\bSoma Break\\b", "long rest"], ["\\bScene Break\\b", "short rest"], ["\\b1/Scene\\b", "once per short rest"],
-      ["\\breroll the lowest die on\\b", "advantage on"], ["\\breroll-lowest on\\b", "advantage on"], ["\\breroll the lowest die\\b", "advantage"],
-      ["\\b3d10 keep lowest 2\\b", "disadvantage"], ["\\b3d10kl2\\b", "disadvantage"],
-      ["\\btemporary Integrity\\b", "temporary hit points"], ["\\bIntegrity\\b", "hit points"], ["\\ba level of Stress\\b", "a level of exhaustion"], ["\\bStrain\\b", "exhaustion"],
-      ["\\bGuard\\b", "AC"], ["\\bdefense check\\b", "saving throw"],
-      ["\\bViolence check", "Strength check"], ["\\bIntrigue check", "Dexterity check"], ["\\bBody check", "Constitution check"], ["\\bMind check", "Intelligence check"], ["\\bSoul check", "Wisdom check"], ["\\bPresence check", "Charisma check"],
-      ["\\bkinetic damage\\b", "bludgeoning, piercing, or slashing damage"], ["\\belectrical damage\\b", "lightning damage"], ["\\bchemical damage\\b", "acid damage"], ["\\bthermal damage\\b", "fire or cold damage"],
-      ["\\bShaken\\b", "frightened"], ["\\bImposed\\b", "at disadvantage"], ["\\bskill rank\\b", "proficiency"],
-      ["\\btier uses\\b", "proficiency-bonus uses"], ["\\+ ?tier\\b", "+ your proficiency bonus"], ["\\bequal to your tier\\b", "equal to your proficiency bonus"]
+      [
+        "\\b(You|you|They|they|Allies[^.]{0,60}?|allies[^.]{0,60}?) reroll the lowest die on\\b",
+        "\\1 have advantage on"
+      ],
+      [
+        "\\b(may|can|could) (choose to )?reroll the lowest die on\\b",
+        "\\1 \\2have advantage on"
+      ],
+      [
+        "\\breroll the lowest die on\\b",
+        "gain advantage on"
+      ],
+      [
+        "\\breroll-lowest on\\b",
+        "advantage on"
+      ],
+      [
+        "\\breroll the lowest die\\b",
+        "gain advantage"
+      ],
+      [
+        "\\bits rank rises by one instead\\b",
+        "you gain expertise with it instead"
+      ],
+      [
+        "\\bYou gain a proficiency in\\b",
+        "You gain proficiency in"
+      ],
+      [
+        "\\bYou gain a skill rank in\\b",
+        "You gain proficiency in"
+      ],
+      [
+        "\\bdefense checks\\b",
+        "saving throws"
+      ],
+      [
+        "\\bSoma Break\\b",
+        "long rest"
+      ],
+      [
+        "\\bScene Break\\b",
+        "short rest"
+      ],
+      [
+        "\\b1/Scene\\b",
+        "once per short rest"
+      ],
+      [
+        "\\b3d10 keep lowest 2\\b",
+        "disadvantage"
+      ],
+      [
+        "\\b3d10kl2\\b",
+        "disadvantage"
+      ],
+      [
+        "\\btemporary Integrity\\b",
+        "temporary hit points"
+      ],
+      [
+        "\\bIntegrity\\b",
+        "hit points"
+      ],
+      [
+        "\\ba level of Stress\\b",
+        "a level of exhaustion"
+      ],
+      [
+        "\\bStrain\\b",
+        "exhaustion"
+      ],
+      [
+        "\\bGuard\\b",
+        "AC"
+      ],
+      [
+        "\\bdefense checks?\\b",
+        "saving throw"
+      ],
+      [
+        "\\bViolence check",
+        "Strength check"
+      ],
+      [
+        "\\bIntrigue check",
+        "Dexterity check"
+      ],
+      [
+        "\\bBody check",
+        "Constitution check"
+      ],
+      [
+        "\\bMind check",
+        "Intelligence check"
+      ],
+      [
+        "\\bSoul check",
+        "Wisdom check"
+      ],
+      [
+        "\\bPresence check",
+        "Charisma check"
+      ],
+      [
+        "\\bkinetic damage\\b",
+        "bludgeoning, piercing, or slashing damage"
+      ],
+      [
+        "\\belectrical damage\\b",
+        "lightning damage"
+      ],
+      [
+        "\\bchemical damage\\b",
+        "acid damage"
+      ],
+      [
+        "\\bthermal damage\\b",
+        "fire or cold damage"
+      ],
+      [
+        "\\bShaken\\b",
+        "frightened"
+      ],
+      [
+        "\\bImposed\\b",
+        "at disadvantage"
+      ],
+      [
+        "\\bskill ranks?\\b",
+        "proficiency"
+      ],
+      [
+        "\\btier uses\\b",
+        "proficiency-bonus uses"
+      ],
+      [
+        "\\+ ?tier\\b",
+        "+ your proficiency bonus"
+      ],
+      [
+        "\\bequal to your tier\\b",
+        "equal to your proficiency bonus"
+      ],
+      [
+        "\\b(Violence|Intrigue|Body|Mind|Soul|Presence) value\\b",
+        "@ABILITY modifier"
+      ],
+      [
+        "\\bInitiative \\(Intrigue\\)",
+        "initiative"
+      ],
+      [
+        "\\b(Diplomacy|Intimidation|Stealth|Athletics|Perception|Investigation|Insight|Empathy|Lore|Occult|Faith|Ritual|Meditation|Performance|Streetwise|Hacking|Tinkering|Piloting|Plating|Fitting|Bracing|Brawl|Melee|Firearms) \\((Violence|Intrigue|Body|Mind|Soul|Presence)\\)",
+        "@SKILL"
+      ],
+      [
+        "\\breaction strikes?\\b",
+        "opportunity attacks"
+      ],
+      [
+        "\\bmanifestations?\\b",
+        "powers"
+      ],
+      [
+        "\\bImpose the target: its next attack roll is 3d10 keep-lowest-2\\b",
+        "the target has disadvantage on its next attack roll"
+      ],
+      [
+        "\\bImpose (the target|it)\\b",
+        "give \\1 disadvantage on its next attack roll or saving throw"
+      ],
+      [
+        "\\bshift (\\d+) squares?\\b",
+        "move @SQUARES feet"
+      ],
+      [
+        "\\bthis principle\\b",
+        "this feat"
+      ],
+      [
+        "\\brank bonus\\b",
+        "proficiency bonus"
+      ],
+      [
+        "\\bSteward\\b",
+        "character"
+      ],
+      [
+        "\\bViolence\\b",
+        "Strength"
+      ],
+      [
+        "\\bIntrigue\\b",
+        "Dexterity"
+      ],
+      [
+        "\\bBody\\b",
+        "Constitution"
+      ],
+      [
+        "\\bMind\\b",
+        "Intelligence"
+      ],
+      [
+        "\\bSoul\\b",
+        "Wisdom"
+      ],
+      [
+        "\\bPresence\\b",
+        "Charisma"
+      ]
     ],
     "squares": "(\\d+) squares? → N×5 feet (handled by the converter, not a plain substitution)",
     "banned": [
-      "\\bSoma Break", "\\bScene Break", "\\bIntegrity\\b", "\\breroll the lowest\\b", "\\breroll-lowest\\b", "\\breroll-highest\\b", "\\b\\d+ squares?\\b",
-      "\\baptitude", "\\bskill rank", "\\bdefense check", "\\b(Violence|Intrigue|Presence|Body|Mind|Soul) (check|defense|save)", "\\b(VIO|INTR|PRE|BOD|MND|SOU)\\b",
-      "\\btier uses\\b", "\\+ ?tier\\b", "\\blevel of Stress\\b", "\\bStress damage\\b", "\\bkinetic damage\\b", "\\benergy damage\\b", "Per-Use Ability", "Click this feature"
+      "\\bSoma Break",
+      "\\bScene Break",
+      "\\bIntegrity\\b",
+      "\\breroll the lowest\\b",
+      "\\breroll-lowest\\b",
+      "\\breroll-highest\\b",
+      "\\b\\d+ squares?\\b",
+      "\\baptitude",
+      "\\bskill rank",
+      "\\bdefense check",
+      "\\b(Violence|Intrigue|Presence|Body|Mind|Soul) (check|defense|save)",
+      "\\b(VIO|INTR|PRE|BOD|MND|SOU)\\b",
+      "\\btier uses\\b",
+      "\\+ ?tier\\b",
+      "\\blevel of Stress\\b",
+      "\\bStress damage\\b",
+      "\\bkinetic damage\\b",
+      "\\benergy damage\\b",
+      "Per-Use Ability",
+      "Click this feature"
     ],
     "bannedFlags": "i for the case-insensitive ones is decided by the tool: everything in banned is tested case-insensitively except the capitalised proper terms (Integrity, Violence…, VIO…)",
-    "keep": ["Spark", "Yesod", "Sephirot", "Qliphoth", "Sefirot", "noosphere", "the Shattering", "hex", "marks", "Circuitborn", "Oldenborn", "Strategic Turn", "OP", "Clarity", "Noise", "Surge", "Path", "Doctrine"]
+    "keep": [
+      "Spark",
+      "Yesod",
+      "Sephirot",
+      "Qliphoth",
+      "Sefirot",
+      "noosphere",
+      "the Shattering",
+      "hex",
+      "marks",
+      "Circuitborn",
+      "Oldenborn",
+      "Strategic Turn",
+      "OP",
+      "Clarity",
+      "Noise",
+      "Surge",
+      "Path",
+      "Doctrine",
+      "Steward? → character (RFI's word for a PC)"
+    ],
+    "tokens": {
+      "@ABILITY": "the faculty in the match, through abilities (full name)",
+      "@SKILL": "the skill in the match, through skills (full name)",
+      "@SQUARES": "the number in the match ×5"
+    },
+    "_order": "front: grammatical reroll/rank rows · middle: the mechanics table · tail: bare capitalised faculty names (Violence→Strength …) so phrases like 'Presence (Persuasion) check' and 'Violence or Dexterity' resolve"
   }
 }

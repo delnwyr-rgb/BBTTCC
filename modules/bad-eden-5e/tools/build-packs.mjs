@@ -50,7 +50,7 @@ const BANNED = [
   /\bgalax/i, /\bhyperspace/i, /\bstarship/i, /\bRepublic\b/, /\bEmpire\b/, /\bImperial\b/,
   /\btwi'?lek/i, /\brodian/i, /\bmiraluka/i, /\bwookiee/i, /\bzabrak/i, /\btogruta/i, /\bchiss\b/i,
   /\bAshla\b/, /\bBendu\b/, /\bBogan\b/, /\blight side\b/i, /\bdark side\b/i, /\buniversal power/i,
-  /\bconsular/i, /\bsentinel\b/i, /\bengineer\b/i, /\bsw5e\b/i, /Compendium\.sw5e/, /\bchapter \d+/i
+  /\bconsular/i, /\bsentinel\b/i, /\b(Armormech|Armstech|Astrotech|Audiotech|Biochem|Biotech|Cybertech|Gadgeteer|Unstable|Construction|Artificer) Engineering\b/, /\bsw5e\b/i, /Compendium\.sw5e/, /\bchapter \d+/i
 ];
 // RFI (fourththing) vocabulary that must not survive into D&D content either — read from THE rubric
 const RUBRIC = JSON.parse(readFileSync(join(ROOT, "conversion", "rubric.json"), "utf8"));
@@ -124,7 +124,9 @@ function featureDoc(f, folderId) {
       type: { value: f.featType ?? "class", subtype: f.subtype ?? "" },
       requirements: f.requirements ?? "",
       prerequisites: { level: f.level ?? null, repeatable: false },
-      properties: [], activities: activityFor(key, f), enchant: {}, identifier: f.slug
+      properties: [], activities: activityFor(key, f), enchant: {}, identifier: f.slug,
+      // feats may carry Trait advancements (a skill or tool proficiency, or a choice between two)
+      ...(f.traits?.length ? { advancement: f.traits.map(t => trait(key, `trait:${t.tag}`, t.level ?? 0, t.title ?? "", t.grants ?? [], t.choices ?? [])) } : {})
     },
     effects: (f.effects ?? []).map((e, i) => {
       // embedded docs need their own LevelDB key for the CLI's hierarchy walk
