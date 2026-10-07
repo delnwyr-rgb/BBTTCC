@@ -52,13 +52,10 @@ const BANNED = [
   /\bAshla\b/, /\bBendu\b/, /\bBogan\b/, /\blight side\b/i, /\bdark side\b/i, /\buniversal power/i,
   /\bconsular/i, /\bsentinel\b/i, /\bengineer\b/i, /\bsw5e\b/i, /Compendium\.sw5e/, /\bchapter \d+/i
 ];
-// RFI (fourththing) vocabulary that must not survive into D&D content either
-const RFI_TERMS = [
-  /\bSoma Break/i, /\bScene Break/i, /\bIntegrity\b/, /\breroll the lowest\b/i, /\breroll-lowest\b/i, /\breroll-highest\b/i, /\b\d+ squares?\b/i,
-  /\baptitude/i, /\bskill rank/i, /\bdefense check/i, /\b(Violence|Intrigue|Presence|Body|Mind|Soul) (check|defense|save)/,
-  /\b(VIO|INTR|PRE|BOD|MND|SOU)\b/, /\btier uses\b/i, /\+ ?tier\b/i, /\blevel of Stress\b/i, /\bStress damage\b/,
-  /\bkinetic damage\b/i, /\benergy damage\b/i, /Per-Use Ability/, /Click this feature/
-];
+// RFI (fourththing) vocabulary that must not survive into D&D content either — read from THE rubric
+const RUBRIC = JSON.parse(readFileSync(join(ROOT, "conversion", "rubric.json"), "utf8"));
+const CASED = /^\\b(Integrity|\(Violence|\(VIO|Stress damage)/;
+const RFI_TERMS = RUBRIC.vocabulary.banned.map(p => new RegExp(p, CASED.test(p) ? "" : "i"));
 const lintFindings = [];
 /** `{{uuid:<pack>:<slug>}}` inside prose → the deterministic compendium UUID. */
 const link = text => (text ?? "").replace(/\{\{uuid:([a-z]+):([a-z0-9-]+)\}\}/g, (_, p, s) => uuid(p, s));
