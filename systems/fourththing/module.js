@@ -14549,6 +14549,7 @@ Hooks.once("init", function () {
   // stays as a fallback; a per-application guard flag prevents double-stacking.
   registerThreatChassisSetting();   // bestiary threat chassis (2026-10-06) — see threat-chassis.js
   // NPC ability automation engine (2026-10-06) — auras, morale, reactions, rerolls, DoT, recharge; see npc-automation.js
+  (game.fourththing ??= {})._postSavePromptCard = _ftPostSavePromptCard;   // trigger kind apply-state (ft-progression) posts the same card
   try { registerNpcAutomation({ actorKind, postSavePrompt: _ftPostSavePromptCard, playAnimation: ftPlayAutoAnimation, ftEscapeHtml }); }
   catch (e) { console.error("Roll for Initiation | npc automation failed to register", e); }
   game.settings.register("fourththing", "autoApplyEffects", {
@@ -16125,7 +16126,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // reflected (rather than re-reading the raw roll term).
       const maxDie = Math.max(0, ...(Array.isArray(baseDice) ? baseDice : []));
       const tags = [skill, defense, intent, damageType].filter(Boolean);
-      await fireTriggers(actor, "on-attack-hit", { tags, maxDie, scope: "self" });
+      await fireTriggers(actor, "on-attack-hit", { tags, maxDie, scope: "self", target: target?.actor ?? target ?? null });
 
       // Burn-on-hit auto-gen for Burn classes (playtest #8).
       await _ftBurnOnHitGen(actor);
@@ -19082,6 +19083,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (_owners[0] !== game.user) return;
     }
 
+    // REGIMEN step 3 (2026-10-06): a real `on-turn-start` trigger event (ancestry/class triggers used to sit on a dead event)
+    try { await fireTriggers(actor, "on-turn-start", { scope: "self", round: combat.round, tags: ["turn-start"] }); }
+    catch (e) { console.warn("[fourththing] on-turn-start triggers failed", actor?.name, e); }
+
     // Reset per-turn action economy + reseed movement budget from current walk speed.
     // Underwater: a Submerged actor moves at Swim speed (half walk if no Swim speed).
     const sysSnap = actor.system?.system ?? actor.system;
@@ -19536,6 +19541,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // 2026-10-01 — dry-run previews (apply:false) must not mutate or post, and
   // only the ACTIVE GM runs it (two GM seats posted every card twice).
   Hooks.on("bbttcc:advanceTurn:end", async ({ apply } = {}) => {
+    // REGIMEN step 3 (2026-10-06): `per-strategic-turn` resource grants — the cadence existed in the schema, nothing fired it.
+    // Gated on BOTH apply and isGM (turn contract). One summary whisper per actor that gained something.
+    if (apply && game.user?.isGM) {
+      for (const a of game.actors?.filter?.(x => ["character", "npc"].includes(x.type) && x.items.some(i => Array.isArray(i.flags?.fourththing?.resourceGrants) && i.flags.fourththing.resourceGrants.some(g => g?.cadence === "per-strategic-turn"))) ?? []) {
+        try { const r = await fireResourceGrants(a, "per-strategic-turn"); if (r?.fired?.length) console.log(`[fourththing] strategic-turn grants → ${a.name}`, r.fired.map(f => f.summary ?? f)); }
+        catch (e) { console.warn("[fourththing] per-strategic-turn grants failed", a.name, e); }
+      }
+    }
     if (!apply || !game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
     for (const actor of game.actors?.contents ?? []) {
       const hasHM = actor.items?.some?.(it => it.type === "class" && (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
@@ -20539,9 +20552,21 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           // True when the item carries a consume block — surfaces the Use
           // button on the inventory row.
           isConsumable: !!rfi?.consume,
-          charges:      Number(rfi?.charges ?? 0) || null
+          charges:      Number(rfi?.charges ?? 0) || null,
+          // Inventory CATEGORY (owner ask 2026-10-06: "list items by category") — the sheet groups rows under these headers.
+          group: i.type === "weapon" ? "Weapons"
+               : i.type === "armor"  ? "Armor"
+               : rfi?.consume        ? "Consumables"
+               : (rfi?.frame === "relic" || (Array.isArray(i.system?.tags) && i.system.tags.some(t => /^relic/i.test(String(t))))) ? "Relics"
+               : "Gear"
         };
       });
+      // Grouped view: fixed category order, then higher tier first, then name. Empty categories are left out.
+      const GEAR_GROUP_ORDER = ["Weapons", "Armor", "Consumables", "Relics", "Gear"];
+      const gearGroups = GEAR_GROUP_ORDER.map(label => ({
+        label,
+        rows: gearRows.filter(r => r.group === label).sort((a, b) => (Number(b.tier) || 0) - (Number(a.tier) || 0) || String(a.name).localeCompare(String(b.name)))
+      })).filter(g => g.rows.length);
 
       return {
         actor,
@@ -20745,6 +20770,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           other:    featuresEnriched.filter(f => f.group === "other")
         },
         gear: gearRows,
+        gearGroups,
         // Items the steward carries but is untrained with (rank 0 in the gating
         // skill). Drives the inventory-tab warning banner.
         equipProfWarnings: gearRows.filter(r => r.notProficient),
@@ -27462,6 +27488,21 @@ Hooks.on("createActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRend
 Hooks.on("deleteActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("updateActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("canvasReady", () => _ftRenderCrewHud());
+// REGIMEN step 3 (2026-10-06): `per-scene-start` resource grants fire once per scene per actor (actor flag remembers the scene).
+Hooks.on("canvasReady", async () => {
+  try {
+    if (!game.user?.isGM || !canvas?.scene) return;
+    const sid = canvas.scene.id;
+    for (const tok of canvas.tokens?.placeables ?? []) {
+      const a = tok.actor; if (!a || !["character", "npc"].includes(a.type)) continue;
+      if (!a.items.some(i => Array.isArray(i.flags?.fourththing?.resourceGrants) && i.flags.fourththing.resourceGrants.some(g => g?.cadence === "per-scene-start"))) continue;
+      if (a.flags?.fourththing?.resourceGrantsScene === sid) continue;
+      const r = await fireResourceGrants(a, "per-scene-start");
+      await a.update({ "flags.fourththing.resourceGrantsScene": sid });
+      if (r?.fired?.length) console.log(`[fourththing] scene-start grants → ${a.name}`, r.fired.map(f => f.summary ?? f));
+    }
+  } catch (e) { console.warn("[fourththing] per-scene-start grants failed", e); }
+});
 
 // ─── Passenger Manifest ──────────────────────────────────────────────
 // 2026-05-19 — Right-side vertical strip listing every boarded steward

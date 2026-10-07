@@ -880,7 +880,7 @@ function _matchPredicate(t, payload) {
   return true;
 }
 
-async function _checkAndConsumeLimit(actor, sourceItemId, triggerIndex, limit) {
+async function _checkAndConsumeLimit(actor, sourceItemId, triggerIndex, limit, consume = true) {
   if (!limit?.window) return { allowed: true };
   const key = `${sourceItemId}:${triggerIndex}`;
   const usage = actor.getFlag("fourththing", _TRIGGER_USAGE_FLAG) ?? {};
@@ -889,6 +889,7 @@ async function _checkAndConsumeLimit(actor, sourceItemId, triggerIndex, limit) {
   const usedInWindow = (current?.windowKey === windowKey) ? Number(current.count) || 0 : 0;
   if (usedInWindow >= Number(limit.uses ?? 1)) return { allowed: false, reason: `${limit.uses}/${limit.window} used` };
   // Reserve a use
+  if (!consume) return { allowed: true, consume: async () => { const u2 = actor.getFlag("fourththing", _TRIGGER_USAGE_FLAG) || {}; await actor.setFlag("fourththing", _TRIGGER_USAGE_FLAG, { ...u2, [key]: { windowKey, count: usedInWindow + 1, at: Date.now() } }); } };
   const updated = { ...usage, [key]: { windowKey, count: usedInWindow + 1, at: Date.now() } };
   await actor.setFlag("fourththing", _TRIGGER_USAGE_FLAG, updated);
   return { allowed: true };
@@ -900,7 +901,7 @@ function _gmAndMe() {
   return [...new Set([...gms, game.user.id])];
 }
 
-async function _dispatchEffect(actor, effect, source, payload) {
+async function _dispatchEffect(actor, effect, source, payload, sourceItemId = null) {
   const kind = effect?.kind;
   const args = effect?.args ?? {};
   switch (kind) {
@@ -937,7 +938,35 @@ async function _dispatchEffect(actor, effect, source, payload) {
       await actor.update({ [path]: before + Number(args.amount) });
       return { ok:true, summary:`+${args.amount} temp Integrity` };
     }
-    case "extra-damage":
+    // ── REGIMEN step 3 (2026-10-06): kinds that used to only whisper the GM now EXECUTE when the event carries a target
+    //    (attackTest's on-attack-hit payload now includes `target`). Without a target they fall through to the whisper.
+    case "apply-state": {
+      const tgt = payload?.target ?? (args.target === "self" ? actor : null);
+      if (!tgt || !args.key) break;
+      const mf = { appliedStates: { states: [args.key], duration: args.duration || "1-round", saveEachRound: args.duration === "until-saved", saveAttribute: args.save?.attr } };
+      if (args.save?.attr) {
+        mf.resolution = { saveAttribute: args.save.attr, saveDcMode: "fixed", saveDcFixed: Number(args.save.dc) || 13, onSave: "negate", statesOnFail: true };
+        const srcItem = (sourceItemId && actor.items?.get?.(sourceItemId)) || null, post = game.fourththing?._postSavePromptCard;
+        if (post && srcItem) { await post(actor, tgt, srcItem, mf, { op: "none" }, { castDc: mf.resolution.saveDcFixed }); return { ok:true, summary:`${args.key} save card → ${tgt.name}` }; }
+      }
+      await game.fourththing.applyManifestationStates(actor, tgt, (sourceItemId && actor.items?.get?.(sourceItemId)) || { name: source }, mf, { castDc: 15 });
+      return { ok:true, summary:`${args.key} → ${tgt.name}` };
+    }
+    case "heal": {
+      const amt = typeof args.amount === "number" ? args.amount : (await new Roll(String(args.amount || "0")).evaluate()).total;
+      await game.fourththing.rolls._applyDamageToActor(args.target === "target" && payload?.target ? payload.target : actor, amt, { op: "heal", track: args.track || "integrity" });
+      return { ok:true, summary:`+${amt} ${args.track || "Integrity"}` };
+    }
+    case "extra-damage": {
+      const tgt = payload?.target;
+      if (tgt && args.dieFormula) {
+        const roll = await new Roll(String(args.dieFormula)).evaluate();
+        const type = String(args.type || "kinetic").toLowerCase();
+        await game.fourththing.rolls._applyDamageToActor(tgt, roll.total, { op: "damage", track: ["psychic", "qliphothic"].includes(type) ? "stress" : "integrity", damageType: type });
+        return { ok:true, summary:`+${roll.total} ${type} → ${tgt.name}` };
+      }
+    }
+    // falls through to the GM whisper when there is no target to hit
     case "queued-reroll":
     case "spend-and-survive": {
       // These need integration into the live roll/damage flow — for v1 we
@@ -978,13 +1007,14 @@ export async function fireTriggers(actor, event, payload = {}) {
       skipped.push({ source: m.sourceItemName, reason: "predicate failed" });
       continue;
     }
-    const limitCheck = await _checkAndConsumeLimit(actor, m.sourceItemId, m.triggerIndex, m.trigger.limit);
+    // 2026-10-06: the limited use is consumed AFTER a successful dispatch — a failed/errored effect no longer burns it
+    const limitCheck = await _checkAndConsumeLimit(actor, m.sourceItemId, m.triggerIndex, m.trigger.limit, false);
     if (!limitCheck.allowed) {
       skipped.push({ source: m.sourceItemName, reason: limitCheck.reason });
       continue;
     }
-    const result = await _dispatchEffect(actor, m.trigger.effect, m.sourceItemName, payload);
-    if (result.ok) fired.push({ source: m.sourceItemName, summary: result.summary });
+    let result; try { result = await _dispatchEffect(actor, m.trigger.effect, m.sourceItemName, payload, m.sourceItemId); } catch (e) { result = { ok: false, reason: e?.message || "threw" }; }
+    if (result.ok) { fired.push({ source: m.sourceItemName, summary: result.summary }); try { await limitCheck.consume?.(); } catch (_e) {} }
     else skipped.push({ source: m.sourceItemName, reason: result.reason });
   }
   // Centralized chat surface — post a single purple "Triggers fired" card per

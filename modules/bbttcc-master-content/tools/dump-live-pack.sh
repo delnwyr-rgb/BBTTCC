@@ -15,10 +15,10 @@ if [[ "${1:-}" == "--assets" ]]; then
     cd /home/foundry/foundry-ember/resources/app/public && find icons ui -type f | sed "s#^\./##"' > "$OUT"
   echo "dump-live-pack: asset list → $OUT ($(wc -l < "$OUT" | tr -d ' ') paths)"; exit 0
 fi
-PACK="${1:?pack dir name, e.g. npcs}"; OUT="${2:-./$PACK.jsonl}"; INST=ember
+PACK="${1:?pack dir name, e.g. npcs — or a Data-relative pack path like systems/fourththing/packs/surge-abilities}"; OUT="${2:-./$(basename "$PACK").jsonl}"; INST=ember
 [[ "${3:-}" == "--instance" ]] && INST="${4:?}"
 DATA=/home/foundry/foundry-emberdata/Data; [[ $INST == foundry ]] && DATA=/home/foundry/foundryuserdata/Data
-"${SSH[@]}" "set -e; T=\$(mktemp -d); cp -r '$DATA/modules/bbttcc-master-content/packs/$PACK' \$T/db; rm -f \$T/db/LOCK
+"${SSH[@]}" "set -e; T=\$(mktemp -d); cp -r '$DATA/$([[ "$PACK" == */* ]] && echo "$PACK" || echo "modules/bbttcc-master-content/packs/$PACK")' \$T/db; rm -f \$T/db/LOCK
 cd \$T && node -e '
 const {ClassicLevel}=require(\"/home/foundry/foundry-ember-backup/resources/app/node_modules/classic-level\");
 (async()=>{const db=new ClassicLevel(\"db\",{valueEncoding:\"json\"});const o=[];

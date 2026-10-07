@@ -6515,3 +6515,9 @@
 .ft-npc-sheet .ft-about-fold > summary .ft-about-summary-concept { font-weight: 400; font-style: italic; opacity: 0.8; }
 .ft-npc-sheet .ft-about-fold[open] > summary .ft-about-summary-concept { display: none; }
 .ft-npc-sheet .ft-about-fold .ft-about > .ft-section-header { display: none; }
+
+/* ── Inventory category headers (2026-10-06, "list items by category") ─────────────────────────────────────── */
+.ft-inventory .ft-inv-group-header { display: flex; align-items: baseline; gap: 0.5rem; margin: 0.55rem 0 0.2rem; padding: 0 0.2rem 0.15rem; border-bottom: 1px solid rgba(212,163,95,0.35); }
+.ft-inventory .ft-inv-group-header:first-child { margin-top: 0.1rem; }
+.ft-inventory .ft-inv-group-label { font-family: var(--font-primary); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: #d4a35f; }
+.ft-inventory .ft-inv-group-count { font-size: 0.68rem; opacity: 0.55; }
