@@ -6,7 +6,7 @@ Hooks.once("init", () => {
   registerConfig();
   // Feature subtypes our content uses (a Theurge's Shapes are picked from a pool by subtype).
   const sub = CONFIG.DND5E.featureTypes?.class?.subtypes;
-  if (sub) sub.be5eShape = "Shape (Theurge)";
+  if (sub) Object.assign(sub, { be5eShape: "Shape (Theurge)", be5eAura: "Aura (Warden)", be5eTenet: "Tenet (Vigilant)" });
 });
 
 Hooks.once("ready", () => {

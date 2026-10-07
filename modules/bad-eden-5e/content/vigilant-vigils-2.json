@@ -1,0 +1,559 @@
+{
+  "_about": "Flow Wolf: Vigilant — Vigils of Iron, Meditation, Shadows, Synthesis (SW5E Paths of Iron, Meditation, Shadows, Synthesis). Mechanics carried over; every line of text is Bad Eden's own. Built by tools/build-packs.mjs.",
+  "_renames": [
+    {
+      "sw5e": "Path of Iron",
+      "new": "Vigil of Iron"
+    },
+    {
+      "sw5e": "Form Combat Training",
+      "new": "Set Stance"
+    },
+    {
+      "sw5e": "Physical Conditioning",
+      "new": "Hard Body"
+    },
+    {
+      "sw5e": "Enhanced Force-Empowered Self (Aegis / Cleave / Momentum)",
+      "new": "Braced in the Current (Bulwark / Cleave / Carry Through)"
+    },
+    {
+      "sw5e": "Kinetic Mastery",
+      "new": "Second Nature"
+    },
+    {
+      "sw5e": "Path of Meditation",
+      "new": "Vigil of Meditation"
+    },
+    {
+      "sw5e": "Force-Empowered Allies",
+      "new": "Current Shared"
+    },
+    {
+      "sw5e": "Legendary Battle Meditation",
+      "new": "The Whole Field"
+    },
+    {
+      "sw5e": "Path of Shadows",
+      "new": "Vigil of Shadows"
+    },
+    {
+      "sw5e": "Path of Synthesis",
+      "new": "Vigil of Synthesis"
+    },
+    {
+      "sw5e": "Techcasting Secrets",
+      "new": "Crossed Wires"
+    },
+    {
+      "sw5e": "Synthetic Understanding",
+      "new": "Mixed Schooling"
+    },
+    {
+      "sw5e": "Force-Empowered Tech (Disruption Pulse / Forced Override / Techcasting Insight)",
+      "new": "Hotwired Current (Overload Pulse / Forced Hand / Read the Rig)"
+    },
+    {
+      "sw5e": "Improved Force-Empowered Tech (Harmonic Synthesis / Conservation of Energy)",
+      "new": "Harmonics (In Tune / Nothing Wasted)"
+    },
+    {
+      "sw5e": "Reflective Shield",
+      "new": "Mirror Field"
+    }
+  ],
+  "_powerRefs": [
+    {
+      "sw5e": "Guidance",
+      "draft": "Good Word",
+      "vigil": "vigil-of-meditation",
+      "note": "not in the Flow keep list; named in <em> only"
+    },
+    {
+      "sw5e": "Battle Meditation",
+      "draft": "Steady the Line",
+      "vigil": "vigil-of-meditation",
+      "note": "exists; linked"
+    },
+    {
+      "sw5e": "Improved / Master Battle Meditation",
+      "draft": "Steady the Line cast at 5th / 7th level",
+      "vigil": "vigil-of-meditation"
+    },
+    {
+      "sw5e": "Psychic Charge",
+      "draft": "Hush",
+      "vigil": "vigil-of-shadows",
+      "note": "not in the Flow keep list; named in <em> only"
+    }
+  ],
+  "_unsure": [
+    "Set Stance / Second Nature: SW5E's lightsaber forms (Expanded Content) have no Bad Eden equivalent, so Set Stance is a flat three-stance feature (Guard / Drive / Pass, bonus action, lasts until your next turn) and Second Nature lets you set one without the bonus action; the martial-weapon proficiency it also granted is already in the class.",
+    "Hard Body: +3 HP then +1 per level = HP bonus equal to Vigilant level, as an AE on hp.bonuses.overall; medium armor proficiency is an AE; the Wis/Cha-for-Dex AC swap is text only (dnd5e has no AE for it).",
+    "Braced in the Current / Hotwired Current: 3 uses +1 at 9/13/17 as the formula 3 + floor((level - 5) / 4); the 'spend 1 Flow point when out of uses' fallback is text only.",
+    "The Whole Field: SW5E casts a 9th-level power; a Vigilant's Max Power Level is 7 and the engine refuses higher, so it casts Steady the Line at 7th level. Turbulent Presence casts it at 5th. Both are 'without spending Flow points' — the GM lets the cast through.",
+    "Crossed Wires: the chosen Artifice powers must be cast with Flow points — the engine keys on the power's method, so the GM sets the copied power's method to the Flow (same seam as the Technology Way's Flow-Touched).",
+    "Mixed Schooling: SW5E's Technology skill became tinker's tools / an Arcana check about machines; the tool choice is a subclass trait (any tool).",
+    "Shadow Strike: 1d6 / 2d6 / 3d6 at 7th / 11th / 17th as the custom formula (1 + floor((level - 5) / 6))d6."
+  ],
+  "subclasses": [
+    {
+      "slug": "vigil-of-iron",
+      "identifier": "vigil-of-iron",
+      "name": "Vigil of Iron",
+      "classIdentifier": "vigilant",
+      "img": "icons/equipment/chest/breastplate-banded-steel.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>Some Vigilants put the current in their footwork. The Vigil of Iron puts it in the bone. These are the ones who train until the body stops arguing, who take punishment that should have ended the conversation and keep talking, and who hit harder than someone that size has any right to.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "iron-set-stance"
+        },
+        {
+          "level": 3,
+          "slug": "iron-hard-body"
+        },
+        {
+          "level": 7,
+          "slug": "iron-braced-in-the-current"
+        },
+        {
+          "level": 13,
+          "slug": "iron-follow-through"
+        },
+        {
+          "level": 18,
+          "slug": "iron-second-nature"
+        }
+      ]
+    },
+    {
+      "slug": "vigil-of-meditation",
+      "identifier": "vigil-of-meditation",
+      "name": "Vigil of Meditation",
+      "classIdentifier": "vigilant",
+      "img": "icons/magic/control/energy-stream-link-white.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>The current runs in harmony and it runs in riot, and the Vigil of Meditation can call up either. These Vigilants sit a little behind the line and put the Flow into everyone else: a friend's blade lands, an enemy's foot slips, and nobody can quite say why the fight went the way it did.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "meditation-sage-counsel"
+        },
+        {
+          "level": 3,
+          "slug": "meditation-current-shared"
+        },
+        {
+          "level": 7,
+          "slug": "meditation-unbreakable-focus"
+        },
+        {
+          "level": 13,
+          "slug": "meditation-turbulent-presence"
+        },
+        {
+          "level": 18,
+          "slug": "meditation-the-whole-field"
+        }
+      ]
+    },
+    {
+      "slug": "vigil-of-shadows",
+      "identifier": "vigil-of-shadows",
+      "name": "Vigil of Shadows",
+      "classIdentifier": "vigilant",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>There's safety in the dark, if you're the thing in it. The Vigil of Shadows is the lodge's ambush work: the planned approach, the unwatched flank, the fight that was over before the other side knew it had started. They don't go through the front door. They were never near the front door.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "shadows-dead-silence"
+        },
+        {
+          "level": 3,
+          "slug": "shadows-cloak-of-shadows"
+        },
+        {
+          "level": 7,
+          "slug": "shadows-shadow-strike"
+        },
+        {
+          "level": 13,
+          "slug": "shadows-shadow-step"
+        },
+        {
+          "level": 18,
+          "slug": "shadows-shadows-wrath"
+        }
+      ]
+    },
+    {
+      "slug": "vigil-of-synthesis",
+      "identifier": "vigil-of-synthesis",
+      "name": "Vigil of Synthesis",
+      "classIdentifier": "vigilant",
+      "img": "icons/commodities/tech/blueprint.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>There's power in not picking a side. The Vigil of Synthesis runs the current through a wire and the wire through the current, and gets things out the other end that neither the Theurges nor the Gearwrights can explain. Salvage in one hand, the Flow in the other, and a grudge against the word \"impossible\".</p>",
+      "traits": [
+        {
+          "tag": "tools",
+          "level": 3,
+          "title": "Mixed Schooling",
+          "choices": [
+            {
+              "count": 1,
+              "pool": [
+                "tool:*"
+              ]
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "level": 3,
+          "slug": "synthesis-crossed-wires"
+        },
+        {
+          "level": 3,
+          "slug": "synthesis-mixed-schooling"
+        },
+        {
+          "level": 7,
+          "slug": "synthesis-hotwired-current"
+        },
+        {
+          "level": 13,
+          "slug": "synthesis-harmonics"
+        },
+        {
+          "level": 18,
+          "slug": "synthesis-mirror-field"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "iron-set-stance",
+      "name": "Set Stance",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Iron) 3",
+      "folder": "Vigil of Iron",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/skills/melee/shield-block-gray-orange.webp",
+      "activation": "bonus",
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "description": "<p><em>Vigil of Iron, 3rd level</em></p><p>You've drilled the shapes until your body finds them on its own. As a bonus action, you can set a stance that lasts until the start of your next turn. Choose one:</p><ul><li><strong>Guard.</strong> While you're holding a melee weapon, you have a +1 bonus to AC.</li><li><strong>Drive.</strong> When you hit a creature with a melee weapon attack, you can push it 5 feet straight away from you.</li><li><strong>Pass.</strong> You can move through hostile creatures' spaces, and moving out of a creature's reach doesn't provoke an opportunity attack from it.</li></ul>"
+    },
+    {
+      "slug": "iron-hard-body",
+      "name": "Hard Body",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Iron) 3",
+      "folder": "Vigil of Iron",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/equipment/chest/breastplate-banded-steel.webp",
+      "description": "<p><em>Vigil of Iron, 3rd level</em></p><p>You trained until the body stopped arguing. You gain the following benefits:</p><ul><li>You gain proficiency with medium armor. If you already had it, you gain proficiency with heavy armor instead. While you wear light or medium armor, you can use your Wisdom or Charisma modifier (your choice) in place of your Dexterity modifier when working out your AC.</li><li>Your hit point maximum increases by 3, and by 1 more every time you gain a level in this class.</li></ul>",
+      "effects": [
+        {
+          "_id": "be5eIronHardBody",
+          "name": "Hard Body",
+          "img": "icons/equipment/chest/breastplate-banded-steel.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.traits.armorProf.value",
+              "mode": 2,
+              "value": "med",
+              "priority": 20
+            },
+            {
+              "key": "system.attributes.hp.bonuses.overall",
+              "mode": 2,
+              "value": "@classes.vigilant.levels",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ]
+    },
+    {
+      "slug": "iron-braced-in-the-current",
+      "name": "Braced in the Current",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Iron) 7",
+      "folder": "Vigil of Iron",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/control/buff-strength-muscle-damage-orange.webp",
+      "activation": "special",
+      "uses": {
+        "max": "3 + floor((@classes.vigilant.levels - 5) / 4)",
+        "per": "sr"
+      },
+      "description": "<p><em>Vigil of Iron, 7th level</em></p><p>All that training opened the channels wider. When you use a Body in the Current trick, you can brace it and get something extra, as listed below. You can brace only one trick per turn.</p><ul><li><strong>Bulwark.</strong> When you brace Slip, any attack that hits you before the start of your next turn deals damage reduced by the number you rolled for Slip.</li><li><strong>Cleave.</strong> When you brace Second Edge, choose another creature within 5 feet of your target. It takes damage of the same type equal to the Second Edge roll.</li><li><strong>Carry Through.</strong> When you brace Quick Feet, until the end of your turn you ignore difficult terrain and can move along vertical surfaces and across liquids without falling.</li></ul><p>You can brace three times. You gain one more use at 9th, 13th, and 17th level, and you regain all spent uses when you finish a short or long rest. When you have no uses left, you can spend 1 Flow point to brace instead.</p>"
+    },
+    {
+      "slug": "iron-follow-through",
+      "name": "Follow Through",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Iron) 13",
+      "folder": "Vigil of Iron",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/skills/melee/weapons-crossed-swords-pink.webp",
+      "activation": "special",
+      "description": "<p><em>Vigil of Iron, 13th level</em></p><p>The swing and the power are the same motion now. When you take the Attack action on your turn, you can spend 2 Flow points and give up one of your attacks to cast an at-will Flow power that calls for a melee weapon attack.</p>"
+    },
+    {
+      "slug": "iron-second-nature",
+      "name": "Second Nature",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Iron) 18",
+      "folder": "Vigil of Iron",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+      "activation": "special",
+      "uses": {
+        "max": "6",
+        "per": "lr"
+      },
+      "description": "<p><em>Vigil of Iron, 18th level</em></p><p>Choose one of your stances. Once on each of your turns, you can set that stance without using your bonus action.</p><p>You can do this six times, and you regain all spent uses when you finish a long rest. When you have no uses left, you can spend 1 Flow point to do it instead.</p>"
+    },
+    {
+      "slug": "meditation-sage-counsel",
+      "name": "Sage Counsel",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Meditation) 3",
+      "folder": "Vigil of Meditation",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "description": "<p><em>Vigil of Meditation, 3rd level</em></p><p>You've always had a word for people at the right moment. You learn the @UUID[{{uuid:powers:good-word}}]{Good Word} power, and it doesn't count against the number of powers you know. When you cast it, its die is one step bigger than usual (a d4 becomes a d6, a d6 a d8, a d8 a d10, a d10 a d12).</p>"
+    },
+    {
+      "slug": "meditation-current-shared",
+      "name": "Current Shared",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Meditation) 3",
+      "folder": "Vigil of Meditation",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/control/energy-stream-link-white.webp",
+      "activation": "reaction",
+      "range": 60,
+      "target": {
+        "type": "ally",
+        "count": 1
+      },
+      "activity": "utility",
+      "roll": "@scale.vigilant.kinetic",
+      "description": "<p><em>Vigil of Meditation, 3rd level</em></p><p>What you can do for yourself, you can do for them. While you're concentrating on a power that benefits a friendly creature other than you, you can use your Body in the Current tricks on that creature. Each costs 1 Flow point, and the creature must be benefiting from a power you cast.</p><ul><li><strong>Slip.</strong> When the ally is hit by an attack roll, you can use your reaction and roll a Kinetic die to add to the ally's AC against it, maybe turning the hit into a miss.</li><li><strong>Second Edge.</strong> When the ally hits with an attack roll, you can use your reaction and roll a Kinetic die to add that much damage of the same type.</li><li><strong>Quick Feet.</strong> When the ally moves on their turn, you can use your reaction and roll a Kinetic die to increase their speed by 5 feet times the roll until the end of that turn.</li></ul>"
+    },
+    {
+      "slug": "meditation-unbreakable-focus",
+      "name": "Unbreakable Focus",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Meditation) 7",
+      "folder": "Vigil of Meditation",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "activation": "action",
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Vigil of Meditation, 7th level</em></p><p>Once per long rest, you can cast @UUID[{{uuid:powers:steady-the-line}}]{Steady the Line} at its base level without spending Flow points. While you're concentrating on it, its die grows one step at the start of each of your turns (d4 to d6, d6 to d8, d8 to d10, d10 to d12).</p><p>Also, whenever you make a Constitution saving throw to keep concentration on a Flow power, you can treat a d20 roll of 9 or lower as a 10.</p>"
+    },
+    {
+      "slug": "meditation-turbulent-presence",
+      "name": "Turbulent Presence",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Meditation) 13",
+      "folder": "Vigil of Meditation",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/air/fog-gas-smoke-dense-gray.webp",
+      "activation": "action",
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Vigil of Meditation, 13th level</em></p><p>Once per long rest, you can cast @UUID[{{uuid:powers:steady-the-line}}]{Steady the Line} at 5th level without spending Flow points. While you're concentrating on it, its die grows one step at the start of each of your turns (d6 to d8, d8 to d10, d10 to d12).</p><p>Also, once per round, when a creature rolls a bonus or penalty die from an effect you control, you can make it roll that die with advantage or disadvantage (your choice).</p>"
+    },
+    {
+      "slug": "meditation-the-whole-field",
+      "name": "The Whole Field",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Meditation) 18",
+      "folder": "Vigil of Meditation",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/lightning/orb-ball-spiral-blue.webp",
+      "activation": "action",
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Vigil of Meditation, 18th level</em></p><p>You can hold the whole fight in your head at once. Once per long rest, you can cast @UUID[{{uuid:powers:steady-the-line}}]{Steady the Line} at 7th level without spending Flow points. While you're concentrating on it, its die grows one step at the start of each of your turns (d8 to d10, d10 to d12).</p><p>Also, you have a second reaction each round that you can use only for Current Shared. You can still take only one reaction per turn.</p>"
+    },
+    {
+      "slug": "shadows-dead-silence",
+      "name": "Dead Silence",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Shadows) 3",
+      "folder": "Vigil of Shadows",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "formula": "max(@abilities.wis.mod, @abilities.cha.mod, 1)",
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "description": "<p><em>Vigil of Shadows, 3rd level</em></p><p>Nobody calls for help after you've touched them. You learn the @UUID[{{uuid:powers:hush}}]{Hush} power, and it doesn't count against the number of powers you know. You can use Wisdom or Charisma as your casting ability for it. When you hit a creature with @UUID[{{uuid:powers:hush}}]{Hush} and it tries to speak, it takes extra psychic damage equal to your Wisdom or Charisma modifier (your choice, minimum of +1), and its voice makes no sound until the end of your next turn.</p>"
+    },
+    {
+      "slug": "shadows-cloak-of-shadows",
+      "name": "Cloak of Shadows",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Shadows) 3",
+      "folder": "Vigil of Shadows",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "activation": "bonus",
+      "description": "<p><em>Vigil of Shadows, 3rd level</em></p><p>Half a shadow is enough. You can take the Hide action as a bonus action on your turn, and you can try to hide while you're only lightly obscured from the creature you're hiding from.</p>"
+    },
+    {
+      "slug": "shadows-shadow-strike",
+      "name": "Shadow Strike",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Shadows) 7",
+      "folder": "Vigil of Shadows",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/skills/melee/strike-dagger-skull-white.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "formula": "(1 + floor((@classes.vigilant.levels - 5) / 6))d6",
+          "types": []
+        }
+      ],
+      "description": "<p><em>Vigil of Shadows, 7th level</em></p><p>The blow they didn't see coming is the one that counts. Once per turn, when you hit a creature with an attack you had advantage on, you can deal an extra 1d6 damage to it.</p><p>The extra damage rises to 2d6 at 11th level and 3d6 at 17th.</p>"
+    },
+    {
+      "slug": "shadows-shadow-step",
+      "name": "Shadow Step",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Shadows) 13",
+      "folder": "Vigil of Shadows",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/skills/movement/figure-running-gray.webp",
+      "activation": "bonus",
+      "range": 60,
+      "target": {
+        "type": "self"
+      },
+      "description": "<p><em>Vigil of Shadows, 13th level</em></p><p>One shadow is as good as another. While you're in dim light or darkness, as a bonus action you can teleport up to 60 feet to an unoccupied space you can see that's also in dim light or darkness. You then have advantage on the first melee attack you make before the end of the turn.</p>"
+    },
+    {
+      "slug": "shadows-shadows-wrath",
+      "name": "Shadow's Wrath",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Shadows) 18",
+      "folder": "Vigil of Shadows",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/unholy/silhouette-robe-evil-power.webp",
+      "activation": "special",
+      "description": "<p><em>Vigil of Shadows, 18th level</em></p><p>They know they were hit. They still don't know where you are. While you're hidden from your target, the first attack roll you make each round doesn't automatically give you away. Make a Dexterity (Stealth) check contested by the target's Wisdom (Perception) check; on a success you stay hidden, and if you were invisible, you stay invisible.</p>"
+    },
+    {
+      "slug": "synthesis-crossed-wires",
+      "name": "Crossed Wires",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Synthesis) 3",
+      "folder": "Vigil of Synthesis",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/commodities/tech/blueprint.webp",
+      "description": "<p><em>Vigil of Synthesis, 3rd level</em></p><p>You picked up Artifice the way you pick up anything: sideways, and faster than the people who were taught properly. Choose two Artifice powers of 1st level or lower. For you they count as Unaligned Flow powers, cast with Flow points and your casting ability, and they don't count against the number of powers you know.</p><p>At 7th level you learn two more Artifice powers of 2nd level or lower; at 13th, two of 3rd level or lower; at 17th, two of 4th level or lower. Whenever you gain a level in this class, you can swap one of these Artifice powers for another of a level this feature allows.</p>"
+    },
+    {
+      "slug": "synthesis-mixed-schooling",
+      "name": "Mixed Schooling",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Synthesis) 3",
+      "folder": "Vigil of Synthesis",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "description": "<p><em>Vigil of Synthesis, 3rd level</em></p><p>You read manuals the way other people read the current. You gain proficiency with tinker's tools or one other set of tools of your choice.</p><p>When you make an Intelligence (Arcana) check to understand a machine, or any check with a tool, you can use your Wisdom or Charisma modifier (your choice) in place of your Intelligence modifier.</p><p>And when you deal damage with an Artifice power or with your Second Edge trick, you can make that damage lightning instead of its usual type.</p>"
+    },
+    {
+      "slug": "synthesis-hotwired-current",
+      "name": "Hotwired Current",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Synthesis) 7",
+      "folder": "Vigil of Synthesis",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/lightning/orb-ball-spiral-blue.webp",
+      "activation": "action",
+      "target": {
+        "template": {
+          "type": "cone",
+          "size": 30
+        }
+      },
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "none"
+      },
+      "uses": {
+        "max": "3 + floor((@classes.vigilant.levels - 5) / 4)",
+        "per": "sr"
+      },
+      "description": "<p><em>Vigil of Synthesis, 7th level</em></p><p>The current and the wire finally agree on something. You have three effects: Overload Pulse, Forced Hand, and Read the Rig. When you use this feature, choose which one.</p><ul><li><strong>Overload Pulse.</strong> As an action, you send a 30-foot cone of charged current out to fry the other side's hardware. Each creature in the cone that is wearing or carrying a gun or other powered weapon must make an Intelligence saving throw, with disadvantage if the weapon is worn. On a failed save, the first attack it makes with that weapon has disadvantage. A creature with several such weapons saves for each one.</li><li><strong>Forced Hand.</strong> When you cast an Artifice power that calls for a saving throw, you can impose disadvantage on the save (no action required).</li><li><strong>Read the Rig.</strong> As an action, you size up another creature's Artifice. Make an Intelligence (Arcana) check contested by the target's Intelligence (Arcana) check. If you win, you learn the target's Artifice Max Power Level and every Artifice power currently affecting it.</li></ul><p>You can use this feature three times. You gain one more use at 9th, 13th, and 17th level, and you regain all spent uses when you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "synthesis-harmonics",
+      "name": "Harmonics",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Synthesis) 13",
+      "folder": "Vigil of Synthesis",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "activation": "bonus",
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "description": "<p><em>Vigil of Synthesis, 13th level</em></p><p>You gain two more Hotwired Current effects:</p><ul><li><strong>In Tune.</strong> When you use your action to cast a Flow power, you can use your bonus action to gain resistance to damage from Artifice powers until the start of your next turn. If you used your action to cast an Artifice power instead, you gain resistance to damage from Flow powers.</li><li><strong>Nothing Wasted.</strong> When you reduce a hostile creature to 0 hit points with an Artifice power, you can reduce that power's Flow point cost to 0 (no action required).</li></ul>"
+    },
+    {
+      "slug": "synthesis-mirror-field",
+      "name": "Mirror Field",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Synthesis) 18",
+      "folder": "Vigil of Synthesis",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/defensive/shield-barrier-flaming-diamond-blue.webp",
+      "activation": "reaction",
+      "condition": "you take damage while the field is up",
+      "range": 5,
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "description": "<p><em>Vigil of Synthesis, 18th level</em></p><p>Whenever you use Hotwired Current, a shimmer of current stands up around you until the end of your next turn. While it's up, when you take damage, you can use your reaction to have resistance to that damage, and if whatever dealt it is within 5 feet of you, it takes half the total damage back as lightning.</p>"
+    }
+  ]
+}

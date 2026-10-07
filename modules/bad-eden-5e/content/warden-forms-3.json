@@ -1,0 +1,864 @@
+{
+  "_about": "Flow Wolf: Warden — Forms batch 3: Ground Form (SW5E Sokan), Feint Form (Trakata), Unity Form (Vonil/Ishu, the ally version), Blade-and-Gun Form (Ysannanite), Adaptation Form (Aqinos). Mechanics carried over; every line of text is Bad Eden's own. SW5E's 'Form Basics' (its lightsaber-form system) is dropped from every Form — Bad Eden has no such system. Built by tools/build-packs.mjs.",
+  "_renames": [
+    {
+      "sw5e": "Sokan Form",
+      "new": "Ground Form"
+    },
+    {
+      "sw5e": "Bonus Proficiencies (Sokan)",
+      "new": "Built for It"
+    },
+    {
+      "sw5e": "The Way of the Varactyl",
+      "new": "Dig In"
+    },
+    {
+      "sw5e": "High Ground Defense",
+      "new": "Give Ground"
+    },
+    {
+      "sw5e": "Unwavering Self",
+      "new": "Unmoved"
+    },
+    {
+      "sw5e": "Unhindered Charge",
+      "new": "Head of Steam"
+    },
+    {
+      "sw5e": "Master of Persistence",
+      "new": "Nothing Moves You"
+    },
+    {
+      "sw5e": "Trakata Form",
+      "new": "Feint Form"
+    },
+    {
+      "sw5e": "The Way of the Monkey-Lizard",
+      "new": "Now You See It"
+    },
+    {
+      "sw5e": "Unbalancing Block",
+      "new": "Off-Hand Parry"
+    },
+    {
+      "sw5e": "Duplicitous Force",
+      "new": "Quick Hands"
+    },
+    {
+      "sw5e": "Pass the Blade",
+      "new": "Pass the Blade"
+    },
+    {
+      "sw5e": "Master of Deception",
+      "new": "Never Where You Look"
+    },
+    {
+      "sw5e": "Vonil/Ishu Form",
+      "new": "Unity Form"
+    },
+    {
+      "sw5e": "The Way of the Hydra",
+      "new": "Two as One"
+    },
+    {
+      "sw5e": "Smite (Vonil)",
+      "new": "Shared Edge"
+    },
+    {
+      "sw5e": "Shield (Ishu)",
+      "new": "Cover Them"
+    },
+    {
+      "sw5e": "Amplified Auras",
+      "new": "Carried Aura"
+    },
+    {
+      "sw5e": "Takedown (Vonil)",
+      "new": "Pile On"
+    },
+    {
+      "sw5e": "Rebuttal (Ishu)",
+      "new": "Backstop"
+    },
+    {
+      "sw5e": "Master of Unity",
+      "new": "Lockstep"
+    },
+    {
+      "sw5e": "Ysannanite Form",
+      "new": "Blade-and-Gun Form"
+    },
+    {
+      "sw5e": "Bonus Proficiencies (Ysannanite)",
+      "new": "Gun Hand"
+    },
+    {
+      "sw5e": "The Way of the Yerdua",
+      "new": "Dead Eye"
+    },
+    {
+      "sw5e": "Force-Empowered Shots",
+      "new": "Current Shots"
+    },
+    {
+      "sw5e": "Improved Force-Empowered Shots",
+      "new": "Quick Draw"
+    },
+    {
+      "sw5e": "Phasestorm",
+      "new": "Six Ways at Once"
+    },
+    {
+      "sw5e": "Master of the Unorthodox",
+      "new": "Both Barrels"
+    },
+    {
+      "sw5e": "Aqinos Form",
+      "new": "Adaptation Form"
+    },
+    {
+      "sw5e": "Bonus Proficiencies (Aqinos)",
+      "new": "Wrench Hand"
+    },
+    {
+      "sw5e": "Techcasting Secrets",
+      "new": "Wired for Both"
+    },
+    {
+      "sw5e": "Droid Companion",
+      "new": "Shop Drone"
+    },
+    {
+      "sw5e": "Channel the Force (Aqinos)",
+      "new": "Cross-Wired"
+    },
+    {
+      "sw5e": "Adaptive Calibration",
+      "new": "Feedback Loop"
+    },
+    {
+      "sw5e": "Master of Adaptation",
+      "new": "Equilibrium"
+    }
+  ],
+  "_powerRefs": [],
+  "_unsure": [
+    "Form Basics (each Form's 3rd-level 'you gain the X lightsaber form') is dropped from all five Forms: Bad Eden has no lightsaber-form system. Each Form still has its stance, its Channel option and its proficiencies at 3rd.",
+    "The 20th-level 'Master of' features: the two +2 ability score increases (one of them a choice) are text only — no Active Effect, since one score is the player's pick. The 1-minute mode is the feature's activity (action, 1 use per long rest).",
+    "Unity Form's Smite/Shield (3rd) and Takedown/Rebuttal (15th) are modelled as subclass ItemChoices (pick one of two) rather than 'you gain one of the following' prose.",
+    "Shop Drone (Adaptation): SW5E points at companion rules Bad Eden lacks. Written as a fixed drone stat line in the feature text (AC 14, HP = 5 × Warden level, fly 30, zap 1d6 + Dex lightning at your attack bonus, acts on your turn, mindless). The 'traits' system and the Flow-point-maximum tax are dropped. The cast-through-the-drone uses are the feature's uses (2, +1 at 5/9/13/17, long rest).",
+    "Wired for Both (Adaptation): the two chosen Artifice powers 'count as Unaligned Flow powers' — the engine keys cost on the power's method, so the GM sets the copied power's method to the Flow (same seam as the Theurge's Flow-Touched).",
+    "Gun Hand (Blade-and-Gun): dnd5e 6 only has sim/mar weapon proficiency keys, so the one-handed-gun proficiency is text only; 'simple and martial blasters that lack two-handed' → pistols and other guns you can fire one-handed.",
+    "Wrench Hand (Adaptation): astrotech's implements → tinker's tools; the Technology skill → Arcana (the Gearwright's own map).",
+    "'kinetic, energy, and ion damage from weapons' → bludgeoning, piercing, slashing, fire and lightning damage from weapons; 'kinetic and energy' → bludgeoning, piercing, slashing and fire; ion → lightning; 5 energy damage → 5 lightning damage.",
+    "Unmoved uses: 1, becoming 2 at 15th, as the formula `1 + floor(@classes.warden.levels / 15)`."
+  ],
+  "subclasses": [
+    {
+      "slug": "ground-form",
+      "identifier": "ground-form",
+      "name": "Ground Form",
+      "classIdentifier": "warden",
+      "img": "icons/magic/earth/barrier-stone-brown-green.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>Some Wardens fight the man. Ground Form fights the floor. You keep moving, keep them off balance, and keep the fight drifting toward the bad footing, the drop, the doorway with no room to swing — and when they're standing somewhere they shouldn't be, you finish it.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "ground-built-for-it"
+        },
+        {
+          "level": 3,
+          "slug": "ground-dig-in"
+        },
+        {
+          "level": 3,
+          "slug": "ground-give-ground"
+        },
+        {
+          "level": 7,
+          "slug": "ground-unmoved"
+        },
+        {
+          "level": 15,
+          "slug": "ground-head-of-steam"
+        },
+        {
+          "level": 20,
+          "slug": "ground-nothing-moves-you"
+        }
+      ]
+    },
+    {
+      "slug": "feint-form",
+      "identifier": "feint-form",
+      "name": "Feint Form",
+      "classIdentifier": "warden",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>An arc-blade goes on and off with a thumb. Feint Form is built on that: the blade that's there and then isn't, the swing that was never coming, the hand you were watching while the other one did the work. Wardens of this Form confuse first and cut second, and the cutting rarely takes long.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "feint-now-you-see-it"
+        },
+        {
+          "level": 3,
+          "slug": "feint-off-hand-parry"
+        },
+        {
+          "level": 7,
+          "slug": "feint-quick-hands"
+        },
+        {
+          "level": 15,
+          "slug": "feint-pass-the-blade"
+        },
+        {
+          "level": 20,
+          "slug": "feint-never-where-you-look"
+        }
+      ]
+    },
+    {
+      "slug": "unity-form",
+      "identifier": "unity-form",
+      "name": "Unity Form",
+      "classIdentifier": "warden",
+      "img": "icons/magic/control/energy-stream-link-white.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>Most Flow Wolves fight like they're the only one in the room. Unity Form is for the ones who looked around. You fight in step with whoever's beside you: moving together, striking together, catching the blow that was meant for them. Two people who know the Form are worse news than four who don't.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "unity-two-as-one"
+        },
+        {
+          "level": 7,
+          "slug": "unity-carried-aura"
+        },
+        {
+          "level": 20,
+          "slug": "unity-lockstep"
+        }
+      ],
+      "choices": [
+        {
+          "tag": "channel",
+          "title": "Channel the Current: Unity",
+          "hint": "Shared Edge (put the current into an ally's hit) or Cover Them (take the sting out of a hit on an ally). Pick one.",
+          "choices": {
+            "3": 1
+          },
+          "pool": [
+            "unity-shared-edge",
+            "unity-cover-them"
+          ],
+          "allowDrops": false
+        },
+        {
+          "tag": "teamwork",
+          "title": "Teamwork",
+          "hint": "Pile On (a Help that lands twice) or Backstop (a Help that armors). Pick one.",
+          "choices": {
+            "15": 1
+          },
+          "pool": [
+            "unity-pile-on",
+            "unity-backstop"
+          ],
+          "allowDrops": false
+        }
+      ]
+    },
+    {
+      "slug": "blade-and-gun-form",
+      "identifier": "blade-and-gun-form",
+      "name": "Blade-and-Gun Form",
+      "classIdentifier": "warden",
+      "img": "icons/weapons/guns/gun-double-barrel.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>The lodge's purists say a Warden carries a blade. Blade-and-Gun Form says a Warden carries whatever puts people down, and the current doesn't care which hand it's in. Blade in one fist, pistol in the other, and the shot lands as true as the cut.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "bladegun-gun-hand"
+        },
+        {
+          "level": 3,
+          "slug": "bladegun-dead-eye"
+        },
+        {
+          "level": 3,
+          "slug": "bladegun-current-shots"
+        },
+        {
+          "level": 7,
+          "slug": "bladegun-quick-draw"
+        },
+        {
+          "level": 15,
+          "slug": "bladegun-six-ways-at-once"
+        },
+        {
+          "level": 20,
+          "slug": "bladegun-both-barrels"
+        }
+      ]
+    },
+    {
+      "slug": "adaptation-form",
+      "identifier": "adaptation-form",
+      "name": "Adaptation Form",
+      "classIdentifier": "warden",
+      "img": "icons/commodities/tech/battery-coil-tesla.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>Adaptation Form was worked out by Wardens who wouldn't choose between the current and the wrench. You run the Flow and Artifice through the same hands, you keep a drone at your shoulder that's a tool and nothing more, and you solve the fight with whichever one the fight hasn't seen yet.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "adaptation-wrench-hand"
+        },
+        {
+          "level": 3,
+          "slug": "adaptation-wired-for-both"
+        },
+        {
+          "level": 3,
+          "slug": "adaptation-shop-drone"
+        },
+        {
+          "level": 7,
+          "slug": "adaptation-cross-wired"
+        },
+        {
+          "level": 15,
+          "slug": "adaptation-feedback-loop"
+        },
+        {
+          "level": 20,
+          "slug": "adaptation-equilibrium"
+        }
+      ],
+      "traits": [
+        {
+          "tag": "tools",
+          "level": 3,
+          "title": "Wrench Hand",
+          "grants": [
+            "tool:tinker",
+            "skills:arc"
+          ]
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "ground-built-for-it",
+      "name": "Built for It",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Ground Form) 3",
+      "folder": "Ground Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/equipment/chest/breastplate-banded-steel-gold.webp",
+      "description": "<p><em>Ground Form, 3rd level</em></p><p>You were built to carry weight. You gain proficiency with heavy armor.</p>",
+      "effects": [
+        {
+          "_id": "be5eGroundHeavy0",
+          "name": "Built for It",
+          "img": "icons/equipment/chest/breastplate-banded-steel-gold.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.traits.armorProf.value",
+              "mode": 2,
+              "value": "hvy",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ]
+    },
+    {
+      "slug": "ground-dig-in",
+      "name": "Dig In",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Ground Form) 3",
+      "folder": "Ground Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/earth/barrier-stone-brown-green.webp",
+      "activation": "bonus",
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Ground Form, 3rd level</em></p><p>You set your feet and the ground agrees with you. As a bonus action, you can take an unyielding stance for 1 minute. While you hold it, you have advantage on ability checks and saving throws to shove, to trip, and to avoid being moved, and you ignore difficult terrain. Also, once per turn when you hit with a melee weapon attack, you can try to shove the target up to 10 feet away from you (no action required).</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "ground-give-ground",
+      "name": "Give Ground",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Ground Form) 3",
+      "folder": "Channel the Current",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+      "activation": "reaction",
+      "condition": "a creature within 5 feet makes a melee attack against you",
+      "range": 5,
+      "target": {
+        "type": "enemy",
+        "count": 1
+      },
+      "description": "<p><em>Channel the Current (Ground Form), 3rd level</em></p><p>They swing at where you were. When a creature within 5 feet of you makes a melee attack against you, you can use your reaction and spend a use of Channel the Current to step to another space within 5 feet of that creature without provoking opportunity attacks. The attack is made with disadvantage. If it misses, you can try to shove the creature up to 10 feet away from you as part of the same reaction.</p>"
+    },
+    {
+      "slug": "ground-unmoved",
+      "name": "Unmoved",
+      "level": 7,
+      "requirements": "Flow Wolf: Warden (Ground Form) 7",
+      "folder": "Ground Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "activation": "special",
+      "uses": {
+        "max": "1 + floor(@classes.warden.levels / 15)",
+        "per": "lr"
+      },
+      "description": "<p><em>Ground Form, 7th and 15th level</em></p><p>The first answer isn't always the one that counts. If you fail a Strength, Dexterity, or Constitution saving throw, you can reroll the die. You must use the new roll.</p><p>Once you've used this feature, you can't use it again until you finish a long rest. From 15th level you can use it twice between long rests.</p>"
+    },
+    {
+      "slug": "ground-head-of-steam",
+      "name": "Head of Steam",
+      "level": 15,
+      "requirements": "Flow Wolf: Warden (Ground Form) 15",
+      "folder": "Ground Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/skills/movement/arrows-up-trio-red.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "formula": "@abilities.str.mod",
+          "types": []
+        }
+      ],
+      "description": "<p><em>Ground Form, 15th level</em></p><p>Distance is just damage you haven't delivered yet. When you move at least 10 feet before making a melee weapon attack, the attack deals extra damage equal to your Strength modifier.</p>"
+    },
+    {
+      "slug": "ground-nothing-moves-you",
+      "name": "Nothing Moves You",
+      "level": 20,
+      "requirements": "Flow Wolf: Warden (Ground Form) 20",
+      "folder": "Ground Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action",
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Ground Form, 20th level</em></p><p>You are the thing the fight breaks against. Your Strength score and your Wisdom or Charisma score (your choice) each increase by 2, and your maximum for those scores increases by 2. Also, you can use your action to gain the following for 1 minute:</p><ul><li>You have resistance to bludgeoning, piercing, slashing, fire, and lightning damage from weapons.</li><li>You ignore effects that would reduce your speed.</li><li>Once per turn, when you push a creature, you can move up to 10 feet as part of the push without provoking opportunity attacks. If you end that movement within 5 feet of the creature, you can make one melee weapon attack against it (no action required).</li></ul><p>The effect ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "feint-now-you-see-it",
+      "name": "Now You See It",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Feint Form) 3",
+      "folder": "Feint Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "activation": "bonus",
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Feint Form, 3rd level</em></p><p>The blade's on. The blade's off. Where did it go? As a bonus action, you can take a confusing stance for 1 minute. As part of that bonus action, and as a bonus action on each of your turns while you hold the stance, when you take the Dodge action you can make one melee weapon attack against a creature within reach. When you make that attack, you can flourish the weapon to pull the target's eye: make a Dexterity (Sleight of Hand) check contested by the target's Wisdom (Perception) check. If you win, you make the attack roll with advantage.</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "feint-off-hand-parry",
+      "name": "Off-Hand Parry",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Feint Form) 3",
+      "folder": "Channel the Current",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "activation": "reaction",
+      "condition": "a melee weapon attack hits you while you wield an arc-blade",
+      "description": "<p><em>Channel the Current (Feint Form), 3rd level</em></p><p>It was a hit until it wasn't. When a melee weapon attack hits you while you're wielding an arc-blade you're proficient with, you can use your reaction and spend a use of Channel the Current to add your Wisdom or Charisma modifier (your choice, minimum of +1) to your AC against that attack. If that turns the hit into a miss, it was always a miss.</p>"
+    },
+    {
+      "slug": "feint-quick-hands",
+      "name": "Quick Hands",
+      "level": 7,
+      "requirements": "Flow Wolf: Warden (Feint Form) 7",
+      "folder": "Feint Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+      "description": "<p><em>Feint Form, 7th level</em></p><p>The current is in your fingers now, and your fingers were already fast. When you make a Dexterity (Sleight of Hand) check, add your Wisdom or Charisma modifier (your choice, minimum of one) to the roll.</p>"
+    },
+    {
+      "slug": "feint-pass-the-blade",
+      "name": "Pass the Blade",
+      "level": 15,
+      "requirements": "Flow Wolf: Warden (Feint Form) 15",
+      "folder": "Feint Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/time/arrows-circling-green.webp",
+      "activation": "special",
+      "activity": "heal",
+      "heal": {
+        "formula": "max(@abilities.wis.mod, @abilities.cha.mod, 1)",
+        "type": "temphp"
+      },
+      "description": "<p><em>Feint Form, 15th level</em></p><p>Every miss is a gift, and you keep them. When a creature misses you with an attack, you gain temporary hit points equal to your Wisdom or Charisma modifier (your choice, minimum of one), and you add that same modifier to the first melee weapon attack roll and damage roll you make against that creature before the end of your next turn.</p>"
+    },
+    {
+      "slug": "feint-never-where-you-look",
+      "name": "Never Where You Look",
+      "level": 20,
+      "requirements": "Flow Wolf: Warden (Feint Form) 20",
+      "folder": "Feint Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action",
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Feint Form, 20th level</em></p><p>Your blade is a rumor they keep walking into. Your Dexterity score and your Wisdom or Charisma score (your choice) each increase by 2, and your maximum for those scores increases by 2. Also, you can use your action to gain the following for 1 minute:</p><ul><li>You have resistance to bludgeoning, piercing, slashing, fire, and lightning damage from weapons.</li><li>Your attack rolls can't have disadvantage.</li><li>Whenever a creature misses you with a melee attack, it takes 5 lightning damage.</li><li>Whenever a creature hits you with a melee attack, it takes damage equal to half the damage you take from that attack.</li></ul><p>The effect ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "unity-two-as-one",
+      "name": "Two as One",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Unity Form) 3",
+      "folder": "Unity Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/control/energy-stream-link-white.webp",
+      "activation": "bonus",
+      "range": 10,
+      "target": {
+        "type": "ally",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Unity Form, 3rd, 11th, and 17th level</em></p><p>You pick one of them and the two of you stop being two. As a bonus action, choose an ally within 10 feet of you and fall into step with them for 1 minute. While it lasts, once per turn when you hit a creature with an attack, the chosen ally has advantage on the next attack they make against that creature before the end of your next turn. And once per turn when the chosen ally hits a creature with an attack, you have advantage on the next attack you make against that creature before the end of your next turn.</p><p>It ends early if either of you is incapacitated or dies, or if the ally is ever more than 10 feet from you. Once you've used this feature, you can't use it again until you finish a long rest.</p><p>At 11th level the ally can be up to 30 feet from you, and at 17th level up to 60 feet.</p>"
+    },
+    {
+      "slug": "unity-shared-edge",
+      "name": "Shared Edge",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Unity Form) 3",
+      "folder": "Channel the Current",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 8,
+          "types": []
+        }
+      ],
+      "description": "<p><em>Channel the Current (Unity Form), 3rd, 11th, and 17th level</em></p><p>Your current, their blade. Once per turn, when an ally within 10 feet of you hits a creature with a melee weapon attack, you can spend a use of Channel the Current and spend Flow points to put extra damage on that hit, of the weapon's type: 1d8 for each point you spend. You can't add more dice this way than your Current Strikes column allows.</p><p>At 11th level the ally can be up to 30 feet from you, and at 17th level up to 60 feet.</p>"
+    },
+    {
+      "slug": "unity-cover-them",
+      "name": "Cover Them",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Unity Form) 3",
+      "folder": "Channel the Current",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "activation": "reaction",
+      "condition": "an ally within 10 feet of you is hit by a weapon attack",
+      "range": 10,
+      "target": {
+        "type": "ally",
+        "count": 1
+      },
+      "activity": "utility",
+      "roll": "1d10 + max(@abilities.wis.mod, @abilities.cha.mod) + @classes.warden.levels",
+      "description": "<p><em>Channel the Current (Unity Form), 3rd, 11th, and 17th level</em></p><p>You get a piece of the current between them and the blow. When an ally within 10 feet of you is hit by a weapon attack, you can use your reaction and spend a use of Channel the Current to turn part of it aside: the damage the ally takes from that attack is reduced by 1d10 + your Wisdom or Charisma modifier (your choice) + your Warden level.</p><p>At 11th level the ally can be up to 30 feet from you, and at 17th level up to 60 feet.</p>"
+    },
+    {
+      "slug": "unity-carried-aura",
+      "name": "Carried Aura",
+      "level": 7,
+      "requirements": "Flow Wolf: Warden (Unity Form) 7",
+      "folder": "Unity Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "description": "<p><em>Unity Form, 7th, 11th, and 17th level</em></p><p>What you carry into a room, they can carry too. Once on each of your turns, you can choose an ally within 10 feet of you. While that ally stays within 10 feet of you, your Auras reach out from them as if you were standing in their space. A creature inside more than one copy of an Aura is affected by it only once.</p><p>At 11th level the ally can be up to 30 feet from you, and at 17th level up to 60 feet.</p>"
+    },
+    {
+      "slug": "unity-pile-on",
+      "name": "Pile On",
+      "level": 15,
+      "requirements": "Flow Wolf: Warden (Unity Form) 15",
+      "folder": "Unity Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
+      "description": "<p><em>Unity Form, 15th level</em></p><p>A hand from you is worth two. When an ally within 30 feet of you takes the Help action to help you, you have advantage on the next two ability checks or attack rolls you make before the start of their next turn, instead of one. When you take the Help action to help an ally within 30 feet of you, they have advantage on the next two ability checks or attack rolls they make before the start of your next turn, instead of one.</p>"
+    },
+    {
+      "slug": "unity-backstop",
+      "name": "Backstop",
+      "level": 15,
+      "requirements": "Flow Wolf: Warden (Unity Form) 15",
+      "folder": "Unity Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "activation": "special",
+      "activity": "heal",
+      "heal": {
+        "formula": "@classes.warden.levels",
+        "type": "temphp"
+      },
+      "description": "<p><em>Unity Form, 15th level</em></p><p>Standing with you is armor. When an ally within 30 feet of you takes the Help action to help you, you gain temporary hit points equal to your Warden level that last until the start of their next turn. When you take the Help action to help an ally within 30 feet of you, they gain temporary hit points equal to your Warden level that last until the start of your next turn.</p>"
+    },
+    {
+      "slug": "unity-lockstep",
+      "name": "Lockstep",
+      "level": 20,
+      "requirements": "Flow Wolf: Warden (Unity Form) 20",
+      "folder": "Unity Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action",
+      "range": 60,
+      "target": {
+        "type": "ally",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Unity Form, 20th level</em></p><p>You and whoever's beside you move like one thing with two edges. Your Strength or Dexterity score (your choice) and your Constitution score each increase by 2, and your maximum for those scores increases by 2. Also, you can use your action and choose an ally within 60 feet of you; the two of you gain the following for 1 minute:</p><ul><li>You both have resistance to bludgeoning, piercing, slashing, and fire damage.</li><li>Neither of you can have disadvantage on attack rolls.</li><li>Both of you score a critical hit on a roll one lower than usual.</li></ul><p>It ends early if either of you is incapacitated or dies, or if the ally is ever more than 60 feet from you. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "bladegun-gun-hand",
+      "name": "Gun Hand",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Blade-and-Gun Form) 3",
+      "folder": "Blade-and-Gun Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/weapons/guns/gun-brown.webp",
+      "description": "<p><em>Blade-and-Gun Form, 3rd level</em></p><p>One hand for the blade, one for the trigger. You gain proficiency with pistols and any other gun you can fire one-handed.</p>"
+    },
+    {
+      "slug": "bladegun-dead-eye",
+      "name": "Dead Eye",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Blade-and-Gun Form) 3",
+      "folder": "Blade-and-Gun Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "activation": "bonus",
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Blade-and-Gun Form, 3rd level</em></p><p>You let the current carry the round. As a bonus action, you can take a steady stance for 1 minute. While you hold it, you add your Wisdom or Charisma modifier (your choice, minimum of +1) to one ranged weapon attack roll and its damage roll each turn, and being within 5 feet of a hostile creature doesn't give your ranged weapon attacks disadvantage.</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "bladegun-current-shots",
+      "name": "Current Shots",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Blade-and-Gun Form) 3",
+      "folder": "Channel the Current",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 8,
+          "types": []
+        }
+      ],
+      "description": "<p><em>Channel the Current (Blade-and-Gun Form), 3rd level</em></p><p>The current goes down the barrel as easily as down the blade. Once per turn, when you hit a creature with a ranged weapon attack, you can spend a use of Channel the Current and spend Flow points to deal extra damage of the weapon's type: 1d8 for each point you spend. You can't add more dice this way than your Current Strikes column allows.</p>"
+    },
+    {
+      "slug": "bladegun-quick-draw",
+      "name": "Quick Draw",
+      "level": 7,
+      "requirements": "Flow Wolf: Warden (Blade-and-Gun Form) 7",
+      "folder": "Blade-and-Gun Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/weapons/guns/gun-double-barrel.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 8,
+          "types": []
+        }
+      ],
+      "description": "<p><em>Blade-and-Gun Form, 7th and 11th level</em></p><p>The gun is part of the hand now. Once on each of your turns, drawing or stowing a gun doesn't use your free object interaction, and you don't need a free hand to reload.</p><p>From 11th level, once per turn when you hit a creature with a ranged weapon attack, it takes an extra 1d8 damage of the weapon's type. If you also use Current Shots on that attack, add this die to those.</p>"
+    },
+    {
+      "slug": "bladegun-six-ways-at-once",
+      "name": "Six Ways at Once",
+      "level": 15,
+      "requirements": "Flow Wolf: Warden (Blade-and-Gun Form) 15",
+      "folder": "Blade-and-Gun Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+      "activation": "action",
+      "range": 30,
+      "target": {
+        "type": "creature",
+        "count": 6
+      },
+      "uses": {
+        "max": "1",
+        "per": "sr"
+      },
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "formula": "max(@abilities.wis.mod, @abilities.cha.mod, 1)",
+          "types": []
+        }
+      ],
+      "description": "<p><em>Blade-and-Gun Form, 15th level</em></p><p>You're everywhere for about a second. As an action, you can tear across the fight and strike up to six creatures you can see within 30 feet of you. You move to each of them in turn without provoking opportunity attacks, then come back to the space you started in. Each creature must make a Dexterity saving throw (DC = 8 + your attack bonus with your weapon), taking your weapon's normal damage on a failed save or half as much on a success. If you're wielding a different weapon in each hand and you're proficient with both, each creature makes the save with disadvantage and takes extra damage equal to your Wisdom or Charisma modifier (your choice, minimum of one) on a failed save, if the damage didn't already include it.</p><p>Once you've used this feature, you can't use it again until you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "bladegun-both-barrels",
+      "name": "Both Barrels",
+      "level": 20,
+      "requirements": "Flow Wolf: Warden (Blade-and-Gun Form) 20",
+      "folder": "Blade-and-Gun Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action",
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Blade-and-Gun Form, 20th level</em></p><p>There is no gap between the shot and the cut anymore. Your Dexterity score and your Wisdom or Charisma score (your choice) each increase by 2, and your maximum for those scores increases by 2. Also, you can use your action to gain the following for 1 minute:</p><ul><li>You have resistance to bludgeoning, piercing, slashing, fire, and lightning damage from weapons.</li><li>When you hit a creature with a ranged weapon attack, you have advantage on your next melee weapon attack against it. When you hit a creature with a melee weapon attack, you have advantage on your next ranged weapon attack against it.</li><li>When a damage die rolls below half its maximum, you can treat it as if it rolled half its maximum. You can do this to a number of dice up to half your Wisdom or Charisma modifier (your choice, rounded up, minimum of one).</li></ul><p>The effect ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "adaptation-wrench-hand",
+      "name": "Wrench Hand",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Adaptation Form) 3",
+      "folder": "Adaptation Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/tools/hand/wrench-steel-grey.webp",
+      "description": "<p><em>Adaptation Form, 3rd level</em></p><p>A Warden who can't fix a truck is only half useful. You gain proficiency with tinker's tools and in the Arcana skill.</p>"
+    },
+    {
+      "slug": "adaptation-wired-for-both",
+      "name": "Wired for Both",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Adaptation Form) 3",
+      "folder": "Adaptation Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/commodities/tech/battery-coil-tesla.webp",
+      "description": "<p><em>Adaptation Form, 3rd level</em></p><p>You've learned to put the current through a circuit and the circuit through the current. Choose two Artifice powers of a level no higher than your Max Power Level on the Warden table. For you, those powers count as Unaligned Flow powers as well as Artifice powers: you cast them with Flow points and your Flow casting ability, and they don't count against the Powers Known column of the Warden table.</p><p>You learn two more Artifice powers this way at 5th, 9th, 13th, and 17th level. Whenever you gain a level in this class, you can swap one of these Artifice powers for another of a level no higher than your Max Power Level.</p>"
+    },
+    {
+      "slug": "adaptation-shop-drone",
+      "name": "Shop Drone",
+      "level": 3,
+      "requirements": "Flow Wolf: Warden (Adaptation Form) 3",
+      "folder": "Adaptation Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/commodities/tech/antenna-powered-purple.webp",
+      "activation": "special",
+      "uses": {
+        "max": "2 + floor((@classes.warden.levels + 3) / 4) - 1",
+        "per": "lr"
+      },
+      "description": "<p><em>Adaptation Form, 3rd, 5th, 9th, 11th, 13th, and 17th level</em></p><p>You've built yourself a drone. It's a tool, not a friend, and it is not a Circuitborn: there is nobody home in it, and it doesn't mind. You need tinker's tools to build it; if it's wrecked beyond repair, or you want a different one, you can build and bond a new one over 8 hours in a workshop. You can have only one drone at a time.</p><p><strong>Your drone.</strong> A Small construct. AC 14. Hit points equal to 5 × your Warden level. Speed 30 feet, flying (it hovers). Str 6, Dex 14, Con 10, Int 10, Wis 10, Cha 1. It's immune to poison and psychic damage, to being charmed, frightened, or poisoned, and to exhaustion. It understands your language but doesn't speak. It uses your proficiency bonus, and it's proficient in Dexterity saving throws and Perception. <strong>Zap:</strong> melee or ranged (30 ft.) attack at your power attack modifier, one target, 1d6 + 2 lightning damage.</p><p>The drone acts on your turn. It moves as you direct it, and it takes the Dodge action unless you use a bonus action to have it do something else: Attack, Dash, Disengage, Help, or Use an Object. If you're incapacitated, it does nothing but Dodge.</p><p><strong>Cast through it.</strong> While your drone is within 10 feet of you, it can cast the Artifice powers you know through Wired for Both without you spending Flow points. An at-will power it casts scales late: what would grow at 5th level grows at 11th instead, and what would grow at 11th grows at 17th. A power of 2nd level or higher spends uses of this feature equal to the power's level. You have 2 uses, and you gain one more at 5th, 9th, 13th, and 17th level; you regain them all when you finish a long rest. At 11th level the drone can be up to 30 feet from you to do this, and at 17th level up to 60 feet.</p>"
+    },
+    {
+      "slug": "adaptation-cross-wired",
+      "name": "Cross-Wired",
+      "level": 7,
+      "requirements": "Flow Wolf: Warden (Adaptation Form) 7",
+      "folder": "Channel the Current",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
+      "description": "<p><em>Channel the Current (Adaptation Form), 7th level</em></p><p>You learn whichever of Draw Down or Lend a Hand you didn't take at 1st level, and both of them pick up something extra in your hands.</p><p><strong>Draw Down:</strong> you can deal lightning damage instead of necrotic.</p><p><strong>Lend a Hand:</strong> it works on drones and other constructs too, as well as on the people it always worked on.</p>"
+    },
+    {
+      "slug": "adaptation-feedback-loop",
+      "name": "Feedback Loop",
+      "level": 15,
+      "requirements": "Flow Wolf: Warden (Adaptation Form) 15",
+      "folder": "Adaptation Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/time/arrows-circling-green.webp",
+      "description": "<p><em>Adaptation Form, 15th level</em></p><p>Every circuit you close gives a little back. When you drop a hostile creature to 0 hit points with an Artifice power, or bring a friendly creature up from 0 hit points with one, you regain a spent use of Channel the Current and gain temporary Flow points equal to the power's level.</p>"
+    },
+    {
+      "slug": "adaptation-equilibrium",
+      "name": "Equilibrium",
+      "level": 20,
+      "requirements": "Flow Wolf: Warden (Adaptation Form) 20",
+      "folder": "Adaptation Form",
+      "folderParent": "Flow Wolf: Warden",
+      "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action",
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Adaptation Form, 20th level</em></p><p>Current and circuit have stopped arguing in you. Your Constitution score and your Wisdom or Charisma score (your choice) each increase by 2, and your maximum for those scores increases by 2. Also, you can use your action to gain the following for 1 minute:</p><ul><li>You have resistance to lightning damage, and you can't have disadvantage on saving throws against lightning damage.</li><li>You can't have disadvantage on attack rolls you make as part of an Artifice power, and enemies can't have advantage on saving throws against your Artifice powers.</li><li>Add your casting ability modifier (minimum of +1) to any damage or healing you do with an Artifice power you cast, if it doesn't already include that modifier.</li></ul><p>While you're conscious and your drone is conscious and within 60 feet of you, it gets these benefits too. The effect ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    }
+  ]
+}

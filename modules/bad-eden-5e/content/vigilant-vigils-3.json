@@ -1,0 +1,669 @@
+{
+  "_about": "Flow Wolf: Vigilant — four Vigils (subclasses) and their features: Vigil of Tenacity (SW5E Path of Tenacity), Vigil of Witchcraft (Path of Witchcraft, the non-companion one), Vigil of the Corsair (Path of the Corsair), Vigil of the Currentblade (Path of the Forceblade). Mechanics carried over 1:1; every line of text is Bad Eden's own. Built by tools/build-packs.mjs.",
+  "_renames": [
+    {
+      "sw5e": "Path of Tenacity",
+      "new": "Vigil of Tenacity"
+    },
+    {
+      "sw5e": "Protector",
+      "new": "Stand With Me"
+    },
+    {
+      "sw5e": "Kinetic Ward",
+      "new": "Catch the Blow"
+    },
+    {
+      "sw5e": "Kinetic Bulwark",
+      "new": "Over Them Too"
+    },
+    {
+      "sw5e": "Indomitable",
+      "new": "Indomitable"
+    },
+    {
+      "sw5e": "Kinetic Bastion",
+      "new": "Wherever It Lands"
+    },
+    {
+      "sw5e": "Path of Witchcraft",
+      "new": "Vigil of Witchcraft"
+    },
+    {
+      "sw5e": "Wild Power",
+      "new": "Hex Hand"
+    },
+    {
+      "sw5e": "Ichor Conjuring",
+      "new": "Haint Calling"
+    },
+    {
+      "sw5e": "Nature's Vigor",
+      "new": "The Woods Know You"
+    },
+    {
+      "sw5e": "Waters of Life",
+      "new": "Spend the Haint"
+    },
+    {
+      "sw5e": "Stormcaller",
+      "new": "Stormcaller"
+    },
+    {
+      "sw5e": "Path of the Corsair",
+      "new": "Vigil of the Corsair"
+    },
+    {
+      "sw5e": "Bonus Proficiencies (Corsair)",
+      "new": "Loud Trade"
+    },
+    {
+      "sw5e": "Corsair Munitions",
+      "new": "Quick Fuse"
+    },
+    {
+      "sw5e": "Force-Empowered Detonators",
+      "new": "Current Charges"
+    },
+    {
+      "sw5e": "Remote Start",
+      "new": "Thumb the Trigger"
+    },
+    {
+      "sw5e": "Energized Kinetics",
+      "new": "Hot Shrapnel"
+    },
+    {
+      "sw5e": "Disorienting Detonations",
+      "new": "Ringing Ears"
+    },
+    {
+      "sw5e": "Path of the Forceblade",
+      "new": "Vigil of the Currentblade"
+    },
+    {
+      "sw5e": "Phasethrow",
+      "new": "Thrown Current"
+    },
+    {
+      "sw5e": "Forceblade Bond",
+      "new": "Blade Bond"
+    },
+    {
+      "sw5e": "Twin Saber Throw",
+      "new": "Twice Thrown"
+    },
+    {
+      "sw5e": "Disruptive Throw",
+      "new": "Knock It Off"
+    },
+    {
+      "sw5e": "Forceblade Mastery",
+      "new": "Blade on a String"
+    }
+  ],
+  "_powerRefs": [
+    {
+      "sw5e": "Saber Ward",
+      "draft": "Brace",
+      "vigil": "Vigil of Tenacity",
+      "note": "exists in the Flow list; linked"
+    },
+    {
+      "sw5e": "Enfeeble",
+      "draft": "Wither",
+      "vigil": "Vigil of Witchcraft",
+      "note": "NOT in the kept Flow list — Hex Hand grants it free; add the power or swap it"
+    },
+    {
+      "sw5e": "Saber Throw",
+      "draft": "Thrown Blade",
+      "vigil": "Vigil of the Currentblade",
+      "note": "NOT in the kept Flow list — the whole Vigil is built on it; add the power"
+    },
+    {
+      "sw5e": "Affliction",
+      "draft": "Molasses",
+      "vigil": "Vigil of the Corsair",
+      "note": "exists; linked"
+    },
+    {
+      "sw5e": "Force Blind/Deafen",
+      "draft": "(blinded or deafened, described inline)",
+      "vigil": "Vigil of the Corsair",
+      "note": "not kept; Ringing Ears applies the condition directly"
+    },
+    {
+      "sw5e": "Stun / Stun Droid",
+      "draft": "Dead Stop",
+      "vigil": "Vigil of the Corsair",
+      "note": "exists (machines folded in); linked"
+    }
+  ],
+  "_unsure": [
+    "Hex Hand (Wild Power) and Thrown Current (Phasethrow) grant powers that aren't in the 109-power Flow list (Enfeeble, Saber Throw). The text names them as <em>Wither</em> and <em>Thrown Blade</em>; the powers pack needs both added (or Dave swaps them) before these Vigils are playable.",
+    "Catch the Blow: the reduction roll (1d10 + Dex + Vigilant level) is the utility roll; the optional 1-Flow-point counterattack with the Kinetic die is text only.",
+    "Haint Calling: the familiar's stat line (AC = power save DC, 1 HP, condition immunity) and the swap/attack-origin/opportunity-attack tricks are text only; activation 'special' with no uses.",
+    "Loud Trade: SW5E demolitions kit → tinker's tools (granted as a subclass trait); 'three blasters' → three guns of your choice, text only (dnd5e has no granular gun proficiency ids in this build).",
+    "Current Charges: uses per short/long rest are the formula 2 + floor((level - 1) / 4) → 2/3/4/5/6 at 3/5/9/13/17; the save activity is Dex by default with the Con/Wis choice (and force/necrotic/psychic type) in text; damage formula = Kinetic die + casting mod.",
+    "Twice Thrown: uses 3 + floor((level - 5) / 4) → 3/4/5/6 at 7/9/13/17.",
+    "Ringing Ears: the three SW5E powers became Molasses (linked), 'blinded or deafened' (the blind/deafen power wasn't kept), and Dead Stop (linked; Stun Droid is folded into it).",
+    "Blade on a String: save DC in the text is 8 + your weapon attack bonus, but the activity uses the power save DC (dnd5e's 'spellcasting' calculation) — close enough at the table; damage = Kinetic die + half level, push and prone in text.",
+    "Stormcaller: 'energy' resistance → fire; the 10 lightning per entry/turn is the damage activity.",
+    "The Corsair's SW5E grenades/mines/missiles/rockets became Bad Eden grenades and mines; starship gear is gone."
+  ],
+  "subclasses": [
+    {
+      "slug": "vigil-of-tenacity",
+      "identifier": "vigil-of-tenacity",
+      "name": "Vigil of Tenacity",
+      "classIdentifier": "vigilant",
+      "img": "icons/magic/defensive/shield-barrier-deflect-teal.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>The current rises and it falls, and a Vigilant of Tenacity has learned to stand in it at both heights. They draw every eye in a fight and turn every blade aside, and the people behind them stop looking over their shoulders. The lodge sends them where somebody has to not fall.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "tenacity-stand-with-me"
+        },
+        {
+          "level": 3,
+          "slug": "tenacity-catch-the-blow"
+        },
+        {
+          "level": 7,
+          "slug": "tenacity-over-them-too"
+        },
+        {
+          "level": 13,
+          "slug": "tenacity-indomitable"
+        },
+        {
+          "level": 18,
+          "slug": "tenacity-wherever-it-lands"
+        }
+      ]
+    },
+    {
+      "slug": "vigil-of-witchcraft",
+      "identifier": "vigil-of-witchcraft",
+      "name": "Vigil of Witchcraft",
+      "classIdentifier": "vigilant",
+      "img": "icons/magic/unholy/hand-claw-fog-green.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>Every living thing in East Texas is wet with the same water, and the dead things remember it. A Vigilant of Witchcraft runs the current downstream through hex and ichor and the woods themselves: they call up haints out of green smoke, talk to the trees, and bring the weather when the weather is what's needed. Folks leave offerings on their porch and don't knock.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "witchcraft-hex-hand"
+        },
+        {
+          "level": 3,
+          "slug": "witchcraft-haint-calling"
+        },
+        {
+          "level": 7,
+          "slug": "witchcraft-the-woods-know-you"
+        },
+        {
+          "level": 13,
+          "slug": "witchcraft-spend-the-haint"
+        },
+        {
+          "level": 18,
+          "slug": "witchcraft-stormcaller"
+        }
+      ]
+    },
+    {
+      "slug": "vigil-of-the-corsair",
+      "identifier": "vigil-of-the-corsair",
+      "name": "Vigil of the Corsair",
+      "classIdentifier": "vigilant",
+      "img": "icons/weapons/thrown/bomb-fuse-black.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>Sometimes a Flow Wolf has to pass for somebody who isn't one: stranded, hunted, or working a river town where the current is a thing people shoot at. A Vigilant of the Corsair fights with what nobody expects of them, guns and grenades and a fuse with the current running down it, and saves the blade for when it's already too late to be careful.</p>",
+      "traits": [
+        {
+          "tag": "tools",
+          "level": 3,
+          "title": "Loud Trade",
+          "grants": [
+            "tool:tinker"
+          ]
+        }
+      ],
+      "features": [
+        {
+          "level": 3,
+          "slug": "corsair-loud-trade"
+        },
+        {
+          "level": 3,
+          "slug": "corsair-quick-fuse"
+        },
+        {
+          "level": 3,
+          "slug": "corsair-current-charges"
+        },
+        {
+          "level": 7,
+          "slug": "corsair-thumb-the-trigger"
+        },
+        {
+          "level": 13,
+          "slug": "corsair-hot-shrapnel"
+        },
+        {
+          "level": 18,
+          "slug": "corsair-ringing-ears"
+        }
+      ]
+    },
+    {
+      "slug": "vigil-of-the-currentblade",
+      "identifier": "vigil-of-the-currentblade",
+      "name": "Vigil of the Currentblade",
+      "classIdentifier": "vigilant",
+      "img": "icons/weapons/thrown/dagger-ringed-steel.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>A few Vigilants stop thinking of the blade as a thing they hold. They run the current through it until it answers them from across a room, comes back to the hand that threw it, and goes where it's told with nobody touching it at all. The lodge calls them Currentblades, and mostly from a distance.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "currentblade-thrown-current"
+        },
+        {
+          "level": 3,
+          "slug": "currentblade-blade-bond"
+        },
+        {
+          "level": 7,
+          "slug": "currentblade-twice-thrown"
+        },
+        {
+          "level": 13,
+          "slug": "currentblade-knock-it-off"
+        },
+        {
+          "level": 18,
+          "slug": "currentblade-blade-on-a-string"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "tenacity-stand-with-me",
+      "name": "Stand With Me",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Tenacity) 3",
+      "folder": "Vigil of Tenacity",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/defensive/shield-barrier-flaming-diamond-teal.webp",
+      "description": "<p><em>Vigil of Tenacity, 3rd level</em></p><p>What you put up for yourself, you can put up for the people beside you. You learn the @UUID[{{uuid:powers:brace}}]{Brace} power, and it doesn't count against your powers known. When you cast it, you can spend 2 extra Flow points to extend what it does to creatures of your choice within 5 feet of you for as long as the power lasts. A creature loses the benefit the moment it moves more than 5 feet from you.</p>"
+    },
+    {
+      "slug": "tenacity-catch-the-blow",
+      "name": "Catch the Blow",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Tenacity) 3",
+      "folder": "Vigil of Tenacity",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/skills/melee/shield-block-gray-orange.webp",
+      "activation": "reaction",
+      "condition": "you take damage from a melee weapon attack",
+      "range": 5,
+      "activity": "utility",
+      "roll": "1d10 + @abilities.dex.mod + @classes.vigilant.levels",
+      "description": "<p><em>Vigil of Tenacity, 3rd level</em></p><p>You see the swing coming and you're already under it. When a melee weapon attack deals damage to you, you can use your reaction to turn it: the damage you take is reduced by 1d10 + your Dexterity modifier + your Vigilant level.</p><p>If that brings the damage to 0 and you have a weapon that can answer, you can send the blow back. Spend 1 Flow point to make a melee weapon attack with that weapon against a target within 5 feet of you as part of the same reaction. You make the attack with proficiency whether or not you'd normally have it, and on a hit the damage roll uses your Kinetic die. If Brace is active on you, you have advantage on the attack roll.</p>"
+    },
+    {
+      "slug": "tenacity-over-them-too",
+      "name": "Over Them Too",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Tenacity) 7",
+      "folder": "Vigil of Tenacity",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "description": "<p><em>Vigil of Tenacity, 7th level</em></p><p>Your reach is longer than your arm. You can use Catch the Blow on a creature within 5 feet of you when a melee weapon attack hits it. If the damage isn't reduced to 0, the creature you covered takes whatever is left.</p>"
+    },
+    {
+      "slug": "tenacity-indomitable",
+      "name": "Indomitable",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Tenacity) 13",
+      "folder": "Vigil of Tenacity",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+      "description": "<p><em>Vigil of Tenacity, 13th level</em></p><p>Moving you is like moving the river. You have advantage on ability checks and saving throws to avoid being grappled or moved. If you fail one anyway, you can spend 1 Flow point to reroll one of the dice, once; you must use the new roll.</p><p>Allies within 5 feet of you who are sharing your Brace through Stand With Me get this feature too.</p>"
+    },
+    {
+      "slug": "tenacity-wherever-it-lands",
+      "name": "Wherever It Lands",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Tenacity) 18",
+      "folder": "Vigil of Tenacity",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "activation": "reaction",
+      "condition": "a creature within 30 feet of you is hit by a melee weapon attack",
+      "range": 30,
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "uses": {
+        "max": "max(@abilities.wis.mod, @abilities.cha.mod, 1)",
+        "per": "lr"
+      },
+      "description": "<p><em>Vigil of Tenacity, 18th level</em></p><p>Thirty feet is no distance at all to the current. When a creature within 30 feet of you is hit by a melee weapon attack, you can use your reaction to be standing beside it, teleporting to a space within 5 feet, and use Catch the Blow on it. If the damage isn't reduced to 0, the creature takes whatever is left.</p><p>You can use this feature a number of times equal to your Wisdom or Charisma modifier (your choice, minimum of once), and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "witchcraft-hex-hand",
+      "name": "Hex Hand",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Witchcraft) 3",
+      "folder": "Vigil of Witchcraft",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/unholy/strike-hand-glow-pink.webp",
+      "description": "<p><em>Vigil of Witchcraft, 3rd level</em></p><p>The first thing a witch learns is how to make something sick. You learn the @UUID[{{uuid:powers:wither}}]{Wither} power, and it doesn't count against your powers known. You can use Wisdom or Charisma as your casting ability for it, and when you cast it as your action and the target fails its save, you can use Second Edge on it as if you'd hit with a weapon. You also add your Wisdom or Charisma modifier (your choice, minimum of one) to its damage rolls.</p>"
+    },
+    {
+      "slug": "witchcraft-haint-calling",
+      "name": "Haint Calling",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Witchcraft) 3",
+      "folder": "Vigil of Witchcraft",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/unholy/orb-smoking-green.webp",
+      "activation": "special",
+      "range": 5,
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "description": "<p><em>Vigil of Witchcraft, 3rd and 11th level</em></p><p>Dead things come when you call, if you call them right. Once on each of your turns, when you cast a Flow power and deal necrotic damage to a creature, you can raise a haint within 5 feet of it (no action required): a person or an animal shaped out of green, glowing smoke. It lasts for 1 minute, until you dismiss it as a bonus action, until you call another, or until you're incapacitated or die.</p><p>Your haint has an AC equal to your power save DC, 1 hit point, and immunity to every condition. If it has to make a saving throw it uses your bonus. It's your size no matter what it looks like, and it takes up its own space. On your turn you can send it up to 30 feet in any direction with a thought (no action required). If it's ever more than 30 feet from you at the end of your turn, it comes apart. While you have a haint:</p><ul><li>As a bonus action, you can trade places with it, wherever it is, for 15 feet of your movement.</li><li>When you take the Attack action, each attack you make with it can come from your space or the haint's. Choose per attack.</li><li>When a creature you can see within 5 feet of your haint moves at least 5 feet away from it, you can use your reaction to make an opportunity attack as if you were standing where the haint stands.</li></ul><p>From 11th level you can raise a haint whenever you deal damage with any Flow power, not only necrotic, and whenever you use one of the Body in the Current tricks on your turn.</p>"
+    },
+    {
+      "slug": "witchcraft-the-woods-know-you",
+      "name": "The Woods Know You",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Witchcraft) 7",
+      "folder": "Vigil of Witchcraft",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/nature/root-vine-entangled-humanoid.webp",
+      "activation": "special",
+      "range": 30,
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "uses": {
+        "max": "1",
+        "per": "sr"
+      },
+      "description": "<p><em>Vigil of Witchcraft, 7th level</em></p><p>Sit still long enough in the pines and they start talking. If you spend at least 1 minute quiet and listening somewhere wild, you gain the following for 1 hour:</p><ul><li>You ignore difficult terrain that nature made.</li><li>You understand plants within 30 feet of you. They can pass you simple ideas without a word, including what they saw in the past day.</li><li>You can tell plants within 30 feet of you to make difficult terrain, or do other small things the GM allows (no action required).</li></ul><p>Once you've used this feature, you can't use it again until you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "witchcraft-spend-the-haint",
+      "name": "Spend the Haint",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Witchcraft) 13",
+      "folder": "Vigil of Witchcraft",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+      "activation": "special",
+      "condition": "your haint is destroyed by damage",
+      "range": 30,
+      "target": {
+        "type": "ally",
+        "count": 1
+      },
+      "activity": "heal",
+      "heal": {
+        "formula": "2d8 + max(@abilities.wis.mod, @abilities.cha.mod)",
+        "type": "temphp"
+      },
+      "uses": {
+        "max": "@attributes.prof",
+        "per": "lr"
+      },
+      "description": "<p><em>Vigil of Witchcraft, 13th level</em></p><p>Nothing a witch makes goes to waste. When your haint is destroyed by damage, you can pour what's left of it into one friendly creature you can see within 30 feet: it gains temporary hit points equal to 2d8 + your Wisdom or Charisma modifier (your choice).</p><p>You can use this feature a number of times equal to your proficiency bonus, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "witchcraft-stormcaller",
+      "name": "Stormcaller",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Witchcraft) 18",
+      "folder": "Vigil of Witchcraft",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/lightning/bolt-strike-cloud-gray.webp",
+      "activation": "action",
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "target": {
+        "template": {
+          "type": "radius",
+          "size": 30
+        }
+      },
+      "activity": "damage",
+      "damage": [
+        {
+          "formula": "10",
+          "types": [
+            "lightning"
+          ]
+        }
+      ],
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "description": "<p><em>Vigil of Witchcraft, 18th level</em></p><p>When you need weather, you make some. As an action, you raise a storm in a 30-foot radius around you and gain the following for 1 minute:</p><ul><li>You have a flying speed equal to your walking speed.</li><li>You have resistance to fire, lightning, and necrotic damage.</li><li>Whenever a hostile creature enters the storm for the first time on a turn or starts its turn inside it, it takes 10 lightning damage.</li></ul><p>The storm ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "corsair-loud-trade",
+      "name": "Loud Trade",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Corsair) 3",
+      "folder": "Vigil of the Corsair",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/weapons/thrown/bomb-detonator.webp",
+      "description": "<p><em>Vigil of the Corsair, 3rd level</em></p><p>You learned a trade the lodge doesn't teach. You gain proficiency with tinker's tools (good enough for building what goes bang) and with three guns of your choice.</p>"
+    },
+    {
+      "slug": "corsair-quick-fuse",
+      "name": "Quick Fuse",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Corsair) 3",
+      "folder": "Vigil of the Corsair",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/weapons/thrown/bomb-fuse-black.webp",
+      "activation": "bonus",
+      "description": "<p><em>Vigil of the Corsair, 3rd level</em></p><p>You don't need a whole action to throw a thing. You can throw grenades and set mines with your bonus action instead of your action. When you throw a grenade, you can use Wisdom or Charisma instead of Strength to work out how far it goes. And when you set the save DC of a charge, grenade, mine, or rocket you control, you can use your power save DC (Unaligned) if it would be higher than the item's own.</p>"
+    },
+    {
+      "slug": "corsair-current-charges",
+      "name": "Current Charges",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Corsair) 3",
+      "folder": "Vigil of the Corsair",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/weapons/thrown/grenade-round.webp",
+      "activation": "action",
+      "range": 30,
+      "target": {
+        "template": {
+          "type": "radius",
+          "size": 5
+        }
+      },
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "formula": "@scale.vigilant.kinetic + max(@abilities.wis.mod, @abilities.cha.mod)",
+          "types": []
+        }
+      ],
+      "uses": {
+        "max": "2 + floor((@classes.vigilant.levels - 1) / 4)",
+        "per": "sr"
+      },
+      "description": "<p><em>Vigil of the Corsair, 3rd, 5th, 9th, 13th, and 17th level</em></p><p>You pack a little of the current into something small and loud. Over the course of a short or long rest, with tinker's tools to hand, you can make two charges. Only you can use them, and they go dead at the end of your next short or long rest.</p><p>A charge can be set to go off on impact or on a timer, which fires on initiative count 20 (losing all ties). As an action, you can prime and throw one at a point you can see within 30 feet + 5 feet per point of your Strength modifier. Every creature within 5 feet of that point must make a Dexterity, Constitution, or Wisdom saving throw (your choice when you make the charge) against your power save DC (Unaligned). A creature takes damage equal to your Kinetic die + your Wisdom or Charisma modifier (your choice) on a failed save, or half as much on a success. The damage is force if you chose Dexterity, necrotic for Constitution, or psychic for Wisdom.</p><p>You can make more charges per rest as you level: three at 5th level, four at 9th, five at 13th, and six at 17th.</p>"
+    },
+    {
+      "slug": "corsair-thumb-the-trigger",
+      "name": "Thumb the Trigger",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Corsair) 7",
+      "folder": "Vigil of the Corsair",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/fire/explosion-fireball-small-orange.webp",
+      "activation": "bonus",
+      "range": 60,
+      "description": "<p><em>Vigil of the Corsair, 7th level</em></p><p>Everything you plant has a trigger, and your thumb is on it. As a bonus action on your turn, you can set off a primed explosive you can see within 60 feet. Or, if you take the Attack action while holding a gun you're proficient with, you can shoot the explosive instead of spending the bonus action, as long as you wouldn't have disadvantage on the attack roll.</p><p>Either way it goes off at once, and you have advantage on the damage roll.</p>"
+    },
+    {
+      "slug": "corsair-hot-shrapnel",
+      "name": "Hot Shrapnel",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Corsair) 13",
+      "folder": "Vigil of the Corsair",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/fire/explosion-embers-evade-silhouette.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "formula": "@scale.vigilant.kinetic",
+          "types": []
+        }
+      ],
+      "description": "<p><em>Vigil of the Corsair, 13th level</em></p><p>The current rides out on every piece. Once per turn, when you deal damage with a Current Charge or with Second Edge, you can deal extra damage equal to one roll of your Kinetic die. The damage is force, lightning, necrotic, or psychic, your choice.</p>"
+    },
+    {
+      "slug": "corsair-ringing-ears",
+      "name": "Ringing Ears",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Corsair) 18",
+      "folder": "Vigil of the Corsair",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/air/fog-gas-smoke-swirling-green.webp",
+      "activation": "special",
+      "duration": {
+        "value": "1",
+        "units": "turn"
+      },
+      "description": "<p><em>Vigil of the Corsair, 18th level</em></p><p>What's in the smoke is worse than the blast. When a creature fails its saving throw against a Current Charge, you can spend 2 Flow points to put one of the following on it: the effects of @UUID[{{uuid:powers:molasses}}]{Molasses}, the blinded or deafened condition (your choice), or the effects of @UUID[{{uuid:powers:dead-stop}}]{Dead Stop} (which works on drones and other mindless machines, too). The creature automatically fails the save against whatever you chose, but it lasts only until the end of your next turn.</p>"
+    },
+    {
+      "slug": "currentblade-thrown-current",
+      "name": "Thrown Current",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Currentblade) 3",
+      "folder": "Vigil of the Currentblade",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/weapons/thrown/dagger-ringed-steel.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "formula": "max(floor(max(@abilities.wis.mod, @abilities.cha.mod) / 2), 1)",
+          "types": []
+        }
+      ],
+      "description": "<p><em>Vigil of the Currentblade, 3rd level</em></p><p>The blade leaves your hand and the current keeps hold of it. You learn the @UUID[{{uuid:powers:thrown-blade}}]{Thrown Blade} power, and it doesn't count against your powers known. You don't have disadvantage on its attack roll for being within 5 feet of a hostile creature, and when you cast it as your action and hit, you can use Second Edge on the hit. When it hits, it deals extra damage equal to half your Wisdom or Charisma modifier (your choice, minimum of +1) if the damage doesn't already include that modifier.</p>"
+    },
+    {
+      "slug": "currentblade-blade-bond",
+      "name": "Blade Bond",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Currentblade) 3",
+      "folder": "Vigil of the Currentblade",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "activation": "bonus",
+      "range": 60,
+      "description": "<p><em>Vigil of the Currentblade, 3rd level</em></p><p>You can make a weapon part of you. The rite takes 1 hour, which you can do over a short rest, with the weapon (an arc-blade or any melee weapon) within reach the whole time. At the end you touch it and the bond takes, and from then on:</p><ul><li>You can't be disarmed of that weapon while you're conscious.</li><li>If the weapon is within 60 feet of you and you can see it, you can call it as a bonus action on your turn. It comes to you at once. If you have a free hand you catch it; if not, it lands at your feet.</li><li>You can use Wisdom or Charisma instead of Strength or Dexterity for its attack and damage rolls.</li></ul><p>You can have two weapons bonded at a time, and you can call them both with the same bonus action.</p>"
+    },
+    {
+      "slug": "currentblade-twice-thrown",
+      "name": "Twice Thrown",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Currentblade) 7",
+      "folder": "Vigil of the Currentblade",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "activation": "bonus",
+      "range": 30,
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "uses": {
+        "max": "3 + floor((@classes.vigilant.levels - 5) / 4)",
+        "per": "lr"
+      },
+      "description": "<p><em>Vigil of the Currentblade, 7th, 9th, 13th, and 17th level</em></p><p>Throw it, follow it, throw it again. When you cast @UUID[{{uuid:powers:thrown-blade}}]{Thrown Blade} with a bonded weapon, you can make its attacks against the same target more than once.</p><p>And when you deal damage to a creature within 30 feet of you with a bonded weapon, you can use your bonus action to be standing next to it, teleporting to within 5 feet, and make a melee weapon attack against it. That attack rolls your Kinetic die for damage in place of the weapon's die. You can do this three times, and you gain one more use at 9th, 13th, and 17th level. You regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "currentblade-knock-it-off",
+      "name": "Knock It Off",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Currentblade) 13",
+      "folder": "Vigil of the Currentblade",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/weapons/swords/sword-broad-worn.webp",
+      "activation": "reaction",
+      "condition": "you are the target of a ranged attack from within your Thrown Blade's range",
+      "range": 60,
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "activity": "attack",
+      "attack": {
+        "type": "ranged"
+      },
+      "damage": [
+        {
+          "formula": "@scale.vigilant.kinetic",
+          "types": []
+        }
+      ],
+      "description": "<p><em>Vigil of the Currentblade, 13th level</em></p><p>Somebody aims at you, and your blade is already on its way to them. When you're the target of a ranged attack and the shooter is within the range of your @UUID[{{uuid:powers:thrown-blade}}]{Thrown Blade} power, you can use your reaction to throw a bonded weapon at them: make a ranged power attack. On a hit, the damage uses your Kinetic die in place of the weapon's die, and the attack that triggered this is made with disadvantage.</p>"
+    },
+    {
+      "slug": "currentblade-blade-on-a-string",
+      "name": "Blade on a String",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of the Currentblade) 18",
+      "folder": "Vigil of the Currentblade",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/control/energy-stream-link-spiral-teal.webp",
+      "activation": "action",
+      "target": {
+        "template": {
+          "type": "radius",
+          "size": 10
+        }
+      },
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "none"
+      },
+      "damage": [
+        {
+          "formula": "@scale.vigilant.kinetic + floor(@classes.vigilant.levels / 2)",
+          "types": []
+        }
+      ],
+      "description": "<p><em>Vigil of the Currentblade, 18th level</em></p><p>You stop throwing the blade and start steering it. As an action, you can send a bonded weapon through any number of creatures within 10 feet of you, spending 1 Flow point per target. Each must make a Dexterity saving throw (DC = 8 + your attack bonus with that weapon). On a failed save a creature takes damage equal to your Kinetic die + half your Vigilant level (rounded down), is pushed 10 feet away from you, and falls prone.</p>"
+    }
+  ]
+}

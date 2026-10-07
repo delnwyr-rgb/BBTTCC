@@ -1,0 +1,153 @@
+{
+  "_about": "Flow Wolf: Warden — the class, its features, Channel the Current, the seven Auras. Mechanics carried over from the SW5E Guardian (half Flow caster, d10); every line of text is Bad Eden's own. Fighting Style draws on dnd5e's own six styles. The thirteen Forms live in warden-forms-*.json. Built by tools/build-packs.mjs.",
+
+  "classes": [
+    {
+      "slug": "flow-wolf-warden",
+      "identifier": "warden",
+      "name": "Flow Wolf: Warden",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "hd": "d10",
+      "primaryAbility": ["str"],
+      "saves": ["con", "cha"],
+      "skills": { "count": 2, "pool": ["acr", "ath", "dec", "his", "ins", "itm", "prc", "per", "rel"] },
+      "weapons": ["sim", "mar"],
+      "armor": ["lgt", "med"],
+      "multiclass": { "weapons": ["sim", "mar"], "armor": ["lgt", "med"] },
+      "casting": { "tradition": "flow", "progression": "half" },
+      "subclassLevel": 3,
+      "subclassTitle": "Form",
+      "asi": [4, 8, 12, 16, 19],
+      "scales": [
+        { "identifier": "powers-known", "title": "Powers Known", "scale": { "1": 2, "3": 3, "5": 4, "7": 5, "9": 6, "11": 7, "13": 8, "15": 9, "17": 10, "19": 10 } },
+        { "identifier": "channel", "title": "Channel the Current Uses", "scale": { "1": 2, "5": 3, "9": 4, "13": 5, "17": 6 } },
+        { "identifier": "current-strikes", "title": "Current Strikes", "type": "dice", "scale": { "2": { "number": 2, "faces": 8 }, "5": { "number": 3, "faces": 8 }, "9": { "number": 4, "faces": 8 }, "13": { "number": 5, "faces": 8 }, "17": { "number": 6, "faces": 8 } } },
+        { "identifier": "auras-known", "title": "Auras Known", "scale": { "3": 1, "10": 2, "18": 3 } },
+        { "identifier": "aura-radius", "title": "Aura Radius", "type": "distance", "units": "ft", "scale": { "3": 5, "9": 15, "17": 30 } }
+      ],
+      "features": {
+        "1": ["warden-flowcasting", "channel-the-current"],
+        "2": ["current-strikes"],
+        "3": ["wardens-aura"],
+        "5": ["warden-extra-attack"],
+        "6": ["clear-current"],
+        "11": ["always-running"],
+        "14": ["wash-it-off"]
+      },
+      "choices": [
+        { "tag": "channel", "title": "Channel the Current", "hint": "Which way the current runs through your hands: Draw Down or Lend a Hand. Your Form adds a third at 3rd level.", "choices": { "1": 1 }, "pool": ["draw-down", "lend-a-hand"], "allowDrops": false },
+        { "tag": "fighting-style", "title": "Fighting Style", "hint": "The way you fight. Pick one.", "choices": { "2": 1 }, "pool": ["Compendium.dnd5e.classfeatures.8YwPFv3UAPjWVDNf", "Compendium.dnd5e.classfeatures.zSlV0O2rQMdoq6pB", "Compendium.dnd5e.classfeatures.hCop9uJrWhF1QPb4", "Compendium.dnd5e.classfeatures.3Nc6u9pyStByuJsm", "Compendium.dnd5e.classfeatures.06NVMYf58Z76O85O", "Compendium.dnd5e.classfeatures.mHcSjcHJ8oZu3hkb"], "subtype": "fightingStyle", "allowDrops": true },
+        { "tag": "auras", "title": "Auras", "hint": "What the people near you feel. One at 3rd level, another at 10th and 18th.", "choices": { "3": 1, "10": 1, "18": 1 }, "pool": ["aura-of-conquest", "aura-of-conviction", "aura-of-hatred", "aura-of-presence", "aura-of-protection", "aura-of-vigor", "aura-of-warding"], "subtype": "be5eAura", "allowDrops": true }
+      ],
+      "description": "<p><em>A big man in a grey coat comes down the jail corridor at a run while the power is still out, armor clanking under the wool. He gets the cell doors open with his hands and tells the people inside to go. When the slavers round the corner with their guns up, he lights an arc-blade the color of a cold morning and plants his feet between them and the strangers behind him.</em></p><p><em>A woman in black-and-red plate walks straight through a line of rifle fire. The rounds hit her and don't matter. When she reaches the line she stops being patient, and the line stops being a line.</em></p><p><em>A squad is about to be overrun on the bridge when something lands in the middle of it and comes up swinging. The attackers have heard stories about Flow Wolves. They decide, as one, that the stories are true.</em></p><p>Wardens are the Flow Wolves who hold the line. They put the current into a blade and an arm and a stance, and the arm does things an arm shouldn't. Where a Theurge reads the Flow, a Warden wears it, and most fights end with the Warden still standing wherever they decided to stand.</p><h3>Shield or Hammer</h3><p>The Flow runs through a Warden into their weapon and into the ground under their boots. Some use it to keep people alive: a wall nobody gets past, a hand on a wounded friend's shoulder. Some use it to end things. The lodge doesn't pretend the two are the same, and it doesn't pretend they're that far apart, either.</p><h3>Somebody Has to Stand There</h3><p>A Warden's grip on the current gives them a presence people notice. Towns rally to them or get out of their way, and sometimes both in the same afternoon. They're the ones who get asked to lead when nobody else wants to, and the ones who get blamed after, and they walk into the next fight anyway.</p><h3>Making a Warden</h3><p>When you make a Warden, decide what the Flow is to you and who you'd stand in a doorway for. Did a lodge train you from a kid, or did the current show up in you in the middle of a bad night with a shovel in your hands? Are you a soldier who found out they had something extra, or something extra that learned to soldier? How do you treat people weaker than you? Who taught you that?</p><h4>Quick Build</h4><p>Make Strength your highest ability score, then Constitution. Pick the Soldier or Folk Hero background.</p><h3>Class Features</h3><p>As a Warden, you gain the following class features.</p><h4>Hit Points</h4><p><strong>Hit Dice:</strong> 1d10 per Warden level<br><strong>Hit Points at 1st Level:</strong> 10 + your Constitution modifier<br><strong>Hit Points at Higher Levels:</strong> 1d10 (or 6) + your Constitution modifier per Warden level after 1st</p><h4>Proficiencies</h4><p><strong>Armor:</strong> Light armor, medium armor<br><strong>Weapons:</strong> Simple weapons, martial weapons<br><strong>Tools:</strong> None<br><strong>Saving Throws:</strong> Constitution, Charisma<br><strong>Skills:</strong> Choose two from Acrobatics, Athletics, Deception, History, Insight, Intimidation, Perception, Persuasion, and Religion</p><h4>Equipment</h4><p>You start with the following equipment, in addition to the equipment granted by your background:</p><ul><li>(a) a martial weapon and a shield or (b) two martial weapons</li><li>(a) scale mail or (b) leather armor</li><li>(a) a priest's pack or (b) an explorer's pack</li><li>An arc-blade hilt, lit or not, and a coat with the lodge's mark on the collar</li></ul><h3>The Forms</h3><p>At 3rd level you choose a Form, the way you fight with the current in your hands. Your Form grants you features at 3rd, 7th, 15th, and 20th level.</p><ul><li>@UUID[{{uuid:subclasses:threshing-form}}]{Threshing Form}</li><li>@UUID[{{uuid:subclasses:duelists-form}}]{Duelist's Form}</li><li>@UUID[{{uuid:subclasses:shelter-form}}]{Shelter Form}</li><li>@UUID[{{uuid:subclasses:leaping-form}}]{Leaping Form}</li><li>@UUID[{{uuid:subclasses:riposte-form}}]{Riposte Form}</li><li>@UUID[{{uuid:subclasses:balanced-form}}]{Balanced Form}</li><li>@UUID[{{uuid:subclasses:ferocious-form}}]{Ferocious Form}</li><li>@UUID[{{uuid:subclasses:twin-blade-form}}]{Twin-Blade Form}</li><li>@UUID[{{uuid:subclasses:ground-form}}]{Ground Form}</li><li>@UUID[{{uuid:subclasses:feint-form}}]{Feint Form}</li><li>@UUID[{{uuid:subclasses:unity-form}}]{Unity Form}</li><li>@UUID[{{uuid:subclasses:blade-and-gun-form}}]{Blade-and-Gun Form}</li><li>@UUID[{{uuid:subclasses:adaptation-form}}]{Adaptation Form}</li></ul><h3>Auras</h3><p>From 3rd level, what a Warden carries into a room:</p><ul><li>@UUID[{{uuid:features:aura-of-conquest}}]{Aura of Conquest}</li><li>@UUID[{{uuid:features:aura-of-conviction}}]{Aura of Conviction}</li><li>@UUID[{{uuid:features:aura-of-hatred}}]{Aura of Hatred}</li><li>@UUID[{{uuid:features:aura-of-presence}}]{Aura of Presence}</li><li>@UUID[{{uuid:features:aura-of-protection}}]{Aura of Protection}</li><li>@UUID[{{uuid:features:aura-of-vigor}}]{Aura of Vigor}</li><li>@UUID[{{uuid:features:aura-of-warding}}]{Aura of Warding}</li></ul>"
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "warden-flowcasting", "name": "Flowcasting", "level": 1, "requirements": "Flow Wolf: Warden",
+      "folder": "Flow Wolf: Warden", "img": "icons/magic/water/wave-water-blue.webp",
+      "description": "<p><em>Flow Wolf: Warden, 1st level</em></p><p>You don't study the Flow so much as carry it. You know a few powers, the ones that come to a body in motion, and they answer you the way a good tool answers a hand that knows it.</p><h4>Powers Known</h4><p>You know two powers of your choice at 1st level, and you learn more as you gain levels, as shown in the Powers Known column of the Warden table. You can't learn a power whose level is higher than your Max Power Level. Whenever you gain a Warden level, you can also swap one power you know for another you qualify for.</p><h4>Flow Points</h4><p>You have a pool of Flow points equal to twice your Warden level, plus your Wisdom or Charisma modifier (your choice). You spend them to cast powers (a power costs its level plus one; at-will powers are free) and to put the current into your strikes. You regain all spent Flow points when you finish a long rest.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Flow point per level, up to your Max Power Level as shown on the Warden table. Powers of 4th and 5th level are heavy water for a Warden: you can cast each of them once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Which ability you cast with depends on which way the power runs. Sephirotic powers use Wisdom. Qliphothic powers use Charisma. Unaligned powers use whichever of the two you prefer. Use that modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your casting ability modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your casting ability modifier</p>"
+    },
+    {
+      "slug": "channel-the-current", "name": "Channel the Current", "level": 1, "requirements": "Flow Wolf: Warden",
+      "folder": "Flow Wolf: Warden", "img": "icons/magic/water/pseudopod-swirl-blue.webp",
+      "activation": "special", "uses": { "max": "@scale.warden.channel", "per": "sr" },
+      "description": "<p><em>Flow Wolf: Warden, 1st level</em></p><p>You can put the current through your hands and make it do one plain thing. You start with one of two effects, Draw Down or Lend a Hand, chosen when you take this level; your Form gives you a third at 3rd level. When you channel the current, you choose which effect to use.</p><p>If an effect calls for a saving throw, the DC is your power save DC, using whichever of Wisdom or Charisma you prefer.</p><p>You can use this feature twice. You gain one more use at 5th, 9th, 13th, and 17th level, and you regain all spent uses when you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "draw-down", "name": "Draw Down", "level": 1, "requirements": "Flow Wolf: Warden",
+      "folder": "Channel the Current", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/unholy/orb-glowing-purple.webp",
+      "activation": "action", "range": 60, "target": { "type": "enemy", "count": 1 }, "activity": "save", "save": { "ability": "con", "onSave": "half" },
+      "damage": [{ "formula": "@classes.warden.levels + max(@abilities.cha.mod, 1)", "types": ["necrotic"] }],
+      "description": "<p><em>Channel the Current</em></p><p>You pull the life out of something the way you'd pull water out of a well. As an action, spend a use of Channel the Current and choose a hostile creature you can see within 60 feet. It must make a Constitution saving throw. On a failed save it takes necrotic damage equal to your Warden level + your Charisma modifier (minimum of +1); on a success, half as much.</p>"
+    },
+    {
+      "slug": "lend-a-hand", "name": "Lend a Hand", "level": 1, "requirements": "Flow Wolf: Warden",
+      "folder": "Channel the Current", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+      "activation": "bonus", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 }, "activity": "heal", "heal": { "formula": "@classes.warden.levels + max(@abilities.wis.mod, 1)", "type": "healing" },
+      "description": "<p><em>Channel the Current</em></p><p>You put a hand on someone and the current does the rest. As a bonus action, spend a use of Channel the Current and touch a beast or humanoid within 5 feet of you. It regains hit points equal to your Warden level + your Wisdom modifier (minimum of +1).</p><p>Or, if the creature is poisoned or diseased, you neutralize the poison or the disease instead. If more than one is at work, you neutralize one you know about, or one at random.</p>"
+    },
+    {
+      "slug": "current-strikes", "name": "Current Strikes", "level": 2, "requirements": "Flow Wolf: Warden 2",
+      "folder": "Flow Wolf: Warden", "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "activation": "special", "activity": "damage", "damage": [{ "number": 1, "denomination": 8, "types": [] }],
+      "description": "<p><em>Flow Wolf: Warden, 2nd level</em></p><p>The current goes down your arm and out through the edge. When you hit a creature with a melee weapon attack, you can spend Flow points to deal extra damage of the weapon's type: 1d8 for each point you spend. You can't add more dice this way than the Current Strikes column of the Warden table allows (2d8 at 2nd level, 3d8 at 5th, 4d8 at 9th, 5d8 at 13th, 6d8 at 17th).</p>"
+    },
+    {
+      "slug": "wardens-aura", "name": "Warden's Aura", "level": 3, "requirements": "Flow Wolf: Warden 3",
+      "folder": "Flow Wolf: Warden", "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "description": "<p><em>Flow Wolf: Warden, 3rd level</em></p><p>People can feel you in a room before they see you. You gain an Aura of your choice from the list at the end of the class description, and you gain more at higher levels, as shown in the Auras Known column of the Warden table. Your Aura reaches 5 feet from you at 3rd level, 15 feet at 9th, and 30 feet at 17th.</p>"
+    },
+    {
+      "slug": "warden-extra-attack", "name": "Extra Attack", "level": 5, "requirements": "Flow Wolf: Warden 5",
+      "folder": "Flow Wolf: Warden", "img": "icons/skills/melee/strike-sword-slashing-red.webp",
+      "description": "<p><em>Flow Wolf: Warden, 5th level</em></p><p>You can attack twice, instead of once, whenever you take the Attack action on your turn.</p>"
+    },
+    {
+      "slug": "clear-current", "name": "Clear Current", "level": 6, "requirements": "Flow Wolf: Warden 6",
+      "folder": "Flow Wolf: Warden", "img": "icons/magic/water/orb-water-bubbles.webp",
+      "description": "<p><em>Flow Wolf: Warden, 6th level</em></p><p>Nothing foul stays in water that moves this fast. You are immune to poison damage, to the poisoned condition, and to disease.</p>",
+      "effects": [
+        { "_id": "be5eClearCurrent", "name": "Clear Current", "img": "icons/magic/water/orb-water-bubbles.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.traits.ci.value", "mode": 2, "value": "poisoned", "priority": 20 },
+            { "key": "system.traits.ci.value", "mode": 2, "value": "diseased", "priority": 20 },
+            { "key": "system.traits.di.value", "mode": 2, "value": "poison", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "always-running", "name": "Always Running", "level": 11, "requirements": "Flow Wolf: Warden 11",
+      "folder": "Flow Wolf: Warden", "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
+      "activation": "special", "activity": "damage", "damage": [{ "number": 1, "denomination": 8, "types": [] }],
+      "description": "<p><em>Flow Wolf: Warden, 11th level</em></p><p>You no longer have to reach for the current; it's in every swing. Whenever you hit a creature with a melee weapon attack, it takes an extra 1d8 damage of the weapon's type.</p>"
+    },
+    {
+      "slug": "wash-it-off", "name": "Wash It Off", "level": 14, "requirements": "Flow Wolf: Warden 14",
+      "folder": "Flow Wolf: Warden", "img": "icons/magic/water/barrier-ice-crystal-wall-jagged-blue.webp",
+      "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "description": "<p><em>Flow Wolf: Warden, 14th level</em></p><p>Whatever somebody put on you, you can take off. As an action, spend a use of Channel the Current to end one Flow power on yourself or on one willing creature you touch.</p>"
+    },
+
+    {
+      "slug": "aura-of-conquest", "name": "Aura of Conquest", "level": 3, "subtype": "be5eAura", "requirements": "Flow Wolf: Warden 3",
+      "folder": "Auras", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "activation": "special", "activity": "damage", "damage": [{ "formula": "floor(@classes.warden.levels / 2)", "types": ["psychic"] }],
+      "description": "<p><em>Aura</em></p><p>Fear of you is a weight. Whenever a creature that is frightened of you starts its turn inside your Aura, its speed drops to 0 until the start of its next turn and it takes psychic damage equal to half your Warden level.</p>"
+    },
+    {
+      "slug": "aura-of-conviction", "name": "Aura of Conviction", "level": 3, "subtype": "be5eAura", "requirements": "Flow Wolf: Warden 3",
+      "folder": "Auras", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/holy/projectiles-blades-salvo-yellow.webp",
+      "description": "<p><em>Aura</em></p><p>Nobody near you gets talked into anything. You and friendly creatures inside your Aura have advantage on saving throws against being charmed or frightened.</p>"
+    },
+    {
+      "slug": "aura-of-hatred", "name": "Aura of Hatred", "level": 3, "subtype": "be5eAura", "requirements": "Flow Wolf: Warden 3",
+      "folder": "Auras", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/fire/beam-jet-stream-embers.webp",
+      "description": "<p><em>Aura</em></p><p>What you feel about the enemy is catching. You and friendly creatures inside your Aura add your Charisma modifier (minimum of +1) to the first melee weapon damage roll each of you makes each round.</p>"
+    },
+    {
+      "slug": "aura-of-presence", "name": "Aura of Presence", "level": 3, "subtype": "be5eAura", "requirements": "Flow Wolf: Warden 3",
+      "folder": "Auras", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+      "description": "<p><em>Aura</em></p><p>Steadiness travels. Whenever you or a friendly creature inside your Aura makes a saving throw, that creature can add your Wisdom modifier to the roll.</p>"
+    },
+    {
+      "slug": "aura-of-protection", "name": "Aura of Protection", "level": 3, "subtype": "be5eAura", "requirements": "Flow Wolf: Warden 3",
+      "folder": "Auras", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "activation": "reaction", "condition": "a creature inside your Aura takes damage",
+      "description": "<p><em>Aura</em></p><p>It was going to hit them. It hits you instead. Whenever a creature inside your Aura takes damage, you can use your reaction to take that damage in its place. Nothing else that came with the damage transfers, and the damage you take this way can't be reduced in any way.</p>"
+    },
+    {
+      "slug": "aura-of-vigor", "name": "Aura of Vigor", "level": 3, "subtype": "be5eAura", "requirements": "Flow Wolf: Warden 3",
+      "folder": "Auras", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+      "activation": "special", "activity": "heal", "heal": { "formula": "max(@abilities.wis.mod, @abilities.cha.mod, 1)", "type": "temphp" },
+      "description": "<p><em>Aura</em></p><p>Standing near you is a kind of rest. Whenever a friendly creature starts its turn inside your Aura, it gains temporary hit points equal to your Wisdom or Charisma modifier (your choice, minimum of one).</p>"
+    },
+    {
+      "slug": "aura-of-warding", "name": "Aura of Warding", "level": 3, "subtype": "be5eAura", "requirements": "Flow Wolf: Warden 3",
+      "folder": "Auras", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "description": "<p><em>Aura</em></p><p>The current breaks around you like water around a rock. You and friendly creatures inside your Aura have resistance to damage from Flow powers.</p>"
+    }
+  ]
+}

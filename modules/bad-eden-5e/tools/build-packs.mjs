@@ -211,7 +211,7 @@ const grant = (docKey, level, slugs, title = "Features") => adv(docKey, `grant:$
   value: {}, level, title
 });
 const scale = (docKey, s) => adv(docKey, `scale:${s.identifier}`, "ScaleValue", {
-  configuration: { identifier: s.identifier, type: s.type ?? "number", distance: { units: "" },
+  configuration: { identifier: s.identifier, type: s.type ?? "number", distance: { units: s.type === "distance" ? (s.units ?? "ft") : "" },
     scale: Object.fromEntries(Object.entries(s.scale).map(([l, v]) => [l, typeof v === "object" ? v : { value: v }])) },
   value: {}, title: s.title
 });
@@ -223,7 +223,8 @@ const choice = (docKey, c) => adv(docKey, `choice:${c.tag}`, "ItemChoice", {
   configuration: {
     choices: Object.fromEntries(Object.entries(c.choices).map(([l, n]) => [l, { count: n, replacement: false }])),
     allowDrops: c.allowDrops ?? false, type: "feat",
-    pool: c.pool.map(s => ({ uuid: uuid("features", s) })),
+    // a pool entry is one of our feature slugs, or a full UUID (e.g. dnd5e's own fighting styles)
+    pool: c.pool.map(s => ({ uuid: s.includes("Compendium.") ? s : uuid("features", s) })),
     restriction: { type: c.subtype ? "class" : "", subtype: c.subtype ?? "", level: "" },
     spell: { ability: [], preparation: "", uses: { max: "", per: "" } }
   },

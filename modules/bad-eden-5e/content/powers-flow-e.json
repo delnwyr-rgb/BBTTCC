@@ -1,0 +1,54 @@
+{
+  "_about": "Seven Flow at-wills added back after the Forms and Vigils were written: Live Hand, Grit, Ripple Out, Good Word, Hush, Wither, Thrown Blade. Mechanics 1:1 from the SW5E cantrips; text and names new. Built by tools/build-packs.mjs.",
+  "_renames": [
+    { "sw5e": "Lightning Charge", "new": "Live Hand" }, { "sw5e": "Resistance", "new": "Grit" }, { "sw5e": "Burst", "new": "Ripple Out" },
+    { "sw5e": "Guidance", "new": "Good Word" }, { "sw5e": "Psychic Charge", "new": "Hush" }, { "sw5e": "Enfeeble", "new": "Wither" }, { "sw5e": "Saber Throw", "new": "Thrown Blade" }
+  ],
+  "powers": [
+    {
+      "slug": "live-hand", "name": "Live Hand", "sw5e": "Lightning Charge", "level": 0, "school": "qliph",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp", "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false, "activity": "damage", "damage": [{ "formula": "@mod", "types": ["lightning"] }], "scaling": "atwill",
+      "description": "<p>You put a charge in your weapon and the current wants out. As part of the action you use to cast this power, make a melee weapon attack against one creature within your reach; if you don't, the power fails. On a hit the target takes the attack's normal effects, and the charge jumps from it to a different creature of your choice you can see within 5 feet of it. That second creature takes lightning damage equal to your casting ability modifier.</p><p>The power grows with you. At 5th level the melee attack deals an extra 1d8 lightning damage to the target, and the jump deals 1d8 + your casting ability modifier. Both rolls gain another 1d8 at 11th level and at 17th level.</p>"
+    },
+    {
+      "slug": "grit", "name": "Grit", "sw5e": "Resistance", "level": 0, "school": "unal",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp", "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "activity": "utility", "roll": "1d4", "scaling": "atwill",
+      "description": "<p>You put a hand on someone and a little of the current stays with them. Touch one willing creature. Once before the power ends, it can roll a d4 and add the result to one saving throw of its choice. Then the power ends.</p><p>The die grows with you: a d6 at 5th level, a d8 at 11th, a d10 at 17th.</p>"
+    },
+    {
+      "slug": "ripple-out", "name": "Ripple Out", "sw5e": "Burst", "level": 0, "school": "unal",
+      "img": "icons/magic/earth/barrier-stone-explosion-debris.webp", "activation": "action", "range": { "units": "self" }, "target": { "template": { "type": "radius", "size": 5 } },
+      "duration": { "units": "inst" }, "concentration": false, "activity": "save", "save": { "ability": "dex", "onSave": "none" },
+      "damage": [{ "number": 1, "denomination": 8, "types": ["bludgeoning"], "scaling": { "mode": "whole", "number": 1 } }], "scaling": "atwill",
+      "description": "<p>You stamp, and the ground remembers it was water once. Every creature within 5 feet of you, other than you, must succeed on a Dexterity saving throw or take 1d8 bludgeoning damage.</p><p>The damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).</p>"
+    },
+    {
+      "slug": "good-word", "name": "Good Word", "sw5e": "Guidance", "level": 0, "school": "seph",
+      "img": "icons/magic/holy/projectiles-blades-salvo-yellow.webp", "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "minute" }, "concentration": true, "activity": "utility", "roll": "1d4", "scaling": "atwill",
+      "description": "<p>You tell someone they've got this, and the current agrees. Touch one willing creature. Once before the power ends, it can roll a d4 and add the result to one ability check of its choice. Then the power ends.</p><p>The die grows with you: a d6 at 5th level, a d8 at 11th, a d10 at 17th.</p>"
+    },
+    {
+      "slug": "hush", "name": "Hush", "sw5e": "Psychic Charge", "level": 0, "school": "qliph",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye.webp", "activation": "action", "range": { "units": "touch" }, "target": { "type": "creature", "count": 1 },
+      "duration": { "value": "1", "units": "round" }, "concentration": false, "activity": "damage", "damage": [{ "number": 1, "denomination": 8, "types": ["psychic"], "scaling": { "mode": "whole", "number": 1 } }], "scaling": "atwill",
+      "description": "<p>A finger to the lips, with weight behind it. As part of the action you use to cast this power, make a melee weapon attack against one creature within your reach; if you don't, the power fails. On a hit the target takes the attack's normal effects, and a violet haze settles over its mouth until the start of your next turn. If it willingly speaks before then, it takes 1d8 psychic damage and the power ends.</p><p>The power grows with you. At 5th level the melee attack deals an extra 1d8 psychic damage to the target, and the damage for speaking rises to 2d8. Both rolls gain another 1d8 at 11th level and at 17th level.</p>"
+    },
+    {
+      "slug": "wither", "name": "Wither", "sw5e": "Enfeeble", "level": 0, "school": "qliph",
+      "img": "icons/magic/unholy/orb-glowing-purple.webp", "activation": "action", "range": { "value": 60 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false, "activity": "save", "save": { "ability": "wis", "onSave": "none" },
+      "damage": [{ "number": 1, "denomination": 12, "types": ["necrotic"], "scaling": { "mode": "whole", "number": 1 } }], "scaling": "atwill",
+      "description": "<p>Something cold runs from your hand to theirs. One creature you can see within range must succeed on a Wisdom saving throw. On a failure, it takes 1d12 necrotic damage if it's already missing hit points, or 1d8 if it isn't.</p><p>Both dice grow by one when you reach 5th level (2d12 or 2d8), 11th level (3d12 or 3d8), and 17th level (4d12 or 4d8).</p>"
+    },
+    {
+      "slug": "thrown-blade", "name": "Thrown Blade", "sw5e": "Saber Throw", "level": 0, "school": "unal",
+      "img": "icons/skills/melee/blade-tips-double-blue.webp", "activation": "action", "range": { "value": 30 }, "target": { "type": "creature", "count": 1 },
+      "duration": { "units": "inst" }, "concentration": false, "activity": "attack", "attack": { "type": "ranged" },
+      "damage": [{ "number": 1, "denomination": 8, "types": [] }], "scaling": "atwill",
+      "description": "<p>You let go of the blade, and the current brings it back. As part of the action you use to cast this power, make a ranged power attack with a melee weapon you're holding against one target within range; if you don't, the power fails. On a hit the target takes 1d8 damage of the weapon's type. The weapon then returns to your hand.</p><p>At higher levels the blade finds more than one of them: two targets at 5th level, three at 11th, four at 17th. Each target must be within 30 feet of the one before it, you make a separate attack roll for each, the last target must be within 30 feet of you, and you can't hit the same target twice in a row.</p>"
+    }
+  ]
+}

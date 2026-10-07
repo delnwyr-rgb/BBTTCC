@@ -1,0 +1,586 @@
+{
+  "_about": "Flow Wolf: Vigilant — Vigils batch 1: Aggression, Communion, Ethereality, Focus (SW5E Paths of Aggression / Communion / Ethereality / Focus). Mechanics 1:1; every line of text is Bad Eden's own. Built by tools/build-packs.mjs.",
+  "_renames": [
+    {
+      "sw5e": "Path of Aggression",
+      "new": "Vigil of Aggression"
+    },
+    {
+      "sw5e": "Voltaic Slash",
+      "new": "Hot Hand"
+    },
+    {
+      "sw5e": "Thunderous Momentum",
+      "new": "Unbroken Stride"
+    },
+    {
+      "sw5e": "Entropic Rush",
+      "new": "Running Charge"
+    },
+    {
+      "sw5e": "Living Current",
+      "new": "Living Current"
+    },
+    {
+      "sw5e": "Retaliatory Strike",
+      "new": "Retaliatory Strike"
+    },
+    {
+      "sw5e": "Path of Communion",
+      "new": "Vigil of Communion"
+    },
+    {
+      "sw5e": "Mystical Connection",
+      "new": "Thin Place"
+    },
+    {
+      "sw5e": "Symbiot Spirit",
+      "new": "Company Kept"
+    },
+    {
+      "sw5e": "Invasive Presence",
+      "new": "Uninvited Guest"
+    },
+    {
+      "sw5e": "Ethereal Vision",
+      "new": "Both Sides"
+    },
+    {
+      "sw5e": "Assuming Direct Control",
+      "new": "Taking the Wheel"
+    },
+    {
+      "sw5e": "Path of Ethereality",
+      "new": "Vigil of Ethereality"
+    },
+    {
+      "sw5e": "Aberrant Resilience",
+      "new": "Held"
+    },
+    {
+      "sw5e": "Force-Empowered Kinesis",
+      "new": "Thin as Water"
+    },
+    {
+      "sw5e": "Out of Touch",
+      "new": "Out of Touch"
+    },
+    {
+      "sw5e": "Event Cascade",
+      "new": "First Touch"
+    },
+    {
+      "sw5e": "Aberrant Self",
+      "new": "Not Quite Here"
+    },
+    {
+      "sw5e": "Path of Focus",
+      "new": "Vigil of Focus"
+    },
+    {
+      "sw5e": "Focused Burst",
+      "new": "Shock and Follow"
+    },
+    {
+      "sw5e": "Blade Dance",
+      "new": "Blade Dance"
+    },
+    {
+      "sw5e": "Blade Storm",
+      "new": "Blade Storm"
+    },
+    {
+      "sw5e": "Focused Flow",
+      "new": "Free Flow"
+    },
+    {
+      "sw5e": "Master Strike",
+      "new": "Master Strike"
+    }
+  ],
+  "_powerRefs": [
+    {
+      "sw5e": "Lightning Charge",
+      "draft": "Live Hand",
+      "vigil": "Vigil of Aggression",
+      "note": "NOT in the 109 Flow powers; the Vigil is built on it — the at-will (touch, lightning, leaps once to a second creature within 30 ft) needs adding to the powers pack, or the Vigil needs a stand-in"
+    },
+    {
+      "sw5e": "Feedback",
+      "draft": "Static",
+      "vigil": "Vigil of Communion",
+      "note": "exists — linked"
+    },
+    {
+      "sw5e": "Resistance",
+      "draft": "Grit",
+      "vigil": "Vigil of Ethereality",
+      "note": "NOT in the 109 Flow powers; a touch at-will that adds a d4 to one saving throw — needs adding, or the feature grants the effect directly"
+    },
+    {
+      "sw5e": "Burst",
+      "draft": "Ripple Out",
+      "vigil": "Vigil of Focus",
+      "note": "NOT in the 109 Flow powers; self-centred 1d8 kinetic at-will with a Dex save — needs adding, or the Vigil needs a stand-in"
+    }
+  ],
+  "_unsure": [
+    "Three of the four Vigils grant a bonus at-will power that was cut from the 109 (Lightning Charge, Resistance, Burst). The features name them in <em> with draft names and say the power comes with the Vigil; the powers themselves still need writing into the powers pack (or Dave swaps the Vigil onto a kept power).",
+    "Hot Hand: the damage activity is the +half-mod lightning rider (custom formula), not the power itself.",
+    "Unbroken Stride: 'immune to shocked' → immune to being jolted; 'each slowed level only reduces speed by 5 ft' → anything that would halve your speed only takes 5 feet off it, unless it would reduce you to 0.",
+    "Living Current: the lightning rider is a damage activity rolling the Kinetic die (`@scale.vigilant.kinetic`); the '+ half the damage you took' is added by hand. Uses 5, +1 at 17th as a level formula.",
+    "Company Kept: the spirit is a ghost in the Flow (no stat block in SW5E either); the strike-through-the-spirit uses are a level formula (2, +1 at 5/9/13/17). 'Jedi/Sith/Nightsister spirit' → ghosts of Flow Wolves, old lodges, or something older in a Shattering-era artifact.",
+    "Uninvited Guest: 'universal force save DC' → your power save DC (Unaligned). Taking the Wheel rides on it (no activity of its own).",
+    "Thin as Water / Out of Touch: 'true damage' → damage that can't be reduced or prevented (Out of Touch's shunt damage is force in the source; kept as force).",
+    "Free Flow: the no-cost option rolls a flat d4 in place of the Kinetic die — the utility activity rolls 1d4.",
+    "Shock and Follow: Double Strike → Second Edge; 'creatures that succeed take half' is text (the power's own activity would need onSave: half when it's written)."
+  ],
+  "subclasses": [
+    {
+      "slug": "vigil-of-aggression",
+      "identifier": "vigil-of-aggression",
+      "name": "Vigil of Aggression",
+      "classIdentifier": "vigilant",
+      "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>Downstream, where the water runs fast and nobody's filtered it, there's a kind of anger that doesn't burn out. Vigilants who keep the Vigil of Aggression put that into a hand and a blade and let it arc. By the end they're carrying enough charge that getting hit by them is the least of your problems: it's what jumps off afterward.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "aggression-hot-hand"
+        },
+        {
+          "level": 3,
+          "slug": "aggression-unbroken-stride"
+        },
+        {
+          "level": 7,
+          "slug": "aggression-running-charge"
+        },
+        {
+          "level": 13,
+          "slug": "aggression-living-current"
+        },
+        {
+          "level": 18,
+          "slug": "aggression-retaliatory-strike"
+        }
+      ]
+    },
+    {
+      "slug": "vigil-of-communion",
+      "identifier": "vigil-of-communion",
+      "name": "Vigil of Communion",
+      "classIdentifier": "vigilant",
+      "img": "icons/magic/control/energy-stream-link-white.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>Some of the people who went into the Flow never came all the way out. Vigilants who keep the Vigil of Communion find one of them, or get found, and the two of them make an arrangement: the ghost gets a pair of hands, and the Vigilant gets a pair of eyes that don't need a door. It changes how you see a room. It changes how you see most things.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "communion-thin-place"
+        },
+        {
+          "level": 3,
+          "slug": "communion-company-kept"
+        },
+        {
+          "level": 7,
+          "slug": "communion-uninvited-guest"
+        },
+        {
+          "level": 13,
+          "slug": "communion-both-sides"
+        },
+        {
+          "level": 18,
+          "slug": "communion-taking-the-wheel"
+        }
+      ]
+    },
+    {
+      "slug": "vigil-of-ethereality",
+      "identifier": "vigil-of-ethereality",
+      "name": "Vigil of Ethereality",
+      "classIdentifier": "vigilant",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>Out past the edges of the map there are parts of the Flow nobody has named, and some of them take an interest. Most people who brush against that come away touched. Vigilants who keep the Vigil of Ethereality came away held, and whatever has hold of them hasn't let go. It makes them hard to pin down in every sense: they walk through walls, they walk through you, and some days they're barely here at all.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "ethereality-held"
+        },
+        {
+          "level": 3,
+          "slug": "ethereality-thin-as-water"
+        },
+        {
+          "level": 7,
+          "slug": "ethereality-out-of-touch"
+        },
+        {
+          "level": 13,
+          "slug": "ethereality-first-touch"
+        },
+        {
+          "level": 18,
+          "slug": "ethereality-not-quite-here"
+        }
+      ]
+    },
+    {
+      "slug": "vigil-of-focus",
+      "identifier": "vigil-of-focus",
+      "name": "Vigil of Focus",
+      "classIdentifier": "vigilant",
+      "img": "icons/skills/melee/blade-tips-triple-steel.webp",
+      "description": "<p><em>Vigil of the Flow Wolf: Vigilant</em></p><p>The Flow shows itself to some people only when they're paying attention to nothing else. Vigilants who keep the Vigil of Focus pay that kind of attention to the fight in front of them: blade, current, blade, current, each one landing on the heels of the last until the other side runs out of answers. They don't win by being stronger. They win by never giving you a turn to breathe.</p>",
+      "features": [
+        {
+          "level": 3,
+          "slug": "focus-shock-and-follow"
+        },
+        {
+          "level": 3,
+          "slug": "focus-blade-dance"
+        },
+        {
+          "level": 7,
+          "slug": "focus-blade-storm"
+        },
+        {
+          "level": 13,
+          "slug": "focus-free-flow"
+        },
+        {
+          "level": 18,
+          "slug": "focus-master-strike"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "aggression-hot-hand",
+      "name": "Hot Hand",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Aggression) 3",
+      "folder": "Vigil of Aggression",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/lightning/bolt-blue.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "formula": "max(floor(max(@abilities.wis.mod, @abilities.cha.mod) / 2), 1)",
+          "types": [
+            "lightning"
+          ]
+        }
+      ],
+      "description": "<p><em>Vigil of Aggression, 3rd level</em></p><p>There's always a charge in your palm now. You know the @UUID[{{uuid:powers:live-hand}}]{Live Hand} power, and it doesn't count against the number of powers you know. You can use Wisdom or Charisma as your casting ability for it, whichever you like. When you deal lightning damage with @UUID[{{uuid:powers:live-hand}}]{Live Hand}, you deal extra lightning damage equal to half your Wisdom or Charisma modifier (your choice, minimum of one), unless the damage already includes that modifier.</p>"
+    },
+    {
+      "slug": "aggression-unbroken-stride",
+      "name": "Unbroken Stride",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Aggression) 3",
+      "folder": "Vigil of Aggression",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/movement/abstract-ribbons-red-orange.webp",
+      "description": "<p><em>Vigil of Aggression, 3rd level</em></p><p>Nothing gets between you and where you're going. You can't be jolted, and anything that would halve your speed only takes 5 feet off it instead, unless it would reduce your speed to 0.</p>"
+    },
+    {
+      "slug": "aggression-running-charge",
+      "name": "Running Charge",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Aggression) 7",
+      "folder": "Vigil of Aggression",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "description": "<p><em>Vigil of Aggression, 7th level</em></p><p>The faster you come in, the harder it lands. If you move at least half your speed before casting @UUID[{{uuid:powers:live-hand}}]{Live Hand}, you make the attack roll with advantage. On a hit, the lightning can jump one more time: to a third creature in range, or back to the first one.</p>"
+    },
+    {
+      "slug": "aggression-living-current",
+      "name": "Living Current",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Aggression) 13",
+      "folder": "Vigil of Aggression",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
+      "activation": "special",
+      "uses": {
+        "max": "5 + floor(@classes.vigilant.levels / 17)",
+        "per": "sr"
+      },
+      "activity": "damage",
+      "damage": [
+        {
+          "formula": "@scale.vigilant.kinetic",
+          "types": [
+            "lightning"
+          ]
+        }
+      ],
+      "description": "<p><em>Vigil of Aggression, 13th level</em></p><p>What they put into you, you put back. The first time you deal damage on your turn, if you've taken damage since the start of your last turn, you can deal extra lightning damage equal to your Kinetic die + half the damage you took.</p><p>You can use this feature five times, and six times from 17th level. You regain all spent uses when you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "aggression-retaliatory-strike",
+      "name": "Retaliatory Strike",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Aggression) 18",
+      "folder": "Vigil of Aggression",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "activation": "reaction",
+      "condition": "a creature within 5 feet of you hits you with an attack",
+      "range": 5,
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "description": "<p><em>Vigil of Aggression, 18th level</em></p><p>Touching you was a mistake. When a creature within 5 feet of you hits you with an attack, you can use your reaction to cast @UUID[{{uuid:powers:live-hand}}]{Live Hand} on it.</p>"
+    },
+    {
+      "slug": "communion-thin-place",
+      "name": "Thin Place",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Communion) 3",
+      "folder": "Vigil of Communion",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "formula": "max(@abilities.wis.mod, @abilities.cha.mod, 1)",
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "description": "<p><em>Vigil of Communion, 3rd level</em></p><p>The wall between you and the other side is thinner than most people's. You know the @UUID[{{uuid:powers:static}}]{Static} power, and it doesn't count against the number of powers you know. You can use Wisdom or Charisma as your casting ability for it, whichever you like. When you cast <em>Static</em> as your action and the target fails its saving throw, you can use your Second Edge trick on it. And when you deal psychic damage with <em>Static</em>, you deal extra psychic damage equal to your Wisdom or Charisma modifier (your choice, minimum of one), unless the damage already includes that modifier.</p>"
+    },
+    {
+      "slug": "communion-company-kept",
+      "name": "Company Kept",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Communion) 3",
+      "folder": "Vigil of Communion",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/control/energy-stream-link-white.webp",
+      "activation": "special",
+      "range": 100,
+      "uses": {
+        "max": "2 + floor((@classes.vigilant.levels - 1) / 4)",
+        "per": "sr"
+      },
+      "description": "<p><em>Vigil of Communion, 3rd level (more at 5th, 9th, 13th, and 17th)</em></p><p>Something that used to be a person has taken an interest in you. Over the course of an hour you can attune to a spirit, a ghost in the Flow, and make the arrangement stick. While you're attuned to it:</p><ul><li>You can always see and hear your spirit. It can choose to be seen and heard by others or not (no action required), but anything with truesight sees it regardless.</li><li>Your spirit can't touch the physical world, and the physical world can't stop it: walls and doors that aren't enhanced mean nothing to it.</li><li>Your spirit has its own mind. It does what you ask if it feels like it. In a fight it rolls its own initiative and takes its own turn. It can't attack, but it can take other actions as normal.</li><li>While your spirit is within 100 feet of you, the two of you can talk mind to mind. As an action, you can look through its eyes and hear through its ears until the start of your next turn; while you do, you're blind and deaf to your own senses.</li><li>When you cast a Flow power with a range of touch, your spirit can deliver it as if it had cast it, as long as it's within 100 feet of you and uses its reaction. If the power needs an attack roll, use your attack modifier.</li></ul><p>You can be attuned to only one spirit at a time. Attuning to another one breaks the bond with the first.</p><p><strong>Where it came from.</strong> Your spirit might be a Flow Wolf who died with the work unfinished, the last of some lodge nobody remembers, or something much older that was sleeping in an artifact from before the Shattering until you picked it up. Work out with your GM what it is and what it wants.</p><p><strong>Hands, briefly.</strong> Your spirit can touch the world for about as long as it takes to swing. When you would make a melee attack, your spirit can make it for you, from wherever it's standing, as long as it's within 100 feet of you and uses its reaction. It uses your attack and damage modifiers. You can do this twice, and you gain one more use at 5th, 9th, 13th, and 17th level. You regain all spent uses when you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "communion-uninvited-guest",
+      "name": "Uninvited Guest",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Communion) 7",
+      "folder": "Vigil of Communion",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "activation": "action",
+      "range": 5,
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "lr"
+      },
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "description": "<p><em>Vigil of Communion, 7th level</em></p><p>Your spirit can get inside someone. As an action, your spirit touches a creature within 5 feet of it, and that creature must make a Wisdom saving throw against your power save DC. If you or anyone friendly to you is fighting it, it has advantage on the save.</p><p>On a failed save, your spirit steps into the creature's space and wears it for 1 minute. The creature has disadvantage on the first attack roll, ability check, or saving throw it makes each turn. At the end of each of its turns it repeats the save; on a success it throws your spirit out, and it's immune to this feature for 24 hours.</p><p>Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "communion-both-sides",
+      "name": "Both Sides",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Communion) 13",
+      "folder": "Vigil of Communion",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/perception/orb-eye-scrying.webp",
+      "description": "<p><em>Vigil of Communion, 13th level</em></p><p>You and your spirit both have truesight out to 60 feet, as long as it's within 100 feet of you.</p><p>Also, when you use your action to look through your spirit's senses, you're no longer blind and deaf to your own. You take in both at once and make sense of both.</p>"
+    },
+    {
+      "slug": "communion-taking-the-wheel",
+      "name": "Taking the Wheel",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Communion) 18",
+      "folder": "Vigil of Communion",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/control/debuff-energy-hold-teal-blue.webp",
+      "activation": "action",
+      "range": 100,
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "turn"
+      },
+      "description": "<p><em>Vigil of Communion, 18th level</em></p><p>When a creature fails its saving throw against your Uninvited Guest, it's also charmed by you for as long as that feature lasts.</p><p>While it's charmed, you and your spirit share a thread of thought with it as long as you're within 100 feet of it, and either of you can give it orders along that thread while you're conscious (no action required). It does its best to obey. A simple, general instruction is enough: attack that one, run over there, fetch that. If it finishes the job and hears nothing more, it looks after its own skin as best it can.</p><p>You can use your action to take total and exact control of it. Until the end of your next turn it takes only the actions you choose and does nothing you don't allow. You can make it use its reaction, but that costs you your own reaction too.</p>"
+    },
+    {
+      "slug": "ethereality-held",
+      "name": "Held",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Ethereality) 3",
+      "folder": "Vigil of Ethereality",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "description": "<p><em>Vigil of Ethereality, 3rd level</em></p><p>Whatever has you, it doesn't want you hurt. You know the @UUID[{{uuid:powers:grit}}]{Grit} power, and it doesn't count against the number of powers you know. When you cast it on yourself, it doesn't need your concentration.</p>"
+    },
+    {
+      "slug": "ethereality-thin-as-water",
+      "name": "Thin as Water",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Ethereality) 3",
+      "folder": "Vigil of Ethereality",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/air/fog-gas-smoke-swirling-gray.webp",
+      "description": "<p><em>Vigil of Ethereality, 3rd level</em></p><p>For a moment at a time, you're not all the way solid. When you use a Body in the Current trick, until the end of your turn you can move through other creatures and objects as if they were difficult terrain. If you end that movement inside something solid, you're shoved to the nearest open space you can stand in and take damage equal to twice the number of feet you were moved; that damage can't be reduced or prevented.</p>"
+    },
+    {
+      "slug": "ethereality-out-of-touch",
+      "name": "Out of Touch",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Ethereality) 7",
+      "folder": "Vigil of Ethereality",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "activation": "action",
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "uses": {
+        "max": "1",
+        "per": "sr"
+      },
+      "activity": "utility",
+      "roll": "1d20",
+      "description": "<p><em>Vigil of Ethereality, 7th level</em></p><p>You can step half a beat out of time with everything else. As an action, you go out of touch for 1 minute. At the start of each of your turns, roll a d20. On an 11 or higher, you and everything you're wearing or carrying are completely invisible to everything except creatures with truesight. On a 10 or lower, you're a blurred shape about your own size instead, and truesight sees you plainly.</p><p>Either way, for the duration your speed is doubled, you have a flying speed equal to your walking speed, and you can move through creatures and objects at will, though you can't affect them and they can't affect you. You can end this early on your turn (no action required). When it ends, if you're inside something solid, you're shoved to the nearest open space you can stand in and take force damage equal to twice the number of feet you were moved.</p><p>It ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "ethereality-first-touch",
+      "name": "First Touch",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Ethereality) 13",
+      "folder": "Vigil of Ethereality",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
+      "description": "<p><em>Vigil of Ethereality, 13th level</em></p><p>They never see the first one coming. You have advantage on attack rolls against any creature you haven't damaged or affected with a Flow power since the start of your previous turn.</p>"
+    },
+    {
+      "slug": "ethereality-not-quite-here",
+      "name": "Not Quite Here",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Ethereality) 18",
+      "folder": "Vigil of Ethereality",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/time/arrows-circling-green.webp",
+      "activation": "special",
+      "activity": "utility",
+      "roll": "@scale.vigilant.kinetic",
+      "description": "<p><em>Vigil of Ethereality, 18th level</em></p><p>Whatever has you has decided to keep you. You no longer suffer the frailty of old age and can't be aged by anything but time; you can still die of it, eventually. You no longer need food, water, or sleep.</p><p>And the first time you take damage on each of your turns, you can roll your Kinetic die and reduce the damage by the result.</p>"
+    },
+    {
+      "slug": "focus-shock-and-follow",
+      "name": "Shock and Follow",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Focus) 3",
+      "folder": "Vigil of Focus",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
+      "activation": "special",
+      "activity": "damage",
+      "damage": [
+        {
+          "formula": "max(@abilities.wis.mod, @abilities.cha.mod, 1)",
+          "types": [
+            "bludgeoning"
+          ]
+        }
+      ],
+      "description": "<p><em>Vigil of Focus, 3rd level</em></p><p>Everything starts with a shove. You know the @UUID[{{uuid:powers:ripple-out}}]{Ripple Out} power, and it doesn't count against the number of powers you know. When you cast it as your action, you can use your Second Edge trick on it; if more than one creature is caught, only one takes the extra damage. You add your Wisdom or Charisma modifier (your choice, minimum of +1) to its damage rolls, and creatures that succeed on their saving throw take half damage instead of none.</p>"
+    },
+    {
+      "slug": "focus-blade-dance",
+      "name": "Blade Dance",
+      "level": 3,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Focus) 3",
+      "folder": "Vigil of Focus",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+      "description": "<p><em>Vigil of Focus, 3rd level</em></p><p>You hit and you're already somewhere else. When you deal damage to a creature within 5 feet of you, you can move up to 10 feet without provoking opportunity attacks.</p>"
+    },
+    {
+      "slug": "focus-blade-storm",
+      "name": "Blade Storm",
+      "level": 7,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Focus) 7",
+      "folder": "Vigil of Focus",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/skills/melee/blade-tips-double-blue.webp",
+      "activation": "special",
+      "activity": "attack",
+      "attack": {
+        "type": "melee"
+      },
+      "damage": [
+        {
+          "formula": "@scale.vigilant.kinetic",
+          "types": []
+        }
+      ],
+      "description": "<p><em>Vigil of Focus, 7th level</em></p><p>Two is never enough. Once on your turn, when a creature has taken damage from you twice, you can immediately make one more attack against it (no action required). That attack rolls your Kinetic die in place of the weapon's damage die.</p>"
+    },
+    {
+      "slug": "focus-free-flow",
+      "name": "Free Flow",
+      "level": 13,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Focus) 13",
+      "folder": "Vigil of Focus",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/magic/movement/abstract-ribbons-red-orange.webp",
+      "activation": "special",
+      "activity": "utility",
+      "roll": "1d4",
+      "description": "<p><em>Vigil of Focus, 13th level</em></p><p>Some of it comes for free now. Whenever you use a Body in the Current trick, you can choose to spend no Flow points on it and roll a d4 in place of your Kinetic die.</p>"
+    },
+    {
+      "slug": "focus-master-strike",
+      "name": "Master Strike",
+      "level": 18,
+      "requirements": "Flow Wolf: Vigilant (Vigil of Focus) 18",
+      "folder": "Vigil of Focus",
+      "folderParent": "Flow Wolf: Vigilant",
+      "img": "icons/skills/melee/blade-tips-triple-steel.webp",
+      "activation": "special",
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "none"
+      },
+      "description": "<p><em>Vigil of Focus, 18th level</em></p><p>Three in a row and even the big ones stop. Once on your turn, when a creature has taken damage from you three times, you can force it to make a Constitution saving throw against your power save DC. On a failed save it's stunned until the end of its next turn.</p>"
+    }
+  ]
+}

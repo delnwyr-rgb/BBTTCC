@@ -1,0 +1,262 @@
+{
+  "_about": "Flow Wolf: Warden — Forms batch 1: Threshing Form (SW5E Shii-Cho), Duelist's Form (Makashi), Shelter Form (Soresu), Leaping Form (Ataru). Features at 3/7/15/20; each Form's 3rd level brings a stance, a Channel the Current option, and (where the source had one) a proficiency. Mechanics carried over; every line of text is Bad Eden's own.",
+  "_renames": [
+    { "sw5e": "Shii-Cho Form", "new": "Threshing Form" },
+    { "sw5e": "Form Basics (Shii-Cho)", "new": "Threshing Basics" },
+    { "sw5e": "The Way of the Sarlaac", "new": "The Thresher" },
+    { "sw5e": "Disarming Slash", "new": "Disarming Cut" },
+    { "sw5e": "Sarlaac Sweep", "new": "Threshing Sweep" },
+    { "sw5e": "Master of Determination", "new": "Master of the Threshing Floor" },
+    { "sw5e": "Makashi Form", "new": "Duelist's Form" },
+    { "sw5e": "Form Basics (Makashi)", "new": "Duelist's Basics" },
+    { "sw5e": "The Way of the Ysalamiri", "new": "The Measured Guard" },
+    { "sw5e": "Makashi Riposte", "new": "Duelist's Riposte" },
+    { "sw5e": "Force-Empowered Reflexes", "new": "Current Reflexes" },
+    { "sw5e": "Master of Contention", "new": "Master of the Duel" },
+    { "sw5e": "Soresu Form", "new": "Shelter Form" },
+    { "sw5e": "Bonus Proficiencies (Soresu)", "new": "Heavy Shelter" },
+    { "sw5e": "Form Basics (Soresu)", "new": "Shelter Basics" },
+    { "sw5e": "The Way of the Mynock", "new": "The Storm Door" },
+    { "sw5e": "Advancing Defender", "new": "Hold and Step" },
+    { "sw5e": "Master of Resilience", "new": "Master of the Shelter" },
+    { "sw5e": "Ataru Form", "new": "Leaping Form" },
+    { "sw5e": "Form Basics (Ataru)", "new": "Leaping Basics" },
+    { "sw5e": "The Way of the Hawk-Bat", "new": "The Grasshopper" },
+    { "sw5e": "Retreating Leap", "new": "Backward Spring" },
+    { "sw5e": "Hawk-Bat Swoop", "new": "Up the Wall" },
+    { "sw5e": "Master of Aggression", "new": "Master of the Leap" }
+  ],
+  "_powerRefs": [
+    { "sw5e": "Saber Ward", "draft": "Brace", "form": "shelter-form", "note": "linked — exists in powers-flow-a" },
+    { "sw5e": "Saber Reflect", "draft": "(none — not in the 109; the Storm Door stance carries its own built-in deflect)", "form": "shelter-form" },
+    { "sw5e": "Force Jump", "draft": "(none — not in the 109; the Grasshopper stance carries its own built-in leap, with Spring named as the at-will cousin)", "form": "leaping-form" }
+  ],
+  "_unsure": [
+    "SW5E's 'Form Basics' grant a lightsaber form (a maneuver kit from its Chapter 6) that Bad Eden has no system for. Each Form's Basics feature is rewritten as a flat, on-brand perk of similar weight: Threshing Basics = proficiency-bonus temp HP when you roll initiative, once per short rest; Duelist's Basics = +1 to attack rolls with a one-handed blade when the other hand is empty; Shelter Basics = +1 AC while wielding a melee weapon and not dual-wielding; Leaping Basics = +10 ft walking speed (as an AE). Flag for Dave.",
+    "Shelter Form leaned on the Saber Reflect power (not in the kept 109): the Storm Door stance now carries the deflect itself (reaction vs a ranged weapon attack that hits: reduce by 1d10 + Dex mod + Warden level; at 0 you can throw the shot back at a creature within 60 ft with a ranged weapon attack using your casting ability), and Hold and Step / Master of the Shelter refer to 'when you Deflect this way'. Brace (Saber Ward) IS kept and is linked.",
+    "Leaping Form leaned on Force Jump at 1st level (not in the kept 109): the Grasshopper stance now gives a built-in leap as the bonus action (jump up to your walking speed, no opportunity attacks, advantage on the first attack against each creature within 5 ft of the landing). Spring (the at-will) is named as the cousin, not required.",
+    "The Thresher's push uses DC 8 + prof + Str or Dex (as the source); modelled as a Str-save utility with the DC in text (the activity's DC is the power save DC, which may differ — GM reads the text).",
+    "The four 20th-level masteries each raise two ability scores by 2 (one fixed, one Wis-or-Cha) with maxes +2: modelled as transfer Active Effects for the fixed score only (Str/Dex→Threshing is a choice, so Threshing gets neither as AE); the Wis-or-Cha half and the Threshing Str-or-Dex half are text — the GM applies them. Each mastery's 1-minute burst is the feature's utility activity (1/long rest).",
+    "'kinetic, energy, ion damage from weapons' → bludgeoning, piercing, slashing, fire, and lightning damage from weapons; 'ignore resistance to kinetic and energy' → ignore resistance to bludgeoning, piercing, slashing, and fire.",
+    "Current Reflexes (second reaction each round) is text only — no dnd5e automation for extra reactions."
+  ],
+
+  "subclasses": [
+    {
+      "slug": "threshing-form", "identifier": "threshing-form", "name": "Threshing Form", "classIdentifier": "warden",
+      "img": "icons/skills/melee/strike-slashes-orange.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>The lodges call it the Threshing Form because that's what it looks like: a flail going round, nothing in the arc left standing. Wardens who keep this Form swing wide and wild on purpose, and every seemingly careless cut is there to knock somebody off their feet, out of their stance, or out of their weapon. It isn't pretty. It clears the floor.</p>",
+      "features": [
+        { "level": 3, "slug": "threshing-basics" }, { "level": 3, "slug": "threshing-the-thresher" }, { "level": 3, "slug": "threshing-disarming-cut" },
+        { "level": 7, "slug": "threshing-unpredictable-motion" }, { "level": 15, "slug": "threshing-sweep" }, { "level": 20, "slug": "threshing-master" }
+      ]
+    },
+    {
+      "slug": "duelists-form", "identifier": "duelists-form", "name": "Duelist's Form", "classIdentifier": "warden",
+      "img": "icons/skills/melee/maneuver-sword-katana-yellow.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>The Duelist's Form wastes nothing. Jabs over chops, parries over blocks, a light cut where somebody else would swing from the hip. Wardens who keep this Form fight one person at a time and make that person's day very long: they read a blade, they time it, and they put theirs where the other one was about to be.</p>",
+      "features": [
+        { "level": 3, "slug": "duelists-basics" }, { "level": 3, "slug": "duelists-measured-guard" }, { "level": 3, "slug": "duelists-riposte" },
+        { "level": 7, "slug": "duelists-current-reflexes" }, { "level": 15, "slug": "duelists-glancing-blow" }, { "level": 20, "slug": "duelists-master" }
+      ]
+    },
+    {
+      "slug": "shelter-form", "identifier": "shelter-form", "name": "Shelter Form", "classIdentifier": "warden",
+      "img": "icons/skills/melee/shield-block-gray-orange.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>The Shelter Form is tight bladework and small, boring steps, and it is the reason some people are alive. Wardens who keep this Form cover the body first and worry about the enemy second, moving in short sweeps that leave nothing open, least of all to a gun. Stand behind one in a firefight. You'll see.</p>",
+      "features": [
+        { "level": 3, "slug": "shelter-heavy-shelter" }, { "level": 3, "slug": "shelter-basics" }, { "level": 3, "slug": "shelter-storm-door" }, { "level": 3, "slug": "shelter-hold-and-step" },
+        { "level": 7, "slug": "shelter-circle-of-shelter" }, { "level": 15, "slug": "shelter-stand-against-the-tide" }, { "level": 20, "slug": "shelter-master" }
+      ],
+      "traits": [ { "tag": "heavy", "level": 3, "title": "Heavy Shelter", "grants": ["armor:hvy"] } ]
+    },
+    {
+      "slug": "leaping-form", "identifier": "leaping-form", "name": "Leaping Form", "classIdentifier": "warden",
+      "img": "icons/skills/movement/feet-winged-boots-blue.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>The Leaping Form is speed, height, and nerve. Wardens who keep this Form don't stay where you put them; they come over the truck, off the wall, out of the hayloft, and the fight is wherever they land. It's loud, it's exhausting, and the people on the other end of it rarely get a clean look before it's over.</p>",
+      "features": [
+        { "level": 3, "slug": "leaping-basics" }, { "level": 3, "slug": "leaping-grasshopper" }, { "level": 3, "slug": "leaping-backward-spring" },
+        { "level": 7, "slug": "leaping-up-the-wall" }, { "level": 15, "slug": "leaping-whirlwind-attack" }, { "level": 20, "slug": "leaping-master" }
+      ]
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "threshing-basics", "name": "Threshing Basics", "level": 3, "requirements": "Flow Wolf: Warden (Threshing Form) 3",
+      "folder": "Threshing Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/strike-slashes-orange.webp",
+      "activation": "special", "uses": { "max": "1", "per": "sr" }, "activity": "heal", "heal": { "formula": "@prof", "type": "temphp" },
+      "description": "<p><em>Threshing Form, 3rd level</em></p><p>You learn the Form's first lesson: get the arc going before anyone's in it. When you roll initiative, you can gain temporary hit points equal to your proficiency bonus. Once you've done this, you can't do it again until you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "threshing-the-thresher", "name": "The Thresher", "level": 3, "requirements": "Flow Wolf: Warden (Threshing Form) 3",
+      "folder": "Threshing Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/strike-flail-destructive-yellow.webp",
+      "activation": "bonus", "uses": { "max": "1", "per": "lr" }, "range": 5, "target": { "type": "creature", "count": 1 }, "duration": { "value": "1", "units": "minute" }, "activity": "save", "save": { "ability": "str", "onSave": "none" },
+      "description": "<p><em>Threshing Form, 3rd level</em></p><p>As a bonus action, you set the arc going and keep it going for 1 minute. While it's going, the first time each turn you hit a creature with a melee weapon attack, it has disadvantage on the next melee attack roll it makes against you before the start of your next turn. If that creature is within 5 feet of you, it must also make a Strength saving throw (DC = 8 + your proficiency bonus + your Strength or Dexterity modifier). On a failed save it's shoved back 5 feet, and you can step straight into the space it left without provoking opportunity attacks.</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "threshing-disarming-cut", "name": "Disarming Cut", "level": 3, "requirements": "Flow Wolf: Warden (Threshing Form) 3",
+      "folder": "Threshing Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/blade-tip-orange.webp",
+      "activation": "special", "range": 5, "target": { "type": "creature", "count": 1 }, "activity": "save", "save": { "ability": "str", "onSave": "none" },
+      "description": "<p><em>Threshing Form, 3rd level — Channel the Current</em></p><p>The arc takes the weapon with it. When you hit a creature with a melee weapon attack, you can spend a use of Channel the Current (no action required) to knock one thing it's holding, your choice, out of its hands. The creature must make a Strength saving throw against your power save DC. On a failed save it drops the object. If you're within 5 feet of it with a free hand, you can catch what it dropped; otherwise it lands at the creature's feet.</p>"
+    },
+    {
+      "slug": "threshing-unpredictable-motion", "name": "Unpredictable Motion", "level": 7, "requirements": "Flow Wolf: Warden (Threshing Form) 7",
+      "folder": "Threshing Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/movement/figure-running-gray.webp",
+      "description": "<p><em>Threshing Form, 7th level</em></p><p>Nobody can tell where you're going, including you. While you're wielding an arc-blade or any melee weapon, opportunity attacks against you are made with disadvantage.</p>"
+    },
+    {
+      "slug": "threshing-sweep", "name": "Threshing Sweep", "level": 15, "requirements": "Flow Wolf: Warden (Threshing Form) 15",
+      "folder": "Threshing Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/strike-slashes-orange.webp",
+      "activation": "reaction", "condition": "a creature moves to within 5 feet of you", "range": 5, "target": { "type": "creature", "count": 1 }, "activity": "damage", "damage": [{ "formula": "max(@abilities.str.mod, @abilities.dex.mod)", "types": [] }],
+      "description": "<p><em>Threshing Form, 15th level</em></p><p>Step into the arc and the arc answers. When a creature moves to within 5 feet of you, you can use your reaction to make a melee weapon attack against it. If the attack hits, you can carry the swing on into another creature within 5 feet of the first and within your reach: if the original attack roll would hit the second creature, it takes damage equal to your Strength or Dexterity modifier (your choice), of the same type as the first attack.</p>"
+    },
+    {
+      "slug": "threshing-master", "name": "Master of the Threshing Floor", "level": 20, "requirements": "Flow Wolf: Warden (Threshing Form) 20",
+      "folder": "Threshing Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>Threshing Form, 20th level</em></p><p>Nobody determined enough to close with you has figured out where you'll be when they get there. Your Strength or Dexterity score and your Wisdom or Charisma score (your choice of each) increase by 2, and your maximum for those scores increases by 2.</p><p>Also, you can use your action to take the floor for 1 minute. While you hold it:</p><ul><li>You have resistance to bludgeoning, piercing, slashing, fire, and lightning damage from weapons.</li><li>Attack rolls against you can't have advantage.</li><li>When more than one creature is within 5 feet of you, you have a bonus to AC equal to the number of creatures within 5 feet of you, up to your Wisdom or Charisma modifier (your choice, minimum of one).</li><li>When you use Threshing Sweep, you have advantage on the attack roll, and the carried-on damage lands on every creature within 5 feet of you.</li></ul><p>It ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+
+    {
+      "slug": "duelists-basics", "name": "Duelist's Basics", "level": 3, "requirements": "Flow Wolf: Warden (Duelist's Form) 3",
+      "folder": "Duelist's Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/maneuver-sword-katana-yellow.webp",
+      "description": "<p><em>Duelist's Form, 3rd level</em></p><p>The Form's first lesson is the one everybody skips: one blade, one hand, nothing in the other. While you're wielding a melee weapon in one hand and nothing in the other, you have a +1 bonus to attack rolls with that weapon.</p>"
+    },
+    {
+      "slug": "duelists-measured-guard", "name": "The Measured Guard", "level": 3, "requirements": "Flow Wolf: Warden (Duelist's Form) 3",
+      "folder": "Duelist's Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "activation": "bonus", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>Duelist's Form, 3rd level</em></p><p>As a bonus action, you settle into the guard and stay there for 1 minute. While you hold it, you add your Wisdom or Charisma modifier (your choice) to the first melee weapon attack roll and the first melee weapon damage roll you make each turn.</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "duelists-riposte", "name": "Duelist's Riposte", "level": 3, "requirements": "Flow Wolf: Warden (Duelist's Form) 3",
+      "folder": "Duelist's Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/strike-sword-dagger-runes-red.webp",
+      "activation": "reaction", "condition": "another creature damages you with a melee attack", "activity": "utility", "roll": "1d10 + @abilities.dex.mod + @classes.warden.levels",
+      "description": "<p><em>Duelist's Form, 3rd level — Channel the Current</em></p><p>Their blade meets yours, and yours was ready. When another creature damages you with a melee attack, you can spend a use of Channel the Current and use your reaction to turn it. The damage you take from the attack is reduced by 1d10 + your Dexterity modifier + your Warden level.</p><p>If that brings the damage to 0, you can make a single melee weapon attack against the creature as part of the same reaction.</p>"
+    },
+    {
+      "slug": "duelists-current-reflexes", "name": "Current Reflexes", "level": 7, "requirements": "Flow Wolf: Warden (Duelist's Form) 7",
+      "folder": "Duelist's Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/time/arrows-circling-green.webp",
+      "description": "<p><em>Duelist's Form, 7th level</em></p><p>The current moves faster than the eye, and so do you. You can take a second reaction each round.</p>"
+    },
+    {
+      "slug": "duelists-glancing-blow", "name": "Glancing Blow", "level": 15, "requirements": "Flow Wolf: Warden (Duelist's Form) 15",
+      "folder": "Duelist's Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/shield-damaged-broken-brown.webp",
+      "activation": "reaction", "condition": "an attacker you can see hits you with an attack",
+      "description": "<p><em>Duelist's Form, 15th level</em></p><p>It lands. It doesn't land well. When an attacker you can see hits you with an attack, you can use your reaction to halve the attack's damage against you.</p>"
+    },
+    {
+      "slug": "duelists-master", "name": "Master of the Duel", "level": 20, "requirements": "Flow Wolf: Warden (Duelist's Form) 20",
+      "folder": "Duelist's Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>Duelist's Form, 20th level</em></p><p>There is nobody left who can fight you one-to-one and enjoy it. Your Dexterity score and your Wisdom or Charisma score (your choice) increase by 2, and your maximum for those scores increases by 2.</p><p>Also, you can use your action to settle the matter for 1 minute. While you do:</p><ul><li>You have resistance to bludgeoning, piercing, slashing, and fire damage, and you ignore resistance to those damage types.</li><li>All melee attacks against you have disadvantage.</li><li>Your melee weapon attacks deal one extra damage die.</li></ul><p>It ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>",
+      "effects": [
+        { "_id": "be5eDuelMaster00", "name": "Master of the Duel", "img": "icons/magic/light/explosion-star-glow-silhouette.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.abilities.dex.max", "mode": 2, "value": "2", "priority": 10 },
+            { "key": "system.abilities.dex.value", "mode": 2, "value": "2", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+
+    {
+      "slug": "shelter-heavy-shelter", "name": "Heavy Shelter", "level": 3, "requirements": "Flow Wolf: Warden (Shelter Form) 3",
+      "folder": "Shelter Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/shield-block-gray-orange.webp",
+      "description": "<p><em>Shelter Form, 3rd level</em></p><p>If it's heavy, it's between you and them. You gain proficiency with heavy armor.</p>"
+    },
+    {
+      "slug": "shelter-basics", "name": "Shelter Basics", "level": 3, "requirements": "Flow Wolf: Warden (Shelter Form) 3",
+      "folder": "Shelter Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/sword-shield-stylized-white.webp",
+      "description": "<p><em>Shelter Form, 3rd level</em></p><p>The Form's first lesson: the blade is a wall before it's anything else. While you're wielding a melee weapon and aren't attacking with two weapons, you have a +1 bonus to AC.</p>"
+    },
+    {
+      "slug": "shelter-storm-door", "name": "The Storm Door", "level": 3, "requirements": "Flow Wolf: Warden (Shelter Form) 3",
+      "folder": "Shelter Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/defensive/shield-barrier-blue.webp",
+      "activation": "bonus", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "minute" }, "activity": "utility", "roll": "1d10 + @abilities.dex.mod + @classes.warden.levels",
+      "description": "<p><em>Shelter Form, 3rd level</em></p><p>As a bonus action, you shut the door and hold it for 1 minute. As part of that bonus action, and as a bonus action on each of your turns while it lasts, you can cast @UUID[{{uuid:powers:brace}}]{Brace}. While the stance lasts you also have a number of special reactions equal to your proficiency bonus, which you can use only to <strong>Deflect</strong>: when a ranged weapon attack hits you, reduce the damage by 1d10 + your Dexterity modifier + your Warden level. If that brings the damage to 0, you can send the shot back as part of the same reaction, making a ranged attack with your casting ability against a creature you can see within 60 feet; on a hit it takes the damage you deflected.</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "shelter-hold-and-step", "name": "Hold and Step", "level": 3, "requirements": "Flow Wolf: Warden (Shelter Form) 3",
+      "folder": "Shelter Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/movement/figure-running-gray.webp",
+      "activation": "special",
+      "description": "<p><em>Shelter Form, 3rd level — Channel the Current</em></p><p>The door moves with you. When you Deflect a ranged weapon attack (with The Storm Door or any other feature that lets you), you can spend a use of Channel the Current to move up to 10 feet as part of the same reaction. The movement doesn't provoke opportunity attacks.</p>"
+    },
+    {
+      "slug": "shelter-circle-of-shelter", "name": "Circle of Shelter", "level": 7, "requirements": "Flow Wolf: Warden (Shelter Form) 7",
+      "folder": "Shelter Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "activation": "reaction", "condition": "you or a creature you can see within 5 feet of you is hit by an attack", "range": 5, "target": { "type": "creature", "count": 1 },
+      "uses": { "max": "3 + floor((@classes.warden.levels - 5) / 4)", "per": "lr" }, "activity": "utility", "roll": "1d8",
+      "description": "<p><em>Shelter Form, 7th level (improves at 9th, 13th, and 17th)</em></p><p>Nobody inside your reach gets hit clean. When you or a creature you can see within 5 feet of you is hit by an attack, and you're wielding a melee weapon or a shield, you can use your reaction to cover the target: roll 1d8 and add it to the target's AC against that attack. If the attack still hits, the target has resistance to its damage.</p><p>You can use this feature three times. You gain one more use at 9th, 13th, and 17th level, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "shelter-stand-against-the-tide", "name": "Stand Against the Tide", "level": 15, "requirements": "Flow Wolf: Warden (Shelter Form) 15",
+      "folder": "Shelter Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/water/barrier-ice-crystal-wall-jagged-blue.webp",
+      "activation": "reaction", "condition": "a hostile creature misses you with a melee attack",
+      "description": "<p><em>Shelter Form, 15th level</em></p><p>They swung, they missed, and you decide where it goes. When a hostile creature misses you with a melee attack, you can use your reaction to make it repeat the same attack against another creature of your choice, other than itself.</p>"
+    },
+    {
+      "slug": "shelter-master", "name": "Master of the Shelter", "level": 20, "requirements": "Flow Wolf: Warden (Shelter Form) 20",
+      "folder": "Shelter Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "uses": { "max": "1", "per": "lr" }, "range": 30, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>Shelter Form, 20th level</em></p><p>People fight better for knowing you're standing there. Your Constitution score and your Wisdom or Charisma score (your choice) increase by 2, and your maximum for those scores increases by 2.</p><p>Also, you can use your action to become the shelter for 1 minute. While you are:</p><ul><li>You have resistance to bludgeoning, piercing, and slashing damage from unenhanced weapons, and to fire damage from them.</li><li>When you Deflect a ranged weapon attack, you can make a single melee attack against an enemy within 5 feet of you as part of the same reaction.</li><li>You have advantage on Dexterity saving throws, and so do your allies within 30 feet of you.</li></ul><p>It ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>",
+      "effects": [
+        { "_id": "be5eShelterMast0", "name": "Master of the Shelter", "img": "icons/magic/light/explosion-star-glow-silhouette.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.abilities.con.max", "mode": 2, "value": "2", "priority": 10 },
+            { "key": "system.abilities.con.value", "mode": 2, "value": "2", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+
+    {
+      "slug": "leaping-basics", "name": "Leaping Basics", "level": 3, "requirements": "Flow Wolf: Warden (Leaping Form) 3",
+      "folder": "Leaping Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/movement/feet-winged-boots-blue.webp",
+      "description": "<p><em>Leaping Form, 3rd level</em></p><p>The Form's first lesson is that standing still is a choice, and a bad one. Your walking speed increases by 10 feet.</p>",
+      "effects": [
+        { "_id": "be5eLeapBasics00", "name": "Leaping Basics", "img": "icons/skills/movement/feet-winged-boots-blue.webp", "transfer": true, "disabled": false,
+          "changes": [{ "key": "system.attributes.movement.walk", "mode": 2, "value": "10", "priority": 20 }],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+    {
+      "slug": "leaping-grasshopper", "name": "The Grasshopper", "level": 3, "requirements": "Flow Wolf: Warden (Leaping Form) 3",
+      "folder": "Leaping Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/movement/arrow-upward-yellow.webp",
+      "activation": "bonus", "uses": { "max": "1", "per": "lr" }, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>Leaping Form, 3rd level</em></p><p>As a bonus action, you get off the ground and stay off it for 1 minute. As part of that bonus action, and as a bonus action on each of your turns while it lasts, you can leap up to your walking speed in any direction, no running start, without provoking opportunity attacks. When you land, you have advantage on the first attack roll you make against each creature within 5 feet of where you came down. (The at-will @UUID[{{uuid:powers:spring}}]{Spring} is this stance's smaller cousin.)</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "leaping-backward-spring", "name": "Backward Spring", "level": 3, "requirements": "Flow Wolf: Warden (Leaping Form) 3",
+      "folder": "Leaping Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/movement/figure-running-gray.webp",
+      "activation": "reaction", "condition": "a creature makes a melee attack roll against you",
+      "description": "<p><em>Leaping Form, 3rd level — Channel the Current</em></p><p>You weren't there. When a creature makes a melee attack roll against you, you can spend a use of Channel the Current and your reaction to jump 10 feet in a direction of your choice, giving the attack disadvantage. The movement doesn't provoke opportunity attacks. You can wait until after the attack roll is made, but before the GM says whether it hits.</p>"
+    },
+    {
+      "slug": "leaping-up-the-wall", "name": "Up the Wall", "level": 7, "requirements": "Flow Wolf: Warden (Leaping Form) 7",
+      "folder": "Leaping Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/control/buff-flight-wings-runes-blue.webp",
+      "description": "<p><em>Leaping Form, 7th level</em></p><p>Walls are a direction. You can move along vertical surfaces on your turn without falling during the move; if you end your turn in the air, you fall. You also take no damage from a fall of a distance no greater than your walking speed.</p>"
+    },
+    {
+      "slug": "leaping-whirlwind-attack", "name": "Whirlwind Attack", "level": 15, "requirements": "Flow Wolf: Warden (Leaping Form) 15",
+      "folder": "Leaping Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/blade-tips-triple-steel.webp",
+      "activation": "action", "range": 5,
+      "description": "<p><em>Leaping Form, 15th level</em></p><p>Everything inside the circle gets a turn. You can use your action to make a melee attack against any number of creatures within 5 feet of you, with a separate attack roll for each.</p>"
+    },
+    {
+      "slug": "leaping-master", "name": "Master of the Leap", "level": 20, "requirements": "Flow Wolf: Warden (Leaping Form) 20",
+      "folder": "Leaping Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "uses": { "max": "1", "per": "lr" }, "range": 30, "duration": { "value": "1", "units": "minute" },
+      "description": "<p><em>Leaping Form, 20th level</em></p><p>On a battlefield you're a blur with an edge on it. Your Dexterity score and your Wisdom or Charisma score (your choice) increase by 2, and your maximum for those scores increases by 2.</p><p>Also, you can use your action to cut loose for 1 minute. While you do:</p><ul><li>You have resistance to bludgeoning, piercing, slashing, fire, and lightning damage from weapons.</li><li>When an ally within 30 feet of you takes the Attack action, they can make one additional attack as part of it.</li><li>When you hit a creature with a weapon attack, you can move up to 10 feet without provoking opportunity attacks.</li></ul><p>It ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>",
+      "effects": [
+        { "_id": "be5eLeapMaster00", "name": "Master of the Leap", "img": "icons/magic/light/explosion-star-glow-silhouette.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.abilities.dex.max", "mode": 2, "value": "2", "priority": 10 },
+            { "key": "system.abilities.dex.value", "mode": 2, "value": "2", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    }
+  ]
+}

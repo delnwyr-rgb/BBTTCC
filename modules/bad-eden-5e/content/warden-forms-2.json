@@ -1,0 +1,289 @@
+{
+  "_about": "Flow Wolf: Warden — Forms batch 2: Riposte Form (SW5E Shien/Djem So), Balanced Form (Niman), Ferocious Form (Juyo/Vaapad), Twin-Blade Form (Jar'Kai). Mechanics carried over; every line of text is Bad Eden's own. SW5E's lightsaber-form (maneuver) system is not ported: each Form's 'Form Basics' is a flat stand-in. Built by tools/build-packs.mjs.",
+  "_renames": [
+    { "sw5e": "Shien/Djem So Form", "new": "Riposte Form" },
+    { "sw5e": "Bonus Proficiencies (Shien/Djem So)", "new": "Heavy Plate" },
+    { "sw5e": "Form Basics (Shien/Djem So)", "new": "Riposte Basics" },
+    { "sw5e": "The Way of the Krayt Dragon", "new": "Hammer Stance" },
+    { "sw5e": "Blade Barrier", "new": "Wall of Edges" },
+    { "sw5e": "Falling Avalanche", "new": "Avalanche" },
+    { "sw5e": "Aggressive Negotiations", "new": "Talking Softly" },
+    { "sw5e": "Precise Reflection", "new": "Sharp Return" },
+    { "sw5e": "Master of Perseverance", "new": "Nothing Moves You" },
+    { "sw5e": "Niman Form", "new": "Balanced Form" },
+    { "sw5e": "Form Basics (Niman)", "new": "Balance Basics" },
+    { "sw5e": "The Way of the Rancor", "new": "Even Stance" },
+    { "sw5e": "Enlightenment", "new": "Refill (Enlightenment is a Bad Eden ladder; kept the name clear)" },
+    { "sw5e": "Master of Moderation", "new": "Perfect Measure" },
+    { "sw5e": "Juyo/Vaapad Form", "new": "Ferocious Form" },
+    { "sw5e": "Bonus Proficiencies (Juyo/Vaapad)", "new": "Heavy Plate" },
+    { "sw5e": "Form Basics (Juyo/Vaapad)", "new": "Ferocity Basics" },
+    { "sw5e": "The Way of the Vornskr", "new": "Prey Stance" },
+    { "sw5e": "Master of Ferocity", "new": "All Teeth" },
+    { "sw5e": "Jar'Kai Form", "new": "Twin-Blade Form" },
+    { "sw5e": "Form Basics (Jar'Kai)", "new": "Twin-Blade Basics" },
+    { "sw5e": "The Way of the Acklay", "new": "Scissor Stance" },
+    { "sw5e": "Master of Domination", "new": "Nobody Leaves" }
+  ],
+  "_powerRefs": [],
+  "_unsure": [
+    "Form Basics: SW5E grants a lightsaber form from its maneuver system, which Bad Eden does not have. Each Form's Basics is a flat stand-in of modest value (Riposte: advantage after a miss; Balanced: weapon as focus + advantage on concentration saves; Ferocious: 10 ft free move on a kill; Twin-Blade: dual-wield without the light property + draw two).",
+    "Riposte and Ferocious Forms keep SW5E's two-branch structure (Shien/Djem So, Juyo/Vaapad): each branching feature presents both options and says to pick one; the same side each time is the intent but not enforced.",
+    "Sharp Return (Precise Reflection) and Assertive Defense keyed on the SW5E 'saber reflect' power, which is not in the Flow keep list; both now key on 'a power or feature that turns a weapon attack or shot back' (Brace / Turn Aside style effects).",
+    "Brutal Strikes' 'minimum roll threshold' = treat any 1 on a Current Strikes die as a 2.",
+    "'kinetic and energy damage from unenhanced weapons' = bludgeoning, piercing, slashing, fire, and lightning damage from unenhanced weapons; Nobody Leaves adds ion → lightning (already covered).",
+    "Level-20 ability increases are Active Effects on the fixed scores (Riposte Str/Con, Ferocious Str/Dex, Twin-Blade Str/Dex); Perfect Measure's Dex is an AE and the Wis-or-Cha +2 is text only (player choice).",
+    "Heavy Plate (heavy armor proficiency) is wired as a subclass trait grant (armor:hvy) on Riposte and Ferocious.",
+    "Reliable Vigor's uses are a formula (3, +1 at 9/13/17); Their Power, My Strength likewise (5, +1 at 17).",
+    "Rising Whirlwind: save activity carries the Str/Dex modifier bonus as its damage part; the base weapon damage is rolled from the weapon.",
+    "The level-20 'stance' features are the item's activity (action, 1 minute, 1/long rest); their reaction riders are text."
+  ],
+
+  "subclasses": [
+    {
+      "slug": "riposte-form", "identifier": "riposte-form", "name": "Riposte Form", "classIdentifier": "warden",
+      "img": "icons/skills/melee/shield-block-gray-orange.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>Some Wardens wait for the opening. Riposte Form makes one. It puts the current into the shoulders and the hips and drives the weapon through whatever the other fellow was planning, and when the other fellow swings back, that's an opening too. Wardens of this Form come in two kinds, the ones who turn a blow and the ones who break through it, and the lodge teaches both under one roof.</p>",
+      "traits": [{ "tag": "heavy", "level": 3, "title": "Heavy Plate", "grants": ["armor:hvy"] }],
+      "features": [
+        { "level": 3, "slug": "riposte-heavy-plate" },
+        { "level": 3, "slug": "riposte-basics" },
+        { "level": 3, "slug": "riposte-hammer-stance" },
+        { "level": 3, "slug": "riposte-channel" },
+        { "level": 7, "slug": "riposte-determination" },
+        { "level": 15, "slug": "riposte-presence" },
+        { "level": 20, "slug": "riposte-nothing-moves-you" }
+      ]
+    },
+    {
+      "slug": "balanced-form", "identifier": "balanced-form", "name": "Balanced Form", "classIdentifier": "warden",
+      "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>A blade in one hand and the current in the other, and neither one favored. Balanced Form weaves casting into the swing: a shove of Flow to tip somebody off their feet, a cut while they're finding them again. It's the Form for Wardens who never decided whether they were fighters or casters and stopped seeing why they should.</p>",
+      "features": [
+        { "level": 3, "slug": "balanced-basics" },
+        { "level": 3, "slug": "balanced-even-stance" },
+        { "level": 3, "slug": "balanced-channel" },
+        { "level": 7, "slug": "balanced-refill" },
+        { "level": 15, "slug": "balanced-redirect" },
+        { "level": 20, "slug": "balanced-perfect-measure" }
+      ]
+    },
+    {
+      "slug": "ferocious-form", "identifier": "ferocious-form", "name": "Ferocious Form", "classIdentifier": "warden",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>Ferocious Form doesn't pretend the fight isn't fun. It takes everything the Warden feels, the fear, the anger, the plain joy of winning, and puts it through the blade in big, heavy sweeps. It runs downstream, toward the Qliphoth, and the lodge watches Wardens of this Form closely, not because they're bad but because the current they're standing in is strong. There are two ways to walk it: the hunter's way, which picks a target and doesn't let go, and the storm's way, which meets the enemy's power with its own.</p>",
+      "traits": [{ "tag": "heavy", "level": 3, "title": "Heavy Plate", "grants": ["armor:hvy"] }],
+      "features": [
+        { "level": 3, "slug": "ferocious-heavy-plate" },
+        { "level": 3, "slug": "ferocious-basics" },
+        { "level": 3, "slug": "ferocious-prey-stance" },
+        { "level": 3, "slug": "ferocious-channel" },
+        { "level": 7, "slug": "ferocious-fury" },
+        { "level": 15, "slug": "ferocious-vengeance" },
+        { "level": 20, "slug": "ferocious-all-teeth" }
+      ]
+    },
+    {
+      "slug": "twin-blade-form", "identifier": "twin-blade-form", "name": "Twin-Blade Form", "classIdentifier": "warden",
+      "img": "icons/weapons/swords/sword-broad-crystal-paired.webp",
+      "description": "<p><em>Form of the Flow Wolf: Warden</em></p><p>One weapon asks a question. Two don't wait for the answer. Twin-Blade Form puts a blade in each hand and comes at the enemy from two angles at once, and Wardens of this Form hold that the second blade isn't extra: it's the one that was missing all along.</p>",
+      "features": [
+        { "level": 3, "slug": "twin-blade-basics" },
+        { "level": 3, "slug": "twin-blade-scissor-stance" },
+        { "level": 3, "slug": "twin-blade-channel" },
+        { "level": 7, "slug": "twin-blade-eye-of-the-storm" },
+        { "level": 15, "slug": "twin-blade-rising-whirlwind" },
+        { "level": 20, "slug": "twin-blade-nobody-leaves" }
+      ]
+    }
+  ],
+
+  "features": [
+    {
+      "slug": "riposte-heavy-plate", "name": "Heavy Plate", "level": 3, "requirements": "Flow Wolf: Warden (Riposte Form) 3",
+      "folder": "Riposte Form", "folderParent": "Flow Wolf: Warden", "img": "icons/equipment/chest/breastplate-banded-steel-grey.webp",
+      "description": "<p><em>Riposte Form, 3rd level</em></p><p>You can carry the weight. You gain proficiency with heavy armor.</p>"
+    },
+    {
+      "slug": "riposte-basics", "name": "Riposte Basics", "level": 3, "requirements": "Flow Wolf: Warden (Riposte Form) 3",
+      "folder": "Riposte Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/shield-block-gray-orange.webp",
+      "description": "<p><em>Riposte Form, 3rd level</em></p><p>Every miss is a gift. Once per turn, when a creature misses you with a melee attack, you have advantage on the next melee weapon attack roll you make against that creature before the end of your next turn.</p>"
+    },
+    {
+      "slug": "riposte-hammer-stance", "name": "Hammer Stance", "level": 3, "requirements": "Flow Wolf: Warden (Riposte Form) 3",
+      "folder": "Riposte Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/control/buff-strength-muscle-damage-red.webp",
+      "activation": "bonus", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "activity": "damage", "damage": [{ "formula": "@abilities.str.mod", "types": [] }],
+      "description": "<p><em>Riposte Form, 3rd level</em></p><p>You set yourself like something that means to come down. As a bonus action, you can take the Hammer Stance for 1 minute. While you're in it, the first time each turn you hit with a melee weapon attack using Strength, you can deal extra damage equal to your Strength modifier. If another creature is within 5 feet of the target and within your reach, you can try to put that extra damage on it instead: if the original attack roll would have hit the second creature, it takes damage equal to your Strength modifier. The extra damage is the same type as the weapon's.</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "riposte-channel", "name": "Channel the Current: Wall of Edges or Avalanche", "level": 3, "requirements": "Flow Wolf: Warden (Riposte Form) 3",
+      "folder": "Riposte Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/defensive/shield-barrier-deflect-teal.webp",
+      "activation": "special",
+      "description": "<p><em>Riposte Form, 3rd level</em></p><p>Your Form gives you one more way to put the current through your hands. Choose one of the two; the lodge says the choice says something about you.</p><h4>Wall of Edges</h4><p>On your turn, when you deal melee weapon damage that includes your Strength modifier, you can leave your Strength modifier off the damage roll, spend a use of Channel the Current (no action required), and halve your speed. If you do, bludgeoning, piercing, slashing, fire, and lightning damage you take from weapons before the end of your next turn is reduced by your Strength modifier. You can't use this if you've already moved more than half your speed this turn.</p><h4>Avalanche</h4><p>On your turn, you can spend a use of Channel the Current (no action required) and halve your speed to gain advantage on the next ability check or attack roll you make using Strength before the end of your next turn. You can't use this if you've already moved more than half your speed this turn.</p>"
+    },
+    {
+      "slug": "riposte-determination", "name": "Determination", "level": 7, "requirements": "Flow Wolf: Warden (Riposte Form) 7",
+      "folder": "Riposte Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/control/buff-strength-muscle-damage-red.webp",
+      "activation": "special", "uses": { "max": "3 + floor(max(0, @classes.warden.levels - 5) / 4)", "per": "lr" },
+      "description": "<p><em>Riposte Form, 7th level</em></p><p>Choose one of the following. Wardens who chose Wall of Edges usually take Talking Softly; those who chose Avalanche take Reliable Vigor.</p><h4>Talking Softly</h4><p>You gain proficiency in Intimidation or Persuasion. While you're wielding a weapon you're proficient with, you can't have disadvantage on Charisma (Intimidation) or Charisma (Persuasion) checks, and if the other party makes a contested check, they can't have advantage on it.</p><h4>Reliable Vigor</h4><p>If the d20 roll for a Strength check or saving throw comes up lower than your Warden level, you can use your Warden level in its place. You can use this three times, and you gain one more use at 9th, 13th, and 17th level. You regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "riposte-presence", "name": "Presence", "level": 15, "requirements": "Flow Wolf: Warden (Riposte Form) 15",
+      "folder": "Riposte Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "activation": "special", "activity": "damage", "damage": [{ "number": 1, "denomination": 8, "types": [] }],
+      "description": "<p><em>Riposte Form, 15th level</em></p><p>Choose one of the following. Wardens who chose Wall of Edges usually take Sharp Return; those who chose Avalanche take Brutal Strikes.</p><h4>Sharp Return</h4><p>When you hit with an attack you make by turning a weapon attack or shot back at its source (a power or feature that does that), you can spend Flow points to deal extra damage of the weapon's type: 1d8 for each point spent, up to the Current Strikes column of the Warden table.</p><h4>Brutal Strikes</h4><p>The current makes you stronger than you have any right to be. When you roll the dice for Current Strikes or Always Running, treat any 1 as a 2. Also, whenever you spend Flow points on Current Strikes, you gain temporary hit points equal to twice the number of points spent.</p>"
+    },
+    {
+      "slug": "riposte-nothing-moves-you", "name": "Nothing Moves You", "level": 20, "requirements": "Flow Wolf: Warden (Riposte Form) 20",
+      "folder": "Riposte Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Riposte Form, 20th level</em></p><p>You wear down whatever stands in front of you, and nothing wears you. Your Strength and Constitution scores each increase by 2, and your maximum for those scores increases by 2.</p><p>Also, you can use your action to gain the following for 1 minute:</p><ul><li>You have resistance to bludgeoning, piercing, slashing, fire, and lightning damage from unenhanced weapons.</li><li>Once per turn, when you hit with a melee weapon attack using Strength, you can use Current Strikes for one die without spending Flow points, and you gain temporary hit points equal to the extra damage dealt.</li><li>When a creature within 5 feet of you makes an attack roll against you, you can use your reaction to make one weapon attack against it with advantage. If the attack hits, the triggering attack roll has disadvantage.</li></ul><p>The effect ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>",
+      "effects": [
+        { "_id": "be5eRiposteM20Ab", "name": "Nothing Moves You", "img": "icons/magic/light/explosion-star-glow-silhouette.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.abilities.str.max", "mode": 2, "value": "2", "priority": 10 }, { "key": "system.abilities.str.value", "mode": 2, "value": "2", "priority": 20 },
+            { "key": "system.abilities.con.max", "mode": 2, "value": "2", "priority": 10 }, { "key": "system.abilities.con.value", "mode": 2, "value": "2", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+
+    {
+      "slug": "balanced-basics", "name": "Balance Basics", "level": 3, "requirements": "Flow Wolf: Warden (Balanced Form) 3",
+      "folder": "Balanced Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+      "description": "<p><em>Balanced Form, 3rd level</em></p><p>The weapon and the casting are one tool. You can use a melee weapon you're holding as the focus for your Flow powers, and while you're holding one you have advantage on Constitution saving throws to keep concentration on a Flow power.</p>"
+    },
+    {
+      "slug": "balanced-even-stance", "name": "Even Stance", "level": 3, "requirements": "Flow Wolf: Warden (Balanced Form) 3",
+      "folder": "Balanced Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/control/energy-stream-link-white.webp",
+      "activation": "bonus", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Balanced Form, 3rd level</em></p><p>You settle into the middle of the current and let both hands work. As a bonus action, you can take the Even Stance for 1 minute. As part of that bonus action, and as a bonus action on each of your turns while the stance lasts, when you use your action to cast a Flow power you can make one melee weapon attack. Also, for the duration, you can use Wisdom or Charisma in place of Strength or Dexterity for the attack and damage rolls of your melee weapon attacks; use the same ability for both.</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "balanced-channel", "name": "Channel the Current: Telekinetic Slash", "level": 3, "requirements": "Flow Wolf: Warden (Balanced Form) 3",
+      "folder": "Balanced Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/air/wind-swirl-gray-blue.webp",
+      "activation": "special", "activity": "damage", "damage": [{ "number": 1, "denomination": 8, "types": [] }],
+      "description": "<p><em>Balanced Form, 3rd level</em></p><p>Your Form gives you one more way to put the current through your hands.</p><h4>Telekinetic Slash</h4><p>When you deal damage with an at-will Flow power that calls for a power attack roll or a saving throw, you can spend a use of Channel the Current and spend Flow points to deal extra damage of the power's type: 1d8 for each point spent, up to the Current Strikes column of the Warden table.</p>"
+    },
+    {
+      "slug": "balanced-refill", "name": "Refill", "level": 7, "requirements": "Flow Wolf: Warden (Balanced Form) 7",
+      "folder": "Balanced Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/water/orb-water-bubbles.webp",
+      "activation": "special", "uses": { "max": "1", "per": "sr" },
+      "description": "<p><em>Balanced Form, 7th level</em></p><p>The current gives back what it takes. When you drop a hostile creature to 0 hit points with a Flow power, or bring a friendly creature up from 0 hit points with one, you gain temporary Flow points equal to your Wisdom or Charisma modifier (your choice, minimum of one). Once you've done so, you can't do so again until you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "balanced-redirect", "name": "Redirect", "level": 15, "requirements": "Flow Wolf: Warden (Balanced Form) 15",
+      "folder": "Balanced Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/time/arrows-circling-green.webp",
+      "activation": "reaction", "condition": "a weapon attack or Flow power that affects only you calls for an attack roll or a Dexterity save", "range": 30, "target": { "type": "creature", "count": 1 },
+      "activity": "save", "save": { "ability": "dex", "onSave": "none" }, "uses": { "max": "1", "per": "sr" },
+      "description": "<p><em>Balanced Form, 15th level</em></p><p>What was meant for you goes somewhere else. When a weapon attack or Flow power that calls for a Dexterity saving throw or an attack roll would affect only you, you can use your reaction to send it at another target within 30 feet. If it called for a melee or ranged attack, make a melee or ranged power attack against the new target as appropriate. If it called for a Dexterity saving throw, the new target makes a Dexterity saving throw against your power save DC instead.</p><p>Once you've used this feature, you can't use it again until you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "balanced-perfect-measure", "name": "Perfect Measure", "level": 20, "requirements": "Flow Wolf: Warden (Balanced Form) 20",
+      "folder": "Balanced Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Balanced Form, 20th level</em></p><p>Blade and current in exact time. Your Dexterity score increases by 2, and so does your Wisdom or Charisma score (your choice); your maximum for those scores increases by 2.</p><p>Also, you can use your action to gain the following for 1 minute:</p><ul><li>You have resistance to bludgeoning, piercing, slashing, fire, and lightning damage from unenhanced weapons.</li><li>You have advantage on saving throws against Flow powers, and resistance to damage from Flow powers.</li><li>When you use your action to cast an at-will Flow power that targets only one creature, you can target one more creature within 5 feet of the first and within the power's range.</li></ul><p>The effect ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>",
+      "effects": [
+        { "_id": "be5eBalancedM20A", "name": "Perfect Measure", "img": "icons/magic/light/explosion-star-glow-silhouette.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.abilities.dex.max", "mode": 2, "value": "2", "priority": 10 }, { "key": "system.abilities.dex.value", "mode": 2, "value": "2", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+
+    {
+      "slug": "ferocious-heavy-plate", "name": "Heavy Plate", "level": 3, "requirements": "Flow Wolf: Warden (Ferocious Form) 3",
+      "folder": "Ferocious Form", "folderParent": "Flow Wolf: Warden", "img": "icons/equipment/chest/breastplate-banded-steel-grey.webp",
+      "description": "<p><em>Ferocious Form, 3rd level</em></p><p>You can carry the weight. You gain proficiency with heavy armor.</p>"
+    },
+    {
+      "slug": "ferocious-basics", "name": "Ferocity Basics", "level": 3, "requirements": "Flow Wolf: Warden (Ferocious Form) 3",
+      "folder": "Ferocious Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/blood-slash-foam-red.webp",
+      "description": "<p><em>Ferocious Form, 3rd level</em></p><p>You don't stand over what you drop. When you reduce a creature to 0 hit points with a melee weapon attack, you can move up to 10 feet without provoking opportunity attacks.</p>"
+    },
+    {
+      "slug": "ferocious-prey-stance", "name": "Prey Stance", "level": 3, "requirements": "Flow Wolf: Warden (Ferocious Form) 3",
+      "folder": "Ferocious Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "activation": "bonus", "range": 10, "target": { "type": "creature", "count": 1 }, "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Ferocious Form, 3rd level</em></p><p>You pick one, and the rest of the room stops existing. As a bonus action, you can take the Prey Stance and mark one creature you can see within 10 feet of you as your prey for 1 minute. You have advantage on attack rolls against it. If it drops to 0 hit points, you can use a bonus action on a later turn to mark a new creature.</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "ferocious-channel", "name": "Channel the Current: Snap Aggression or Assertive Defense", "level": 3, "requirements": "Flow Wolf: Warden (Ferocious Form) 3",
+      "folder": "Ferocious Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/unholy/orb-glowing-purple.webp",
+      "activation": "special",
+      "description": "<p><em>Ferocious Form, 3rd level</em></p><p>Your Form gives you one more way to put the current through your hands. Choose one of the two.</p><h4>Snap Aggression</h4><p>Nobody gets the drop on you twice. If you're surprised at the start of a fight and aren't incapacitated, you can spend a use of Channel the Current to act normally on your first turn.</p><h4>Assertive Defense</h4><p>What they throw at you, you throw back. When you reduce the damage of a Flow power to 0 with a power or feature that turns an attack back at its source, and you're wielding a melee weapon, you can spend a use of Channel the Current to send the attack at a target within range, whatever its damage type.</p>"
+    },
+    {
+      "slug": "ferocious-fury", "name": "Fury", "level": 7, "requirements": "Flow Wolf: Warden (Ferocious Form) 7",
+      "folder": "Ferocious Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/fire/beam-jet-stream-embers.webp",
+      "activation": "reaction", "condition": "a hostile creature within 30 feet casts a Flow power", "range": 30,
+      "description": "<p><em>Ferocious Form, 7th level</em></p><p>Choose one of the following. Wardens who chose Snap Aggression usually take Relentless; those who chose Assertive Defense take Punishing Charge.</p><h4>Relentless</h4><p>You have advantage on initiative rolls, and your speed increases by 10 feet on your first turn of a fight.</p><h4>Punishing Charge</h4><p>When a hostile creature you can see or hear within 30 feet of you casts a Flow power, you can use your reaction to move up to half your speed. You must end the move closer to that creature than you started. If you end it within 5 feet of the creature and the power called for a ranged attack roll, the creature has disadvantage on that roll.</p>"
+    },
+    {
+      "slug": "ferocious-vengeance", "name": "Vengeance", "level": 15, "requirements": "Flow Wolf: Warden (Ferocious Form) 15",
+      "folder": "Ferocious Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/wounds/injury-pain-body-orange.webp",
+      "activation": "special", "uses": { "max": "5 + floor(max(0, @classes.warden.levels - 15) / 2)", "per": "sr" },
+      "description": "<p><em>Ferocious Form, 15th level</em></p><p>Choose one of the following. Wardens who chose Snap Aggression usually take Devastating Critical; those who chose Assertive Defense take Their Power, My Strength.</p><h4>Devastating Critical</h4><p>When you score a critical hit with a melee weapon attack, add your Warden level to the weapon's damage roll.</p><h4>Their Power, My Strength</h4><p>When a Flow power deals damage to you, you can reduce that damage by your Warden level (no action required). You can do this five times, and you gain one more use at 17th level. You regain all spent uses when you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "ferocious-all-teeth", "name": "All Teeth", "level": 20, "requirements": "Flow Wolf: Warden (Ferocious Form) 20",
+      "folder": "Ferocious Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Ferocious Form, 20th level</em></p><p>There's nothing left in the way between what you feel and what you do. Your Strength and Dexterity scores each increase by 2, and your maximum for those scores increases by 2.</p><p>Also, you can use your action to gain the following for 1 minute:</p><ul><li>You have resistance to all damage.</li><li>When you take the Attack action on your turn, you can make one additional attack as part of it.</li><li>Your critical hit range with weapons increases by 1.</li></ul><p>The effect ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>",
+      "effects": [
+        { "_id": "be5eFerociousM20", "name": "All Teeth", "img": "icons/magic/light/explosion-star-glow-silhouette.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.abilities.str.max", "mode": 2, "value": "2", "priority": 10 }, { "key": "system.abilities.str.value", "mode": 2, "value": "2", "priority": 20 },
+            { "key": "system.abilities.dex.max", "mode": 2, "value": "2", "priority": 10 }, { "key": "system.abilities.dex.value", "mode": 2, "value": "2", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    },
+
+    {
+      "slug": "twin-blade-basics", "name": "Twin-Blade Basics", "level": 3, "requirements": "Flow Wolf: Warden (Twin-Blade Form) 3",
+      "folder": "Twin-Blade Form", "folderParent": "Flow Wolf: Warden", "img": "icons/weapons/swords/sword-broad-crystal-paired.webp",
+      "description": "<p><em>Twin-Blade Form, 3rd level</em></p><p>Two hands, two blades, no rule about it. You can fight with two weapons even when the one-handed melee weapons you're holding aren't light, and you can draw or stow two one-handed weapons when you would normally be able to draw or stow only one.</p>"
+    },
+    {
+      "slug": "twin-blade-scissor-stance", "name": "Scissor Stance", "level": 3, "requirements": "Flow Wolf: Warden (Twin-Blade Form) 3",
+      "folder": "Twin-Blade Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/sword-twirl-orange.webp",
+      "activation": "bonus", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Twin-Blade Form, 3rd level</em></p><p>You open and close like a pair of shears. As a bonus action, you can take the Scissor Stance for 1 minute. While you're in it, you can add half your Strength or Dexterity modifier (your choice, minimum of one) to any melee weapon damage roll that doesn't already include that modifier. Also, when you hit a creature with a melee weapon attack, you can move up to 5 feet without provoking opportunity attacks.</p><p>The stance ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "twin-blade-channel", "name": "Channel the Current: Twin Strike", "level": 3, "requirements": "Flow Wolf: Warden (Twin-Blade Form) 3",
+      "folder": "Twin-Blade Form", "folderParent": "Flow Wolf: Warden", "img": "icons/skills/melee/blade-tips-double-blue.webp",
+      "activation": "special",
+      "description": "<p><em>Twin-Blade Form, 3rd level</em></p><p>Your Form gives you one more way to put the current through your hands.</p><h4>Twin Strike</h4><p>The first blade was the question. Once per turn, when you miss with a melee weapon attack, you can spend a use of Channel the Current to immediately make another melee weapon attack against the same target (no action required).</p>"
+    },
+    {
+      "slug": "twin-blade-eye-of-the-storm", "name": "Eye of the Storm", "level": 7, "requirements": "Flow Wolf: Warden (Twin-Blade Form) 7",
+      "folder": "Twin-Blade Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/air/wind-swirl-gray-blue.webp",
+      "description": "<p><em>Twin-Blade Form, 7th level</em></p><p>A clean hit is its own reward. When you score a critical hit with a melee weapon attack, you regain one spent use of Channel the Current.</p>"
+    },
+    {
+      "slug": "twin-blade-rising-whirlwind", "name": "Rising Whirlwind", "level": 15, "requirements": "Flow Wolf: Warden (Twin-Blade Form) 15",
+      "folder": "Twin-Blade Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/air/wind-swirl-gray-blue.webp",
+      "activation": "action", "target": { "template": { "type": "radius", "size": 5 } }, "uses": { "max": "1", "per": "sr" },
+      "activity": "save", "save": { "ability": "dex", "onSave": "half" }, "damage": [{ "formula": "max(@abilities.str.mod, @abilities.dex.mod, 1)", "types": [] }],
+      "description": "<p><em>Twin-Blade Form, 15th level</em></p><p>You go through them like weather. As an action, you can rush up to 30 feet to an unoccupied space you can see without provoking opportunity attacks. Each creature within 5 feet of your path must make a Dexterity saving throw (DC = 8 + your attack bonus with your weapon). A creature takes your weapon's normal damage on a failed save, or half as much on a success. If you're wielding a separate one-handed melee weapon you're proficient with in each hand, or a weapon with the double property, creatures make the save with disadvantage, and on a failed save they take extra damage equal to your Strength or Dexterity modifier (your choice, minimum of one) if the weapon damage didn't already include it.</p><p>Once you've used this feature, you can't use it again until you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "twin-blade-nobody-leaves", "name": "Nobody Leaves", "level": 20, "requirements": "Flow Wolf: Warden (Twin-Blade Form) 20",
+      "folder": "Twin-Blade Form", "folderParent": "Flow Wolf: Warden", "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+      "activation": "action", "duration": { "value": "1", "units": "minute" }, "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Twin-Blade Form, 20th level</em></p><p>Inside your reach is the worst place to be and the hardest place to leave. Your Strength and Dexterity scores each increase by 2, and your maximum for those scores increases by 2.</p><p>Also, you can use your action to gain the following for 1 minute:</p><ul><li>You have resistance to bludgeoning, piercing, slashing, fire, and lightning damage from weapons.</li><li>When you hit a creature with a melee weapon attack, you have advantage on the next melee weapon attack roll you make against it, and until the end of your next turn that creature provokes an opportunity attack from you when it leaves your reach even if it took the Disengage action.</li><li>Creatures provoke an opportunity attack from you when they enter your reach.</li></ul><p>The effect ends early if you're incapacitated or die. Once you've used this feature, you can't use it again until you finish a long rest.</p>",
+      "effects": [
+        { "_id": "be5eTwinBladeM20", "name": "Nobody Leaves", "img": "icons/magic/light/explosion-star-glow-silhouette.webp", "transfer": true, "disabled": false,
+          "changes": [
+            { "key": "system.abilities.str.max", "mode": 2, "value": "2", "priority": 10 }, { "key": "system.abilities.str.value", "mode": 2, "value": "2", "priority": 20 },
+            { "key": "system.abilities.dex.max", "mode": 2, "value": "2", "priority": 10 }, { "key": "system.abilities.dex.value", "mode": 2, "value": "2", "priority": 20 }
+          ],
+          "duration": {}, "flags": {}, "origin": null, "tint": "#ffffff", "statuses": [], "description": "" }
+      ]
+    }
+  ]
+}
