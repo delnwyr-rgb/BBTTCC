@@ -50,12 +50,16 @@ export function convertText(html) {
   s = s.replace(/\b(\d+) squares?\b/gi, (_, n) => `${Number(n) * 5} feet`);
   s = s.replace(/\bshift (\d+) squares?\b/gi, (_, n) => `move ${Number(n) * 5} feet`);
   for (const [pat, rep] of RUBRIC.vocabulary.replace) {
-    const re = new RegExp(pat, "g");
+    // a lower-case mechanics row also matches its sentence-initial capital ("Kinetic damage", "Reroll the lowest die")
+    const first = pat.match(/^\\b([a-z])/)?.[1];
+    const re = new RegExp(first ? pat.replace(/^\\b[a-z]/, `\\b[${first}${first.toUpperCase()}]`) : pat, "g");
     s = s.replace(re, (...m) => {
-      if (rep.includes("@ABILITY")) return rep.replace("@ABILITY", ABIL_NAME[ABIL[m[1].toLowerCase()]] ?? m[1]);
-      if (rep.includes("@SKILL")) return skillText(m[1]);
-      if (rep.includes("@SQUARES")) return rep.replace("@SQUARES", String(Number(m[1]) * 5));
-      return rep.replace(/\\(\d)/g, (_, i) => m[Number(i)]);
+      const cap = first && /^[A-Z]/.test(m[0]);
+      const fix = out => cap ? out.charAt(0).toUpperCase() + out.slice(1) : out;
+      if (rep.includes("@ABILITY")) return fix(rep.replace("@ABILITY", ABIL_NAME[ABIL[m[1].toLowerCase()]] ?? m[1]));
+      if (rep.includes("@SKILL")) return fix(skillText(m[1]));
+      if (rep.includes("@SQUARES")) return fix(rep.replace("@SQUARES", String(Number(m[1]) * 5)));
+      return fix(rep.replace(/\\(\d)/g, (_, i) => m[Number(i)]));
     });
   }
   return s;
@@ -189,15 +193,170 @@ function laneTechniques() {
   return { src, out, needsAll };
 }
 
+
+/* ── gear lane: weapons, armor, gear, equipment, consumables → dnd5e items ── */
+const WEAPON_TYPE_HINTS = { bludgeoning: /maul|hammer|blunt|bludgeon|sap|subdual|staff|cudgel|spatula|club|mace|foam/i, slashing: /axe|chop|saber|sword|blade|edge|reaver|scythe/i, piercing: /knife|stab|stylus|bolt|crossbow|rifle|pistol|ballistic|slug|spear|pike|dart|driver/i };
+const ENERGY_FLAVOR = { laser: "fire", light: "fire", fire: "fire", thermal: "fire", cold: "cold", ice: "cold", lightning: "lightning", electrical: "lightning", shock: "lightning", resonance: "thunder", sonic: "thunder", quantum: "force", psychic: "psychic" };
+function weaponDamageType(s, tags) {
+  const t = String(s.damage?.type ?? "kinetic"), fl = String(s.damage?.damageFlavor ?? ""), hay = `${tags.join(" ")} ${fl} ${s.identifier ?? ""}`;
+  if (t === "kinetic") { for (const [k, re] of Object.entries(WEAPON_TYPE_HINTS)) if (re.test(hay)) return k; return s.category === "ranged" ? "piercing" : "bludgeoning"; }
+  if (t === "energy" || t === "electrical" || t === "thermal") { for (const [k, v] of Object.entries(ENERGY_FLAVOR)) if (hay.toLowerCase().includes(k)) return v; return t === "thermal" ? "fire" : "lightning"; }
+  if (t === "chemical") return "acid";
+  return t; // poison, psychic, sephirotic, qliphothic
+}
+const DIE_UP = { 4: 6, 6: 8, 8: 10, 10: 12, 12: 12 };
+const rarityFor = (tags, marks, attune) => tags.includes("t1-baseline") ? "" : tags.includes("capstone") || marks >= 2000 ? "legendary" : attune || marks >= 1000 ? "veryRare" : marks >= 300 ? "rare" : marks >= 150 ? "uncommon" : "common";
+const rfiPrice = d => Number(d.flags?.fourththing?.rfi?.item?.price?.marks ?? 0) || 0;
+const baseItem = (d, type, extra = {}) => ({
+  slug: "gear-" + d.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),   // by name: RFI identifiers collide (two "laser" weapons)
+  name: d.name, type, img: d.img && !/fourththing|bbttcc/.test(d.img) ? d.img : extra.img ?? "icons/svg/item-bag.svg",
+  system: { description: { value: "", chat: "" }, identified: true, unidentified: { description: "" }, container: null, quantity: 1, weight: { value: extra.weight ?? 1, units: "lb" }, price: { value: rfiPrice(d), denomination: "gp" }, rarity: "", attunement: "", attuned: false, equipped: false, uses: { max: "", spent: 0, recovery: [] }, properties: [], identifier: d.system?.identifier || undefined },
+  effects: [], flags: {}
+});
+function gearDescription(d, needs = []) {
+  const s = d.system ?? {};
+  const parts = [];
+  // "⚙️ Mechanical Effects …" blocks are RFI engine notes (BloodDebt / FrameDice / Stress ops) — not sheet text in 5E
+  const strip = h => String(h ?? "")
+    .replace(/<!-- BBTTCC:MECHANICS:START -->[\s\S]*?<!-- BBTTCC:MECHANICS:END -->/g, m => { const t = m.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(); needs.push(`RFI engine block dropped: "${t.replace(/^.*?⚙️ Mechanical Effects\s*/, "").slice(0, 110)}"`); return ""; })
+    .replace(/(<hr\s*\/?>\s*)?<p>\s*<strong>\s*⚙️?[^<]*Mechanical Effects[\s\S]*?<\/ul>/g, m => { const t = m.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(); needs.push(`RFI engine block dropped: "${t.replace(/^.*?Mechanical Effects\s*/, "").slice(0, 110)}"`); return ""; });
+  if (s.flavor) parts.push(`<p><em>${s.flavor}</em></p>`);
+  if (s.effect) parts.push(`<p>${s.effect}</p>`);
+  if (s.description?.value) parts.push(strip(s.description.value));
+  return convertText(parts.join("")).replace(/\s+([.,;:])/g, "$1");
+}
+function convertWeapon(d, needs) {
+  const s = d.system, tags = (s.tags ?? []).map(String);
+  const e = baseItem(d, "weapon", { weight: s.category === "ranged" ? 5 : 3, img: "icons/weapons/swords/sword-guard-blue.webp" });
+  const m = String(s.damage?.formula ?? "1d6").replace(/\s/g, "").match(/^(\d+)d(\d+)(?:\+(\d+))?$/);
+  const number = m ? Number(m[1]) : 1, denom = m ? Number(m[2]) : 6, bonus = m?.[3] ? Number(m[3]) : 0;
+  if (!m) needs.push(`damage formula "${s.damage?.formula}" not NdM(+K)`);
+  const dtype = weaponDamageType(s, tags);
+  const attune = tags.includes("attunement") || tags.includes("soulbound");
+  const ranged = s.category === "ranged";
+  const firearm = /pistol|rifle|ballistic|laser|slug|gun/i.test(tags.join(" ") + " " + d.name);
+  const martial = ranged ? (firearm && !tags.includes("pistol") && !tags.includes("sidearm") && !/pistol/i.test(d.name)) : tags.some(t => ["heavy", "two-handed", "reach", "longsword", "maul"].includes(t));
+  const props = new Set();
+  for (const [t, p] of [["two-handed", "two"], ["light", "lgt"], ["heavy", "hvy"], ["thrown", "thr"], ["versatile", "ver"], ["finesse", "fin"], ["reach", "rch"], ["slow-reload", "lod"]]) if (tags.includes(t)) props.add(p);
+  if (firearm) props.add("fir");
+  if (ranged && !firearm) props.add("amm");
+  if (bonus && !tags.includes("t1-baseline")) props.add("mgc");
+  const magical = bonus && !tags.includes("t1-baseline") ? bonus : null;
+  if (bonus && !magical) needs.push(`flat +${bonus} dropped (baseline weapon)`);
+  const reach = !ranged && (tags.includes("reach") ? 10 : 5);
+  if (!ranged && Number(s.range?.short) > 2) needs.push(`melee range ${s.range.short} squares read as reach ${reach} ft`);
+  Object.assign(e.system, {
+    rarity: rarityFor(tags, rfiPrice(d), attune), attunement: attune ? "required" : "",
+    range: ranged ? { value: Number(s.range?.short || 6) * 5, long: Number(s.range?.long || s.range?.short || 6) * 5, units: "ft", reach: null } : { value: null, long: null, units: "ft", reach },
+    damage: { base: { number, denomination: denom, types: [dtype], custom: { enabled: false }, scaling: { number: 1 }, bonus: "" },
+      versatile: props.has("ver") ? { number, denomination: DIE_UP[denom] ?? denom, types: [dtype], bonus: "", custom: { enabled: false, formula: "" }, scaling: { mode: "", number: null, formula: "" } } : { number: null, denomination: null, bonus: "", types: [], custom: { enabled: false, formula: "" }, scaling: { mode: "", number: null, formula: "" } } },
+    armor: { value: null }, hp: { value: null, max: null, dt: null, conditions: "" },
+    type: { value: ranged ? (martial ? "martialR" : "simpleR") : (martial ? "martialM" : "simpleM"), baseItem: "" },
+    magicalBonus: magical, properties: [...props], proficient: null, ammunition: {}, mastery: "",
+    activities: { [sha("act" + e.slug).slice(0, 16).padEnd(16, "0")]: { type: "attack", activation: { type: "action", value: 1, condition: "", override: false }, consumption: { targets: [], scaling: { allowed: false, max: "" }, spellSlot: true }, description: { chatFlavor: "" }, duration: { concentration: false, value: "", units: "inst", special: "", override: false }, effects: [], range: { override: false }, target: { template: { count: "", contiguous: false, type: "", size: "", width: "", height: "", units: "" }, affects: { count: "", type: "", choice: false, special: "" }, prompt: false, override: false }, attack: { ability: "", bonus: "", critical: { threshold: null }, flat: false, type: { value: ranged ? "ranged" : "melee", classification: "weapon" } }, damage: { critical: { bonus: "" }, includeBase: true, parts: [] }, uses: { spent: 0, recovery: [], max: "" }, sort: 0, name: "", img: "", appliedEffects: [] } }
+  });
+  e.system.description.value = gearDescription(d, needs);
+  return e;
+}
+const SHIELD_RE = /shield|buckler|tower|pavise|targe|aegis/i;
+function armorBand(tags, name) {
+  if (tags.includes("shield") || (SHIELD_RE.test(name) && !tags.includes("vestment"))) return "shield";
+  if (tags.includes("medium")) return "medium";
+  if ((tags.includes("heavy") || tags.includes("plate")) && !tags.includes("light")) return "heavy";
+  return "light";
+}
+function resistanceTypes(list) {
+  const out = [];
+  for (const r of list ?? []) {
+    const t = typeof r === "string" ? r : r.flavor && RUBRIC.damage[r.type]?.to?.[r.flavor] ? RUBRIC.damage[r.type].to[r.flavor] : r.type;
+    const to = RUBRIC.damage[t]?.to ?? (t === "energy" ? "lightning" : t);
+    for (const x of [].concat(typeof to === "object" && !Array.isArray(to) ? to.default : to)) if (typeof x === "string" && /^[a-z]+$/.test(x)) out.push(x);
+  }
+  return [...new Set(out)];
+}
+function convertArmor(d, needs, src = null) {
+  const s = src ?? d.system, tags = (s.tags ?? d.system?.tags ?? []).map(String);
+  const band = armorBand(tags, d.name);
+  const g = Number(s.guardBonus) || 0, ev = Number(s.evasionBonus) || 0, re = Number(s.resolveBonus) || 0;
+  const attune = tags.includes("attunement") || tags.includes("soulbound");
+  const e = baseItem(d, "equipment", { weight: { light: 10, medium: 20, heavy: 40, shield: 6 }[band], img: band === "shield" ? "icons/equipment/shield/heater-steel-worn.webp" : "icons/equipment/chest/breastplate-leather-brown.webp" });
+  const ac = band === "shield" ? Math.max(2, g) : { light: 10, medium: 12, heavy: 14 }[band] + g;
+  Object.assign(e.system, {
+    rarity: rarityFor(tags, rfiPrice(d), attune), attunement: attune ? "required" : "",
+    armor: { value: ac, magicalBonus: null, dex: band === "light" || band === "shield" ? null : band === "medium" ? 2 : 0 },
+    hp: { value: null, max: null, dt: null, conditions: "" },
+    type: { value: band, baseItem: "" }, properties: band === "heavy" ? ["stealthDisadvantage"] : [],
+    speed: { value: null, conditions: "" }, strength: band === "heavy" ? (ac >= 17 ? 15 : 13) : null, proficient: null, activities: {}
+  });
+  const changes = [];
+  if (ev) changes.push({ key: "system.abilities.dex.bonuses.save", mode: 2, value: String(ev), priority: 20 });
+  if (re) changes.push({ key: "system.abilities.wis.bonuses.save", mode: 2, value: String(re), priority: 20 });
+  for (const t of resistanceTypes(s.resistances)) changes.push({ key: "system.traits.dr.value", mode: 2, value: t, priority: 20 });
+  if (Math.abs(re) > 2 || Math.abs(ev) > 2) needs.push(`save bonus Evasion ${ev >= 0 ? "+" : ""}${ev} / Resolve ${re >= 0 ? "+" : ""}${re} carried as-is (large for 5E — ruling?)`);
+  if (changes.length) e.effects = [{ _id: "be5e" + sha(e.slug).slice(0, 12), name: d.name, img: e.img, transfer: true, disabled: false, changes, duration: {}, flags: {}, origin: null, tint: "#ffffff", statuses: [], description: "" }];
+  const extra = (ev || re) ? `<p><strong>Worn:</strong> ${[ev ? `${ev >= 0 ? "+" : ""}${ev} to Dexterity saving throws` : "", re ? `${re >= 0 ? "+" : ""}${re} to Wisdom saving throws` : ""].filter(Boolean).join(", ")}.</p>` : "";
+  e.system.description.value = gearDescription(d, needs) + extra;
+  return e;
+}
+function convertGear(d, needs, folder) {
+  const s = d.system, tags = (s.tags ?? []).map(String), marks = rfiPrice(d);
+  const consumable = s.slot === "consumable" || tags.includes("consumable") || tags.includes("potion") || tags.includes("single-use") || /Consumables/.test(folder);
+  const wondrous = /Wondrous/.test(folder) || tags.includes("wondrous") || tags.includes("attunement");
+  let e;
+  if (consumable) {
+    e = baseItem(d, "consumable", { weight: 0.5, img: "icons/consumables/potions/bottle-round-corked-glowing-red.webp" });
+    Object.assign(e.system, { type: { value: tags.includes("potion") ? "potion" : "trinket", subtype: "" }, uses: { max: "1", spent: 0, recovery: [], autoDestroy: true }, damage: { base: { number: null, denomination: null, types: [], custom: { enabled: false }, scaling: { number: 1 } }, replace: false }, magicalBonus: null, activities: {}, rarity: rarityFor(tags, marks, false) });
+  } else if (wondrous) {
+    e = baseItem(d, "equipment", { weight: 1, img: "icons/sundries/misc/lantern-copper-lit.webp" });
+    const attune = tags.includes("attunement") || tags.includes("soulbound");
+    Object.assign(e.system, { type: { value: "trinket", baseItem: "" }, armor: { value: null, magicalBonus: null, dex: null }, hp: { value: null, max: null, dt: null, conditions: "" }, speed: { value: null, conditions: "" }, strength: null, proficient: null, activities: {}, rarity: rarityFor(tags, marks, attune), attunement: attune ? "required" : "" });
+  } else {
+    e = baseItem(d, "loot", { weight: 1, img: s.slot === "material" ? "icons/commodities/materials/bowl-powder-grey.webp" : "icons/containers/bags/pack-leather-brown.webp" });
+    Object.assign(e.system, { type: { value: s.slot === "material" ? "material" : "gear", subtype: "" }, rarity: "" });
+    delete e.system.uses; delete e.system.equipped; delete e.system.attuned; delete e.system.attunement;
+  }
+  e.system.description.value = gearDescription(d, needs);
+  return e;
+}
+function passthrough(d, needs, folder) {
+  // equipment / consumable docs that were already written in dnd5e shape (the June port era)
+  const s = JSON.parse(JSON.stringify(d.system));
+  if ("guardBonus" in s) return convertArmor(d, needs, s);
+  const e = baseItem(d, d.type, { weight: Number(s.weight?.value) || 1 });
+  for (const k of ["guardBonus", "evasionBonus", "resolveBonus", "armorSkill", "resistances", "slot", "tags", "crewed", "crew"]) delete s[k];
+  e.system = { ...e.system, ...s, description: { value: gearDescription({ ...d, system: { description: s.description } }, needs), chat: "" } };
+  const marks = rfiPrice(d); if (marks) e.system.price = { value: marks, denomination: "gp" };
+  if (d.type === "equipment" && !e.system.type?.value) e.system.type = { value: /Wondrous/.test(folder) || e.system.rarity ? "trinket" : "clothing", baseItem: "" };
+  if (!e.system.rarity && e.system.attunement) e.system.rarity = "rare";
+  return e;
+}
+function laneGear() {
+  const all = loadPack("items");
+  const byId = new Map(all.map(d => [d._id, d]));
+  const folderOf = d => { const p = []; let f = d.folder; while (f && byId.has(f)) { p.unshift(byId.get(f).name); f = byId.get(f).folder; } return p.join("/"); };
+  const src = all.filter(d => ["weapon", "armor", "gear", "equipment", "consumable"].includes(d.type) && !d.flags?.fourththing?.rigGear && !d.flags?.fourththing?.rigFrame && !/^Rig & Boss/.test(folderOf(d)));
+  const out = [], needsAll = [];
+  for (const d of src.sort((a, b) => a.name.localeCompare(b.name))) {
+    const needs = [], folder = folderOf(d);
+    const e = d.type === "weapon" ? convertWeapon(d, needs) : d.type === "armor" ? convertArmor(d, needs) : d.type === "gear" ? convertGear(d, needs, folder) : passthrough(d, needs, folder);
+    e.folder = folder.split("/")[0] || "Gear";
+    for (const l of leftovers(e.system.description.value)) needs.push(`leftover term "${l}"`);
+    if (!rfiPrice(d) && !e.system.price?.value) needs.push("no price in marks");
+    e.flags = { "bad-eden-5e": { rfi: { id: d._id, pack: "items", identifier: d.system?.identifier ?? "", hash: sha(JSON.stringify({ n: d.name, s: d.system, f: d.flags?.fourththing ?? {} })) } } };
+    out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
+  }
+  return { src, out, needsAll, kind: "items" };
+}
+
 /* ── overrides + output ──────────────────────────────────────────────────── */
 const deepMerge = (a, b) => { for (const [k, v] of Object.entries(b)) a[k] = v && typeof v === "object" && !Array.isArray(v) && a[k] && typeof a[k] === "object" ? deepMerge(a[k], v) : v; return a; };
 
-function writeLane(name, features, needsAll, about) {
+function writeLane(name, features, needsAll, about, kind = "features") {
   const ovPath = join(ROOT, "content", "overrides", `${name}.json`);
   const overrides = existsSync(ovPath) ? JSON.parse(readFileSync(ovPath, "utf8")) : {};
   let applied = 0;
   for (const f of features) if (overrides[f.slug]) { deepMerge(f, overrides[f.slug]); applied++; }
-  const doc = { _about: about, _generated: { by: "tools/convert-5e.mjs", rubric: RUBRIC.version, at: new Date().toISOString().slice(0, 10), overridesApplied: applied }, features };
+  const doc = { _about: about, _generated: { by: "tools/convert-5e.mjs", rubric: RUBRIC.version, at: new Date().toISOString().slice(0, 10), overridesApplied: applied }, [kind]: features };
   const outPath = join(ROOT, "content", `${name}.json`);
   writeFileSync(outPath, JSON.stringify(doc, null, 2) + "\n");
   mkdirSync(join(ROOT, "content", "_needs-human"), { recursive: true });
@@ -207,10 +366,10 @@ function writeLane(name, features, needsAll, about) {
   return { outPath, applied };
 }
 
-function parity(name, src, features) {
+function parity(name, src, features, kind = "features") {
   const outPath = join(ROOT, "content", `${name}.json`);
   if (!existsSync(outPath)) { console.log(`parity ${name}: no content/${name}.json yet — ${src.length} missing`); return; }
-  const have = JSON.parse(readFileSync(outPath, "utf8")).features ?? [];
+  const have = JSON.parse(readFileSync(outPath, "utf8"))[kind] ?? [];
   const byId = new Map(have.map(f => [f.flags?.["bad-eden-5e"]?.rfi?.id, f]));
   const missing = [], stale = [];
   for (const f of features) {
@@ -226,12 +385,13 @@ function parity(name, src, features) {
 }
 
 /* ── main ────────────────────────────────────────────────────────────────── */
-const LANES = { techniques: laneTechniques };
+const LANES = { techniques: laneTechniques, gear: laneGear };
 if (!lane || !LANES[lane]) { console.error(`usage: convert-5e.mjs <${Object.keys(LANES).join("|")}> [--write] [--parity]`); process.exit(2); }
-const { src, out, needsAll } = LANES[lane]();
-if (flag("--parity")) { parity(lane, src, out); }
+const { src, out, needsAll, kind = "features" } = LANES[lane]();
+if (flag("--parity")) { parity(lane, src, out, kind); }
 else if (flag("--write")) {
-  const { outPath, applied } = writeLane(lane, out, needsAll, `GENERATED from RFI canon by tools/convert-5e.mjs (rubric v${RUBRIC.version}) — do not hand-edit; put fixes in content/overrides/${lane}.json. The 75 Bad Eden Core techniques as dnd5e feats.`);
+  const ABOUT = { techniques: "The 75 Bad Eden Core techniques as dnd5e feats.", gear: "Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks)." };
+  const { outPath, applied } = writeLane(lane, out, needsAll, `GENERATED from RFI canon by tools/convert-5e.mjs (rubric v${RUBRIC.version}) — do not hand-edit; put fixes in content/overrides/${lane}.json. ${ABOUT[lane] ?? ""}`, kind);
   console.log(`${lane}: ${out.length} converted → ${outPath} (${applied} override(s) applied); ${needsAll.length} need a human → content/_needs-human/${lane}.md`);
 } else {
   console.log(`${lane}: ${out.length} would convert; ${needsAll.length} need a human:`);

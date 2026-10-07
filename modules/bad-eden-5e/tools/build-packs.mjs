@@ -59,10 +59,11 @@ const RFI_TERMS = RUBRIC.vocabulary.banned.map(p => new RegExp(p, CASED.test(p) 
 const lintFindings = [];
 /** `{{uuid:<pack>:<slug>}}` inside prose → the deterministic compendium UUID. */
 const link = text => (text ?? "").replace(/\{\{uuid:([a-z]+):([a-z0-9-]+)\}\}/g, (_, p, s) => p === "tables" ? `Compendium.${MOD}.tables.RollTable.${id(`tables:${s}`)}` : uuid(p, s));
-function lint(doc, text) {
+function lint(doc, text, { rfi = false } = {}) {
   if (!text) return;
   const plain = text.replace(/<[^>]+>/g, " ");
-  for (const re of [...BANNED, ...RFI_TERMS]) {
+  // RFI-origin content is ours: only the RFI vocabulary list applies (a Bad Eden blaster is a Bad Eden blaster)
+  for (const re of rfi ? RFI_TERMS : [...BANNED, ...RFI_TERMS]) {
     const m = plain.match(re);
     if (m) lintFindings.push(`${doc}: "${m[0]}"`);
   }
@@ -112,8 +113,9 @@ function usesFor(f) {
 /* ── feature ─────────────────────────────────────────────────────────────── */
 function featureDoc(f, folderId) {
   const key = `features:${f.slug}`;
-  lint(`feature ${f.slug}`, f.description);
-  lint(`feature ${f.slug} (name)`, f.name);
+  const rfi = { rfi: !!f.flags?.["bad-eden-5e"]?.rfi || f.featType === "race" };
+  lint(`feature ${f.slug}`, f.description, rfi);
+  lint(`feature ${f.slug} (name)`, f.name, rfi);
   return {
     _id: id(key), name: f.name, type: "feat", img: f.img ?? "icons/magic/water/wave-water-blue.webp",
     folder: folderId ?? null, sort: (f.level ?? 0) * 100000,
@@ -250,6 +252,22 @@ function tableDoc(t) {
   };
 }
 
+/* ── raw dnd5e items (the gear lane hands us complete system objects) ────── */
+function rawItemDoc(it, folderId) {
+  const key = `gear:${it.slug}`;
+  const rfi = { rfi: !!it.flags?.["bad-eden-5e"]?.rfi };
+  lint(`item ${it.slug}`, it.system?.description?.value ?? "", rfi);
+  lint(`item ${it.slug} (name)`, it.name, rfi);
+  const sys = { ...it.system, source: { ...SOURCE_META }, identifier: it.system?.identifier ?? it.slug };
+  sys.description = { value: link(sys.description?.value ?? ""), chat: "" };
+  return {
+    _id: id(key), name: it.name, type: it.type, img: it.img, folder: folderId ?? null, sort: 0, system: sys,
+    effects: (it.effects ?? []).map((e, i) => { const eid = /^[A-Za-z0-9]{16}$/.test(e._id ?? "") ? e._id : id(`effect:${key}:${i}`); return { ...e, _id: eid, _key: `!items.effects!${id(key)}.${eid}` }; }),
+    flags: { ...(it.flags ?? {}), dnd5e: { riders: { activity: [], effect: [] } } },
+    _key: `!items!${id(key)}`
+  };
+}
+
 /* ── advancement helpers ─────────────────────────────────────────────────── */
 const adv = (docKey, tag, type, body) => ({ _id: id(`adv:${docKey}:${tag}`), type, ...body });
 const trait = (docKey, tag, level, title, grants, choices = [], extra = {}) => adv(docKey, tag, "Trait", {
@@ -356,8 +374,8 @@ function folderDoc(pack, name, parentName = null) {
 /* ── main ────────────────────────────────────────────────────────────────── */
 function main() {
   const files = readdirSync(CONTENT).filter(f => f.endsWith(".json")).sort();
-  const docs = { classes: [], subclasses: [], features: [], powers: [], species: [], tables: [] };
-  const folders = { features: new Map(), powers: new Map(), species: new Map() };
+  const docs = { classes: [], subclasses: [], features: [], powers: [], species: [], tables: [], gear: [] };
+  const folders = { features: new Map(), powers: new Map(), species: new Map(), gear: new Map() };
   const folderFor = (pack, name, parent) => {
     const k = `${parent ? parent + "/" : ""}${name}`;
     if (!folders[pack].has(k)) folders[pack].set(k, folderDoc(pack, name, parent));
@@ -369,6 +387,7 @@ function main() {
     for (const c of data.classes ?? []) docs.classes.push(classDoc(c));
     for (const s of data.subclasses ?? []) docs.subclasses.push(subclassDoc(s));
     for (const t of data.tables ?? []) docs.tables.push(tableDoc(t));
+    for (const it of data.items ?? []) docs.gear.push(rawItemDoc(it, it.folder ? folderFor("gear", it.folder, it.folderParent ?? null) : null));
     for (const r of data.races ?? []) { const d = raceDoc(r); if (r.family) d.folder = folderFor("species", r.family, null); docs.species.push(d); }
     for (const f of data.features ?? []) {
       const fid = f.folder ? folderFor("features", f.folder, f.folderParent ?? null) : null;
@@ -401,7 +420,7 @@ function main() {
     }
   }
   // every @UUID link in prose must resolve to a doc we build
-  const everything = [...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers, ...docs.species];
+  const everything = [...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers, ...docs.species, ...docs.gear];
   const tableIds = new Set(docs.tables.map(t => t._id));
   for (const d of docs.species) {
     for (const a of d.system.advancement) for (const r of a.configuration?.items ?? []) {

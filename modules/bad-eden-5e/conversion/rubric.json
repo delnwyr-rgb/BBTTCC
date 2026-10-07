@@ -1,6 +1,6 @@
 {
   "_about": "THE conversion rubric: how a Bad Eden mechanic written for RFI (the fourththing system) becomes its D&D 5E (dnd5e 6) twin. Read by tools/build-packs.mjs (the lint), bin/ft-convert-5e (the converter) and bin/ft-lint-parity (the parity check). Rendered for humans as CONVERSION_RUBRIC.md — keep the two in step. Every entry marked ruling:true was ruled by Dave; ruling:'owed' is a draft awaiting one.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "date": "2026-10-07",
   "direction": "rfi→5e",
   "sourceOfTruth": {
@@ -796,6 +796,18 @@
       [
         "\\bPresence\\b",
         "Charisma"
+      ],
+      [
+        "\\benergy damage\\b",
+        "fire or lightning damage"
+      ],
+      [
+        "\\blevels of Stress\\b",
+        "levels of exhaustion"
+      ],
+      [
+        "\\blevel of Stress\\b",
+        "level of exhaustion"
       ]
     ],
     "squares": "(\\d+) squares? → N×5 feet (handled by the converter, not a plain substitution)",
@@ -848,7 +860,8 @@
       "@SKILL": "the skill in the match, through skills (full name)",
       "@SQUARES": "the number in the match ×5"
     },
-    "_order": "front: grammatical reroll/rank rows · middle: the mechanics table · tail: bare capitalised faculty names (Violence→Strength …) so phrases like 'Presence (Persuasion) check' and 'Violence or Dexterity' resolve"
+    "_order": "front: grammatical reroll/rank rows · middle: the mechanics table · tail: bare capitalised faculty names (Violence→Strength …) so phrases like 'Presence (Persuasion) check' and 'Violence or Dexterity' resolve",
+    "lintScope": "docs carrying flags.bad-eden-5e.rfi (RFI-origin) are linted for RFI vocabulary only; the Star Wars list applies to origin:5e content (classes, subclasses, powers) — a Bad Eden blaster is a Bad Eden blaster"
   },
   "_rulings": {
     "2026-10-07": "Dave ruled rubric lines 1–8 (small bonus +2, Stress points, Clarity/Noise kept with Flow-point bonus, radiation stays a ladder, the skill table, armor bands, martial weapons, marks, creature scores 10+2×value). Scarred's scale is the one open question."
