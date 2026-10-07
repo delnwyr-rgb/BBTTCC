@@ -17,7 +17,7 @@
  *  FLOODED TOWNS — "The route used to be a military railway."
  *   • The Dispatcher's persona (actor flag bbttcc-mal-voice.persona): the route it is trying to finish is a military railway.
  *
- *  THE HUM RENAME — "Let's go with Two Kinds of Tent."
+ *  THE HUM RENAME — "Let's go with The Two Tents."
  *   • quest registry (bbttcc-campaign.quests) quest_sarmoung_hum: name + player-facing description + tags carry no "Sarmoung";
  *     the cached questName in every campaign faction's Quest Log buckets; campaign.story.quests.sarmoung_hum.name.
  *  THE CULT CAMP — "the camp needs to be a scene on the Khezek Tor hex itself"
@@ -87,8 +87,8 @@
   // ── THE CULT CAMP is on the Khezek Tor hex ──
   edit("wt_cult_camp", b => { if (b.hexName !== "Khezek-Tor") b.hexName = "Khezek-Tor"; }, "hexName → Khezek-Tor (the camp is near the mountain)");
 
-  // ── THE HUM RENAME: "Two Kinds of Tent" ──
-  const HUM_Q = "quest_sarmoung_hum", HUM_NAME = "Two Kinds of Tent";
+  // ── THE HUM RENAME: "The Two Tents" ──
+  const HUM_Q = "quest_sarmoung_hum", HUM_NAME = "The Two Tents";
   const HUM_DESC = "Two kinds of tent on the roads now, and Bit and Coll noticed first. Its rungs are met on the way, not sought.";
   const sq = camp.story?.quests?.sarmoung_hum;
   if (sq && sq.name !== HUM_NAME) { sq.name = HUM_NAME; changes++; say(`✎ campaign.story.quests.sarmoung_hum.name → "${HUM_NAME}"`); } else if (sq) say("· ok story quest name (already)");

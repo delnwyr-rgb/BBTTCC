@@ -1269,7 +1269,8 @@
       }
       function _applyPassage(cost, fid, hexEntry) {
         const p = _passage(fid, hexEntry);
-        if (p.free) for (const k of Object.keys(cost || {})) cost[k] = 0;
+        const mult = p.free ? 0 : (p.why && Number.isFinite(p.mult) ? p.mult : 1);
+        if (mult < 1) for (const k of Object.keys(cost || {})) cost[k] = Math.round(Number(cost[k] || 0) * mult);
         return p;
       }
 

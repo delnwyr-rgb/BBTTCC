@@ -665,11 +665,14 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
   return out;
 }
 
-  // Free-passage authority (owner directive 2026-06-06): dev-6 hex + owner-or-ally ⇒ cost 0.
+  // Passage authority (owner directive 2026-06-06; ladder ruled 2026-10-07): for the OWNING
+  // faction and its ALLIES, a developed hex gets cheaper as it develops — dev 4 = half cost,
+  // dev 5 = a quarter, dev 6 = free. Civilization means roads, then paved roads, then ours.
   // Accepts a Drawing placeable, DrawingDocument, uuid string, or the raw territory flags.
-  // Returns { free, why: "owner"|"allied"|null, ownerId, devStage }.
+  // Returns { free, mult, why: "owner"|"allied"|"militia escort"|null, ownerId, devStage }.
+  const PASSAGE_LADDER = { 4: 0.5, 5: 0.25, 6: 0 };
   function passageFor(factionId, hexLike) {
-    const out = { free: false, why: null, ownerId: "", devStage: 0 };
+    const out = { free: false, mult: 1, why: null, ownerId: "", devStage: 0 };
     try {
       let tf = null;
       if (typeof hexLike === "string") { const d = fromUuidSync(hexLike); tf = d?.flags?.[MOD_TERR] || null; }
@@ -685,11 +688,13 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
         const ms = (fid && game.bbttcc?.api?.raid?.militia?.state) ? game.bbttcc.api.raid.militia.state(game.actors.get(fid)) : null;
         if (ms && ms.rung >= 3) { const hn = String(tf.name || tf.hexName || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase(); if (hn && ms.hexes.some(h => String(h).toLowerCase() === hn)) { out.free = true; out.why = "militia escort"; return out; } }
       } catch (_eM) {}
-      if (!fid || !out.ownerId || out.devStage < 6) return out;
-      if (out.ownerId === fid) { out.free = true; out.why = "owner"; return out; }
+      const mult = PASSAGE_LADDER[Math.min(6, out.devStage)];
+      if (!fid || !out.ownerId || mult === undefined) return out;
       const rel = game.bbttcc?.api?.factions?.relations;
       const ALLIED = 5; // relations tier ladder: ..., friendly=4, allied=5
-      if (rel?.tier && Number(rel.tier(out.ownerId, fid)) >= ALLIED) { out.free = true; out.why = "allied"; }
+      const why = out.ownerId === fid ? "owner" : (rel?.tier && Number(rel.tier(out.ownerId, fid)) >= ALLIED) ? "allied" : null;
+      if (!why) return out;
+      out.why = why; out.mult = mult; out.free = mult === 0;
     } catch (_e) {}
     return out;
   }
@@ -1129,10 +1134,11 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     // (2026-09-07: preview showed full freight while execution charged 0).
     try {
       const pass = passageFor(factionId, to);
-      if (pass.free) {
-        for (const k of Object.keys(ctx.cost || {})) ctx.cost[k] = 0;
-        ctx.devSixFreePassage = pass.why;
-        console.log(TAG, "Dev-6 free passage:", { hexOwnerId: pass.ownerId, factionId, why: pass.why });
+      if (pass.why && pass.mult < 1) {
+        for (const k of Object.keys(ctx.cost || {})) ctx.cost[k] = Math.round(Number(ctx.cost[k] || 0) * pass.mult);
+        ctx.devSixFreePassage = pass.free ? pass.why : null;
+        ctx.passage = { why: pass.why, mult: pass.mult, devStage: pass.devStage };
+        console.log(TAG, "Developed-hex passage:", { hexOwnerId: pass.ownerId, factionId, why: pass.why, devStage: pass.devStage, mult: pass.mult });
       }
     } catch (e) {
       console.warn(TAG, "dev-6 free-passage check failed (non-fatal)", e);

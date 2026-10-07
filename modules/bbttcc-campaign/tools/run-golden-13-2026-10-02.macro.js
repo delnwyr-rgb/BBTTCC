@@ -21,7 +21,7 @@
  *   review thread: vault-allies (no-op when present) → template patches A → B → C → Fixit early alliance → Fixit board vault
  *   gate → Burnt Flats registry (added after Golden 13's first save) → Tikkun atonement → load the sparks pack (writes the bbttcc-tikkun.sparks COMPENDIUM on THIS instance only — run
  *   load-sparks-pack once on the foundry instance too);
- *   Mags: the Hum at Tier 2 ("Two Kinds of Tent") → owner canon (Marnie, the Sigil Bridge, the Wendigo's gift, the railway,
+ *   Mags: the Hum at Tier 2 ("The Two Tents") → owner canon (Marnie, the Sigil Bridge, the Wendigo's gift, the railway,
  *   the rename, the camp on Khezek-Tor) → Jeargan + the Garden at ninety-six;
  *   town hubs: Chuckle Creek, Soft Landing, Stillwater, Crown Mall, Maneuver Vault, Gloomgill, Port Kudzu, and the Widening
  *   Trail sites (2026-10-04): the Rotating Chapel, the Burnt Flats, the Singing Mire, Anchor Reach, Legansus Waystation.
@@ -49,7 +49,7 @@
     { file: C + "patch-burnt-flats-quest-registry-2026-10-02.macro.js", label: "Burnt Flats registry row + the Widening Trail's name (lint E, review thread)" },
     { file: C + "seed-tikkun-atonement.macro.js",                       label: "Tikkun atonement (5 beats)" },
     { file: "modules/bbttcc-tikkun/tools/load-sparks-pack.macro.js",    label: "Sparks pack (compendium, this instance)" },
-    { file: C + "seed-sarmoung-hum-retrofit.macro.js",                  label: "Two Kinds of Tent (the Hum at Tier 2)" },
+    { file: C + "seed-sarmoung-hum-retrofit.macro.js",                  label: "The Two Tents (the Hum at Tier 2)" },
     { file: C + "patch-owner-canon-2026-10-02.macro.js",                label: "Owner canon 10-02 (Marnie, bridge, Wendigo, railway, rename, camp)" },
     { file: C + "patch-legansus-second-hearing-2026-10-03.macro.js",     label: "Legansus second hearing (one desk, reclassification, the Finale reads either)" },
     { file: C + "patch-performance-contests-2026-10-04.macro.js",       label: "Performance contests (the Cadence's floor, the Tanneritos' skate-off)" },
