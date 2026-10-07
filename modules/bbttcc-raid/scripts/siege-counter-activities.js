@@ -462,12 +462,12 @@
     await _pushWarLog(actor, `${title}: attacker Buffer −${spent}${morale ? `, morale ${morale > 0 ? "+" : ""}${morale}` : ""}.`, { activityKey: key, hexUuid: targetUuid });
     return { ok: true, summary: `${title} — attacker Buffer −${spent}.` };
   }
-  const boiling_oil  = (ctx) => _defenderBufferManeuver(ctx, { key: "boiling_oil",  title: "Boiling Oil",  drain: 2, morale: +1, vfxHook: "boilingOil" });
+  const boiling_oil  = (ctx) => _defenderBufferManeuver(ctx, { key: "boiling_oil",  title: "Boiling Oil",  drain: 10, morale: +1, vfxHook: "boilingOil" });   // ROI ruling 2026-10-06: 12 clash marks shave 10 (was 2)
   // `sortie` is NOT registered here any more (owner ruling 2026-09-09): the authored
   // threat-vector Sortie in siege-threat-vectors.js (sever Supply Line, Buffer −15,
   // 1d4 holdings at risk) is the one that runs. This generic clash body used to
   // overwrite it because this file loads later.
-  const flaming_pitch= (ctx) => _defenderBufferManeuver(ctx, { key: "flaming_pitch", title: "Flaming Pitch", drain: 2, morale: +1, vfxHook: "flamingPitch" });
+  const flaming_pitch= (ctx) => _defenderBufferManeuver(ctx, { key: "flaming_pitch", title: "Flaming Pitch", drain: 10, morale: +1, vfxHook: "flamingPitch" });   // ROI ruling 2026-10-06
 
   // ── Content Sprint batch 2b (2026-06-13) — class-granted siege maneuvers ─────
   // One per Steward class. grantedByClass gates HUD visibility (siege-hud.js) to
@@ -497,14 +497,14 @@
   const cls_wyrdlens = (ctx) => _attackerWallManeuver(ctx, { key: "clsWyrdRead",     title: "Read the Weak Point", formula: "2d10+14", fallback: 25, damageType: "kinetic", flavor: "strike the revealed weak point of" });
   const cls_courier  = (ctx) => _attackerWallManeuver(ctx, { key: "clsOpenPostern",  title: "Open the Postern",    formula: "3d10+12", fallback: 28, damageType: "kinetic", flavor: "slip the postern and breach" });
   // Attacker boons / control
-  const cls_marshal  = (ctx) => _classBoon(ctx, { key: "clsRally",  title: "Rally the Standard", bufferDelta: +2, morale: +1, note: "the standard rises and the supply train steadies (+2 Buffer).", vfxHook: "clsRally" });
-  const cls_pact     = (ctx) => _classBoon(ctx, { key: "clsDebt",   title: "Call the Debt",      bufferDelta: +2,             note: "a sworn debt is called in; an ally's supply arrives (+2 Buffer).", vfxHook: "clsDebt" });
+  const cls_marshal  = (ctx) => _classBoon(ctx, { key: "clsRally",  title: "Rally the Standard", bufferDelta: +10, morale: +1, note: "the standard rises and the supply train steadies (+10 Buffer).", vfxHook: "clsRally" });   // ROI ruling 2026-10-06
+  const cls_pact     = (ctx) => _classBoon(ctx, { key: "clsDebt",   title: "Call the Debt",      bufferDelta: +12,            note: "a sworn debt is called in; an ally's supply arrives (+12 Buffer).", vfxHook: "clsDebt" });   // ROI ruling 2026-10-06
   const cls_linguist = (ctx) => _classBoon(ctx, { key: "clsClause", title: "Cite the Clause",    defRenewal: -1,              note: "a binding clause is cited; the defenders' renewal is voided (−1 Renewal).", vfxHook: "clsClause" });
   const cls_aurablade= (ctx) => _classBoon(ctx, { key: "clsMercy",  title: "Mercy's Edge",       defAnytime: -1,              note: "a merciful edge staggers the garrison without a death (−1 Anytime).", vfxHook: "clsMercy" });
   // Defender boons
   const cls_bulwark  = (ctx) => _classBoon(ctx, { key: "clsBrace",  title: "Brace the Breach",   defAnytime: +2, morale: +1, note: "the breach is braced; the line holds (+2 Anytime).", vfxHook: "clsBrace" });
   const cls_soulsmith= (ctx) => _classBoon(ctx, { key: "clsRefit",  title: "Field Refit",        defRenewal: +2, morale: +1, note: "a field forge refits the wall under fire (+2 Renewal).", vfxHook: "clsRefit" });
-  const cls_dreamwalker = (ctx) => _defenderBufferManeuver(ctx, { key: "clsPhantom", title: "Phantom Host", drain: 2, morale: +1, vfxHook: "clsPhantom" });
+  const cls_dreamwalker = (ctx) => _defenderBufferManeuver(ctx, { key: "clsPhantom", title: "Phantom Host", drain: 13, morale: +1, vfxHook: "clsPhantom" });   // ROI ruling 2026-10-06: 15 clash marks shave 13
 
   // ============================================================
   // Registration

@@ -41,7 +41,7 @@
       kind:  "strategic",
       band:  "standard",
       label: E.develop_infrastructure_std?.label || "Develop Infrastructure",
-      cost:  E.develop_infrastructure_std?.cost  || { economy: 20, logistics: 10 },
+      cost:  E.develop_infrastructure_std?.cost  || { economy: 40, logistics: 20 },   // one authority: the planner table (2026-10-06)
       async apply({ entry }) {
         let msg = "";
         if (typeof base === "function") {

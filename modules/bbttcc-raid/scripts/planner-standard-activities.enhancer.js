@@ -36,7 +36,7 @@
       band:"standard",
       label:"Loyalty Program",
       cost:{ softpower:30, culture:10, faith:10 },
-      storyOnly:true
+      storyOnly:false /* executes — ruling 2026-10-06 */
     });
 
     add("develop_infrastructure_std", {
@@ -44,7 +44,7 @@
       band:"standard",
       label:"Develop Infrastructure",
       cost:{ economy:40, logistics:20 },
-      storyOnly:true
+      storyOnly:false /* executes — ruling 2026-10-06 */
     });
 
     add("reconstruction_drive_std", {
@@ -93,7 +93,7 @@
       band:"standard",
       label:"Gather Intel",
       cost:{ intrigue:20 },
-      storyOnly:true
+      storyOnly:false /* executes — ruling 2026-10-06 */
     });
 
     add("propaganda_campaign", {
@@ -101,7 +101,7 @@
       band:"standard",
       label:"Propaganda Campaign",
       cost:{ softpower:30, diplomacy:10 },
-      storyOnly:true
+      storyOnly:false /* executes — ruling 2026-10-06 */
     });
 
     add("diplomatic_mission_std", {
@@ -109,7 +109,7 @@
       band:"standard",
       label:"Diplomatic Mission",
       cost:{ diplomacy:30, softpower:10 },
-      storyOnly:true
+      storyOnly:false /* executes — ruling 2026-10-06 */
     });
 
     add("cultural_festival_std", {
@@ -117,7 +117,7 @@
       band:"standard",
       label:"Cultural Festival",
       cost:{ culture:20, faith:10, softpower:10 },
-      storyOnly:true
+      storyOnly:false /* executes — ruling 2026-10-06 */
     });
 
     // ---------------------------------------------------------------------
@@ -141,7 +141,7 @@
       band:"standard",
       label:"Alignment Shift (Sephirot)",
       cost:{ faith:30, culture:20, softpower:20 },
-      storyOnly:true
+      storyOnly:false /* executes — ruling 2026-10-06 */
     });
 
     // ---------------------------------------------------------------------
