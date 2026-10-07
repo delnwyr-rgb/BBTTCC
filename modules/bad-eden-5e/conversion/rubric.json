@@ -1,6 +1,6 @@
 {
   "_about": "THE conversion rubric: how a Bad Eden mechanic written for RFI (the fourththing system) becomes its D&D 5E (dnd5e 6) twin. Read by tools/build-packs.mjs (the lint), bin/ft-convert-5e (the converter) and bin/ft-lint-parity (the parity check). Rendered for humans as CONVERSION_RUBRIC.md — keep the two in step. Every entry marked ruling:true was ruled by Dave; ruling:'owed' is a draft awaiting one.",
-  "version": "1.4.0",
+  "version": "1.6.0",
   "date": "2026-10-07",
   "direction": "rfi→5e",
   "sourceOfTruth": {
@@ -586,6 +586,62 @@
     "_about": "text substitutions the converter applies before a human sees the draft, and the terms the lint refuses to ship",
     "replace": [
       [
+        "\\b(Resolve|Evasion|Guard) vs DC (\\d+)",
+        "@SAVE saving throw, DC \\2"
+      ],
+      [
+        "\\bvs (Resolve|Evasion) \\(DC (\\d+)\\)",
+        "\\1 saving throw (DC \\2)"
+      ],
+      [
+        "\\bvs (Resolve|Evasion)\\b",
+        "\\1 saving throw"
+      ],
+      [
+        "\\b(\\d+d\\d+(?: ?\\+ ?\\d+)?) (psychic|qliphothic) to Stress\\b",
+        "\\1 \\2 damage"
+      ],
+      [
+        "\\bto Stress\\b",
+        ""
+      ],
+      [
+        "\\b(\\d+d\\d+(?: ?\\+ ?\\d+)?) kinetic\\b",
+        "\\1 bludgeoning"
+      ],
+      [
+        "\\b(\\d+d\\d+(?: ?\\+ ?\\d+)?) energy\\b",
+        "\\1 fire"
+      ],
+      [
+        "\\brerolls the lowest die on\\b",
+        "has advantage on"
+      ],
+      [
+        "\\bStaggered\\b",
+        "slowed (speed halved, −2 to attack rolls)"
+      ],
+      [
+        "\\b1/scene\\b",
+        "1/short rest"
+      ],
+      [
+        "\\beach scene\\b",
+        "each encounter"
+      ],
+      [
+        "\\bper scene\\b",
+        "per short rest"
+      ],
+      [
+        "\\bthis scene\\b",
+        "this encounter"
+      ],
+      [
+        "\\bshaken\\b",
+        "frightened"
+      ],
+      [
         "\\b(You|you|They|they|Allies[^.]{0,60}?|allies[^.]{0,60}?) reroll the lowest die on\\b",
         "\\1 have advantage on"
       ],
@@ -808,6 +864,18 @@
       [
         "\\blevel of Stress\\b",
         "level of exhaustion"
+      ],
+      [
+        "\\bStress damage\\b",
+        "psychic damage"
+      ],
+      [
+        "\\breroll-lowest\\b",
+        "advantage"
+      ],
+      [
+        "\\breroll-highest\\b",
+        "disadvantage"
       ]
     ],
     "squares": "(\\d+) squares? → N×5 feet (handled by the converter, not a plain substitution)",
@@ -858,7 +926,8 @@
     "tokens": {
       "@ABILITY": "the faculty in the match, through abilities (full name)",
       "@SKILL": "the skill in the match, through skills (full name)",
-      "@SQUARES": "the number in the match ×5"
+      "@SQUARES": "the number in the match ×5",
+      "@SAVE": "Resolve → Wisdom, Evasion → Dexterity, Guard → (AC; no save)"
     },
     "_order": "front: grammatical reroll/rank rows · middle: the mechanics table · tail: bare capitalised faculty names (Violence→Strength …) so phrases like 'Presence (Persuasion) check' and 'Violence or Dexterity' resolve",
     "lintScope": "docs carrying flags.bad-eden-5e.rfi (RFI-origin) are linted for RFI vocabulary only; the Star Wars list applies to origin:5e content (classes, subclasses, powers) — a Bad Eden blaster is a Bad Eden blaster"

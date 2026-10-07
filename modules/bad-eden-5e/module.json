@@ -106,6 +106,17 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "name": "monsters",
+      "label": "Bad Eden Bestiary",
+      "path": "packs/monsters",
+      "type": "Actor",
+      "system": "dnd5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -119,7 +130,8 @@
         "powers",
         "species",
         "tables",
-        "gear"
+        "gear",
+        "monsters"
       ]
     }
   ],

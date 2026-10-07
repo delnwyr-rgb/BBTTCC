@@ -268,6 +268,29 @@ function rawItemDoc(it, folderId) {
   };
 }
 
+/* ── raw dnd5e actors (the creatures lane hands us complete npc documents) ── */
+function rawActorDoc(a, folderId) {
+  const key = `monsters:${a.slug}`;
+  const aid = id(key);
+  lint(`actor ${a.slug}`, a.system?.details?.biography?.value ?? "", { rfi: true });
+  const items = (a.items ?? []).map((it, i) => {
+    const ikey = `${key}:${i}:${it.slug ?? "item"}`; const iid = id(ikey);   // index-qualified: a monster can carry two features of one name
+    lint(`actor ${a.slug} › ${it.name}`, it.system?.description?.value ?? "", { rfi: true });
+    const sys = { ...it.system, source: { ...SOURCE_META }, identifier: it.system?.identifier ?? it.slug };
+    sys.description = { value: link(sys.description?.value ?? ""), chat: "" };
+    return { _id: iid, name: it.name, type: it.type, img: it.img, sort: (i + 1) * 100000, system: sys,
+      effects: (it.effects ?? []).map((e, j) => { const eid = id(`effect:${ikey}:${j}`); return { ...e, _id: eid, _key: `!actors.items.effects!${aid}.${iid}.${eid}` }; }),
+      flags: { ...(it.flags ?? {}), dnd5e: { riders: { activity: [], effect: [] } } }, _key: `!actors.items!${aid}.${iid}` };
+  });
+  return {
+    _id: aid, name: a.name, type: a.type ?? "npc", img: a.img, folder: folderId ?? null, sort: 0,
+    prototypeToken: a.prototypeToken ?? { name: a.name },
+    system: { ...a.system, source: { ...SOURCE_META } },
+    items, effects: (a.effects ?? []).map((e, j) => { const eid = id(`effect:${key}:${j}`); return { ...e, _id: eid, _key: `!actors.effects!${aid}.${eid}` }; }),
+    flags: a.flags ?? {}, _key: `!actors!${aid}`
+  };
+}
+
 /* ── advancement helpers ─────────────────────────────────────────────────── */
 const adv = (docKey, tag, type, body) => ({ _id: id(`adv:${docKey}:${tag}`), type, ...body });
 const trait = (docKey, tag, level, title, grants, choices = [], extra = {}) => adv(docKey, tag, "Trait", {
@@ -367,15 +390,15 @@ function subclassDoc(s) {
 /* ── folders ─────────────────────────────────────────────────────────────── */
 function folderDoc(pack, name, parentName = null) {
   const key = `folder:${pack}:${parentName ? parentName + "/" : ""}${name}`;
-  return { _id: id(key), name, type: "Item", folder: parentName ? id(`folder:${pack}:${parentName}`) : null,
+  return { _id: id(key), name, type: pack === "monsters" ? "Actor" : pack === "tables" ? "RollTable" : "Item", folder: parentName ? id(`folder:${pack}:${parentName}`) : null,
     sorting: "a", sort: 0, color: null, description: "", flags: {}, _key: `!folders!${id(key)}` };
 }
 
 /* ── main ────────────────────────────────────────────────────────────────── */
 function main() {
   const files = readdirSync(CONTENT).filter(f => f.endsWith(".json")).sort();
-  const docs = { classes: [], subclasses: [], features: [], powers: [], species: [], tables: [], gear: [] };
-  const folders = { features: new Map(), powers: new Map(), species: new Map(), gear: new Map() };
+  const docs = { classes: [], subclasses: [], features: [], powers: [], species: [], tables: [], gear: [], monsters: [] };
+  const folders = { features: new Map(), powers: new Map(), species: new Map(), gear: new Map(), monsters: new Map() };
   const folderFor = (pack, name, parent) => {
     const k = `${parent ? parent + "/" : ""}${name}`;
     if (!folders[pack].has(k)) folders[pack].set(k, folderDoc(pack, name, parent));
@@ -387,6 +410,7 @@ function main() {
     for (const c of data.classes ?? []) docs.classes.push(classDoc(c));
     for (const s of data.subclasses ?? []) docs.subclasses.push(subclassDoc(s));
     for (const t of data.tables ?? []) docs.tables.push(tableDoc(t));
+    for (const a of data.actors ?? []) docs.monsters.push(rawActorDoc(a, a.folder ? folderFor("monsters", a.folder, null) : null));
     for (const it of data.items ?? []) docs.gear.push(rawItemDoc(it, it.folder ? folderFor("gear", it.folder, it.folderParent ?? null) : null));
     for (const r of data.races ?? []) { const d = raceDoc(r); if (r.family) d.folder = folderFor("species", r.family, null); docs.species.push(d); }
     for (const f of data.features ?? []) {
@@ -420,7 +444,7 @@ function main() {
     }
   }
   // every @UUID link in prose must resolve to a doc we build
-  const everything = [...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers, ...docs.species, ...docs.gear];
+  const everything = [...docs.classes, ...docs.subclasses, ...docs.features, ...docs.powers, ...docs.species, ...docs.gear, ...docs.monsters];
   const tableIds = new Set(docs.tables.map(t => t._id));
   for (const d of docs.species) {
     for (const a of d.system.advancement) for (const r of a.configuration?.items ?? []) {
@@ -430,10 +454,11 @@ function main() {
   const all = new Set(everything.map(d => d._id));
   const proseMissing = [];
   for (const d of everything) {
-    for (const m of d.system.description.value.matchAll(/@UUID\[Compendium\.bad-eden-5e\.\w+\.(Item|RollTable)\.(\w+)\]/g)) {
+    const prose = d.system?.description?.value ?? d.system?.details?.biography?.value ?? "";
+    for (const m of prose.matchAll(/@UUID\[Compendium\.bad-eden-5e\.\w+\.(Item|RollTable)\.(\w+)\]/g)) {
       if (!(m[1] === "RollTable" ? tableIds : all).has(m[2])) proseMissing.push(`${d.name} (prose link): ${m[0]}`);
     }
-    if (/\{\{uuid:/.test(d.system.description.value)) missing.push(`${d.name}: unresolved {{uuid}} token`);
+    if (/\{\{uuid:/.test(prose)) missing.push(`${d.name}: unresolved {{uuid}} token`);
   }
   // a prose link to a doc not built yet is a warning in --dry (content lands in batches), fatal in a real build
   if (proseMissing.length) {

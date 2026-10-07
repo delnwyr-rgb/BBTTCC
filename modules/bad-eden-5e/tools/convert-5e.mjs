@@ -57,6 +57,8 @@ export function convertText(html) {
       const cap = first && /^[A-Z]/.test(m[0]);
       const fix = out => cap ? out.charAt(0).toUpperCase() + out.slice(1) : out;
       if (rep.includes("@ABILITY")) return fix(rep.replace("@ABILITY", ABIL_NAME[ABIL[m[1].toLowerCase()]] ?? m[1]));
+      if (rep.includes("@SAVE")) { const sv = { resolve: "Wisdom", evasion: "Dexterity", guard: "Armor Class" }[m[1].toLowerCase()] ?? m[1]; return fix(rep.replace("@SAVE", sv).replace(/\\(\d)/g, (_, i) => m[Number(i)])); }
+      if (/\\1 saving throw/.test(rep)) { const sv = { resolve: "Wisdom", evasion: "Dexterity" }[m[1].toLowerCase()] ?? m[1]; return fix(rep.replace("\\1", sv).replace(/\\(\d)/g, (_, i) => m[Number(i)])); }
       if (rep.includes("@SKILL")) return fix(skillText(m[1]));
       if (rep.includes("@SQUARES")) return fix(rep.replace("@SQUARES", String(Number(m[1]) * 5)));
       return fix(rep.replace(/\\(\d)/g, (_, i) => m[Number(i)]));
@@ -348,6 +350,176 @@ function laneGear() {
   return { src, out, needsAll, kind: "items" };
 }
 
+
+/* ── creatures lane: the live NPC Pack's lineage-flagged monsters → dnd5e npc actors ── */
+const CR = { 1: { light: 0.5, medium: 1, heavy: 2, boss: 4 }, 2: { light: 3, medium: 5, heavy: 6, boss: 8 }, 3: { light: 7, medium: 9, heavy: 11, boss: 13 }, 4: { light: 12, medium: 14, heavy: 16, boss: 20 } };
+const CHASSIS = { damage: [0, 3, 4, 5], pool: { light: [0.6, 0.6, 0.6, 0.6], medium: [2, 1.5, 1.5, 1.5], heavy: [3, 3, 3, 3], boss: [5, 5, 5, 4] }, strikes: { light: [1, 1, 1, 2], medium: [1, 2, 2, 3], heavy: [2, 2, 3, 3], boss: [2, 3, 3, 3] }, legendary: { light: [0, 0, 0, 0], medium: [0, 0, 0, 0], heavy: [0, 0, 0, 0], boss: [1, 1, 1, 2] } };
+const ROMAN = { I: 1, II: 2, III: 3, IV: 4 };
+const acFor = cr => cr < 4 ? 13 : cr < 5 ? 14 : cr < 8 ? 15 : cr < 10 ? 16 : cr < 13 ? 17 : cr < 17 ? 18 : 19;
+const LINEAGE_TYPE = { qliphothic: "fiend", sephirotic: "celestial", wild: "beast", "pre-fall": "construct", "hex-touched": "monstrosity", dream: "aberration", revenant: "undead", mortal: "humanoid" };
+const DND_TYPES = new Set(["aberration", "beast", "celestial", "construct", "dragon", "elemental", "fey", "fiend", "giant", "humanoid", "monstrosity", "ooze", "plant", "undead"]);
+const DND_CI = new Set(["blinded", "charmed", "deafened", "diseased", "exhaustion", "frightened", "grappled", "incapacitated", "invisible", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious"]);
+const INTENT_SAVE = { violence: "str", intrigue: "dex", body: "con", mind: "int", soul: "wis", presence: "cha" };
+function dmgTypes(list) {
+  const out = [];
+  for (const r of list ?? []) {
+    const t = typeof r === "string" ? r : r.type, fl = typeof r === "string" ? "" : (r.flavor ?? "");
+    if (t === "physical" || t === "kinetic") { out.push("bludgeoning", "piercing", "slashing"); continue; }
+    const m = RUBRIC.damage[t]?.to;
+    if (!m) { if (/^[a-z]+$/.test(t)) out.push(t); continue; }
+    if (typeof m === "object" && !Array.isArray(m)) out.push(...[].concat(m[fl] ?? m.default));
+    else out.push(...[].concat(m).filter(x => typeof x === "string" && /^[a-z]+$/.test(x)));
+  }
+  return [...new Set(out)];
+}
+function autoRulesText(na) {
+  // npcAuto rules → a readable line each (the rubric's effect table); the rider automation is a later pass
+  const lines = [];
+  for (const r of na?.rules ?? []) {
+    const on = { hit: "When it hits with an attack", use: "When it uses this", saveFail: "When a target fails its save", turnStart: "At the start of each turn", selfTurnStart: "At the start of its turn", attack: "When it attacks", bloodied: "When it is bloodied", struck: "When it is hit", zero: "When it drops to 0 hit points", attacked: "When it is attacked", allyDamaged: "When an ally takes damage", damaged: "When it takes damage" }[r.on] ?? `On ${r.on}`;
+    const d = r.do ?? {}, bits = [];
+    if (d.damage) bits.push(`deal ${typeof d.damage === "object" ? `${d.damage.formula ?? d.damage.amount ?? ""} ${dmgTypes([d.damage.type ?? "kinetic"]).join("/")}`.trim() : d.damage} damage`);
+    if (d.heal) bits.push(`regain ${typeof d.heal === "object" ? d.heal.formula ?? d.heal.amount : d.heal} hit points`);
+    if (d.tempIntegrity) bits.push(`gain ${d.tempIntegrity} temporary hit points`);
+    if (d.condition) bits.push(`the target is ${[].concat(d.condition).map(c => RUBRIC.conditions[c]?.to?.split(/[ (]/)[0] ?? c).join(", ")}`);
+    if (d.reroll) bits.push(typeof d.reroll === "object" && d.reroll.mode === "reroll-highest" ? "the roll is at disadvantage" : "the roll is at advantage");
+    if (d.save) bits.push(`the target makes a ${ABIL_NAME[INTENT_SAVE[d.save.ability] ?? d.save.ability] ?? "Wisdom"} saving throw`);
+    if (d.noReactions) bits.push("the target can't take reactions until the start of its next turn");
+    if (d.dot) bits.push(`the target takes ${typeof d.dot === "object" ? d.dot.formula ?? d.dot.amount : d.dot} damage at the start of each of its turns`);
+    if (d.radiation) bits.push("the target takes one step up the radiation ladder");
+    if (d.morale) bits.push("a morale check");
+    if (d.ward) bits.push("it is warded");
+    if (d.prompt) bits.push(convertText(String(d.prompt)).replace(/<[^>]+>/g, ""));
+    const lim = r.limit ? ` (${r.limit.uses ?? 1}/${{ combat: "encounter", scene: "short rest", round: "round", "soma-break": "long rest" }[r.limit.per] ?? r.limit.per})` : "";
+    if (bits.length) lines.push(`<p><strong>${on}${lim}:</strong> ${bits.join("; ")}.</p>`);
+  }
+  return lines.join("");
+}
+function monsterFeature(it, needs, actorSlug, dc = 12) {
+  const s = it.system ?? {}, na = it.flags?.fourththing?.npcAuto;
+  const e = { slug: it.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), name: it.name, type: "feat", img: it.img && !/fourththing|bbttcc/.test(it.img) ? it.img : "icons/svg/aura.svg", system: {}, effects: [], flags: {} };
+  const text = convertText([s.effect ? `<p>${s.effect}</p>` : "", s.description?.value ?? ""].join("")).replace(/<!-- BBTTCC[\s\S]*?-->/g, "");
+  const auto = autoRulesText(na);
+  const uses = {};
+  const lim = (na?.rules ?? []).find(r => r.limit)?.limit;
+  if (lim) { uses.max = String(lim.uses ?? 1); uses.recovery = [{ period: lim.per === "round" ? "round" : lim.per === "soma-break" ? "lr" : "sr", type: "recoverAll" }]; }
+  if (/recharges? on a (Soma Break|long rest)/i.test(it.name + text)) { uses.max = "1"; uses.recovery = [{ period: "lr", type: "recoverAll" }]; }
+  e.name = it.name.replace(/\s*\(recharges on a Soma Break\)/i, " (1/Long Rest)");
+  e.system = { description: { value: text + auto, chat: "" }, type: { value: "monster", subtype: "" }, uses: { max: uses.max ?? "", spent: 0, recovery: uses.recovery ?? [] }, requirements: "", prerequisites: { level: null, repeatable: false }, properties: [], activities: {}, enchant: {}, identifier: e.slug };
+  if (it.type === "power") {
+    const dm = String(s.damage ?? "").replace(/\s/g, "").match(/^(\d+)d(\d+)(?:\+(\d+))?$/);
+    const ability = INTENT_SAVE[s.intent] ?? "wis";
+    const aid = sha("act" + actorSlug + e.slug).slice(0, 16).padEnd(16, "0");
+    const types = dmgTypes([s.damageType ?? s.damageRoll?.type ?? "psychic"]);
+    const self = s.target === "self" || s.range === "self";
+    e.system.activities[aid] = { _id: aid, type: dm && !self ? "save" : "utility", name: "", img: "", sort: 0,
+      activation: { type: s.activation === "bonus" ? "bonus" : s.activation === "reaction" ? "reaction" : "action", value: null, condition: "", override: false },
+      consumption: { targets: [], scaling: { allowed: false, max: "" }, spellSlot: false }, description: { chatFlavor: "" },
+      duration: { concentration: false, value: "", units: "inst", special: "", override: false }, effects: [],
+      range: { value: self ? "" : "60", units: self ? "self" : "ft", special: "", override: false },
+      target: { template: { count: "", contiguous: false, type: "", size: "", width: "", height: "", units: "" }, affects: { count: self ? "" : "1", type: self ? "self" : "creature", choice: false, special: "" }, prompt: true, override: false },
+      uses: { spent: 0, recovery: [] }, appliedEffects: [],
+      ...(dm && !self ? { save: { ability: [ability === "str" || ability === "con" ? "con" : ability === "dex" ? "dex" : "wis"], dc: { calculation: "", formula: String(dc) } }, damage: { onSave: "half", critical: { allow: false, bonus: "" }, parts: [{ custom: { enabled: false, formula: "" }, number: Number(dm[1]), denomination: Number(dm[2]), bonus: dm[3] ?? "", types, scaling: { mode: "", number: 1 } }] } } : { roll: { formula: "", name: "", prompt: false, visible: false } }) };
+    e.img = "icons/magic/unholy/orb-glowing-purple.webp";
+  }
+  if (na?.rules?.length) needs.push(`"${it.name}": ${na.rules.length} automation rule(s) rendered as text (rider pass later)`);
+  return e;
+}
+function convertMonster(a, items, needs) {
+  const s = a.system ?? {}, ff = a.flags?.fourththing ?? {}, rfi = ff.rfi?.actor ?? {};
+  const tier = Math.max(1, Math.min(4, ROMAN[rfi.tier] || Number(rfi.tier) || Number(s.details?.tier) || 1));
+  const bracketRaw = String(rfi.bracket || "medium").toLowerCase();
+  const bracket = CHASSIS.pool[bracketRaw] ? bracketRaw : ({ elite: "heavy", minion: "light", standard: "medium" }[bracketRaw] ?? "medium");
+  const cr = CR[tier][bracket], t = tier - 1;
+  const slug = a.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const abil = {}; for (const [k, v] of Object.entries(ABIL)) abil[v] = Math.min(30, 10 + 2 * (Number(s.attributes?.[k]?.value) || 1));
+  const d = s.derived ?? {};
+  const hp = Math.max(5, Math.round((Number(d.integrity?.max) || 10) * CHASSIS.pool[bracket][t]));
+  const ac = acFor(cr);
+  const creatureTypeRaw = [].concat(ff.creatureType ?? [])[0];
+  const type = /dragon|wyrm/i.test(a.name) ? "dragon" : DND_TYPES.has(String(creatureTypeRaw)) ? creatureTypeRaw : (LINEAGE_TYPE[rfi.lineage] ?? "monstrosity");
+  const themes = (rfi.bestiary?.themes ?? []).map(String); const name = a.name;
+  const size = themes.includes("dragon") || /dragon|apex|colossus/i.test(name) ? "huge" : /patriarch|berserker|construct|tree|elemental|serpent|mother|warlord|wendigo/i.test(name) && bracket !== "light" ? "lg" : /tick|hound|stray|skitter|kiddo|hawk/i.test(name) && bracket === "light" ? "sm" : "med";
+  if (size !== "med") needs.push(`size guessed ${size} from the name — check`);
+  const dark = ["qliphothic", "dream", "revenant", "pre-fall", "hex-touched"].includes(rfi.lineage) || type !== "humanoid" ? 60 : 0;
+  const prof = Math.max(2, Math.ceil(cr / 4) + 1);
+  const abilities = {}; for (const k of Object.keys(ABIL_NAME)) abilities[k] = { value: abil[k], proficient: 0, bonuses: { check: "", save: "" }, max: null };
+  if (Number(d.evasion?.value) >= 14) abilities.dex.proficient = 1;
+  if (Number(d.resolve?.value) >= 14) abilities.wis.proficient = 1;
+  if ((Number(s.attributes?.body?.value) || 0) >= 4) abilities.con.proficient = 1;
+  if ((Number(s.attributes?.violence?.value) || 0) >= 4) abilities.str.proficient = 1;
+  const skills = {};
+  for (const [k, v] of Object.entries(s.skills ?? {})) { const n = Number(v?.value) || 0; const sk = skillOf(k); if (n >= 1 && sk?.kind === "skill") skills[sk.key] = { value: n >= 2 ? 2 : 1, ability: "", bonuses: { check: "", passive: "" }, roll: { min: null, max: null, mode: 0 } }; }
+  const dr = dmgTypes(s.defenses?.resistances), di = dmgTypes(s.defenses?.immunities), dv = dmgTypes(s.defenses?.vulnerabilities);
+  const ci = (s.conditionImmunities ?? []).map(c => String(RUBRIC.conditions[c]?.to ?? c).split(/[ (]/)[0]).filter(c => DND_CI.has(c));
+  const strikes = CHASSIS.strikes[bracket][t], legendary = CHASSIS.legendary[bracket][t];
+  // embedded items
+  const out = [];
+  const weapons = items.filter(i => i.type === "weapon");
+  for (const w of weapons) {
+    const needsW = [];
+    const e = convertWeapon({ ...w, flags: w.flags ?? {} }, needsW);
+    e.slug = e.slug.replace(/^gear-/, "");
+    e.system.proficient = 1; e.system.price = { value: 0, denomination: "gp" };
+    const bonus = CHASSIS.damage[t]; if (bonus) e.system.damage.base.bonus = String(bonus);
+    const tags = (w.system?.tags ?? []).map(String);
+    if (tags.includes("aoe") || tags.some(x => x.startsWith("shape-"))) {
+      // an area weapon: a save activity with a template instead of an attack
+      const act = Object.values(e.system.activities)[0]; const shape = (tags.find(x => x.startsWith("shape-")) ?? "shape-cone").replace("shape-", "");
+      const sizeFt = Number(w.system?.range?.short || 3) * 5;
+      act.type = "save"; delete act.attack;
+      const ability = w.system?.damage?.track === "stress" || w.system?.damage?.type === "psychic" ? "wis" : "dex";
+      act.save = { ability: [ability], dc: { calculation: "", formula: String(8 + prof + Math.floor((abil[INTENT_SAVE[w.system?.damage?.attribute] ?? "cha"] - 10) / 2)) } };
+      act.damage = { onSave: "half", critical: { allow: false, bonus: "" }, parts: [{ custom: { enabled: false, formula: "" }, number: e.system.damage.base.number, denomination: e.system.damage.base.denomination, bonus: "", types: e.system.damage.base.types, scaling: { mode: "", number: 1 } }] };
+      act.target = { template: { count: "", contiguous: false, type: { cone: "cone", sphere: "sphere", line: "line", burst: "radius" }[shape] ?? "cone", size: String(sizeFt), width: shape === "line" ? "5" : "", height: "", units: "ft" }, affects: { count: "", type: "", choice: false, special: "" }, prompt: true, override: false };
+      act.range = { value: "", units: "self", special: "", override: false };
+      e.system.damage.base = { number: null, denomination: null, types: [], custom: { enabled: false }, scaling: { number: 1 }, bonus: "" };
+    }
+    out.push(e); for (const n of needsW) needs.push(`weapon "${w.name}": ${n}`);
+  }
+  const mental = Math.max(abil.int, abil.wis, abil.cha); const dc = 8 + prof + Math.floor((mental - 10) / 2);
+  for (const f of items.filter(i => ["feat", "feature", "power"].includes(i.type))) out.push(monsterFeature(f, needs, slug, dc));
+  for (const g of items.filter(i => ["armor", "gear"].includes(i.type))) { const n = []; const e = g.type === "armor" ? convertArmor(g, n) : convertGear(g, n, ""); e.slug = e.slug.replace(/^gear-/, ""); out.push(e); }
+  if (strikes > 1) out.unshift({ slug: "multiattack", name: "Multiattack", type: "feat", img: "icons/skills/melee/strike-sword-slashing-red.webp", system: { description: { value: `<p>It makes ${strikes} attacks.</p>` }, type: { value: "monster", subtype: "" }, uses: { max: "", spent: 0, recovery: [] }, requirements: "", prerequisites: { level: null, repeatable: false }, properties: [], activities: {}, enchant: {}, identifier: "multiattack" }, effects: [], flags: {} });
+  if (legendary) out.push({ slug: "legendary-actions", name: "Legendary Actions", type: "feat", img: "icons/magic/light/explosion-star-glow-silhouette.webp", system: { description: { value: `<p>It can take ${legendary} legendary action${legendary > 1 ? "s" : ""}, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. It regains spent legendary actions at the start of its turn.</p><ul>${weapons.slice(0, 2).map(w => `<li><strong>${w.name}.</strong> It makes one ${w.name} attack.</li>`).join("")}<li><strong>Move.</strong> It moves up to its speed without provoking opportunity attacks.</li></ul>` }, type: { value: "monster", subtype: "" }, uses: { max: "", spent: 0, recovery: [] }, requirements: "", prerequisites: { level: null, repeatable: false }, properties: [], activities: {}, enchant: {}, identifier: "legendary-actions" }, effects: [], flags: {} });
+  // the sheet text: concept + notes + bestiary line
+  const bio = [s.biography?.concept ? `<p><em>${s.biography.concept}</em></p>` : "", s.notes ? `<p>${s.notes}</p>` : "", s.biography?.notes ? `<p>${s.biography.notes}</p>` : "",
+    `<p><strong>Lineage:</strong> ${rfi.lineage}${rfi.subLineage ? ` (${rfi.subLineage})` : ""} · <strong>Tier ${rfi.tier ?? tier}</strong>, ${bracket}${rfi.bestiary?.role ? ` · ${rfi.bestiary.role}` : ""}${rfi.price?.bounty != null ? ` · bounty ${rfi.price.bounty} marks${rfi.price.hire != null ? `, hire ${rfi.price.hire}` : ""}` : ""}</p>`].join("");
+  const actor = {
+    slug, name, type: "npc", img: a.img, folder: rfi.lineage ? rfi.lineage.replace(/\b\w/g, c => c.toUpperCase()) : "Monsters",
+    prototypeToken: { name, displayName: 30, actorLink: false, width: size === "huge" ? 3 : size === "lg" ? 2 : 1, height: size === "huge" ? 3 : size === "lg" ? 2 : 1, texture: { src: a.prototypeToken?.texture?.src ?? a.img }, disposition: -1, displayBars: 20, bar1: { attribute: "attributes.hp" } },
+    system: {
+      abilities, skills,
+      attributes: { ac: { flat: ac, calc: "flat", formula: "" }, hp: { value: hp, max: hp, temp: 0, tempmax: 0, formula: "" }, init: { ability: "", bonus: "", roll: { min: null, max: null, mode: 0 } },
+        movement: { burrow: 0, climb: /serpent|skitter|swarm|hound|tick|stray|lurker/i.test(name) ? 30 : 0, fly: /hawk|wraith|avatar|dragon/i.test(name) ? 60 : 0, swim: /bog|marsh|reed|salt/i.test(name) ? 30 : 0, walk: 30, units: "ft", hover: /wraith|avatar/i.test(name) },
+        attunement: { max: 3 }, senses: { darkvision: dark, blindsight: 0, tremorsense: 0, truesight: 0, units: "ft", special: "" }, spellcasting: "", exhaustion: 0, concentration: { ability: "", roll: { min: null, max: null, mode: 0 }, bonuses: { save: "" }, limit: 1 }, hd: { spent: 0 }, death: { ability: "", roll: { min: null, max: null, mode: 0 }, success: 0, failure: 0 } },
+      details: { biography: { value: convertText(bio), public: "" }, alignment: "", race: null, type: { value: type, subtype: rfi.subLineage ?? "", swarm: /swarm/i.test(name) ? "med" : "", custom: "" }, environment: "", cr, spellLevel: 0, ideal: "", bond: "", flaw: "" },
+      traits: { size, di: { value: di, bypasses: [], custom: "" }, dr: { value: dr, bypasses: [], custom: "" }, dv: { value: dv, bypasses: [], custom: "" }, ci: { value: ci, custom: "" }, languages: { value: [], custom: "" }, dm: { amount: {}, bypasses: [] } },
+      currency: { pp: 0, gp: 0, ep: 0, sp: 0, cp: 0 }, bonuses: { mwak: { attack: "", damage: "" }, rwak: { attack: "", damage: "" }, msak: { attack: "", damage: "" }, rsak: { attack: "", damage: "" }, abilities: { check: "", save: "", skill: "" }, spell: { dc: "" } },
+      resources: { legact: { value: legendary, max: legendary }, legres: { value: 0, max: 0 }, lair: { value: false, initiative: null } }
+    },
+    items: out, effects: [],
+    flags: { fourththing: { rfi: { actor: rfi }, creatureType: type, kind: "monster" } }
+  };
+  return actor;
+}
+function laneCreatures() {
+  const file = join(ROOT, "conversion", "sources", "npcs-monsters.jsonl");
+  const rows = readFileSync(file, "utf8").split("\n").filter(Boolean).map(l => JSON.parse(l));
+  const actors = rows.filter(r => r.k.startsWith("!actors!")).map(r => r.v).filter(a => a.flags?.fourththing?.rfi?.actor?.lineage);
+  const itemsOf = id => rows.filter(r => r.k.startsWith(`!actors.items!${id}.`)).map(r => r.v);
+  const out = [], needsAll = [];
+  for (const a of actors.sort((x, y) => x.name.localeCompare(y.name))) {
+    const needs = [], items = itemsOf(a._id);
+    const e = convertMonster(a, items, needs);
+    for (const it of e.items) for (const l of leftovers(it.system?.description?.value ?? "")) needs.push(`"${it.name}": leftover term "${l}"`);
+    for (const l of leftovers(e.system.details.biography.value)) needs.push(`biography: leftover term "${l}"`);
+    e.flags["bad-eden-5e"] = { rfi: { id: a._id, pack: "npcs", identifier: a.name, hash: sha(JSON.stringify({ n: a.name, s: a.system, f: a.flags?.fourththing ?? {}, i: items.map(i => [i.name, i.system, i.flags?.fourththing ?? {}]) })) } };
+    out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
+  }
+  return { src: actors, out, needsAll, kind: "actors" };
+}
+
 /* ── overrides + output ──────────────────────────────────────────────────── */
 const deepMerge = (a, b) => { for (const [k, v] of Object.entries(b)) a[k] = v && typeof v === "object" && !Array.isArray(v) && a[k] && typeof a[k] === "object" ? deepMerge(a[k], v) : v; return a; };
 
@@ -385,12 +557,12 @@ function parity(name, src, features, kind = "features") {
 }
 
 /* ── main ────────────────────────────────────────────────────────────────── */
-const LANES = { techniques: laneTechniques, gear: laneGear };
+const LANES = { techniques: laneTechniques, gear: laneGear, creatures: laneCreatures };
 if (!lane || !LANES[lane]) { console.error(`usage: convert-5e.mjs <${Object.keys(LANES).join("|")}> [--write] [--parity]`); process.exit(2); }
 const { src, out, needsAll, kind = "features" } = LANES[lane]();
 if (flag("--parity")) { parity(lane, src, out, kind); }
 else if (flag("--write")) {
-  const ABOUT = { techniques: "The 75 Bad Eden Core techniques as dnd5e feats.", gear: "Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks)." };
+  const ABOUT = { techniques: "The 75 Bad Eden Core techniques as dnd5e feats.", gear: "Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).", creatures: "The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis." };
   const { outPath, applied } = writeLane(lane, out, needsAll, `GENERATED from RFI canon by tools/convert-5e.mjs (rubric v${RUBRIC.version}) — do not hand-edit; put fixes in content/overrides/${lane}.json. ${ABOUT[lane] ?? ""}`, kind);
   console.log(`${lane}: ${out.length} converted → ${outPath} (${applied} override(s) applied); ${needsAll.length} need a human → content/_needs-human/${lane}.md`);
 } else {

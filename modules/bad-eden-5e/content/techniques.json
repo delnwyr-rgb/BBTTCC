@@ -1,8 +1,8 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.4.0) — do not hand-edit; put fixes in content/overrides/techniques.json. The 75 Bad Eden Core techniques as dnd5e feats.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.6.0) — do not hand-edit; put fixes in content/overrides/techniques.json. The 75 Bad Eden Core techniques as dnd5e feats.",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.4.0",
+    "rubric": "1.6.0",
     "at": "2026-10-07",
     "overridesApplied": 0
   },
@@ -38,7 +38,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_anchor_point.png",
-      "description": "<p><em>The world pushes. You remain.</em></p><p>You have advantage on checks or saves made to resist being pushed, pulled, knocked prone, frightened, or charmed.</p>",
+      "description": "<p><em>The world pushes. You remain.</em></p><p>You have advantage on checks or saves made to resist being pushed, pulled, knocked prone, Frightened, or charmed.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -85,7 +85,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_battlefied_presence.png",
-      "description": "<p><em>People fight better when you are near.</em></p><p>Allies within 10 feet of you have advantage on the first saving throws they make against being frightened or charmed each combat.</p>",
+      "description": "<p><em>People fight better when you are near.</em></p><p>Allies within 10 feet of you have advantage on the first saving throws they make against being Frightened or charmed each combat.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -390,7 +390,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_darkness_hardened.png",
-      "description": "<p><em>The Dark doesn’t scare you. It negotiates.</em></p><p>You have advantage on saving throws against being frightened.</p><p>Additionally, when you fail a saving throw against fear or horror, you may choose to succeed instead. If you do, you gain one level of exhaustion after the effect ends. Once you use this feat, you can’t use it again until you finish a long rest.</p>",
+      "description": "<p><em>The Dark doesn’t scare you. It negotiates.</em></p><p>You have advantage on saving throws against being Frightened.</p><p>Additionally, when you fail a saving throw against fear or horror, you may choose to succeed instead. If you do, you gain one level of exhaustion after the effect ends. Once you use this feat, you can’t use it again until you finish a long rest.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -516,7 +516,7 @@
       "requirements": "Path of the Cosmic Linguist",
       "folder": "Techniques",
       "img": "icons/magic/symbols/runes-star-blue.webp",
-      "description": "<p><em>You hold the Sentence open and let the meaning pour in.</em></p><p>While your <strong>Sentence</strong> stance is active, your maximum <strong>Clarity</strong> increases by <strong>3</strong> — but the open channel costs you <strong>+1 Noise per scene</strong> for as long as the stance is held.</p>",
+      "description": "<p><em>You hold the Sentence open and let the meaning pour in.</em></p><p>While your <strong>Sentence</strong> stance is active, your maximum <strong>Clarity</strong> increases by <strong>3</strong> — but the open channel costs you <strong>+1 Noise per short rest</strong> for as long as the stance is held.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -664,7 +664,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_grave_calm.jpeg",
-      "description": "<p><em>Panic spreads. So does steadiness.</em></p><p>You have advantage on saving throws against being frightened. If you succeed, choose one ally within 10 feet to gain the same benefit on their next save.</p>",
+      "description": "<p><em>Panic spreads. So does steadiness.</em></p><p>You have advantage on saving throws against being Frightened. If you succeed, choose one ally within 10 feet to gain the same benefit on their next save.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -783,7 +783,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_iron_nerves.png",
-      "description": "<p><em>Panic is contagious. So is control.</em></p><p>When you roll initiative, you gain temporary hit points equal to your proficiency bonus.</p><p>Additionally, when you make a saving throw against being frightened or charmed, you may roll a d4 and add it to the save. Once you use this bonus, you can’t use it again until you finish a short rest or long rest.</p>",
+      "description": "<p><em>Panic is contagious. So is control.</em></p><p>When you roll initiative, you gain temporary hit points equal to your proficiency bonus.</p><p>Additionally, when you make a saving throw against being Frightened or charmed, you may roll a d4 and add it to the save. Once you use this bonus, you can’t use it again until you finish a short rest or long rest.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -1192,7 +1192,12 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/control/buff-flight-wings-blue.webp",
-      "description": "<p><em>You tear reserve will out of your own composure.</em></p><p>Once per scene, you may take <strong>1 Stress</strong> to immediately recover <strong>2 Clarity</strong>, up to your maximum.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "description": "<p><em>You tear reserve will out of your own composure.</em></p><p>Once per short rest, you may take <strong>1 Stress</strong> to immediately recover <strong>2 Clarity</strong>, up to your maximum.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "uses": {
+        "max": "1",
+        "per": "sr"
+      },
+      "activation": "special",
       "flags": {
         "bad-eden-5e": {
           "rfi": {

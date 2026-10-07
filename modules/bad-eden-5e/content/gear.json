@@ -1,8 +1,8 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.4.0) — do not hand-edit; put fixes in content/overrides/gear.json. Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.6.0) — do not hand-edit; put fixes in content/overrides/gear.json. Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.4.0",
+    "rubric": "1.6.0",
     "at": "2026-10-07",
     "overridesApplied": 0
   },
@@ -3288,7 +3288,7 @@
       "img": "icons/equipment/shield/heater-steel-worn.webp",
       "system": {
         "description": {
-          "value": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><strong>Structural Foam.</strong> Counts as a buckler — +1 AC while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
+          "value": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><strong>Structural Foam.</strong> Counts as a buckler — +1 AC while equipped in the off-hand. Once per short rest, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
           "chat": ""
         },
         "identified": true,
@@ -5211,7 +5211,7 @@
       "img": "icons/containers/bags/pack-leather-brown.webp",
       "system": {
         "description": {
-          "value": "<p>An old yellow Walkman with a single cassette permanently inside. The label is hand-written in a marker that has since stopped being manufactured. The headphones are foam-and-tinfoil affairs that ride over the ears with the dignity of a sleeping cat. The player is, somehow, ley-tuned. It plays when you need it to. Sometimes more.</p><p><strong>Side A — GENERIC MOTIVATIONAL.</strong> Once per scene as a free action, press play. You and one ally within Near range gain advantage on the next Resolve check.</p><p><strong>Side B — EMERGENCY ONLY.</strong> Once per session, flip the cassette. The track plays for the rest of the scene. All allies within Near range have advantage on every Resolve check. The cassette will not flip back without 24 hours of silence. Mal does not recommend abusing this.</p>",
+          "value": "<p>An old yellow Walkman with a single cassette permanently inside. The label is hand-written in a marker that has since stopped being manufactured. The headphones are foam-and-tinfoil affairs that ride over the ears with the dignity of a sleeping cat. The player is, somehow, ley-tuned. It plays when you need it to. Sometimes more.</p><p><strong>Side A — GENERIC MOTIVATIONAL.</strong> Once per short rest as a free action, press play. You and one ally within Near range gain advantage on the next Resolve check.</p><p><strong>Side B — EMERGENCY ONLY.</strong> Once per session, flip the cassette. The track plays for the rest of the scene. All allies within Near range have advantage on every Resolve check. The cassette will not flip back without 24 hours of silence. Mal does not recommend abusing this.</p>",
           "chat": ""
         },
         "identified": true,
@@ -5353,7 +5353,7 @@
       "img": "icons/containers/bags/pack-leather-brown.webp",
       "system": {
         "description": {
-          "value": "<p>A battered steel thermos wrapped in hex-script copper wire. The interior is older than the exterior, somehow. The lid screws on counterclockwise. The coffee inside is always hot, always strong, and always tastes like exactly what kind of day you're having. Some days it's cardamom and rain. Some days it's the warm bitter ash of decisions you'd rather not revisit. Some days it's just plain.</p><p><strong>Day's Reading.</strong> Once per scene, take a sip. The GM names a single mood-word that describes the current scene's emotional center: <em>tense. desperate. hollow. tender. funny.</em> You may use that word in conversation as if you'd been told it directly by an authority figure. (NPCs accept it as plausibly true.) The thermos refills overnight. Coffee is non-negotiable.</p>",
+          "value": "<p>A battered steel thermos wrapped in hex-script copper wire. The interior is older than the exterior, somehow. The lid screws on counterclockwise. The coffee inside is always hot, always strong, and always tastes like exactly what kind of day you're having. Some days it's cardamom and rain. Some days it's the warm bitter ash of decisions you'd rather not revisit. Some days it's just plain.</p><p><strong>Day's Reading.</strong> Once per short rest, take a sip. The GM names a single mood-word that describes the current scene's emotional center: <em>tense. desperate. hollow. tender. funny.</em> You may use that word in conversation as if you'd been told it directly by an authority figure. (NPCs accept it as plausibly true.) The thermos refills overnight. Coffee is non-negotiable.</p>",
           "chat": ""
         },
         "identified": true,
@@ -5967,7 +5967,7 @@
       "img": "icons/sundries/misc/lantern-copper-lit.webp",
       "system": {
         "description": {
-          "value": "<p>A fat, dog-eared ledger of debts, prices, and who-owes-whom across the Thatwards. While carried, you have an edge on any negotiation, bribe, or appraisal. The Jackalopes update theirs hourly. Yours is probably out of date and still better than nothing.</p><p><strong>Use.</strong> Once per scene, recall an exact figure or favor to gain advantage on a single Dexterity or Economy check.</p>",
+          "value": "<p>A fat, dog-eared ledger of debts, prices, and who-owes-whom across the Thatwards. While carried, you have an edge on any negotiation, bribe, or appraisal. The Jackalopes update theirs hourly. Yours is probably out of date and still better than nothing.</p><p><strong>Use.</strong> Once per short rest, recall an exact figure or favor to gain advantage on a single Dexterity or Economy check.</p>",
           "chat": ""
         },
         "identified": true,
@@ -6106,7 +6106,7 @@
       "img": "icons/weapons/swords/sword-guard-blue.webp",
       "system": {
         "description": {
-          "value": "<p><em>RIGHT??</em></p><p>Stun Mode: free-action toggle; on hit, Constitution DC 12 or Staggered (no hit points dealt).</p><p>You know that really cool laser blaster that you saw that one time?<br /><br />This is it.</p><p></p><p>It shoots lasers.</p><p></p><p>And has a stun mode.</p><p></p><p>RIGHT??</p>\n",
+          "value": "<p><em>RIGHT??</em></p><p>Stun Mode: free-action toggle; on hit, Constitution DC 12 or slowed (speed halved, −2 to attack rolls) (no hit points dealt).</p><p>You know that really cool laser blaster that you saw that one time?<br /><br />This is it.</p><p></p><p>It shoots lasers.</p><p></p><p>And has a stun mode.</p><p></p><p>RIGHT??</p>\n",
           "chat": ""
         },
         "identified": true,
@@ -7470,7 +7470,7 @@
       "img": "icons/equipment/chest/breastplate-leather-brown.webp",
       "system": {
         "description": {
-          "value": "<p>It hums with the after-image of fluorescent signage. Smells like ozone and pretzel salt.</p><p><b>Neon Afterimage.</b> While in dim light or within 30 ft of an obvious artificial light source (signage, streetlights, neon, holo-ads), gain advantage on Dexterity (tumble/balance/slip-past) checks to avoid provoking opportunity attacks.</p><p><b>Ghostwalk (1/long rest).</b> As a bonus action, become briefly half-ethereal until the end of your current turn. You can move through creatures and objects as if difficult terrain. If you end your turn inside an object, you're shunted to the nearest open space and take <b>1d10 bludgeoning, piercing, or slashing damage</b>.</p><p><b>Neon Signature.</b> The armor sheds faint, shifting light: a 5-ft radius of dim light. Suppress or restore as a bonus action.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
+          "value": "<p>It hums with the after-image of fluorescent signage. Smells like ozone and pretzel salt.</p><p><b>Neon Afterimage.</b> While in dim light or within 30 ft of an obvious artificial light source (signage, streetlights, neon, holo-ads), gain advantage on Dexterity (tumble/balance/slip-past) checks to avoid provoking opportunity attacks.</p><p><b>Ghostwalk (1/long rest).</b> As a bonus action, become briefly half-ethereal until the end of your current turn. You can move through creatures and objects as if difficult terrain. If you end your turn inside an object, you're shunted to the nearest open space and take <b>1d10 bludgeoning damage</b>.</p><p><b>Neon Signature.</b> The armor sheds faint, shifting light: a 5-ft radius of dim light. Suppress or restore as a bonus action.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
           "chat": ""
         },
         "identified": true,
@@ -8186,7 +8186,7 @@
       "img": "icons/containers/bags/pack-leather-brown.webp",
       "system": {
         "description": {
-          "value": "<p>A small steel flashlight with a yellow filter and a faint, persistent warmth. Switch it on and the immediate surroundings look like 4pm in late June, regardless of when or where you are. The batteries last unreasonably long. The light is technically real. The comfort is technically real. The smell of cut grass is, fine, the smell of cut grass is in your head.</p><p><strong>Pocket Noon.</strong> Once per scene, illuminate one Near zone in soft golden light for one minute. Allies in the zone have advantage on Resolve checks against fear, despair, or the slow corruption of qliphothic ambient. Enemies in the zone are visible regardless of cover. Mal: \"It's not actually sunlight. It's, you know, *vibes.*\"</p>",
+          "value": "<p>A small steel flashlight with a yellow filter and a faint, persistent warmth. Switch it on and the immediate surroundings look like 4pm in late June, regardless of when or where you are. The batteries last unreasonably long. The light is technically real. The comfort is technically real. The smell of cut grass is, fine, the smell of cut grass is in your head.</p><p><strong>Pocket Noon.</strong> Once per short rest, illuminate one Near zone in soft golden light for one minute. Allies in the zone have advantage on Resolve checks against fear, despair, or the slow corruption of qliphothic ambient. Enemies in the zone are visible regardless of cover. Mal: \"It's not actually sunlight. It's, you know, *vibes.*\"</p>",
           "chat": ""
         },
         "identified": true,
@@ -8230,7 +8230,7 @@
       "img": "icons/containers/bags/pack-leather-brown.webp",
       "system": {
         "description": {
-          "value": "<p>A laminated mail-route map, hand-annotated in three colors of ink. The roads are pre-Shattering. Most are now dust, briar, or crater. The annotations include phrases like <em>\"dog at 12, friendly,\"</em> and <em>\"Mrs. Vorhees needs the package put inside the screen door,\"</em> and, more recently in different handwriting, <em>\"the bend remembers wrong.\"</em></p><p><strong>Pre-Shattering Memory.</strong> Once per scene, consult the map. The GM tells you one fact about the current hex that pre-dates the Shattering — a building, a road, a name, a habit of the land. This information is true; it is also at least 27 years out of date. Use it however you want.</p>",
+          "value": "<p>A laminated mail-route map, hand-annotated in three colors of ink. The roads are pre-Shattering. Most are now dust, briar, or crater. The annotations include phrases like <em>\"dog at 12, friendly,\"</em> and <em>\"Mrs. Vorhees needs the package put inside the screen door,\"</em> and, more recently in different handwriting, <em>\"the bend remembers wrong.\"</em></p><p><strong>Pre-Shattering Memory.</strong> Once per short rest, consult the map. The GM tells you one fact about the current hex that pre-dates the Shattering — a building, a road, a name, a habit of the land. This information is true; it is also at least 27 years out of date. Use it however you want.</p>",
           "chat": ""
         },
         "identified": true,
@@ -9928,7 +9928,7 @@
       "img": "icons/containers/bags/pack-leather-brown.webp",
       "system": {
         "description": {
-          "value": "<p>A jagged shard of pre-Fall enamel signage. The mascot's grin is preserved exactly as it was when the world stopped being funny on purpose. Most people pin it to a coat. Some keep it in a pocket. A few have tried to throw it away. It comes back. Probably. I haven't checked.</p><p><strong>Mascot's Last Dignity.</strong> Gain advantage on the first Intimidate or Mock check you make each scene. Other people see the brooch. Other people remember S'narchy Burger. Other people make their check against being charmed by your obvious bad taste.</p>",
+          "value": "<p>A jagged shard of pre-Fall enamel signage. The mascot's grin is preserved exactly as it was when the world stopped being funny on purpose. Most people pin it to a coat. Some keep it in a pocket. A few have tried to throw it away. It comes back. Probably. I haven't checked.</p><p><strong>Mascot's Last Dignity.</strong> Gain advantage on the first Intimidate or Mock check you make each encounter. Other people see the brooch. Other people remember S'narchy Burger. Other people make their check against being charmed by your obvious bad taste.</p>",
           "chat": ""
         },
         "identified": true,
@@ -9972,7 +9972,7 @@
       "img": "icons/weapons/swords/sword-guard-blue.webp",
       "system": {
         "description": {
-          "value": "<p><em>The grill is cold. The burns are not.</em></p><p>Improvised melee. On a hit, you may make a withering remark — target rolls Resolve vs DC 11 or is frightened until the end of its next turn.</p><p>Standard-issue S'narchy Burger flat-top spatula, well-seasoned, slightly cursed by decades of overheard sarcasm. Hits about as hard as you'd expect and exactly as hard as it needs to.</p>\n",
+          "value": "<p><em>The grill is cold. The burns are not.</em></p><p>Improvised melee. On a hit, you may make a withering remark — target rolls Wisdom saving throw, DC 11 or is Frightened until the end of its next turn.</p><p>Standard-issue S'narchy Burger flat-top spatula, well-seasoned, slightly cursed by decades of overheard sarcasm. Hits about as hard as you'd expect and exactly as hard as it needs to.</p>\n",
           "chat": ""
         },
         "identified": true,
@@ -10513,7 +10513,7 @@
       "img": "icons/equipment/chest/breastplate-leather-brown.webp",
       "system": {
         "description": {
-          "value": "<p>An unreasonably long woolen scarf, two-tone gray, that occasionally shifts position on its own. Sometimes it tightens against the neck on a cold night. Sometimes it falls off your shoulder for no reason. Sometimes, very quietly, when you are alone in a room, it purrs. The previous owner left it to you. The previous owner was very specific that this was a kindness.</p><p><strong>Companion-Texture.</strong> +1 to Resolve while worn. Once per scene, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p><p><strong>Worn:</strong> +2 to Wisdom saving throws.</p>",
+          "value": "<p>An unreasonably long woolen scarf, two-tone gray, that occasionally shifts position on its own. Sometimes it tightens against the neck on a cold night. Sometimes it falls off your shoulder for no reason. Sometimes, very quietly, when you are alone in a room, it purrs. The previous owner left it to you. The previous owner was very specific that this was a kindness.</p><p><strong>Companion-Texture.</strong> +1 to Resolve while worn. Once per short rest, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p><p><strong>Worn:</strong> +2 to Wisdom saving throws.</p>",
           "chat": ""
         },
         "identified": true,
@@ -10970,7 +10970,7 @@
       "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
       "system": {
         "description": {
-          "value": "<p>A wax-paper sandwich that re-folds itself when you set it down. Take a bite, set it down, look up, look back: re-wrapped. Take another bite, set it down. Re-wrapped. The bread stays fresh. The filling stays at exactly the temperature it was when you got it. You have been eating this sandwich for three days now. So has the previous owner, apparently. So has the owner before them.</p><p><strong>Eternal Lunch.</strong> Heals 1 Stress per scene if eaten during the scene. Cannot be eaten in fewer than 4 actions across at least 4 scenes. The sandwich never spoils. The sandwich never runs out. The sandwich is approximately 60% as satisfying as a real sandwich.</p>",
+          "value": "<p>A wax-paper sandwich that re-folds itself when you set it down. Take a bite, set it down, look up, look back: re-wrapped. Take another bite, set it down. Re-wrapped. The bread stays fresh. The filling stays at exactly the temperature it was when you got it. You have been eating this sandwich for three days now. So has the previous owner, apparently. So has the owner before them.</p><p><strong>Eternal Lunch.</strong> Heals 1 Stress per short rest if eaten during the scene. Cannot be eaten in fewer than 4 actions across at least 4 scenes. The sandwich never spoils. The sandwich never runs out. The sandwich is approximately 60% as satisfying as a real sandwich.</p>",
           "chat": ""
         },
         "identified": true,
@@ -12786,7 +12786,7 @@
       "img": "icons/equipment/chest/breastplate-leather-brown.webp",
       "system": {
         "description": {
-          "value": "<p>A heavy hauberk woven through with a fine tension-thread of reactive yesodium-doped wire, cut and rivetted by a journeyman armorer in one of the older Bad Eden plate-houses. The weave snags incoming force a half-beat before it lands, redistributing it into the wearer's stance instead of their ribs. Heavy. Expensive. Worth it.</p><p><strong>Reactive Lacing.</strong> While worn, the wearer may shift one die of incoming bludgeoning, piercing, or slashing damage into Stress instead of hit points, once per scene. No upkeep, no harmonization — the thread does the thinking.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
+          "value": "<p>A heavy hauberk woven through with a fine tension-thread of reactive yesodium-doped wire, cut and rivetted by a journeyman armorer in one of the older Bad Eden plate-houses. The weave snags incoming force a half-beat before it lands, redistributing it into the wearer's stance instead of their ribs. Heavy. Expensive. Worth it.</p><p><strong>Reactive Lacing.</strong> While worn, the wearer may shift one die of incoming bludgeoning, piercing, or slashing damage into Stress instead of hit points, once per short rest. No upkeep, no harmonization — the thread does the thinking.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
           "chat": ""
         },
         "identified": true,
@@ -13164,7 +13164,7 @@
       "img": "icons/containers/bags/pack-leather-brown.webp",
       "system": {
         "description": {
-          "value": "<p>A belt buckle in the shape of the Frontier Formerly Known As Texas. Cast brass, slightly tarnished, the panhandle a little crooked because nobody really knows where the panhandle WAS, alright? The maps are vague. The buckle is more confident than the maps. People notice.</p><p><strong>Mild Authority.</strong> While worn (visibly), once per scene you may extend a social interaction by one sentence. The other party will hear you out. They are not obligated to agree. (Mal: \"This is, technically, a magic item. Mostly it's brass and audacity.\")</p>",
+          "value": "<p>A belt buckle in the shape of the Frontier Formerly Known As Texas. Cast brass, slightly tarnished, the panhandle a little crooked because nobody really knows where the panhandle WAS, alright? The maps are vague. The buckle is more confident than the maps. People notice.</p><p><strong>Mild Authority.</strong> While worn (visibly), once per short rest you may extend a social interaction by one sentence. The other party will hear you out. They are not obligated to agree. (Mal: \"This is, technically, a magic item. Mostly it's brass and audacity.\")</p>",
           "chat": ""
         },
         "identified": true,
@@ -13581,7 +13581,7 @@
       "img": "icons/svg/item-bag.svg",
       "system": {
         "description": {
-          "value": "<p><em>“You remember who you were.”</em></p><p><strong>Ward.</strong> You gain +1 to Wisdom check and +1 to Insight (Wisdom).</p><p><strong>Once per scene:</strong> Ignore the first failed check caused by ambient Darkness (GM adjudication).</p>",
+          "value": "<p><em>“You remember who you were.”</em></p><p><strong>Ward.</strong> You gain +1 to Wisdom check and +1 to Insight (Wisdom).</p><p><strong>Once per short rest:</strong> Ignore the first failed check caused by ambient Darkness (GM adjudication).</p>",
           "chat": ""
         },
         "identified": true,
@@ -15202,7 +15202,7 @@
       "img": "icons/sundries/misc/lantern-copper-lit.webp",
       "system": {
         "description": {
-          "value": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><strong>Recall Sephirah (Harmonized, 1/scene).</strong> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><strong>Memory Edge (Harmonized).</strong> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><em>Unharmonized: clear glass. Pretty. Inert.</em></p>",
+          "value": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><strong>Recall Sephirah (Harmonized, 1/short rest).</strong> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><strong>Memory Edge (Harmonized).</strong> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><em>Unharmonized: clear glass. Pretty. Inert.</em></p>",
           "chat": ""
         },
         "identified": true,
