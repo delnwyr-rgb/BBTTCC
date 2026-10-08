@@ -252,7 +252,8 @@ class LootApp extends ApplicationV2 {
     if (!gate) return;
     const actor = game.actors?.get(this.recipientId) || _defaultRecipient();
     if (!actor) { ui.notifications?.warn?.("No Steward to make the attempt."); return; }
-    const roll = await game.fourththing?.rolls?.skillCheck?.(actor, { skill: gate.skill });
+    // A CHARACTER check: the system's own skill roll (RFI canon die / dnd5e tinker's tools) — dice split 2026-10-08.
+    const roll = await (game.bbttcc?.dice?.skillCheck ?? game.fourththing?.rolls?.skillCheck)?.(actor, { skill: gate.skill, label: `Crack the ${fl.kind ?? "container"} — ${gate.skill} vs DC ${gate.dc}` });
     const total = Number(roll?.total ?? 0);
     if (total >= Number(gate.dc)) {
       const res = await _relay("crack", { tokenUuid: this.token.uuid });
@@ -382,6 +383,11 @@ function _amActiveGM() {
 // derived health pool (system.derived.stress), NOT the manifestation cast pool.
 function _isDownedNPC(actor) {
   if (!actor || actor.type !== "npc") return false;
+  // dnd5e (2026-10-08): one pool, the HP bar, through the system-agnostic combat adapter.
+  if (game.system?.id !== "fourththing") {
+    const h = game.bbttcc?.combat?.getHealth?.(actor) ?? { value: Number(actor.system?.attributes?.hp?.value), max: Number(actor.system?.attributes?.hp?.max) };
+    return Number.isFinite(h?.max) && h.max > 0 && Number.isFinite(h?.value) && h.value <= 0;
+  }
   const d = actor.system?.derived || {};
   const iv = Number(d.integrity?.value), im = Number(d.integrity?.max);
   const sv = Number(d.stress?.value), sm = Number(d.stress?.max);
@@ -415,7 +421,8 @@ Hooks.on("updateActor", (actor, changes) => {
   if (!_amActiveGM() || actor?.type !== "npc") return;
   // Only react when a health pool actually changed.
   if (!foundry.utils.hasProperty(changes, "system.derived.integrity")
-    && !foundry.utils.hasProperty(changes, "system.derived.stress")) return;
+    && !foundry.utils.hasProperty(changes, "system.derived.stress")
+    && !foundry.utils.hasProperty(changes, "system.attributes.hp")) return;   // dnd5e: the HP pool
   _reconcileLootForActor(actor);
 });
 

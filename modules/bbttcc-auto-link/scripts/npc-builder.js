@@ -696,7 +696,7 @@ function _echoBoonItemData({ family, kind, tier, stewardName, entryName, memberN
     <p><em>${foundry.utils.escapeHTML(boon.flavor)}</em></p>`;
   return {
     name: `${boon.name} (Echo Boon)`,
-    type: "feature",
+    type: game.bbttcc?.types?.item?.("feature") ?? "feature",   // feat on dnd5e
     img: boon.img,
     system: {
       category: "echo",

@@ -309,7 +309,7 @@
         });
 
         const dc = computeRoundDC(spec, state.darknessNow);
-        const roll = await (new Roll(`${(game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + @b`, { b: bonus })).evaluate();   // canon die: 2d10, tens explode
+        const roll = await (new Roll(`${(game.bbttcc?.dice?.checkFormula?.() ?? game.fourththing?.rolls?.checkFormula?.() ?? "2d10x10")} + @b`, { b: bonus })).evaluate();   // the system's check die (dice split 2026-10-08) — was: canon die: 2d10, tens explode
         const total = roll.total ?? 0;
         const margin = total - dc;
 

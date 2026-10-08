@@ -126,7 +126,8 @@
     "scripts/maneuvers-balance-content.enhancer.js",
     "scripts/maneuvers-audit-wiring.enhancer.js",
     "scripts/raid-infiltration.canvas-vfx.enhancer.js",
-    "scripts/affiliation-op-table.enhancer.js"
+    "scripts/affiliation-op-table.enhancer.js",
+    "scripts/raid-battle-scenes.enhancer.js"
   ],
   "styles": [
     "css/raid-styles.css"

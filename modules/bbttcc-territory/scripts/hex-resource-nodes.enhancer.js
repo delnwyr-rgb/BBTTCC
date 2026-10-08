@@ -78,10 +78,17 @@
         }
       } catch (_e) {}
     }
-    if (!data) data = {
+    // No source item: a stub. RFI = a `gear` material; dnd5e = a `loot` material (the RFI item
+    // types don't exist there — step 4 parity, 2026-10-08). The rfi flag block is raw data, so it
+    // is safe on both systems (only getFlag("fourththing") throws on dnd5e).
+    if (!data) data = game.system?.id === "dnd5e" ? {
+      name: name || key, type: "loot", img: "icons/commodities/materials/bowl-powder-grey.webp",
+      system: { type: { value: "material" }, quantity: units, weight: { value: 0 }, price: { value: 0, denomination: "gp" } },
+      flags: { fourththing: { rfi: { item: { tier: tier || "I", frame: "material", origin: "found", bound: "free", materialKey: key, charges: units } } } }
+    } : {
       name: name || key, type: "gear", img: "icons/svg/mystery-man.svg",
       system: { slot: "material", tags: ["material", key] },
-      flags: { fourththing: { rfi: { item: { ...RfiItems.defaults({ type: "gear", system: {}, getFlag: () => null }),
+      flags: { fourththing: { rfi: { item: { ...(RfiItems?.defaults?.({ type: "gear", system: {}, getFlag: () => null }) ?? {}),
         tier: tier || "I", frame: "material", origin: "found", bound: "free", materialKey: key, charges: units, upkeep: { mode: "passive", per: "none" } } } } }
     };
     foundry.utils.setProperty(data, "flags.fourththing.rfi.item.charges", units);
@@ -116,11 +123,9 @@
     if (!hexDoc) throw new Error("harvestHexNode: no hex doc.");
     if (!nodeId) throw new Error("harvestHexNode: no node id.");
 
-    const RfiItems = game.fourththing?.items;
-    if (!RfiItems) {
-      ui.notifications?.error("RFI items API not available.");
-      return { ok: false, reason: "no-items-api" };
-    }
+    // The RFI items API is optional since 2026-10-08: on dnd5e the material lands as a `loot` item
+    // (or in the faction stockpile, which is system-agnostic).
+    const RfiItems = game.fourththing?.items ?? null;
 
     const { node, idx, arr } = findNode(hexDoc, nodeId);
     if (!node) {
@@ -137,12 +142,16 @@
     const skill = node.skill || "body";
     const dc = Number(node.dc ?? 12);
     const sys = actor.system?.system ?? actor.system;
-    const baseAttr = Number(sys?.attributes?.[skill]?.value ?? 0);
+    // A CHARACTER check (dice split 2026-10-08): RFI = the attribute value (+ listed passive AEs);
+    // dnd5e = the mapped ability modifier (its AEs are already in the modifier).
+    const dice = game.bbttcc?.dice;
+    const onRFI = dice ? dice.isRFI() : true;
+    const baseAttr = onRFI ? Number(sys?.attributes?.[skill]?.value ?? 0) : dice.abilityMod(actor, skill);
 
     // Passive AE bonuses (mode "add") on the attribute being used.
     const aeContribs = [];
     let aeAttr = 0;
-    for (const effect of actor.appliedEffects ?? []) {
+    for (const effect of (onRFI ? actor.appliedEffects : []) ?? []) {
       if (effect.disabled) continue;
       const src = effect.parent?.name ?? effect.name ?? "Passive";
       for (const change of effect.changes ?? []) {
@@ -155,7 +164,7 @@
     }
     const attr = baseAttr + aeAttr;
 
-    const formula = `${game.fourththing?.rolls?.checkFormula?.() || "2d10x10"} + ${attr}`;   // canon check die (2026-10-01)
+    const formula = `${dice?.checkFormula?.() ?? (game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${attr}`;   // the system's check die (canon 2d10 on RFI, d20 on dnd5e)
     const roll = new Roll(formula);
     await roll.evaluate();
     const total = roll.total;

@@ -51,6 +51,7 @@ function _ensureRoot() {
   if (typeof _combat.resistsForcedMove === "undefined")  _combat.resistsForcedMove = null;
   if (typeof _combat.applyCondition === "undefined")     _combat.applyCondition = null;
   if (typeof _combat.getHealth === "undefined")          _combat.getHealth = null;
+  if (typeof _combat.heal === "undefined")               _combat.heal = null;   // heal(actor, amount) → {before, after} (2026-10-08)
   if (typeof _combat.hasCondition === "undefined")       _combat.hasCondition = null;
   if (!(_combat._interceptors instanceof Array))         _combat._interceptors = [];
   if (typeof _combat.registerDamageInterceptor !== "function") {

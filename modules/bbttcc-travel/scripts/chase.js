@@ -243,8 +243,9 @@
     let rollTotal = 0;
     const pilot = side.pilotId ? game.actors.get(side.pilotId) : null;
 
-    if (pilot && game.fourththing?.rolls?.skillCheck) {
-      const res = await game.fourththing.rolls.skillCheck(pilot, {
+    const skillCheck = game.bbttcc?.dice?.skillCheck ?? game.fourththing?.rolls?.skillCheck;   // dice split 2026-10-08: RFI canon die / dnd5e vehicle tools
+    if (pilot && skillCheck) {
+      const res = await skillCheck(pilot, {
         skill: "piloting",
         label: `Piloting — ${state.label ?? "Chase"} · ${leg.label}`
       });

@@ -6213,22 +6213,6 @@ try {
   }
 }
 
-// Post effects
-// (hex id only when hex target)
-    try {
-      const post = game.bbttcc?.api?.raid?.applyPostRoundEffects;
-      if (typeof post === "function") {
-        await post({
-          attackerId: attacker?.id || null,
-          defenderId: defender?.id || null,
-          success: (Number(totalFinal||0) >= Number(dcFinal||0)),
-          maneuversAtt: listA,
-          maneuversDef: listD,
-          targetHexId: (r.targetType==="hex") ? (targetHex?.id || null) : null
-        });
-      }
-    } catch (e) { warn("post-round effects failed", e); }
-
     const ts = Date.now(), dateStr = new Date(ts).toLocaleString();
 
     // Persist final numbers for display + war logs.
@@ -6304,6 +6288,29 @@ try {
     }
   }
 } catch (_eB3TR) {}
+
+// Post effects — AFTER the B3.2 flank re-tier (2026-10-08: it used to run before it, so Unity and
+// morale could disagree with the outcome the console shows) and WITH an outcome word: the
+// victory/morale wrappers key on win / stalemate / loss, and a bare `success` boolean meant
+// stalemate never fired. Stalemate = the attacker held exactly at the DC (margin 0).
+// (hex id only when hex target)
+    try {
+      const post = game.bbttcc?.api?.raid?.applyPostRoundEffects;
+      if (typeof post === "function") {
+        const finalMargin = r.contested ? Number(r.margin || 0)
+          : (Number(r.meta?.b3?.thisRound?.effectiveTotal ?? r.total ?? totalFinal) || 0) - (Number(r.dcFinal ?? dcFinal) || 0);
+        await post({
+          attackerId: attacker?.id || null,
+          defenderId: defender?.id || null,
+          success: finalMargin >= 0,
+          outcome: finalMargin > 0 ? "win" : finalMargin < 0 ? "loss" : "stalemate",
+          margin: finalMargin,
+          maneuversAtt: listA,
+          maneuversDef: listD,
+          targetHexId: (r.targetType==="hex") ? (targetHex?.id || null) : null
+        });
+      }
+    } catch (e) { warn("post-round effects failed", e); }
 
 // Legacy fields: keep a Roll object for non-contested raids; contested raids store a friendly string in r.roll.result.
     if (!r.contested) {
@@ -7917,6 +7924,8 @@ Hooks.once("ready", () => {
     if (typeof game.bbttcc.api.raid.consumeQueuedTurnEffects !== "function") {
       game.bbttcc.api.raid.consumeQueuedTurnEffects = async (args = {}) => args;
     }
+    // lifecycle contract (2026-10-08): the victory/morale wrappers' `ready` runs before this one — they wait on it.
+    try { game.bbttcc.lifecycle?.provide?.("raid.postRound", true); } catch (_e) {}
     game.bbttcc.api.raid.crewGrants = {
       crewMap: CREW_MANEUVER_GRANTS,
       occultMap: OCCULT_MANEUVER_GRANTS,

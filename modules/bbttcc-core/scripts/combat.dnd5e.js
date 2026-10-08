@@ -142,6 +142,16 @@ function getHealth(actor) {
   return { value: Number.isFinite(value) ? value : null, max: Number.isFinite(max) ? max : null };
 }
 
+/** heal(actor, amount) → {before, after}: adds to the dnd5e HP pool, capped at max (2026-10-08). */
+async function heal(actor, amount) {
+  const hp = actor?.system?.attributes?.hp;
+  if (!hp || !Number.isFinite(Number(amount))) return null;
+  const before = Number(hp.value) || 0, max = Number(hp.max) || before;
+  const after = Math.max(0, Math.min(max, before + Number(amount)));
+  if (after !== before) await actor.update({ "system.attributes.hp.value": after });
+  return { before, after };
+}
+
 /** hasCondition(actor, condition) → bool via the Foundry-core status set. */
 function hasCondition(actor, condition) {
   return !!actor?.statuses?.has?.(condition);
@@ -185,8 +195,9 @@ Hooks.once("ready", () => {
   // Fill only empty slots — never clobber an impl another source installed.
   if (typeof combat.applyDamage       !== "function") combat.applyDamage = applyDamage;
   if (typeof combat.getHealth         !== "function") combat.getHealth = getHealth;
+  if (typeof combat.heal              !== "function") combat.heal = heal;
   if (typeof combat.hasCondition      !== "function") combat.hasCondition = hasCondition;
   if (typeof combat.applyCondition    !== "function") combat.applyCondition = applyCondition;
   if (typeof combat.resistsForcedMove !== "function") combat.resistsForcedMove = resistsForcedMove;
-  console.log(TAG, "dnd5e combat impl registered on game.bbttcc.combat (system=dnd5e, dnd5e v5.x)");
+  console.log(TAG, `dnd5e combat impl registered on game.bbttcc.combat (system=dnd5e ${game.system?.version ?? ""})`);
 });

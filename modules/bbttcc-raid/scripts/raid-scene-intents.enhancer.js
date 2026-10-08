@@ -247,6 +247,13 @@
       const actor = tok.actor;
       if (!actor) continue;
       try {
+        // dnd5e has no system.integrity: heal through the combat adapter when it offers one (2026-10-08).
+        const healFn = game.bbttcc?.combat?.heal;
+        if (typeof healFn === "function" && game.system?.id !== "fourththing") {
+          const r = await healFn(actor, amount);
+          results.push({ tokenId: tok.id, ok: !!r, before: r?.before, after: r?.after });
+          continue;
+        }
         const cur = Number(foundry.utils.getProperty(actor, "system.integrity.value") || 0);
         const max = Number(foundry.utils.getProperty(actor, "system.integrity.max") || 0) || cur + amount;
         const next = Math.max(0, Math.min(max, cur + amount));

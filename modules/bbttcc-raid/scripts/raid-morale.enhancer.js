@@ -23,7 +23,12 @@
 
   function installOnce(){
     const raid = game.bbttcc?.api?.raid || game.modules.get("bbttcc-raid")?.api?.raid;
-    if (!raid || typeof raid.applyPostRoundEffects !== "function") return console.warn(TAG, "raid.applyPostRoundEffects not found");
+    if (!raid || typeof raid.applyPostRoundEffects !== "function") {
+      // our `ready` runs before the console installs the base — wait on the lifecycle contract (2026-10-08)
+      if (game.bbttcc?.lifecycle?.need && !installOnce.__waiting) { installOnce.__waiting = true; game.bbttcc.lifecycle.need("raid.postRound").then(() => { installOnce.__waiting = false; installOnce(); }); return; }
+      if (!installOnce.__waiting) console.warn(TAG, "raid.applyPostRoundEffects not found");
+      return;
+    }
     // Idempotent: installOnce also runs on every canvasReady — never stack a second morale layer.
     if (raid.__moraleWrapped || raid.applyPostRoundEffects.__bbttccMoraleWrapped) return;
     const orig = raid.applyPostRoundEffects;

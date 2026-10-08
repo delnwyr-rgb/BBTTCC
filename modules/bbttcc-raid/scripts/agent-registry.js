@@ -381,6 +381,8 @@
       Object.defineProperty(globalThis.game.bbttcc.api.agent, "_registryVersion", { get: () => VERSION, configurable: true, enumerable: true });
 
       log(`Registry installed (v${VERSION}). Verbs registered: ${REGISTRY.size}.`);
+      // lifecycle contract (2026-10-08): consumers that load before us (mal-voice sorts first) wait on this.
+      try { globalThis.game.bbttcc.lifecycle?.provide?.("raid.agent", globalThis.game.bbttcc.api.agent); } catch (_e) {}
     } catch (e) {
       warn("Failed to install registry:", e?.message || e);
     }

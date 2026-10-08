@@ -243,11 +243,14 @@ async function withdrawToCharacter(character, faction, matKey, qtyAmt, _opts = {
   }
   if (!itemData) {
     // Minimal stub mirroring the harvest fallback.
+    // dnd5e has no `gear` type: a `loot` material there (bbttcc-core types) — 2026-10-08
+    const onDnd = game.system?.id === "dnd5e";
     itemData = {
       name: entry?.name || matKey,
-      type: "gear",
+      type: game.bbttcc?.types?.item?.("gear") ?? "gear",
       img:  entry?.img  || "icons/svg/mystery-man.svg",
-      system: { slot: "material", tags: ["material", matKey] },
+      system: onDnd ? { type: { value: "material" }, quantity: q, weight: { value: 0 }, price: { value: 0, denomination: "gp" } }
+                    : { slot: "material", tags: ["material", matKey] },
       flags: { fourththing: { rfi: { item: {
         tier:        "I",
         frame:       "material",

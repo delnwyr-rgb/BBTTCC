@@ -127,6 +127,8 @@ World settings: `overshootEnabled/overshootTierGate/overshootSkillChecks/autoApp
 ---
 
 ## 2. bbttcc-core
+**Two-system seams added 2026-10-08 (step 4 of the D&D port):** `scripts/hud-draggable.js` — `globalThis._ftMakeHudDraggable ??=` a verbatim copy of the system's HUD drag/collapse/remember helper, so dnd5e HUDs (player HUD, toolbar) are movable too (the fourththing copy wins on RFI). `scripts/dice.js` — **`game.bbttcc.dice`** = the CHARACTER check in the running system's voice (owner ruling, the dice split: faction contests stay 2d10 everywhere; character checks = RFI canon die / dnd5e d20): `isRFI, checkFormula({mode}), abilityKey(rfiAttr), abilityMod(actor, rfiAttr), skillRef(rfiSkill) → {kind: skill|tool|attack, key}, skillBonus, await skillCheck(actor, {skill, attribute, label}) → {total, roll, isFumble} (dnd5e: rollSkill / rollToolCheck / rollAbilityCheck, dialog skipped), await check(actor, {attribute, bonus, dc, label}), await flatCheck({bonus, dc, label})`, plus **`aeKey(key)` / `aeChanges(changes)`** (RFI `system.derived.<guard|evasion|resolve|initiative|integrity|stress>.aeBonus` and `system.skills.<rfi>.value` → dnd5e AC / save / init / HP bonus / skill check-bonus keys) and **`game.bbttcc.types.{actor, item, hasActor, hasItem}`** (rig→vehicle, boss→npc, gear→loot, feature→feat on dnd5e). Maps mirror `bad-eden-5e/conversion/rubric.json`. Consumers: banks loot (crack + downed-by-HP), territory hex harvest (also runs without the RFI items API: loot stub), tikkun repair/ritual, structures Ruin to Renewal, travel chase piloting, factions stockpile stub, auto-link builders, character-options enlightenment, radiation mutations. `combat.dnd5e.js` gained **`heal(actor, amount) → {before, after}`** (facade slot `game.bbttcc.combat.heal`; raid scene heal intents use it).
+
 
 *Strategic Layer Core* v13.1.17 — namespace bootstrap, GM write/audit layer, combat adapter seam, central help registry, global window/theme defaults (`be-theme.css` et al.), and the **Manifestation Bridge** (steward↔faction value transfer).
 
@@ -184,6 +186,8 @@ Loot flavors `corpse|chest(tinkering DC12)|terminal(hacking DC14)|cache`; **auto
 ---
 
 ## 5. bbttcc-territory
+**2026-10-08:** the player HUD defaults to just under `#bbttcc-toolbar` when no per-user drag position is saved (both bars are fixed top-centre; they overlapped on dnd5e, which had no drag helper until bbttcc-core shipped one). Hex harvest = a character check through `game.bbttcc.dice` and works without the RFI items API (dnd5e: a `loot` material stub).
+
 
 *Hex Territory Map* v1.3.20 (~20k lines, biggest module) — hexes-as-Drawings, terrain/conditions/resource nodes/fog, the **turn pipeline**, resolution/outcome matrix, garrison upkeep, build units, Townbuilder, quest links, GM toolbar + player HUD, Territory Dashboard / Campaign Overview.
 
@@ -343,6 +347,8 @@ Emits `bbttcc:beforeTravel`, `bbttcc:afterTravel {…, success, rollTotal, dc, e
 ---
 
 ## 12. bbttcc-raid
+**2026-10-08 (step 4):** `_commitRound` now calls `applyPostRoundEffects` AFTER the B3.2 flank re-tier and passes `outcome: win|stalemate|loss` + `margin` (stalemate = held exactly at the DC) beside `success` — the victory/morale wrappers' stalemate rows can fire (never could before). `agent-registry.js` publishes `lifecycle.provide("raid.agent", game.bbttcc.api.agent)`. **`scripts/raid-battle-scenes.enhancer.js`** (non-fourththing systems only): module-side `game.bbttcc.api.raid.battleScenes.{list, current, bind, unbind, activate}`, the `ft-activateBattleScene` socket relay, and the Phase 5 wrap of `applyPostRoundEffects` (advance-to-next-scene prompt for the GM; final scene → `flags.bbttcc-raid.lastOutcome = {kind: "occupation"}` on the hex + a victory card) — the system owns all of this on RFI.
+
 
 *Raid & Siege Engine* v1.3.14.4 — 104 esmodules, ~40k lines. Raid console, maneuver catalog, strategic activities, **Courtly Intrigue**, **Tableau**, **Siege**, **Agent API**, orbital strikes.
 
@@ -378,6 +384,8 @@ API `api.raid.tableau.{DEFAULTS, readConfig, enable, disable, sizeExisting, setS
 ---
 
 ## 13. bbttcc-mal-voice
+**2026-10-08:** declares dnd5e; the agent-registry bootstrap waits on `game.bbttcc.lifecycle.need("raid.agent")` (mal-voice sorts before raid, so the old one-shot `ready` check always warned).
+
 
 - **Facilitation reads (2026-10-07):** `_facNpcAiOff()` (campaign `facilitation.get().npcAi === "off"`) is the FIRST clause of `_refusalReason` and gates `talkTo` — refuses GM and players alike (Tabletop: NPCs are played at the table); `_playIntroAudio` also returns when `narration === "off"`. Still no mal-voice-side master switch; the campaign policy is it.
 

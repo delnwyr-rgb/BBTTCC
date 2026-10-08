@@ -385,8 +385,10 @@ async function _onRenewal(actor) {
           // check instead: Faith = faith skill (soul); Economy = streetwise (intrigue).
           const skillKey = attrKey === "economy" ? "streetwise" : "faith";
           let total = 0;
-          if (game.fourththing?.rolls?.skillCheck) {
-            const res = await game.fourththing.rolls.skillCheck(actor, { skill: skillKey, label: `Ruin to Renewal — ${attrKey === "economy" ? "Economy" : "Faith"} vs DC 15` });
+          const dice = game.bbttcc?.dice;
+          if (dice?.skillCheck || game.fourththing?.rolls?.skillCheck) {
+            // A CHARACTER check: the system's own skill roll (RFI canon die / dnd5e d20 — dice split 2026-10-08).
+            const res = await (dice?.skillCheck ?? game.fourththing.rolls.skillCheck)(actor, { skill: skillKey, label: `Ruin to Renewal — ${attrKey === "economy" ? "Economy" : "Faith"} vs DC 15` });
             total = res?.isFumble ? 0 : (Number(res?.total) || 0);
           } else {
             const rawSys = actor.system?.system ?? actor.system;

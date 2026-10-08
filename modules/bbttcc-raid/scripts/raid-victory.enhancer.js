@@ -132,7 +132,11 @@
       raid.applyPostRoundEffects.__bbttccVictoryWrapped = true;
       raid.__victoryWrapped = true;
       console.log(TAG, "Wrapped applyPostRoundEffects with Victory/Unity awards.");
-    } else {
+    } else if (game.bbttcc?.lifecycle?.need && !installOnce.__waiting) {
+      // not there yet (our `ready` runs before the console's): wait for the base, then wrap
+      installOnce.__waiting = true;
+      game.bbttcc.lifecycle.need("raid.postRound").then(() => { installOnce.__waiting = false; installOnce(); });
+    } else if (!installOnce.__waiting) {
       console.warn(TAG, "applyPostRoundEffects not found; skipping outcome awards.");
     }
   }

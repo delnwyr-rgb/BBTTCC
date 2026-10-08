@@ -198,12 +198,16 @@ function _install() {
     });
 
     // Verify the agent registry is present — we depend on it for context.
+    // bbttcc-mal-voice loads before bbttcc-raid (alphabetical), so at our `ready` the registry
+    // isn't there yet — wait for it through the core lifecycle contract instead of warning
+    // (2026-10-08; the round-commit trigger never needed it at install time anyway).
+    const bootstrap = (agent) => { try { const caps = agent.capabilities(); log(`Bootstrapped against agent registry v${caps.version} (${caps.verbs.length} verbs).`); } catch (e) { warn("agent registry bootstrap failed:", e?.message || e); } };
     const agent = globalThis.game?.bbttcc?.api?.agent;
-    if (!agent?.capabilities) {
-      warn("game.bbttcc.api.agent.capabilities() not available. Mal Voice cannot read game state until bbttcc-raid is active and the agent registry is installed.");
-    } else {
-      const caps = agent.capabilities();
-      log(`Bootstrapped against agent registry v${caps.version} (${caps.verbs.length} verbs).`);
+    if (agent?.capabilities) bootstrap(agent);
+    else if (globalThis.game?.bbttcc?.lifecycle?.need) globalThis.game.bbttcc.lifecycle.need("raid.agent").then(bootstrap);
+    else {
+      let tries = 0;
+      const poll = setInterval(() => { const a = globalThis.game?.bbttcc?.api?.agent; if (a?.capabilities) { clearInterval(poll); bootstrap(a); } else if (++tries > 40) { clearInterval(poll); warn("game.bbttcc.api.agent.capabilities() never appeared — is bbttcc-raid active?"); } }, 500);
     }
 
     log(`Installed at game.bbttcc.mal (v${globalThis.game.bbttcc.mal.version}). Provider: ${game.bbttcc.mal.settings.provider()}. ${game.user?.isGM ? `Key on this GM machine: ${!!game.bbttcc.mal.settings.apiKey()}.` : "Player seat — AI calls relay through the GM."}`);

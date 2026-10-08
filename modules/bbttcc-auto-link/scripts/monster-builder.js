@@ -323,7 +323,7 @@ function makeTraitItem(spec, trait) {
 
 function makeFeatureItem(spec, feat) {
   return {
-    name: feat.name, type: "feature", img: feat.img ?? "icons/magic/symbols/symbol-runes-purple.webp",
+    name: feat.name, type: game.bbttcc?.types?.item?.("feature") ?? "feature", img: feat.img ?? "icons/magic/symbols/symbol-runes-purple.webp",   // feat on dnd5e
     system: {
       category: "principle", source: "", tags: _kitTags(spec, feat.tags ?? []),
       description: { value: `<p><strong>Passive.</strong> ${feat.desc}</p>${feat.flavor ? `<p><em>${feat.flavor}</em></p>` : ""}`, chat: "" }

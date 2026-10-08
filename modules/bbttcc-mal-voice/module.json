@@ -20,7 +20,8 @@
         "compatibility": {
           "verified": "14"
         }
-      }
+      },
+      { "id": "dnd5e", "type": "system", "compatibility": { "verified": "6" } }
     ],
     "requires": [
       {

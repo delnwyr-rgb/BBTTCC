@@ -1047,7 +1047,25 @@
     refreshTravelStackPill();
     // 2026-05-25 — make the player HUD bar draggable + collapsible (same helper
     // the system uses for the Crew/Manifest/Raid HUDs). Position persists per user.
+    // (On dnd5e the helper comes from bbttcc-core/scripts/hud-draggable.js.)
     try { globalThis._ftMakeHudDraggable?.(root, { storageKey: "player-hud-bar", collapsedLabel: "⚙ HUD" }); } catch (_e) {}
+    // 2026-10-08 — default spot = just under the Bad Eden toolbar. Both bars are fixed
+    // top-centre and drew over each other until the user dragged one away; a saved
+    // drag position (the helper's per-user localStorage) still wins.
+    const placeBelowToolbarIfUnsaved = () => {
+      const key = `ft-hud-pos:${game.user?.id || "anon"}:player-hud-bar`;
+      let saved = null; try { saved = JSON.parse(localStorage.getItem(key) || "null"); } catch (_e) {}
+      if (saved?.left != null && saved?.top != null) return;
+      const place = () => {
+        if (!root.isConnected) return;
+        const bar = document.getElementById("bbttcc-toolbar");
+        const r = bar?.getBoundingClientRect();
+        if (!r?.height) return;
+        root.style.top = `${Math.round(r.bottom + 8)}px`;
+      };
+      place(); setTimeout(place, 800); setTimeout(place, 2500);
+    };
+    placeBelowToolbarIfUnsaved();
     log("Player HUD mounted.");
   }
 

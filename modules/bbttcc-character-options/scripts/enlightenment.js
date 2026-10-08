@@ -182,7 +182,8 @@ async function ensureEffect(actor, key) {
     img: def.icon,
     origin: `Actor.${actor.id}`,
     disabled: false,
-    changes: def.changes,
+    // RFI aeBonus / skill-rank keys → their dnd5e twins (AC, saves, skill check bonuses) — step 4 parity 2026-10-08
+    changes: game.bbttcc?.dice?.aeChanges?.(def.changes) ?? def.changes,
     duration: {},
     flags: { [MOD]: { enlightenment: true, level: key }, ...(def.flags ?? {}) }
   };

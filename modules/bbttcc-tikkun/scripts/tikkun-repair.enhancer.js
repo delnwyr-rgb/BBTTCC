@@ -264,7 +264,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
         <label>Extra ${opPool ? `${opPool} ` : ""}spend — steps of ${mpo} marks, +1 to roll each (0–3)</label>
         <input type="number" name="extraOp" value="0" min="0" max="3" />
       </div>
-      <p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.7">Roll: <code>2d10 + ritual + soul + cost steps + extra steps</code> vs DC ${dc}. Margin ≥0 → success; -1 to -3 → partial (DC drops 2 next try); -4 or worse → failure (ritual debt).</p>
+      <p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.7">Roll: <code>check die + ritual skill + cost steps + extra steps</code> vs DC ${dc}. Margin ≥0 → success; -1 to -3 → partial (DC drops 2 next try); -4 or worse → failure (ritual debt).</p>
     </div>`;
 
     new Dialog({
@@ -317,11 +317,14 @@ console.log("[bbttcc-tikkun/repair] LOADED");
   }) {
     // Skill bonus: ritual rank + soul attribute. Both pulled from contributor's
     // system.skills/system.attributes (post-AE applied by Foundry prepareData).
+    // A CHARACTER check (dice split, 2026-10-08): the system's own die + the ritual skill —
+    // RFI = canon 2d10 + ritual rank + soul; dnd5e = d20 + the Religion skill total.
+    const dice = game.bbttcc?.dice;
     const sys      = contributor.system?.system ?? contributor.system ?? {};
-    const ritRank  = Number(sys.skills?.ritual?.value ?? 0);
-    const soulAttr = Number(sys.attributes?.soul?.value ?? 2);
-    const totalBonus = ritRank + soulAttr + extraOp + opNeed; // OP cost itself contributes too
-    const formula  = `${game.fourththing?.rolls?.checkFormula?.() || "2d10x10"} + ${totalBonus}`;   // canon check die
+    const ritSkill = dice ? dice.skillBonus(contributor, "ritual", "soul")
+      : Number(sys.skills?.ritual?.value ?? 0) + Number(sys.attributes?.soul?.value ?? 2);
+    const totalBonus = ritSkill + extraOp + opNeed; // OP cost itself contributes too
+    const formula  = `${dice?.checkFormula?.() ?? (game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${totalBonus}`;   // the check die
     const roll = await new Roll(formula).roll();
     const total = roll.total;
     const margin = total - dc;
@@ -399,7 +402,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
         <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">${headerIcon} ${headerText}: ${sparkItem.name}</span></div>
         <p style="margin:0.2rem 0;font-size:0.82rem">${contributor.name} performs the repair ritual on <b>${ownerActor.name}</b>'s ${sephLabel ? `<i>${sephLabel}</i> ` : ""}spark.</p>
         <div class="ft-roll-formula">
-          <span class="ft-fp" title="2d10">${(roll.terms[0]?.results ?? []).map(r => r.result).join(" + ")}</span>
+          <span class="ft-fp" title="check die">${(roll.terms[0]?.results ?? []).map(r => r.result).join(" + ")}</span>
           <span class="ft-fp" title="ritual">+${ritRank}</span>
           <span class="ft-fp" title="soul">+${soulAttr}</span>
           ${extraOp ? `<span class="ft-fp" title="extra ${opPool} spend (${extraOp * mpo} marks)">+${extraOp}</span>` : ""}

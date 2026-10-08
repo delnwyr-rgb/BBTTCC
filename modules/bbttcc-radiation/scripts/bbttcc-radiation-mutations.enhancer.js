@@ -172,7 +172,8 @@
       origin: A.uuid,
       disabled: false,
       // mode 2 = ADD. Defense aeBonus is the single-application channel (see header).
-      changes: mut.effects.map(e => ({ key: e.key, mode: 2, value: String(e.value), priority: 20 })),
+      // the aeBonus channels translate to dnd5e's own bonus fields (bbttcc-core dice.aeKey) — 2026-10-08
+      changes: mut.effects.map(e => ({ key: game.bbttcc?.dice?.aeKey?.(e.key) ?? e.key, mode: 2, value: String(e.value), priority: 20 })),
       flags:  { [MOD]: { mutationId: mut.id, mutation: true } }
     }]).catch(err => console.warn(TAG, "applyMutationEffects failed:", err));
   }
