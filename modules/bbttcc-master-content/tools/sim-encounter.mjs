@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 /* sim-encounter.mjs — offline tactical-combat Monte Carlo for the NPC pack vs kitted Stewards.  `bin/ft-sim-encounter` symlinks here.
- * Usage: ft-sim-encounter <npcs.jsonl> <items.jsonl> [--n 2000] [--tier 2] [--name "Ash Wolf"] [--chassis system|file.json] [--normalize] [--json out.json]
+ * Usage: ft-sim-encounter <npcs.jsonl> <items.jsonl> [--n 2000] [--tier 2] [--name "Ash Wolf"] [--chassis system|file.json] [--normalize] [--no-resist] [--json out.json]
  *   --chassis system = the live threat chassis (threat-chassis.js) · --normalize = clamp weapon dice to the tier budget
+ *   --no-resist = ignore resist / vuln / immunity on BOTH sides. Diff a run with and without it: a verdict that only
+ *     exists WITH resistances is a damage-TYPE match-up (the sim's Stewards carry kinetic weapons and resist qliphothic
+ *     from T3), not a stat problem — tune stats only on the verdicts that survive both runs.
  *   (dumps come from `bin/ft-dump-pack npcs …` / `bin/ft-dump-pack items …` — ember live is canonical)
  *
  * Mirrors the system as of 2026-10-06 (systems/fourththing/module.js):
@@ -148,7 +151,8 @@ function expected(att, w, tgt) {
   return p * (avgFormula(w.f) + (att.attrs[w.intent] || 0)) * mult(tgt, w.type);
 }
 const avgCache = {}; function avgFormula(f) { return avgCache[f] ??= Array.from({ length: 400 }, () => rollFormula(f)).reduce((a, b) => a + b, 0) / 400; }
-const mult = (t, type) => t.immune.has(type) ? 0 : (t.vuln.has(type) ? 2 : 1) * (t.resist.has(type) ? 0.5 : 1);
+const NO_RESIST = argv.includes("--no-resist");
+const mult = (t, type) => NO_RESIST ? 1 : t.immune.has(type) ? 0 : (t.vuln.has(type) ? 2 : 1) * (t.resist.has(type) ? 0.5 : 1);
 function strike(att, tgt) {
   const pool = att.weapons.filter(w => !(w.limited && att.used.has(w.name)));
   if (!pool.length) return;

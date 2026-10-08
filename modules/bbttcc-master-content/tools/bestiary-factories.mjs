@@ -1,7 +1,7 @@
 /* bestiary-factories.mjs — shared item/actor factories for the offline bestiary builders (build-bestiary-slots.mjs, build-named-statblocks.mjs).
  * Shapes follow the monster builder (monster-builder.js): INTEGRITY / DMG envelopes, lineage signatures, boss kit = Fractured Will + Signature + Ultimate;
  * weapon dice sit inside threat-budget.mjs's per-tier band; abilities carry npcAuto / passives the engine runs; prices follow the creature rubric. */
-import { meanDice, budgetFor } from "./threat-budget.mjs";
+import { meanDice, budgetFor, trackOf } from "./threat-budget.mjs";
 export const FOLDER_BAD_EDEN_MONSTERS = "uMhSIaldbbcnBh0H";
 export const ROMAN = { 1: "I", 2: "II", 3: "III", 4: "IV" }, LEVEL = { 1: 1, 2: 8, 3: 13, 4: 18 };
 export const INTEGRITY = { light: { 1: 25, 2: 32, 3: 39, 4: 46 }, medium: { 1: 40, 2: 50, 3: 60, 4: 70 }, heavy: { 1: 60, 2: 75, 3: 90, 4: 105 }, boss: { 1: 75, 2: 95, 3: 115, 4: 135 } };
@@ -81,7 +81,7 @@ export function actor(sp) {
 export function checkBudgets(actors) {
   const problems = [];
   for (const a of actors) for (const it of a.items) if (it.type === "weapon") {
-    const limited = /recharges|\/scene/.test(it.name); const [lo, hi] = budgetFor(a.system.details.tier, limited); const m = meanDice(it.system.damage.formula);
+    const limited = /recharges|\/scene/.test(it.name); const [lo, hi] = budgetFor(a.system.details.tier, limited, trackOf(it)); const m = meanDice(it.system.damage.formula);
     if (m < lo || m > hi) problems.push(`${a.name} › ${it.name}: ${it.system.damage.formula} (mean ${m}) outside T${a.system.details.tier} budget [${lo}, ${hi}]`);
   }
   return problems;

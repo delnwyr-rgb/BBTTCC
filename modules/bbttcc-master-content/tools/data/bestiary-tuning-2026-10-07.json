@@ -1,0 +1,501 @@
+{
+ "Ash Wolf": {
+  "attrs": {
+   "violence": [
+    3,
+    2
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "violence-"
+  ],
+  "verdicts": [
+   "OK",
+   "OK"
+  ]
+ },
+ "Bog-Skitter Swarm": {
+  "attrs": {
+   "violence": [
+    3,
+    1
+   ],
+   "presence": [
+    2,
+    1
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "violence-",
+   "presence-",
+   "violence-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Hex-Touched Stray": {
+  "attrs": {
+   "violence": [
+    3,
+    2
+   ]
+  },
+  "weapons": {
+   "Howl-of-the-Hex (recharges on a Soma Break)": [
+    "1d6",
+    "1d4"
+   ],
+   "Yellowing Bite": [
+    "1d6",
+    "1d4"
+   ]
+  },
+  "steps": [
+   "violence-",
+   "dice-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Jackalope Tinker-Scout": {
+  "attrs": {
+   "intrigue": [
+    4,
+    2
+   ],
+   "body": [
+    2,
+    1
+   ]
+  },
+  "weapons": {
+   "Bolt-Spitter Carbine": [
+    "1d8",
+    "1d6"
+   ]
+  },
+  "steps": [
+   "intrigue-",
+   "body-",
+   "intrigue-",
+   "dice-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "TOO HARD",
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Pre-Fall Drone": {
+  "attrs": {
+   "violence": [
+    2,
+    1
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "violence-"
+  ],
+  "verdicts": [
+   "OK",
+   "OK"
+  ]
+ },
+ "Road Bandit": {
+  "attrs": {
+   "violence": [
+    3,
+    1
+   ]
+  },
+  "weapons": {
+   "Pipe Rifle": [
+    "1d8",
+    "1d6"
+   ]
+  },
+  "steps": [
+   "violence-",
+   "violence-",
+   "dice-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Scavenger Beast": {
+  "attrs": {
+   "violence": [
+    4,
+    2
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "violence-",
+   "violence-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Thaumielite Despot": {
+  "attrs": {
+   "violence": [
+    2,
+    3
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "violence+"
+  ],
+  "verdicts": [
+   "OK",
+   "OK"
+  ]
+ },
+ "Yesodium Tick-Hound": {
+  "attrs": {
+   "body": [
+    3,
+    2
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "body-"
+  ],
+  "verdicts": [
+   "OK",
+   "OK"
+  ]
+ },
+ "Witness Initiate": {
+  "attrs": {
+   "violence": [
+    3,
+    1
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "violence-",
+   "violence-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "S'narchy Burger Mascot (Reanimated)": {
+  "attrs": {
+   "presence": [
+    4,
+    3
+   ],
+   "body": [
+    5,
+    4
+   ]
+  },
+  "weapons": {
+   "Aggressive Up-Sell": [
+    "1d8",
+    "1d4"
+   ],
+   "Combo-Meal Slam": [
+    "2d6",
+    "1d10"
+   ]
+  },
+  "steps": [
+   "presence-",
+   "dice-",
+   "dice-",
+   "body-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "TOO HARD",
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Thagirion Disputant": {
+  "attrs": {
+   "body": [
+    4,
+    3
+   ]
+  },
+  "weapons": {
+   "Inciting Word": [
+    "2d8",
+    "2d6"
+   ]
+  },
+  "steps": [
+   "body-",
+   "dice-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Please-Stop-Hitting-Yourself (Qliphothic Loop)": {
+  "attrs": {
+   "body": [
+    2,
+    1
+   ]
+  },
+  "weapons": {
+   "Recursion Ache": [
+    "2d6",
+    "1d12"
+   ],
+   "Reflect The Blow": [
+    "2d8",
+    "2d6"
+   ]
+  },
+  "steps": [
+   "dice-",
+   "body-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Soma-Reaper": {
+  "attrs": {
+   "body": [
+    4,
+    3
+   ],
+   "violence": [
+    4,
+    3
+   ]
+  },
+  "weapons": {
+   "Dreamcut": [
+    "2d8",
+    "2d6"
+   ],
+   "Echo-Pluck": [
+    "2d8",
+    "2d6"
+   ],
+   "Soma-Drain Field (recharges on a Soma Break)": [
+    "2d8",
+    "2d6"
+   ]
+  },
+  "steps": [
+   "body-",
+   "violence-",
+   "dice-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Whispering Deceiver": {
+  "attrs": {
+   "violence": [
+    1,
+    2
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "violence+"
+  ],
+  "verdicts": [
+   "OK",
+   "OK"
+  ]
+ },
+ "Gilbert, Attendant Eternal": {
+  "attrs": {
+   "body": [
+    6,
+    4
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "body-",
+   "body-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Pre-Fall Battlemind": {
+  "attrs": {
+   "body": [
+    6,
+    5
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "body-"
+  ],
+  "verdicts": [
+   "OK",
+   "OK"
+  ]
+ },
+ "Slippage Wraith": {
+  "attrs": {
+   "body": [
+    4,
+    3
+   ],
+   "intrigue": [
+    6,
+    5
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "body-",
+   "intrigue-"
+  ],
+  "verdicts": [
+   "TOO HARD",
+   "OK",
+   "OK"
+  ]
+ },
+ "Abomination of Excess": {
+  "attrs": {
+   "violence": [
+    6,
+    7
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "violence+"
+  ],
+  "verdicts": [
+   "soft",
+   "soft"
+  ]
+ },
+ "Hex-Warlord's Honored Guard": {
+  "attrs": {},
+  "weapons": {
+   "Sworn Intercept": [
+    "2d12",
+    "3d10"
+   ],
+   "Warlord's Blade": [
+    "2d12",
+    "3d10"
+   ],
+   "Wall-of-Honor (recharges on a Soma Break)": [
+    "2d12",
+    "3d10"
+   ]
+  },
+  "steps": [
+   "dice+"
+  ],
+  "verdicts": [
+   "soft",
+   "soft"
+  ]
+ },
+ "Archon of the Twin Crown": {
+  "attrs": {
+   "body": [
+    6,
+    5
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "body-"
+  ],
+  "verdicts": [
+   "OK",
+   "OK"
+  ]
+ },
+ "The Ashen Horde": {
+  "attrs": {
+   "body": [
+    5,
+    8
+   ],
+   "violence": [
+    4,
+    5
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "body+",
+   "violence+",
+   "body+",
+   "body+"
+  ],
+  "verdicts": [
+   "TOO EASY (duo wins)",
+   "no teeth",
+   "no teeth",
+   "OK",
+   "OK"
+  ]
+ },
+ "The Lewd Miasma": {
+  "attrs": {
+   "violence": [
+    1,
+    2
+   ]
+  },
+  "weapons": {},
+  "steps": [
+   "violence+"
+  ],
+  "verdicts": [
+   "OK",
+   "OK"
+  ]
+ }
+}

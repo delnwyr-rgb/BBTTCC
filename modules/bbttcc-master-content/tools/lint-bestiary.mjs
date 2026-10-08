@@ -19,7 +19,7 @@
  *   L3 W  no weapon deals the lineage's signature damage type
  *   B1 I  stored Integrity ≠ runtime max (harmless since the threat chassis fills fresh monsters to max — informational)
  *   B4 E  monster has no weapon item — it cannot hurt anyone in automated play
- *   B2 W  weapon damage dice outside the tier budget (mean of dice, before faculty)
+ *   B2 W  weapon damage dice outside the tier budget (mean of dice, before faculty; Stress-track weapons may run to ½ the floor)
  *   B3 E  tier × bracket coverage hole (every tier needs light, medium, heavy AND boss — ruled 2026-10-06)
  *   M1 W  ability states a mechanic in prose but nothing automates it (no manifestation / triggers / damageParts / AE / consume)
  *   M2 W  weapon carries a rider in `system.effect` text with no manifestation block to apply it
@@ -31,7 +31,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { BUDGET, LIMITED_RE, meanDice, budgetFor } from "./threat-budget.mjs";
+import { BUDGET, LIMITED_RE, meanDice, budgetFor, trackOf } from "./threat-budget.mjs";
 import { validateNpcAuto, validateWeaponManifestation, statesList } from "./npc-auto-schema.mjs";
 
 const argv = process.argv.slice(2);
@@ -142,8 +142,8 @@ for (const a of actors) {
     if (stored && stored !== real) hit("B1", "I", a, `stored Integrity ${stored}; pre-chassis runtime ${real}`);
     if (!its.some(i => i.type === "weapon")) hit("B4", "E", a, "no weapon — harmless in automated play");
     for (const w of its.filter(i => i.type === "weapon")) {
-      const m = meanDice(w.system?.damage?.formula), [lo, cap] = budgetFor(tier, LIMITED_RE.test(w.name));
-      if (m && (m < lo || m > cap)) hit("B2", "W", a, `${w.system.damage.formula} (mean ${m}) outside T${tier} budget ${lo}–${cap}`, w);
+      const track = trackOf(w), m = meanDice(w.system?.damage?.formula), [lo, cap] = budgetFor(tier, LIMITED_RE.test(w.name), track);
+      if (m && (m < lo || m > cap)) hit("B2", "W", a, `${w.system.damage.formula} (mean ${m}) outside T${tier}${track === "stress" ? " Stress-track" : ""} budget ${lo}–${cap}`, w);
     }
     const pb = rfi.price?.bounty, want = Math.ceil(BOUNTY.tier[tier - 1] * (BOUNTY.br[br] ?? 1) / 5) * 5;   // marks round UP to 5
     if (pb == null) hit("P1", "W", a, `no bounty (rubric ${want})`); else if (Number(pb) !== want) hit("P1", "W", a, `bounty ${pb} ≠ rubric ${want}`);
