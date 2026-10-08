@@ -17,11 +17,14 @@
  *   I11 I mechanic-bearing feat/feature with empty system.identifier (nothing id-keyed can attach)
  *   I13 E automation data the engines can't execute: bad rerolls context/mode, grants entry shape, npcAuto schema
  *   I14 I calling Trick text with no per-use route
+ *   I16 E  item ladder stamps (flags.fourththing.grade / .working) inconsistent with the item: rank↔name↔bonuses↔bound, working payload/charges/tech
+ *   I17 W  pricing drift vs systems/fourththing/rfi-pricing.js (E when a market item has no price): frame unknown to the tables, currency ≠ frame
+ *          default (no gmOverride), marks ≠ computeListPrice ±5, tech recipe without a binding material. Skips npc-abilities + starter kits.
  */
 import fs from "node:fs";
 import path from "node:path";
 
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { validateNpcAuto } from "./npc-auto-schema.mjs";
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "../../..");
@@ -283,6 +286,47 @@ const _listOf = (name) => { const m = PR.match(new RegExp(`export const ${name} 
 const TRIGGER_EVENTS = _listOf("TRIGGER_EVENTS"), TRIGGER_KINDS = _listOf("TRIGGER_EFFECT_KINDS"), WHEN_VOCAB = _listOf("REROLL_WHEN_VOCAB");
 const PASSIVE_KEYS = new Set(["ranks", "checkBonus", "aura", "movement", "initiative", "vision", "combat"]);
 const _whenBad = (w) => (Array.isArray(w) ? w : [w]).filter(x => !WHEN_VOCAB.has(String(x)));
+// I16/I17 (2026-10-07): the pricing rubric + the item ladder, imported from the SYSTEM source so the lint cannot drift from the code.
+globalThis.Hooks ??= { on() {}, once() {}, callAll() {} }; globalThis.game ??= { settings: { get() { return undefined; } } };
+const PRICING = await import(pathToFileURL(path.resolve(HERE, "../../../systems/fourththing/rfi-pricing.js")).href);
+const LADDER = await import(pathToFileURL(path.resolve(HERE, "../../../systems/fourththing/item-ladder.js")).href);
+const PRICE_SKIP = new Set(["npc-abilities", "starter-manifestations"]);
+const REQ_FUEL = new Set(["yesodium", "witness-glass", "hex-glyph-plate", "pre-fall-component"]);
+const _flatTail = f => Number((String(f || "").replace(/\s+/g, "").match(/([+-]\d+)$/) || [0, 0])[1]) || 0;
+function lintLadder(pack, v) {
+  const g = v.flags?.fourththing?.grade, w = v.flags?.fourththing?.working, ri = v.flags?.fourththing?.rfi?.item ?? {};
+  if (g) {
+    const G = LADDER.GRADES[Number(g.rank)]; if (!G) { hit("I16", "E", pack, v, `grade.rank ${g.rank} is not 1–3`); }
+    else {
+      if (g.name !== G.name || g.key !== G.key) hit("I16", "E", pack, v, `grade name/key ${g.name}/${g.key} ≠ ${G.name}/${G.key}`);
+      if (!String(v.name).startsWith(G.name + " ")) hit("I16", "E", pack, v, `graded item name should start with "${G.name} "`);
+      if (ri.bound !== G.bound) hit("I16", "E", pack, v, `grade ${G.name} must be ${G.bound}, rfi.bound is ${ri.bound}`);
+      if (v.type === "weapon") { if (Number(g.attack) !== G.rank || Number(g.damage) !== G.rank) hit("I16", "E", pack, v, `weapon grade attack/damage ${g.attack}/${g.damage} ≠ rank ${G.rank}`); if (_flatTail(v.system?.damage?.formula) < G.rank) hit("I16", "E", pack, v, `damage formula "${v.system?.damage?.formula}" carries no +${G.rank} tail`); }
+      else if (Number(g.defense) !== G.rank) hit("I16", "E", pack, v, `armor grade defense ${g.defense} ≠ rank ${G.rank}`);
+    }
+  }
+  if (w) {
+    if (!w.power?.system || !w.power?.name) hit("I16", "E", pack, v, "working has no power payload (name + system)");
+    if (!(Number(w.charges?.max) >= 1)) hit("I16", "E", pack, v, "working charges.max < 1");
+    if (ri.tech?.kind !== "charged") hit("I16", "E", pack, v, `bound Working host should carry rfi.tech.kind "charged" (is ${ri.tech?.kind ?? "none"})`);
+    if (ri.bound !== "attuned") hit("I16", "E", pack, v, `bound Working host should be attuned (is ${ri.bound})`);
+  }
+}
+function lintPrice(pack, v) {
+  if (PRICE_SKIP.has(pack)) return; const ri = v.flags?.fourththing?.rfi?.item; if (!ri) return;   // not gear
+  if ((v.system?.tags ?? []).includes("starter-kit") || v.flags?.fourththing?.starterKit) return;   // Path grants, not market goods
+  const p = ri.price; if (!p) { hit("I17", "E", pack, v, "market item has no price block (run price-hygiene)"); return; }
+  if (p.gmOverride) return;
+  const frame = ri.frame ?? "tool", tier = ri.tier ?? "I", bound = ri.bound ?? "free";
+  if (PRICING.CATEGORY_MULT_BY_FRAME[frame] === undefined) hit("I17", "W", pack, v, `frame "${frame}" is not in the pricing tables (prices as ×1.0 economy)`);
+  const want = p.currency === "split" ? "split" : PRICING.defaultCurrencyForFrame(frame);
+  if (p.currency && p.currency !== "auto" && p.currency !== want) hit("I17", "W", pack, v, `currency ${p.currency} ≠ ${want} for frame ${frame} (no gmOverride)`);
+  const marks = frame === "material"
+    ? PRICING.materialUnitPriceMarks(tier, Number(p.rarityMult) || 1) * Math.max(1, Number(ri.charges) || 1)   // rubric §3: unit × stack
+    : PRICING.computeListPrice({ tier, frame, hasTech: !!ri.tech, bound, rarityMult: Number(p.rarityMult) || 1 });
+  if (Math.abs((Number(p.marks) || 0) - marks) > 5) hit("I17", "W", pack, v, `marks ${p.marks} ≠ rubric ${marks} (T${tier} ${frame}${ri.tech ? " tech" : ""} ${bound}${(Number(p.rarityMult) || 1) !== 1 ? ` ×${p.rarityMult}` : ""})`);
+  if (ri.tech) { const rec = Array.isArray(ri.materialOf) ? ri.materialOf : []; if (!rec.some(m => REQ_FUEL.has(String(m?.key ?? m ?? "").toLowerCase()))) hit("I17", "W", pack, v, "technomagical recipe has no binding material (yesodium / witness-glass / hex-glyph-plate / pre-fall-component)"); }
+}
 const hits = [];
 const hit = (rule, sev, pack, v, msg) => { if (ONLY_RULE && !ONLY_RULE.includes(rule)) return; hits.push({ rule, sev, pack, id: v._id, name: v.name, type: v.type, msg }); };
 const PACK_FILES = fs.readdirSync(PACKS).filter(f => f.endsWith(".jsonl")).filter(f => !/^npcs/.test(f)).sort();
@@ -298,6 +342,7 @@ for (const file of PACK_FILES) {
     if (mech) S.mech++; if (auto) S.automated++;
     const ff = v.flags?.fourththing || {}, id = String(v.system?.identifier || "");
     if (mech && !auto && !isAnchor) { S.prose++; const sh = shapeOf(text); hit("P1", "W", pack, v, `prose-only [${sh}] → ${HINT[sh]} :: ${text.slice(0, 110)}`); }
+    lintLadder(pack, v); lintPrice(pack, v);   // I16 / I17 (2026-10-07)
     if (c.includes("technique:card-only") && mech) hit("I1", "W", pack, v, `technique ${id} routes to a card only`);
     if (c.includes("triggers(chat-prompt only)")) hit("I2", "W", pack, v, "triggers are chat-prompts only");
     // I15 (2026-10-07): data the engine would silently ignore — unknown trigger event / kind, reroll `when`, passives key, aura shape.

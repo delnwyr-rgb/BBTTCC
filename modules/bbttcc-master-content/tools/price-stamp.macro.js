@@ -127,7 +127,10 @@
           rarityMult = MATERIAL_RARITY[matKey];
         }
 
-        const marks = pricing.computeListPrice({ tier, frame, hasTech, bound, rarityMult });
+        // 2026-10-07: materials stamp at rubric §3 unit × stack charges (matches the Forge and price-audit).
+        const marks = frame === "material"
+          ? pricing.materialUnitPriceMarks(tier, rarityMult) * Math.max(1, Number(stored.charges) || 1)
+          : pricing.computeListPrice({ tier, frame, hasTech, bound, rarityMult });
         const currency = pricing.defaultCurrencyForFrame(frame);
         const saleBack = pricing.computeSaleBack(marks, bound);
 

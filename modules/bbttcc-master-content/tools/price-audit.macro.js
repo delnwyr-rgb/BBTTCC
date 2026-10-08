@@ -24,6 +24,8 @@
 
 (async () => {
   const PACK_IDS = null;
+  // 2026-10-07: the monster kit and the Path starter kits are not market goods — never audit their prices.
+  const SKIP_PACKS = new Set(["bbttcc-master-content.npc-abilities", "fourththing.starter-manifestations"]);
   const MARKS_TOLERANCE = 5;
   const POST_CHAT_CARD = true;
 
@@ -42,9 +44,9 @@
   const FLAG_KEY = RfiItems.FLAG.key;
 
   const allItemPacks = game.packs.filter(p => p.documentName === "Item");
-  const selectedPacks = PACK_IDS
+  const selectedPacks = (PACK_IDS
     ? allItemPacks.filter(p => PACK_IDS.includes(p.collection))
-    : allItemPacks;
+    : allItemPacks).filter(p => !SKIP_PACKS.has(p.collection));
 
   // World items walked when no PACK_IDS filter — mirror price-stamp.macro.js
   // so audits cover the same surface that the stamper does.
@@ -117,7 +119,10 @@
       // ── MARKS_DRIFT (skip GM-overridden) ──
       if (!price.gmOverride) {
         const rarityMult = Number(price.rarityMult) || 1.0;
-        const recomputed = pricing.computeListPrice({ tier, frame, hasTech, bound, rarityMult });
+        // 2026-10-07: materials list at rubric §3 unit × stack (the Forge's valuation), not the category formula.
+        const recomputed = frame === "material"
+          ? pricing.materialUnitPriceMarks(tier, rarityMult) * Math.max(1, Number(stored.charges) || 1)
+          : pricing.computeListPrice({ tier, frame, hasTech, bound, rarityMult });
         const stored_marks = Number(price.marks) || 0;
         if (stored_marks >= 0 && Math.abs(stored_marks - recomputed) > MARKS_TOLERANCE) {
           findings.MARKS_DRIFT.push({

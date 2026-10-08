@@ -8489,7 +8489,7 @@ const ITEMS = [
         }
        ],
        "price": {
-        "marks": 225,
+        "marks": 105,
         "currency": "economy",
         "gmOverride": false,
         "altCurrencies": {},
@@ -8497,7 +8497,7 @@ const ITEMS = [
         "rarityMult": 1,
         "notes": "TII shield (Inlaid +1 on TI Pressed Buckler) × bound free",
         "bound": "free",
-        "saleBack": 90
+        "saleBack": 42
        }
       }
      },
@@ -8579,7 +8579,7 @@ const ITEMS = [
         }
        ],
        "price": {
-        "marks": 675,
+        "marks": 315,
         "currency": "economy",
         "gmOverride": false,
         "altCurrencies": {},
@@ -8587,7 +8587,7 @@ const ITEMS = [
         "rarityMult": 1,
         "notes": "TIII shield (Circuited +2 on TI Pressed Buckler) × bound attuned",
         "bound": "attuned",
-        "saleBack": 270
+        "saleBack": 126
        }
       }
      },
@@ -8669,7 +8669,7 @@ const ITEMS = [
         }
        ],
        "price": {
-        "marks": 3040,
+        "marks": 1415,
         "currency": "economy",
         "gmOverride": false,
         "altCurrencies": {},
@@ -10455,7 +10455,7 @@ const ITEMS = [
         }
        ],
        "price": {
-        "marks": 675,
+        "marks": 315,
         "currency": "economy",
         "gmOverride": false,
         "altCurrencies": {},
@@ -10463,7 +10463,7 @@ const ITEMS = [
         "rarityMult": 1,
         "notes": "TIII shield (Inlaid +1 on TII Wardiron Targe) × bound free",
         "bound": "free",
-        "saleBack": 270
+        "saleBack": 126
        }
       }
      },
@@ -10558,7 +10558,7 @@ const ITEMS = [
         }
        ],
        "price": {
-        "marks": 2025,
+        "marks": 945,
         "currency": "economy",
         "gmOverride": false,
         "altCurrencies": {},
@@ -10566,7 +10566,7 @@ const ITEMS = [
         "rarityMult": 1,
         "notes": "TIV shield (Circuited +2 on TII Wardiron Targe) × bound attuned",
         "bound": "attuned",
-        "saleBack": 810
+        "saleBack": 378
        }
       }
      },
@@ -10685,15 +10685,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -11168,15 +11168,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -11657,15 +11657,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -12146,15 +12146,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -12614,15 +12614,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -13085,15 +13085,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -13551,15 +13551,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -13960,15 +13960,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -14187,15 +14187,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -14410,15 +14410,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -14633,20 +14633,20 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
          "qty": 1
-        },
-        {
-         "key": "focused-crystal",
-         "qty": 1
         }
        ],
        "price": {
-        "marks": 450,
+        "marks": 210,
         "currency": "economy",
         "gmOverride": false,
         "altCurrencies": {},
@@ -14654,7 +14654,7 @@ const ITEMS = [
         "rarityMult": 1,
         "notes": "TII shield × tech 2.0 (bound Working: Mutual Aid Clause TI) × attuned",
         "bound": "attuned",
-        "saleBack": 180
+        "saleBack": 84
        },
        "tech": {
         "kind": "charged",
@@ -14870,15 +14870,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -15097,15 +15097,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -15322,15 +15322,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -15553,15 +15553,15 @@ const ITEMS = [
          "qty": 1
         },
         {
+         "key": "witness-glass",
+         "qty": 1
+        },
+        {
          "key": "prayer-binding",
          "qty": 1
         },
         {
          "key": "anchor-quartz",
-         "qty": 1
-        },
-        {
-         "key": "focused-crystal",
          "qty": 1
         }
        ],
@@ -15571,7 +15571,7 @@ const ITEMS = [
         ]
        },
        "price": {
-        "marks": 300,
+        "marks": 450,
         "currency": "economy",
         "gmOverride": false,
         "altCurrencies": {},
@@ -15579,7 +15579,7 @@ const ITEMS = [
         "rarityMult": 1,
         "notes": "TII vestment × tech 2.0 (bound Working: Latchkey Lullaby TI) × attuned",
         "bound": "attuned",
-        "saleBack": 120
+        "saleBack": 180
        },
        "tech": {
         "kind": "charged",

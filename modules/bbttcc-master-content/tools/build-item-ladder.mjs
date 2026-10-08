@@ -31,7 +31,7 @@ const id = () => { const c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 const strip = it => { const v = structuredClone(it); delete v._id; delete v.folder; delete v.sort; delete v.ownership; delete v._stats; delete v.effects; return v; };
 const frameOf = it => rfi(it).frame || (it.type === "weapon" ? "weapon" : "armor");
 function priceFor(tier, frame, { tech = false, bound = "free" } = {}, currency, note) {
-  const marks = computeListPrice({ tier, frame: frame === "shield" ? "armor" : frame, hasTech: tech, bound });
+  const marks = computeListPrice({ tier, frame, hasTech: tech, bound });   // shield / vestment / footwear are in the tables since 2026-10-07
   return { marks, currency, gmOverride: false, altCurrencies: {}, split: null, rarityMult: 1, notes: note, bound, saleBack: computeSaleBack(marks, bound) };
 }
 const mech = (lines) => `\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ ${lines[0]}</strong></p>\n<ul>\n${lines.slice(1).map(l => `  <li>${l}</li>`).join("\n")}\n</ul>\n<!-- BBTTCC:LADDER:END -->`;
@@ -97,7 +97,7 @@ const WORKINGS = [
   { host: "Boots That Knew Each Other Once", power: "Doorframe Discount", name: "Boots of the Doorframe Discount" },
   { host: "Scarf That Was a Cat (Probably)", power: "Latchkey Lullaby",  name: "Scarf of the Latchkey Lullaby" }
 ];
-const WORKING_MATS = [["prayer-binding", 1], ["anchor-quartz", 1], ["focused-crystal", 1]];
+const WORKING_MATS = [["witness-glass", 1], ["prayer-binding", 1], ["anchor-quartz", 1]];   // witness-glass = the rubric §6 binding material a tech recipe must carry
 const workings = [];
 for (const spec of WORKINGS) {
   const host = byName(spec.host), power = byName(spec.power), r = rfi(host), frame = frameOf(host);

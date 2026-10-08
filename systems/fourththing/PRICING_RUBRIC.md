@@ -123,7 +123,14 @@ Apply to `tierBase` to get list price for a stock instance of that category.
 | **Consumable** (frame: consumable) | 0.2 | 10 | 30 | 90 | 270 |
 | **Material** (frame: material) — *unit* | 0.1 | 5 | 15 | 45 | 135 |
 | **Vehicle / mount** (non-rig) | 5.0 | 250 | 750 | 2250 | 6750 |
+| **Vestment** (frame: vestment — scarves, shirts with a defense line) | 1.5 | 75 | 225 | 675 | 2025 |
+| **Footwear** (frame: footwear) | 1.0 | 50 | 150 | 450 | 1350 |
+| **Talisman / wondrous** (frame: talisman — worn charms, relic-trinkets; × rarity, see below) | 1.2 | 60 | 180 | 540 | 1620 |
+| **Implant** (frame: implant) | 1.5 | 75 | 225 | 675 | 2025 |
+| **Trade good** (frame: trade-good) | 0.4 | 20 | 60 | 180 | 540 |
 | **Technomagical** (any frame) | × 2.0 of base category | — | — | — | — |
+
+**Wondrous rarity (2026-10-07):** an item carrying the legacy `system.rarity` (the equipment-type wondrous pieces) multiplies list by `rarityMult` — common ×1 · uncommon ×1.5 · rare ×2 · very rare ×3 · legendary ×5 · artifact ×8 — stamped into `price.rarityMult` (the same field materials use). Native pool for shields / vestments / footwear = Non-Lethal (armor cluster); talismans = Soft Power (sigil cluster).
 
 **Pricing formula (final):**
 ```

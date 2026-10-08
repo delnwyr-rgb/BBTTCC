@@ -48,8 +48,22 @@ export const CATEGORY_MULT_BY_FRAME = {
   sigil:      1.2,
   vehicle:    5.0,
   consumable: 0.2,
-  container:  0.4
+  container:  0.4,
+  // 2026-10-07 pricing hygiene — frames the pack already used that the table never named (they fell to ×1.0 economy):
+  shield:     0.7,    // rubric §2 "Shield / off-hand" — the row existed in the doc, never in the code
+  vestment:   1.5,    // worn like armor (scarves, shirts with a defense line)
+  footwear:   1.0,
+  talisman:   1.2,    // wondrous: worn charms, relic-trinkets (the "Wondrous Items" folder) — sigil-priced
+  implant:    1.5,
+  "trade-good": 0.4,
+  gear:       0.6,    // legacy alias of tool
+  material:   0.1     // rubric §3 unit price (materialUnitPriceMarks is the canonical path; listed for completeness)
 };
+// Wondrous-item rarity (the legacy `system.rarity` on equipment-type items) → price.rarityMult (2026-10-07).
+export const RARITY_MULT = { common: 1.0, uncommon: 1.5, rare: 2.0, veryRare: 3.0, legendary: 5.0, artifact: 8.0 };
+export function rarityMultFor(item) {
+  const r = String(item?.system?.rarity ?? "").trim(); return RARITY_MULT[r] ?? 1.0;
+}
 
 // Six canonical OP pools used by the pricing rubric. The faction opBank also
 // tracks logistics/culture/faith for raid stats, but those are out-of-scope
@@ -81,7 +95,16 @@ export const NATIVE_POOL_BY_FRAME = {
   sigil:      "softpower",
   vehicle:    "economy",
   consumable: "economy",
-  container:  "economy"
+  container:  "economy",
+  // 2026-10-07 pricing hygiene (see CATEGORY_MULT_BY_FRAME):
+  shield:     "nonlethal",
+  vestment:   "nonlethal",
+  footwear:   "nonlethal",
+  talisman:   "softpower",
+  implant:    "economy",
+  "trade-good": "economy",
+  gear:       "economy",
+  material:   "economy"
 };
 
 // Technomagical multiplier (rubric §2 / §6).
@@ -363,7 +386,7 @@ export const RfiPricing = {
   // math
   tierBaseMarks, categoryMult, defaultCurrencyForFrame,
   computeListPrice, computeSaleBack, isOverride,
-  tierFeeForTier, materialUnitPriceMarks,
+  tierFeeForTier, materialUnitPriceMarks, rarityMultFor, RARITY_MULT,
   rigBracketMult, computeRigListPrice, computeFacilityListPrice,
   creatureBracketMult, computeCreaturePricing, computeBossPricing,
   // defaults
