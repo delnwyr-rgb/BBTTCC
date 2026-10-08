@@ -1383,7 +1383,7 @@ function _serialisePayload(payload = {}) {
   }
   return out;
 }
-async function _postOfferCard(actor, m, payload, event) {
+async function _postOfferCard(actor, m, payload, event, fireId = null) {
   const eff = m.trigger.effect ?? {};
   const what = m.trigger.offerText || eff.args?.body || ({
     "reroll-failed-check": "Reroll the check you just failed",
@@ -1405,7 +1405,7 @@ async function _postOfferCard(actor, m, payload, event) {
       <div style="font-size:0.78rem;margin:0.2rem 0">${what}</div>
       <button type="button" class="ft-trigger-accept" style="font-size:0.78rem;line-height:1.6;margin-top:0.15rem">Use ${m.sourceItemName}</button>
     </div>`,
-    flags: { fourththing: { triggerOffer: { actorUuid: actor.uuid, itemId: m.sourceItemId, triggerIndex: m.triggerIndex, event, payload: _serialisePayload(payload), used: false } } }
+    flags: { fourththing: { triggerOffer: { actorUuid: actor.uuid, itemId: m.sourceItemId, triggerIndex: m.triggerIndex, event, fireId, payload: _serialisePayload(payload), used: false } } }
   });
   return msg;
 }
@@ -1427,12 +1427,19 @@ export async function acceptTriggerOffer(message) {
   if (result.ok) {
     try { await limitCheck.consume?.(); } catch (_e) {}
     try { await message.update({ "flags.fourththing.triggerOffer.used": true, content: message.content.replace(/<button[\s\S]*?<\/button>/, `<div style="font-size:0.78rem;color:#2f6b2f">✔ ${result.summary}</div>`) }); } catch (_e) {}
+    // 2026-10-07: sibling Offers from the same event (e.g. Wind-Read + Ward of the Gale + Reactor Shield Cape on one hit) are retired — one reaction per event.
+    if (off.fireId) for (const sib of game.messages.contents) {
+      const so = sib.flags?.fourththing?.triggerOffer;
+      if (!so || sib.id === message.id || so.used || so.fireId !== off.fireId || so.actorUuid !== off.actorUuid) continue;
+      try { await sib.update({ "flags.fourththing.triggerOffer.used": true, content: sib.content.replace(/<button[\s\S]*?<\/button>/, `<div style="font-size:0.78rem;opacity:0.6">— superseded by ${item.name}</div>`) }); } catch (_e) {}
+    }
   } else ui.notifications?.warn?.(`${item.name}: ${result.reason}`);
   return result;
 }
 
 export async function fireTriggers(actor, event, payload = {}) {
   const matches = collectTriggers(actor, event);
+  const fireId = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;   // sibling Offers from one event supersede each other on accept
   const fired   = [];
   const skipped = [];
   const offered = [];
@@ -1449,7 +1456,7 @@ export async function fireTriggers(actor, event, payload = {}) {
     }
     // Offers: post the card and move on — nothing fires until the player accepts.
     if (m.trigger.offer === true || OFFER_ONLY_KINDS.has(m.trigger.effect?.kind)) {
-      try { await _postOfferCard(actor, m, payload, event); offered.push({ source: m.sourceItemName }); }
+      try { await _postOfferCard(actor, m, payload, event, fireId); offered.push({ source: m.sourceItemName }); }
       catch (e) { skipped.push({ source: m.sourceItemName, reason: e?.message || "offer failed" }); }
       continue;
     }

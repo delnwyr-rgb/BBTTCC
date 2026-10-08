@@ -16978,6 +16978,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   };
   game.fourththing.triggers = {
     accept: acceptTriggerOffer, events: TRIGGER_EVENTS, kinds: TRIGGER_EFFECT_KINDS, fire: fireTriggers, fireAllies: fireAllyTriggers,
+    /** debug(actor, {context, skill, attribute, target}) — what the roll path would see right now: reroll grants (own + aura + banked), flat bonuses, covering auras, rank grants. Read-only. */
+    debug(actor, query = { context: "check" }) {
+      const q = { ...query, target: query.target?.actor ?? query.target ?? null };
+      return { rerolls: collectRerolls(actor, q).map(g => ({ mode: g.mode, source: g.sourceItemName, vs: g.vs ?? null })), bonuses: collectCheckBonuses(actor, q),
+               auras: collectAuraSources(actor).map(s => ({ from: s.actor.name, item: s.item.name, squares: s.squares, aura: s.aura })), ranks: rankGrantsOf(actor),
+               defenseBonus: { guard: auraDefenseBonus(actor, "guard"), evasion: auraDefenseBonus(actor, "evasion"), resolve: auraDefenseBonus(actor, "resolve") }, walkSquares: auraWalkSquares(actor) };
+    },
     /** displace-token: push/pull a target along the line from the actor, or widen the actor's own movement budget for a free shift. */
     async displace(actor, target, args = {}, source = "") {
       const who = args.who || (target ? "target" : "self");
