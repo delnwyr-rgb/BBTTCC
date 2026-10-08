@@ -811,12 +811,116 @@ function resolveActor(actorOrId) {
 
 async function applyBaseStatsToActor(actor, baseStats) {
   const update = {};
-  for (const key of ATTRIBUTE_KEYS) {
-    const value = Number(baseStats && baseStats[key]);
-    if (!Number.isFinite(value)) continue;
-    update["system.attributes." + key + ".value"] = value;
+  if (isDnd5e()) {
+    // Bad Eden 5E: the wizard hands over the six ability scores on the standard array.
+    for (const key of Object.keys(CONFIG.DND5E?.abilities || {})) {
+      const value = Number(baseStats && baseStats[key]);
+      if (!Number.isFinite(value)) continue;
+      update["system.abilities." + key + ".value"] = value;
+    }
+  } else {
+    for (const key of ATTRIBUTE_KEYS) {
+      const value = Number(baseStats && baseStats[key]);
+      if (!Number.isFinite(value)) continue;
+      update["system.attributes." + key + ".value"] = value;
+    }
   }
   if (Object.keys(update).length) await actor.update(update);
+}
+
+// ---------------------------------------------------------------------------
+// Bad Eden 5E branch (2026-10-07). The Tree wizard produces the same payload on
+// dnd5e with `payload.dnd5e = { backgroundUuid, surgePath: {key, doctrine},
+// skills: [...] }`, `speciesUuid` pointing at a bad-eden-5e species (race) item
+// and `classUuid` at a dnd5e class. Species / background / class go on through
+// dnd5e's own AdvancementManager so HP, size, traits and item grants are
+// applied exactly as a sheet drop would; the Surge Path item is created with
+// its doctrine pre-set so surge-powers stamps the doctrine perk itself.
+// ---------------------------------------------------------------------------
+function isDnd5e() { return game.system?.id === "dnd5e"; }
+
+async function createWithAdvancement(actor, itemData) {
+  const AM = globalThis.dnd5e?.applications?.advancement?.AdvancementManager;
+  const already = () => actor.items.find(i => i.type === itemData.type && i.name === itemData.name);
+  let manager = null;
+  try { manager = AM ? AM.forNewItem(actor, itemData) : null; }
+  catch (e) { warn("AdvancementManager.forNewItem failed; creating item directly", e); }
+  if (!manager || !manager.steps?.length) {
+    const [doc] = await actor.createEmbeddedDocuments("Item", [itemData]);
+    return doc || null;
+  }
+  await new Promise((resolve) => {
+    const hook = Hooks.on("closeAdvancementManager", (app) => {
+      if (app !== manager) return;
+      Hooks.off("closeAdvancementManager", hook);
+      resolve();
+    });
+    manager.render(true);
+  });
+  // The player closed the manager without finishing — land the item plainly so
+  // the sheet still carries it (they can re-run advancement from the sheet).
+  if (!already()) {
+    warn("advancement for " + itemData.name + " was dismissed; creating the item without its advancement choices");
+    const [doc] = await actor.createEmbeddedDocuments("Item", [itemData]);
+    return doc || null;
+  }
+  return already();
+}
+
+async function grantSurgePath(actor, sp) {
+  const SP = "surge-powers";
+  const api = game.surgePowers?.paths;
+  const def = api?.data?.[sp?.key];
+  if (!def) { warn("surge path not found", sp); return null; }
+  const world = game.items.find(i => i.flags?.[SP]?.path?.key === sp.key);
+  const data = world ? world.toObject() : {
+    name: def.name, type: "feat", img: def.img || "icons/svg/mystery-man.svg",
+    system: { description: { value: "<p><em>" + (def.tagline || "") + "</em></p>" + (def.entry?.description || "") } },
+    flags: { [SP]: { path: { key: sp.key } } }
+  };
+  delete data._id; delete data.folder;
+  const doc = sp.doctrine ? def.doctrines?.[sp.doctrine] : null;
+  if (doc) {
+    data.name = def.name + " (" + doc.name + ")";
+    foundry.utils.setProperty(data, "flags." + SP + ".path.doctrine", sp.doctrine);
+    foundry.utils.setProperty(data, "system.description.value",
+      (def.entry?.description || "") + "<h3>Doctrine: " + doc.name + "</h3>" + (doc.perk?.description || ""));
+  }
+  const [item] = await actor.createEmbeddedDocuments("Item", [data]);
+  return item || null;
+}
+
+async function importDnd5eBuild(actor, payload) {
+  const out = { ancestryDoc: null, heritageDoc: null, classDoc: null, subclassDoc: null, backgroundDoc: null, pathItem: null };
+  const d = payload.dnd5e || {};
+
+  // 1) The three free skill picks land first so the class/background pickers
+  //    show them as taken instead of offering them again.
+  const skills = (d.skills || []).filter(k => actor.system?.skills?.[k]);
+  if (skills.length) {
+    const update = {};
+    for (const k of skills) update["system.skills." + k + ".value"] = Math.max(1, Number(actor.system.skills[k].value) || 0);
+    await actor.update(update);
+  }
+
+  // 2) Species → background → class, each through dnd5e advancement.
+  const steps = [["ancestryDoc", payload.speciesUuid], ["backgroundDoc", d.backgroundUuid], ["classDoc", payload.classUuid]];
+  for (const [slot, uuid] of steps) {
+    if (!uuid) continue;
+    const src = await fromUuid(uuid).catch(() => null);
+    if (!src) { warn("Bad Eden 5E: missing " + slot + " for uuid", uuid); continue; }
+    const data = src.toObject();
+    delete data._id; delete data.folder;
+    try { await createWithAdvancement(actor, data); out[slot] = src; }
+    catch (e) { warn("Bad Eden 5E: " + slot + " import failed", e); }
+  }
+
+  // 3) The Surge Path + doctrine.
+  if (d.surgePath?.key) {
+    try { out.pathItem = await grantSurgePath(actor, d.surgePath); }
+    catch (e) { warn("Bad Eden 5E: surge path grant failed", e); }
+  }
+  return out;
 }
 
 
@@ -868,14 +972,17 @@ async function runGuidedCreatePipeline(payload, opts) {
   await actor.setFlag(BBTTCC_SCOPE, "classUuid", payload.classUuid || "");
   await actor.setFlag(BBTTCC_SCOPE, "subclassUuid", payload.subclassUuid || "");
 
-  const importResult = await importClassAncestrySubclass(actor, {
-    ancestryUuid: payload.speciesUuid || "",
-    heritageUuid: payload.heritageUuid || "",
-    classUuid: payload.classUuid || "",
-    subclassUuid: payload.subclassUuid || ""
-  });
+  const importResult = isDnd5e()
+    ? await importDnd5eBuild(actor, payload)
+    : await importClassAncestrySubclass(actor, {
+      ancestryUuid: payload.speciesUuid || "",
+      heritageUuid: payload.heritageUuid || "",
+      classUuid: payload.classUuid || "",
+      subclassUuid: payload.subclassUuid || ""
+    });
 
-  await createMissingIdentityItems(actor, selections);
+  try { await createMissingIdentityItems(actor, selections); }
+  catch (e) { warn("identity item creation failed (non-fatal)", e); }
 
   await actor.setFlag(BBTTCC_SCOPE, "nativeLinks", {
     speciesUuid: payload.speciesUuid || "",

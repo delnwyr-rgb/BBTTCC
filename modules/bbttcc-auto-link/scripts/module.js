@@ -90,8 +90,11 @@ function injectButtons(html) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.dataset.bbttccCreateCharacter = "1";
-    btn.innerHTML = `<i class="fas fa-user-plus"></i> Create RFI Character`;
-    btn.title = "Open the Roll For Initiation Character Creation Wizard (Tree of Life walkthrough)";
+    const dnd = game.system?.id === "dnd5e";
+    btn.innerHTML = `<i class="fas fa-user-plus"></i> ${dnd ? "Create Bad Eden Character" : "Create RFI Character"}`;
+    btn.title = dnd
+      ? "Open the Bad Eden 5E Character Creation Wizard (Tree of Life walkthrough)"
+      : "Open the Roll For Initiation Character Creation Wizard (Tree of Life walkthrough)";
 
     btn.addEventListener("click", () => {
       try {

@@ -18,8 +18,9 @@
  * text is unlicensed, so nothing of it may survive the rewrite.
  * ───────────────────────────────────────────────────────────────────────────── */
 import { createHash } from "node:crypto";
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, mkdtempSync, rmSync, cpSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
@@ -493,14 +494,43 @@ function main() {
   console.log(`expanded ${total} document(s) → ${SOURCE}`);
   if (args.has("--dry")) return;
 
+  // Pack into a scratch dir and verify by unpacking BEFORE touching packs/.
+  // A running Foundry holds each LevelDB's LOCK; packing straight into it
+  // silently produced truncated databases (2026-10-07: 1 of 4 classes, 0 of
+  // 28 species), and swapping a directory under a live handle is no better:
+  // LevelDB deletes "obsolete" files BY PATH, so the old process wiped the new
+  // tables on its next compaction/shutdown and repaired the pack to empty.
+  // So: refuse while any process holds a pack open. Quit Foundry, build, relaunch.
+  const held = Object.keys(docs).map(pack => join(PACKS, pack, "LOCK")).filter(existsSync);
+  if (held.length) {
+    const l = spawnSync("lsof", ["-t", ...held], { encoding: "utf8" });
+    const pids = [...new Set((l.stdout || "").split(/\s+/).filter(Boolean))];
+    if (pids.length) {
+      console.error(`packs are open by process ${pids.join(", ")} (Foundry?) — quit it before building, or the packs come out truncated.`);
+      process.exit(1);
+    }
+  }
+  const stage = mkdtempSync(join(tmpdir(), "bad-eden-5e-packs-"));
   for (const pack of Object.keys(docs)) {
     const dir = join(SOURCE, pack);
     if (!existsSync(dir)) continue;
-    rmSync(join(PACKS, pack), { recursive: true, force: true });
-    const r = spawnSync("fvtt", ["package", "pack", pack, "--in", dir, "--out", PACKS], { encoding: "utf8" });
+    const want = readdirSync(dir).filter(f => f.endsWith(".json")).length;
+    const r = spawnSync("fvtt", ["package", "pack", pack, "--in", dir, "--out", stage], { encoding: "utf8" });
     if (r.status !== 0) { console.error(r.stdout, r.stderr); process.exit(r.status ?? 1); }
-    console.log(`packed ${pack}`);
+    const check = join(stage, `_verify_${pack}`);
+    const u = spawnSync("fvtt", ["package", "unpack", pack, "--in", stage, "--out", check], { encoding: "utf8" });
+    const got = u.status === 0 ? readdirSync(check).filter(f => f.endsWith(".json")).length : -1;
+    if (got !== want) {
+      console.error(`${pack}: packed ${got} record(s) but the source holds ${want} — refusing to install a truncated pack.`);
+      console.error(`  (is Foundry running with this module loaded? quit it, or pack from a copy)`);
+      process.exit(1);
+    }
+    rmSync(check, { recursive: true, force: true });
+    rmSync(join(PACKS, pack), { recursive: true, force: true });
+    cpSync(join(stage, pack), join(PACKS, pack), { recursive: true });
+    console.log(`packed ${pack} (${got} records, verified)`);
   }
+  rmSync(stage, { recursive: true, force: true });
 }
 
 main();

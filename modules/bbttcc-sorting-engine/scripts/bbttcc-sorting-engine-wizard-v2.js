@@ -55,6 +55,73 @@ const FACULTY_LABELS = {
 const FACULTY_STARTING_ARRAY = [5, 4, 3, 3, 2, 2];
 
 // ============================================================================
+// Bad Eden 5E flavour (2026-10-07) — the same Tree, the D&D twin's sheet.
+// When the world runs dnd5e the wizard swaps its RFI rows for their 5E twins
+// per modules/bad-eden-5e/conversion/CONVERSION_RUBRIC.md:
+//   faculties  → the six abilities, standard array 15/14/13/12/10/8
+//   aptitudes  → three skill proficiencies (the "3 free aptitudes" rule)
+//   Path/Doctrine → the Surge Path + doctrine (surge-powers/data/paths.json;
+//                   same nine names the Sorting Engine ranks)
+//   Ancestry/Heritage → a `bad-eden-5e.species` race item (the heritage line)
+//   + a Class row (bad-eden-5e.classes, then the SRD) and a Background row.
+// Everything funnels through the same pipeline payload; bbttcc-auto-link's
+// runGuidedCreatePipeline has the matching dnd5e branch.
+// ============================================================================
+
+const isDnd = () => game.system?.id === "dnd5e";
+const DND_ABILITIES = ["str", "dex", "con", "int", "wis", "cha"];
+const DND_ABILITY_LABELS = { str: "Strength", dex: "Dexterity", con: "Constitution", int: "Intelligence", wis: "Wisdom", cha: "Charisma" };
+const DND_STANDARD_ARRAY = [15, 14, 13, 12, 10, 8];
+// Rubric: Violence→Str, Intrigue→Dex, Body→Con, Mind→Int, Soul→Wis, Presence→Cha.
+const FACULTY_TO_ABILITY = { violence: "str", intrigue: "dex", body: "con", mind: "int", soul: "wis", presence: "cha" };
+// Rubric skill table, chargen keys only. Combat aptitudes and tool-mapped
+// skills (hacking, tinkering) have no skill twin and are backfilled.
+const RFI_APT_TO_SKILL = {
+  athletics: "ath", stealth: "ste", streetwise: "inv", diplomacy: "per", intimidation: "itm",
+  empathy: "ins", performance: "prf", perception: "prc", investigation: "inv", lore: "his",
+  occult: "arc", faith: "rel", meditation: "rel", ritual: "rel", insight: "ins"
+};
+const facKeys  = () => isDnd() ? DND_ABILITIES : FACULTY_KEYS;
+const facArray = () => isDnd() ? DND_STANDARD_ARRAY : FACULTY_STARTING_ARRAY;
+const facLabel = (k) => (isDnd() ? DND_ABILITY_LABELS[k] : FACULTY_LABELS[k]) || k;
+// The RFI recommended array re-expressed on the standard array: rank the six
+// faculties by their RFI value (ties keep FACULTY_KEYS order) and deal
+// 15/14/13/12/10/8 to the mapped abilities in that order.
+function dndArrayFromGuide(array) {
+  const ranked = [...FACULTY_KEYS].sort((a, b) => (array[b] ?? 0) - (array[a] ?? 0));
+  return Object.fromEntries(ranked.map((k, i) => [FACULTY_TO_ABILITY[k], DND_STANDARD_ARRAY[i]]));
+}
+let _DND_SKILL_LIST = null;
+function dndSkillList() {
+  if (_DND_SKILL_LIST) return _DND_SKILL_LIST;
+  const skills = CONFIG.DND5E?.skills ?? {};
+  const abl = CONFIG.DND5E?.abilities ?? {};
+  _DND_SKILL_LIST = Object.entries(skills).map(([k, s]) => [k, `${s.label ?? k} (${abl[s.ability]?.label ?? s.ability ?? ""})`]);
+  return _DND_SKILL_LIST;
+}
+const aptitudeList = () => isDnd() ? dndSkillList() : CHARGEN_APTITUDES;
+const aptitudeLabel = (k) => (isDnd() ? Object.fromEntries(dndSkillList())[k] : APTITUDE_LABEL[k]) || k;
+// Surge Path lookups — Sorting Engine names ("Bulwark", "Path of the Mountain")
+// against surge-powers names ("Path of the Bulwark", "Mountain"): containment
+// either way after normalisation.
+function surgePathFor(seName) {
+  if (!seName) return null;
+  const paths = game.surgePowers?.paths?.data ?? {};
+  const n = _normalizeOptionName(seName);
+  const hit = Object.entries(paths).find(([, d]) => _normalizeOptionName(d?.name).includes(n));
+  return hit ? { key: hit[0], def: hit[1] } : null;
+}
+function surgeDoctrineFor(def, seDoctrine) {
+  if (!def?.doctrines || !seDoctrine) return null;
+  const n = _normalizeOptionName(seDoctrine);
+  const hit = Object.entries(def.doctrines).find(([, d]) => {
+    const dn = _normalizeOptionName(d?.name);
+    return dn && (n.includes(dn) || dn.includes(n));
+  });
+  return hit ? { key: hit[0], def: hit[1] } : null;
+}
+
+// ============================================================================
 // Chargen aptitudes — the 20 free-pick aptitudes (armor skills excluded; those
 // come from Path). Single source of truth for the picker AND the recommended-
 // build apply logic below. Label format: "Name (Faculty)".
@@ -426,7 +493,9 @@ const _SE_PACK_INDEX_RULES = {
 };
 
 function _applyIndexRules(category, packEntry) {
-  const rules = _SE_PACK_INDEX_RULES[category] || {};
+  // The RFI rules key on bbttcc pack shapes (heritage = a `feat` flagged
+  // kind:heritage); on dnd5e the type filter in _loadPackIndex is the rule.
+  const rules = (isDnd() && category in DND_PACK_KEYS) ? {} : (_SE_PACK_INDEX_RULES[category] || {});
   if (rules.skipIf && rules.skipIf(packEntry)) return null;
   if (rules.filterFn && !rules.filterFn(packEntry)) return null;
   let name = packEntry.name || "";
@@ -435,11 +504,28 @@ function _applyIndexRules(category, packEntry) {
   return name;
 }
 
+// Bad Eden 5E pack sources. Heritage = the species item itself (one race item
+// per heritage line); class and background prefer Bad Eden content and fall
+// back to the SRD (2024 packs first, legacy second). Path / doctrine /
+// ancestry have no pack on dnd5e — see _loadDescription.
+const DND_PACK_KEYS = {
+  heritage:   "bad-eden-5e.species",
+  class:      ["bad-eden-5e.classes", "dnd5e.classes24", "dnd5e.classes"],
+  background: ["dnd5e.origins24", "dnd5e.backgrounds"],
+  ancestry:   null, path: null, doctrine: null
+};
+const DND_PACK_TYPES = { heritage: "race", class: "class", background: "background" };
+function _packKeysFor(category) {
+  if (isDnd() && category in DND_PACK_KEYS) return DND_PACK_KEYS[category];
+  return SE_PACK_KEYS[category];
+}
+
 async function _loadPackIndex(category) {
   if (_SE_PACK_INDEX_CACHE.has(category)) return _SE_PACK_INDEX_CACHE.get(category);
-  const raw = SE_PACK_KEYS[category];
+  const raw = _packKeysFor(category);
   if (!raw) return null;
   const candidates = Array.isArray(raw) ? raw : [raw];
+  const wantType = isDnd() ? DND_PACK_TYPES[category] : null;
 
   const map = new Map();
   const triedPacks = [];
@@ -455,6 +541,7 @@ async function _loadPackIndex(category) {
       const idx = await pack.getIndex({ fields: ["name", "img", "type", "flags.bbttcc.kind"] });
       let added = 0;
       for (const entry of idx) {
+        if (wantType && entry.type !== wantType) continue;
         const processedName = _applyIndexRules(category, entry);
         if (processedName == null) continue;  // skipped by rules
         const norm = _normalizeOptionName(processedName);
@@ -497,7 +584,27 @@ async function _loadDescription(category, optionName) {
     return { name: optionName, img: "", descriptionHtml: `<p><em>${optionName}</em></p>`, source: "bbttcc-aae" };
   }
 
-  if (!SE_PACK_KEYS[category]) {
+  // Bad Eden 5E: Path / doctrine read from the surge-powers table, ancestry
+  // from the inline family blurbs (the species pack holds heritage lines only).
+  if (isDnd()) {
+    if (category === "path") {
+      const sp = surgePathFor(optionName);
+      if (sp) return { name: sp.def.name, img: sp.def.img || "", source: "Surge Paths",
+        descriptionHtml: `<p><em>${_esc(sp.def.tagline || "")}</em></p>${sp.def.entry?.description || ""}` };
+    } else if (category === "doctrine") {
+      for (const def of Object.values(game.surgePowers?.paths?.data ?? {})) {
+        const dc = surgeDoctrineFor(def, optionName);
+        if (dc) return { name: `${def.name}: ${dc.def.name}`, img: def.img || "", source: "Surge Paths",
+          descriptionHtml: `<p><em>${_esc(dc.def.tagline || "")}</em></p>${dc.def.perk?.description || ""}` };
+      }
+    } else if (category === "ancestry") {
+      const blurb = _DEAD_INLINE_DESCRIPTIONS_REMOVED.ancestry?.[optionName];
+      return { name: optionName, img: "", source: "Bad Eden 5E",
+        descriptionHtml: blurb ? `<p>${_esc(blurb)}</p>` : `<p><em>${_esc(optionName)}</em></p>` };
+    }
+  }
+
+  if (!_packKeysFor(category)) {
     return { name: optionName, img: "", descriptionHtml: `<p><em>(${category}: no pack source configured)</em></p>` };
   }
 
@@ -598,6 +705,10 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       // case (e.g. re-render after typing the name) is free.
       try { await this._recomputeAutoGrants(); }
       catch (e) { WARN("auto-grant precompute failed", e); }
+      if (isDnd()) {
+        try { await this._loadDndOptions(); }
+        catch (e) { WARN("Bad Eden 5E option load failed", e); }
+      }
       return this._buildReviewHtml();
     }
     return this._buildDescentHtml();
@@ -752,13 +863,20 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const chargenAptitudesHtml = this._buildChargenAptitudesHtml();
     const treeFinal = this._buildFinalTreeSvg(spec, this._effective("alignment"));
 
+    const dnd = isDnd();
     const buildRows = [
       this._buildRow("archetype",  "Archetype",            sug.build.archetype,  sug.rankings.archetype),
       this._buildRow("ancestry",   "Ancestry",             sug.build.ancestry,   sug.rankings.ancestry),
       this._buildHeritageRow(heritageOptions),
       this._buildRow("crew",       "Awesome Crew",         sug.build.crew,       sug.rankings.crew),
-      this._buildRow("path",       "Path (Class)",         sug.build.path,       sug.rankings.path),
+      this._buildRow("path",       dnd ? "Surge Path" : "Path (Class)", sug.build.path, sug.rankings.path),
       this._buildRow("doctrine",   "Doctrine",             sug.build.doctrine,   this._currentDoctrineRanking(), "(filtered by Path)"),
+      // Bad Eden 5E: the D&D class and background are rows of their own — the
+      // Surge Path above is a layer on top of any class, not the class itself.
+      ...(dnd ? [
+        this._buildRow("class",      "Class",      null, this._dndOptions.class,      "(Bad Eden, then the SRD)"),
+        this._buildRow("background", "Background", null, this._dndOptions.background, "(optional)")
+      ] : []),
       this._buildRow("philosophy", "Political Philosophy", sug.build.philosophy, sug.rankings.philosophy),
       this._buildRow("occult",     "Occult Association",   sug.build.occult,     sug.rankings.occult),
       this._buildRow("alignment",  "Sephirotic Alignment", sug.build.alignment,  sug.rankings.alignment)
@@ -791,13 +909,17 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
               </div>
               <div class="bbttcc-twv2-build-table">${buildRows}</div>
               <div class="bbttcc-twv2-faculties" data-finalize-section="faculties">
-                <div class="bbttcc-twv2-section-title">Malkuth — Faculty Allocation</div>
-                <p class="bbttcc-twv2-section-note">Distribute the starting array <strong>[5, 4, 3, 3, 2, 2]</strong> across the six RFI faculties. Each value used exactly once.</p>
+                <div class="bbttcc-twv2-section-title">${dnd ? "Malkuth — Ability Scores" : "Malkuth — Faculty Allocation"}</div>
+                <p class="bbttcc-twv2-section-note">${dnd
+                  ? `Distribute the standard array <strong>[15, 14, 13, 12, 10, 8]</strong> across the six abilities. Each value used exactly once; your species and background add their increases on top.`
+                  : `Distribute the starting array <strong>[5, 4, 3, 3, 2, 2]</strong> across the six RFI faculties. Each value used exactly once.`}</p>
                 ${facultiesHtml}
               </div>
               <div class="bbttcc-twv2-chargen-aptitudes" data-finalize-section="aptitudes">
-                <div class="bbttcc-twv2-section-title">Yesod — Aptitude Picks</div>
-                <p class="bbttcc-twv2-section-note">Choose <strong>3 free aptitudes</strong> at character creation. Armor skills (Plating, Weave, Warding) come from your Path. Picks granted at rank&nbsp;1; aptitudes already provided by your class, heritage, crew, or occult association are greyed out — if you select one anyway, the duplicate pick is dropped at finalize.</p>
+                <div class="bbttcc-twv2-section-title">${dnd ? "Yesod — Skill Picks" : "Yesod — Aptitude Picks"}</div>
+                <p class="bbttcc-twv2-section-note">${dnd
+                  ? `Choose <strong>3 free skill proficiencies</strong> at character creation — the Bad Eden twin of RFI's three free aptitudes. Your class and background offer their own picks afterwards; anything already proficient is greyed out there.`
+                  : `Choose <strong>3 free aptitudes</strong> at character creation. Armor skills (Plating, Weave, Warding) come from your Path. Picks granted at rank&nbsp;1; aptitudes already provided by your class, heritage, crew, or occult association are greyed out — if you select one anyway, the duplicate pick is dropped at finalize.`}</p>
                 ${chargenAptitudesHtml}
               </div>
             </div>
@@ -874,7 +996,38 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     `;
   }
 
+  // Bad Eden 5E: index the species / class / background packs once per wizard.
+  // Rows render synchronously, so this runs in _renderHTML before the review.
+  async _loadDndOptions() {
+    if (this._dndOptions) return this._dndOptions;
+    const rows = async (cat) => {
+      const idx = await _loadPackIndex(cat);
+      return [...(idx?.values() ?? [])].map(e => ({ name: e.displayName, score: 0 }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+    };
+    const speciesIdx = await _loadPackIndex("heritage");
+    const species = [];
+    if (speciesIdx) {
+      const pack = game.packs.get(DND_PACK_KEYS.heritage);
+      const full = await pack?.getIndex({ fields: ["name", "type", "flags.bad-eden-5e"] });
+      for (const e of full ?? []) {
+        if (e.type !== "race") continue;
+        const f = e.flags?.["bad-eden-5e"] ?? {};
+        species.push({ name: e.name, family: f.family || e.name.replace(/\s*\(.*$/, ""), heritage: f.heritage || "" });
+      }
+    }
+    this._dndOptions = { class: await rows("class"), background: await rows("background"), species };
+    return this._dndOptions;
+  }
+
   _heritageOptionsFor(ancestryName) {
+    if (isDnd()) {
+      const n = _normalizeOptionName(ancestryName);
+      return (this._dndOptions?.species ?? [])
+        .filter(s => _normalizeOptionName(s.family) === n)
+        .map(s => s.name)
+        .sort();
+    }
     const map = {
       "Circuitborn":      ["Exo-Knight", "Parallax", "Salvage", "Synapse"],
       "Cryptidkin":       ["Chupacabra", "Furrykin", "Jackalope"],
@@ -909,11 +1062,11 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const f = this._faculties || this._defaultFacultyDistribution();
     return `
       <div class="bbttcc-twv2-faculty-grid">
-        ${FACULTY_KEYS.map(k => {
-          const optsHtml = FACULTY_STARTING_ARRAY.map(v => `<option value="${v}" ${f[k] === v ? "selected" : ""}>${v}</option>`).join("");
+        ${facKeys().map(k => {
+          const optsHtml = facArray().map(v => `<option value="${v}" ${f[k] === v ? "selected" : ""}>${v}</option>`).join("");
           return `
             <label class="bbttcc-twv2-faculty">
-              <span class="bbttcc-twv2-faculty-label">${FACULTY_LABELS[k]}</span>
+              <span class="bbttcc-twv2-faculty-label">${facLabel(k)}</span>
               <select data-faculty-key="${k}" class="bbttcc-twv2-faculty-select">${optsHtml}</select>
             </label>
           `;
@@ -924,7 +1077,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   }
 
   _defaultFacultyDistribution() {
-    return Object.fromEntries(FACULTY_KEYS.map((k, i) => [k, FACULTY_STARTING_ARRAY[i]]));
+    return Object.fromEntries(facKeys().map((k, i) => [k, facArray()[i]]));
   }
 
   // ── Chargen Aptitude Picks (3 free L1 picks) ─────────────────────────────
@@ -996,6 +1149,13 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     if (this._autoGrantsFingerprint === fp) return this._grantedAptitudes;
 
     const map = new Map();
+    // Bad Eden 5E: skills come from class/background advancement after the
+    // wizard; nothing to grey out here (dnd5e's own picker handles overlap).
+    if (isDnd()) {
+      this._autoGrantsFingerprint = fp;
+      this._grantedAptitudes = map;
+      return map;
+    }
 
     // 1) Class L1 plan — explicit, since these grants come from stamped AEs
     // that aren't part of the readable description text.
@@ -1047,7 +1207,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   }
 
   _buildChargenAptitudesHtml() {
-    const APTITUDES = CHARGEN_APTITUDES;
+    const APTITUDES = aptitudeList();
     const slots = this._chargenAptitudes;
     const autoGranted = this._autoGrantedAptitudes();
     return `
@@ -1175,20 +1335,20 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       doctrineName = name;
       className = this._parentClassOfDoctrine(name);
     }
-    const guide = className ? CLASS_BUILD_GUIDE[className] : null;
+    const guide = className ? this._guideForFlavour(CLASS_BUILD_GUIDE[className]) : null;
     if (!guide) return "";
 
     const primaryPills = guide.primary
-      .map(k => `<span class="bbttcc-twv2-rec-faculty">${_esc(FACULTY_LABELS[k] || k)}</span>`)
+      .map(k => `<span class="bbttcc-twv2-rec-faculty">${_esc(facLabel(k))}</span>`)
       .join("");
-    const arrayHtml = FACULTY_KEYS
+    const arrayHtml = facKeys()
       .map(k => `<span class="bbttcc-twv2-rec-cell ${guide.primary.includes(k) ? "is-primary" : ""}">
-          <span class="bbttcc-twv2-rec-cell-label">${_esc(FACULTY_LABELS[k])}</span>
+          <span class="bbttcc-twv2-rec-cell-label">${_esc(facLabel(k))}</span>
           <span class="bbttcc-twv2-rec-cell-val">${guide.array[k]}</span>
         </span>`)
       .join("");
     const aptHtml = guide.aptitudes
-      .map(k => `<span class="bbttcc-twv2-rec-apt">${_esc(APTITUDE_LABEL[k] || k)}</span>`)
+      .map(k => `<span class="bbttcc-twv2-rec-apt">${_esc(aptitudeLabel(k))}</span>`)
       .join("");
 
     const inheritNote = doctrineName
@@ -1270,9 +1430,9 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   _categoryLabel(cat) {
     const map = {
       archetype: "Archetype", ancestry: "Ancestry", heritage: "Heritage",
-      crew: "Awesome Crew", path: "Path (Class)", doctrine: "Doctrine",
+      crew: "Awesome Crew", path: isDnd() ? "Surge Path" : "Path (Class)", doctrine: "Doctrine",
       philosophy: "Political Philosophy", occult: "Occult Association",
-      alignment: "Sephirotic Alignment"
+      alignment: "Sephirotic Alignment", class: "Class", background: "Background"
     };
     return map[cat] || cat;
   }
@@ -1465,7 +1625,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     // ancestry/path and forge a broken character (2026-08-20 playtest).
     const CAT_LABELS = { archetype: "Archetype", ancestry: "Ancestry", crew: "Awesome Crew",
       path: "Path", doctrine: "Doctrine", philosophy: "Philosophy", occult: "Occult Association",
-      alignment: "Alignment" };
+      alignment: "Alignment", ...(isDnd() ? { class: "Class" } : {}) };
     const missingCats = Object.keys(CAT_LABELS).filter(c => !this._effective(c));
     const buildOk = missingCats.length === 0;
 
@@ -1490,8 +1650,8 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
 
   _areFacultiesValid() {
     const f = this._faculties || this._defaultFacultyDistribution();
-    const used = FACULTY_KEYS.map(k => f[k]).sort((a, b) => b - a);
-    const required = [...FACULTY_STARTING_ARRAY].sort((a, b) => b - a);
+    const used = facKeys().map(k => f[k]).sort((a, b) => b - a);
+    const required = [...facArray()].sort((a, b) => b - a);
     return used.length === required.length && used.every((v, i) => v === required[i]);
   }
 
@@ -1520,8 +1680,8 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const warn = root.querySelector("[data-faculty-warn]");
     if (!warn) return true;
     const f = this._faculties || this._defaultFacultyDistribution();
-    const used = FACULTY_KEYS.map(k => f[k]).sort((a, b) => b - a);
-    const required = [...FACULTY_STARTING_ARRAY].sort((a, b) => b - a);
+    const used = facKeys().map(k => f[k]).sort((a, b) => b - a);
+    const required = [...facArray()].sort((a, b) => b - a);
     const valid = used.length === required.length && used.every((v, i) => v === required[i]);
     warn.textContent = valid ? "" : `Each value in [5,4,3,3,2,2] must be used exactly once. Currently: [${used.join(",")}]`;
     warn.style.display = valid ? "none" : "block";
@@ -1547,9 +1707,27 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   // the three Yesod aptitude picks in one click. Both remain fully editable.
   // Aptitude picks skip anything the class already auto-grants and backfill from
   // the remaining pool so the player still lands exactly three valid picks.
+  // The CLASS_BUILD_GUIDE canon is written in RFI terms; on dnd5e it is read
+  // through the rubric (abilities on the standard array, skills for aptitudes).
+  _guideForFlavour(guide) {
+    if (!guide || !isDnd()) return guide;
+    const seen = new Set();
+    const aptitudes = guide.aptitudes.map(k => RFI_APT_TO_SKILL[k]).filter(k => k && !seen.has(k) && seen.add(k));
+    for (const k of ["prc", "ins", "ath", "inv", "per", "ste"]) {
+      if (aptitudes.length >= 3) break;
+      if (!aptitudes.includes(k)) aptitudes.push(k);
+    }
+    return {
+      ...guide,
+      primary: guide.primary.map(k => FACULTY_TO_ABILITY[k]),
+      array: dndArrayFromGuide(guide.array),
+      aptitudes
+    };
+  }
+
   async _onApplyRecommended(el) {
     const className = el?.dataset?.recClass;
-    const guide = className ? CLASS_BUILD_GUIDE[className] : null;
+    const guide = className ? this._guideForFlavour(CLASS_BUILD_GUIDE[className]) : null;
     if (!guide) return;
 
     // Faculty array — copy so later edits don't mutate the canon table.
@@ -1557,7 +1735,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
 
     // Aptitude picks — drop auto-granted/duplicates, backfill to exactly 3.
     const auto = this._autoGrantedAptitudes();
-    const validKeys = new Set(CHARGEN_APTITUDES.map(([k]) => k));
+    const validKeys = new Set(aptitudeList().map(([k]) => k));
     const picks = [];
     const tryAdd = (k) => {
       if (picks.length >= 3) return;
@@ -1565,7 +1743,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       picks.push(k);
     };
     guide.aptitudes.forEach(tryAdd);
-    if (picks.length < 3) CHARGEN_APTITUDES.forEach(([k]) => tryAdd(k));
+    if (picks.length < 3) aptitudeList().forEach(([k]) => tryAdd(k));
     this._chargenAptitudes = [picks[0] || "", picks[1] || "", picks[2] || ""];
 
     ui.notifications?.info(`Applied the recommended ${className} build — tweak any line you like.`);
@@ -1725,6 +1903,11 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       ui.notifications?.warn("Doctrine is required — pick one for the selected Path.");
       return;
     }
+    if (isDnd() && !this._effective("class")) {
+      ui.notifications?.warn("Class is required — pick a D&D class for the character.");
+      this._scrollToFinalizeSection(root, "build");
+      return;
+    }
     const confirmed = this._buildConfirmedBuild();
     // No more dry-run branch — finalize always creates a new actor via the pipeline.
     // Prefer the known-good pipeline from bbttcc-auto-link. It creates a new actor
@@ -1760,12 +1943,13 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
         }
         // Apply class L1 grants + chargen aptitude picks. Class L1 lands
         // first so the picks see them as conflicts and skip cleanly. Only
+        // (RFI only — on dnd5e the pipeline writes the skill picks itself.)
         // writes to rank-0 skills (idempotent — safe even if the AE-promotion
         // path already fired). The explicit grant here is a safety net: in
         // practice the stamped AEs on class T1 anchors don't always make it
         // through import → promotion, so armor/combat aptitudes can go missing
         // without this step.
-        try {
+        if (!isDnd()) try {
           const ARMOR = new Set(["plating", "weave", "warding"]);
           const picks = (this._chargenAptitudes || []).filter(s => s && !ARMOR.has(s));
           const sys = created.system?.system ?? created.system ?? {};
@@ -1880,6 +2064,24 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
         political: politicalKey ? { id: politicalKey } : null
       }
     };
+
+    // Bad Eden 5E: the species item IS the heritage line; the Surge Path and
+    // doctrine ride in `dnd5e.surgePath` (keys into surge-powers' table); the
+    // D&D class / background are their own rows; the three picks are skills.
+    if (isDnd()) {
+      const sp = surgePathFor(build.path?.name);
+      const dc = sp ? surgeDoctrineFor(sp.def, build.doctrine?.name) : null;
+      payload.speciesUuid  = await resolveUuid("heritage", build.heritage?.name);
+      payload.heritageUuid = "";
+      payload.classUuid    = await resolveUuid("class", build.class?.name);
+      payload.subclassUuid = "";
+      payload.dnd5e = {
+        backgroundUuid: await resolveUuid("background", build.background?.name),
+        surgePath: sp ? { key: sp.key, doctrine: dc?.key ?? null, pathName: build.path?.name, doctrineName: build.doctrine?.name } : null,
+        skills: (this._chargenAptitudes || []).filter(Boolean)
+      };
+      if (sp && build.doctrine?.name && !dc) WARN(`no surge-powers doctrine matched "${build.doctrine.name}" on ${sp.key} — the player will be asked`);
+    }
 
     // Strip nulls from picks (pipeline skips missing picks gracefully)
     for (const k of Object.keys(payload.picks)) {
@@ -2011,13 +2213,13 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     // ---- 4. RFI faculty attributes ----
     if (build.faculties) {
       const update = {};
-      for (const key of FACULTY_KEYS) {
+      for (const key of facKeys()) {
         const v = Number(build.faculties[key] ?? 0);
         update[`system.attributes.${key}.value`] = v;
       }
       try {
         await actor.update(update);
-        log.push(`faculties: ${FACULTY_KEYS.map(k => `${FACULTY_LABELS[k].slice(0,3)}=${build.faculties[k]}`).join(" ")}`);
+        log.push(`faculties: ${facKeys().map(k => `${facLabel(k).slice(0,3)}=${build.faculties[k]}`).join(" ")}`);
       } catch (e) {
         warn.push(`faculty update failed: ${e.message}`);
       }
@@ -2043,6 +2245,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       philosophy: eff("philosophy"),
       occult:     eff("occult"),
       alignment:  eff("alignment"),
+      ...(isDnd() ? { class: eff("class"), background: eff("background") } : {}),
       faculties:  { ...this._faculties, _playerPick: true }
     };
   }

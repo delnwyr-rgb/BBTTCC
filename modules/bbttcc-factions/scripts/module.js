@@ -4419,6 +4419,11 @@ factionApi.applyStartingPackage ??= (async ({
     const starterKey = ["hexmobile", "space_marine"].includes(String(starterRig)) ? String(starterRig) : "hexmobile";
     if (a.getFlag?.(MODULE_ID, "starterRigGranted")) {
       console.log(`[bbttcc-factions] starter-rig grant skipped for ${a.name} — already granted.`);
+    } else if (!(Actor.TYPES ?? []).includes("rig")) {
+      // Bad Eden 5E: dnd5e has no `rig` Actor type yet (the rig/vehicle lane is
+      // still unported), and a failed Actor.create here used to abort the whole
+      // faction creation with a DataModelValidationError.
+      console.log(`[bbttcc-factions] starter-rig grant skipped for ${a.name} — no "rig" Actor type in ${game.system?.id}.`);
     } else if (!rigApi?.mintFromChassis) {
       console.warn("[bbttcc-factions] starter-rig grant SKIPPED — game.bbttcc.api.rigBuilder.mintFromChassis unavailable (is bbttcc-auto-link enabled/loaded?).");
     } else {
