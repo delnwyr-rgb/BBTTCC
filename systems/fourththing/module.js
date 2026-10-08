@@ -195,6 +195,7 @@ import {
   registerActorKindHooks,
 } from "./actor-kind.js";
 import { threatFor, registerThreatChassisSetting, registerThreatChassisHooks } from "./threat-chassis.js";
+import { ItemLadder, registerItemLadderHooks, workingCharges, spendWorkingCharge, refillWorkingCharges } from "./item-ladder.js";
 import { registerNpcAutomation } from "./npc-automation.js";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -7760,6 +7761,14 @@ async function castManifestation(actor, item, {
   rollMode = "normal"
 } = {}) {
   const rawSys = actor?.system?.system ?? actor?.system ?? {};
+  // 2026-10-07 (item ladder): a Bound Working casts from its HOST item's charges — never Clarity; Noise/misfire still apply.
+  const _wk = item ? workingCharges(actor, item) : null;
+  if (_wk) {
+    if (!_wk.host) { ui.notifications?.warn(`${item.name}: its host item is gone — this bound Working is inert.`); return false; }
+    if (_wk.value <= 0) { ui.notifications?.warn(`${item.name}: ${_wk.host.name} has no charges left (recovers on a Soma Break).`); return false; }
+    freeClarity = true;
+    await spendWorkingCharge(actor, item);
+  }
   const stewardTier = _ftCasterTier(actor);
   const mf = item ? ftNormalizeManifestationData(item.system ?? {}, item.type === "weapon" ? "weapon" : "power") : null;
   const manTier = mf ? Math.max(1, Math.min(4, Number(mf.tier) || 1)) : stewardTier;
@@ -14167,6 +14176,8 @@ Hooks.once("init", function () {
   registerActorKindApi();
   registerActorKindHooks();
   registerThreatChassisHooks();
+  registerItemLadderHooks();                 // graded arms + bound Workings (2026-10-07) — see item-ladder.js
+  game.fourththing.ladder = ItemLadder;
 
   // Bad Eden Display font — registered so it appears in Foundry's font dropdowns
   // (Drawings, Scene text, journal rich-text editor). CSS usage is also wired
@@ -15818,6 +15829,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const threatAttack = Number(_threatAtk?.attack) || 0;
     // 2026-10-07 (regimen pass 7): flat attack bonuses (passives.checkBonus context attack, auras, banked).
     const _atkCb = collectCheckBonuses(actor, { context: "attack", skill, attribute: intent, target: target?.actor ?? target ?? null });
+    // 2026-10-07 (item ladder): a graded weapon's +N to hit — only the weapon being swung (item-ladder.js).
+    try { const _gi = itemUuid ? fromUuidSync(itemUuid) : null; const _g = _gi?.flags?.fourththing?.grade; if (_g && Number(_g.attack)) _atkCb.push({ bonus: Number(_g.attack), source: _gi.name, note: `${_g.name} +${_g.attack}` }); } catch (_e) {}
     const _atkCbSum = _atkCb.reduce((n, b) => n + (Number(b.bonus) || 0), 0);
     const total_mod = _atkCbSum + attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus + threatAttack - echoPenalty - _radPen;
     // ── Aptitude rank + roll mode → dice pool ────────────────────────────────
@@ -17181,6 +17194,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     } catch (_e) {}
 
     await actor.update(updates);
+    // 2026-10-07 (item ladder): bound-Working charges + technomagical tech.charges recover on the deepest rest.
+    try { await refillWorkingCharges(actor, { cadence: "soma-break" }); } catch (e) { console.warn("[fourththing] charge refill on Soma Break failed", e); }
     // Clear manifestation lockout flag (Blood Debt refit 2026-05-09) and refresh
     // the Enlightenment "minor miracle" charge (bbttcc). unsetFlag, not the
     // legacy "-=key" update syntax v14 deprecated (2026-10-01).

@@ -114,16 +114,19 @@ function monsterFrom(a) {
 }
 
 // ── Stewards: four paths × four tiers, real live gear, chargen array + 1 faculty/level (cap 10) ───────
+// kit[0] = the main weapon (its skill gets the ranks); later weapons = SIDEARMS of another damage type (2026-10-07: without
+// them the duo — Bulwark + Shadow Courier — dealt only kinetic, so every kinetic-resist monster read TOO HARD by construction).
+// strike() picks the weapon with the best expected damage per target, so a sidearm only comes out against a resist.
 const gear = Object.fromEntries(itemRecs.filter(r => r.k.startsWith("!items!")).map(r => [r.v.name, r.v]));
 const need = n => { if (!gear[n]) throw new Error(`live items pack has no "${n}"`); return gear[n]; };
 const LEVEL = { 1: 1, 2: 8, 3: 13, 4: 18 };                 // same levels the monster builder writes
 const BUILDS = {
   Bulwark:         { bracket: "vanguard", striker: true, base: { violence: 4, intrigue: 2, presence: 3, body: 5, mind: 3, soul: 2 }, grow: ["violence", "body", "presence"],
-    kit: { 1: ["Maul", "Bulwark Hauberk"], 2: ["Maul", "Steelweave Hauberk"], 3: ["Soulbound Hex-Reaver", "Hex-Carved Plate"], 4: ["Soulbound Hex-Reaver", "Yesodic Plating"] } },
+    kit: { 1: ["Maul", "Bulwark Hauberk"], 2: ["Maul", "Wrath-Brand", "Steelweave Hauberk"], 3: ["Soulbound Hex-Reaver", "Singing Hammer", "Hex-Carved Plate"], 4: ["Soulbound Hex-Reaver", "Singing Hammer", "Yesodic Plating"] } },
   Aurablade:       { bracket: "vanguard", striker: true, base: { violence: 5, intrigue: 2, presence: 3, body: 3, mind: 2, soul: 4 }, grow: ["violence", "body", "soul"],
-    kit: { 1: ["Hand Axe", "Patrolman's Plate", "Pressed Buckler"], 2: ["Hand Axe", "Steelweave Hauberk", "Wardiron Targe"], 3: ["Frikkin' Laser Blade Saber", "Hex-Carved Plate", "Null-Field Tower Shield"], 4: ["Yesodic Edge", "Yesodic Plating", "Oathkeeper's Bulwark"] } },
+    kit: { 1: ["Hand Axe", "Patrolman's Plate", "Pressed Buckler"], 2: ["Hand Axe", "Wrath-Brand", "Steelweave Hauberk", "Wardiron Targe"], 3: ["Frikkin' Laser Blade Saber", "Hex-Carved Plate", "Null-Field Tower Shield"], 4: ["Yesodic Edge", "Soulbound Hex-Reaver", "Yesodic Plating", "Oathkeeper's Bulwark"] } },
   "Shadow Courier": { bracket: "mid", striker: true, base: { violence: 4, intrigue: 5, presence: 2, body: 3, mind: 2, soul: 3 }, grow: ["violence", "intrigue", "body"],
-    kit: { 1: ["Slug Pistol", "Drifter's Weave"], 2: ["Hex-Script Pistol", "Septhide Vestments"], 3: ["Hex-Script Pistol", "Septhide Vestments"], 4: ["Hex-Script Pistol", "Septhide Vestments"] } },
+    kit: { 1: ["Slug Pistol", "Drifter's Weave"], 2: ["Hex-Script Pistol", "Laser Rifle, Rad", "Septhide Vestments"], 3: ["Hex-Script Pistol", "Plasma Lance", "Septhide Vestments"], 4: ["Hex-Script Pistol", "Plasma Lance", "Septhide Vestments"] } },
   Dreamwalker:     { bracket: "caster", striker: false, base: { violence: 2, intrigue: 2, presence: 3, body: 3, mind: 5, soul: 4 }, grow: ["mind", "body", "soul"],
     kit: { 1: ["Quantum Staff", "Drifter's Weave"], 2: ["Quantum Staff", "Septhide Vestments"], 3: ["Quantum Staff", "Septhide Vestments"], 4: ["Quantum Staff", "Mantle of the Unbroken Circle"] } },
 };
