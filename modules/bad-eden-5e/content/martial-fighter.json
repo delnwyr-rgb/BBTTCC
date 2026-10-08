@@ -1,0 +1,232 @@
+{
+  "_about": "Fighter — two Bad Eden subclasses of the dnd5e Fighter: the Current Runner (Flow, one-third caster) and the Line Sergeant (Artifice, one-third caster). Mechanics carried over from the SW5E Fighter archetypes Adept Specialist and Shield Specialist; every line of text is Bad Eden's own. Second Wind, Action Surge, Indomitable and Extra Attack are the dnd5e Fighter's own features. Built by tools/build-packs.mjs.",
+  "_names": [
+    { "subclass": "fighter-current-runner", "chosen": "Current Runner", "alternates": ["Riptide Blade", "Quickwater Knight"] },
+    { "subclass": "fighter-line-sergeant", "chosen": "Line Sergeant", "alternates": ["Wall Keeper", "Rampart Knight"] }
+  ],
+  "_renames": [
+    { "sw5e": "Adept Specialist", "new": "Current Runner" },
+    { "sw5e": "Forcecasting", "new": "Flowcasting" },
+    { "sw5e": "Growing Momentum", "new": "Pick Up Speed" },
+    { "sw5e": "Whirling Weapons", "new": "Follow Through" },
+    { "sw5e": "Focused Breathing", "new": "Catch Your Breath" },
+    { "sw5e": "Unstoppable Force", "new": "Can't Be Held" },
+    { "sw5e": "Instant Acceleration", "new": "There and Gone" },
+    { "sw5e": "Shield Specialist", "new": "Line Sergeant" },
+    { "sw5e": "Techcasting", "new": "Artificing" },
+    { "sw5e": "Stay in Formation", "new": "Eyes Up" },
+    { "sw5e": "Rallying Cry", "new": "Everybody Up" },
+    { "sw5e": "Inspiring Surge", "new": "On Me" },
+    { "sw5e": "Bulwark", "new": "Shake It Off" },
+    { "sw5e": "Greater Inspiring Surge", "new": "Both of You" }
+  ],
+  "_powerRefs": [
+    { "sw5e": "Burst of Speed", "draft": null, "cut": true, "feature": "runner-pick-up-speed", "note": "Not in power-map.json (cut). Pick Up Speed carries the power's own shape as a flat effect: action, self, +10 feet speed for 1 hour, no concentration; the SW5E +10 at 10th and 18th are kept." },
+    { "sw5e": "Freedom of Movement", "draft": "Nothing Holds", "slug": "nothing-holds", "feature": "runner-cant-be-held" }
+  ],
+  "_unsure": [
+    "Eyes Up: SW5E's Guard action has no 5E twin; rendered as the Dodge action taken as a bonus action.",
+    "Pick Up Speed: 'burst of speed' was cut from our power list, so the feature is a flat effect in the power's shape (action, self, +10 ft for 1 hour) rather than a free cast; the speed bonus is text-only (no Active Effect is applied by the activity), uses = 2 + floor((Fighter level - 1) / 4), which lands the +1 at 5th, 9th, 13th and 17th.",
+    "Powers Known: both subclasses use the brief's column (2/3/4/5/6/7 at 3rd/7th/10th/13th/16th/19th); the SW5E tables started at 4 (Adept) and 3 (Shield). Flagged in case the owner wants the SW5E starts.",
+    "Flow points (Current Runner) come back on a long rest; Artifice points (Line Sergeant) come back on a short or long rest, as SW5E did and as the Gearwright's Artificing does.",
+    "Everybody Up: the ally count is a formula in the activity's target count (3 + floor((Fighter level - 5) / 4) = 3/4/5/6 at 7th/9th/13th/17th) and the heal activity's formula is @classes.fighter.levels; it is a special-activation rider on Second Wind, not a separate action.",
+    "Can't Be Held: Nothing Holds is a 4th-level power; the feature grants its effect on an Indomitable use regardless of the Runner's Max Power Level, as the SW5E feature did.",
+    "Indomitable, Second Wind and Action Surge are written against the 2014 Fighter (Indomitable = reroll, must use the new roll). If the world runs the 2024 Fighter the Shake It Off and Catch Your Breath text still works but the wording of the parent feature differs.",
+    "The casting features are named Flowcasting / Artificing to match the Warden and Gearwright class features; the names repeat, the slugs (runner-flowcasting, sergeant-artificing) do not."
+  ],
+  "subclasses": [
+    {
+      "slug": "fighter-current-runner",
+      "identifier": "current-runner",
+      "name": "Current Runner",
+      "classIdentifier": "fighter",
+      "img": "icons/skills/movement/feet-winged-boots-blue.webp",
+      "description": "<p><em>Fighter subclass</em></p><p>Some fighters find a little of the Flow in them and don't know what to do with it except run. The Current Runner puts it in their legs and their hands: in, a flurry of blows before anyone has turned around, and out again. You never stand still long enough to be a target, and you hit like somebody who was already halfway to the next fight.</p>",
+      "casting": { "tradition": "flow", "progression": "arch" },
+      "scales": [
+        {
+          "identifier": "powers-known",
+          "title": "Powers Known",
+          "scale": { "3": 2, "7": 3, "10": 4, "13": 5, "16": 6, "19": 7 }
+        }
+      ],
+      "features": [
+        { "level": 3, "slug": "runner-flowcasting" },
+        { "level": 3, "slug": "runner-pick-up-speed" },
+        { "level": 7, "slug": "runner-follow-through" },
+        { "level": 10, "slug": "runner-catch-your-breath" },
+        { "level": 15, "slug": "runner-cant-be-held" },
+        { "level": 18, "slug": "runner-there-and-gone" }
+      ]
+    },
+    {
+      "slug": "fighter-line-sergeant",
+      "identifier": "line-sergeant",
+      "name": "Line Sergeant",
+      "classIdentifier": "fighter",
+      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "description": "<p><em>Fighter subclass</em></p><p>Somebody has to hold the line, and somebody has to make the rest of the line believe it will hold. The Line Sergeant does both. You carry a kit and a few Artifice tricks for keeping people on their feet, and a voice that gets heard over the noise: when you catch your breath, so do they; when you push, they push with you.</p>",
+      "casting": { "tradition": "artifice", "progression": "arch" },
+      "scales": [
+        {
+          "identifier": "powers-known",
+          "title": "Powers Known",
+          "scale": { "3": 2, "7": 3, "10": 4, "13": 5, "16": 6, "19": 7 }
+        }
+      ],
+      "features": [
+        { "level": 3, "slug": "sergeant-artificing" },
+        { "level": 3, "slug": "sergeant-eyes-up" },
+        { "level": 7, "slug": "sergeant-everybody-up" },
+        { "level": 10, "slug": "sergeant-on-me" },
+        { "level": 15, "slug": "sergeant-shake-it-off" },
+        { "level": 18, "slug": "sergeant-both-of-you" }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "runner-flowcasting",
+      "name": "Flowcasting",
+      "level": 3,
+      "requirements": "Fighter (Current Runner) 3",
+      "folder": "Current Runner",
+      "folderParent": "Fighter",
+      "img": "icons/magic/water/wave-water-blue.webp",
+      "description": "<p><em>Current Runner, 3rd level</em></p><p>You never sat still long enough to study the Flow. You picked up what came to a body in motion, and it turns out that's a few powers, and they answer when you reach for them.</p><h4>Powers Known</h4><p>You know two Flow powers of your choice at 3rd level, and you learn more as you gain levels, as shown in the Powers Known column of the Current Runner table. You can't learn a power whose level is higher than your Max Power Level, and you can learn a power at the same time you learn the one it requires. Whenever you gain a Fighter level, you can also swap one power you know for another you qualify for.</p><h4>Flow Points</h4><p>You have a pool of Flow points equal to your Fighter level, plus your Wisdom or Charisma modifier (your choice). You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Flow points when you finish a long rest.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Flow point per level, up to your Max Power Level: 1st at 3rd level, 2nd at 7th, 3rd at 13th, and 4th at 17th. A 4th-level power is a lot of water for a Runner: you can cast one once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Which ability you cast with depends on which way the power runs. Sephirotic powers use Wisdom. Qliphothic powers use Charisma. Unaligned powers use whichever of the two you prefer. Use that modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your casting ability modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your casting ability modifier</p>"
+    },
+    {
+      "slug": "runner-pick-up-speed",
+      "name": "Pick Up Speed",
+      "level": 3,
+      "requirements": "Fighter (Current Runner) 3",
+      "folder": "Current Runner",
+      "folderParent": "Fighter",
+      "img": "icons/skills/movement/figure-running-gray.webp",
+      "activation": "action",
+      "duration": { "value": "1", "units": "hour" },
+      "uses": { "max": "2 + floor((@classes.fighter.levels - 1) / 4)", "per": "lr" },
+      "description": "<p><em>Current Runner, 3rd, 5th, 9th, 13th, and 17th level</em></p><p>You put the current in your legs and let it carry you. As an action, you can increase your speed by 10 feet for 1 hour. It doesn't need concentration, and it doesn't cost Flow points. At 10th level the increase is 20 feet, and at 18th level it is 30 feet.</p><p>You can use this feature twice, and you gain one more use at 5th, 9th, 13th, and 17th level. You regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "runner-follow-through",
+      "name": "Follow Through",
+      "level": 7,
+      "requirements": "Fighter (Current Runner) 7",
+      "folder": "Current Runner",
+      "folderParent": "Fighter",
+      "img": "icons/skills/melee/strike-slashes-orange.webp",
+      "description": "<p><em>Current Runner, 7th level</em></p><p>A miss is just the wind-up for the next one. Once on each of your turns, when you miss with a weapon attack, you can make another weapon attack. No action required.</p>"
+    },
+    {
+      "slug": "runner-catch-your-breath",
+      "name": "Catch Your Breath",
+      "level": 10,
+      "requirements": "Fighter (Current Runner) 10",
+      "folder": "Current Runner",
+      "folderParent": "Fighter",
+      "img": "icons/magic/air/wind-swirl-gray-blue.webp",
+      "description": "<p><em>Current Runner, 10th level</em></p><p>The current comes back as fast as your wind does. When you use your Second Wind, you also regain Flow points equal to your Wisdom or Charisma modifier (your choice, minimum of one).</p>"
+    },
+    {
+      "slug": "runner-cant-be-held",
+      "name": "Can't Be Held",
+      "level": 15,
+      "requirements": "Fighter (Current Runner) 15",
+      "folder": "Current Runner",
+      "folderParent": "Fighter",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "activation": "special",
+      "duration": { "value": "1", "units": "turn" },
+      "description": "<p><em>Current Runner, 15th level</em></p><p>Mud, rope, a hand on your collar, somebody's power pinning you to the floor: you've learned to run through all of it. You can spend a use of Indomitable to gain the effect of @UUID[{{uuid:powers:nothing-holds}}]{Nothing Holds} on yourself until the end of your next turn.</p>"
+    },
+    {
+      "slug": "runner-there-and-gone",
+      "name": "There and Gone",
+      "level": 18,
+      "requirements": "Fighter (Current Runner) 18",
+      "folder": "Current Runner",
+      "folderParent": "Fighter",
+      "img": "icons/magic/movement/abstract-ribbons-red-orange.webp",
+      "activation": "special",
+      "range": 30,
+      "target": { "type": "self", "count": 1 },
+      "description": "<p><em>Current Runner, 18th level</em></p><p>Nobody sees you cross the room any more. They see where you were, and then where you are. When you use your Action Surge, you can teleport up to 30 feet to an unoccupied space you can see. You can do it before or after the extra action.</p>"
+    },
+    {
+      "slug": "sergeant-artificing",
+      "name": "Artificing",
+      "level": 3,
+      "requirements": "Fighter (Line Sergeant) 3",
+      "folder": "Line Sergeant",
+      "folderParent": "Fighter",
+      "img": "icons/tools/hand/wrench-steel-grey.webp",
+      "description": "<p><em>Line Sergeant, 3rd level</em></p><p>You carry a kit, and you've learned to build the thing the line needs out of what's in it, fast enough that it counts as casting. The powers you know are schematics: a patch, a dose, a trick with a wire, each one put together in the moment and gone when it's done.</p><h4>Powers Known</h4><p>You know two Artifice powers of your choice at 3rd level, and you learn more as you gain levels, as shown in the Powers Known column of the Line Sergeant table. You can't learn a power whose level is higher than your Max Power Level. Whenever you gain a Fighter level, you can also swap one power you know for another you qualify for.</p><h4>Artifice Points</h4><p>You have a pool of Artifice points equal to half your Fighter level (rounded up), plus your Intelligence modifier. You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Artifice points when you finish a short or long rest.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Artifice point per level, up to your Max Power Level: 1st at 3rd level, 2nd at 7th, 3rd at 13th, and 4th at 17th. A 4th-level power takes parts you only have once: you can cast one once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Intelligence is your casting ability for Artifice powers. Use your Intelligence modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your Intelligence modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your Intelligence modifier</p><h4>Focus</h4><p>Your kit is the focus for your Artifice powers: a toolkit you're proficient with, kept close enough to reach in a fight.</p>"
+    },
+    {
+      "slug": "sergeant-eyes-up",
+      "name": "Eyes Up",
+      "level": 3,
+      "requirements": "Fighter (Line Sergeant) 3",
+      "folder": "Line Sergeant",
+      "folderParent": "Fighter",
+      "img": "icons/skills/melee/shield-block-gray-orange.webp",
+      "activation": "bonus",
+      "description": "<p><em>Line Sergeant, 3rd level</em></p><p>You can watch the line and your own skin at the same time. On your turn, you can take the Dodge action as a bonus action.</p>"
+    },
+    {
+      "slug": "sergeant-everybody-up",
+      "name": "Everybody Up",
+      "level": 7,
+      "requirements": "Fighter (Line Sergeant) 7",
+      "folder": "Line Sergeant",
+      "folderParent": "Fighter",
+      "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+      "activation": "special",
+      "range": 60,
+      "target": { "type": "ally", "count": "3 + floor((@classes.fighter.levels - 5) / 4)" },
+      "activity": "heal",
+      "heal": { "formula": "@classes.fighter.levels", "type": "healing" },
+      "description": "<p><em>Line Sergeant, 7th, 9th, 13th, and 17th level</em></p><p>When you get your wind back, you give some of it away. When you use your Second Wind, you can choose up to three allies within 60 feet of you who can see or hear you. Each of them regains hit points equal to your Fighter level.</p><p>You can choose one more ally at 9th, 13th, and 17th level.</p>"
+    },
+    {
+      "slug": "sergeant-on-me",
+      "name": "On Me",
+      "level": 10,
+      "requirements": "Fighter (Line Sergeant) 10",
+      "folder": "Line Sergeant",
+      "folderParent": "Fighter",
+      "img": "icons/skills/melee/blade-tips-double-blue.webp",
+      "activation": "special",
+      "range": 60,
+      "target": { "type": "ally", "count": 1 },
+      "description": "<p><em>Line Sergeant, 10th level</em></p><p>When you go, somebody goes with you. When you use your Action Surge, you can choose one creature allied with you within 60 feet of you. If it can see or hear you, it can use its reaction to make one melee or ranged weapon attack.</p>"
+    },
+    {
+      "slug": "sergeant-shake-it-off",
+      "name": "Shake It Off",
+      "level": 15,
+      "requirements": "Fighter (Line Sergeant) 15",
+      "folder": "Line Sergeant",
+      "folderParent": "Fighter",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "activation": "special",
+      "range": 60,
+      "target": { "type": "ally", "count": 1 },
+      "description": "<p><em>Line Sergeant, 15th level</em></p><p>Whatever got into your head, you can talk it out of theirs too. When you use Indomitable to reroll an Intelligence, Wisdom, or Charisma saving throw and you aren't incapacitated, you can choose one ally within 60 feet of you who also failed a saving throw against the same effect. If that ally can see or hear you, they can reroll their saving throw, and they must use the new roll.</p>"
+    },
+    {
+      "slug": "sergeant-both-of-you",
+      "name": "Both of You",
+      "level": 18,
+      "requirements": "Fighter (Line Sergeant) 18",
+      "folder": "Line Sergeant",
+      "folderParent": "Fighter",
+      "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "activation": "special",
+      "range": 60,
+      "target": { "type": "ally", "count": 2 },
+      "description": "<p><em>Line Sergeant, 18th level</em></p><p>The line moves when you say so. When you use your On Me feature, you can choose two allies within 60 feet of you rather than one.</p>"
+    }
+  ]
+}

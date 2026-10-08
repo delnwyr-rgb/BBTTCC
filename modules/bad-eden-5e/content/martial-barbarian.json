@@ -1,0 +1,207 @@
+{
+  "_about": "Barbarian subclasses: Powderkeg Fury (Artifice, arch caster) and Whitewater Fury (the Flow, arch caster). Mechanics carried over from the SW5E Berserker archetypes (Industrial Approach, Marauder Approach); every line of text is Bad Eden's own. Built by tools/build-packs.mjs.",
+  "_names": [
+    {"subclass": "barbarian-powderkeg-fury", "pick": "Powderkeg Fury", "alternates": ["Boiler Rage", "Salvage Rager"]},
+    {"subclass": "barbarian-whitewater-fury", "pick": "Whitewater Fury", "alternates": ["Rage of the Torrent", "Spate Rager"]}
+  ],
+  "_renames": [
+    {"sw5e": "Industrial Approach", "new": "Powderkeg Fury"},
+    {"sw5e": "Techcasting", "new": "Artificing"},
+    {"sw5e": "Industrious Tech", "new": "Build Angry"},
+    {"sw5e": "Explosive Resilience", "new": "Blowback"},
+    {"sw5e": "Painkiller", "new": "Field Dose"},
+    {"sw5e": "Final Countdown", "new": "Dead Man's Switch"},
+    {"sw5e": "Marauder Approach", "new": "Whitewater Fury"},
+    {"sw5e": "Forcecasting", "new": "Flowcasting"},
+    {"sw5e": "Furious Force", "new": "Angry Water"},
+    {"sw5e": "Reckless Power", "new": "Both Hands"},
+    {"sw5e": "Powerful Presence", "new": "The Holler"},
+    {"sw5e": "Force Storm", "new": "Bursting the Banks"}
+  ],
+  "_powerRefs": [],
+  "_unsure": [
+    "Powers Known: SW5E starts Industrial at 3 and Marauder at 4 powers known; both subclasses use the house arch ladder (2/3/4/5/6/7 at 3/7/10/13/16/19) per the brief. Both casting features say 'two'.",
+    "Artificing (Powderkeg) recovers Artifice points on a short or long rest, as the Gearwright does and as the SW5E source did; Flowcasting (Whitewater) recovers on a long rest, as the Warden does.",
+    "Blowback: SW5E's 'acid, cold, fire, ion, or lightning' collapses to 'acid, cold, fire, or lightning' (rubric: ion -> lightning). Uses ride a subclass ScaleValue `blowback-uses` (3/4/5/6 at 6/9/13/17) referenced as @scale.powderkeg-fury.blowback-uses; the activity's damage is text-only (it equals the rage damage bonus, which isn't roll data).",
+    "Field Dose: rendered as a heal activity with a temphp formula; the frightened-save advantage is text-only (no effect doc).",
+    "Dead Man's Switch: the activity rolls a single 1d12 (acid by default, type swapped at the table); the per-Artifice-point multiplier and the spend-everything trigger are text-only. The resisted-type list is the same acid/cold/fire/lightning as Blowback.",
+    "Bursting the Banks: keeps the dnd5e 'force' damage type (lowercase, as nine of our powers already do); swap to thunder if the owner wants the word gone entirely. The activity rolls a single 1d12; the per-round-raging multiplier and the end-your-rage cost are text-only.",
+    "The Holler: duration is '1 turn' on the activity; the text keeps the SW5E split (friends until the start of your next turn, enemies until the end of it).",
+    "No SW5E-only mechanics (Guard, superiority dice, modification slots) appear in these two archetypes, so nothing was flattened. The 'not wearing heavy armor' clause on Angry Water carries over as written."
+  ],
+  "subclasses": [
+    {
+      "slug": "barbarian-powderkeg-fury",
+      "identifier": "powderkeg-fury",
+      "name": "Powderkeg Fury",
+      "classIdentifier": "barbarian",
+      "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
+      "description": "<p><em>Barbarian subclass</em></p><p>Some ragers just go red and swing. A Powderkeg Fury goes red and <em>builds</em>. Half the kit on their belt is there to be thrown, lit, or wired to something, and the rage doesn't make them clumsy with it; it makes them fast. Where a Gearwright works a problem, a Powderkeg solves it, usually with a bang and a smell of scorched hair, and if the thing they built doesn't hold up, well, neither will whatever it landed on.</p>",
+      "casting": {"tradition": "artifice", "progression": "arch"},
+      "scales": [
+        {"identifier": "powers-known", "title": "Powers Known", "scale": {"3": 2, "7": 3, "10": 4, "13": 5, "16": 6, "19": 7}},
+        {"identifier": "blowback-uses", "title": "Blowback Uses", "scale": {"6": 3, "9": 4, "13": 5, "17": 6}}
+      ],
+      "features": [
+        {"level": 3, "slug": "powderkeg-artificing"},
+        {"level": 3, "slug": "powderkeg-build-angry"},
+        {"level": 6, "slug": "powderkeg-blowback"},
+        {"level": 10, "slug": "powderkeg-field-dose"},
+        {"level": 14, "slug": "powderkeg-dead-mans-switch"}
+      ]
+    },
+    {
+      "slug": "barbarian-whitewater-fury",
+      "identifier": "whitewater-fury",
+      "name": "Whitewater Fury",
+      "classIdentifier": "barbarian",
+      "img": "icons/magic/air/wind-vortex-swirl-blue.webp",
+      "description": "<p><em>Barbarian subclass</em></p><p>There are few worse places to stand than in front of a rager who has found the Flow. Most people wade into the current. A Whitewater Fury hits it running, and something down in the fury answers: a raw well of power that doesn't ask what you meant to do with it. When they rage, the river comes up with them, and what's left behind is fire, blades, and blood in no particular order. The Qliphothic side of the river runs faster, and it is honest about it, and a lot of these people end up swimming there. The ones who don't still hear it, every time the rage comes on.</p>",
+      "casting": {"tradition": "flow", "progression": "arch"},
+      "scales": [
+        {"identifier": "powers-known", "title": "Powers Known", "scale": {"3": 2, "7": 3, "10": 4, "13": 5, "16": 6, "19": 7}}
+      ],
+      "features": [
+        {"level": 3, "slug": "whitewater-flowcasting"},
+        {"level": 3, "slug": "whitewater-angry-water"},
+        {"level": 6, "slug": "whitewater-both-hands"},
+        {"level": 10, "slug": "whitewater-the-holler"},
+        {"level": 14, "slug": "whitewater-bursting-the-banks"}
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "powderkeg-artificing",
+      "name": "Artificing",
+      "level": 3,
+      "requirements": "Barbarian (Powderkeg Fury) 3",
+      "folder": "Powderkeg Fury",
+      "folderParent": "Barbarian",
+      "img": "icons/tools/hand/wrench-steel-grey.webp",
+      "description": "<p><em>Powderkeg Fury, 3rd level</em></p><p>You never had the patience for schematics, so you learned them with your hands instead. The powers you know are things you can build angry: a charge, a dose, a trick with a wire, slapped together from whatever's in your pockets and gone the second it goes off.</p><h4>Powers Known</h4><p>You know two Artifice powers of your choice at 3rd level, and you learn more as you gain levels, as shown in the Powers Known column of the Powderkeg Fury table. You can't learn a power whose level is higher than your Max Power Level. Whenever you gain a Barbarian level, you can also swap one power you know for another you qualify for.</p><h4>Artifice Points</h4><p>You have a pool of Artifice points equal to half your Barbarian level (rounded up), plus your Intelligence modifier. You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Artifice points when you finish a short or long rest.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Artifice point per level, up to your Max Power Level: 1st-level powers at 3rd level, 2nd at 7th, 3rd at 13th, and 4th at 17th. A 4th-level power is a lot of parts to burn at once: you can cast one once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Intelligence is your casting ability for Artifice powers. Use your Intelligence modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your Intelligence modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your Intelligence modifier</p><h4>Focus</h4><p>You use your kit, the toolkit that is your Artifice focus, to cast your Artifice powers.</p>"
+    },
+    {
+      "slug": "powderkeg-build-angry",
+      "name": "Build Angry",
+      "level": 3,
+      "requirements": "Barbarian (Powderkeg Fury) 3",
+      "folder": "Powderkeg Fury",
+      "folderParent": "Barbarian",
+      "img": "icons/magic/control/buff-strength-muscle-damage-orange.webp",
+      "description": "<p><em>Powderkeg Fury, 3rd level</em></p><p>Rage doesn't slow your hands down. It just takes the hesitation out. You can cast Artifice powers while raging, as long as the power's casting time is no more than 1 action and it doesn't require concentration.</p><p>While you're raging, you add your rage damage to the damage rolls of any Artifice power you cast that requires a power attack roll or a saving throw. If the power damages more than one target, the rage damage lands on only one of them (your choice).</p><p>Casting an Artifice power while raging counts as attacking for the purpose of keeping your rage going, and you can use Reckless Attack to gain advantage on a power attack roll the same way you would on a weapon attack.</p>"
+    },
+    {
+      "slug": "powderkeg-blowback",
+      "name": "Blowback",
+      "level": 6,
+      "requirements": "Barbarian (Powderkeg Fury) 6",
+      "folder": "Powderkeg Fury",
+      "folderParent": "Barbarian",
+      "img": "icons/magic/fire/explosion-embers-orange.webp",
+      "activation": "special",
+      "condition": "once per round, when you deal damage that includes your rage damage",
+      "range": 5,
+      "target": {"type": "creature", "count": ""},
+      "duration": {"value": "1", "units": "turn"},
+      "uses": {"max": "@scale.powderkeg-fury.blowback-uses", "per": "sr"},
+      "description": "<p><em>Powderkeg Fury, 6th level</em></p><p>Everything you build is a little overcharged, and when it goes off, it goes off in every direction. Once per round, when you deal damage that includes your rage damage, you can set off a small blast around whoever took it. Each creature within 5 feet of that creature, other than you, takes acid, cold, fire, or lightning damage (your choice) equal to your rage damage bonus. You've been standing in the smell of it long enough that you gain resistance to the damage type you chose until the end of your next turn.</p><p>You can use this feature three times. You gain one more use at 9th, 13th, and 17th level. You regain all spent uses when you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "powderkeg-field-dose",
+      "name": "Field Dose",
+      "level": 10,
+      "requirements": "Barbarian (Powderkeg Fury) 10",
+      "folder": "Powderkeg Fury",
+      "folderParent": "Barbarian",
+      "img": "icons/magic/life/heart-cross-strong-green.webp",
+      "activation": "special",
+      "condition": "when you cast an Artifice power of 1st level or higher, or deal damage with Blowback",
+      "range": 30,
+      "target": {"type": "ally", "count": 1},
+      "activity": "heal",
+      "heal": {"formula": "ceil(@classes.barbarian.levels / 2) + @abilities.int.mod", "type": "temphp"},
+      "description": "<p><em>Powderkeg Fury, 10th level</em></p><p>You keep a little something in the kit for the people standing next to you, and you've learned to throw it without looking. Whenever you cast an Artifice power of 1st level or higher, or deal damage with your Blowback feature, you can give one friendly creature you can see within 30 feet of you temporary hit points equal to half your Barbarian level + your Intelligence modifier.</p><p>While a creature has those temporary hit points, it has advantage on saving throws against being frightened. Hard to be scared of much with that stuff in you.</p>"
+    },
+    {
+      "slug": "powderkeg-dead-mans-switch",
+      "name": "Dead Man's Switch",
+      "level": 14,
+      "requirements": "Barbarian (Powderkeg Fury) 14",
+      "folder": "Powderkeg Fury",
+      "folderParent": "Barbarian",
+      "img": "icons/magic/fire/explosion-fireball-large-purple-orange.webp",
+      "activation": "special",
+      "condition": "when you are reduced to 0 hit points but not killed outright, with at least one Artifice point left",
+      "range": 30,
+      "target": {"type": "creature", "count": ""},
+      "activity": "save",
+      "save": {"ability": "dex", "onSave": "half"},
+      "damage": [{"formula": "1d12", "types": ["acid", "cold", "fire", "lightning"]}],
+      "description": "<p><em>Powderkeg Fury, 14th level</em></p><p>You wired yourself up a long time ago. When you are reduced to 0 hit points but not killed outright, and you have at least one Artifice point left, you can spend every Artifice point you have remaining and drop to 1 hit point instead (no action required).</p><p>If you do, everything in the kit goes up at once. Each creature within 30 feet of you must make a Dexterity saving throw against your Artifice power save DC. On a failed save, a creature takes 1d12 acid, cold, fire, or lightning damage (your choice) for each Artifice point you spent this way, or half as much on a successful one.</p>"
+    },
+    {
+      "slug": "whitewater-flowcasting",
+      "name": "Flowcasting",
+      "level": 3,
+      "requirements": "Barbarian (Whitewater Fury) 3",
+      "folder": "Whitewater Fury",
+      "folderParent": "Barbarian",
+      "img": "icons/magic/water/wave-water-blue.webp",
+      "description": "<p><em>Whitewater Fury, 3rd level</em></p><p>Nobody taught you the Flow. It came up through the rage like water through a floorboard, and you learned to stand in it. You know a few powers, the loud ones mostly, and they answer the same thing in you that the fury does.</p><h4>Powers Known</h4><p>You know two Flow powers of your choice at 3rd level, and you learn more as you gain levels, as shown in the Powers Known column of the Whitewater Fury table. You can't learn a power whose level is higher than your Max Power Level, and you can learn a power at the same time you learn the power it requires. Whenever you gain a Barbarian level, you can also swap one power you know for another you qualify for.</p><h4>Flow Points</h4><p>You have a pool of Flow points equal to your Barbarian level, plus your Wisdom or Charisma modifier (your choice). You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Flow points when you finish a long rest.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Flow point per level, up to your Max Power Level: 1st-level powers at 3rd level, 2nd at 7th, 3rd at 13th, and 4th at 17th. A 4th-level power is more river than you can hold twice: you can cast one once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Which ability you cast with depends on which way the power runs. Sephirotic powers use Wisdom. Qliphothic powers use Charisma. Unaligned powers use whichever of the two you prefer. Use that modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your casting ability modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your casting ability modifier</p>"
+    },
+    {
+      "slug": "whitewater-angry-water",
+      "name": "Angry Water",
+      "level": 3,
+      "requirements": "Barbarian (Whitewater Fury) 3",
+      "folder": "Whitewater Fury",
+      "folderParent": "Barbarian",
+      "img": "icons/magic/control/buff-strength-muscle-damage-red.webp",
+      "description": "<p><em>Whitewater Fury, 3rd level</em></p><p>The current doesn't go quiet when you lose your temper. It gets louder. You can cast Flow powers while raging, as long as the power's casting time is no more than 1 action, it doesn't require concentration, and you aren't wearing heavy armor.</p><p>While you're raging, you add your rage damage to the damage rolls of any Flow power you cast that requires a power attack roll or a saving throw. If the power damages more than one target, the rage damage lands on only one of them (your choice).</p><p>Casting a Flow power while raging counts as attacking for the purpose of keeping your rage going, and you can use Reckless Attack to gain advantage on a power attack roll the same way you would on a weapon attack.</p>"
+    },
+    {
+      "slug": "whitewater-both-hands",
+      "name": "Both Hands",
+      "level": 6,
+      "requirements": "Barbarian (Whitewater Fury) 6",
+      "folder": "Whitewater Fury",
+      "folderParent": "Barbarian",
+      "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+      "activation": "bonus",
+      "condition": "while raging, when you use your action to cast a Flow power",
+      "description": "<p><em>Whitewater Fury, 6th level</em></p><p>The blade and the river are the same arm as far as the rage is concerned. While you are raging, when you use your action to cast a Flow power, you can make one melee weapon attack as a bonus action.</p>"
+    },
+    {
+      "slug": "whitewater-the-holler",
+      "name": "The Holler",
+      "level": 10,
+      "requirements": "Barbarian (Whitewater Fury) 10",
+      "folder": "Whitewater Fury",
+      "folderParent": "Barbarian",
+      "img": "icons/magic/death/undead-ghost-scream-teal.webp",
+      "activation": "bonus",
+      "range": 60,
+      "target": {"type": "creature", "count": 10},
+      "duration": {"value": "1", "units": "turn"},
+      "uses": {"max": "1", "per": "lr"},
+      "description": "<p><em>Whitewater Fury, 10th level</em></p><p>You open your mouth and the river comes out of it. As a bonus action, you let go a holler with the Flow behind it. Choose up to ten other creatures within 60 feet of you that can hear you. Friendly creatures have advantage on attack rolls and saving throws until the start of your next turn. Hostile creatures have disadvantage on attack rolls and saving throws until the end of your next turn.</p><p>Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+    },
+    {
+      "slug": "whitewater-bursting-the-banks",
+      "name": "Bursting the Banks",
+      "level": 14,
+      "requirements": "Barbarian (Whitewater Fury) 14",
+      "folder": "Whitewater Fury",
+      "folderParent": "Barbarian",
+      "img": "icons/magic/air/wind-tornado-funnel-gray.webp",
+      "activation": "action",
+      "range": 15,
+      "target": {"type": "creature", "count": ""},
+      "activity": "save",
+      "save": {"ability": "dex", "onSave": "half"},
+      "damage": [{"formula": "1d12", "types": ["force"]}],
+      "description": "<p><em>Whitewater Fury, 14th level</em></p><p>Everything the rage has been holding back, you can let go of at once. As an action, you can end your rage early and let the river out. Each creature within 15 feet of you must make a Dexterity saving throw against your Unaligned power save DC. On a failed save, a creature takes 1d12 force damage for each round you spent raging before this one, or half as much on a successful one.</p><p>It's not a thing you do twice in a fight. There's nothing left to do it with.</p>"
+    }
+  ]
+}

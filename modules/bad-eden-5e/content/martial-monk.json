@@ -1,0 +1,183 @@
+{
+  "_about": "Monk subclasses: Warrior of the Riptide (Flow, arch caster) and Warrior of the Wire (Artifice, arch caster). Mechanics carried over 1:1 from the two SW5E Monk archetypes that cast; every line of text is Bad Eden's own. Subclasses of the dnd5e Monk (subclass at 3rd). Built by tools/build-packs.mjs.",
+  "_names": [
+    {
+      "subclass": "monk-riptide",
+      "picked": "Warrior of the Riptide",
+      "alternates": ["Warrior of the Blur", "Warrior of the Slipstream"]
+    },
+    {
+      "subclass": "monk-wire",
+      "picked": "Warrior of the Wire",
+      "alternates": ["Warrior of the Workbench", "Warrior of the Tune-Up"]
+    }
+  ],
+  "_renames": [
+    { "sw5e": "Aing-Tii Order", "new": "Warrior of the Riptide" },
+    { "sw5e": "Forcecasting", "new": "Flowcasting" },
+    { "sw5e": "Flow-Walking", "new": "Riptide Step" },
+    { "sw5e": "Prismatic Step", "new": "Skipping Stone" },
+    { "sw5e": "Iridescent Strikes", "new": "Undertow" },
+    { "sw5e": "Rakatan Order", "new": "Warrior of the Wire" },
+    { "sw5e": "Techcasting", "new": "Artificing" },
+    { "sw5e": "Focused Tech", "new": "Hot-Wired" },
+    { "sw5e": "Harmonious Rakatan", "new": "Tuned Body" },
+    { "sw5e": "Tech Mastery", "new": "Master Schematic" }
+  ],
+  "_powerRefs": [
+    { "sw5e": "Phasestrike", "draft": "(cut from our list) — its mechanics are inlined into Riptide Step as a flat bonus-action effect", "subclass": "monk-riptide" },
+    { "sw5e": "Detect Enhancement", "draft": "(cut from our list) — inlined into Tuned Body as an always-on sense with the power's range and blocking materials", "subclass": "monk-wire" },
+    { "sw5e": "Analyze", "draft": "Teardown", "slug": "teardown", "subclass": "monk-wire" }
+  ],
+  "_unsure": [
+    "Powers Known: SW5E gave Aing-Tii 4 and Rakatan 3 powers at 3rd; both subclasses use the brief's column instead (L3:2, L7:3, L10:4, L13:5, L16:6, L19:7) as a subclass ScaleValue `powers-known`.",
+    "Artificing: SW5E let the Rakatan pick Intelligence, Wisdom or Charisma; ours is Intelligence per the house rule. Artifice points refill on a short or long rest (the engine's rule), Flow points on a long rest.",
+    "Riptide Step: SW5E's phasestrike was cut from our list, so the feature carries the power's mechanics inline (1 minute, no opportunity attacks, once: advantage + 1d8 force damage + 30 ft speed) and costs no Flow points. The 1d8 → 2d8 (11th) → 3d8 (17th) ladder is in the text, not automated. Uses are the SW5E shared pool: `3 + floor((@classes.monk.levels - 5) / 4)` per long rest = 3 at 6th, 4 at 9th, 5 at 13th, 6 at 17th.",
+    "Riptide Step: 'Martial Arts or Focus features after an at-will power' is text only; nothing in the engine treats an at-will cast as the Attack action.",
+    "Hot-Wired / Tuned Body: the cross-pool spend (Focus points paying for Artifice powers at 6th, Artifice points paying for Focus features at 11th, each use lowering the other pool's maximum by 1 until a long rest) carries over as written. The engine has NO cross-pool spend yet (crossCast is tradition-to-tradition only), so the text tells the player/GM to adjust both pools by hand.",
+    "Hot-Wired: SW5E's 'shocked' → immune to being jolted, and 'each slowed level only reduces your speed by 5 feet' → anything that would halve your speed only takes 5 feet off it (the Unbroken Stride precedent). The feature's one activity is the Patient Defense reaction; the Flurry 1d8 rider and the Step of the Wind rider are text only.",
+    "Tuned Body: detect enhancement was cut, so the always-on sense is a flat passive in the text. analyze → Teardown; the feature compresses Teardown's 1-minute casting time to an action, as SW5E did, and the free cast is tracked as 1 use per short rest.",
+    "Master Schematic: a 5th-level power sits above the arch Max Power Level (4th at 17th), so it's ruled as not counting against Powers Known; the free once-per-long-rest cast is the feature's uses. The player adds the chosen power to the sheet by hand.",
+    "Neither casting feature has an activity; the subclass's `casting` flag ({tradition, progression: 'arch'}) drives the pools and max power level."
+  ],
+  "subclasses": [
+    {
+      "slug": "monk-riptide",
+      "identifier": "warrior-of-the-riptide",
+      "name": "Warrior of the Riptide",
+      "classIdentifier": "monk",
+      "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+      "description": "<p>Some Monks go still to find the Flow. A Warrior of the Riptide finds it the other way: at a dead run, in the half-second between one step and the next, where the current pulls hardest. They fight like something seen out of the corner of your eye. Here, then not, then behind you.</p>",
+      "casting": { "tradition": "flow", "progression": "arch" },
+      "scales": [
+        {
+          "identifier": "powers-known",
+          "title": "Powers Known",
+          "scale": { "3": 2, "7": 3, "10": 4, "13": 5, "16": 6, "19": 7 }
+        }
+      ],
+      "features": [
+        { "level": 3, "slug": "riptide-flowcasting" },
+        { "level": 6, "slug": "riptide-step" },
+        { "level": 11, "slug": "riptide-skipping-stone" },
+        { "level": 17, "slug": "riptide-undertow" }
+      ]
+    },
+    {
+      "slug": "monk-wire",
+      "identifier": "warrior-of-the-wire",
+      "name": "Warrior of the Wire",
+      "classIdentifier": "monk",
+      "img": "icons/commodities/tech/cable-armored-reticulated.webp",
+      "description": "<p>A Warrior of the Wire treats the body as a machine that can be tuned, and tunes it. Where another Monk breathes, they tighten a bolt; where another meditates, they run a diagnostic. Nothing on them is bolted in that couldn't be fixed with a screwdriver, and they'd thank you not to call it cheating.</p>",
+      "casting": { "tradition": "artifice", "progression": "arch" },
+      "scales": [
+        {
+          "identifier": "powers-known",
+          "title": "Powers Known",
+          "scale": { "3": 2, "7": 3, "10": 4, "13": 5, "16": 6, "19": 7 }
+        }
+      ],
+      "features": [
+        { "level": 3, "slug": "wire-artificing" },
+        { "level": 6, "slug": "wire-hot-wired" },
+        { "level": 11, "slug": "wire-tuned-body" },
+        { "level": 17, "slug": "wire-master-schematic" }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "riptide-flowcasting",
+      "name": "Flowcasting",
+      "level": 3,
+      "requirements": "Monk (Warrior of the Riptide) 3",
+      "folder": "Warrior of the Riptide",
+      "folderParent": "Monk",
+      "img": "icons/magic/water/wave-water-blue.webp",
+      "description": "<p><em>Warrior of the Riptide, 3rd level</em></p><p>You didn't sit down to learn the Flow; you ran into it. The powers you know are the ones that come to a body already moving, and they arrive the way you do: fast, and from an angle nobody was watching.</p><h4>Powers Known</h4><p>You know two Flow powers of your choice at 3rd level, and you learn more as you gain Monk levels, as shown in the Powers Known column of the Warrior of the Riptide table. You can't learn a power whose level is higher than your Max Power Level. Whenever you gain a Monk level, you can also swap one power you know for another you qualify for.</p><h4>Flow Points</h4><p>You have a pool of Flow points equal to your Monk level, plus your Wisdom or Charisma modifier (your choice). You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Flow points when you finish a long rest.</p><p>Flow points are a separate pool from your Focus points (Ki points in the older rules). The current doesn't make change.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Flow point per level, up to your Max Power Level: 1st-level powers at 3rd level, 2nd at 7th, 3rd at 13th, and 4th at 17th. A 4th-level power is more water than you can carry twice: you can cast one once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Which ability you cast with depends on which way the power runs. Sephirotic powers use Wisdom. Qliphothic powers use Charisma. Unaligned powers use whichever of the two you prefer. Use that modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your casting ability modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your casting ability modifier</p>"
+    },
+    {
+      "slug": "riptide-step",
+      "name": "Riptide Step",
+      "level": 6,
+      "requirements": "Monk (Warrior of the Riptide) 6",
+      "folder": "Warrior of the Riptide",
+      "folderParent": "Monk",
+      "img": "icons/skills/movement/feet-winged-boots-blue.webp",
+      "activation": "bonus",
+      "duration": { "value": "1", "units": "minute" },
+      "uses": { "max": "3 + floor((@classes.monk.levels - 5) / 4)", "per": "lr" },
+      "description": "<p><em>Warrior of the Riptide, 6th level</em></p><p>You step into the current and let it carry you through the fight. As a bonus action, you can slip into the riptide for 1 minute. While you're in it, your movement doesn't provoke opportunity attacks. Once before it ends, you can give yourself advantage on one weapon attack roll on your turn; on a hit, that attack deals an extra 1d8 force damage, and whether it hits or misses, your walking speed increases by 30 feet until the end of that turn. The extra damage becomes 2d8 when you reach 11th level in this class and 3d8 at 17th level.</p><p>The current also carries your hands. When you use your action to cast an at-will Flow power, you can use your Martial Arts and Focus features afterward as if you'd taken the Attack action: the bonus-action unarmed strike, Flurry of Blows, and the rest.</p><p>You can use these two tricks a combined total of three times. You gain one more use at 9th, 13th, and 17th level, and you regain all spent uses when you finish a long rest.</p>"
+    },
+    {
+      "slug": "riptide-skipping-stone",
+      "name": "Skipping Stone",
+      "level": 11,
+      "requirements": "Monk (Warrior of the Riptide) 11",
+      "folder": "Warrior of the Riptide",
+      "folderParent": "Monk",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "description": "<p><em>Warrior of the Riptide, 11th level</em></p><p>You don't cross a room so much as touch it in a few places. When you take the Attack action, you can teleport up to 10 feet before each attack, to an unoccupied space you can see. If you attack at least two different creatures with that action, you can make one additional attack against a third creature, and it takes no action to do it.</p>"
+    },
+    {
+      "slug": "riptide-undertow",
+      "name": "Undertow",
+      "level": 17,
+      "requirements": "Monk (Warrior of the Riptide) 17",
+      "folder": "Warrior of the Riptide",
+      "folderParent": "Monk",
+      "img": "icons/magic/movement/abstract-ribbons-red-orange.webp",
+      "activation": "bonus",
+      "range": 5,
+      "target": { "type": "creature", "count": 1 },
+      "description": "<p><em>Warrior of the Riptide, 17th level</em></p><p>Whatever the Flow has hold of, you can follow it in. When you use your action to cast a Flow power, you can spend 2 Focus points to teleport to a space within 5 feet of a creature the power affected and make two unarmed strikes against that creature as a bonus action.</p>"
+    },
+    {
+      "slug": "wire-artificing",
+      "name": "Artificing",
+      "level": 3,
+      "requirements": "Monk (Warrior of the Wire) 3",
+      "folder": "Warrior of the Wire",
+      "folderParent": "Monk",
+      "img": "icons/tools/hand/wrench-steel-grey.webp",
+      "description": "<p><em>Warrior of the Wire, 3rd level</em></p><p>You carry a kit the way other Monks carry a prayer. The powers you know are schematics, built in the moment from whatever's in your pockets and gone when they've done their job, and you cast them with the same hands you fight with.</p><h4>Powers Known</h4><p>You know two Artifice powers of your choice at 3rd level, and you learn more as you gain Monk levels, as shown in the Powers Known column of the Warrior of the Wire table. You can't learn a power whose level is higher than your Max Power Level. Whenever you gain a Monk level, you can also swap one power you know for another you qualify for.</p><h4>Artifice Points</h4><p>You have a pool of Artifice points equal to half your Monk level (rounded up), plus your Intelligence modifier. You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Artifice points when you finish a short or long rest.</p><p>Artifice points are a separate pool from your Focus points (Ki points in the older rules). At least until you learn to run a line between them.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Artifice point per level, up to your Max Power Level: 1st-level powers at 3rd level, 2nd at 7th, 3rd at 13th, and 4th at 17th. A 4th-level power takes parts you only have once: you can cast one once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Intelligence is your casting ability for Artifice powers. Use your Intelligence modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your Intelligence modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your Intelligence modifier</p><h4>Your Kit</h4><p>Your kit, the toolkit you keep on you, is the focus for your Artifice powers. Any set of tools you're proficient with will do.</p>"
+    },
+    {
+      "slug": "wire-hot-wired",
+      "name": "Hot-Wired",
+      "level": 6,
+      "requirements": "Monk (Warrior of the Wire) 6",
+      "folder": "Warrior of the Wire",
+      "folderParent": "Monk",
+      "img": "icons/commodities/tech/battery-coil-tesla.webp",
+      "activation": "reaction",
+      "condition": "an attack hits you while your Patient Defense is active (costs 1 Artifice point)",
+      "description": "<p><em>Warrior of the Wire, 6th level</em></p><p>You've run a line between the two things that keep you going, and the current runs down it. You can spend Focus points in place of Artifice points to cast an Artifice power, point for point. Each time you do, your maximum number of Focus points drops by 1 until you finish a long rest. (The engine doesn't do this for you yet: spend the points and lower the maximum by hand.)</p><p>Your Focus features come with upgrades, too. Each one costs 1 Artifice point, paid when you use it.</p><p><strong>Flurry of Blows.</strong> When you hit with one of the Flurry's attacks, you can deal an extra 1d8 damage of the same type.</p><p><strong>Patient Defense.</strong> While your Patient Defense is up and an attack hits you, you can use your reaction to roll your Martial Arts die and add the result to your AC against that attack.</p><p><strong>Step of the Wind.</strong> While your Step of the Wind is up, you can make yourself immune to being jolted, and anything that would halve your speed only takes 5 feet off it instead, unless it would reduce your speed to 0.</p>"
+    },
+    {
+      "slug": "wire-tuned-body",
+      "name": "Tuned Body",
+      "level": 11,
+      "requirements": "Monk (Warrior of the Wire) 11",
+      "folder": "Warrior of the Wire",
+      "folderParent": "Monk",
+      "img": "icons/commodities/tech/cog-gear-steel-glass.webp",
+      "activation": "action",
+      "uses": { "max": "1", "per": "sr" },
+      "description": "<p><em>Warrior of the Wire, 11th level</em></p><p>The line runs the other way now. You can spend Artifice points in place of Focus points on your Focus features, point for point. Each time you do, your maximum number of Artifice points drops by 1 until you finish a long rest. (Adjust both pools by hand; the engine doesn't do it for you yet.)</p><p>Your kit never stops listening, either. You always know when an enhanced or modified item is within 30 feet of you, and you can use your action to see a faint outline around any creature or object you can see in that range that carries one. A foot of stone, an inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt blocks the sense.</p><p>As an action, you can cast @UUID[{{uuid:powers:teardown}}]{Teardown} without spending Artifice points and without the minute it normally takes. When you do, the sense goes quiet, and you can't do either again until you finish a short or long rest.</p>"
+    },
+    {
+      "slug": "wire-master-schematic",
+      "name": "Master Schematic",
+      "level": 17,
+      "requirements": "Monk (Warrior of the Wire) 17",
+      "folder": "Warrior of the Wire",
+      "folderParent": "Monk",
+      "img": "icons/commodities/tech/blueprint.webp",
+      "activation": "special",
+      "uses": { "max": "1", "per": "lr" },
+      "description": "<p><em>Warrior of the Wire, 17th level</em></p><p>There's one build in your kit that's above your pay grade, and you've made it work anyway. You learn one 5th-level Artifice power of your choice. It doesn't count against the powers you know, and you can cast it once without spending Artifice points. You regain the ability to do so when you finish a long rest.</p>"
+    }
+  ]
+}
