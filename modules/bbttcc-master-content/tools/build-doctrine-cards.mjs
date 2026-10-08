@@ -11,8 +11,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const [DRAFTS, COSTS, DUMP] = process.argv.slice(2);
-if (!DRAFTS || !COSTS || !DUMP) { console.error("usage: build-doctrine-cards.mjs <doctrines-drafts.json> <doctrine-costs.json> <doctrines.jsonl>"); process.exit(2); }
+const ARGS = process.argv.slice(2);
+// --held-only (pass 6b, 2026-10-07): the owner ticked Keep on the 16 cards held back in pass 6 — write ONLY those, and skip any card
+// whose live effects.text is already written (re-run safe against the 47 from pass 6).
+const HELD_ONLY = ARGS.includes("--held-only");
+const [DRAFTS, COSTS, DUMP] = ARGS.filter(a => !a.startsWith("--"));
+if (!DRAFTS || !COSTS || !DUMP) { console.error("usage: build-doctrine-cards.mjs <doctrines-drafts.json> <doctrine-costs.json> <doctrines.jsonl> [--held-only]"); process.exit(2); }
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const drafts = JSON.parse(fs.readFileSync(DRAFTS, "utf8")).entries;
 const costs = JSON.parse(fs.readFileSync(COSTS, "utf8"));
@@ -32,7 +36,8 @@ const esc = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").re
 const plan = [], tally = { cards: 0, held: 0, storyOnly: 0, archetype: 0 }, problems = [];
 for (const d of drafts) {
   const v = live[d.key]; if (!v) { problems.push(`${d.key} not in the live doctrines pack`); continue; }
-  if (UNTICKED.has(d.key)) { tally.held++; continue; }
+  if (HELD_ONLY ? !UNTICKED.has(d.key) : UNTICKED.has(d.key)) { tally.held++; continue; }
+  if (HELD_ONLY && String(v.flags?.bbttcc?.effects?.text ?? "").trim()) { problems.push(`${d.key}: live card already carries rules text — refusing to overwrite`); continue; }
   let text = d.text;
   for (const [old, now] of Object.entries(ARCHETYPE)) if (text.startsWith(old)) { text = now + text.slice(old.length); tally.archetype++; }
   const c = costs[d.key]; if (!c?.cost) { problems.push(`${d.key}: no engine cost`); continue; }
@@ -45,8 +50,8 @@ for (const d of drafts) {
 }
 if (problems.length) { console.error("PROBLEMS:\n  " + problems.join("\n  ")); process.exit(1); }
 
-const OUT = path.join(HERE, "regimen-pass6-doctrine-cards.macro.js");
-fs.writeFileSync(OUT, `/* regimen-pass6-doctrine-cards.macro.js — doctrine cards get their rules text + honest cost lines (GENERATED ${new Date().toISOString().slice(0, 10)}
+const OUT = path.join(HERE, HELD_ONLY ? "regimen-pass6b-doctrine-cards.macro.js" : "regimen-pass6-doctrine-cards.macro.js");
+fs.writeFileSync(OUT, `/* ${path.basename(OUT)} — doctrine cards get their rules text + honest cost lines${HELD_ONLY ? " (pass 6b: the 16 cards the owner ticked on 2026-10-07)" : ""} (GENERATED ${new Date().toISOString().slice(0, 10)}
  * by build-doctrine-cards.mjs — do not hand-edit). GM macro on EMBER; DRY_RUN = true prints the plan.
  * Writes the compendium bbttcc-master-content.doctrines (by key) AND any world copy embedded on an actor (same key).
  * Tally: ${JSON.stringify(tally)}
@@ -68,7 +73,7 @@ const PLAN = ${JSON.stringify(plan)};
       for (const it of worldByKey.get(row.key) ?? []) { log.push(\`\${DRY_RUN ? "·" : "✔"} [world \${it.parent.name} ›] \${it.name}\`); if (!DRY_RUN) await it.update(row.set); worldWrites++; }
     }
   } finally { if (!DRY_RUN && wasLocked) await pack.configure({ locked: true }); }
-  console.log(\`[regimen-pass6-doctrine-cards] \${DRY_RUN ? "DRY RUN" : "APPLIED"} — \${packWrites} card(s), \${worldWrites} world copy(ies), \${skipped} skipped\\n\` + log.join("\\n"));
+  console.log(\`[${path.basename(OUT, ".macro.js")}] \${DRY_RUN ? "DRY RUN" : "APPLIED"} — \${packWrites} card(s), \${worldWrites} world copy(ies), \${skipped} skipped\\n\` + log.join("\\n"));
   ui.notifications.info(\`regimen-pass6 \${DRY_RUN ? "dry run" : "applied"}: \${packWrites} cards + \${worldWrites} world, \${skipped} skipped — see console (F12).\`);
 })();
 `);
