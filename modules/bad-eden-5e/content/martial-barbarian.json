@@ -1,5 +1,6 @@
 {
   "_about": "Barbarian subclasses: Powderkeg Fury (Artifice, arch caster) and Whitewater Fury (the Flow, arch caster). Mechanics carried over from the SW5E Berserker archetypes (Industrial Approach, Marauder Approach); every line of text is Bad Eden's own. Built by tools/build-packs.mjs.",
+  "_names_ruled": "2026-10-07 Dave: Powderkeg Fury and Whitewater Fury stand",
   "_names": [
     {"subclass": "barbarian-powderkeg-fury", "pick": "Powderkeg Fury", "alternates": ["Boiler Rage", "Salvage Rager"]},
     {"subclass": "barbarian-whitewater-fury", "pick": "Whitewater Fury", "alternates": ["Rage of the Torrent", "Spate Rager"]}

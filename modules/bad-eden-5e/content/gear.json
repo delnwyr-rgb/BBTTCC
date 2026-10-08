@@ -1,8 +1,8 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.7.0) — do not hand-edit; put fixes in content/overrides/gear.json. Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/gear.json. Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.7.0",
+    "rubric": "1.8.1",
     "at": "2026-10-08",
     "overridesApplied": 0
   },

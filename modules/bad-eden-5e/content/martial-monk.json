@@ -69,7 +69,7 @@
       "name": "Warrior of the Wire",
       "classIdentifier": "monk",
       "img": "icons/commodities/tech/cable-armored-reticulated.webp",
-      "description": "<p>A Warrior of the Wire treats the body as a machine that can be tuned, and tunes it. Where another Monk breathes, they tighten a bolt; where another meditates, they run a diagnostic. Nothing on them is bolted in that couldn't be fixed with a screwdriver, and they'd thank you not to call it cheating.</p>",
+      "description": "<p>A Warrior of the Wire treats the body as a machine that can be tuned, and tunes it. Where another Monk breathes, they tighten a bolt; where another meditates, they run a diagnostic. Nothing on them is bolted in that couldn't be fixed with a screwdriver, and they'd thank you not to call it cheating.</p><p>Around the shop they get called Wireiors. They answer to it.</p>",
       "casting": { "tradition": "artifice", "progression": "arch" },
       "scales": [
         {

@@ -1,6 +1,6 @@
 # The Bad Eden conversion rubric (RFI → D&D 5E)
 
-**v1.8.0 · 2026-10-07.** This is the canonical rulebook for turning a Bad Eden mechanic written for RFI (the `fourththing` system) into its D&D 5E twin. The machine copy is `rubric.json` beside this file; the build lint, the converter (`bin/ft-convert-5e`) and the parity check (`bin/ft-lint-parity`) read that file. Change the JSON and this page together.
+**v1.8.1 · 2026-10-07.** This is the canonical rulebook for turning a Bad Eden mechanic written for RFI (the `fourththing` system) into its D&D 5E twin. The machine copy is `rubric.json` beside this file; the build lint, the converter (`bin/ft-convert-5e`) and the parity check (`bin/ft-lint-parity`) read that file. Change the JSON and this page together.
 
 ✅ = ruled by Dave · ⏳ = drafted, ruling owed.
 
@@ -103,7 +103,7 @@ Tier I at creation (level 0), Tier II at 5th, Tier III at 11th, Tier IV at 17th 
 
 ## Engine effects → sheet automation
 
-**Path-discipline shifts (⏳ proposed 2026-10-07, built):** the RFI `flags.fourththing.discipline` block (manifestation-discipline.js) becomes Active Effects on the feat — Clarity max +n → `flags.bad-eden-5e.bonus.points` +n on every tradition the character casts; concurrency +n → dnd5e concentration limit +n; upkeep ×½ → advantage on concentration saves, ×¾ → +2 on them; reach discount n → each upcast step costs n fewer points (`flags.bad-eden-5e.discount.upcast`, never below the base cost); misfire band shift → text (5E casting has no misfire table). A *mode* (Sentence / Refraction / Walking Lane / Sealed Pact) becomes a second effect, off by default, named "<Technique> — <stance> held", which the player toggles while the stance is held; Sealed Pact flips automatically with the surge-powers buff. **Clarity techniques:** Enduring Focus → advantage on concentration saves; Frugal Caster → level-1 powers cost 1 less (`discount.level1`); Reclamation → once per short rest, one level of exhaustion for 2 points per 5 of the pool max back; Overreach and Signature Ascendant stay text.
+**Path-discipline shifts (✅ ruled 2026-10-07, built):** the RFI `flags.fourththing.discipline` block (manifestation-discipline.js) becomes Active Effects on the feat — Clarity max +n → `flags.bad-eden-5e.bonus.points` +n on every tradition the character casts; concurrency +n → dnd5e concentration limit +n; upkeep ×½ → advantage on concentration saves, ×¾ → +2 on them; reach discount n → each upcast step costs n fewer points (`flags.bad-eden-5e.discount.upcast`, never below the base cost); misfire band shift → text (5E casting has no misfire table). A *mode* (Sentence / Refraction / Walking Lane / Sealed Pact) becomes a second effect, off by default, named "<Technique> — <stance> held", which the player toggles while the stance is held; Sealed Pact flips automatically with the surge-powers buff. **Clarity techniques:** Enduring Focus → advantage on concentration saves; Frugal Caster → level-1 powers cost 1 less (`discount.level1`); Reclamation → once per short rest, one level of exhaustion for 2 points per 5 of the pool max back; Overreach and Signature Ascendant stay text.
 
 | RFI engine kind | D&D |
 | --- | --- |

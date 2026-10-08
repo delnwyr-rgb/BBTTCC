@@ -1,17 +1,17 @@
 {
-  "_about": "Rogue subclasses: Sweet Talker (Flow, arch caster) and Wrecker (Artifice, arch caster). Mechanics carried over from the SW5E Operative archetypes Beguiler Practice and Saboteur Practice; every line of text is Bad Eden's own. Subclasses of the dnd5e Rogue (Sneak Attack, Cunning Action, Uncanny Dodge and Evasion are the Rogue's own). Built by tools/build-packs.mjs.",
+  "_about": "Rogue subclasses: Rhapsodist (Flow, arch caster) and Wheelstick (Artifice, arch caster). Mechanics carried over from the SW5E Operative archetypes Beguiler Practice and Saboteur Practice; every line of text is Bad Eden's own. Subclasses of the dnd5e Rogue (Sneak Attack, Cunning Action, Uncanny Dodge and Evasion are the Rogue's own). Built by tools/build-packs.mjs.",
   "_names": [
-    { "subclass": "Sweet Talker", "sw5e": "Beguiler Practice", "alternates": ["Charmer", "Silver Tongue"] },
-    { "subclass": "Wrecker", "sw5e": "Saboteur Practice", "alternates": ["Gremlin", "Spoiler"] }
+    { "subclass": "Rhapsodist", "sw5e": "Beguiler Practice", "alternates": ["Charmer", "Silver Tongue"] },
+    { "subclass": "Wheelstick", "sw5e": "Saboteur Practice", "alternates": ["Gremlin", "Spoiler"] }
   ],
   "_renames": [
-    { "sw5e": "Beguiler Practice", "new": "Sweet Talker" },
+    { "sw5e": "Beguiler Practice", "new": "Rhapsodist" },
     { "sw5e": "Forcecasting", "new": "Flowcasting" },
     { "sw5e": "Fascinating Display", "new": "Hold the Room" },
     { "sw5e": "Mesmerizing Presence", "new": "Easy Mark" },
     { "sw5e": "Enthralling Vigor", "new": "Warm Glow" },
     { "sw5e": "Distracting Countenance", "new": "Not Me" },
-    { "sw5e": "Saboteur Practice", "new": "Wrecker" },
+    { "sw5e": "Saboteur Practice", "new": "Wheelstick" },
     { "sw5e": "Bonus Proficiencies", "new": "Shop Hands" },
     { "sw5e": "Techcasting", "new": "Artificing" },
     { "sw5e": "Tracker Droid Companion", "new": "Tracker Drone" },
@@ -37,62 +37,62 @@
   ],
   "subclasses": [
     {
-      "slug": "rogue-sweet-talker",
-      "identifier": "sweet-talker",
-      "name": "Sweet Talker",
+      "slug": "rogue-rhapsodist",
+      "identifier": "rhapsodist",
+      "name": "Rhapsodist",
       "classIdentifier": "rogue",
       "img": "icons/magic/control/hypnosis-mesmerism-eye-tan.webp",
-      "description": "<p><em>A Rogue who talks</em></p><p>Some Rogues pick the lock. A Sweet Talker gets handed the key. They've got a little of the Flow in them, and they spend it the way they spend everything else, on people: a word that lands warm, a smile that stays after they've left, a room that forgets it had a reason to be suspicious. Then the knife, if it comes to that. It usually doesn't have to.</p>",
+      "description": "<p><em>A Rogue who talks</em></p><p>Some Rogues pick the lock. A Rhapsodist gets handed the key. They've got a little of the Flow in them, and they spend it the way they spend everything else, on people: a word that lands warm, a smile that stays after they've left, a room that forgets it had a reason to be suspicious. Then the knife, if it comes to that. It usually doesn't have to.</p>",
       "casting": { "tradition": "flow", "progression": "arch" },
       "scales": [
         { "identifier": "powers-known", "title": "Powers Known", "scale": { "3": 2, "7": 3, "10": 4, "13": 5, "16": 6, "19": 7 } }
       ],
       "features": [
-        { "level": 3, "slug": "talker-flowcasting" },
-        { "level": 3, "slug": "talker-hold-the-room" },
-        { "level": 9, "slug": "talker-easy-mark" },
-        { "level": 13, "slug": "talker-warm-glow" },
-        { "level": 17, "slug": "talker-not-me" }
+        { "level": 3, "slug": "rhapsodist-flowcasting" },
+        { "level": 3, "slug": "rhapsodist-hold-the-room" },
+        { "level": 9, "slug": "rhapsodist-easy-mark" },
+        { "level": 13, "slug": "rhapsodist-warm-glow" },
+        { "level": 17, "slug": "rhapsodist-not-me" }
       ]
     },
     {
-      "slug": "rogue-wrecker",
-      "identifier": "wrecker",
-      "name": "Wrecker",
+      "slug": "rogue-wheelstick",
+      "identifier": "wheelstick",
+      "name": "Wheelstick",
       "classIdentifier": "rogue",
       "img": "icons/commodities/tech/wire-spliced.webp",
-      "description": "<p><em>A Rogue who breaks things</em></p><p>A Wrecker is a Rogue with a kit and a bad attitude toward anything that runs on a current. They do their sneaking the same as the rest, but they do it with Artifice in their pockets and a little tracker drone riding their shoulder, and when the job goes long they've got the gear to stay in it. Nothing with a wire in it is safe around them.</p>",
+      "description": "<p><em>A Rogue who breaks things</em></p><p>A Wheelstick is a Rogue with a kit and a bad attitude toward anything that runs on a current. They do their sneaking the same as the rest, but they do it with Artifice in their pockets and a little tracker drone riding their shoulder, and when the job goes long they've got the gear to stay in it. Nothing with a wire in it is safe around them.</p>",
       "casting": { "tradition": "artifice", "progression": "arch" },
       "scales": [
         { "identifier": "powers-known", "title": "Powers Known", "scale": { "3": 2, "7": 3, "10": 4, "13": 5, "16": 6, "19": 7 } }
       ],
       "features": [
-        { "level": 3, "slug": "wrecker-shop-hands" },
-        { "level": 3, "slug": "wrecker-artificing" },
-        { "level": 3, "slug": "wrecker-tracker-drone" },
-        { "level": 9, "slug": "wrecker-from-the-dark" },
-        { "level": 13, "slug": "wrecker-discharge" },
-        { "level": 17, "slug": "wrecker-cut-the-wire" }
+        { "level": 3, "slug": "wheelstick-shop-hands" },
+        { "level": 3, "slug": "wheelstick-artificing" },
+        { "level": 3, "slug": "wheelstick-tracker-drone" },
+        { "level": 9, "slug": "wheelstick-from-the-dark" },
+        { "level": 13, "slug": "wheelstick-discharge" },
+        { "level": 17, "slug": "wheelstick-cut-the-wire" }
       ]
     }
   ],
   "features": [
     {
-      "slug": "talker-flowcasting",
+      "slug": "rhapsodist-flowcasting",
       "name": "Flowcasting",
       "level": 3,
-      "requirements": "Rogue (Sweet Talker) 3",
-      "folder": "Sweet Talker",
+      "requirements": "Rogue (Rhapsodist) 3",
+      "folder": "Rhapsodist",
       "folderParent": "Rogue",
       "img": "icons/magic/water/wave-water-blue.webp",
-      "description": "<p><em>Sweet Talker, 3rd level</em></p><p>You never studied the Flow. You noticed it the first time a room went quiet for you, and you wanted to know why. The powers you know are the ones that live in a look, a pause, a word said at exactly the right volume.</p><h4>Powers Known</h4><p>You know two Flow powers of your choice at 3rd level, and you learn more as you gain levels, as shown in the Powers Known column of the Sweet Talker table. You can't learn a power whose level is higher than your Max Power Level. Whenever you gain a Rogue level, you can also swap one power you know for another you qualify for.</p><h4>Flow Points</h4><p>You have a pool of Flow points equal to your Rogue level, plus your Wisdom or Charisma modifier (your choice). You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Flow points when you finish a long rest.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Flow point per level, up to your Max Power Level: 1st at 3rd level, 2nd at 7th, 3rd at 13th, and 4th at 17th. A 4th-level power is more than a Rogue keeps in the tank: you can cast at 4th level once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Which ability you cast with depends on which way the power runs. Sephirotic powers use Wisdom. Qliphothic powers use Charisma. Unaligned powers use whichever of the two you prefer. Use that modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your casting ability modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your casting ability modifier</p>"
+      "description": "<p><em>Rhapsodist, 3rd level</em></p><p>You never studied the Flow. You noticed it the first time a room went quiet for you, and you wanted to know why. The powers you know are the ones that live in a look, a pause, a word said at exactly the right volume.</p><h4>Powers Known</h4><p>You know two Flow powers of your choice at 3rd level, and you learn more as you gain levels, as shown in the Powers Known column of the Rhapsodist table. You can't learn a power whose level is higher than your Max Power Level. Whenever you gain a Rogue level, you can also swap one power you know for another you qualify for.</p><h4>Flow Points</h4><p>You have a pool of Flow points equal to your Rogue level, plus your Wisdom or Charisma modifier (your choice). You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Flow points when you finish a long rest.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Flow point per level, up to your Max Power Level: 1st at 3rd level, 2nd at 7th, 3rd at 13th, and 4th at 17th. A 4th-level power is more than a Rogue keeps in the tank: you can cast at 4th level once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Which ability you cast with depends on which way the power runs. Sephirotic powers use Wisdom. Qliphothic powers use Charisma. Unaligned powers use whichever of the two you prefer. Use that modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your casting ability modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your casting ability modifier</p>"
     },
     {
-      "slug": "talker-hold-the-room",
+      "slug": "rhapsodist-hold-the-room",
       "name": "Hold the Room",
       "level": 3,
-      "requirements": "Rogue (Sweet Talker) 3",
-      "folder": "Sweet Talker",
+      "requirements": "Rogue (Rhapsodist) 3",
+      "folder": "Rhapsodist",
       "folderParent": "Rogue",
       "img": "icons/magic/control/hypnosis-mesmerism-pendulum.webp",
       "activation": "special",
@@ -102,38 +102,38 @@
       "uses": { "max": "1", "per": "lr" },
       "activity": "save",
       "save": { "ability": "wis" },
-      "description": "<p><em>Sweet Talker, 3rd level</em></p><p>Give you a minute and a room, and the room is yours. You can spend 1 minute putting on a show: a story, a song, a card trick, whatever you've got. Choose up to a number of humanoids equal to your Charisma modifier (minimum of one) within 60 feet of you who watched the whole thing. Each must succeed on a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier) or be charmed by you.</p><p>While charmed this way, a target thinks the world of you. It says so to anyone who asks, and it gets in the way of anyone who moves against you, though it won't come to blows unless it was already the type to fight for you. The charm ends on a target after 1 hour, or sooner if the target takes any damage, if you attack it, or if it sees you attack or hurt any of its friends. A target that makes the save has no idea you tried anything.</p><p>Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+      "description": "<p><em>Rhapsodist, 3rd level</em></p><p>Give you a minute and a room, and the room is yours. You can spend 1 minute putting on a show: a story, a song, a card trick, whatever you've got. Choose up to a number of humanoids equal to your Charisma modifier (minimum of one) within 60 feet of you who watched the whole thing. Each must succeed on a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier) or be charmed by you.</p><p>While charmed this way, a target thinks the world of you. It says so to anyone who asks, and it gets in the way of anyone who moves against you, though it won't come to blows unless it was already the type to fight for you. The charm ends on a target after 1 hour, or sooner if the target takes any damage, if you attack it, or if it sees you attack or hurt any of its friends. A target that makes the save has no idea you tried anything.</p><p>Once you've used this feature, you can't use it again until you finish a long rest.</p>"
     },
     {
-      "slug": "talker-easy-mark",
+      "slug": "rhapsodist-easy-mark",
       "name": "Easy Mark",
       "level": 9,
-      "requirements": "Rogue (Sweet Talker) 9",
-      "folder": "Sweet Talker",
+      "requirements": "Rogue (Rhapsodist) 9",
+      "folder": "Rhapsodist",
       "folderParent": "Rogue",
       "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
-      "description": "<p><em>Sweet Talker, 9th level</em></p><p>They're not watching your hands. You have advantage on attack rolls against any creature charmed by you.</p>"
+      "description": "<p><em>Rhapsodist, 9th level</em></p><p>They're not watching your hands. You have advantage on attack rolls against any creature charmed by you.</p>"
     },
     {
-      "slug": "talker-warm-glow",
+      "slug": "rhapsodist-warm-glow",
       "name": "Warm Glow",
       "level": 13,
-      "requirements": "Rogue (Sweet Talker) 13",
-      "folder": "Sweet Talker",
+      "requirements": "Rogue (Rhapsodist) 13",
+      "folder": "Rhapsodist",
       "folderParent": "Rogue",
       "img": "icons/magic/life/heart-hand-gold-green.webp",
       "activation": "special",
       "uses": { "max": "5 + floor(@classes.rogue.levels / 17)", "per": "sr" },
       "activity": "heal",
       "heal": { "formula": "max(floor(@classes.rogue.levels / 2) + @abilities.cha.mod, 1)", "type": "temphp" },
-      "description": "<p><em>Sweet Talker, 13th and 17th level</em></p><p>Every time somebody gives in to you, it does you good. Whenever a creature fails a Wisdom or Charisma saving throw against a Flow power or a class feature of yours, you can gain temporary hit points equal to half your Rogue level + your Charisma modifier (minimum of 1).</p><p>You can use this feature five times, and you gain one more use at 17th level. You regain all spent uses when you finish a short or long rest.</p>"
+      "description": "<p><em>Rhapsodist, 13th and 17th level</em></p><p>Every time somebody gives in to you, it does you good. Whenever a creature fails a Wisdom or Charisma saving throw against a Flow power or a class feature of yours, you can gain temporary hit points equal to half your Rogue level + your Charisma modifier (minimum of 1).</p><p>You can use this feature five times, and you gain one more use at 17th level. You regain all spent uses when you finish a short or long rest.</p>"
     },
     {
-      "slug": "talker-not-me",
+      "slug": "rhapsodist-not-me",
       "name": "Not Me",
       "level": 17,
-      "requirements": "Rogue (Sweet Talker) 17",
-      "folder": "Sweet Talker",
+      "requirements": "Rogue (Rhapsodist) 17",
+      "folder": "Rhapsodist",
       "folderParent": "Rogue",
       "img": "icons/magic/control/silhouette-aura-energy.webp",
       "activation": "bonus",
@@ -141,58 +141,58 @@
       "uses": { "max": "1", "per": "sr" },
       "activity": "save",
       "save": { "ability": "cha" },
-      "description": "<p><em>Sweet Talker, 17th level</em></p><p>You put a little of the Flow in your face, and nobody wants to be the one who hits it. As a bonus action, you can wear that look for 1 minute, or until you're incapacitated. For the duration, the first time on each of its turns that a creature tries to attack you, it must first make a Charisma saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). On a failed save, it can't attack you this turn; it has to pick a new target for the attack, or the attack is wasted. On a success, it can attack you this turn, but it has disadvantage on any saving throw it makes against your powers on your next turn.</p><p>Once you've used this feature, you can't use it again until you finish a short or long rest.</p>"
+      "description": "<p><em>Rhapsodist, 17th level</em></p><p>You put a little of the Flow in your face, and nobody wants to be the one who hits it. As a bonus action, you can wear that look for 1 minute, or until you're incapacitated. For the duration, the first time on each of its turns that a creature tries to attack you, it must first make a Charisma saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). On a failed save, it can't attack you this turn; it has to pick a new target for the attack, or the attack is wasted. On a success, it can attack you this turn, but it has disadvantage on any saving throw it makes against your powers on your next turn.</p><p>Once you've used this feature, you can't use it again until you finish a short or long rest.</p>"
     },
     {
-      "slug": "wrecker-shop-hands",
+      "slug": "wheelstick-shop-hands",
       "name": "Shop Hands",
       "level": 3,
-      "requirements": "Rogue (Wrecker) 3",
-      "folder": "Wrecker",
+      "requirements": "Rogue (Wheelstick) 3",
+      "folder": "Wheelstick",
       "folderParent": "Rogue",
       "img": "icons/tools/hand/wrench-steel-grey.webp",
       "traits": [ { "tag": "tinker", "level": 3, "title": "Shop Hands", "grants": ["tool:tinker"] } ],
-      "description": "<p><em>Wrecker, 3rd level</em></p><p>You know which end of the screwdriver goes in the drone. You gain proficiency with tinker's tools.</p>"
+      "description": "<p><em>Wheelstick, 3rd level</em></p><p>You know which end of the screwdriver goes in the drone. You gain proficiency with tinker's tools.</p>"
     },
     {
-      "slug": "wrecker-artificing",
+      "slug": "wheelstick-artificing",
       "name": "Artificing",
       "level": 3,
-      "requirements": "Rogue (Wrecker) 3",
-      "folder": "Wrecker",
+      "requirements": "Rogue (Wheelstick) 3",
+      "folder": "Wheelstick",
       "folderParent": "Rogue",
       "img": "icons/commodities/tech/blueprint.webp",
-      "description": "<p><em>Wrecker, 3rd level</em></p><p>Your kit goes everywhere you do: a roll of tools, a coil of wire, a few parts nobody will miss. The powers you know are schematics, each one built on the spot from what's in the roll and gone when it's done. Some Rogues learn to pick a lock. You learned to make the lock stop being a lock.</p><h4>Powers Known</h4><p>You know two Artifice powers of your choice at 3rd level, and you learn more as you gain levels, as shown in the Powers Known column of the Wrecker table. You can't learn a power whose level is higher than your Max Power Level. Whenever you gain a Rogue level, you can also swap one power you know for another you qualify for.</p><h4>Artifice Points</h4><p>You have a pool of Artifice points equal to half your Rogue level (rounded up), plus your Intelligence modifier. You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Artifice points when you finish a short or long rest.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Artifice point per level, up to your Max Power Level: 1st at 3rd level, 2nd at 7th, 3rd at 13th, and 4th at 17th. A 4th-level power takes parts you only carry one of: you can cast at 4th level once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Intelligence is your casting ability for Artifice powers. Use your Intelligence modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your Intelligence modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your Intelligence modifier</p><h4>Focus</h4><p>Your kit is the focus for your Artifice powers. Any set of tinker's tools you're proficient with will do, once you've spent a long rest making it yours.</p>"
+      "description": "<p><em>Wheelstick, 3rd level</em></p><p>Your kit goes everywhere you do: a roll of tools, a coil of wire, a few parts nobody will miss. The powers you know are schematics, each one built on the spot from what's in the roll and gone when it's done. Some Rogues learn to pick a lock. You learned to make the lock stop being a lock.</p><h4>Powers Known</h4><p>You know two Artifice powers of your choice at 3rd level, and you learn more as you gain levels, as shown in the Powers Known column of the Wheelstick table. You can't learn a power whose level is higher than your Max Power Level. Whenever you gain a Rogue level, you can also swap one power you know for another you qualify for.</p><h4>Artifice Points</h4><p>You have a pool of Artifice points equal to half your Rogue level (rounded up), plus your Intelligence modifier. You spend them to cast powers: a power costs its level plus one (at-will powers are free). You regain all spent Artifice points when you finish a short or long rest.</p><h4>Max Power Level</h4><p>Most powers can be cast above their own level for a bigger effect, at one extra Artifice point per level, up to your Max Power Level: 1st at 3rd level, 2nd at 7th, 3rd at 13th, and 4th at 17th. A 4th-level power takes parts you only carry one of: you can cast at 4th level once, and you regain the ability to do so when you finish a long rest.</p><h4>Casting Ability</h4><p>Intelligence is your casting ability for Artifice powers. Use your Intelligence modifier whenever a power refers to your casting ability, when you set a saving throw DC for a power, and when you make an attack roll with one.</p><p><strong>Power save DC</strong> = 8 + your proficiency bonus + your Intelligence modifier<br><strong>Power attack modifier</strong> = your proficiency bonus + your Intelligence modifier</p><h4>Focus</h4><p>Your kit is the focus for your Artifice powers. Any set of tinker's tools you're proficient with will do, once you've spent a long rest making it yours.</p>"
     },
     {
-      "slug": "wrecker-tracker-drone",
+      "slug": "wheelstick-tracker-drone",
       "name": "Tracker Drone",
       "level": 3,
-      "requirements": "Rogue (Wrecker) 3",
-      "folder": "Wrecker",
+      "requirements": "Rogue (Wheelstick) 3",
+      "folder": "Wheelstick",
       "folderParent": "Rogue",
       "img": "icons/commodities/tech/electronics-sensor-eye.webp",
       "activation": "special",
       "range": 10,
       "uses": { "max": "1 + floor((@classes.rogue.levels + 3) / 4)", "per": "lr" },
-      "description": "<p><em>Wrecker, 3rd, 5th, 9th, 11th, 13th, and 17th level</em></p><p>You've built a tracker drone. It's a tool, not a friend, and it is not a Circuitborn: there's nobody home in it, and it doesn't mind. You need tinker's tools to build it; if it's wrecked beyond repair, or you want a new one, you can build another over 8 hours in a workshop. You can have only one at a time.</p><p><strong>Your drone.</strong> A Tiny construct about the size of a coffee can. AC 12. Hit points equal to 4 × your Rogue level. Speed 5 feet, flying 60 feet (it hovers). Str 3, Dex 13, Con 8, Int 2, Wis 12, Cha 7. Darkvision 120 feet. It's immune to poison and psychic damage, to being charmed, frightened, or poisoned, and to exhaustion. It understands your language but doesn't speak. It uses your proficiency bonus, and it's proficient in Perception, Stealth, and Survival. <strong>Prod:</strong> melee attack at your power attack modifier, reach 5 feet, one target, 1d4 + 1 lightning damage.</p><p>The drone acts on your turn. It moves as you direct it, and it takes the Dodge action unless you use a bonus action to have it do something else: Attack, Dash, Disengage, Help, Hide, Search, or Use an Object. If you're incapacitated, it does nothing but Dodge. It carries a number of <strong>charge dice</strong> equal to your Rogue level; each is a d4. Other features of this subclass spend them, and the drone regains all of them when you finish a long rest.</p><p><strong>It tracks.</strong> While the drone is within 60 feet of you, you have advantage on Wisdom (Survival) checks to track a creature. At 11th level you give it a better build: its AC becomes 13 and its Prod deals 2d4 + 1 lightning damage.</p><p><strong>Boost.</strong> When you cast an Artifice power of 1st level or higher that would affect only one target, and the drone is within 10 feet of you or the target, you can have it boost the power as part of the casting: the power counts as cast one level higher than you paid for, at no extra cost in Artifice points, and it can go one level above your Max Power Level this way. You can do this twice, and you gain one more use at 5th, 9th, 13th, and 17th level; you regain all spent uses when you finish a long rest. At 11th level the drone can be up to 30 feet from you or the target to boost, and at 17th level up to 60 feet.</p>"
+      "description": "<p><em>Wheelstick, 3rd, 5th, 9th, 11th, 13th, and 17th level</em></p><p>You've built a tracker drone. It's a tool, not a friend, and it is not a Circuitborn: there's nobody home in it, and it doesn't mind. You need tinker's tools to build it; if it's wrecked beyond repair, or you want a new one, you can build another over 8 hours in a workshop. You can have only one at a time.</p><p><strong>Your drone.</strong> A Tiny construct about the size of a coffee can. AC 12. Hit points equal to 4 × your Rogue level. Speed 5 feet, flying 60 feet (it hovers). Str 3, Dex 13, Con 8, Int 2, Wis 12, Cha 7. Darkvision 120 feet. It's immune to poison and psychic damage, to being charmed, frightened, or poisoned, and to exhaustion. It understands your language but doesn't speak. It uses your proficiency bonus, and it's proficient in Perception, Stealth, and Survival. <strong>Prod:</strong> melee attack at your power attack modifier, reach 5 feet, one target, 1d4 + 1 lightning damage.</p><p>The drone acts on your turn. It moves as you direct it, and it takes the Dodge action unless you use a bonus action to have it do something else: Attack, Dash, Disengage, Help, Hide, Search, or Use an Object. If you're incapacitated, it does nothing but Dodge. It carries a number of <strong>charge dice</strong> equal to your Rogue level; each is a d4. Other features of this subclass spend them, and the drone regains all of them when you finish a long rest.</p><p><strong>It tracks.</strong> While the drone is within 60 feet of you, you have advantage on Wisdom (Survival) checks to track a creature. At 11th level you give it a better build: its AC becomes 13 and its Prod deals 2d4 + 1 lightning damage.</p><p><strong>Boost.</strong> When you cast an Artifice power of 1st level or higher that would affect only one target, and the drone is within 10 feet of you or the target, you can have it boost the power as part of the casting: the power counts as cast one level higher than you paid for, at no extra cost in Artifice points, and it can go one level above your Max Power Level this way. You can do this twice, and you gain one more use at 5th, 9th, 13th, and 17th level; you regain all spent uses when you finish a long rest. At 11th level the drone can be up to 30 feet from you or the target to boost, and at 17th level up to 60 feet.</p>"
     },
     {
-      "slug": "wrecker-from-the-dark",
+      "slug": "wheelstick-from-the-dark",
       "name": "From the Dark",
       "level": 9,
-      "requirements": "Rogue (Wrecker) 9",
-      "folder": "Wrecker",
+      "requirements": "Rogue (Wheelstick) 9",
+      "folder": "Wheelstick",
       "folderParent": "Rogue",
       "img": "icons/magic/air/fog-gas-smoke-dense-gray.webp",
-      "description": "<p><em>Wrecker, 9th level</em></p><p>The first they hear of you is the power going off. If you're hidden from a creature when you cast a power on it, the creature has disadvantage on any saving throw it makes against that power this turn.</p>"
+      "description": "<p><em>Wheelstick, 9th level</em></p><p>The first they hear of you is the power going off. If you're hidden from a creature when you cast a power on it, the creature has disadvantage on any saving throw it makes against that power this turn.</p>"
     },
     {
-      "slug": "wrecker-discharge",
+      "slug": "wheelstick-discharge",
       "name": "Discharge",
       "level": 13,
-      "requirements": "Rogue (Wrecker) 13",
-      "folder": "Wrecker",
+      "requirements": "Rogue (Wheelstick) 13",
+      "folder": "Wheelstick",
       "folderParent": "Rogue",
       "img": "icons/magic/lightning/bolt-forked-large-blue-yellow.webp",
       "activation": "bonus",
@@ -201,14 +201,14 @@
       "activity": "save",
       "save": { "ability": "con", "onSave": "half" },
       "damage": [ { "number": 1, "denomination": 4, "types": ["lightning"] } ],
-      "description": "<p><em>Wrecker, 13th level</em></p><p>The drone has a setting past the last one. As a bonus action on your turn, you can spend one or more of your drone's charge dice to have it let go of everything in its cell at once. Each creature within 5 feet of the drone must make a Constitution saving throw against your power save DC, taking 1d4 lightning damage per charge die spent on a failed save, or half as much on a success. Any electronics in the blast that nobody is wearing or carrying go dead until somebody reboots them.</p><p>(The sheet rolls one die; add a d4 for each extra charge die you spend.)</p>"
+      "description": "<p><em>Wheelstick, 13th level</em></p><p>The drone has a setting past the last one. As a bonus action on your turn, you can spend one or more of your drone's charge dice to have it let go of everything in its cell at once. Each creature within 5 feet of the drone must make a Constitution saving throw against your power save DC, taking 1d4 lightning damage per charge die spent on a failed save, or half as much on a success. Any electronics in the blast that nobody is wearing or carrying go dead until somebody reboots them.</p><p>(The sheet rolls one die; add a d4 for each extra charge die you spend.)</p>"
     },
     {
-      "slug": "wrecker-cut-the-wire",
+      "slug": "wheelstick-cut-the-wire",
       "name": "Cut the Wire",
       "level": 17,
-      "requirements": "Rogue (Wrecker) 17",
-      "folder": "Wrecker",
+      "requirements": "Rogue (Wheelstick) 17",
+      "folder": "Wheelstick",
       "folderParent": "Rogue",
       "img": "icons/commodities/tech/cable-end.webp",
       "activation": "reaction",
@@ -218,7 +218,7 @@
       "activity": "save",
       "save": { "ability": "int" },
       "damage": [ { "number": 1, "denomination": 6, "types": ["lightning"] } ],
-      "description": "<p><em>Wrecker, 17th level</em></p><p>You know the moment a schematic goes live, and you know where to put your thumb. When a hostile creature casts an Artifice power and you're its target or inside its area, you can use your reaction to make that creature make an Intelligence saving throw against your power save DC. On a success, the power goes off as normal.</p><p>On a failed save, the power fizzles and does nothing, and the caster takes 1d6 lightning damage for each level of the power it was casting. Its focus is burned out too: it can't cast Artifice powers with that focus for 1 minute. At the end of each of its turns, the caster can repeat the Intelligence saving throw, and on a success the focus works again.</p><p>Once you've used this feature, you can't use it again until you finish a long rest.</p>"
+      "description": "<p><em>Wheelstick, 17th level</em></p><p>You know the moment a schematic goes live, and you know where to put your thumb. When a hostile creature casts an Artifice power and you're its target or inside its area, you can use your reaction to make that creature make an Intelligence saving throw against your power save DC. On a success, the power goes off as normal.</p><p>On a failed save, the power fizzles and does nothing, and the caster takes 1d6 lightning damage for each level of the power it was casting. Its focus is burned out too: it can't cast Artifice powers with that focus for 1 minute. At the end of each of its turns, the caster can repeat the Intelligence saving throw, and on a success the focus works again.</p><p>Once you've used this feature, you can't use it again until you finish a long rest.</p>"
     }
   ]
 }

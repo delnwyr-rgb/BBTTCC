@@ -1,8 +1,8 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.6.1) — do not hand-edit; put fixes in content/overrides/creatures.json. The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/creatures.json. The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.6.1",
+    "rubric": "1.8.1",
     "at": "2026-10-08",
     "overridesApplied": 0
   },
