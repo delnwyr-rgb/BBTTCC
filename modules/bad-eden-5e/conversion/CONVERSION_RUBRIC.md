@@ -113,9 +113,9 @@ Tier I at creation (level 0), Tier II at 5th, Tier III at 11th, Tier IV at 17th 
 | `discipline.passive.clarityMaxBonus` | ⏳ Flow-point bonus flag |
 | `triggers[]` chat prompts | text (the prompt body is the rule) |
 | `resourceGrants[]` (OP) | verbatim text as a "Strategic Hooks" feature |
-| `_tq.temp(n)` | heal activity, temp HP |
-| `_tq.bank(n)` · `_tq.impose` | banked advantage · disadvantage (text; riders later) |
-| `strain.gain(n)` | n levels of exhaustion |
+| `_tq.temp(n)` | a heal activity for temporary hit points (`@prof`) |
+| `_tq.bank(n)` · `_tq.impose` | `flags.bad-eden-5e.riders` → `scripts/riders.js`: banked advantage on the receiver's next d20 test · the target is **Imposed** (status `be5e-imposed`: next attack roll or saving throw at disadvantage, then it clears) ✅ 2026-10-07 |
+| `strain.gain(n)` | `riders.strain` → n levels of exhaustion ✅ |
 | RFI uses / recovery | dnd5e uses with the recovery table |
 
 ## Gear (drafted for the gear lane)
@@ -125,7 +125,7 @@ Armor: Guard bonus → AC by band (light 10+, medium 12+, heavy 14+; `armorSkill
 
 ## Creatures (drafted for the monster lane)
 
-Tier 1–4 → CR bands 1–4 / 5–8 / 9–13 / 14+, bracket shifting inside the band; Integrity → HP; Guard → flat AC; Evasion / Resolve → Dex / Wis save proficiency; attributes 1–5 → scores 10 + 2×value ✅; skills through the rank table; attacks → weapon items through the gear table; lineage → creature type; `npcAuto` rules → activities and Active Effects, the rest feature text; bounties and hire stay in marks. Budgets are checked against `threat-chassis.js` and the table-kit encounter sim.
+Tier 1–4 → CR bands 1–4 / 5–8 / 9–13 / 14+, bracket shifting inside the band; Integrity → HP; Guard → flat AC; Evasion / Resolve → Dex / Wis save proficiency; attributes 1–5 → scores 10 + 2×value ✅; skills through the rank table; attacks → weapon items through the gear table; lineage → creature type; bounties and hire stay in marks. **`npcAuto` rules (the monster rider slice, ✅ ruled + shipped 2026-10-07):** *use* + condition/save/damage → a save (or utility) activity on the feature with the condition as an applied effect (Staggered = status `be5e-staggered`: speed ×½, −2 to attacks; Shaken → frightened; Calmed/Compelled → charmed; a weapon's *kinetic* = its own damage type); *hit* + damage/condition/no-reactions/ongoing damage → riders on the weapon's attack activity; *saveFail* → effects on the weapon's save activity (a second "— condition" save activity when the weapon only attacks); *attack* + reroll → chat flavour; *turnStart · selfTurnStart · bloodied · zero · struck · attacked · damaged · allyDamaged* → text + `flags.bad-eden-5e.reminders` whispered to the GM at the moment by `scripts/reminders.js`; *radiation · morale · ward · tempIntegrity · heal · prompt* → chat flavour on the activity. Budgets are checked against `threat-chassis.js` and the table-kit encounter sim.
 
 ## Vocabulary the lint refuses
 

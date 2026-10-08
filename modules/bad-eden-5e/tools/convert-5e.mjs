@@ -172,16 +172,51 @@ function convertTechnique(d, banks) {
   // the same change can arrive from ID_REROLL_GRANTS and flags.rerolls — keep one
   const seenChange = new Set(); const uniq = changes.filter(c => { const k = c.key + "=" + c.value; if (seenChange.has(k)) return false; seenChange.add(k); return true; }); changes.length = 0; changes.push(...uniq);
   if (changes.length) entry.effects = [{ _id: "be5e" + sha(slug).slice(0, 12), name: d.name, img: entry.img, transfer: true, disabled: false, changes, duration: {}, flags: {}, origin: null, tint: "#ffffff", statuses: [], description: "" }];
-  // riders the sheet can't do yet
+  // engine riders → the Bad Eden 5E rider engine (scripts/riders.js) reads flags.bad-eden-5e.riders
+  // when the feature's activity is used: bank = banked advantage on the receiver's next d20,
+  // impose = the target's next attack or save at disadvantage, strain = exhaustion, temp = a
+  // native heal activity for temporary hit points.
   const eff = banks.effects[idf] ?? {};
-  const riders = Object.entries(eff).filter(([k, v]) => v && ["bank", "impose", "temp", "strain", "clarity"].includes(k)).map(([k]) => k);
-  if (riders.length) needs.push(`engine riders (${riders.join(", ")}) are text only until the table-kit rider pass`);
+  const rider = TECHNIQUE_RIDERS[idf.replace(/^bbttcc_feat_/, "")];
+  if (rider) {
+    entry.riders = rider.riders;
+    entry.activation ??= "special";
+    if (rider.heal) { entry.activity = "heal"; entry.heal = rider.heal; }
+    if (rider.target) { entry.range = 30; entry.target = rider.target; }
+    entry.flags = { "bad-eden-5e": { riders: rider.riders } };
+  } else {
+    const riders = Object.entries(eff).filter(([k, v]) => v && ["bank", "impose", "temp", "strain"].includes(k)).map(([k]) => k);
+    if (riders.length) needs.push(`engine riders (${riders.join(", ")}) have no entry in TECHNIQUE_RIDERS`);
+  }
+  if (eff.clarity) needs.push("Clarity rider (ruling owed)");
   if (ff.discipline) needs.push(`Path-discipline mechanic (${JSON.stringify(ff.discipline).slice(0, 80)}) — needs the Paths engine`);
   for (const l of leftovers(description)) needs.push(`leftover term "${l}"`);
   if (/\bClarity\b/.test(plain)) needs.push("mentions Clarity (ruling owed)");
-  entry.flags = { "bad-eden-5e": { rfi: { id: d._id, pack: "items", identifier: idf, hash: sha(JSON.stringify({ n: d.name, h: html, f: ff, r: banks.rerolls[idf] ?? null, a: apt ?? null, e: eff })) } } };
+  entry.flags = { "bad-eden-5e": { ...(entry.flags?.["bad-eden-5e"] ?? {}), rfi: { id: d._id, pack: "items", identifier: idf, hash: sha(JSON.stringify({ n: d.name, h: html, f: ff, r: banks.rerolls[idf] ?? null, a: apt ?? null, e: eff })) } } };
   return { entry, needs };
 }
+
+// The RFI technique handlers (systems/fourththing/ft-class-automation.js TECHNIQUE_EFFECTS)
+// re-expressed as rider declarations. `to`: self | ally (the first targeted creature that
+// isn't the user) | target (every targeted creature). Amounts follow the rubric: the RFI
+// rank bonus becomes the proficiency bonus.
+const TECHNIQUE_RIDERS = {
+  calculated_risk:        { riders: { bank: { n: 1, to: "self" } } },
+  deliberate_tempo:       { riders: { bank: { n: 1, to: "self" } } },
+  iron_will:              { riders: { bank: { n: 1, to: "self" } } },
+  unyielding_finish:      { riders: { bank: { n: 1, to: "self" } } },
+  pressure_transference:  { riders: { bank: { n: 1, to: "ally" } }, target: { count: 1, type: "ally" } },
+  combat_logistics:       { riders: { temp: { formula: "@prof", to: "ally-or-self" } }, heal: { formula: "@prof", type: "temphp" }, target: { count: 1, type: "ally" } },
+  last_ritual:            { riders: { temp: { formula: "@prof", to: "ally" } }, heal: { formula: "@prof", type: "temphp" }, target: { count: 1, type: "ally" } },
+  relentless_advance:     { riders: { temp: { formula: "@prof", to: "self" } }, heal: { formula: "@prof", type: "temphp" } },
+  controlled_aggression:  { riders: { impose: { note: "You deal minimum damage on this hit." } }, target: { count: 1, type: "enemy" } },
+  disciplined_fire:       { riders: { impose: { note: "Disrupt — or Pin: the target's speed is reduced by 10 feet until the start of your next turn." } }, target: { count: 1, type: "enemy" } },
+  linebreaker:            { riders: { impose: { note: "Reaction attacks it makes until the end of its next turn are at disadvantage." } }, target: { count: 1, type: "enemy" } },
+  threatening_silence:    { riders: { impose: { note: "Applies to its next attack against a target other than you." } }, target: { count: 1, type: "enemy" } },
+  unbroken_guard:         { riders: { impose: { note: "Its speed is 0 until the end of its current turn." } }, target: { count: 1, type: "enemy" } },
+  unsettling_precision:   { riders: { impose: { note: "Applies to its next saving throw before the end of its next turn." } }, target: { count: 1, type: "enemy" } },
+  darkness_hardened:      { riders: { strain: { n: 1 } } }
+};
 
 function laneTechniques() {
   const banks = engineBanks();
@@ -425,8 +460,177 @@ function monsterFeature(it, needs, actorSlug, dc = 12) {
       ...(dm && !self ? { save: { ability: [ability === "str" || ability === "con" ? "con" : ability === "dex" ? "dex" : "wis"], dc: { calculation: "", formula: String(dc) } }, damage: { onSave: "half", critical: { allow: false, bonus: "" }, parts: [{ custom: { enabled: false, formula: "" }, number: Number(dm[1]), denomination: Number(dm[2]), bonus: dm[3] ?? "", types, scaling: { mode: "", number: 1 } }] } } : { roll: { formula: "", name: "", prompt: false, visible: false } }) };
     e.img = "icons/magic/unholy/orb-glowing-purple.webp";
   }
-  if (na?.rules?.length) needs.push(`"${it.name}": ${na.rules.length} automation rule(s) rendered as text (rider pass later)`);
+  applyUseRules(e, na, actorSlug, dc, needs, it.name);
   return e;
+}
+
+/* ── npcAuto → dnd5e automation (the monster rider slice, ruled 2026-10-07) ─
+ *   use      + condition/save/damage → a save (or utility) activity on the feature,
+ *                                       the condition as an applied effect
+ *   hit      + damage/condition/…    → riders on the weapon's attack activity
+ *   saveFail + condition/damage/…    → effects on the weapon's save activity
+ *                                       (a second "— <condition>" save activity
+ *                                       when the weapon only attacks)
+ *   attack   + reroll                → chat flavour on the attack (no engine for
+ *                                       conditional advantage yet)
+ *   turnStart · selfTurnStart · bloodied · zero · struck · attacked · damaged ·
+ *   allyDamaged                      → text + GM reminders (flags.bad-eden-5e.reminders,
+ *                                       scripts/reminders.js)
+ *   radiation · morale · ward · tempIntegrity · heal · prompt → chat flavour text
+ * ─────────────────────────────────────────────────────────────────────────── */
+const COND_STATUS = { restrained: "restrained", prone: "prone", blinded: "blinded", charmed: "charmed", shaken: "frightened",
+  calmed: "charmed", compelled: "charmed", staggered: "be5e-staggered", imposed: "be5e-imposed", surprised: "surprised", stunned: "stunned" };
+const COND_IMG = { restrained: "icons/svg/net.svg", prone: "icons/svg/falling.svg", blinded: "icons/svg/blind.svg", charmed: "icons/magic/control/hypnosis-mesmerism-eye.webp",
+  shaken: "icons/svg/terror.svg", calmed: "icons/magic/control/hypnosis-mesmerism-eye.webp", compelled: "icons/magic/control/hypnosis-mesmerism-eye.webp",
+  staggered: "icons/svg/daze.svg", imposed: "icons/magic/control/debuff-chains-shackles-movement-red.webp" };
+const ATTR_SAVE = { violence: "str", intrigue: "dex", body: "con", mind: "int", soul: "wis", presence: "cha" };
+const cap = (x) => String(x).replace(/\b\w/g, c => c.toUpperCase());
+const effId = (...parts) => sha("eff" + parts.join("|")).slice(0, 16).padEnd(16, "0");
+const actId = (...parts) => sha("act" + parts.join("|")).slice(0, 16).padEnd(16, "0");
+
+/** The condition of a rule as an Active Effect (v14 change shape). */
+function conditionEffect(cnd, owner, actorSlug) {
+  const key = typeof cnd === "string" ? cnd : cnd?.key;
+  if (!key) return null;
+  const status = COND_STATUS[key];
+  const dur = typeof cnd === "object" ? cnd.duration : "";
+  const duration = dur === "1-round" ? { rounds: 1, turns: 0 } : {};
+  const tail = dur === "until-saved" ? " It repeats the saving throw at the end of each of its turns, ending the effect on a success."
+    : dur === "scene" ? " It lasts until the end of the scene (a short rest)." : "";
+  const rule = String(RUBRIC.conditions[key]?.to ?? key).replace(/\s*\((text|ruling.*?)\)$/, "");
+  const changes = key === "staggered" ? [
+    { key: "system.attributes.movement.walk", value: "0.5", type: "multiply", priority: 20 },
+    { key: "system.bonuses.mwak.attack", value: "-2", type: "add", priority: 20 },
+    { key: "system.bonuses.rwak.attack", value: "-2", type: "add", priority: 20 }
+  ] : [];
+  return {
+    _id: effId(actorSlug, owner, key), name: cap(key), img: COND_IMG[key] ?? "icons/svg/aura.svg", transfer: false, disabled: false,
+    statuses: status ? [status] : [], changes, duration, description: `<p>${cap(rule)}.${tail}</p>`, origin: null, tint: "#ffffff",
+    flags: { "bad-eden-5e": { rule: key, from: owner } }
+  };
+}
+function textEffect(name, img, text, owner, actorSlug) {
+  return { _id: effId(actorSlug, owner, name), name, img, transfer: false, disabled: false, statuses: [], changes: [], duration: {},
+    description: `<p>${text}</p>`, origin: null, tint: "#ffffff", flags: { "bad-eden-5e": { rule: name.toLowerCase(), from: owner } } };
+}
+/** Flavour lines for the parts of a rule the sheet can't automate. */
+function ruleFlavour(rule) {
+  const d = rule.do ?? {}, bits = [];
+  const cond = rule.if ?? {};
+  if (cond.targetCondition) bits.push(`only if the target is ${[].concat(cond.targetCondition).join(" or ")}`);
+  if (cond.targetTag) bits.push(`only against ${[].concat(cond.targetTag).join(", ")} creatures`);
+  if (cond.damageType) bits.push(`only ${[].concat(cond.damageType).map(t => dmgTypes([t]).join("/")).join(" or ")} damage`);
+  if (d.reroll) bits.push(/highest/.test(String(d.reroll)) ? `${/damage/.test(String(d.reroll)) ? "damage" : "attack"} rolls at disadvantage` : `${/damage/.test(String(d.reroll)) ? "damage" : "attack"} rolls with advantage`);
+  if (d.tempIntegrity) bits.push(`it gains ${d.tempIntegrity} temporary hit points`);
+  if (d.heal) bits.push(`it regains ${typeof d.heal === "object" ? d.heal.formula ?? d.heal.amount : d.heal} hit points`);
+  if (d.radiation) bits.push("the target takes one step up the radiation ladder");
+  if (d.morale) bits.push("a morale check");
+  if (d.ward) bits.push("it is warded");
+  if (d.prompt) bits.push(convertText(String(d.prompt).replace(/\b(damage|the \d+d\d+|it) goes to (the )?Stress( track)?/gi, "$1 is psychic damage").replace(/\bto (the )?Stress( track)?\b/gi, "as psychic damage")).replace(/<[^>]+>/g, "").replace(/\s+([.;,])/g, "$1"));
+  return bits.join("; ");
+}
+function damagePart(dm) {
+  const f = typeof dm === "object" ? String(dm.formula ?? dm.amount ?? "") : String(dm);
+  const m = f.replace(/\s/g, "").match(/^(\d+)d(\d+)(?:\+(\d+))?$/);
+  const types = dmgTypes([typeof dm === "object" ? dm.type ?? "kinetic" : "kinetic"]);
+  return m ? { custom: { enabled: false, formula: "" }, number: Number(m[1]), denomination: Number(m[2]), bonus: m[3] ?? "", types, scaling: { mode: "", number: 1 } }
+    : { custom: { enabled: true, formula: f }, number: null, denomination: 0, bonus: "", types, scaling: { mode: "", number: 1 } };
+}
+function saveSpec(rule, dc) {
+  const d = rule.do ?? {}; const cs = typeof d.condition === "object" ? d.condition?.save : null; const s = d.save ?? cs;
+  if (!s) return null;
+  return { ability: ATTR_SAVE[s.attr] ?? "wis", dc: Number(s.dc) || dc, onSave: s.onSave === "negate" ? "none" : "half" };
+}
+const baseActivity = (aid, type, activation = "action") => ({
+  _id: aid, type, name: "", img: "", sort: 0,
+  activation: { type: activation, value: null, condition: "", override: false },
+  consumption: { targets: [], scaling: { allowed: false, max: "" }, spellSlot: false }, description: { chatFlavor: "" },
+  duration: { concentration: false, value: "", units: "inst", special: "", override: false }, effects: [],
+  range: { value: "60", units: "ft", special: "", override: false },
+  target: { template: { count: "", contiguous: false, type: "", size: "", width: "", height: "", units: "" }, affects: { count: "1", type: "creature", choice: false, special: "" }, prompt: true, override: false },
+  uses: { spent: 0, recovery: [] }, appliedEffects: []
+});
+/** `use` rules → one activity on the feature (save when anything asks for one). */
+function applyUseRules(e, na, actorSlug, dc, needs, itemName) {
+  const rules = (na?.rules ?? []).filter(r => r.on === "use");
+  const rest = (na?.rules ?? []).filter(r => r.on !== "use");
+  const flavour = rules.map(ruleFlavour).filter(Boolean);
+  if (!rules.length) return;
+  const self = rules.every(r => r.who === "self" && !r.do?.condition && !r.do?.damage && !r.do?.save);
+  const anySave = rules.map(r => saveSpec(r, dc)).find(Boolean);
+  const existing = Object.values(e.system.activities ?? {})[0];
+  const act = existing ?? baseActivity(actId(actorSlug, e.slug, "use"), anySave ? "save" : "utility");
+  if (!existing) e.system.activities = { [act._id]: act };
+  if (self) { act.range = { value: "", units: "self", special: "", override: false }; act.target.affects = { count: "", type: "self", choice: false, special: "" }; }
+  if (anySave && act.type !== "save") { act.type = "save"; delete act.attack; }
+  if (anySave) {
+    act.save = { ability: [anySave.ability], dc: { calculation: "", formula: String(anySave.dc) } };
+    act.damage ??= { onSave: anySave.onSave, critical: { allow: false, bonus: "" }, parts: [] };
+    act.damage.onSave = anySave.onSave;
+  }
+  e.effects ??= [];
+  for (const r of rules) {
+    const d = r.do ?? {};
+    if (d.damage) { act.damage ??= { onSave: "half", critical: { allow: false, bonus: "" }, parts: [] }; act.damage.parts.push(damagePart(d.damage)); if (act.type === "utility") act.type = "damage"; }
+    for (const c of [].concat(d.condition ?? [])) { const fx = conditionEffect(c, itemName, actorSlug); if (fx) { e.effects.push(fx); act.effects.push({ _id: fx._id, onSave: false }); } }
+    if (d.noReactions) { const fx = textEffect("No Reactions", "icons/svg/paralysis.svg", "It can't take reactions until the start of its next turn.", itemName, actorSlug); e.effects.push(fx); act.effects.push({ _id: fx._id, onSave: false }); }
+    if (d.dot) { const dot = d.dot; const fx = textEffect(`Ongoing ${dmgTypes([dot.type ?? "kinetic"]).join("/")} damage`, "icons/svg/blood.svg", `It takes ${dot.formula ?? dot.amount} ${dmgTypes([dot.type ?? "kinetic"]).join("/")} damage at the start of each of its turns${dot.ends === "action" ? " until it uses an action to end it" : dot.rounds ? ` for ${dot.rounds} rounds` : ""}.`, itemName, actorSlug); e.effects.push(fx); act.effects.push({ _id: fx._id, onSave: false }); }
+  }
+  if (flavour.length) act.description.chatFlavor = flavour.join(" · ");
+  if (rest.some(r => ["radiation", "morale", "ward"].some(k => r.do?.[k]))) needs.push(`"${itemName}": radiation / morale / ward stay text (no D&D engine yet)`);
+}
+/** `hit` / `attack` / `saveFail` rules on a weapon → riders on its activities. */
+function applyWeaponRules(e, w, actorSlug, dc) {
+  const rules = w.flags?.fourththing?.npcAuto?.rules ?? [];
+  // "kinetic" on a weapon rider means the weapon's own damage type, not all three
+  const own = (e.system.damage?.base?.types ?? []).filter(Boolean);
+  const kin = (list) => own.length && list.length > 1 && list.every(t => ["bludgeoning", "piercing", "slashing"].includes(t)) ? own : list;
+  const acts = Object.values(e.system.activities ?? {});
+  const attack = acts.find(a => a.type === "attack"), save0 = acts.find(a => a.type === "save");
+  e.effects ??= [];
+  const flavour = [];
+  const link = (act, fx) => { e.effects.push(fx); act.effects.push({ _id: fx._id, ...(act.type === "save" ? { onSave: false } : {}) }); };
+  const addRule = (act, r) => {
+    const d = r.do ?? {};
+    if (d.damage) { act.damage ??= { onSave: "half", critical: { allow: true, bonus: "" }, parts: [] }; const part = damagePart(d.damage); part.types = kin(part.types); act.damage.parts.push(part); }
+    for (const c of [].concat(d.condition ?? [])) { const fx = conditionEffect(c, w.name, actorSlug); if (fx) link(act, fx); }
+    if (d.noReactions) link(act, textEffect("No Reactions", "icons/svg/paralysis.svg", "It can't take reactions until the start of its next turn.", w.name, actorSlug));
+    if (d.dot) { const dot = d.dot; const t = kin(dmgTypes([dot.type ?? "kinetic"])).join("/"); link(act, textEffect(`Ongoing ${t} damage`, "icons/svg/blood.svg", `It takes ${dot.formula ?? dot.amount} ${t} damage at the start of each of its turns${dot.ends === "action" ? " until it uses an action to end it" : dot.rounds ? ` for ${dot.rounds} rounds` : ""}.`, w.name, actorSlug)); }
+    const f = ruleFlavour(r); if (f) flavour.push(`${r.on === "hit" ? "On a hit" : r.on === "saveFail" ? "On a failed save" : "Attack"}: ${f}`);
+  };
+  for (const r of rules) {
+    if (r.if?.weapon && r.if.weapon !== w.name) continue;
+    if (r.on === "hit" && attack) addRule(attack, r);
+    else if (r.on === "attack" && attack) { const f = ruleFlavour(r); if (f) flavour.push(`Attack: ${f}`); }
+    else if (r.on === "saveFail") {
+      let act = save0;
+      if (!act) {
+        const sp = saveSpec(r, dc);
+        act = baseActivity(actId(actorSlug, e.slug, "savefail"), "save");
+        act.name = `${w.name} — ${[].concat(r.do?.condition ?? []).map(c => cap(typeof c === "string" ? c : c.key)).join(", ") || "save"}`;
+        act.activation = { type: "", value: null, condition: "On a hit", override: false };
+        act.save = { ability: [sp?.ability ?? "wis"], dc: { calculation: "", formula: String(sp?.dc ?? dc) } };
+        act.damage = { onSave: sp?.onSave ?? "none", critical: { allow: false, bonus: "" }, parts: [] };
+        e.system.activities[act._id] = act;
+      }
+      addRule(act, r);
+    }
+  }
+  if (flavour.length && attack) attack.description.chatFlavor = [attack.description.chatFlavor, flavour.join(" · ")].filter(Boolean).join(" · ");
+}
+/** Everything that is a GM moment, not a roll: collected per actor for scripts/reminders.js. */
+const REMINDER_ON = ["turnStart", "selfTurnStart", "bloodied", "zero", "struck", "attacked", "damaged", "allyDamaged"];
+function reminderLines(items) {
+  const out = {};
+  for (const it of items) {
+    for (const r of it.flags?.fourththing?.npcAuto?.rules ?? []) {
+      if (!REMINDER_ON.includes(r.on)) continue;
+      const line = autoRulesText({ rules: [r] }).replace(/<[^>]+>/g, "").trim();
+      if (!line) continue;
+      (out[r.on] ??= []).push({ item: it.name, text: line, ...(r.radius ? { radius: Number(r.radius) * 5 } : {}), ...(r.who ? { who: r.who } : {}) });
+    }
+  }
+  return out;
 }
 function convertMonster(a, items, needs) {
   const s = a.system ?? {}, ff = a.flags?.fourththing ?? {}, rfi = ff.rfi?.actor ?? {};
@@ -478,6 +682,7 @@ function convertMonster(a, items, needs) {
       act.range = { value: "", units: "self", special: "", override: false };
       e.system.damage.base = { number: null, denomination: null, types: [], custom: { enabled: false }, scaling: { number: 1 }, bonus: "" };
     }
+    applyWeaponRules(e, w, slug, 8 + prof + Math.floor((Math.max(abil.int, abil.wis, abil.cha) - 10) / 2));
     out.push(e); for (const n of needsW) needs.push(`weapon "${w.name}": ${n}`);
   }
   const mental = Math.max(abil.int, abil.wis, abil.cha); const dc = 8 + prof + Math.floor((mental - 10) / 2);
@@ -502,7 +707,7 @@ function convertMonster(a, items, needs) {
       resources: { legact: { value: legendary, max: legendary }, legres: { value: 0, max: 0 }, lair: { value: false, initiative: null } }
     },
     items: out, effects: [],
-    flags: { fourththing: { rfi: { actor: rfi }, creatureType: type, kind: "monster" } }
+    flags: { fourththing: { rfi: { actor: rfi }, creatureType: type, kind: "monster" }, "bad-eden-5e": { reminders: reminderLines(items) } }
   };
   return actor;
 }
@@ -517,7 +722,7 @@ function laneCreatures() {
     const e = convertMonster(a, items, needs);
     for (const it of e.items) for (const l of leftovers(it.system?.description?.value ?? "")) needs.push(`"${it.name}": leftover term "${l}"`);
     for (const l of leftovers(e.system.details.biography.value)) needs.push(`biography: leftover term "${l}"`);
-    e.flags["bad-eden-5e"] = { rfi: { id: a._id, pack: "npcs", identifier: a.name, hash: sha(JSON.stringify({ n: a.name, s: a.system, f: a.flags?.fourththing ?? {}, i: items.map(i => [i.name, i.system, i.flags?.fourththing ?? {}]) })) } };
+    e.flags["bad-eden-5e"] = { ...(e.flags["bad-eden-5e"] ?? {}), rfi: { id: a._id, pack: "npcs", identifier: a.name, hash: sha(JSON.stringify({ n: a.name, s: a.system, f: a.flags?.fourththing ?? {}, i: items.map(i => [i.name, i.system, i.flags?.fourththing ?? {}]) })) } };
     out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
   }
   return { src: actors, out, needsAll, kind: "actors" };

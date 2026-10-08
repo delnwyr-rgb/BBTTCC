@@ -461,7 +461,7 @@
     }
   },
   "effects": {
-    "_about": "what each RFI engine effect kind becomes on the 5E side. 'ae' = a transfer Active Effect on the feature; 'activity' = a dnd5e activity; 'text' = prose only (rider automation is a later pass)",
+    "_about": "what each RFI engine effect kind becomes on the 5E side. 'ae' = a transfer Active Effect on the feature; 'activity' = a dnd5e activity; 'text' = prose only; 'rider' = flags.bad-eden-5e.riders consumed by scripts/riders.js (bank, impose, strain) — the techniques rider pass shipped 2026-10-07",
     "rerolls[]": {
       "fields": "{context: check|save|defense|attack|initiative|forced-movement|opportunity-attack, mode, attribute?, skill?, vs?, when?}",
       "to": "unconditional (no vs/when) → advantage AE per rolls.reroll-lowest.ae; initiative → system.attributes.init.roll.mode ADD 1; conditional → text"

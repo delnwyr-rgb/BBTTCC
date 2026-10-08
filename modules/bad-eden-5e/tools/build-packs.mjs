@@ -280,7 +280,8 @@ function rawActorDoc(a, folderId) {
     const sys = { ...it.system, source: { ...SOURCE_META }, identifier: it.system?.identifier ?? it.slug };
     sys.description = { value: link(sys.description?.value ?? ""), chat: "" };
     return { _id: iid, name: it.name, type: it.type, img: it.img, sort: (i + 1) * 100000, system: sys,
-      effects: (it.effects ?? []).map((e, j) => { const eid = id(`effect:${ikey}:${j}`); return { ...e, _id: eid, _key: `!actors.items.effects!${aid}.${iid}.${eid}` }; }),
+      // keep an authored id (the converter links activities to effects by it); mint one otherwise
+      effects: (it.effects ?? []).map((e, j) => { const eid = /^[A-Za-z0-9]{16}$/.test(e._id ?? "") ? e._id : id(`effect:${ikey}:${j}`); return { ...e, _id: eid, _key: `!actors.items.effects!${aid}.${iid}.${eid}` }; }),
       flags: { ...(it.flags ?? {}), dnd5e: { riders: { activity: [], effect: [] } } }, _key: `!actors.items!${aid}.${iid}` };
   });
   return {

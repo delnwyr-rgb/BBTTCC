@@ -1,9 +1,9 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.6.0) — do not hand-edit; put fixes in content/overrides/techniques.json. The 75 Bad Eden Core techniques as dnd5e feats.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.6.1) — do not hand-edit; put fixes in content/overrides/techniques.json. The 75 Bad Eden Core techniques as dnd5e feats.",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.6.0",
-    "at": "2026-10-07",
+    "rubric": "1.6.1",
+    "at": "2026-10-08",
     "overridesApplied": 0
   },
   "features": [
@@ -179,8 +179,21 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_calculated_risk.png",
       "description": "<p><em>You open yourself on purpose.</em></p><p>Once per turn, you may choose to have advantage on an attack roll. If you do, attack rolls against you gain advantage until the start of your next turn.</p>",
+      "riders": {
+        "bank": {
+          "n": 1,
+          "to": "self"
+        }
+      },
+      "activation": "special",
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "bank": {
+              "n": 1,
+              "to": "self"
+            }
+          },
           "rfi": {
             "id": "Rst7wYHeDxYMFrI0",
             "pack": "items",
@@ -302,8 +315,31 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_combat_logistic.jpeg",
       "description": "<p><em>Wars are won before the first swing.</em></p><p>At the start of combat, choose one ally. That ally gains temporary hit points equal to your proficiency bonus.</p>",
+      "riders": {
+        "temp": {
+          "formula": "@prof",
+          "to": "ally-or-self"
+        }
+      },
+      "activation": "special",
+      "activity": "heal",
+      "heal": {
+        "formula": "@prof",
+        "type": "temphp"
+      },
+      "range": 30,
+      "target": {
+        "count": 1,
+        "type": "ally"
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "temp": {
+              "formula": "@prof",
+              "to": "ally-or-self"
+            }
+          },
           "rfi": {
             "id": "O3ox21QkblL6C0Kl",
             "pack": "items",
@@ -323,8 +359,24 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_controlled_aggression.png",
       "description": "<p><em>Sometimes restraint hurts more.</em></p><p>Once per turn, when you hit with a weapon attack, you may choose to deal minimum damage and the target has disadvantage on its next attack roll.</p>",
+      "riders": {
+        "impose": {
+          "note": "You deal minimum damage on this hit."
+        }
+      },
+      "activation": "special",
+      "range": 30,
+      "target": {
+        "count": 1,
+        "type": "enemy"
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "impose": {
+              "note": "You deal minimum damage on this hit."
+            }
+          },
           "rfi": {
             "id": "mue3ysZjdVf3gngT",
             "pack": "items",
@@ -391,8 +443,19 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_darkness_hardened.png",
       "description": "<p><em>The Dark doesn’t scare you. It negotiates.</em></p><p>You have advantage on saving throws against being Frightened.</p><p>Additionally, when you fail a saving throw against fear or horror, you may choose to succeed instead. If you do, you gain one level of exhaustion after the effect ends. Once you use this feat, you can’t use it again until you finish a long rest.</p>",
+      "riders": {
+        "strain": {
+          "n": 1
+        }
+      },
+      "activation": "special",
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "strain": {
+              "n": 1
+            }
+          },
           "rfi": {
             "id": "XeSQLXvQFDdiynkW",
             "pack": "items",
@@ -454,8 +517,21 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_deliberate_tempo.png",
       "description": "<p><em>Timing is a weapon.</em></p><p>Once per turn, you may delay one attack you make until later in the round. When you do, that attack gain advantage.</p>",
+      "riders": {
+        "bank": {
+          "n": 1,
+          "to": "self"
+        }
+      },
+      "activation": "special",
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "bank": {
+              "n": 1,
+              "to": "self"
+            }
+          },
           "rfi": {
             "id": "q9iV4JZUm71Enwim",
             "pack": "items",
@@ -496,8 +572,24 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_disciplined_fire.png",
       "description": "<p><em>It’s not about more shots. It’s about the right shot.</em></p><p>Once per turn when you hit with a ranged weapon attack, you may choose one:</p><ul><li><strong>Pin:</strong> The target’s movement is reduced by 10 feet until the start of your next turn.</li><li><strong>Disrupt:</strong> The next attack roll the target makes before the end of its next turn is at disadvantage (3d10 keep-lowest-2).</li></ul><p>A creature can be affected by this feat only once per round.</p>",
+      "riders": {
+        "impose": {
+          "note": "Disrupt — or Pin: the target's speed is reduced by 10 feet until the start of your next turn."
+        }
+      },
+      "activation": "special",
+      "range": 30,
+      "target": {
+        "count": 1,
+        "type": "enemy"
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "impose": {
+              "note": "Disrupt — or Pin: the target's speed is reduced by 10 feet until the start of your next turn."
+            }
+          },
           "rfi": {
             "id": "o2BssJu9XhrDFBgV",
             "pack": "items",
@@ -810,8 +902,20 @@
         "per": "lr"
       },
       "activation": "special",
+      "riders": {
+        "bank": {
+          "n": 1,
+          "to": "self"
+        }
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "bank": {
+              "n": 1,
+              "to": "self"
+            }
+          },
           "rfi": {
             "id": "9qquKLVG0GTjCO4C",
             "pack": "items",
@@ -920,8 +1024,24 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_linebreaker.png",
       "description": "<p><em>Formations exist to be disrespected.</em></p><p>When you move at least 15 feet straight toward an enemy and hit with a melee attack, that enemy is at disadvantage: its opportunity attacks roll 3d10 keep-lowest-2 until the end of its next turn.</p>",
+      "riders": {
+        "impose": {
+          "note": "Reaction attacks it makes until the end of its next turn are at disadvantage."
+        }
+      },
+      "activation": "special",
+      "range": 30,
+      "target": {
+        "count": 1,
+        "type": "enemy"
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "impose": {
+              "note": "Reaction attacks it makes until the end of its next turn are at disadvantage."
+            }
+          },
           "rfi": {
             "id": "wPupELTaHtIHTcdP",
             "pack": "items",
@@ -1082,8 +1202,30 @@
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_penultimate_rites.png",
       "description": "<p><em>If you can’t save them, you can at least keep them here.</em></p><p>When a creature you can reach drops to 0 hit points, you may use your reaction to stabilize it. If you do, it also gains temporary hit points equal to your proficiency bonus.</p><p>Once you use this feat, you can’t use it again until you finish a short rest or long rest.</p>",
       "activation": "reaction",
+      "riders": {
+        "temp": {
+          "formula": "@prof",
+          "to": "ally"
+        }
+      },
+      "activity": "heal",
+      "heal": {
+        "formula": "@prof",
+        "type": "temphp"
+      },
+      "range": 30,
+      "target": {
+        "count": 1,
+        "type": "ally"
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "temp": {
+              "formula": "@prof",
+              "to": "ally"
+            }
+          },
           "rfi": {
             "id": "CmO8Q6nr21zzgXjv",
             "pack": "items",
@@ -1130,8 +1272,25 @@
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_pressure_transference.png",
       "description": "<p><em>If someone must suffer, at least let it matter.</em></p><p>When you would take damage, you may use your reaction to give an ally within 10 feet gain advantage on their next roll before the end of their next turn. Once per round.</p>",
       "activation": "reaction",
+      "riders": {
+        "bank": {
+          "n": 1,
+          "to": "ally"
+        }
+      },
+      "range": 30,
+      "target": {
+        "count": 1,
+        "type": "ally"
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "bank": {
+              "n": 1,
+              "to": "ally"
+            }
+          },
           "rfi": {
             "id": "2bZYOIwDSLJuBJfn",
             "pack": "items",
@@ -1266,8 +1425,26 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_relentless_advance.png",
       "description": "<p><em>You do not circle. You close.</em></p><p>Once per turn, when you move at least 10 feet straight toward a creature before hitting it with a melee attack, you gain temporary hit points equal to your proficiency bonus.</p>",
+      "riders": {
+        "temp": {
+          "formula": "@prof",
+          "to": "self"
+        }
+      },
+      "activation": "special",
+      "activity": "heal",
+      "heal": {
+        "formula": "@prof",
+        "type": "temphp"
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "temp": {
+              "formula": "@prof",
+              "to": "self"
+            }
+          },
           "rfi": {
             "id": "gAEdwjTv0hK1LaMS",
             "pack": "items",
@@ -1591,8 +1768,23 @@
         "per": "sr"
       },
       "activation": "bonus",
+      "riders": {
+        "impose": {
+          "note": "Applies to its next attack against a target other than you."
+        }
+      },
+      "range": 30,
+      "target": {
+        "count": 1,
+        "type": "enemy"
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "impose": {
+              "note": "Applies to its next attack against a target other than you."
+            }
+          },
           "rfi": {
             "id": "4jCeY0iHWA3KKak0",
             "pack": "items",
@@ -1613,8 +1805,23 @@
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_unbroken_guard.png",
       "description": "<p><em>You stand where others would rather not.</em></p><p>When a creature within 5 feet of you targets an ally with an attack, you may use your reaction to Impose the attacker (that attack rolls 3d10 keep-lowest-2) and reduce the attacker’s movement to 0 until the end of its current turn.</p>",
       "activation": "reaction",
+      "riders": {
+        "impose": {
+          "note": "Its speed is 0 until the end of its current turn."
+        }
+      },
+      "range": 30,
+      "target": {
+        "count": 1,
+        "type": "enemy"
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "impose": {
+              "note": "Its speed is 0 until the end of its current turn."
+            }
+          },
           "rfi": {
             "id": "xFmnZHrmzKGGMk0N",
             "pack": "items",
@@ -1634,8 +1841,24 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_unsettling_precision.png",
       "description": "<p><em>They start wondering when the next one lands.</em></p><p>When you hit the same creature twice in a round, it is at disadvantage: its next saving throw before the end of its next turn is 3d10 keep-lowest-2.</p>",
+      "riders": {
+        "impose": {
+          "note": "Applies to its next saving throw before the end of its next turn."
+        }
+      },
+      "activation": "special",
+      "range": 30,
+      "target": {
+        "count": 1,
+        "type": "enemy"
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "impose": {
+              "note": "Applies to its next saving throw before the end of its next turn."
+            }
+          },
           "rfi": {
             "id": "STCAtbtJ2KY9dSdt",
             "pack": "items",
@@ -1655,8 +1878,21 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_unyielding_finish.png",
       "description": "<p><em>Momentum should not be wasted.</em></p><p>When you reduce a creature to 0 hit points, you may immediately gain advantage on your next roll before the end of your next turn. Once per round.</p>",
+      "riders": {
+        "bank": {
+          "n": 1,
+          "to": "self"
+        }
+      },
+      "activation": "special",
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "bank": {
+              "n": 1,
+              "to": "self"
+            }
+          },
           "rfi": {
             "id": "lQJnB8Y8dYRv0Dsq",
             "pack": "items",
