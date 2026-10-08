@@ -347,7 +347,9 @@ export async function run({ rebuild = false } = {}) {
       if (!pd) return [false, `no level-1 ${from} power with an activity`];
       // One batch on purpose: the feature isn't on the sheet when the power's preCreate runs,
       // so the createItem settle pass has to do the routing.
-      [feat, pw] = await actor.createEmbeddedDocuments("Item", [(await PACK("features").getDocument(fe._id)).toObject(), pd.toObject()]);
+      const made = await actor.createEmbeddedDocuments("Item", [(await PACK("features").getDocument(fe._id)).toObject(), pd.toObject()]);
+      // the batch comes back in no guaranteed order — pick by type
+      feat = made.find(d => d.type === "feat"); pw = made.find(d => d.type === "spell");
       await sleep(400);
       pw = actor.items.get(pw.id);
       const ok = traditionOf(pw) === to && isCrossCast(pw) && TRADITIONS[to].attrs.includes(pw.system.ability) && pw.system.ability === abilityFor(actor, pw);
@@ -624,10 +626,13 @@ export async function run({ rebuild = false } = {}) {
     const since = game.messages.size;
     const idx = combat.turns.findIndex(c => c.tokenId === wraithTok.id);
     if (idx < 0) return [false, "wraith not in combat"];
+    // combatTurnChange only fires on a CHANGE — step off the Wraith first if initiative put it up already
+    if (combat.turn === idx) { await combat.update({ turn: (idx + 1) % combat.turns.length }); await sleep(300); }
     await combat.update({ turn: idx });
-    await sleep(800);
-    const cards = newCards(since).filter(m => /Start of Slippage Wraith/.test(m.content));
-    return [cards.length === 1 && /selfTurnStart|Slippage Wraith:/.test(cards[0].content), `${cards.length} card(s); ${cards[0]?.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 160) ?? ""}`];
+    let cards = [];
+    for (let i = 0; i < 10 && !cards.length; i++) { await sleep(300); cards = newCards(since).filter(m => /Start of Slippage Wraith/.test(m.content)); }
+    // one card per client logged in as the active GM — two Mags windows post two identical cards
+    return [cards.length >= 1 && /selfTurnStart|Slippage Wraith:/.test(cards[0].content), `${cards.length} card(s)${cards.length > 1 ? " (the active GM user has more than one client open)" : ""}; ${cards[0]?.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 160) ?? ""}`];
   });
   await R.step("GM reminder when the Lurker drops to 0 HP", async () => {
     const a = lurkerTok?.actor ?? lurker; if (!a) return [false, "no lurker"];
