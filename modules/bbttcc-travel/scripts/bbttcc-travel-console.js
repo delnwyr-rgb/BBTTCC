@@ -7,6 +7,7 @@
   const TAG      = "[bbttcc-travel-console v1.5.11]";
   const MOD_TERR = "bbttcc-territory";
   const MOD_FCT  = "bbttcc-factions";
+  const MOD_ID   = "bbttcc-travel";   // this module (flags on the facilitation handoff card, 2026-10-07)
 
   function enc(s) { return foundry.utils.escapeHTML(String(s ?? "")); }
 
@@ -2019,7 +2020,48 @@
       };
 
       const $execBtn = content.querySelector('[data-action="rp-exec"]');
+      // FACILITATION (2026-10-07): travelExec:"gmOnly" (Tabletop) — players plot, the GM executes. On a
+      // player seat the Execute button becomes a handoff: the plan is persisted as the faction's ride
+      // session (seat-safe) and the GM gets a whispered card; Resume ride → Execute on the GM's console.
+      const _facGmOnly = () => { try { return !game.user?.isGM && game.bbttcc?.api?.campaign?.facilitation?.get?.()?.travelExec === "gmOnly"; } catch (_e) { return false; } };
+      if (_facGmOnly()) { $execBtn.textContent = "✋ Hand route to GM"; $execBtn.title = "Tabletop facilitation: players plot the route, the GM rides it."; }
+      const _handRouteToGM = async (factionId) => {
+        const facName = game.actors?.get(factionId)?.name || "The coalition";
+        const rideApi = game.bbttcc?.api?.travel?.rideSession;
+        const session = {
+          id: `ride:${factionId}:${Date.now()}`, factionId,
+          joiningFactionIds: joiningFactionIds.slice(),
+          legs: legs.map(L => ({ fromUuid: L.fromUuid, toUuid: L.toUuid, fromId: L.fromId, toId: L.toId, gate: L.gate ?? null })),
+          executed: 0, stage: "handoff", encounter: null, handedBy: game.user?.name || "", createdTs: Date.now(), updatedTs: Date.now()
+        };
+        const saved = await rideApi?.save?.(factionId, session).catch(e => ({ ok: false, error: String(e?.message || e) }));
+        if (saved && saved.ok === false) { $rout.textContent = `Could not hand the route over: ${saved.error || "relay failed"}.`; return; }
+        const nameOf = (id) => { const h = hexes.find(x => x.id === id); return h?.label || h?.name || id || "?"; };
+        const path = [legs[0]?.fromId, ...legs.map(L => L.toId)].map(nameOf).map(enc).join(" → ");
+        const gmIds = (game.users?.contents || game.users || []).filter(u => u.isGM).map(u => u.id);
+        await ChatMessage.create({
+          whisper: gmIds,
+          speaker: { alias: "Travel Console" },
+          content: `<div class="bbttcc-travel-handoff" style="font:13px Helvetica;line-height:1.35;">
+            <div style="font-weight:800;">✋ ${enc(facName)} asks to ride — ${legs.length} leg${legs.length === 1 ? "" : "s"}</div>
+            <div style="opacity:.9;margin:4px 0;">${path}</div>
+            ${joiningFactionIds.length ? `<div style="opacity:.8;font-size:12px;">Riding with: ${joiningFactionIds.map(id => enc(game.actors?.get(id)?.name || id)).join(", ")}</div>` : ""}
+            <div style="opacity:.8;font-size:12px;margin-top:4px;">Plotted by ${enc(game.user?.name || "a player")} · Tabletop facilitation: the GM rides it.</div>
+            <button type="button" data-action="bbttcc-travel-handoff-open" data-faction-id="${enc(factionId)}" style="margin-top:6px;">▶ Open Travel Console (Resume ride → Execute)</button>
+          </div>`,
+          flags: { [MOD_ID]: { routeHandoff: { factionId, legs: legs.length, ts: Date.now() } } }
+        });
+        $rout.textContent = `Route handed to the GM — ${legs.length} leg${legs.length === 1 ? "" : "s"}. They ride it from their console.`;
+        ui.notifications?.info?.("✋ Route handed to the GM.");
+      };
       $execBtn.onclick = async () => {
+        if (_facGmOnly()) {
+          const factionId = $fac.value;
+          if (!factionId) { $rout.textContent = "Pick a faction first."; return; }
+          if (!legs.length) { $rout.textContent = "Add at least one leg."; return; }
+          try { await _handRouteToGM(factionId); } catch (e) { console.warn(TAG, "handoff failed", e); $rout.textContent = `Could not hand the route over: ${e?.message || e}`; }
+          return;
+        }
         // In-flight guard (on the app, so a re-render mid-ride cannot arm a second loop over the same legs).
         if (this._execBusy) { ui.notifications?.info?.("The route is already executing."); return; }
         this._execBusy = true;
@@ -2932,6 +2974,25 @@ if (game.bbttcc?.runVisuals) {
   }
 
   globalThis.BBTTCC_TravelConsole = BBTTCC_TravelConsole;
+
+  // FACILITATION handoff card (2026-10-07): the GM's "Open Travel Console" button on the whispered card.
+  const _bindHandoffCard = (message, html) => {
+    try {
+      if (!message?.getFlag?.(MOD_ID, "routeHandoff")) return;
+      const root = html?.[0] || html; if (!root?.querySelectorAll) return;
+      root.querySelectorAll('[data-action="bbttcc-travel-handoff-open"]').forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (!game.user?.isGM) { ui.notifications?.warn?.("The GM rides handed-over routes."); return; }
+          const fid = btn.dataset.factionId || "";
+          const facName = game.actors?.get(fid)?.name || "the faction";
+          try { game.bbttcc?.ui?.travelConsole?.render?.(true); } catch (_e) {}
+          ui.notifications?.info?.(`Travel Console: pick ${facName}, click ↻ Resume ride, then ▶ Execute Route.`);
+        });
+      });
+    } catch (_e) {}
+  };
+  Hooks.on("renderChatMessageHTML", _bindHandoffCard);
+  Hooks.on("renderChatMessage", _bindHandoffCard);
 
   Hooks.once("ready", () => {
     game.bbttcc ??= { api: {} };

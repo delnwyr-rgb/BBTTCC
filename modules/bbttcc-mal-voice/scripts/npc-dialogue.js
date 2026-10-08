@@ -2064,6 +2064,7 @@ async function _playIntroAudio(actor) {
     let on = true;
     try { on = !!game.settings.get(MODULE_ID, "dialogueIntroAudio"); } catch (_e) {}
     if (!on) return;
+    try { if (game.bbttcc?.api?.campaign?.facilitation?.get?.()?.narration === "off") return; } catch (_eFac) {}   // FACILITATION: narration off
     const api = game.bbttcc?.api?.campaign;
     const rows = (await api?.dialogue?.choicesFor?.(actor.id, {})) || [];
     if (!rows.length) return;
@@ -2123,6 +2124,7 @@ async function _postIntroText(actor, beat) {
 async function talkTo(actorOrToken) {
   const actor = actorOrToken?.actor ?? actorOrToken;
   if (!actor?.id) return ui.notifications?.warn("No actor to talk to.");
+  if (_facNpcAiOff()) { log(`talkTo refused: facilitation npcAi off (${actor.name})`); return ui.notifications?.warn("🎲 Tabletop mode — NPCs are played at the table, not by the AI. (Facilitation setting in bbttcc-campaign.)"); }
   const App = _defineAppClass();
   if (!App) return ui.notifications?.error("ApplicationV2 not available in this Foundry version.");
 
@@ -2631,8 +2633,14 @@ function _playersAllowed() {
 
 // Returns null if talkable, else a human-readable refusal reason (logged so
 // a silent no-op is always diagnosable from the console).
+// FACILITATION (2026-10-07): Tabletop plays NPCs at the table — the campaign engine's npcAi policy
+// closes the conversation window for GM and players alike.
+function _facNpcAiOff() {
+  try { return game.bbttcc?.api?.campaign?.facilitation?.get?.()?.npcAi === "off"; } catch (_e) { return false; }
+}
 function _refusalReason(actor, tokenDoc = null) {
   if (!actor) return "token has no actor";
+  if (_facNpcAiOff()) return "Facilitation: Tabletop — NPCs are played at the table (campaign facilitation npcAi = off)";
   if (game.user.isGM) return null;                       // GM talks to anything
   if (!_playersAllowed()) return "npcDialoguePlayers setting is off";
   if (tokenDoc?.hidden) return `'${actor.name}' is hidden`;

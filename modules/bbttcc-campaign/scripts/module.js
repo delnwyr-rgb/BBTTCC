@@ -8,6 +8,7 @@
 import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
+import { registerFacilitationSettings, facilitation, installFacilitationAPI, GMEXEC_CHOICE_PICK } from "./facilitation.js";   // FACILITATION MODES (2026-10-07): Tabletop / Projectionist / Autopilot / Manual
 import { applyStoryData, rebuildRegistry, validateStoryData, scaffoldStory, codeStory, slugKey } from "./story-model.js";   // Layer 2 story data (2026-09-21)
 import { deriveSituation, QUEST_MAP, QUEST_SCRIPTS, scriptOf, registerScripts, scriptView, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl, isAnchorable, placeOf, hexKey, rewardFor, AWARD_MARKS, QUEST_REWARDS } from "./story-model.js";
 // bbttcc-rolls-api.js removed 2026-08-28 (atlas cleanup) — game.bbttcc.api.rolls
@@ -1198,6 +1199,16 @@ let __bbttccBeatAudioStartedAt = 0;
 // delegation below so the Play button works even if the dialog-scoped
 // jQuery delegation attached before the element was populated.
 let __bbttccCurrentBeatDialogBeat = null;
+let __bbttccCurrentBeatDialogPick = null;   // Autopilot: { beat, token, pick(i, callerUser) } for the open GM dialog
+
+// FACILITATION (2026-10-07): the one reader for "does this beat reach player screens" — the mode's
+// beatText policy over the authored flag (five aliases, all in live use).
+function _facPlayerFacing(beat, pol) {
+  const p = pol || facilitation();
+  if (p.beatText === "never") return false;
+  if (p.beatText === "always") return true;
+  return !!(beat && (beat.playerFacing || beat.playerFacingDialog || beat.dialogPlayerFacing || beat.playerFacingContent || beat.showToPlayers));
+}
 let __bbttccBeatDialogPlayDelegationInstalled = false;
 function _installBeatDialogPlayDelegation() {
   if (__bbttccBeatDialogPlayDelegationInstalled) return;
@@ -1432,6 +1443,7 @@ function _buildPlayerFacingDialogHtml(payload) {
     const title = _escapeHtml(payload && payload.title ? payload.title : "Beat");
     const desc = String(payload && payload.desc ? payload.desc : "").trim();
     const choices = Array.isArray(payload && payload.choices ? payload.choices : []) ? payload.choices : [];
+    const canPick = !!(payload && payload.canPick);   // Autopilot: the mirror's choices are live buttons
 
     var parts = [];
     parts.push('<div class="bbttcc-campaign-dialog bbttcc-player-facing-dialog">');
@@ -1450,15 +1462,19 @@ function _buildPlayerFacingDialogHtml(payload) {
         var checkLabel = String(ch.checkLabel || "").trim();
         var checkDC = _num(ch.checkDC, 0);
 
-        parts.push('<div style="padding:8px 10px; border:1px solid rgba(255,255,255,0.10); border-radius:10px; margin:8px 0;">');
+        if (canPick) parts.push('<button type="button" class="bbttcc-mirror-pick" data-bbttcc-pick="' + i + '" style="display:block; width:100%; text-align:left; padding:8px 10px; border:1px solid rgba(120,190,255,0.55); border-radius:10px; margin:8px 0; cursor:pointer;">');
+        else parts.push('<div style="padding:8px 10px; border:1px solid rgba(255,255,255,0.10); border-radius:10px; margin:8px 0;">');
         parts.push('<div style="font-weight:700;">' + label + '</div>');
         if (cdesc) parts.push('<div style="opacity:0.85; margin-top:6px;">' + _escapeHtml(cdesc).replace(/\n/g, "<br/>") + '</div>');
         if (checkLabel) {
           parts.push('<div style="opacity:0.85; font-size:12px; margin-top:6px;"><b>Check:</b> ' + _escapeHtml(checkLabel) + '  -  <b>Difficulty:</b> ' + _escapeHtml(String(checkDC)) + '</div>');
         }
-        parts.push('</div>');
+        parts.push(canPick ? '</button>' : '</div>');
       }
+      if (canPick) parts.push('<div style="opacity:.8; font-size:12px; margin-top:6px;">◆ Autopilot — click a choice to make it. First click at the table wins.</div>');
       parts.push('</div>');
+    } else if (payload && payload.choicesHidden) {
+      // Facilitation hides the choices (Tabletop-style): the GM voices them.
     } else {
       parts.push('<div style="opacity:.8; margin-top:8px;">No choices are available for players on this beat.</div>');
     }
@@ -1501,6 +1517,26 @@ function _showPlayerFacingDialogLocal(payload) {
             try { btnWrap[0].style.display = "none"; } catch (_eC0) {}
           }
         } catch (_eD) {}
+        // Autopilot (2026-10-07): live choice buttons relay the pick to the GM seat's open beat dialog.
+        try {
+          if (payload && payload.canPick && dlg && dlg.element && dlg.element[0]) {
+            var root = dlg.element[0];
+            root.querySelectorAll("[data-bbttcc-pick]").forEach(function (btn) {
+              btn.addEventListener("click", async function () {
+                try {
+                  root.querySelectorAll("[data-bbttcc-pick]").forEach(function (b) { b.disabled = true; b.style.opacity = ".6"; });
+                  const gx = game.bbttcc?.api?.gmExec;
+                  if (!gx?.call) { ui.notifications?.warn?.("The GM seat is not reachable — ask the GM to click."); return; }
+                  const r = await gx.call(GMEXEC_CHOICE_PICK, { beatId: payload.beatId || null, pickToken: payload.pickToken || null, choiceIndex: Number(btn.dataset.bbttccPick) });
+                  if (r && r.ok) ui.notifications?.info?.(`✓ ${r.label || "Choice"} — made.`);
+                  else ui.notifications?.warn?.(`That choice was not taken: ${(r && r.error) || "the moment moved on"}.`);
+                } catch (e) {
+                  ui.notifications?.warn?.(`That choice was not taken: ${e?.message || e}.`);
+                }
+              });
+            });
+          }
+        } catch (_eP) {}
       }, 0);
     } catch (_e1) {}
   } catch (e) {
@@ -1584,9 +1620,13 @@ async function _maybePlayBeatAudio(beat) {
     const a = beat && beat.audio ? beat.audio : null;
     if (!a || !a.enabled) return false;
     if (!a.autoplay) return false;
+    // FACILITATION (2026-10-07): Tabletop = off (the GM narrates aloud); gmLocal = never pushed to players.
+    const narr = facilitation().narration;
+    if (narr === "off") { log(`[facilitation] narration off — skipped autoplay for '${beat.id || beat.label || "beat"}'.`); return false; }
     const m = _mgr();
     if (!m) return false;
-    await m.playForBeat(beat, { trigger: "autoplay" });
+    const playBeat = (narr === "gmLocal" && a.broadcastPlayers) ? { ...beat, audio: { ...a, broadcastPlayers: false } } : beat;
+    await m.playForBeat(playBeat, { trigger: "autoplay" });
     return true;
   } catch (_e) {
     return false;
@@ -2391,7 +2431,13 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
   const visible = await _visibleChoiceIndices(beat, campaign, ctx);   // D-1/D-2: gated / cooling choices are not shown
   const choicesAll = Array.isArray(beat.choices) ? beat.choices : [];
   const choices = visible.map(k => choicesAll[k]);
-  const isPlayerFacing = !!(beat && (beat.playerFacing || beat.playerFacingDialog || beat.dialogPlayerFacing || beat.playerFacingContent || beat.showToPlayers));
+  // FACILITATION (2026-10-07): the mode layer sits over the authored flag — Tabletop never mirrors,
+  // Autopilot always does, Projectionist honours the beat. Choices: hidden / shown / player-pick.
+  const facPol = facilitation();
+  const isPlayerFacing = _facPlayerFacing(beat, facPol);
+  const facChoicesHidden = facPol.choices === "hidden";
+  const facCanPick = facPol.choices === "playerPick";
+  const facPickToken = facCanPick ? `${beat.id || "beat"}:${Date.now().toString(36)}:${Math.random().toString(36).slice(2, 8)}` : null;
 
   // If no prompt text and no choices, nothing to show (checked BEFORE the player
   // mirror broadcast — finish() is the only 'close', so a mirror shown here would orphan).
@@ -2402,7 +2448,11 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
       _broadcastPlayerFacingDialog("show", {
         title: title,
         desc: desc,
-        choices: choices.map(function (ch, i) {
+        beatId: beat.id || null,
+        choicesHidden: facChoicesHidden,
+        canPick: facCanPick,
+        pickToken: facPickToken,
+        choices: facChoicesHidden ? [] : choices.map(function (ch, i) {
           return {
             label: ch && ch.label ? ch.label : ('Choice ' + (i + 1)),
             description: String(ch && ch.description ? ch.description : '').trim(),
@@ -2589,6 +2639,7 @@ ${
       // Clear the beat ref only if this is still the currently-shown beat.
       // (A subsequent dialog may have opened on top.)
       if (__bbttccCurrentBeatDialogBeat === beat) __bbttccCurrentBeatDialogBeat = null;
+      if (__bbttccCurrentBeatDialogPick && __bbttccCurrentBeatDialogPick.beat === beat) __bbttccCurrentBeatDialogPick = null;
       resolve(payload);
     };
 
@@ -2638,9 +2689,12 @@ ${
 
               // If choice has a check, resolve now
               if (_choiceHasCheck(ch)) {
+                // FACILITATION (2026-10-07): rolls = rules (the 08-30 ruling) | gmAll (Tabletop: the table rolls
+                // real dice for EVERY check, OP included; the GM records SUCCESS/FAIL) | auto (Autopilot).
+                const facRolls = facilitation().rolls;
 
                 // GM adjudication mode (no automation)
-                if (_isGMAdjudicatedChoice(ch)) {
+                if (_isGMAdjudicatedChoice(ch) || facRolls === "gmAll") {
                   const dcTxt = (ch.checkDC != null && String(ch.checkDC).trim() !== "") ? String(_num(ch.checkDC != null ? ch.checkDC : 0, 0)) : "";
                   const statTxt = String((ch && ch.checkStat) || "").trim() || "gm";
                   const prompt = String((ch && (ch.checkPrompt || ch.prompt)) || "").trim();
@@ -2683,7 +2737,7 @@ ${
                 const statTxt0 = String(ch.checkStat || "").trim().toLowerCase();
                 const isOp = statTxt0.indexOf("op.") === 0;
 
-                if (!isOp) {
+                if (!isOp && facRolls !== "auto") {
                   const dcTxt = (ch.checkDC != null && String(ch.checkDC).trim() !== "") ? String(_num(ch.checkDC != null ? ch.checkDC : 0, 0)) : "";
                   const statTxt = String((ch && ch.checkStat) || "").trim() || "check";
                   const prompt = String((ch && (ch.checkPrompt || ch.prompt)) || "").trim();
@@ -2856,6 +2910,29 @@ ${
 
     dlg.render(true);
     try { __bbttccAutosizeDialogDeferred(dlg, { pad: 40, maxH: Math.floor(window.innerHeight * 0.94) }); } catch (_eAuto) {}
+
+    // Autopilot (2026-10-07): a player's mirror click lands here through gmExec and presses the matching
+    // button on THIS dialog — same callback, same roster/support reads, same chain. First pick wins.
+    if (facCanPick) {
+      __bbttccCurrentBeatDialogPick = {
+        beat, token: facPickToken,
+        pick: async (i, caller) => {
+          const key = `c${i}`;
+          if (!buttons[key] || typeof buttons[key].callback !== "function") throw new Error("no such choice");
+          if (buttonTaken) throw new Error("already chosen");
+          try {
+            // The clicker's own steward makes the check when it is on the roster.
+            const sel = dlg.element?.[0]?.querySelector?.('select[name="bbttccRosterActor"]');
+            const cid = caller?.character?.id;
+            if (sel && cid && Array.from(sel.options).some(o => o.value === cid)) sel.value = cid;
+          } catch (_eSel) {}
+          const p = buttons[key].callback(dlg.element);   // sync prefix reads the DOM before close
+          try { dlg.close(); } catch (_eCl) {}
+          p.catch(e => warn("[facilitation] relayed pick chain failed:", e));
+          return { ok: true, label: choices[i]?.label || `Choice ${i + 1}` };
+        }
+      };
+    }
 
     // HexChrome styling hook (works for V1 Dialog)
     setTimeout(() => {
@@ -5929,6 +6006,8 @@ async function directorTick(opts = {}) {
     try { enabled = !!game.settings.get(MOD_ID, SETTING_DIRECTOR_ENABLED); } catch (_e) {}
     if (!enabled) return { fired: null, reason: "disabled" };
 
+    // FACILITATION (2026-10-07): Autopilot fires story beats without the GM prompt (beatAdvance:"silent").
+    if (opts.silent == null) { try { opts.silent = facilitation().beatAdvance === "silent"; } catch (_eFac) {} }
     const turn = Number(opts.turn) || _getTurnNumberSafe();
     const state = _readDirectorState();
     if (!opts.force && turn > 0 && state.lastStoryTurn === turn)
@@ -6435,7 +6514,9 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
 
     // GM adjudication — owner ruling 2026-08-30: EVERY non-OP check goes to
     // the table (GM clicks pass/fail); checkMode:"auto" no longer overrides.
-    if (_isGMAdjudicatedChoice(ch) || !isOp) {
+    // FACILITATION (2026-10-07): gmAll sends OP checks to the table too; auto rolls everything.
+    const facRolls = facilitation().rolls;
+    if (_isGMAdjudicatedChoice(ch) || facRolls === "gmAll" || (!isOp && facRolls !== "auto")) {
       const prompt = String((ch && (ch.checkPrompt || ch.prompt)) || "").trim();
       const dcTxt = (ch.checkDC != null && String(ch.checkDC).trim() !== "") ? String(_num(ch.checkDC, 0)) : "";
       const prettyStat = _choiceCheckLabel(String(ch.checkStat || "").trim() || "gm");
@@ -7001,6 +7082,29 @@ async function _acceptInviteAnySeat({ actorId = "", beatId = "", message = null 
     return r || null;
   } catch (e) { warn("[invites] relay failed:", e); ui.notifications?.error?.(`The invitation slipped — ${e?.message || e}`); return null; }
 }
+// FACILITATION / Autopilot (2026-10-07): a player's mirror click → the GM seat's open beat dialog.
+// Validated: the dialog for THAT beat is still open, the token matches the mirror that was shown,
+// the policy still allows player picks. First pick wins; later clicks get "already chosen".
+function _registerChoicePickGmExec() {
+  try {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (!gx?.register) return;
+    gx.register(GMEXEC_CHOICE_PICK, async (payload = {}, meta = {}) => {
+      if (!game.user?.isGM) throw new Error("not a GM seat");
+      if (facilitation().choices !== "playerPick") throw new Error("players do not pick in this facilitation mode");
+      const h = __bbttccCurrentBeatDialogPick;
+      const beatId = String(payload?.beatId || "");
+      if (!h || !h.beat || String(h.beat.id || "") !== beatId) throw new Error("that beat is no longer open");
+      if (payload?.pickToken && h.token && String(payload.pickToken) !== String(h.token)) throw new Error("that mirror is stale — the GM re-opened the beat");
+      const i = Number(payload?.choiceIndex);
+      if (!Number.isInteger(i) || i < 0) throw new Error("bad choice index");
+      const caller = game.users?.get(String(meta?.fromUserId || "")) || null;
+      const r = await h.pick(i, caller);
+      log(`[facilitation] choice ${i} on '${beatId}' picked by ${meta?.fromUserName || caller?.name || "a player"}.`);
+      return r;
+    });
+  } catch (e) { warn("[facilitation] gmExec register failed:", e); }
+}
 function _registerInviteGmExec() {
   try {
     const gx = game.bbttcc?.api?.gmExec;
@@ -7519,6 +7623,7 @@ async function _directorIssueInvites(story, { onChain = false } = {}) {
   if (!game.user?.isGM || !story) return 0;
   let auto = true; try { auto = !!game.settings.get(MOD_ID, SETTING_DIRECTOR_AUTOINVITE); } catch (_e) {}
   if (!auto) return 0;
+  try { if (facilitation().npcAi === "off") return 0; } catch (_eFac) {}   // FACILITATION: Tabletop plays NPCs at the table — no AI invitations
   const cands = [];
   for (const q of story.quests) {
     if (q.state === "completed" || q.state === "closed") continue;
@@ -8876,6 +8981,7 @@ function _registerCampaignHelp() {
 }
 
 Hooks.once("init", () => {
+  try { registerFacilitationSettings(); } catch (_eFac) { warn("facilitation settings failed to register:", _eFac); }   // FACILITATION MODES (2026-10-07)
   game.settings.register(MOD_ID, SETTING_CAMPAIGNS, {
     name: "Bad Eden Campaign Definitions",
     hint: "Internal storage for Bad Eden Campaign Builder. Do not edit manually.",
@@ -9185,10 +9291,12 @@ Hooks.once("init", () => {
 // READY
 Hooks.once("ready", () => {
   _registerInviteGmExec();   // player-seat invitation accepts land here (bbttcc-core gmExec)
+  _registerChoicePickGmExec();   // Autopilot: player mirror clicks land here (FACILITATION, 2026-10-07)
   _registerLedgerTravelGmExec();   // player-driven travel legs relay their Turn Ledger day debit here
   game.bbttcc ??= { api: {} };
   game.bbttcc.api ??= {};
   game.bbttcc.api.campaign = buildCampaignAPI();
+  installFacilitationAPI(game.bbttcc.api.campaign);   // api.campaign.facilitation.{get, mode, set, open, presets} (2026-10-07)
   try { const ac = getCampaign(getActiveCampaignId()); if (ac) _applyCampaignStory(ac); } catch (_e) {}   // Layer 2 story data
   // Open-choice introspection (2026-08-24): the Visualizer's hero shows the
   // REAL state of play — when a beat dialog is open, the table is choosing,
@@ -9315,14 +9423,27 @@ Hooks.once("ready", () => {
     // (or a courier miss) can eat a mirror the players still need. One call
     // puts it back.
     game.bbttcc.api.campaign.expandStoryTokens = (text) => _expandStoryTokens(text);   // {{coalition.hexCount}} etc. (2026-10-05)
-    game.bbttcc.api.campaign.remirrorBeatDialog = () => {
+    game.bbttcc.api.campaign.remirrorBeatDialog = async () => {
       try {
         const beat = __bbttccCurrentBeatDialogBeat;
         if (!beat) { ui.notifications?.warn?.("No beat dialog is open on this client — nothing to re-mirror."); return false; }
+        // FACILITATION (2026-10-07): the re-mirror honours the mode and the beat's flag like the first mirror did,
+        // and only shows the choices the players could see (gated / cooling ones stay hidden).
+        const pol = facilitation();
+        if (!_facPlayerFacing(beat, pol)) { ui.notifications?.warn?.(`"${beat.label || beat.id}" is not player-facing under the current facilitation mode — nothing to mirror.`); return false; }
+        const campaign0 = getCampaign(getActiveCampaignId());
+        let vis = null; try { vis = await _visibleChoiceIndices(beat, campaign0, {}); } catch (_eV) { vis = null; }
+        const all = Array.isArray(beat.choices) ? beat.choices : [];
+        const shown = Array.isArray(vis) ? vis.map(k => all[k]) : all;
+        const pick = __bbttccCurrentBeatDialogPick;
         _broadcastPlayerFacingDialog("show", {
           title: beat.label || beat.id || "Beat",
           desc: _expandStoryTokens(String(beat.description || "").trim()),
-          choices: (Array.isArray(beat.choices) ? beat.choices : []).map((ch, i) => ({
+          beatId: beat.id || null,
+          choicesHidden: pol.choices === "hidden",
+          canPick: pol.choices === "playerPick" && !!(pick && pick.beat === beat),
+          pickToken: (pick && pick.beat === beat) ? pick.token : null,
+          choices: (pol.choices === "hidden" ? [] : shown).map((ch, i) => ({
             label: (ch && ch.label) || ("Choice " + (i + 1)),
             description: String((ch && ch.description) || "").trim(),
             checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : "",

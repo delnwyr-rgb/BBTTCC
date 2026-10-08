@@ -723,6 +723,12 @@
     // no faction token stands on the map (a restore can leave the map tokenless).
     try { await _recordPosition((ctx && ctx.factionId) || (opts && opts.factionId) || null, to, hexUuid); } catch (_eP) {}
 
+    // FACILITATION (2026-10-07): hexAutofire:"off" = the GM runs arrival beats by hand (position still recorded above).
+    try {
+      const fac = game.bbttcc?.api?.campaign?.facilitation?.get?.();
+      if (fac && fac.hexAutofire === "off") { log("Hex enter: arrival beats are off under the current facilitation mode — GM runs them by hand.", { hexUuid }); return; }
+    } catch (_eFac) {}
+
     const beatIds = readOnEnterBeatIds(campaign, hexUuid, to);
     const beatId = beatIds[0] || null;
 
