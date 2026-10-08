@@ -73,7 +73,8 @@
   const hexApi = () => api()?._hexTravel;
   const isGM = () => !!game.user?.isGM;
   const gmIds = () => game.users.filter(u => u.isGM).map(u => u.id);
-  const rigSys = (rig) => rig?.system?.system ?? rig?.system ?? {};
+  // rig accessor (2026-10-08): works on dnd5e vehicles too — rigSys is only ever handed rig actors
+  const rigSys = (rig) => game.bbttcc?.rigs?.data(rig) ?? (rig?.system?.system ?? rig?.system ?? {});
 
   function normKey(k) {
     const raw = String(k ?? "").trim();
@@ -138,7 +139,7 @@
       const sys = rigSys(rig);
       side.rigId = rig.id;
       side.rigName = rig.name;
-      side.factionId = side.factionId ?? sys?.identity?.factionOwnerId ?? rig.flags?.[FCT]?.factionId ?? null;
+      side.factionId = side.factionId ?? (game.bbttcc?.rigs?.ownerOf?.(rig) || null) ?? sys?.identity?.factionOwnerId ?? rig.flags?.[FCT]?.factionId ?? null;   // rig accessor (2026-10-08): works on dnd5e vehicles too
       side.speed = Number(spec.speed ?? sys?.travel?.speed ?? 2);
       side.tier = Number(spec.tier ?? sys?.integrity?.tier ?? 1);
       side.hazardResist = Number(spec.hazardResist ?? sys?.travel?.hazardResist ?? 0);

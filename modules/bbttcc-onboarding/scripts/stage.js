@@ -190,9 +190,11 @@ let _hitTrackerOn = false;
 
 /** Integrity for either actor shape (rigs: system.integrity; npcs/characters: derived). */
 function _integrityOf(actor) {
+  // rig accessor (2026-10-08): works on dnd5e vehicles too
+  const R = game.bbttcc?.rigs;
   const sys = actor?.system?.system ?? actor?.system;
-  const raw = actor?.type === "rig"
-    ? foundry.utils.getProperty(sys, "integrity.value")
+  const raw = (R?.isRig ? R.isRig(actor) : actor?.type === "rig")
+    ? (R?.data?.(actor)?.integrity?.value ?? foundry.utils.getProperty(sys, "integrity.value"))
     : foundry.utils.getProperty(sys, "derived.integrity.value");
   const n = Number(raw);
   return Number.isFinite(n) ? n : null;
@@ -216,7 +218,8 @@ function _installHitTracker() {
 
 /** A rig's Steward: its pilot, else the first character aboard. */
 function _rigSteward(rig) {
-  const slots = rig?.system?.crew?.slots ?? [];
+  // rig accessor (2026-10-08): works on dnd5e vehicles too
+  const slots = game.bbttcc?.rigs?.data?.(rig)?.crew?.slots ?? rig?.system?.crew?.slots ?? [];
   const pick = slots.find(s => s?.role === "pilot" && s?.actorId) || slots.find(s => s?.actorId);
   const a = pick ? game.actors?.get?.(pick.actorId) : null;
   return a?.type === "character" ? a : null;
@@ -224,7 +227,8 @@ function _rigSteward(rig) {
 /** Attacker actor → the Steward to bill (a rig bills its pilot). Foes never bill. */
 function _stewardOf(actor) {
   if (!actor || actor.getFlag?.(MODULE_ID, "spawned") === true) return null;
-  if (actor.type === "rig") return _rigSteward(actor);
+  // rig accessor (2026-10-08): works on dnd5e vehicles too
+  if (game.bbttcc?.rigs?.isRig ? game.bbttcc.rigs.isRig(actor) : actor.type === "rig") return _rigSteward(actor);
   return actor.type === "character" ? actor : null;
 }
 
@@ -872,7 +876,10 @@ function _registerOps() {
     if (!rb?.mintFromChassis || !factionId) return { rigId: null };
     const OWNER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
     // Idempotent: a faction that already owns a rig gets that one back, never a twin.
-    const existing = (game.actors?.contents ?? []).find(a => a.type === "rig" &&
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    const R = globalThis.game?.bbttcc?.rigs;
+    const existing = (R?.listByFaction?.(factionId) ?? [])[0]
+      ?? (game.actors?.contents ?? []).find(a => a.type === "rig" &&
       (a.getFlag?.("fourththing", "factionOwnerId") === factionId || a.system?.identity?.factionOwnerId === factionId));
     if (existing) {
       // 🔒 owner ruling 2026-08-17 — the starter rig is the player's REAL rig and
@@ -998,20 +1005,27 @@ function _registerOps() {
     // and fire `bbttcc:rig:destroyed` — which is what the driving beat now gates on.
     // (Last Stand is character-only, so rigs stay clear of the dying cycle too.)
     const hp = Math.max(1, Number(integrity) || 12);
-    const actor = await Actor.create({
-      name, type: "rig", folder: folder?.id, img: img || "icons/svg/hazard.svg",
-      ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
-      prototypeToken: Object.assign(
+    // rig accessor (2026-10-08): works on dnd5e vehicles too — create through the
+    // accessor (rig on RFI, vehicle+flags on dnd5e), then stamp ownership + the
+    // spawned flag the accessor's spec doesn't carry.
+    const R = globalThis.game?.bbttcc?.rigs;
+    if (!R?.create) { console.warn(TAG, "spawnObstacle: rig accessor not loaded"); return null; }
+    const actor = await R.create({
+      name, folder: folder?.id, img: img || "icons/svg/hazard.svg",
+      identity: { mobility: "stationary", state: "parked", factionOwnerId: "" },
+      integrity: { value: hp, max: hp, tier: 1, bracket },
+      token: Object.assign(
         { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name, width: size, height: size },
         img ? { texture: { src: img } } : {}
-      ),
-      system: {
-        identity: { mobility: "stationary", state: "parked", factionOwnerId: "" },
-        integrity: { value: hp, max: hp, tier: 1, bracket }
-      },
-      flags: { [MODULE_ID]: { spawned: true, kind: "obstacle", ownerUserId, ...shared } }
+      )
     });
     if (!actor) return null;
+    try {
+      await actor.update({
+        ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
+        [`flags.${MODULE_ID}`]: { spawned: true, kind: "obstacle", ownerUserId, ...shared }
+      });
+    } catch (e) { console.warn(TAG, "spawnObstacle: ownership/flag stamp failed", e); }
     // Optional ARMAMENT (2026-08-27): the sim's gun-truck is fictionally an
     // armed vehicle the GM shoots back with, but a bare obstacle spawned with
     // no weapons or plating (owner's first wave-3 test). Seed named items from
@@ -1126,19 +1140,25 @@ function _registerOps() {
     // Use the system's canonical disembark so it also un-hides the Steward's tokens and
     // restores sight on EVERY scene — hand-clearing flags would leave a real token (e.g.
     // on the live map) invisible.
-    const fn = globalThis.game?.fourththing?.rig?.disembark;
+    // rig accessor (2026-10-08): works on dnd5e vehicles too — rigs.disembark routes
+    // to game.fourththing.rig.disembark on RFI and the dnd5e runtime's impl otherwise.
+    const R = globalThis.game?.bbttcc?.rigs;
+    const fn = R?.disembark ?? globalThis.game?.fourththing?.rig?.disembark;
     if (typeof fn === "function") {
-      try { await fn(steward, rigId ? { rigId } : {}); return { ok: true }; }
+      try { const r = await fn(steward, rigId ? { rigId } : {}); if (r !== false) return { ok: true }; }
       catch (e) { console.warn(TAG, "canonical disembark failed", e); }
     }
     // Fallback: clear the flag + the named rig's slots (no token un-hide available).
     try { if (steward.getFlag?.("fourththing", "boardedRig")) await steward.unsetFlag("fourththing", "boardedRig"); } catch (_) {}
+    try { if (steward.getFlag?.("bbttcc-factions", "boardedRig")) await steward.unsetFlag("bbttcc-factions", "boardedRig"); } catch (_) {}
     const rig = rigId ? game.actors?.get?.(rigId) : null;
     if (rig) {
-      const slots = foundry.utils.deepClone(rig.system?.crew?.slots ?? []);
+      const slots = foundry.utils.deepClone(R?.data?.(rig)?.crew?.slots ?? rig.system?.crew?.slots ?? []);
       let changed = false;
       for (const s of slots) if (s?.actorId === stewardId) { s.actorId = ""; changed = true; }
-      if (changed) { try { await rig.update({ "system.crew.slots": slots }); } catch (_) {} }
+      if (changed) {
+        try { if (R?.update) await R.update(rig, { "crew.slots": slots }); else await rig.update({ "system.crew.slots": slots }); } catch (_) {}
+      }
     }
     return { ok: true };
   });

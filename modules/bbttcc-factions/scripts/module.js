@@ -2745,16 +2745,16 @@ const politicalPressure = {
         personal: "Personal", light: "Light", medium: "Medium",
         heavy: "Heavy", siege: "Siege"
       };
+      // rig accessor (2026-10-08): works on dnd5e vehicles too
+      const R = game.bbttcc?.rigs;
       return (game.actors?.contents ?? [])
         .filter(a => {
-          if (a?.type !== "rig") return false;
-          const owner = foundry.utils.getProperty(a, "system.identity.factionOwnerId")
-                    ?? foundry.utils.getProperty(a, "system.system.identity.factionOwnerId")
-                    ?? "";
-          return String(owner) === factionId;
+          if (!R?.isRig(a)) return false;
+          const owner = R.ownerOf(a) ?? "";
+          return String(owner).replace(/^Actor\./, "") === factionId;
         })
         .map(a => {
-          const sys = a.system?.system ?? a.system ?? {};
+          const sys = R.data(a) ?? {};
           const integrity = sys?.integrity ?? {};
           const identity = sys?.identity ?? {};
           const bracket = String(integrity.bracket ?? "medium");
@@ -4419,12 +4419,12 @@ factionApi.applyStartingPackage ??= (async ({
     const starterKey = ["hexmobile", "space_marine"].includes(String(starterRig)) ? String(starterRig) : "hexmobile";
     if (a.getFlag?.(MODULE_ID, "starterRigGranted")) {
       console.log(`[bbttcc-factions] starter-rig grant skipped for ${a.name} — already granted.`);
-    } else if (!(Actor.TYPES ?? []).includes("rig")) {
-      // Bad Eden 5E: dnd5e has no `rig` Actor type yet (the rig/vehicle lane is
-      // still unported), and a failed Actor.create here used to abort the whole
-      // faction creation with a DataModelValidationError.
-      console.log(`[bbttcc-factions] starter-rig grant skipped for ${a.name} — no "rig" Actor type in ${game.system?.id}.`);
-    } else if (!rigApi?.mintFromChassis) {
+    } else if (!game.bbttcc?.rigs) {
+      // rig accessor (2026-10-08): works on dnd5e vehicles too — the accessor
+      // (bbttcc-core/rigs.js) decides the per-system actor shape, so the old
+      // `Actor.TYPES.includes("rig")` guard is gone; mintFromChassis is accessor-based.
+      console.log(`[bbttcc-factions] starter-rig grant skipped for ${a.name} — game.bbttcc.rigs accessor not installed (bbttcc-core).`);
+    } else if (typeof rigApi?.mintFromChassis !== "function") {
       console.warn("[bbttcc-factions] starter-rig grant SKIPPED — game.bbttcc.api.rigBuilder.mintFromChassis unavailable (is bbttcc-auto-link enabled/loaded?).");
     } else {
       const rig = await rigApi.mintFromChassis(starterKey, { factionOwnerId: a.id, free: true });

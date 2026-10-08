@@ -258,6 +258,9 @@ function resolveFaction(user = game.user, steward = null) {
 function resolveRig(faction) {
   if (!faction) return null;
   try {
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    const R = game.bbttcc?.rigs;
+    if (R?.listByFaction) return R.listByFaction(faction.id)[0] || null;
     return (game.actors?.contents ?? []).find(
       x => x.type === "rig" &&
         (x.getFlag?.("fourththing", "factionOwnerId") === faction.id ||

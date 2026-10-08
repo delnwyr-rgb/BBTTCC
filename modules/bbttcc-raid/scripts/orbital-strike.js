@@ -22,22 +22,27 @@
   const MOD = "bbttcc-raid";
 
   const _sys = (a) => a?.system?.system ?? a?.system ?? {};
+  // rig accessor (2026-10-08): works on dnd5e vehicles too
+  const _R = () => game.bbttcc?.rigs;
+  const _isRig = (a) => (_R()?.isRig ? _R().isRig(a) : a?.type === "rig");
+  const _rigData = (a) => (_R()?.data?.(a) ?? _sys(a));
   const _rigDomains = (rig) => {
-    const d = _sys(rig)?.travel?.domains;
+    const d = _rigData(rig)?.travel?.domains;
     return Array.isArray(d) ? d.map(x => String(x).toLowerCase()) : ["land"];
   };
   const _rigFaction = (rig) =>
-    String(_sys(rig)?.identity?.factionOwnerId || rig?.flags?.["bbttcc-factions"]?.factionId || "");
+    String((_R()?.isRig?.(rig) ? _R().ownerOf(rig) : "") || _sys(rig)?.identity?.factionOwnerId || rig?.flags?.["bbttcc-factions"]?.factionId || "");
 
   // Find an orbital bunker (space-domain rig) for the faction, else any.
   function findOrbitalBunker(factionId) {
-    const cands = (game.actors?.contents || []).filter(a => a.type === "rig" && _rigDomains(a).includes("space"));
+    const cands = (game.actors?.contents || []).filter(a => _isRig(a) && _rigDomains(a).includes("space"));
     if (factionId) return cands.find(a => _rigFaction(a) === String(factionId)) || null;
     return cands[0] || null;
   }
 
   function _actorFactionId(actor) {
     return String(actor?.flags?.["bbttcc-factions"]?.factionId
+      || (_R()?.isRig?.(actor) ? _R().ownerOf(actor) : "")   // rig accessor (2026-10-08): works on dnd5e vehicles too
       || foundry.utils.getProperty(actor, "system.system.identity.factionOwnerId")
       || foundry.utils.getProperty(actor, "flags.bbttcc-factions.factionId") || "");
   }
@@ -332,7 +337,7 @@
     try {
       if (!game.user?.isGM) return;
       const actor = hud?.object?.actor;
-      if (!actor || actor.type !== "rig" || !_rigDomains(actor).includes("space")) return;
+      if (!actor || !_isRig(actor) || !_rigDomains(actor).includes("space")) return;   // rig accessor (2026-10-08): works on dnd5e vehicles too
       const root = html instanceof HTMLElement ? html : (html?.[0] ?? html);
       const col = root?.querySelector?.(".col.right");
       if (!col || col.querySelector('[data-action="bbttcc-orbital-strike"]')) return;

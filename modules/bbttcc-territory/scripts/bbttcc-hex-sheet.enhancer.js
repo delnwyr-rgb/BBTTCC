@@ -263,9 +263,11 @@
 
   function _hldClassify(actor) {
     if (!actor) return null;
-    if (actor.type === "boss") return "boss";
-    if (actor.type === "rig") {
-      const mob = String(actor.system?.identity?.mobility || "mobile").toLowerCase();
+    if (actor.type === "boss") return "boss";   // dead branch (no `boss` type on either system) — kept harmless
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    const R = game.bbttcc?.rigs;
+    if (R?.isRig(actor)) {
+      const mob = String(R.data(actor)?.identity?.mobility || "mobile").toLowerCase();
       return (mob === "stationary") ? "facility" : "rig";
     }
     return null;
@@ -275,6 +277,9 @@
   // owner filter. Rigs/facilities carry it on identity.factionOwnerId; bosses on
   // identity.factionId (system.factionId as a generic fallback). "" = unlinked.
   function _hldActorFactionId(actor) {
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    const R = game.bbttcc?.rigs;
+    if (R?.isRig(actor)) return String(R.ownerOf(actor) || "");
     const sys = actor?.system || {};
     return String(sys?.identity?.factionOwnerId || sys?.identity?.factionId || sys?.factionId || "");
   }
@@ -291,7 +296,8 @@
       return { kind, bonus, label: actor.name, tier, doctrineKeys };
     }
     if (kind === "rig") {
-      const bracket = String(actor.system?.integrity?.bracket || "medium").toLowerCase();
+      // rig accessor (2026-10-08): works on dnd5e vehicles too
+      const bracket = String(game.bbttcc?.rigs?.data(actor)?.integrity?.bracket || "medium").toLowerCase();
       const bonus = _HLD_RIG_BONUS[bracket] ?? 0;
       return { kind, bonus, label: actor.name, bracket };
     }

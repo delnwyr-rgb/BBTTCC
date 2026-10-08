@@ -132,9 +132,11 @@
   }
 
   function getBoardedRig(steward) {
-    const b = steward?.flags?.fourththing?.boardedRig;
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    const R = game.bbttcc?.rigs;
+    const b = R?.boardedRigOf ? R.boardedRigOf(steward) : steward?.flags?.fourththing?.boardedRig;
     const rig = b?.rigId ? game.actors?.get(b.rigId) : null;
-    return rig && rig.type === "rig" ? rig : null;
+    return rig && (R ? R.isRig(rig) : rig.type === "rig") ? rig : null;
   }
 
   // Rigs present on the current scene the player can at least observe.
@@ -143,9 +145,10 @@
     if (!scene) return [];
     const seen = new Set();
     const out = [];
+    const R = game.bbttcc?.rigs;   // rig accessor (2026-10-08): works on dnd5e vehicles too
     for (const t of scene.tokens) {
       const a = t.actor;
-      if (!a || a.type !== "rig" || seen.has(a.id)) continue;
+      if (!a || !(R ? R.isRig(a) : a.type === "rig") || seen.has(a.id)) continue;
       if (!a.testUserPermission?.(game.user, "OBSERVER")) continue;
       seen.add(a.id);
       out.push(a);

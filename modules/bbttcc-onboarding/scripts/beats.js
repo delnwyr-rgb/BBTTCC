@@ -368,7 +368,8 @@ const driving = {
       }
       if (!obstacleActorIds.has(actor?.id) || downed.has(actor?.id)) return;
       // Backstop for the hook: rig integrity, or the destroyed state being set directly.
-      const sys = actor.system?.system ?? actor.system;
+      // rig accessor (2026-10-08): works on dnd5e vehicles too
+      const sys = game.bbttcc?.rigs?.data?.(actor) ?? (actor.system?.system ?? actor.system);
       const val = Number(foundry.utils.getProperty(sys, "integrity.value") ?? NaN);
       const state = foundry.utils.getProperty(sys, "identity.state");
       if ((!Number.isNaN(val) && val <= 0) || state === "destroyed") scrapped(actor);
@@ -1286,9 +1287,10 @@ const combatSim = {
     /** Current integrity for either shape of actor. Rigs keep the canonical value
      *  at system.integrity; characters/npcs at system.derived.integrity. */
     const integrityOf = (actor, isRig) => {
+      // rig accessor (2026-10-08): works on dnd5e vehicles too
       const sys = actor?.system?.system ?? actor?.system;
       const raw = isRig
-        ? foundry.utils.getProperty(sys, "integrity.value")
+        ? (game.bbttcc?.rigs?.data?.(actor)?.integrity?.value ?? foundry.utils.getProperty(sys, "integrity.value"))
         : foundry.utils.getProperty(sys, "derived.integrity.value");
       const n = Number(raw);
       return Number.isFinite(n) ? n : null;

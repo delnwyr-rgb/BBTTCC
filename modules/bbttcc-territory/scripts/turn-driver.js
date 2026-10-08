@@ -995,8 +995,9 @@ function laneHexBonus(tf){
   const facNames = [];
   try {
     for (const id of (Array.isArray(tf?.holdings?.rigIds) ? tf.holdings.rigIds : [])) {
-      const a = game.actors?.get(String(id)); if (!a || a.type !== "rig") continue;
-      if (String(a.system?.identity?.mobility || "mobile").toLowerCase() === "mobile") continue;   // mobile rigs are rigs, not facilities
+      const R = game.bbttcc?.rigs;   // rig accessor (2026-10-08): works on dnd5e vehicles too
+      const a = game.actors?.get(String(id)); if (!a || !R?.isRig(a)) continue;
+      if (String(R.data(a)?.identity?.mobility || "mobile").toLowerCase() === "mobile") continue;   // mobile rigs are rigs, not facilities
       facNames.push(String(a.name || "").toLowerCase());
     }
   } catch (_e) {}

@@ -226,9 +226,17 @@ function _findInjectionTarget(appEl) {
   // [[appv2-render-hook-html-param]], which can be partial during the render
   // lifecycle. Using app.element guarantees we see the fully-built DOM.
   if (!appEl || !appEl.querySelector) return null;
-  // Prefer identity tab pane
+  // Prefer identity tab pane (RFI rig/boss sheets)
   let host = appEl.querySelector(".tab.identity[data-tab='identity']")
           || appEl.querySelector(".tab[data-tab='identity']");
+  if (host) return host;
+  // rig accessor (2026-10-08): works on dnd5e vehicles too — the dnd5e
+  // VehicleActorSheet (AppV2) has no identity tab; its panes are
+  // .tab[data-tab=description|stations|crew] inside .tab-body. Prefer the
+  // description pane, then the first tab pane, then the tab/sheet body.
+  host = appEl.querySelector(".tab[data-tab='description']")
+      || appEl.querySelector(".tab-body .tab, .sheet-body .tab")
+      || appEl.querySelector(".tab-body, .sheet-body");
   if (host) return host;
   // Fallback: any tab pane that's currently active
   host = appEl.querySelector(".tab.active");
@@ -265,7 +273,9 @@ function _mirrorPlatesIntoIntegrity(appEl, actor, state) {
 
     // Surface the raw integrity-overflow value (what the ± buttons touch) in
     // the tooltip so the GM understands the prominent number is now Plates.
-    const rawSys = actor.system?.system ?? actor.system;
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    const R = game.bbttcc?.rigs;
+    const rawSys = R?.data?.(actor) ?? (actor.system?.system ?? actor.system);
     const ovCur = Number(rawSys?.integrity?.value);
     const ovMax = Number(rawSys?.integrity?.max);
     const ovNote = (Number.isFinite(ovCur) && Number.isFinite(ovMax))
@@ -294,9 +304,13 @@ function injectPanel(app /* html unused — we use app.element */) {
     // Only inject on actor types that can host structures. Rig/Boss now;
     // Phase E may add NPC/character if facility-flagged structure actors
     // turn out to need it.
-    if (!["rig", "boss"].includes(actor.type)) return;
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    const R = game.bbttcc?.rigs;
+    const isHost = R?.isRig ? (R.isRig(actor) || actor.type === "boss") : ["rig", "boss"].includes(actor.type);
+    if (!isHost) return;
 
-    const appEl = app.element;
+    // AppV2 sheets expose a DOM element; AppV1 (older dnd5e vehicle sheet) a jQuery wrapper.
+    const appEl = app.element?.jquery ? app.element[0] : app.element;
     if (!appEl) return;
 
     // Always sweep ALL prior panels first — defensive against earlier
@@ -911,6 +925,11 @@ function install() {
   // to land in the window chrome.
   Hooks.on("renderFourthThingRigSheet", handler);
   Hooks.on("renderFourthThingBossSheet", handler);
+  // rig accessor (2026-10-08): works on dnd5e vehicles too — dnd5e's
+  // VehicleActorSheet (AppV2, 5.x/6.x) and the legacy ActorSheet5eVehicle
+  // (AppV1). injectPanel gates on rigs.isRig, so plain vehicles are skipped.
+  Hooks.on("renderVehicleActorSheet", handler);
+  Hooks.on("renderActorSheet5eVehicle", handler);
   console.log(TAG, "panel enhancer installed");
 }
 

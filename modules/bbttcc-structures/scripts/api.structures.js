@@ -470,14 +470,16 @@ async function releaseCrew(actor, tokenId) {
 // offering them. The wall's real garrison runs through the siege crew relationship above +
 // the Siege HUD, not these vehicle seats. Idempotent; no-op if the actor has no crew schema.
 async function retypeFortification(actor) {
-  if (!actor?.system?.crew) return { ok: false, reason: "no crew schema" };
+  // rig accessor (2026-10-08): works on dnd5e vehicles too
+  const R = game.bbttcc?.rigs;
+  if (!R?.isRig?.(actor) || !R.data(actor)?.crew) return { ok: false, reason: "no crew schema" };
   const zero = { min: 0, max: 0 };
   try {
-    await actor.update({
-      "system.crew.capacity": { pilot: { ...zero }, gunner: { ...zero }, engineer: { ...zero }, crew: { ...zero } },
-      "system.crew.slots": [],
-      "system.crew.crewMin": 0,
-      "system.crew.crewMax": 0
+    await R.update(actor, {
+      "crew.capacity": { pilot: { ...zero }, gunner: { ...zero }, engineer: { ...zero }, crew: { ...zero } },
+      "crew.slots": [],
+      "crew.crewMin": 0,
+      "crew.crewMax": 0
     });
   } catch (e) { return { ok: false, reason: e.message }; }
   return { ok: true };

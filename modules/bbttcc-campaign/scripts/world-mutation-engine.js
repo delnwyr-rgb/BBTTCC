@@ -1733,17 +1733,18 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       const rt = we.rigTransfer && typeof we.rigTransfer === "object" ? we.rigTransfer : null;
       if (rt) {
         const nn = (x) => String(x || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase();
-        const rig = rt.rigId ? game.actors.get(String(rt.rigId).replace(/^Actor\./, "")) : game.actors.find(a => nn(a.name) === nn(rt.rigName) && (a.type === "rig" || a.flags?.fourththing?.kind === "rig"));
+        const RG = get(game, "bbttcc.rigs", null);   // rig accessor (2026-10-08): works on dnd5e vehicles too
+        const rig = rt.rigId ? game.actors.get(String(rt.rigId).replace(/^Actor\./, "")) : (RG ? RG.list() : game.actors.filter(a => a.type === "rig" || a.flags?.fourththing?.kind === "rig")).find(a => nn(a.name) === nn(rt.rigName));
         const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
         const camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null;
         const coal = [...new Set([].concat((camp && camp.factionId) ? [camp.factionId] : [], (camp && camp.factionIds) || []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean))];
         const lead = coal[0];
         if (!rig || !lead) console.warn(TAG, "rigTransfer: rig or coalition not resolved", { rig: rt.rigName || rt.rigId, lead, beatId: beatCtx.beatId });
         else {
-          const prev = String(rig.flags?.["bbttcc-factions"]?.factionId || "");
+          const prev = String((RG && RG.isRig(rig) ? RG.ownerOf(rig) : "") || rig.flags?.["bbttcc-factions"]?.factionId || "").replace(/^Actor\./, "");
           const tapi = get(game, "bbttcc.api.travel.charters", null); const dom = get(game, "bbttcc.api.travel.domains", null);
           const doms = (dom && typeof dom.rigDomains === "function") ? dom.rigDomains(rig).filter(d => d !== "land") : [];
-          if (prev !== lead) { await rig.update({ "flags.bbttcc-factions.factionId": lead }); changed = true; notes.push("rigTransfer:" + rig.name); }
+          if (prev !== lead) { if (RG && RG.isRig(rig)) await RG.setOwner(rig, lead); else await rig.update({ "flags.bbttcc-factions.factionId": lead }); changed = true; notes.push("rigTransfer:" + rig.name); }
           if (tapi && typeof tapi.grant === "function") {
             for (const fid of coal) {
               if (prev && prev !== lead && typeof tapi.revoke === "function") { try { await tapi.revoke(fid, { fromFactionId: prev }); } catch (eRv) { console.warn(TAG, "rigTransfer: revoke failed", eRv); } }

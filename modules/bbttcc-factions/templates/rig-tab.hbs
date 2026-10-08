@@ -1,0 +1,92 @@
+<section class="tab {{ tab.cssClass }}" data-tab="{{ tab.id }}" data-group="{{ tab.group }}">
+  <div class="bbttcc-rig-tab" style="padding:.5rem .75rem">
+    {{#unless bbttccRig.isRig}}
+      <h3 style="margin:.2rem 0">🛻 Bad Eden Rig</h3>
+      <p style="font-size:.85rem;opacity:.75">This vehicle is not a Rig yet. Rigs are faction assets — they produce OP on the
+        strategic turn, park/deploy, carry crew, and mount gear.</p>
+      {{#if bbttccRig.editable}}
+      <button type="button" data-rig-init style="width:auto;padding:.3rem .8rem">⚙ Initialize as Rig</button>
+      {{else}}<p style="font-size:.78rem;opacity:.6">Unlock the sheet to initialize.</p>{{/if}}
+    {{else}}
+
+    <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.5rem">
+      <h3 style="margin:0">🛻 Rig</h3>
+      <span style="font-weight:700">{{ bbttccRig.stateIcon }} {{ bbttccRig.state }}</span>
+      {{#if bbttccRig.canDeploy}}<button type="button" data-rig-deploy style="width:auto;padding:.15rem .6rem;font-size:.75rem">Deploy ▸</button>{{/if}}
+      {{#if bbttccRig.canPark}}<button type="button" data-rig-park style="width:auto;padding:.15rem .6rem;font-size:.75rem">Park ▸</button>{{/if}}
+      {{#if bbttccRig.destroyed}}{{#if bbttccRig.editable}}<button type="button" data-rig-restore style="width:auto;padding:.15rem .6rem;font-size:.75rem">🔧 Restore (GM)</button>{{/if}}{{/if}}
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.35rem .8rem;margin-bottom:.6rem">
+      <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem">Faction
+        {{#if bbttccRig.faction.options}}
+        <select data-rig-field="factionOwnerId" style="flex:1">{{#each bbttccRig.faction.options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+        {{else}}<b>{{#if bbttccRig.faction.name}}{{bbttccRig.faction.name}}{{else}}—{{/if}}</b>{{/if}}
+      </label>
+      <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem">Archetype
+        {{#if bbttccRig.editable}}<input type="text" data-rig-field="archetype" value="{{bbttccRig.archetype}}" style="flex:1"/>{{else}}<b>{{bbttccRig.archetype}}</b>{{/if}}
+      </label>
+      <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem">Mobility
+        {{#if bbttccRig.editable}}<select data-rig-field="mobility" style="flex:1">{{#each bbttccRig.mobility}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>{{else}}<b>{{#each bbttccRig.mobility}}{{#if selected}}{{label}}{{/if}}{{/each}}</b>{{/if}}
+      </label>
+      <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem">Bracket
+        {{#if bbttccRig.editable}}<select data-rig-field="bracket" style="flex:1">{{#each bbttccRig.bracket}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>{{else}}<b>{{#each bbttccRig.bracket}}{{#if selected}}{{label}}{{/if}}{{/each}}</b>{{/if}}
+      </label>
+      <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem">Tier
+        {{#if bbttccRig.editable}}<select data-rig-field="tier" style="flex:1">{{#each bbttccRig.tier}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>{{else}}<b>{{#each bbttccRig.tier}}{{#if selected}}{{label}}{{/if}}{{/each}}</b>{{/if}}
+      </label>
+      {{#if bbttccRig.showTravel}}
+      <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem">Travel (hex/turn · range · hazard)
+        {{#if bbttccRig.editable}}
+        <input type="number" data-rig-field="travel.speed" value="{{bbttccRig.travel.speed}}" style="width:3rem"/>
+        <input type="number" data-rig-field="travel.range" value="{{bbttccRig.travel.range}}" style="width:3rem"/>
+        <input type="number" data-rig-field="travel.hazardResist" value="{{bbttccRig.travel.hazardResist}}" style="width:3rem"/>
+        {{else}}<b>{{bbttccRig.travel.speed}} · {{bbttccRig.travel.range}} · {{bbttccRig.travel.hazardResist}}</b>{{/if}}
+      </label>
+      {{/if}}
+    </div>
+
+    {{#if bbttccRig.frame}}
+    <p style="font-size:.78rem;margin:.1rem 0 .4rem">⚙ <b>Frame:</b> {{ bbttccRig.frame.name }} <span style="opacity:.6">· slots: {{ bbttccRig.frame.usage }}</span></p>
+    {{else}}
+    <p style="font-size:.72rem;opacity:.55;margin:.1rem 0 .4rem">⚙ No frame equipped — drop a <em>rig-frame</em> item (or a <em>rig-template</em>) on this sheet to define hull, slots, crew capacity, and role actions.</p>
+    {{/if}}
+
+    {{#if bbttccRig.showOrder}}
+    <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;margin:.2rem 0 .5rem">📋 Order (this strategic turn)
+      {{#if bbttccRig.editable}}
+      <select data-rig-field="order" style="flex:1">{{#each bbttccRig.order}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+      {{else}}<b>{{#each bbttccRig.order}}{{#if selected}}{{label}}{{/if}}{{/each}}</b>{{/if}}
+    </label>
+    {{/if}}
+
+    <h4 style="margin:.3rem 0 .2rem;border-bottom:1px solid rgba(185,136,46,.4)">Output / strategic turn <span style="font-size:.72rem;opacity:.65">{{ bbttccRig.mult }}</span></h4>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.2rem .8rem;margin-bottom:.6rem">
+      {{#each bbttccRig.output}}
+      <label style="display:flex;align-items:center;gap:.35rem;font-size:.76rem">
+        <span style="flex:1;text-transform:capitalize">{{ channel }}</span>
+        {{#if @root.bbttccRig.editable}}<input type="number" min="0" data-rig-output="{{channel}}" value="{{base}}" style="width:3.2rem"/>{{else}}<b>{{base}}</b>{{/if}}
+        <span style="opacity:.65;min-width:2.4rem">→ +{{ effective }}</span>
+      </label>
+      {{/each}}
+    </div>
+    <p style="font-size:.7rem;opacity:.55;margin:.1rem 0 .6rem">Base values author flat output; equipped <em>output-module</em> gear items add on top (P3 catalog). Deployed = halved (floored); modules that can't run mobile produce 0 while deployed.</p>
+
+    <h4 style="margin:.3rem 0 .2rem;border-bottom:1px solid rgba(185,136,46,.4)">Crew</h4>
+    {{#if bbttccRig.hasCrew}}
+    <table style="font-size:.8rem;width:100%">
+      <tr><th style="text-align:left">Role</th><th style="text-align:left">Steward</th><th></th></tr>
+      {{#each bbttccRig.crew}}
+      <tr><td style="text-transform:capitalize">{{ role }}</td><td>{{ name }}</td>
+        <td style="text-align:right;white-space:nowrap">
+          <button type="button" data-rig-act="{{ i }}" style="width:auto;padding:.05rem .45rem;font-size:.7rem">🎛 Actions</button>
+          {{#if @root.bbttccRig.editable}}<button type="button" data-rig-unboard="{{ i }}" style="width:auto;padding:.05rem .45rem;font-size:.7rem">Disembark</button>{{/if}}</td></tr>
+      {{/each}}
+    </table>
+    {{else}}
+    <p style="font-size:.78rem;opacity:.6">No crew boarded. Board from a steward token's HUD (🛻 button) while adjacent to this rig's token.</p>
+    {{/if}}
+    <p style="font-size:.7rem;opacity:.55;margin:.4rem 0 0">Boarded stewards spend their <b>own</b> action economy on rig actions — a 4-crew rig does up to 4 things a round. Pilot disembarking auto-parks a mobile rig.</p>
+    {{/unless}}
+  </div>
+</section>

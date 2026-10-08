@@ -780,7 +780,12 @@ async function deliverActorByUuid(factionId, sourceUuid) {
   data.ownership = { default: 0 };
 
   // Assign faction ownership where the schema supports it.
-  if (data.type === "rig") {
+  // rig accessor (2026-10-08): works on dnd5e vehicles too — rigs are owned via
+  // rigs.setOwner on the CREATED actor below (the raw clone is system-shaped).
+  const rigOwnerPending = !!(game.bbttcc?.rigs && (data.type === "rig" || (data.type === "vehicle" && data.flags?.["bbttcc-factions"]?.rig)));
+  if (rigOwnerPending) {
+    // deferred to setOwner after Actor.create
+  } else if (data.type === "rig") {
     foundry.utils.setProperty(data, "system.identity.factionOwnerId", factionId);
   } else if (data.type === "boss") {
     foundry.utils.setProperty(data, "system.identity.factionId", factionId);
@@ -794,6 +799,9 @@ async function deliverActorByUuid(factionId, sourceUuid) {
   foundry.utils.setProperty(data, "flags.fourththing.rfi.actor.acquiredAt", Date.now());
 
   const created = await Actor.create(data);
+  if (rigOwnerPending && created && game.bbttcc?.rigs?.isRig(created)) {
+    try { await game.bbttcc.rigs.setOwner(created, factionId); } catch (e) { console.warn("[bbttcc-market] rig setOwner failed", e); }
+  }
   return { clonedId: created?.id ?? null, sourceUuid, type: data.type };
 }
 

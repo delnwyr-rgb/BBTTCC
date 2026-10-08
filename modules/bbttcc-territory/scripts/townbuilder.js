@@ -601,7 +601,11 @@
     //    _ftFindHexDrawingById via scene.drawings.get).
     const folder = await ensureActorFolder(settlement.name);
     try {
-      const upd = { "system.identity.binding.hexId": hexDoc.id };
+      // rig accessor (2026-10-08): works on dnd5e vehicles too — one update carries binding + folder
+      const R = game.bbttcc?.rigs;
+      const upd = R?.isRig(built.actor)
+        ? R.toUpdate(built.actor, { "identity.binding.hexId": hexDoc.id })
+        : { "system.identity.binding.hexId": hexDoc.id };
       if (folder) upd.folder = folder.id;
       await built.actor.update(upd);
     } catch (_e) {}

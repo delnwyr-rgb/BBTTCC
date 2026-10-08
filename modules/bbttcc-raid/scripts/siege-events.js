@@ -203,9 +203,13 @@
           const id = _rand(ids);
           const actor = game.actors?.get?.(id);
           if (!actor) return "defector not found";
-          const cur = foundry.utils.getProperty(actor, "system.identity.factionOwnerId");
+          // rig accessor (2026-10-08): works on dnd5e vehicles too
+          const R = game.bbttcc?.rigs;
+          const isRig = !!R?.isRig?.(actor);
+          const cur = isRig ? R.ownerOf(actor) : foundry.utils.getProperty(actor, "system.identity.factionOwnerId");
           const next = String(cur) === String(ctx.attackerFactionId) ? ctx.defenderFactionId : ctx.attackerFactionId;
-          await actor.update({ "system.identity.factionOwnerId": next || null, [`flags.${MOD_R}.siegeFate`]: { fate: "defected", to: next, turn: ctx.turn } });
+          const ownerPatch = (isRig && R.toUpdate) ? R.toUpdate(actor, { "identity.factionOwnerId": next || "" }) : { "system.identity.factionOwnerId": next || null };
+          await actor.update({ ...ownerPatch, [`flags.${MOD_R}.siegeFate`]: { fate: "defected", to: next, turn: ctx.turn } });
           return `${_nm(id)} defects to ${_nm(next)}`;
         } catch (e) { console.warn(TAG, "defection failed", e); return "defection fizzled"; }
       }

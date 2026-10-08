@@ -199,7 +199,8 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
 
   // Domains a single rig provides (defaults to land if unset/legacy).
   function rigDomains(rig) {
-    const sys = rig?.system?.system ?? rig?.system ?? {};
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    const sys = game.bbttcc?.rigs?.data(rig) ?? (rig?.system?.system ?? rig?.system ?? {});
     const raw = sys?.travel?.domains;
     const list = Array.isArray(raw) ? raw.map(d => String(d).toLowerCase()).filter(Boolean) : [];
     return list.length ? list : ["land"];
@@ -211,9 +212,11 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
   function factionRigs(factionId) {
     const fid = String(factionId || "");
     if (!fid) return [];
+    // rig accessor (2026-10-08): works on dnd5e vehicles too (ownerOf covers both owner keys)
+    const R = game.bbttcc?.rigs;
     return Array.from(game.actors ?? []).filter(a => {
-      if (a?.type !== RIG_TYPE) return false;
-      const sys = a?.system?.system ?? a?.system ?? {};
+      if (!(R ? R.isRig(a) : a?.type === RIG_TYPE)) return false;
+      const sys = R ? (R.data(a) ?? {}) : (a?.system?.system ?? a?.system ?? {});
       const mobility = String(sys?.identity?.mobility || "mobile").toLowerCase();
       if (mobility === "stationary") return false;
       const ownerA = String(sys?.identity?.factionOwnerId || "");
@@ -416,7 +419,8 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
     let best = -1;
     for (const rig of factionRigs(factionId)) {
       if (!rigDomains(rig).includes("water-sub")) continue;
-      const sys = rig?.system?.system ?? rig?.system ?? {};
+      // rig accessor (2026-10-08): works on dnd5e vehicles too
+      const sys = game.bbttcc?.rigs?.data(rig) ?? (rig?.system?.system ?? rig?.system ?? {});
       best = Math.max(best, Number(sys?.travel?.depthRating ?? 0) || 0);
     }
     return best;

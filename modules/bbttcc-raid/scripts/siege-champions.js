@@ -32,15 +32,20 @@
     const sys = _sys(actor);
     const kind = actor.getFlag?.(MOD_AL, "entityKind") || actor.type;
     if (kind === "boss") return (Number(sys.integrity?.tier) || 1) * 5;
-    if (actor.type === "rig") return (Number(sys.integrity?.tier) || 1) * 4;
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    const R = game.bbttcc?.rigs;
+    if (R?.isRig?.(actor)) return (Number(R.data(actor)?.integrity?.tier) || 1) * 4;
     return Number(sys.details?.level) || 1;
   }
 
   function _affiliated(actor, factionId){
-    const owner = foundry.utils.getProperty(actor, "system.identity.factionOwnerId")
-               ?? foundry.utils.getProperty(actor, "system.system.identity.factionOwnerId")
-               ?? actor.getFlag?.(MOD_F, "factionId")
-               ?? actor.getFlag?.(MOD_AL, "factionId");
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    const R = game.bbttcc?.rigs;
+    const owner = (R?.isRig?.(actor) ? R.ownerOf(actor) : null)
+               || foundry.utils.getProperty(actor, "system.identity.factionOwnerId")
+               || foundry.utils.getProperty(actor, "system.system.identity.factionOwnerId")
+               || actor.getFlag?.(MOD_F, "factionId")
+               || actor.getFlag?.(MOD_AL, "factionId");
     return String(owner || "") === String(factionId);
   }
 

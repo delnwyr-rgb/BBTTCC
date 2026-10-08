@@ -143,22 +143,22 @@ export async function build(recipeId, factionActor, opts = {}) {
   }
 
   // Create the Rig actor
+  // rig accessor (2026-10-08): works on dnd5e vehicles too
+  const R = game.bbttcc?.rigs;
+  if (!R?.create) return { ok: false, error: "Rig accessor (game.bbttcc.rigs) not loaded" };
   const actorName = opts.actorName ?? recipe.name;
-  const actorData = {
+  const newActor = await R.create({
     name: actorName,
-    type: "rig",
     img: recipe.tokenImg ?? "icons/svg/castle.svg",
-    system: {
-      identity: {
-        archetype: `Structure: ${recipe.name}`,
-        mobility: "stationary",
-        state: "parked",
-        factionOwnerId: factionActor?.id ?? ""
-      }
-    }
-  };
-  const newActor = await Actor.create(actorData);
-  if (!newActor) return { ok: false, error: "Actor.create returned null" };
+    identity: {
+      archetype: `Structure: ${recipe.name}`,
+      mobility: "stationary",
+      state: "parked",
+      factionOwnerId: factionActor?.id ?? ""
+    },
+    integrity: { bracket: recipe.facilityMode ? "heavy" : "light" }
+  });
+  if (!newActor) return { ok: false, error: "rigs.create returned null" };
 
   // Stamp the BOM (Phase A API)
   const stampOpts = {

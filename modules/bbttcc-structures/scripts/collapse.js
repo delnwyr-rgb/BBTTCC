@@ -125,9 +125,11 @@ function readTargetCurrentHP(actor) {
     const h = getHealth(actor);
     return (h && Number.isFinite(h.value)) ? h.value : null;
   }
-  const isStruct = ["rig", "boss"].includes(actor.type);
+  // rig accessor (2026-10-08): works on dnd5e vehicles too
+  const R = game?.bbttcc?.rigs;
+  const isStruct = R?.isRig ? R.isRig(actor) : ["rig", "boss"].includes(actor.type);
   const raw = actor.system?.system ?? actor.system;
-  const v = isStruct ? raw?.integrity?.value : raw?.derived?.integrity?.value;
+  const v = isStruct ? (R?.data?.(actor)?.integrity?.value ?? raw?.integrity?.value) : raw?.derived?.integrity?.value;
   const n = Number(v);
   return Number.isFinite(n) ? n : null;
 }

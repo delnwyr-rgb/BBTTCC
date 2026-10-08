@@ -126,7 +126,10 @@
       const mode = effMode; // "capture" | "destroy"  (scatter reserved for future event-driven dispersal)
       try {
         if (mode === "capture") {
-          if (actor) await actor.update({ "system.identity.factionOwnerId": attackerId, [`flags.${MOD_R}.siegeFate`]: { fate: "captured", by: attackerId, siegeId, turn } });
+          // rig accessor (2026-10-08): works on dnd5e vehicles too — one write: owner (through the accessor's path map) + fate flag
+          const R = game.bbttcc?.rigs;
+          const ownerPatch = (R?.isRig?.(actor) && R.toUpdate) ? R.toUpdate(actor, { "identity.factionOwnerId": attackerId }) : { "system.identity.factionOwnerId": attackerId };
+          if (actor) await actor.update({ ...ownerPatch, [`flags.${MOD_R}.siegeFate`]: { fate: "captured", by: attackerId, siegeId, turn } });
           counts.capture++; (h.kind === "rig" ? keepRig : keepBoss).add(h.id);   // captured → stays, now attacker's
         } else { // destroy
           if (actor) await actor.update({ [`flags.${MOD_R}.siegeFate`]: { fate: "destroyed", siegeId, turn } });

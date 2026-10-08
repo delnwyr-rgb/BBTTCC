@@ -481,8 +481,10 @@ function _findFactionForActor(actor) {
     const f = game.actors?.get(affil);
     if (f) return f;
   }
+  // rig accessor (2026-10-08): works on dnd5e vehicles too
+  const R = game.bbttcc?.rigs;
   const sys = actor.system?.system ?? actor.system;
-  const ownerId = sys?.identity?.factionOwnerId;
+  const ownerId = (R?.isRig?.(actor) ? R.ownerOf(actor) : null) || sys?.identity?.factionOwnerId;
   if (ownerId) {
     const f = game.actors?.get(ownerId);
     if (f) return f;

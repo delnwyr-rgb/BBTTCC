@@ -43,7 +43,10 @@
     "scripts/diplomacy-apps.js",
     "scripts/relationship-nudge.js",
     "scripts/quest-log-app.js",
-    "scripts/faction-tier-advance-button.enhancer.js"
+    "scripts/faction-tier-advance-button.enhancer.js",
+    "scripts/rigs-dnd5e.runtime.js",
+    "scripts/rigs-dnd5e.actions.js",
+    "scripts/rigs-dnd5e.sheet.js"
   ],
   "scripts": [
     "scripts/inbox-card.enhancer.js",

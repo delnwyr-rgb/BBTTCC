@@ -709,8 +709,10 @@ function _infraChipsHTML() {
  * per-role {min, max} pairs.
  */
 export function rigSeedFromActor(actor) {
-  if (!actor || actor.type !== "rig") return null;
-  const sys = actor.system?.system ?? actor.system ?? {};
+  // rig accessor (2026-10-08): works on dnd5e vehicles too
+  const R = game.bbttcc?.rigs;
+  if (!actor || !(R?.isRig ? R.isRig(actor) : actor.type === "rig")) return null;
+  const sys = R?.data?.(actor) ?? actor.system?.system ?? actor.system ?? {};
   const ident = sys.identity ?? {};
   const integ = sys.integrity ?? {};
   const defs  = sys.defenses ?? {};
@@ -1478,7 +1480,7 @@ async function _commit(root) {
 
   const data = {
     name,
-    type: "rig",
+    type: "rig",   // rig accessor (2026-10-08): works on dnd5e vehicles too — legacy shape; _createRigFromLegacyData picks the real type
     flags: {
       [MOD]: {
         entityKind: (category === "facility") ? "facility" : "rig",
@@ -1540,9 +1542,10 @@ async function _commit(root) {
 
   let actor;
   try {
-    actor = await Actor.create(data);
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    actor = await _createRigFromLegacyData(data);
   } catch (err) {
-    console.error("[bbttcc-auto-link/rig-builder] Actor.create failed", err);
+    console.error("[bbttcc-auto-link/rig-builder] rigs.create failed", err);
     ui.notifications?.error?.(`Failed to create RFI Rig: ${err?.message || err}`);
     // Refund the fabrication charge — allowOvercap so the refund always lands
     // even if the faction sat near its economy cap.
@@ -1605,6 +1608,65 @@ async function _commit(root) {
   return actor;
 }
 
+/* rig accessor (2026-10-08): works on dnd5e vehicles too.
+ * Both create sites still assemble the legacy RFI-shaped `data` (type:"rig" +
+ * system.{identity,crew,integrity,defenses,output,travel,tags}) because
+ * mintFromChassis `overrides` and the cost readout are keyed on it. This turns
+ * that into a game.bbttcc.rigs.create() spec (rig on RFI, vehicle+flags on
+ * dnd5e), then stamps what the spec doesn't carry — module flags, ownership
+ * and the description — in one follow-up update. */
+async function _createRigFromLegacyData(data) {
+  const R = game.bbttcc?.rigs;
+  if (!R?.create) throw new Error("game.bbttcc.rigs accessor not loaded (bbttcc-core)");
+  const sys = data?.system ?? {};
+  const actor = await R.create({
+    name: data?.name, img: data?.img, folder: data?.folder ?? null,
+    identity: sys.identity ?? {}, crew: sys.crew ?? {}, integrity: sys.integrity ?? {},
+    defenses: sys.defenses ?? {}, output: sys.output ?? {}, travel: sys.travel ?? {},
+    tags: Array.isArray(sys.tags) ? sys.tags : [], token: data?.prototypeToken ?? {}
+  });
+  if (!actor) return null;
+  const extra = {};
+  if (data?.flags && Object.keys(data.flags).length) extra.flags = data.flags;
+  if (data?.ownership) extra.ownership = data.ownership;
+  const bio = foundry.utils.getProperty(data, "system.details.biography");
+  if (bio) extra["system.details.biography"] = bio;                                   // RFI + dnd5e vehicle
+  if (sys.description && game.system?.id === "fourththing") extra["system.description"] = sys.description;
+  if (Object.keys(extra).length) await actor.update(extra);
+  return actor;
+}
+
+/* rig accessor (2026-10-08): works on dnd5e vehicles too.
+ * Normalise a catalog/synthetic rig item for the running system: on RFI it is
+ * untouched (type "gear"/"weapon" as authored); on dnd5e rig weapons stay
+ * `weapon` and everything else maps through game.bbttcc.types.item ("gear" →
+ * "loot"). The rigGear/rigFrame flags are mirrored under flags.fourththing (RFI)
+ * AND flags.bbttcc (the dnd5e June convention) so either runtime finds them. */
+function _rigItemForSystem(data) {
+  if (!data) return data;
+  const ft = data.flags?.fourththing ?? {};
+  const bb = data.flags?.bbttcc ?? {};
+  const gear = ft.rigGear ?? bb.rigGear ?? null;
+  const frame = ft.rigFrame ?? bb.rigFrame ?? null;
+  if (gear || frame) {
+    data.flags = data.flags ?? {};
+    data.flags.fourththing = { ...ft, ...(gear ? { rigGear: gear } : {}), ...(frame ? { rigFrame: frame } : {}) };
+    data.flags.bbttcc = { ...bb, ...(gear ? { rigGear: gear } : {}), ...(frame ? { rigFrame: frame } : {}) };
+  }
+  const isWeapon = data.type === "weapon" || gear?.subtype === "rig-weapon";
+  const map = game.bbttcc?.types?.item;
+  data.type = isWeapon ? "weapon" : (typeof map === "function" ? map(data.type) : data.type);
+  if (game.system?.id !== "fourththing" && data.system && typeof data.system === "object") {
+    // dnd5e: the RFI mechanical payload doesn't fit the 5e item schemas — keep only
+    // the description (same {value, chat} shape) and stash the rest for the runtime.
+    const rfi = data.system;
+    data.flags = data.flags ?? {};
+    data.flags.bbttcc = { ...(data.flags.bbttcc ?? {}), rfiSystem: foundry.utils.deepClone(rfi) };
+    data.system = rfi.description && typeof rfi.description === "object" ? { description: rfi.description } : {};
+  }
+  return data;
+}
+
 /* Seed embedded frame + weapons + systems on a newly-minted rig from a
  * chassis loadout. Looks up named items in the `bbttcc-master-content.items`
  * compendium; if a `frame` field is an object (not a string), builds it
@@ -1662,7 +1724,9 @@ async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
     { count: itemsToCreate.length, names: itemsToCreate.map(i => i.name) });
 
   if (itemsToCreate.length) {
-    const created = await actor.createEmbeddedDocuments("Item", itemsToCreate);
+    // rig accessor (2026-10-08): works on dnd5e vehicles too — map RFI item types
+    // and mirror the rigGear flag so either runtime sees it.
+    const created = await actor.createEmbeddedDocuments("Item", itemsToCreate.map(_rigItemForSystem));
     console.log(TAG, "embedded",
       { count: created?.length ?? 0, ids: (created ?? []).map(d => d.id) });
   }
@@ -1675,9 +1739,11 @@ async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
  * flags.fourththing.rigFrame.
  */
 function _buildSyntheticFrame(spec) {
+  // rig accessor (2026-10-08): works on dnd5e vehicles too — `gear` → `loot` on dnd5e
+  // (the item is re-normalised by _rigItemForSystem before embedding).
   return {
     name: spec.synthName ?? "Custom Frame",
-    type: "gear",
+    type: game.bbttcc?.types?.item?.("gear") ?? "gear",
     img: "icons/svg/oak.svg",
     system: {
       description: {
@@ -1731,7 +1797,7 @@ function _rigDataFromChassis(chassis, { factionOwnerId = "" } = {}) {
   const isFacility = chassis?.category === "facility" || mobility === "stationary";
   const data = {
     name: chassis?.label || "Rig",
-    type: "rig",
+    type: "rig",   // rig accessor (2026-10-08): works on dnd5e vehicles too — legacy shape; _createRigFromLegacyData picks the real type
     flags: {
       [MOD]: {
         entityKind: isFacility ? "facility" : "rig",
@@ -1829,9 +1895,10 @@ export async function mintFromChassis(chassisKey, { factionOwnerId = "", free = 
 
   let actor;
   try {
-    actor = await Actor.create(data);
+    // rig accessor (2026-10-08): works on dnd5e vehicles too
+    actor = await _createRigFromLegacyData(data);
   } catch (err) {
-    console.error("[bbttcc-auto-link/rig-builder] mintFromChassis Actor.create failed", err);
+    console.error("[bbttcc-auto-link/rig-builder] mintFromChassis rigs.create failed", err);
     if (chargedMarks > 0) {
       try {
         await game.bbttcc?.api?.op?.commit?.(factionOwnerId, { economy: chargedMarks },

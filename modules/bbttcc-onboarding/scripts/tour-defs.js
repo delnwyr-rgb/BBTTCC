@@ -700,9 +700,11 @@ function _resolveRigForTour(ctx) {
   const viaResolver = game.bbttcc?.onboarding?.resolve?.rig?.(ctx.faction);
   if (viaResolver?.sheet) return viaResolver;
   const fid = ctx.faction?.id || null;
-  const rigs = game.actors.filter(a => a.type === "rig");
+  // rig accessor (2026-10-08): works on dnd5e vehicles too
+  const R = game.bbttcc?.rigs;
+  const rigs = R?.list ? R.list() : game.actors.filter(a => a.type === "rig");
   if (fid) {
-    const owned = rigs.find(a => {
+    const owned = R?.listByFaction ? R.listByFaction(fid)[0] : rigs.find(a => {
       const sys = a.system?.system ?? a.system;
       return String(sys?.identity?.factionOwnerId || "") === fid;
     });
