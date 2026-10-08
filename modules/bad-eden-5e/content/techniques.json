@@ -1,8 +1,8 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.6.1) — do not hand-edit; put fixes in content/overrides/techniques.json. The 75 Bad Eden Core techniques as dnd5e feats.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.0) — do not hand-edit; put fixes in content/overrides/techniques.json. The 75 Bad Eden Core techniques as dnd5e feats.",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.6.1",
+    "rubric": "1.8.0",
     "at": "2026-10-08",
     "overridesApplied": 0
   },
@@ -128,6 +128,33 @@
       "folder": "Techniques",
       "img": "icons/magic/symbols/runes-carved-stone-purple.webp",
       "description": "<p><em>A sealed pact holds itself; you need only keep the terms.</em></p><p>While your <strong>Sealed Pact</strong> stance is active, the bindings carry their own weight: the <strong>upkeep</strong> cost of your sustained powers is <strong>halved</strong>.</p>",
+      "effects": [
+        {
+          "_id": "be5ec40bf29460c9",
+          "name": "Bound and Bargained — Sealed Pact held",
+          "img": "icons/magic/symbols/runes-carved-stone-purple.webp",
+          "transfer": true,
+          "disabled": true,
+          "changes": [
+            {
+              "key": "system.attributes.concentration.roll.mode",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {
+            "bad-eden-5e": {
+              "mode": "pkSealedPact"
+            }
+          },
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": "<p>On while Sealed Pact is active.</p>"
+        }
+      ],
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -496,6 +523,29 @@
       "folder": "Techniques",
       "img": "icons/magic/water/orb-water-bubbles.webp",
       "description": "<p><em>Your reservoir of will runs deeper than most stewards'.</em></p><p>Your maximum <strong>Clarity</strong> increases by <strong>2</strong>. A deeper reservoir lets you hold more powers at once and absorb a bad misfire without running dry.</p>",
+      "effects": [
+        {
+          "_id": "be5ebae45fa89320",
+          "name": "Deep Well",
+          "img": "icons/magic/water/orb-water-bubbles.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "flags.bad-eden-5e.bonus.points",
+              "mode": 2,
+              "value": "2",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -609,6 +659,33 @@
       "folder": "Techniques",
       "img": "icons/magic/symbols/runes-star-blue.webp",
       "description": "<p><em>You hold the Sentence open and let the meaning pour in.</em></p><p>While your <strong>Sentence</strong> stance is active, your maximum <strong>Clarity</strong> increases by <strong>3</strong> — but the open channel costs you <strong>+1 Noise per short rest</strong> for as long as the stance is held.</p>",
+      "effects": [
+        {
+          "_id": "be5ea8728cb14d84",
+          "name": "Drawing Deep — the Sentence held",
+          "img": "icons/magic/symbols/runes-star-blue.webp",
+          "transfer": true,
+          "disabled": true,
+          "changes": [
+            {
+              "key": "flags.bad-eden-5e.bonus.points",
+              "mode": 2,
+              "value": "3",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {
+            "bad-eden-5e": {
+              "mode": "clSentence"
+            }
+          },
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": "<p>On while the Sentence is active.</p>"
+        }
+      ],
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -651,6 +728,29 @@
       "folder": "Techniques",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_enduring_focus.png",
       "description": "<p><em>You hold your will together when others lose it.</em></p><p>You have advantage on Constitution checks made to maintain Clarity hold. Additionally, you can perform somatic components even when holding weapons or a shield.</p>",
+      "effects": [
+        {
+          "_id": "be5ec4c46ab275a5",
+          "name": "Enduring Focus",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_enduring_focus.png",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.attributes.concentration.roll.mode",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -736,6 +836,29 @@
       "folder": "Techniques",
       "img": "icons/magic/light/explosion-star-glow-blue.webp",
       "description": "<p><em>You wring every drop of meaning from a working.</em></p><p>Reduce the <strong>Clarity</strong> cost of any <strong>Tier&nbsp;1</strong> powers you cast by <strong>1</strong> (minimum&nbsp;0).</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "effects": [
+        {
+          "_id": "be5e9cb7f51506ea",
+          "name": "Frugal Caster",
+          "img": "icons/magic/light/explosion-star-glow-blue.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "flags.bad-eden-5e.discount.level1",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -1003,6 +1126,29 @@
       "folder": "Techniques",
       "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
       "description": "<p><em>Your sustained workings sit lightly on the world.</em></p><p>The ongoing <strong>upkeep</strong> cost of maintaining your sustained powers is <strong>halved</strong>.</p>",
+      "effects": [
+        {
+          "_id": "be5e294c17b3694f",
+          "name": "Light Footprint",
+          "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.attributes.concentration.roll.mode",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -1061,6 +1207,33 @@
       "folder": "Techniques",
       "img": "icons/magic/control/sleep-bubble-purple.webp",
       "description": "<p><em>In the Lane, the dream cushions your mistakes.</em></p><p>While you walk the <strong>Lane</strong>, misfires land <strong>two bands safer</strong> and the <strong>Blood-Debt</strong> cost of reaching is reduced by <strong>1</strong>.</p>",
+      "effects": [
+        {
+          "_id": "be5e5fa9d75b0540",
+          "name": "Lucid Footing — the Walking Lane held",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": true,
+          "disabled": true,
+          "changes": [
+            {
+              "key": "flags.bad-eden-5e.discount.upcast",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {
+            "bad-eden-5e": {
+              "mode": "dwWalkingLane"
+            }
+          },
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": "<p>On while the Walking Lane is active.</p>"
+        }
+      ],
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -1082,6 +1255,29 @@
       "folder": "Techniques",
       "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
       "description": "<p><em>You keep more plates spinning than anyone has a right to.</em></p><p>You can sustain <strong>one additional powers</strong> before upkeep begins charging you for the overflow. Increases your powers <strong>concurrency by 1</strong>.</p>",
+      "effects": [
+        {
+          "_id": "be5e5b51741e6f7f",
+          "name": "Many Hands",
+          "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.attributes.concentration.limit",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -1180,6 +1376,29 @@
       "folder": "Techniques",
       "img": "icons/magic/death/skull-energy-light-purple.webp",
       "description": "<p><em>You have made your peace with the price of reaching.</em></p><p>The <strong>Blood-Debt</strong> cost of reaching beyond your grasp is reduced by <strong>1</strong> (minimum&nbsp;0).</p>",
+      "effects": [
+        {
+          "_id": "be5ee093e7987a97",
+          "name": "Pay the Toll",
+          "img": "icons/magic/death/skull-energy-light-purple.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "flags.bad-eden-5e.discount.upcast",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -1357,8 +1576,26 @@
         "per": "sr"
       },
       "activation": "special",
+      "riders": {
+        "strain": {
+          "n": 1
+        },
+        "restore": {
+          "per5": 2,
+          "min": 2
+        }
+      },
       "flags": {
         "bad-eden-5e": {
+          "riders": {
+            "strain": {
+              "n": 1
+            },
+            "restore": {
+              "per5": 2,
+              "min": 2
+            }
+          },
           "rfi": {
             "id": "y5n7kupZ6OYuA1QI",
             "pack": "items",
@@ -1378,6 +1615,39 @@
       "folder": "Techniques",
       "img": "icons/magic/perception/eye-ringed-glow-angry-blue.webp",
       "description": "<p><em>Through the lens, one mind looks out of many windows.</em></p><p>While your <strong>Refraction</strong> stance is active, you split your focus across more threads: hold <strong>+1 powers</strong> and pay only <strong>three-quarters</strong> upkeep on what you sustain.</p>",
+      "effects": [
+        {
+          "_id": "be5e987645ecfc21",
+          "name": "Refracted Attention — Refraction held",
+          "img": "icons/magic/perception/eye-ringed-glow-angry-blue.webp",
+          "transfer": true,
+          "disabled": true,
+          "changes": [
+            {
+              "key": "system.attributes.concentration.limit",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            },
+            {
+              "key": "system.attributes.concentration.bonuses.save",
+              "mode": 2,
+              "value": "2",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {
+            "bad-eden-5e": {
+              "mode": "wlRefraction"
+            }
+          },
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": "<p>On while Refraction is active.</p>"
+        }
+      ],
       "flags": {
         "bad-eden-5e": {
           "rfi": {

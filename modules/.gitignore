@@ -60,6 +60,8 @@
 !dnd5e-table-kit/**
 !bad-eden-5e/
 !bad-eden-5e/**
+# …except its built LevelDB packs (built from content/*.json by tools/build-packs.mjs)
+bad-eden-5e/packs/
 
 # Allow root docs if added later
 !README.md

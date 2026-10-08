@@ -29,7 +29,7 @@
     "Modification slots (Shop Armor / Shop Gun / Shop Blade): the SW5E 4–9 slot ladder is replaced by a flat rule — the shop piece permanently carries the Gearwright's Field Mod bonus (+1/+2/+3 by level, `@scale.gearwright.field-mod`) and the Field Mod feature is freed to go on something else; the 9th-level second item is kept.",
     "Jammer Rig: the rig's modification slots became a sensor suite (advantage on Investigation to understand machines; drones and mindless machines within 60 ft can't hide from you).",
     "SW5E 'armormech's / armstech's / artificer's / astrotech's implements' → smith's tools, smith's tools, jeweler's tools, thieves' tools (dnd5e tool ids smith / jeweler / thief). Arc-blade proficiency is text only (no dnd5e weapon id).",
-    "Flow-Touched (Enhancement 6th): the chosen Flow powers must be cast with Artifice points and Intelligence — the engine keys on a power's casting method, so the GM sets the copied power's method to Artifice on the item sheet (engine seam; noted for later automation).",
+    "Flow-Touched (Enhancement 6th): AUTOMATED 2026-10-07 — the feature carries flags.bad-eden-5e.crossCast {from: flow, to: artifice}; a Flow power dropped on a Gearwright who can't cast the Flow is stamped flags.bad-eden-5e.castThrough = artifice (Artifice points, Intelligence, the Artifice section of the spellbook). Toggle by hand from the spellbook row's context menu.",
     "'4 slowed levels' (Ionizing Field) rendered as speed halved + no reactions + disadvantage on Dexterity saves; 'minimum roll threshold' (Second Skin) rendered as treating a d20 roll of 9 or lower as a 10; ion → lightning.",
     "Growing dice (Clean Hit, Resonance, Machine Breaker) use custom formulas that step with class level so the sheet rolls the right size; the text states the ladder."
   ],
@@ -180,7 +180,7 @@
       "description": "<p><em>Enhancement, 3rd, 5th, 11th, and 17th level</em></p><p>The core sings when it bites, and you can make it sing louder. Once per round, when you hit a creature with your shop blade, you can spend one use of Bright Idea to deal an extra 2d6 damage to it. The extra damage is the same type as the blade's.</p><p>The extra damage rises to 3d6 at 5th level, 5d6 at 11th, and 8d6 at 17th.</p>"
     },
     {
-      "slug": "enhancement-flow-touched", "name": "Flow-Touched", "level": 6, "requirements": "Gearwright (Enhancement) 6",
+      "slug": "enhancement-flow-touched", "name": "Flow-Touched", "level": 6, "flags": { "bad-eden-5e": { "crossCast": { "from": "flow", "to": "artifice" } } }, "requirements": "Gearwright (Enhancement) 6",
       "folder": "Enhancement", "folderParent": "Gearwright", "img": "icons/magic/water/wave-water-blue.webp",
       "description": "<p><em>Enhancement, 6th, 7th, 13th, and 17th level</em></p><p>Somewhere around the tenth core you cut, the hum started answering. Choose two Flow powers of 1st level. You know them, and for you they count as Artifice powers: you cast them with Artifice points and Intelligence, and they don't count against your Powers Known.</p><p>At 7th level you learn two more Flow powers of 1st or 2nd level; at 13th, two of 1st to 3rd level; at 17th, two of 1st to 4th level. Whenever you gain a Gearwright level, you can swap one of these Flow powers for another of the same level.</p>"
     },

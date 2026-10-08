@@ -13,7 +13,7 @@
  * Every step logs PASS / FAIL with the numbers it saw; the summary goes to the
  * console and a GM-whispered chat card. GM only — it creates scenes and combats.
  * ───────────────────────────────────────────────────────────────────────────── */
-import { MOD, TRADITIONS, castingFor, costAt, traditionOf, setPoints } from "./casting.js";
+import { MOD, TRADITIONS, castingFor, costAt, traditionOf, nativeTraditionOf, isCrossCast, abilityFor, castThrough, setPoints } from "./casting.js";
 
 const TAG = `${MOD} | redshirts`;
 const FOLDER = "The Crashtest Redshirts";
@@ -32,7 +32,10 @@ const SQUAD = [
     // one technique per rider kind (scripts/riders.js): bank · impose · temp HP · strain · bank-to-ally
     techniques: ["Calculated Risk", "Controlled Aggression", "Relentless Advance", "Darkness Hardened", "Pressure Transference"] },
   { name: "Redshirt Vigilant",   cls: "vigilant",   level: 5, path: "wyrdlens",  doctrine: "truth",
-    abilities: { str: 12, dex: 16, con: 14, int: 10, wis: 14, cha: 10 }, weapon: "Combat Knife", mastery: "prc" }
+    abilities: { str: 12, dex: 16, con: 14, int: 10, wis: 14, cha: 10 }, weapon: "Combat Knife", mastery: "prc" },
+  // A plain dnd5e Fighter carrying one of the martial Flow subclasses (1/3 caster from the host-class side).
+  { name: "Redshirt Fighter",     cls: "fighter",    classPack: "dnd5e.classes", subTradition: "flow", level: 5, path: "courier", doctrine: "wayfarer",
+    abilities: { str: 16, dex: 14, con: 14, int: 10, wis: 14, cha: 12 }, weapon: "Hand Axe", mastery: "ins" }
 ];
 // Road Bandit = the punching bag; the other two carry rich npcAuto automation (save/attack riders + GM reminders).
 const FOES = ["Road Bandit", "Crystal Lurker", "Slippage Wraith"];
@@ -111,18 +114,21 @@ function surgePathData(pathKey, doctrineKey) {
 }
 
 async function buildRedshirt(spec, folder) {
-  const classes = await indexed("classes", ["system.identifier"]);
+  // Our own classes pack by default; a dnd5e host class (Barbarian/Fighter/Monk/Rogue) by `classPack`.
+  const classPack = spec.classPack ? game.packs.get(spec.classPack) : PACK("classes");
+  if (!classPack) throw new Error(`pack ${spec.classPack ?? MOD + ".classes"} is not registered`);
+  const classes = [...await classPack.getIndex({ fields: ["system.identifier"] })];
   const classEntry = classes.find(e => e.system?.identifier === spec.cls);
   if (!classEntry) throw new Error(`no class with identifier ${spec.cls}`);
-  const classDoc = await PACK("classes").getDocument(classEntry._id);
+  const classDoc = await classPack.getDocument(classEntry._id);
   const classData = classDoc.toObject();
   classData.system.levels = spec.level;
   // HP: max at 1st, average after — dnd5e derives hp.max from this map.
   const hp = advs(classData.system).find(a => a.type === "HitPoints");
   if (hp) hp.value = Object.fromEntries(Array.fromRange(spec.level, 1).map(l => [l, l === 1 ? "max" : "avg"]));
 
-  const subs = await indexed("subclasses", ["system.classIdentifier"]);
-  const subEntry = subs.find(e => e.system?.classIdentifier === spec.cls);
+  const subs = await indexed("subclasses", ["system.classIdentifier", "flags.bad-eden-5e.casting"]);
+  const subEntry = subs.find(e => e.system?.classIdentifier === spec.cls && (!spec.subTradition || e.flags?.[MOD]?.casting?.tradition === spec.subTradition));
   const subDoc = subEntry && spec.level >= 3 ? await PACK("subclasses").getDocument(subEntry._id) : null;
 
   const items = [classData];
@@ -133,12 +139,14 @@ async function buildRedshirt(spec, folder) {
   }
 
   // Powers: every cantrip we can carry plus two per castable level, inside "powers known".
-  const trad = classDoc.flags?.[MOD]?.casting?.tradition;
+  const casting = classDoc.flags?.[MOD]?.casting ?? subDoc?.flags?.[MOD]?.casting;
+  const trad = casting?.tradition;
   if (trad) {
     const method = TRADITIONS[trad].method;
-    const known = Number(advs(classData.system).find(a => a.type === "ScaleValue" && a.configuration?.identifier === "powers-known")
+    const scaleSrc = classDoc.flags?.[MOD]?.casting ? classData.system : subDoc.system;
+    const known = Number(advs(scaleSrc).find(a => a.type === "ScaleValue" && a.configuration?.identifier === "powers-known")
       ?.configuration?.scale?.[String(spec.level)]?.value) || 6;
-    const maxLevel = Math.max(1, Math.ceil(spec.level / 2));
+    const maxLevel = casting.progression === "arch" ? 1 : Math.max(1, Math.ceil(spec.level / 2));
     const all = (await indexed("powers", ["system.method", "system.level"])).filter(e => e.system?.method === method);
     const pick = [];
     for (let lvl = 0; lvl <= maxLevel; lvl++) pick.push(...all.filter(e => e.system.level === lvl).slice(0, lvl === 0 ? 3 : 2));
@@ -263,7 +271,7 @@ export async function run({ rebuild = false } = {}) {
   await scene.view();
   await sleep(500);
   const R = new Report();
-  const [theurge, gearwright, warden, vigilant] = SQUAD.map(s => game.actors.find(a => a.name === s.name));
+  const [theurge, gearwright, warden, vigilant, fighter] = SQUAD.map(s => game.actors.find(a => a.name === s.name));
   const foe = foes()[0];
   const foeToken = tokenOf(scene, foe);
 
@@ -278,7 +286,8 @@ export async function run({ rebuild = false } = {}) {
   });
 
   // Pools
-  for (const [actor, trad] of [[theurge, "flow"], [gearwright, "artifice"], [warden, "flow"], [vigilant, "flow"]]) {
+  for (const [actor, trad] of [[theurge, "flow"], [gearwright, "artifice"], [warden, "flow"], [vigilant, "flow"], [fighter, "flow"]]) {
+    if (!actor) { R.add(`${trad} pool: missing redshirt`, false, "rebuild the squad: game.badEden5e.redshirts.run({rebuild: true})"); continue; }
     await R.step(`${actor.name}: ${TRADITIONS[trad].pointsLabel} pool`, async () => {
       await setPoints(actor, trad, { value: 999 });
       const c = castingFor(actor)[trad];
@@ -321,6 +330,125 @@ export async function run({ rebuild = false } = {}) {
       const c = castingFor(actor)[trad];
       const r = await cast(actor, p, { be5eLevel: c.maxPowerLevel + 1 });
       return [!r.used && r.after === r.before, `asked level ${c.maxPowerLevel + 1} (max ${c.maxPowerLevel}), points ${r.before} → ${r.after}`];
+    });
+  }
+
+  // Cross-casting: Flow-Touched (Gearwright: a Flow power through Artifice) and Wired for Both
+  // (Warden: an Artifice power through the Flow). The feature + power land, the power is routed
+  // and re-keyed automatically, the cast spends the host pool, and castThrough(null) puts it back.
+  for (const [actor, featName, from, to] of [[gearwright, "Flow-Touched", "flow", "artifice"], [warden, "Wired for Both", "artifice", "flow"]]) {
+    let feat = null, pw = null;
+    await R.step(`${actor.name}: ${featName} routes a level-1 ${TRADITIONS[from].short} power through ${TRADITIONS[to].label}`, async () => {
+      const fe = (await indexed("features", ["name"])).find(x => x.name === featName);
+      if (!fe) return [false, `no feature named ${featName}`];
+      const cands = (await indexed("powers", ["system.method", "system.level"])).filter(e => e.system?.method === TRADITIONS[from].method && e.system?.level === 1).slice(0, 8);
+      let pd = null;
+      for (const e of cands) { const d = await PACK("powers").getDocument(e._id); if (Object.keys(d.system.activities ?? {}).length || d.system.activities?.size) { pd = d; break; } }
+      if (!pd) return [false, `no level-1 ${from} power with an activity`];
+      // One batch on purpose: the feature isn't on the sheet when the power's preCreate runs,
+      // so the createItem settle pass has to do the routing.
+      [feat, pw] = await actor.createEmbeddedDocuments("Item", [(await PACK("features").getDocument(fe._id)).toObject(), pd.toObject()]);
+      await sleep(400);
+      pw = actor.items.get(pw.id);
+      const ok = traditionOf(pw) === to && isCrossCast(pw) && TRADITIONS[to].attrs.includes(pw.system.ability) && pw.system.ability === abilityFor(actor, pw);
+      return [ok, `${pw.name}: native ${nativeTraditionOf(pw)}, cast through ${traditionOf(pw)}, ability ${pw.system.ability}`];
+    });
+    await R.step(`${actor.name}: the routed power spends ${TRADITIONS[to].pointsLabel}`, async () => {
+      if (!pw?.system.activities?.size) return [false, "no routed power"];
+      target(foeToken);
+      await setPoints(actor, to, { value: 999 });
+      const r = await cast(actor, pw);
+      return [r.used && r.before - r.after === costAt(1), `${pw.name}: ${r.before} → ${r.after}`];
+    });
+    await R.step(`${actor.name}: castThrough(null) makes it native again, and the cast is refused`, async () => {
+      if (!pw) return [false, "no routed power"];
+      await castThrough(pw, null);
+      const back = !isCrossCast(pw) && traditionOf(pw) === from;
+      const act = pw.system.activities.contents[0];
+      const r = await act.use({ event: { shiftKey: true } }, { configure: false }, { create: true });
+      await actor.deleteEmbeddedDocuments("Item", [feat?.id, pw.id].filter(Boolean));
+      return [back && !r, `native again: ${back}; cast ${r ? "went through" : "blocked (no " + TRADITIONS[from].label + " casting)"}`];
+    });
+  }
+
+  // Path-discipline + Clarity techniques → Active Effects and riders (rubric engine.discipline.*).
+  const featByName = async (name) => { const e = (await indexed("features", ["name"])).find(x => x.name === name); return e ? (await PACK("features").getDocument(e._id)).toObject() : null; };
+  const withFeat = async (actor, name, fn) => {
+    const d = await featByName(name); if (!d) return [false, `no feature named ${name}`];
+    const [it] = await actor.createEmbeddedDocuments("Item", [d]); await sleep(200);
+    try { return await fn(actor.items.get(it.id)); } finally { await actor.deleteEmbeddedDocuments("Item", [it.id]); }
+  };
+  await R.step(`${theurge.name}: Deep Well adds 2 Flow points`, async () => {
+    const before = castingFor(theurge).flow.max;
+    return withFeat(theurge, "Deep Well", async () => { const c = castingFor(theurge).flow; return [c.max === before + 2, `${before} → ${c.max}`]; });
+  });
+  await R.step(`${theurge.name}: Drawing Deep is off until the Sentence is held, then +3`, async () => {
+    const before = castingFor(theurge).flow.max;
+    return withFeat(theurge, "Drawing Deep", async (it) => {
+      const off = castingFor(theurge).flow.max;
+      const mode = it.effects.find(e => e.flags?.[MOD]?.mode === "clSentence");
+      if (!mode) return [false, "no mode effect"];
+      await mode.update({ disabled: false }); await sleep(150);
+      const on = castingFor(theurge).flow.max;
+      return [off === before && on === before + 3, `${before} → off ${off} → on ${on}`];
+    });
+  });
+  await R.step(`${warden.name}: Many Hands raises the concentration limit to 2`, async () => {
+    const before = warden.system.attributes.concentration.limit;
+    return withFeat(warden, "Many Hands", async () => [warden.system.attributes.concentration.limit === before + 1, `${before} → ${warden.system.attributes.concentration.limit}`]);
+  });
+  await R.step(`${warden.name}: Light Footprint = advantage on concentration saves`, async () =>
+    withFeat(warden, "Light Footprint", async () => [warden.system.attributes.concentration.roll.mode === 1, `roll.mode ${warden.system.attributes.concentration.roll.mode}`]));
+  await R.step(`${theurge.name}: Pay the Toll makes the level-1 → 2 upcast cost ${costAt(2) - 1}`, async () => {
+    await setPoints(theurge, "flow", { value: 999 }); target(foeToken);
+    return withFeat(theurge, "Pay the Toll", async () => {
+      const p = power(theurge, "flow", 1); const r = await cast(theurge, p, { be5eLevel: 2 });
+      return [r.used && r.before - r.after === costAt(2) - 1, `${p.name}: ${r.before} → ${r.after}`];
+    });
+  });
+  await R.step(`${theurge.name}: Frugal Caster makes a level-1 power cost ${costAt(1) - 1}`, async () => {
+    await setPoints(theurge, "flow", { value: 999 }); target(foeToken);
+    return withFeat(theurge, "Frugal Caster", async () => {
+      const p = power(theurge, "flow", 1); const r = await cast(theurge, p);
+      return [r.used && r.before - r.after === costAt(1) - 1, `${p.name}: ${r.before} → ${r.after}`];
+    });
+  });
+  await R.step(`${theurge.name}: Reclamation = 1 exhaustion for points back`, async () => {
+    await setPoints(theurge, "flow", { value: 1 });
+    await theurge.update({ "system.attributes.exhaustion": 0 }); await sleep(300);
+    return withFeat(theurge, "Reclamation", async (it) => {
+      const c0 = castingFor(theurge).flow; const expect = Math.max(2, 2 * Math.floor(c0.max / 5));
+      await it.system.activities.contents[0].use({ event: { shiftKey: true } }, { configure: false }, { create: true }); await sleep(500);
+      const c1 = castingFor(theurge).flow; const ex = theurge.system.attributes.exhaustion;
+      await theurge.update({ "system.attributes.exhaustion": 0 }); await setPoints(theurge, "flow", { value: 999 });
+      return [ex === 1 && c1.value - c0.value === Math.min(expect, c0.max - c0.value), `exhaustion ${ex}, Flow ${c0.value} → ${c1.value} (expected +${expect})`];
+    });
+  });
+  await R.step(`${warden.name}: Bound and Bargained follows the Sealed Pact buff`, async () =>
+    withFeat(warden, "Bound and Bargained", async (it) => {
+      const mode = () => it.effects.find(e => e.flags?.[MOD]?.mode === "pkSealedPact");
+      const off0 = mode()?.disabled;
+      const [buff] = await warden.createEmbeddedDocuments("ActiveEffect", [{ name: "Sealed Pact", img: "icons/svg/aura.svg", changes: [] }]); await sleep(300);
+      const on = mode()?.disabled === false && warden.system.attributes.concentration.roll.mode === 1;
+      await buff.delete(); await sleep(300);
+      const off1 = mode()?.disabled === true;
+      return [off0 === true && on && off1, `off ${off0} → on ${on} → off ${off1}`];
+    }));
+
+  // The host-class 1/3 caster: a dnd5e Fighter with a martial Flow subclass.
+  if (fighter) {
+    await R.step(`${fighter.name}: martial subclass = Flow points equal to level + mod, max power level 1`, async () => {
+      const sub = fighter.items.find(i => i.type === "subclass");
+      const c = castingFor(fighter).flow;
+      const mod = Math.max(fighter.system.abilities.wis.mod, fighter.system.abilities.cha.mod);
+      return [!!sub && c && c.max === 5 + mod && c.maxPowerLevel === 1 && c.limit === 4, `${sub?.name ?? "no subclass"}: ${c?.max} points (expected ${5 + mod}), max power level ${c?.maxPowerLevel}`];
+    });
+    await R.step(`${fighter.name}: level-1 power costs ${costAt(1)}, upcast to 2 is refused`, async () => {
+      target(foeToken); await setPoints(fighter, "flow", { value: 999 });
+      const p = power(fighter, "flow", 1); if (!p) return [false, "no level-1 power"];
+      const r = await cast(fighter, p);
+      const r2 = await cast(fighter, p, { be5eLevel: 2 });
+      return [r.used && r.before - r.after === costAt(1) && !r2.used, `${p.name}: ${r.before} → ${r.after}; upcast ${r2.used ? "went through" : "refused"}`];
     });
   }
 

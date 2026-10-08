@@ -134,7 +134,7 @@ function convertTechnique(d, banks) {
   }
   rules = rules.replace(/<(p|span)[^>]*>\s*<strong>Requires:<\/strong>[^<]*<\/\1>/g, "").replace(/<(p|span)[^>]*>\s*⚙[\s\S]*?<\/\1>/g, "").replace(/⚙[^<]*/g, "").replace(/<p>\s*<\/p>/g, "").trim();
   let text = convertText(rules).replace(/\s+([.,;:])/g, "$1").replace(/\s{2,}/g, " ");
-  const description = (tagline ? `<p><em>${convertText(tagline)}</em></p>` : "") + text;
+  let description = (tagline ? `<p><em>${convertText(tagline)}</em></p>` : "") + text;
   const plain = text.replace(/<[^>]+>/g, " ");
   // uses and recovery from the converted text
   const entry = { slug, name: d.name, featType: "feat", subtype: "general", level: null, requirements, folder: "Techniques", img: d.img && !d.img.includes("fourththing") ? d.img : "icons/skills/melee/strike-sword-slashing-red.webp", description };
@@ -169,9 +169,29 @@ function convertTechnique(d, banks) {
     }
     if (traits.length) entry.traits = traits;
   }
+  // Path-discipline shifts: passives ride the feat's own effect; a mode's grants become a second,
+  // disabled effect the player toggles while the stance is held (scripts/disciplines.js auto-flips
+  // the ones that exist as surge-powers buffs).
+  const modeEffects = [];
+  if (ff.discipline?.passive) changes.push(...disciplineChanges(ff.discipline.passive, needs));
+  if (ff.discipline?.mode?.key) {
+    const key = ff.discipline.mode.key, stance = MODE_NAMES[key] ?? key;
+    const mc = disciplineChanges(ff.discipline.mode.grants, needs);
+    if (mc.length) modeEffects.push({ _id: "be5e" + sha(slug + ":mode").slice(0, 12), name: `${d.name} — ${stance} held`, img: entry.img, transfer: true, disabled: true, changes: mc, duration: {}, flags: { "bad-eden-5e": { mode: key } }, origin: null, tint: "#ffffff", statuses: [], description: `<p>On while ${stance} is active.</p>` });
+    if (!MODE_NAMES[key]) needs.push(`mode "${key}" has no stance name`);
+  }
+  const clarityTwin = TECHNIQUE_CLARITY[idf.replace(/^bbttcc_feat_/, "")];
+  if (clarityTwin) changes.push(...clarityTwin.changes);
   // the same change can arrive from ID_REROLL_GRANTS and flags.rerolls — keep one
   const seenChange = new Set(); const uniq = changes.filter(c => { const k = c.key + "=" + c.value; if (seenChange.has(k)) return false; seenChange.add(k); return true; }); changes.length = 0; changes.push(...uniq);
-  if (changes.length) entry.effects = [{ _id: "be5e" + sha(slug).slice(0, 12), name: d.name, img: entry.img, transfer: true, disabled: false, changes, duration: {}, flags: {}, origin: null, tint: "#ffffff", statuses: [], description: "" }];
+  if (changes.length || modeEffects.length) entry.effects = [
+    ...(changes.length ? [{ _id: "be5e" + sha(slug).slice(0, 12), name: d.name, img: entry.img, transfer: true, disabled: false, changes, duration: {}, flags: {}, origin: null, tint: "#ffffff", statuses: [], description: "" }] : []),
+    ...modeEffects
+  ];
+  if (modeEffects.length) {
+    const key = ff.discipline.mode.key, stance = MODE_NAMES[key] ?? key;
+    entry.description += `<p><em>5E: the effect "${d.name} — ${stance} held" is off by default; ${AUTO_MODES.has(key) ? `it switches on with the ${stance} Surge buff and off when it ends` : `switch it on while you hold ${stance}`}.</em></p>`;
+  }
   // engine riders → the Bad Eden 5E rider engine (scripts/riders.js) reads flags.bad-eden-5e.riders
   // when the feature's activity is used: bank = banked advantage on the receiver's next d20,
   // impose = the target's next attack or save at disadvantage, strain = exhaustion, temp = a
@@ -188,10 +208,10 @@ function convertTechnique(d, banks) {
     const riders = Object.entries(eff).filter(([k, v]) => v && ["bank", "impose", "temp", "strain"].includes(k)).map(([k]) => k);
     if (riders.length) needs.push(`engine riders (${riders.join(", ")}) have no entry in TECHNIQUE_RIDERS`);
   }
-  if (eff.clarity) needs.push("Clarity rider (ruling owed)");
-  if (ff.discipline) needs.push(`Path-discipline mechanic (${JSON.stringify(ff.discipline).slice(0, 80)}) — needs the Paths engine`);
+  entry.description = description;
+  if (eff.clarity && !rider?.riders?.restore && !clarityTwin) needs.push("Clarity rider — text only (rubric: Clarity ≙ points)");
   for (const l of leftovers(description)) needs.push(`leftover term "${l}"`);
-  if (/\bClarity\b/.test(plain)) needs.push("mentions Clarity (ruling owed)");
+  if (/\bClarity\b/.test(plain) && !clarityTwin && !rider && !ff.discipline) needs.push("mentions Clarity — text only (rubric: Clarity ≙ points)");
   entry.flags = { "bad-eden-5e": { ...(entry.flags?.["bad-eden-5e"] ?? {}), rfi: { id: d._id, pack: "items", identifier: idf, hash: sha(JSON.stringify({ n: d.name, h: html, f: ff, r: banks.rerolls[idf] ?? null, a: apt ?? null, e: eff })) } } };
   return { entry, needs };
 }
@@ -215,7 +235,44 @@ const TECHNIQUE_RIDERS = {
   threatening_silence:    { riders: { impose: { note: "Applies to its next attack against a target other than you." } }, target: { count: 1, type: "enemy" } },
   unbroken_guard:         { riders: { impose: { note: "Its speed is 0 until the end of its current turn." } }, target: { count: 1, type: "enemy" } },
   unsettling_precision:   { riders: { impose: { note: "Applies to its next saving throw before the end of its next turn." } }, target: { count: 1, type: "enemy" } },
-  darkness_hardened:      { riders: { strain: { n: 1 } } }
+  darkness_hardened:      { riders: { strain: { n: 1 } } },
+  // Reclamation: once per short rest, a level of exhaustion buys points back (the RFI "1 Stress
+  // for 2 Clarity" on the pool's 5-point grain — see rubric conditions.scarred).
+  reclamation:            { riders: { strain: { n: 1 }, restore: { per5: 2, min: 2 } } }
+};
+
+// The RFI manifestation-discipline shifts (systems/fourththing/manifestation-discipline.js) as
+// dnd5e Active Effect changes — rubric `engine.discipline.*` (proposed 2026-10-07).
+//   clarityMaxBonus n → points bonus on every tradition the actor casts
+//   concurrencyBonus n → one more concentration (dnd5e's concentration limit)
+//   upkeepScale ≤ .5 → advantage on concentration saves; < 1 → +2 on them
+//   reachDiscount n → each upcast step costs n less (never below the base cost)
+//   misfireBandShift → text (5E casting has no misfire table)
+const DISCIPLINE_CHANGES = {
+  clarityMaxBonus:  n => [{ key: "flags.bad-eden-5e.bonus.points", mode: 2, value: String(n), priority: 20 }],
+  concurrencyBonus: n => [{ key: "system.attributes.concentration.limit", mode: 2, value: String(n), priority: 20 }],
+  upkeepScale:      x => Number(x) <= 0.5 ? [{ key: "system.attributes.concentration.roll.mode", mode: 2, value: "1", priority: 20 }]
+                        : Number(x) < 1 ? [{ key: "system.attributes.concentration.bonuses.save", mode: 2, value: "2", priority: 20 }] : [],
+  reachDiscount:    n => [{ key: "flags.bad-eden-5e.discount.upcast", mode: 2, value: String(n), priority: 20 }],
+  misfireBandShift: () => []
+};
+const MODE_NAMES = { clSentence: "the Sentence", wlRefraction: "Refraction", dwWalkingLane: "the Walking Lane", pkSealedPact: "Sealed Pact" };
+const AUTO_MODES = new Set(["pkSealedPact"]);   // stances that exist as surge-powers buffs → auto-toggled
+function disciplineChanges(grants, needs) {
+  const out = [];
+  for (const [k, v] of Object.entries(grants ?? {})) {
+    const f = DISCIPLINE_CHANGES[k];
+    if (!f) { needs.push(`discipline grant "${k}" has no 5E mapping`); continue; }
+    if (k === "misfireBandShift") needs.push("misfire band shift is text only — 5E casting has no misfire table");
+    out.push(...f(v));
+  }
+  return out;
+}
+
+// Clarity techniques (rubric conditions.clarity: Clarity ≙ points) with an engine twin.
+const TECHNIQUE_CLARITY = {
+  enduring_focus: { changes: [{ key: "system.attributes.concentration.roll.mode", mode: 2, value: "1", priority: 20 }] },
+  frugal_caster:  { changes: [{ key: "flags.bad-eden-5e.discount.level1", mode: 2, value: "1", priority: 20 }] }
 };
 
 function laneTechniques() {
@@ -332,7 +389,7 @@ function convertArmor(d, needs, src = null) {
   if (ev) changes.push({ key: "system.abilities.dex.bonuses.save", mode: 2, value: String(ev), priority: 20 });
   if (re) changes.push({ key: "system.abilities.wis.bonuses.save", mode: 2, value: String(re), priority: 20 });
   for (const t of resistanceTypes(s.resistances)) changes.push({ key: "system.traits.dr.value", mode: 2, value: t, priority: 20 });
-  if (Math.abs(re) > 2 || Math.abs(ev) > 2) needs.push(`save bonus Evasion ${ev >= 0 ? "+" : ""}${ev} / Resolve ${re >= 0 ? "+" : ""}${re} carried as-is (large for 5E — ruling?)`);
+  // Big Evasion/Resolve save bonuses (+3..+5 on the legendary vestments) stand in 5E — ruled 2026-10-07.
   if (changes.length) e.effects = [{ _id: "be5e" + sha(e.slug).slice(0, 12), name: d.name, img: e.img, transfer: true, disabled: false, changes, duration: {}, flags: {}, origin: null, tint: "#ffffff", statuses: [], description: "" }];
   const extra = (ev || re) ? `<p><strong>Worn:</strong> ${[ev ? `${ev >= 0 ? "+" : ""}${ev} to Dexterity saving throws` : "", re ? `${re >= 0 ? "+" : ""}${re} to Wisdom saving throws` : ""].filter(Boolean).join(", ")}.</p>` : "";
   e.system.description.value = gearDescription(d, needs) + extra;

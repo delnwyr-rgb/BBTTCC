@@ -19,7 +19,7 @@
  * hooks on the client that makes the roll (it owns the actor and can clear the
  * state). Writes to actors the user doesn't own are whispered to the GM.
  * ───────────────────────────────────────────────────────────────────────────── */
-import { MOD } from "./casting.js";
+import { MOD, TRADITIONS, castingFor } from "./casting.js";
 
 export const IMPOSED = "be5e-imposed";
 const log = (...a) => console.log(`${MOD} | riders`, ...a);
@@ -67,6 +67,21 @@ export async function strain(actor, n = 1, from = "Technique") {
   return true;
 }
 
+/** Reclamation: points back — n = max(spec.min, spec.per5 × ⌊pool max ÷ 5⌋) per tradition (the RFI
+ *  "2 Clarity" scaled to the pool, the same 5-point grain as Scarred). */
+export async function restore(actor, spec = {}, from = "Technique") {
+  if (!actor?.isOwner) return false;
+  const casting = castingFor(actor);
+  const lines = [];
+  for (const [k, c] of Object.entries(casting)) {
+    const n = Math.max(Number(spec.min) || 0, (Number(spec.per5) || 0) * Math.floor(c.max / 5));
+    const next = Math.min(c.max, c.value + n);
+    if (next > c.value) { await actor.update({ [`flags.${MOD}.points.${k}.value`]: next }); lines.push(`${next - c.value} ${TRADITIONS[k].pointsLabel}`); }
+  }
+  await note(actor, `${from}: <b>${actor.name}</b> ${lines.length ? `recovers ${lines.join(" and ")}` : "has nothing to recover"}.`);
+  return lines.length > 0;
+}
+
 async function onPostUseActivity(activity) {
   const riders = activity?.item?.flags?.[MOD]?.riders;
   const actor = activity?.actor;
@@ -84,6 +99,7 @@ async function onPostUseActivity(activity) {
     for (const t of ts) await impose(t, from, riders.impose.note ?? "");
   }
   if (riders.strain) await strain(actor, Number(riders.strain.n) || 1, from);
+  if (riders.restore) await restore(actor, riders.restore, from);
 }
 
 /* ── consumption ──────────────────────────────────────────────────────────── */
@@ -126,4 +142,4 @@ export function activateRiders() {
   log("armed");
 }
 
-export const riders = { bank, impose, strain, IMPOSED };
+export const riders = { bank, impose, strain, restore, IMPOSED };

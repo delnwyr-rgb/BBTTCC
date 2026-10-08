@@ -92,7 +92,7 @@
     "Hard Body: +3 HP then +1 per level = HP bonus equal to Vigilant level, as an AE on hp.bonuses.overall; medium armor proficiency is an AE; the Wis/Cha-for-Dex AC swap is text only (dnd5e has no AE for it).",
     "Braced in the Current / Hotwired Current: 3 uses +1 at 9/13/17 as the formula 3 + floor((level - 5) / 4); the 'spend 1 Flow point when out of uses' fallback is text only.",
     "The Whole Field: SW5E casts a 9th-level power; a Vigilant's Max Power Level is 7 and the engine refuses higher, so it casts Steady the Line at 7th level. Turbulent Presence casts it at 5th. Both are 'without spending Flow points' — the GM lets the cast through.",
-    "Crossed Wires: the chosen Artifice powers must be cast with Flow points — the engine keys on the power's method, so the GM sets the copied power's method to the Flow (same seam as the Technology Way's Flow-Touched).",
+    "Crossed Wires: AUTOMATED 2026-10-07 — flags.bad-eden-5e.crossCast {from: artifice, to: flow}; an Artifice power dropped on a Vigilant who can't cast Artifice is stamped castThrough = flow (Flow points, the Flow ability). Toggle from the spellbook row's context menu.",
     "Mixed Schooling: SW5E's Technology skill became tinker's tools / an Arcana check about machines; the tool choice is a subclass trait (any tool).",
     "Shadow Strike: 1d6 / 2d6 / 3d6 at 7th / 11th / 17th as the custom formula (1 + floor((level - 5) / 6))d6."
   ],
@@ -481,6 +481,7 @@
       "slug": "synthesis-crossed-wires",
       "name": "Crossed Wires",
       "level": 3,
+      "flags": { "bad-eden-5e": { "crossCast": { "from": "artifice", "to": "flow" } } },
       "requirements": "Flow Wolf: Vigilant (Vigil of Synthesis) 3",
       "folder": "Vigil of Synthesis",
       "folderParent": "Flow Wolf: Vigilant",

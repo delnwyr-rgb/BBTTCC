@@ -1,6 +1,6 @@
 {
   "_about": "THE conversion rubric: how a Bad Eden mechanic written for RFI (the fourththing system) becomes its D&D 5E (dnd5e 6) twin. Read by tools/build-packs.mjs (the lint), bin/ft-convert-5e (the converter) and bin/ft-lint-parity (the parity check). Rendered for humans as CONVERSION_RUBRIC.md — keep the two in step. Every entry marked ruling:true was ruled by Dave; ruling:'owed' is a draft awaiting one.",
-  "version": "1.6.1",
+  "version": "1.8.0",
   "date": "2026-10-07",
   "direction": "rfi→5e",
   "sourceOfTruth": {
@@ -115,7 +115,7 @@
       "ruling": true
     },
     "clarity": {
-      "to": "keep the word; a Clarity bonus becomes a Flow-point bonus (ae flags.bad-eden-5e.bonus.flow ADD n, n = the Clarity amount)",
+      "to": "keep the word; a Clarity bonus becomes a points bonus on every tradition the actor casts (ae flags.bad-eden-5e.bonus.points ADD n, n = the Clarity amount)",
       "ruling": true,
       "scale": "Clarity is a 5-ish pool, Flow points are 4×level — see conditions.scarred for the bite scale"
     },
@@ -412,7 +412,8 @@
     },
     "scarred": {
       "to": "keep the mark; the Clarity bite scales to the Flow pool: −1 Flow point per 5 points of your Flow maximum (minimum 1) until the end of the scene",
-      "ruling": "owed — Dave asked whether −1 flat is enough; this is the proportional answer (Clarity ≈ a 5-point pool, so −1 Clarity ≈ 20%)"
+      "ruling": true,
+      "_why": "ruled 2026-10-07 (Dave took the proportional proposal): Clarity ≈ a 5-point pool, so −1 Clarity ≈ 20% of the pool"
     },
     "calmed": {
       "to": "charmed (with the RFI wording: can't take violent action willingly)"
@@ -482,9 +483,22 @@
     "passives.movement.climbEqualsWalk": {
       "to": "ae system.attributes.movement.climb = walk"
     },
-    "discipline.passive.clarityMaxBonus": {
-      "to": "ae flags.bad-eden-5e.bonus.flow ADD n",
-      "ruling": "owed"
+    "discipline.passive / discipline.mode.grants (manifestation-discipline.js)": {
+      "clarityMaxBonus n": "ae flags.bad-eden-5e.bonus.points ADD n — every tradition the actor casts",
+      "concurrencyBonus n": "ae system.attributes.concentration.limit ADD n — one more concentration",
+      "upkeepScale ≤ 0.5": "ae system.attributes.concentration.roll.mode ADD 1 — advantage on concentration saves",
+      "upkeepScale 0.75": "ae system.attributes.concentration.bonuses.save ADD 2",
+      "reachDiscount n": "ae flags.bad-eden-5e.discount.upcast ADD n — each upcast step costs n less, never below the base cost",
+      "misfireBandShift": "text — 5E casting has no misfire table (the Instability Table is a random-effects draw, not a severity ladder)",
+      "mode {key, grants}": "a SECOND effect, disabled by default, named '<Technique> — <stance> held', flags.bad-eden-5e.mode = key; the player toggles it while the stance is held; pkSealedPact flips automatically with the surge-powers 'Sealed Pact' buff (scripts/disciplines.js MODE_STANCES)",
+      "ruling": "proposed 2026-10-07 — Dave to confirm"
+    },
+    "Clarity techniques": {
+      "Enduring Focus": "ae system.attributes.concentration.roll.mode ADD 1",
+      "Frugal Caster": "ae flags.bad-eden-5e.discount.level1 ADD 1 — level-1 powers cost 1 less (min 0)",
+      "Reclamation": "riders strain 1 + restore {per5: 2, min: 2} once per short rest — 2 points back per 5 of the pool max, in every tradition cast",
+      "Overreach / Signature Ascendant": "text",
+      "ruling": "proposed 2026-10-07 — Dave to confirm"
     },
     "triggers[] (chat-prompt)": {
       "to": "text — the prompt body is already the rule"
@@ -543,8 +557,8 @@
         "to": "AC = 10 + guardBonus for light, 12 + bonus for medium, 14 + bonus for heavy — band by armorSkill/tags",
         "ruling": true
       },
-      "evasionBonus": "Dex save bonus (text or AE)",
-      "resolveBonus": "Wis save bonus",
+      "evasionBonus": { "to": "Dex save bonus AE (abilities.dex.bonuses.save), carried at full value", "ruling": true },
+      "resolveBonus": { "to": "Wis save bonus AE (abilities.wis.bonuses.save), carried at full value — +3..+5 on the legendary vestments STAND (ruled 2026-10-07)", "ruling": true },
       "resistances[]": "via damage → ae dr",
       "armorSkill": "fitting → light, plating → medium/heavy, bracing → shield (ruled)"
     },
@@ -937,6 +951,8 @@
     "lintScope": "docs carrying flags.bad-eden-5e.rfi (RFI-origin) are linted for RFI vocabulary only; the Star Wars list applies to origin:5e content (classes, subclasses, powers) — a Bad Eden blaster is a Bad Eden blaster"
   },
   "_rulings": {
-    "2026-10-07": "Dave ruled rubric lines 1–8 (small bonus +2, Stress points, Clarity/Noise kept with Flow-point bonus, radiation stays a ladder, the skill table, armor bands, martial weapons, marks, creature scores 10+2×value). Scarred's scale is the one open question."
+    "2026-10-07": "Dave ruled rubric lines 1–8 (small bonus +2, Stress points, Clarity/Noise kept with Flow-point bonus, radiation stays a ladder, the skill table, armor bands, martial weapons, marks, creature scores 10+2×value). Scarred's scale is the one open question.",
+    "2026-10-07b": "Dave ruled Scarred = −1 Flow point per 5 of Flow max (min 1) and that the big Resolve/Evasion save bonuses on legendary vestments stand in 5E. Cross-tradition casting (Flow-Touched / Crossed Wires / Wired for Both) automated in the engine (castThrough).",
+    "2026-10-07c": "PROPOSED (built, awaiting Dave): the nine Path-discipline techniques and the Clarity techniques → Active Effects / riders per engine.discipline.* and engine['Clarity techniques']; needs-human for techniques fell 31 → 6."
   }
 }

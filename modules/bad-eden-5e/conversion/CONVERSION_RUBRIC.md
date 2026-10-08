@@ -1,6 +1,6 @@
 # The Bad Eden conversion rubric (RFI → D&D 5E)
 
-**v1.3.0 · 2026-10-07.** This is the canonical rulebook for turning a Bad Eden mechanic written for RFI (the `fourththing` system) into its D&D 5E twin. The machine copy is `rubric.json` beside this file; the build lint, the converter (`bin/ft-convert-5e`) and the parity check (`bin/ft-lint-parity`) read that file. Change the JSON and this page together.
+**v1.8.0 · 2026-10-07.** This is the canonical rulebook for turning a Bad Eden mechanic written for RFI (the `fourththing` system) into its D&D 5E twin. The machine copy is `rubric.json` beside this file; the build lint, the converter (`bin/ft-convert-5e`) and the parity check (`bin/ft-lint-parity`) read that file. Change the JSON and this page together.
 
 ✅ = ruled by Dave · ⏳ = drafted, ruling owed.
 
@@ -98,10 +98,12 @@ Tier I at creation (level 0), Tier II at 5th, Tier III at 11th, Tier IV at 17th 
 | Strained | exhaustion ✅ | Staggered | speed halved, −2 to attacks (text) |
 | Calmed | charmed, can't act violently | Compelled | charmed + must spend an action on the directive |
 | Burning | 1d4 fire at the start of each turn | Dying | 0 HP, death saves |
-| Scarred | keep the mark; −1 Flow point per 5 of your Flow maximum (min 1) to end of scene ⏳ scale | Submerged / Drowning / Crushing | the 5E underwater and suffocation rules |
+| Scarred | keep the mark; −1 Flow point per 5 of your Flow maximum (min 1) to end of scene ✅ | Submerged / Drowning / Crushing | the 5E underwater and suffocation rules |
 | blinded · prone · restrained · charmed · surprised | the same | jolted (SW5E) | no reactions until its next turn |
 
 ## Engine effects → sheet automation
+
+**Path-discipline shifts (⏳ proposed 2026-10-07, built):** the RFI `flags.fourththing.discipline` block (manifestation-discipline.js) becomes Active Effects on the feat — Clarity max +n → `flags.bad-eden-5e.bonus.points` +n on every tradition the character casts; concurrency +n → dnd5e concentration limit +n; upkeep ×½ → advantage on concentration saves, ×¾ → +2 on them; reach discount n → each upcast step costs n fewer points (`flags.bad-eden-5e.discount.upcast`, never below the base cost); misfire band shift → text (5E casting has no misfire table). A *mode* (Sentence / Refraction / Walking Lane / Sealed Pact) becomes a second effect, off by default, named "<Technique> — <stance> held", which the player toggles while the stance is held; Sealed Pact flips automatically with the surge-powers buff. **Clarity techniques:** Enduring Focus → advantage on concentration saves; Frugal Caster → level-1 powers cost 1 less (`discount.level1`); Reclamation → once per short rest, one level of exhaustion for 2 points per 5 of the pool max back; Overreach and Signature Ascendant stay text.
 
 | RFI engine kind | D&D |
 | --- | --- |
@@ -121,7 +123,7 @@ Tier I at creation (level 0), Tier II at 5th, Tier III at 11th, Tier IV at 17th 
 ## Gear (drafted for the gear lane)
 
 Weapons: damage formula → a damage part (flat +N dropped unless enhanced), type through the damage table, Violence → Str (Dex if finesse), Intrigue → Dex ranged, ranges ×5 ft, tags → properties (two-handed, finesse, light, heavy, reach, thrown, loading, attunement), manifestation tier → rarity (uncommon / rare / very rare / legendary). Martial = tagged heavy, two-handed, reach, or a firearm beyond a pistol; the rest simple ✅.
-Armor: Guard bonus → AC by band (light 10+, medium 12+, heavy 14+; `armorSkill` fitting / plating / bracing decides the band) ✅; Evasion / Resolve bonuses → save bonuses; resistances → Active Effects. Prices stay in marks ✅ (dnd5e's price field labelled marks). Rigs → the vehicle lane, not drafted.
+Armor: Guard bonus → AC by band (light 10+, medium 12+, heavy 14+; `armorSkill` fitting / plating / bracing decides the band) ✅; Evasion / Resolve bonuses → Dex / Wis save-bonus Active Effects at full value (the +3..+5 on legendary vestments stand ✅ 2026-10-07); resistances → Active Effects. Prices stay in marks ✅ (dnd5e's price field labelled marks). Rigs → the vehicle lane, not drafted.
 
 ## Creatures (drafted for the monster lane)
 

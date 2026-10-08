@@ -16,6 +16,13 @@
  *           caster's highest power level. Powers at or above the high-level limit
  *           can be cast once each per long rest.
  *  REST     the Flow refills on a long rest; Artifice on a short or long rest.
+ *  CROSS    a power can be cast THROUGH the other tradition (Flow-Touched, Crossed
+ *           Wires, Wired for Both): flags.bad-eden-5e.castThrough = "flow"|"artifice"
+ *           on the power wins over its method for cost, pool, ability and the
+ *           spellbook. Features that allow it carry flags.bad-eden-5e.crossCast =
+ *           { from, to }; a power of tradition `from` landing on an actor who can't
+ *           cast `from` natively is stamped automatically. Toggle by hand from the
+ *           spellbook row's context menu or game.badEden5e.castThrough(item, trad).
  *
  * Adapted from the SW5E module's powercasting (MIT) — see NOTICE.md.
  * ─────────────────────────────────────────────────────────────────────────────
@@ -52,9 +59,63 @@ export const TRADITIONS = {
 };
 const METHOD_TO_TRADITION = Object.fromEntries(Object.entries(TRADITIONS).map(([k, t]) => [t.method, k]));
 
-/** The tradition a spell item is cast through, or null if it isn't a Bad Eden power. */
-export function traditionOf(item) {
+/** The tradition a power belongs to by its casting method, or null if it isn't a Bad Eden power. */
+export function nativeTraditionOf(item) {
   return METHOD_TO_TRADITION[item?.system?.method] ?? null;
+}
+
+/** The tradition a power is CAST through: a cross-cast flag first, then its own method. */
+export function traditionOf(item) {
+  const native = nativeTraditionOf(item);
+  if (!native) return null;
+  const through = item?.flags?.[MOD]?.castThrough;
+  return TRADITIONS[through] ? through : native;
+}
+
+/** True when the power is cast through the other tradition. */
+export const isCrossCast = (item) => !!nativeTraditionOf(item) && traditionOf(item) !== nativeTraditionOf(item);
+
+/* ── Cross-casting features (Flow-Touched, Crossed Wires, Wired for Both) ─── */
+// Built features carry flags.bad-eden-5e.crossCast = { from, to }; the name table covers
+// copies made before the flag shipped.
+const CROSS_CAST_BY_NAME = {
+  "Flow-Touched":   { from: "flow",     to: "artifice" },
+  "Crossed Wires":  { from: "artifice", to: "flow" },
+  "Wired for Both": { from: "artifice", to: "flow" }
+};
+/** The cross-cast permissions an actor's features grant: [{ from, to, feature }]. */
+export function crossCastsFor(actor) {
+  const out = [];
+  for (const it of actor?.items ?? []) {
+    if (it.type !== "feat") continue;
+    const cc = it.flags?.[MOD]?.crossCast ?? CROSS_CAST_BY_NAME[it.name];
+    if (cc?.from && cc?.to && TRADITIONS[cc.from] && TRADITIONS[cc.to]) out.push({ from: cc.from, to: cc.to, feature: it });
+  }
+  return out;
+}
+/** The tradition a new power should be cast through on this actor, or null to leave it native:
+ *  the actor can't cast the power's own tradition, and a feature lets it through one they can. */
+export function autoCastThrough(actor, item) {
+  const native = nativeTraditionOf(item);
+  if (!native) return null;
+  const casting = castingFor(actor);
+  if (casting[native]) return null;
+  const cc = crossCastsFor(actor).find(c => c.from === native && casting[c.to]);
+  return cc ? cc.to : null;
+}
+/** Set (or clear, with null) the tradition a power is cast through; re-keys its casting ability. */
+export async function castThrough(item, tradition) {
+  if (!nativeTraditionOf(item)) throw new Error(`${item?.name ?? "item"} is not a Bad Eden power`);
+  const to = tradition && tradition !== nativeTraditionOf(item) && TRADITIONS[tradition] ? tradition : null;
+  // v14 dropped the "-=key" deletion syntax for flags: unsetFlag, then the ability.
+  if (!to) await item.unsetFlag(MOD, "castThrough");
+  const update = to ? { [`flags.${MOD}.castThrough`]: to } : {};
+  if (item.parent instanceof Actor) {
+    const trad = TRADITIONS[to ?? nativeTraditionOf(item)];
+    const school = to ? null : trad.schools[item.system?.school];
+    update["system.ability"] = bestOf(item.parent, school?.attrs ?? trad.attrs);
+  }
+  return Object.keys(update).length ? item.update(update) : item;
 }
 
 const abilityMod = (actor, key) => Number(actor?.system?.abilities?.[key]?.mod) || 0;
@@ -64,7 +125,9 @@ const bestOf = (actor, keys) => keys.reduce((best, k) => (abilityMod(actor, k) >
 export function abilityFor(actor, item) {
   const trad = TRADITIONS[traditionOf(item)];
   if (!trad) return null;
-  const school = trad.schools[item.system?.school];
+  // Cast through the other tradition = that tradition's ability (Flow-Touched: Intelligence;
+  // Crossed Wires / Wired for Both: the Flow ability), not the power's school.
+  const school = isCrossCast(item) ? null : trad.schools[item.system?.school];
   return bestOf(actor, school?.attrs ?? trad.attrs);
 }
 
@@ -89,7 +152,9 @@ export function castingFor(actor) {
       maxOf20 = Math.max(maxOf20, MAX_LEVEL[prog][20]);
       if (!single || levels > single.levels) single = { levels, prog };
     }
-    const bonus = Number(actor.flags?.[MOD]?.bonus?.[key]) || 0;
+    // bonus.<trad> is tradition-specific; bonus.points (Deep Well, Drawing Deep: the RFI Clarity
+    // bonus) lands on every tradition the actor has class levels in.
+    const bonus = (Number(actor.flags?.[MOD]?.bonus?.[key]) || 0) + (classesCount ? Number(actor.flags?.[MOD]?.bonus?.points) || 0 : 0);
     if (!classesCount && !bonus) continue;
     casterLevel = Math.round(casterLevel);
     const maxPowerLevel = classesCount === 1 ? MAX_LEVEL[single.prog][single.levels]
@@ -114,12 +179,38 @@ export function castingFor(actor) {
 /** Point cost of casting a power at a given level. */
 export const costAt = (level) => (Number(level) > 0 ? Number(level) + 1 : 0);
 
+/** The cost for THIS actor: costAt(level) less the technique discounts —
+ *  flags.bad-eden-5e.discount.upcast (Pay the Toll, Lucid Footing: each upcast step costs 1 less,
+ *  never below the base cost) and discount.level1 (Frugal Caster: level-1 powers cost 1 less, min 0). */
+export function costFor(actor, base, level) {
+  const b = Number(base) || 0, l = Number(level) || 0;
+  if (l < 1) return 0;
+  const d = actor?.flags?.[MOD]?.discount ?? {};
+  let cost = costAt(l);
+  if (l > b) cost -= Math.min(Number(d.upcast) || 0, l - b);
+  if (l === 1) cost -= Number(d.level1) || 0;
+  return Math.max(0, cost);
+}
+
 /** Set a tradition's points (value and/or temp). */
 export async function setPoints(actor, key, { value, temp } = {}) {
   const update = {};
   if (value !== undefined) update[`flags.${MOD}.points.${key}.value`] = Math.max(0, Math.round(value));
   if (temp !== undefined) update[`flags.${MOD}.points.${key}.temp`] = Math.max(0, Math.round(temp));
   if (Object.keys(update).length) await actor.update(update);
+}
+
+/** Give back n points in every tradition the actor casts (capped at max). Returns what landed. */
+export async function restorePoints(actor, n) {
+  const casting = castingFor(actor);
+  const update = {}, got = {};
+  for (const [k, c] of Object.entries(casting)) {
+    const next = Math.min(c.max, c.value + Math.max(0, Math.round(n)));
+    if (next === c.value) continue;
+    update[`flags.${MOD}.points.${k}.value`] = next; got[k] = next - c.value;
+  }
+  if (Object.keys(update).length) await actor.update(update);
+  return got;
 }
 
 /** Refill the given traditions (default: all) and clear their high-level use marks. */
@@ -200,8 +291,8 @@ function onPreUseActivity(activity, usageConfig, dialogConfig) {
     ui.notifications?.warn?.(`${activity.item.name} is level ${level}; ${activity.actor.name} can cast up to level ${c.maxPowerLevel}.`);
     return false;
   }
-  if (level > 0 && (c.value + c.temp) < costAt(level)) {
-    ui.notifications?.warn?.(`Not enough ${label} for ${activity.item.name} (needs ${costAt(level)}, have ${c.value + c.temp}).`);
+  if (level > 0 && (c.value + c.temp) < costFor(activity.actor, level, level)) {
+    ui.notifications?.warn?.(`Not enough ${label} for ${activity.item.name} (needs ${costFor(activity.actor, level, level)}, have ${c.value + c.temp}).`);
     return false;
   }
   // A scripted cast can ask for a level: activity.use({ be5eLevel: 3 }, { configure: false }).
@@ -233,7 +324,7 @@ function patchUsageDialog() {
     const available = c.value + c.temp;
     const options_ = [];
     for (let lvl = base; lvl <= Math.max(base, c.maxPowerLevel); lvl++) {
-      const cost = costAt(lvl);
+      const cost = costFor(this.actor, base, lvl);
       const spentHigh = c.limit > 0 && lvl >= c.limit && c.used.has(lvl);
       options_.push({ value: String(lvl), label: `${CONFIG.DND5E.spellLevels[lvl] ?? lvl} (${cost} ${label})`, disabled: spentHigh || cost > available });
     }
@@ -269,8 +360,9 @@ function onActivityConsumption(activity, usageConfig, messageConfig, updates) {
   const tk = traditionOf(activity?.item);
   if (!tk) return;
   const c = castingFor(activity.actor)[tk];
-  const level = baseLevel(activity) + (Number(usageConfig?.scaling) || 0);
-  const cost = costAt(level);
+  const base = baseLevel(activity);
+  const level = base + (Number(usageConfig?.scaling) || 0);
+  const cost = costFor(activity.actor, base, level);
   if (!c || !cost) return;
   if ((c.value + c.temp) < cost) {
     ui.notifications?.warn?.(`Not enough ${TRADITIONS[tk].pointsLabel} (needs ${cost}, have ${c.value + c.temp}).`);
@@ -286,14 +378,59 @@ function onActivityConsumption(activity, usageConfig, messageConfig, updates) {
   updates.actor[`flags.${MOD}.points.${tk}.value`] = c.value - (cost - fromTemp);
   if (c.limit > 0 && level >= c.limit) updates.actor[`flags.${MOD}.points.${tk}.used`] = [...c.used, level];
   messageConfig.data ??= {};
-  messageConfig.data.flags = foundry.utils.mergeObject(messageConfig.data.flags ?? {}, { [MOD]: { cast: { tradition: tk, level, cost } } });
+  messageConfig.data.flags = foundry.utils.mergeObject(messageConfig.data.flags ?? {}, { [MOD]: { cast: { tradition: tk, level, cost, through: isCrossCast(activity.item) ? tk : null } } });
 }
 
-// A power gets its school's casting ability when it lands on an actor.
+// A power gets its casting ability when it lands on an actor — and is routed through the
+// other tradition when a feature allows it and the actor can't cast it natively.
 function onPreCreateItem(item, data) {
-  if (!(item.parent instanceof Actor) || !traditionOf(item) || item.system?.ability) return;
-  const ability = abilityFor(item.parent, item);
-  if (ability) item.updateSource({ "system.ability": ability });
+  if (!(item.parent instanceof Actor) || !nativeTraditionOf(item)) return;
+  const update = {};
+  const through = item.flags?.[MOD]?.castThrough ? null : autoCastThrough(item.parent, item);
+  if (through) update[`flags.${MOD}.castThrough`] = through;
+  if (!item.system?.ability || through) {
+    const trad = TRADITIONS[through ?? traditionOf(item)];
+    const school = through || isCrossCast(item) ? null : trad.schools[item.system?.school];
+    update["system.ability"] = bestOf(item.parent, school?.attrs ?? trad.attrs);
+  }
+  if (Object.keys(update).length) item.updateSource(update);
+}
+
+// After the fact, for the orders preCreateItem can't see: a power created in the same batch
+// as its feature, or a cross-cast feature landing on an actor who already holds the powers.
+// Runs on the creating client only, once the batch has settled.
+function onCreateItem(item, options, userId) {
+  if (userId !== game.user.id || !(item.parent instanceof Actor)) return;
+  const actor = item.parent;
+  const isFeature = item.type === "feat" && !!(item.flags?.[MOD]?.crossCast ?? CROSS_CAST_BY_NAME[item.name]);
+  if (!isFeature && !nativeTraditionOf(item)) return;
+  setTimeout(async () => {
+    try {
+      const powers = isFeature ? actor.items.filter(i => nativeTraditionOf(i)) : [actor.items.get(item.id)].filter(Boolean);
+      for (const pw of powers) {
+        if (pw.flags?.[MOD]?.castThrough) continue;
+        const to = autoCastThrough(actor, pw);
+        if (to) await castThrough(pw, to);
+      }
+    } catch (e) { console.warn(`${MOD} | cross-cast routing failed`, e); }
+  }, 0);
+}
+
+// Spellbook row context menu: route a power through the other tradition, or back.
+function onItemContextOptions(item, options) {
+  const actor = item?.parent;
+  const native = nativeTraditionOf(item);
+  if (!(actor instanceof Actor) || !native || !actor.isOwner) return;
+  const other = Object.keys(TRADITIONS).find(k => k !== native);
+  const casting = castingFor(actor);
+  if (!casting[other] && !isCrossCast(item)) return;
+  const through = isCrossCast(item);
+  options.push({
+    name: through ? `Cast as ${TRADITIONS[native].short} again` : `Cast through ${TRADITIONS[other].label}`,
+    icon: '<i class="fas fa-exchange-alt"></i>',
+    group: "action",
+    callback: () => castThrough(item, through ? null : other)
+  });
 }
 
 function onRestCompleted(actor, result) {
@@ -345,6 +482,8 @@ export function activateCasting() {
   Hooks.on("dnd5e.preUseActivity", onPreUseActivity);
   Hooks.on("dnd5e.activityConsumption", onActivityConsumption);
   Hooks.on("preCreateItem", onPreCreateItem);
+  Hooks.on("createItem", onCreateItem);
+  Hooks.on("dnd5e.getItemContextOptions", onItemContextOptions);
   Hooks.on("dnd5e.restCompleted", onRestCompleted);
   Hooks.on("renderCharacterActorSheet", onRenderSheet);
 }

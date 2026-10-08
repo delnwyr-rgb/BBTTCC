@@ -1,5 +1,6 @@
 // Bad Eden 5E — entry point. D&D-only: RFI never loads this module.
-import { MOD, TRADITIONS, registerConfig, activateCasting, castingFor, setPoints, restore, costAt, traditionOf, abilityFor } from "./casting.js";
+import { MOD, TRADITIONS, registerConfig, activateCasting, castingFor, setPoints, restore, restorePoints, costAt, costFor, traditionOf, nativeTraditionOf, isCrossCast, abilityFor, castThrough, crossCastsFor, autoCastThrough } from "./casting.js";
+import { activateDisciplines, disciplines } from "./disciplines.js";
 import { activateMastery } from "./mastery.js";
 import { redshirts } from "./redshirts.js";
 import { activateRiders, registerRiderStatus, riders } from "./riders.js";
@@ -26,6 +27,7 @@ Hooks.once("ready", () => {
   registerRiderStatus();   // after dnd5e has rebuilt CONFIG.statusEffects from its own conditions
   activateRiders();
   activateReminders();
-  game.badEden5e = { MOD, TRADITIONS, castingFor, setPoints, restore, costAt, traditionOf, abilityFor, redshirts, riders };
+  activateDisciplines();
+  game.badEden5e = { MOD, TRADITIONS, castingFor, setPoints, restore, restorePoints, costAt, costFor, traditionOf, nativeTraditionOf, isCrossCast, abilityFor, castThrough, crossCastsFor, autoCastThrough, redshirts, riders, disciplines };
   console.log(`${MOD} | ready: the Flow and Artifice`);
 });
