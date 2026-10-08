@@ -1,7 +1,7 @@
 {
-  "name": "Lisa Frank Elemental",
+  "name": "CACA",
   "type": "npc",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/lisa_frank_elemental.png",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/caca.png",
   "system": {
     "role": "Joy Elemental (Saturated)",
     "tier": 2,
@@ -640,7 +640,7 @@
           "manifestation"
         ],
         "category": "manifestation",
-        "flavor": "Animal silhouettes briefly inhabit the landscape behind targets \u2014 a unicorn, a kitten, a dolphin.",
+        "flavor": "Animal silhouettes briefly inhabit the landscape behind targets — a unicorn, a kitten, a dolphin.",
         "manifestation": {
           "tier": 1,
           "family": "working",
@@ -660,8 +660,8 @@
           "rangeAreaText": "Near burst.",
           "rangeFt": 0,
           "maintenanceCost": "",
-          "riskText": "The Elemental fades by 1 Integrity per Cascade \u2014 joy is expensive.",
-          "pathResonance": "Netzach \u2014 eternity of art.",
+          "riskText": "The Elemental fades by 1 Integrity per Cascade — joy is expensive.",
+          "pathResonance": "Netzach — eternity of art.",
           "fictionalPermission": "Charmed targets cannot directly attack the Elemental.",
           "gmCalibration": "Resolve check; energy damage; Charm one exchange.",
           "mechanicalHook": "AOE save; 2d6 energy + Charmed.",
@@ -901,7 +901,7 @@
           "phase2-narrative"
         ],
         "description": {
-          "value": "<p><strong>Passive.</strong> While the Elemental is present in the scene, lighting saturates impossibly. All damage to Integrity from any source is reduced by 1 (minimum 1). Manifestations cost +1 Clarity to cast \u2014 joy is expensive.</p>",
+          "value": "<p><strong>Passive.</strong> While the Elemental is present in the scene, lighting saturates impossibly. All damage to Integrity from any source is reduced by 1 (minimum 1). Manifestations cost +1 Clarity to cast — joy is expensive.</p>",
           "chat": ""
         }
       },
@@ -935,14 +935,14 @@
   },
   "_id": "a9orjOV99MnMObho",
   "prototypeToken": {
-    "name": "Lisa Frank Elemental",
+    "name": "CACA",
     "displayName": 0,
     "actorLink": false,
     "width": 1,
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/lisa_frank_elemental.png",
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/caca.png",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -1028,7 +1028,15 @@
   },
   "folder": "uMhSIaldbbcnBh0H",
   "sort": 1100000,
-  "flags": {},
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "title": "Charismatic, Aggressive Cover Art (Saturated)"
+        }
+      }
+    }
+  },
   "_stats": {
     "coreVersion": "14.364",
     "systemId": "fourththing",

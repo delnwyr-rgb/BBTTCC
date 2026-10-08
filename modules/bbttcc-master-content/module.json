@@ -102,6 +102,13 @@
       "name": "scenes",
       "label": "Bad Eden: Scenes",
       "path": "packs/scenes"
+    },
+    {
+      "name": "tool-macros",
+      "label": "Bad Eden: Tool Macros",
+      "type": "Macro",
+      "path": "packs/tool-macros",
+      "system": "fourththing"
     }
   ],
   "esmodules": [

@@ -69,13 +69,23 @@ function companionData(host) {
     system, flags: { fourththing: { workingOf: host.id, working: { tier: w.tier ?? system.manifestation?.tier ?? 1 } } }
   };
 }
-/** Mint missing companions, retire orphans. Safe to call often; only the creating client / an owner writes. */
-export async function syncBoundWorkings(actor) {
+/** Mint missing companions, retire orphans. Safe to call often; only the creating client / an owner writes.
+ *  Serialised per actor: a host create kicks a sync whose own companion create kicks another — without the queue the
+ *  second pass could read the collection before the first write landed and mint a twin (seen live 2026-10-07). */
+const _syncQueue = new Map();
+export function syncBoundWorkings(actor) {
+  if (!actor?.id) return Promise.resolve({ created: 0, deleted: 0 });
+  const run = (_syncQueue.get(actor.id) ?? Promise.resolve()).then(() => _syncBoundWorkings(actor)).catch(e => { console.warn("[fourththing] bound Working sync failed", e); return { created: 0, deleted: 0 }; });
+  _syncQueue.set(actor.id, run);
+  return run;
+}
+async function _syncBoundWorkings(actor) {
   if (!actor?.items || !(game.user?.isGM || actor.isOwner)) return { created: 0, deleted: 0 };
   const hosts = actor.items.filter(i => workingOf(i)?.power?.system);
   const companions = actor.items.filter(isCompanion);
   const toCreate = hosts.filter(h => !companions.some(c => c.flags.fourththing.workingOf === h.id)).map(companionData).filter(Boolean);
-  const toDelete = companions.filter(c => !actor.items.get(c.flags.fourththing.workingOf)).map(c => c.id);
+  const seen = new Set();
+  const toDelete = companions.filter(c => { const h = c.flags.fourththing.workingOf; if (!actor.items.get(h)) return true; if (seen.has(h)) return true; seen.add(h); return false; }).map(c => c.id);
   if (toCreate.length) await actor.createEmbeddedDocuments("Item", toCreate);
   if (toDelete.length) await actor.deleteEmbeddedDocuments("Item", toDelete);
   return { created: toCreate.length, deleted: toDelete.length };

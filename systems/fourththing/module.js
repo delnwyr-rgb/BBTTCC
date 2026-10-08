@@ -16138,6 +16138,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         radPenalty: _radPen
       }) + restraintNote + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
+        : "") + (_atkCb.length
+        // 2026-10-07: itemise the flat attack bonuses in the total (graded weapon, passives.checkBonus, auras, banked) — the
+        // breakdown above lists faculty + rank only, so a +1 Inlaid axe read as "+4 +1 = 16" with a hidden +1.
+        ? `<p style="font-size:0.78rem;color:#9ad0ff;margin:0.2rem 0 0">✚ Bonuses: ${_atkCb.map(b => `${ftEscapeHtml(String(b.source ?? "bonus"))} ${b.bonus >= 0 ? "+" : ""}${b.bonus}${b.note ? ` (${ftEscapeHtml(String(b.note))})` : ""}`).join(" · ")}</p>`
         : "") + (() => {
           // Foe rider save DC (owner ruling 2026-08-22, "no edits"): monster
           // ability prose carries hand-written DCs nothing machine-reads. A
