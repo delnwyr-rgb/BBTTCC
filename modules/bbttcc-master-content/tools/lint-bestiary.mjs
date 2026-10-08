@@ -73,7 +73,7 @@ const liveManifest = m => !!m && (!!statesList(m.appliedStates?.states).length |
   || !!(m.appliedEffects?.resists || []).length || !!(m.appliedEffects?.immunes || []).length || !!m.resolution?.saveAttribute);
 const automated = (a, i) => liveManifest(i.system?.manifestation) || !!i.flags?.fourththing?.triggers?.length || !!i.flags?.fourththing?.npcAuto
   || !!i.system?.damageParts?.length || !!(effects[`${a._id}.${i._id}`] || []).length || !!i.flags?.fourththing?.rfi?.item?.consume
-  || !!i.flags?.fourththing?.automation;
+  || !!i.flags?.fourththing?.automation || !!i.flags?.fourththing?.passives?.aura || !!i.flags?.fourththing?.passives?.checkBonus || !!i.flags?.fourththing?.passives?.ranks;   // pass-7 passives count (2026-10-07)
 
 // art index for A2: file basenames on the box, normalised
 const artIndex = ASSETS ? [...ASSETS].filter(p => /^(art|modules\/bbttcc-[^/]+\/art)\//.test(p) && /\.(webp|png|jpe?g)$/i.test(p)) : [];
