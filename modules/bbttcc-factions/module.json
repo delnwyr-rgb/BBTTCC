@@ -46,7 +46,8 @@
     "scripts/faction-tier-advance-button.enhancer.js",
     "scripts/rigs-dnd5e.runtime.js",
     "scripts/rigs-dnd5e.actions.js",
-    "scripts/rigs-dnd5e.sheet.js"
+    "scripts/rigs-dnd5e.sheet.js",
+    "scripts/rigs-dnd5e.gauntlet.js"
   ],
   "scripts": [
     "scripts/inbox-card.enhancer.js",
