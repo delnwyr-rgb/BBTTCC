@@ -2,7 +2,7 @@
   "id": "bbttcc-raid",
   "title": "Raid & Siege Engine",
   "description": "Raid and siege management engine: maneuvers, doctrines, and agent API.",
-  "version": "1.3.14.4",
+  "version": "1.3.14.5",
   "authors": [
     {
       "name": "Shattered Lens Studios"
@@ -127,7 +127,8 @@
     "scripts/maneuvers-audit-wiring.enhancer.js",
     "scripts/raid-infiltration.canvas-vfx.enhancer.js",
     "scripts/affiliation-op-table.enhancer.js",
-    "scripts/raid-battle-scenes.enhancer.js"
+    "scripts/raid-battle-scenes.enhancer.js",
+    "scripts/raid-console.compact.enhancer.js"
   ],
   "styles": [
     "css/raid-styles.css"

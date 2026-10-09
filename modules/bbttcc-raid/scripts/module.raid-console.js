@@ -1463,6 +1463,29 @@ function _isInfilKey(k) {
   return lk === "infiltration_alarm" || lk === "intrigue";
 }
 
+// 2026-10-09 — themed, non-blocking confirm. Replaces the browser-native
+// window.confirm() boxes ("<host> says…"), which ignored the Bad Eden theme
+// and froze the whole game tab until answered. Same wording, same outcomes.
+async function _rcConfirm(title, text) {
+  const esc = (t) => foundry.utils.escapeHTML(String(t ?? ""));
+  const content = String(text ?? "").split(/\n\n+/).map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("");
+  const D2 = foundry.applications?.api?.DialogV2;
+  if (D2?.confirm) {
+    try {
+      return !!(await D2.confirm({
+        window: { title, icon: "fa-solid fa-circle-question" },
+        content,
+        rejectClose: false,
+        modal: true
+      }));
+    } catch (_e) { return false; }
+  }
+  if (typeof Dialog?.confirm === "function") {
+    try { return !!(await Dialog.confirm({ title, content, defaultYes: false })); } catch (_e) { return false; }
+  }
+  return false;
+}
+
 // Courtly Intrigue gate. True for the legacy "courtly" key OR for "presence"
 // when the active scene has tableau enabled — see COURTLY_INTRIGUE_SPEC.md §3
 // and project_courtly_intrigue_s2_design_memo_2026_05_20. Lets a Presence raid
@@ -3648,7 +3671,7 @@ _renderScenarioHUD(host, round){
                     if (tt && !t2.includes(tt)) t2.push(tt);
                   }
 
-                  const ok = confirm(`Apply ${pend.length} pending world effect(s)?\n\n` + (t2.length ? `Types: ${t2.join(", ")}\n\n` : "") + `This will mutate world state via WME.`);
+                  const ok = await _rcConfirm("Apply World Effects", `Apply ${pend.length} pending world effect(s)?\n\n` + (t2.length ? `Types: ${t2.join(", ")}\n\n` : "") + `This will mutate world state via WME.`);
                   if (!ok) return;
 
                   const wm = game.bbttcc?.api?.worldMutation;
@@ -4585,8 +4608,12 @@ r.view = {
       }
 
 
-      // Auto-queue from last existing round (if present)
-      const last = (this.vm.rounds||[]).slice(-1)[0];
+      // 2026-10-09 — new rounds START CLEAN. The old auto-queue copied every
+      // side's maneuvers from the previous round and silently charged them
+      // again; repeating is now opt-in via "↻ Repeat last round" in the picker
+      // (raid-console.compact.enhancer.js). Set game.bbttcc.api.raid.autoQueue
+      // = true to restore the legacy behaviour.
+      const last = (game.bbttcc?.api?.raid?.autoQueue === true) ? (this.vm.rounds||[]).slice(-1)[0] : null;
       if (last) {
         if (Array.isArray(last.mansSelected))    round.mansSelected    = last.mansSelected.slice();
         if (Array.isArray(last.mansSelectedDef)) round.mansSelectedDef = last.mansSelectedDef.slice();
@@ -4638,9 +4665,9 @@ r.view = {
       this.render();
     });
 
-    $root.on("click.bbttccRaid","[data-id='reset']", (ev)=>{
+    $root.on("click.bbttccRaid","[data-id='reset']", async (ev)=>{
       ev.preventDefault();
-      if (!confirm("Clear all rounds in this console?")) return;
+      if (!(await _rcConfirm("Reset Raid Console", "Clear all rounds in this console?"))) return;
       this.vm.rounds = [];
       // Propagate the cleared rounds via the session flag so any open player
       // consoles re-render via the updateActor hook below (bindAPI).
@@ -4666,7 +4693,7 @@ r.view = {
     $root.on("click.bbttccRaid","[data-id='end-raid']", async (ev)=>{
       ev.preventDefault();
       if (!_rcIsGMUser()) return;
-      if (!confirm("End the raid? This clears rounds, supporters, and the target for every player.")) return;
+      if (!(await _rcConfirm("End Raid", "End the raid? This clears rounds, supporters, and the target for every player."))) return;
       this.vm.rounds = [];
       this.vm.supportFactionIds = [];
       this.vm.targetUuid = "";
@@ -5023,11 +5050,30 @@ async _postRoundCard(idx){
     // clicked "Commit Staging to GM" — that contribution won't be in the
     // session. The GM client can't see remote pending state, so we just warn
     // up front and let the GM decide.
-    if (!confirm("Resolve this round?\n\nAny supporter who staged but hasn't clicked 'Commit Staging to GM' yet will lose that contribution.")) {
+    if (!(await _rcConfirm("Resolve Round", "Resolve this round?\n\nAny supporter who staged but hasn't clicked 'Commit Staging to GM' yet will lose that contribution."))) {
       return;
     }
 
     const r = this.vm.rounds[idx]; if (!r) return;
+
+    // 2026-10-09 — ARMED ANYTIME maneuvers fire at commit. Ticking an anytime
+    // maneuver only arms it ("▶ Fire Now"); if the round is committed with it
+    // armed but unfired it used to be silently dropped (Artillery Salvo, trailer
+    // shoot). Fire them now, in tick order, before the roll.
+    try {
+      try { _rcSyncManeuverSelectionsFromDOM(this, idx, r); } catch (_eS) {}
+      const EFF = game.bbttcc?.api?.raid?.EFFECTS || {};
+      const armed = [];
+      for (const k of (r.mansSelected || [])) if (_rcGetFireMode(EFF[k]) === "anytime" && !_rcWasManFired(r, "att", k)) armed.push(["att", k, null]);
+      for (const k of (r.mansSelectedDef || [])) if (_rcGetFireMode(EFF[k]) === "anytime" && !_rcWasManFired(r, "def", k)) armed.push(["def", k, null]);
+      for (const [fid, keys] of Object.entries(r.mansSelectedSupport || {})) {
+        const sf = game.actors?.get?.(fid);
+        for (const k of (keys || [])) if (sf && _rcGetFireMode(EFF[k]) === "anytime" && !_rcWasManFired(r, "support", k, fid)) armed.push(["support", k, sf]);
+      }
+      for (const [side, k, actor] of armed) { try { await _rcFireOneManeuver(r, side, k, actor, null, this); } catch (_eF) { warn("auto-fire armed anytime failed", k, _eF); } }
+      if (armed.length) { try { await this._persistFireGate(r); } catch (_eP) {} }
+    } catch (_eArmed) { warn("armed-anytime sweep failed", _eArmed); }
+
     // FX anchor for the raid_outcome / boss_phase_change / rig_damage plays below (was never declared).
     let __fxPanel = null;
     try { __fxPanel = _bbttccFxPanelForRound(this, idx); } catch (_eFxP) {}
@@ -5114,6 +5160,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
               content: `
                 <form>
                   <p class="hint">Initial commitment sets starting Influence HP. You can leave these at 0 for a quick test.</p>
+                  <p class="hint" style="opacity:.85;">Attacker bank — Diplomacy <b>${Math.floor(Number(attacker?.getFlag?.("bbttcc-factions","opBank")?.diplomacy||0))}</b> · Soft Power <b>${Math.floor(Number(attacker?.getFlag?.("bbttcc-factions","opBank")?.softpower||0))}</b> marks. 10 Soft Power stays in reserve so the next round can still be added.</p>
                   <div class="form-group"><label>Attacker: Diplomacy marks commit</label><input type="number" name="atkDip" value="0" min="0" step="10"/></div>
                   <div class="form-group"><label>Attacker: Soft Power marks commit</label><input type="number" name="atkSoft" value="0" min="0" step="10"/></div>
                   <hr/>
@@ -5139,6 +5186,19 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
             }, { width: 520 }).render(true);
           });
           if (!init) return;
+
+          // 2026-10-09 — the opening commitment draws on the same Soft Power pool
+          // that Add Round gates on. Keep the round cost in reserve so starting
+          // the duel can't lock the attacker out of round 2.
+          try {
+            const RESERVE = 10;
+            const bankSoft = Math.floor(Number(attacker?.getFlag?.("bbttcc-factions", "opBank")?.softpower || 0));
+            const maxSoft = Math.max(0, bankSoft - RESERVE);
+            if (init.atkSoft > maxSoft) {
+              ui.notifications?.warn?.(`Soft Power commitment trimmed to ${maxSoft} marks so ${RESERVE} stay in reserve for the next round.`);
+              init.atkSoft = maxSoft;
+            }
+          } catch (_eRes) {}
 
           try {
             this.__courtlyScenario = await raidApi.courtly({
@@ -6305,6 +6365,7 @@ try {
           success: finalMargin >= 0,
           outcome: finalMargin > 0 ? "win" : finalMargin < 0 ? "loss" : "stalemate",
           margin: finalMargin,
+          activityKey: r.activityKey || this.vm?.activityKey || null,
           maneuversAtt: listA,
           maneuversDef: listD,
           targetHexId: (r.targetType==="hex") ? (targetHex?.id || null) : null
@@ -7537,8 +7598,26 @@ function _getOwnedOptionCountsSafe(actor){
       null;
 
     const fn = api?.getOwnedOptionCounts;
-    if (typeof fn === "function") return fn(actor) || {};
+    if (typeof fn === "function") {
+      const r = fn(actor);
+      if (_isPlainObject(r) && Object.keys(r).length) return r;
+    }
   } catch (e) { /* ignore */ }
+
+  // 2026-10-09 — derive from the actor's Character Option ITEMS (crew types,
+  // occult associations, …): flags.bbttcc-character-options.option.key. The
+  // counts API returned nothing for chargen/level-up built Stewards, so roster-
+  // gated ⭐ option maneuvers never unlocked even with the crew item embedded.
+  try {
+    const derived = {};
+    for (const it of actor?.items ?? []) {
+      const k = it?.flags?.["bbttcc-character-options"]?.option?.key;
+      if (!k) continue;
+      const key = String(k).toLowerCase().replace(/-/g, "_");
+      derived[key] = (derived[key] || 0) + 1;
+    }
+    if (Object.keys(derived).length) return derived;
+  } catch (_eD) {}
 
   // Fallback: some builds store normalized outputs here
   const f = actor?.flags?.["bbttcc-character-options"] || {};
@@ -7556,7 +7635,7 @@ function _aggregateFactionOptionCounts(factionActor){
     const counts = _getOwnedOptionCountsSafe(a);
     if (!_isPlainObject(counts)) continue;
     for (const [k,v] of Object.entries(counts)) {
-      const key = _lc(k);
+      const key = _lc(k).replace(/-/g, "_");
       const n = Number(v||0);
       if (!key || !Number.isFinite(n) || n<=0) continue;
       out[key] = (Number(out[key]||0) + n);
@@ -7969,7 +8048,9 @@ function _canFactionUseManeuver(factionActor, mKey, { side="att", activityKey=""
   }
 
   // 1) Doctrine ownership gate (only when doctrine items exist on the faction).
-  if (!isGMView && !_bbttccDoctrineAllowsManeuver(factionActor, mKey)) {
+  // 2026-10-09 — ⭐ option-derived maneuvers are gated by the ROSTER (step 3),
+  // not by doctrine items; no doctrine item ever owns an opt_* key.
+  if (!isGMView && !_isOptionDerivedManeuver(mKey) && !_bbttccDoctrineAllowsManeuver(factionActor, mKey)) {
     return { ok:false, reason:"Not in faction doctrine." };
   }
 
@@ -7988,7 +8069,7 @@ function _canFactionUseManeuver(factionActor, mKey, { side="att", activityKey=""
     const need = _requiredOptionsForManeuver(mKey);
     if (need.length) {
       const have = _aggregateFactionOptionCounts(factionActor);
-      const ok = need.some(k => Number(have[_lc(k)]||0) > 0);
+      const ok = need.some(k => Number(have[_lc(k).replace(/-/g, "_")]||0) > 0);
       return ok
         ? { ok:true, reason:"" }
         : { ok:false, reason:`Requires roster option: ${need.join(", ")}` };

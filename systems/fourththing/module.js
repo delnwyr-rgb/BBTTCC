@@ -28958,7 +28958,11 @@ async function ftBindBattleSceneToHex(hexDoc, scene, opts = {}) {
     ui.notifications?.warn(`"${scene.name}" is already bound to this hex.`);
     return false;
   }
-  list.push({ sceneId: scene.id, label: opts.label || scene.name, order: list.length });
+  // 2026-10-09 — optional raid type so a hex can hold one ordered sequence PER raid
+  // type (violence / intrigue / presence / siege …). Untagged entries keep the
+  // legacy single-sequence behaviour.
+  const raidType = opts.raidType ? String(opts.raidType).toLowerCase() : null;
+  list.push({ sceneId: scene.id, label: opts.label || scene.name, order: list.length, ...(raidType ? { raidType } : {}) });
   await _ftSetHexBattleScenes(hexDoc, list);
   try { await scene.update({ "flags.bbttcc-raid.battleScene": true }); } catch (_) {}
   _ftStrategicMapCache.delete(scene);
@@ -28987,7 +28991,20 @@ async function ftActivateBattleScene(hexDoc, idx) {
     ui.notifications?.info(`Requesting GM to activate "${scene.name}"…`);
     return true;
   }
-  await scene.activate();
+  // 2026-10-09 — scene.activate() is a no-op for anyone viewing another scene
+  // when the bound scene is ALREADY the active one. View it here and pull the
+  // other connected users so "activate" always lands everyone on the battle.
+  if (scene.active) {
+    try { await scene.view(); } catch (_) {}
+    try {
+      for (const u of game.users ?? []) {
+        if (!u.active || u.id === game.user.id) continue;
+        game.socket?.emit?.("pullToScene", scene.id, u.id);
+      }
+    } catch (_) {}
+  } else {
+    await scene.activate();
+  }
   await _ftSetHexCurrentSceneIdx(hexDoc, idx);
   return true;
 }
@@ -29550,8 +29567,24 @@ Hooks.once("ready", async () => {
       }
 
       const currentIdx = _ftGetHexCurrentSceneIdx(hexDoc);
-      const nextIdx = currentIdx + 1;
-      const isFinal = currentIdx >= list.length - 1;
+      // 2026-10-09 — sequences are per raid type. The current entry's type (or
+      // the round's activity, or untagged = legacy) picks which entries count;
+      // "next" / "final" are judged within that group only, so a violence raid
+      // is never offered the intrigue or courtly scene bound to the same hex.
+      const _norm = (k) => {
+        const lk = String(k || "").toLowerCase();
+        if (["courtly", "presence"].includes(lk)) return "presence";
+        if (["intrigue", "infiltration_alarm", "infiltration", "espionage"].includes(lk)) return "intrigue";
+        if (["violence", "assault", "occupation", "liberation", "assault_defense"].includes(lk)) return "violence";
+        return lk || null;
+      };
+      const curType = _norm(list[currentIdx]?.raidType) || _norm(args?.activityKey) || null;
+      const _curTagged = !!list[currentIdx]?.raidType;
+      const group = list.map((e, i) => ({ e, i })).filter(({ e }) =>
+        _curTagged ? (_norm(e.raidType) === curType) : !e.raidType);
+      const posInGroup = group.findIndex(g => g.i === currentIdx);
+      const nextIdx = (posInGroup >= 0 && posInGroup + 1 < group.length) ? group[posInGroup + 1].i : -1;
+      const isFinal = posInGroup >= 0 ? posInGroup >= group.length - 1 : true;
       console.log(`[fourththing:phase5] currentSceneIdx=${currentIdx}, nextIdx=${nextIdx}, isFinal=${isFinal}, success=${success}`);
 
       if (!success) {
@@ -29572,11 +29605,14 @@ Hooks.once("ready", async () => {
           return res;
         }
         console.log(`[fourththing:phase5] FIRING advance prompt for scene ${scene.id} (${scene.name})`);
-        Dialog.confirm({
-          title: "Advance to Next Battle Scene?",
-          content: `<p>Round resolved successfully. Advance to <b>${entry.label || scene.name}</b> (${nextIdx + 1} of ${list.length})?</p>`,
-          yes: async () => { await ftActivateBattleScene(hexDoc, nextIdx); }
-        });
+        const _pos = group.findIndex(g => g.i === nextIdx) + 1;
+        const _esc = (t) => foundry.utils.escapeHTML(String(t ?? ""));
+        const _D2 = foundry.applications?.api?.DialogV2;
+        const _content = `<p>Round resolved successfully. Advance to <b>${_esc(entry.label || scene.name)}</b> (${_pos} of ${group.length})?</p>`;
+        const _ok = _D2?.confirm
+          ? await _D2.confirm({ window: { title: "Advance to Next Battle Scene?", icon: "fa-solid fa-forward" }, content: _content, rejectClose: false }).catch(() => false)
+          : await Dialog.confirm({ title: "Advance to Next Battle Scene?", content: _content });
+        if (_ok) await ftActivateBattleScene(hexDoc, nextIdx);
       } else {
         // Final scene — flip the hex to Occupation outcome
         const attackerId = args?.attackerId ?? args?.attacker ?? null;

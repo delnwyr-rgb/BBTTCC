@@ -178,6 +178,9 @@
       if (!dir || dir === getFacing(doc)) return;
 
       foundry.utils.setProperty(changes, `flags.${MOD}.${FLAG}.facing`, dir);
+      // Initiator sees the new facing at once — no server round trip.
+      // (Other clients swap on updateToken.) Deferred so the update proceeds.
+      queueMicrotask(() => showFacingNow(doc, dir));
     } catch (e) { console.warn(TAG, "preUpdateToken facing failed", e); }
   });
 
@@ -202,16 +205,55 @@
       if (art.flip !== curFlip) {
         changes["texture.scaleX"] = (art.flip ? -1 : 1) * (Math.abs(doc.texture?.scaleX ?? 1) || 1);
       }
-      if (Object.keys(changes).length) await doc.update(changes);
+      // animate:false — no texture crossfade. The visible mesh already shows
+      // this art (showFacingNow), so the persisted swap must not replay a fade.
+      if (Object.keys(changes).length) await doc.update(changes, { animate: false });
     } catch (e) { console.warn(TAG, "settle-swap failed", e); }
     finally { _settling.delete(doc.uuid); }
   }
 
+  // v3 (2026-10-09): show the new facing art IMMEDIATELY on every client by
+  // swapping the token mesh's texture in place — no document update, no
+  // redraw, no texture-transition fade. Foundry's default "fade" crossfade
+  // ran over the whole movement animation and renders the target art into a
+  // full-resolution offscreen texture first (a hitch with large art); with
+  // keyboard (WASD) stepping, each new step restarted it, which read as a
+  // slow swap or a stutter between perspectives. The document still catches
+  // up at rest (settleThenSwap, animate:false) so the art persists.
+  async function showFacingNow(doc, dirOverride = null) {
+    const token = doc?.object;
+    if (!token?.mesh) return;
+    const cfg = getDirArt(doc);
+    if (!cfg) return;
+    const want = dirOverride ?? getFacing(doc);
+    const art = resolveArt(cfg.images, want);
+    if (!art) return;
+    const load = foundry.canvas?.loadTexture ?? globalThis.loadTexture;
+    if (!load) return;
+    let tex;
+    try { tex = await load(art.src); } catch (_e) { return; }
+    if (!tex || !token.mesh || token.destroyed) return;
+    // Facing may have changed again while the texture loaded (the override
+    // path is the initiator's own pending move — trust it).
+    if (!dirOverride) {
+      const latest = resolveArt(getDirArt(doc)?.images, getFacing(doc));
+      if (!latest || latest.src !== art.src) return;
+    }
+    if (token.mesh.texture !== tex) token.mesh.texture = tex;
+    // Mirrored side profiles: flip the visible mesh now; the persisted
+    // texture.scaleX sign follows in settleThenSwap.
+    const sx = token.mesh.scale?.x ?? 1;
+    if ((sx < 0) !== art.flip) token.mesh.scale.x = -sx;
+    // Re-fit to the new texture's dimensions (and let the tableau re-apply
+    // its depth scale via refreshToken) without a full redraw.
+    token.renderFlags?.set?.({ refreshSize: true, refreshMesh: true });
+  }
+
   Hooks.on("updateToken", (doc, changes, _options, userId) => {
     try {
-      if (userId !== game.user.id) return;
       if (foundry.utils.getProperty(changes, `flags.${MOD}.${FLAG}.facing`) === undefined) return;
-      settleThenSwap(doc);
+      showFacingNow(doc);                       // every client, instantly
+      if (userId === game.user.id) settleThenSwap(doc);  // one writer persists
     } catch (e) { console.warn(TAG, "updateToken facing watch failed", e); }
   });
 

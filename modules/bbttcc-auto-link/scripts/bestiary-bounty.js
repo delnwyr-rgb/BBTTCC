@@ -84,7 +84,7 @@ function _cardHTML(actor, { factionId = "" } = {}) {
   const opts = ['<option value="">— choose the faction that resolved it —</option>']
     .concat(factions.map(f => `<option value="${f.id}"${f.id === factionId ? " selected" : ""}>${_esc(f.name)}</option>`)).join("");
   const buttons = Object.entries(METHODS).map(([k, m]) =>
-    `<button type="button" data-bbttcc-bounty-method="${k}" title="credits ${m.pool}" style="flex:1 1 30%; font-size:0.78rem; padding:0.25rem 0.4rem;">${_esc(m.label)}<br/><span style="opacity:0.7;">→ ${m.pool}</span></button>`).join("");
+    `<button type="button" data-bbttcc-bounty-method="${k}" title="credits ${m.pool}" style="flex:1 1 45%; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.05rem; height:auto; line-height:1.15; white-space:normal; word-break:normal; overflow-wrap:normal; text-align:center; font-size:0.78rem; padding:0.3rem 0.4rem;"><span>${_esc(m.label)}</span><span style="opacity:0.7; font-size:0.72rem;">→ ${m.pool}</span></button>`).join("");
   return `
 <div class="bbttcc-bounty-card" data-bbttcc-bounty-actor="${_esc(actor.uuid)}" style="border:1px solid rgba(46,170,94,0.6); border-radius:6px; padding:0.5rem;">
   <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -210,8 +210,42 @@ Hooks.on("updateActor", (actor, changes, options) => {
     const prev = Number(options?._bbttccPrevInteg);
     const next = Number(foundry.utils.getProperty(changes, "system.derived.integrity.value"));
     if (!Number.isFinite(prev) || !Number.isFinite(next)) return;
-    if (prev > 0 && next <= 0) offer(actor).catch(() => {});
+    if (prev > 0 && next <= 0) {
+      // 2026-10-09 — mid-combat kills queue their bounty card until the
+      // combat ends (trailer playtest: a card per kill buried the fight's
+      // roll cards). Out of combat the card posts at once, as before.
+      const combat = _activeCombatOf(actor);
+      if (combat) {
+        const q = _pendingBounties.get(combat.id) || [];
+        if (!q.includes(actor.uuid)) q.push(actor.uuid);
+        _pendingBounties.set(combat.id, q);
+        return;
+      }
+      offer(actor).catch(() => {});
+    }
   } catch (e) { console.warn(`[${NS}] auto-offer failed`, e); }
+});
+
+const _pendingBounties = new Map(); // combatId -> actor uuids
+function _activeCombatOf(actor) {
+  try {
+    for (const c of game.combats ?? []) {
+      if (!c.started) continue;
+      if (c.combatants.some(cb => cb.actorId === actor.id || cb.actor?.uuid === actor.uuid)) return c;
+    }
+  } catch (_e) {}
+  return null;
+}
+async function _flushBounties(combatId) {
+  const q = _pendingBounties.get(combatId);
+  _pendingBounties.delete(combatId);
+  for (const uuid of q || []) {
+    try { const a = await fromUuid(uuid); if (a) await offer(a); } catch (_e) {}
+  }
+}
+Hooks.on("deleteCombat", (combat) => { try { if (game.user.isGM) _flushBounties(combat.id); } catch (_e) {} });
+Hooks.on("updateCombat", (combat, changes) => {
+  try { if (game.user.isGM && changes.started === false) _flushBounties(combat.id); } catch (_e) {}
 });
 
 /* ── Install ──────────────────────────────────────────────────────────── */

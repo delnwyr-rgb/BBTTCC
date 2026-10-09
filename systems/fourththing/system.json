@@ -2,7 +2,7 @@
   "id": "fourththing",
   "title": "Roll for Initiation (Bad Eden Core Rules)",
   "description": "Core ruleset for Bad Eden: Roll for Initiation. Steward-first play, manifestation, hex-scale decisions, Tikkun, Darkness, and Radiation.",
-  "version": "0.6.7",
+  "version": "0.6.8",
   "compatibility": {
     "minimum": "11",
     "verified": "14"
@@ -48,7 +48,7 @@
       "flags": {
         "fourththing": {
           "deck": "rfi-v1.0",
-          "description": "Nine starter manifestations from the RFI deck \u2014 teach players how to think in Manifestation before they build their own."
+          "description": "Nine starter manifestations from the RFI deck — teach players how to think in Manifestation before they build their own."
         }
       }
     },

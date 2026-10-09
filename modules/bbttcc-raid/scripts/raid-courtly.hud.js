@@ -365,26 +365,89 @@
     await actor.update({ [`flags.${MOD_R}.courtFavor`]: cur });
   }
 
+  // 2026-10-09 — ONE DOCK. The three panels (Influence, Courtiers, Receipts &
+  // Leverage) used to float independently and landed on top of the tableau
+  // characters. They now mount, stacked, inside a single draggable, collapsible
+  // "⚜ Court" dock (left edge by default; position remembered).
+  const DOCK_ID = "ft-courtly-dock";
+  function _ensureDockStyle() {
+    if (document.getElementById(DOCK_ID + "-style")) return;
+    const st = document.createElement("style");
+    st.id = DOCK_ID + "-style";
+    st.textContent = `
+      #${DOCK_ID}{position:fixed;left:12px;top:60px;width:310px;max-height:calc(100vh - 150px);overflow-y:auto;
+        z-index:60;display:flex;flex-direction:column;gap:.4rem;padding:.35rem;border-radius:10px;
+        background:rgba(8,12,18,.72);border:1px solid rgba(96,200,255,.35);box-shadow:0 4px 18px rgba(0,0,0,.45)}
+      #${DOCK_ID} > .ft-courtly-dock-head{display:flex;align-items:center;gap:.4rem;cursor:move;user-select:none;
+        font-size:.8rem;letter-spacing:.06em;color:#9fdcff;padding:.1rem .25rem}
+      #${DOCK_ID} > .ft-courtly-dock-head button{margin-left:auto;padding:0 .45rem;font-size:.75rem;line-height:1.4}
+      #${DOCK_ID}.collapsed > .ft-hud-panel{display:none!important}
+      #${DOCK_ID} > .ft-hud-panel{position:static!important;left:auto!important;right:auto!important;top:auto!important;
+        bottom:auto!important;width:auto!important;max-height:none!important;transform:none!important;margin:0!important}
+      #${DOCK_ID} .ft-courtly-roster-list{max-height:30vh}`;
+    document.head.appendChild(st);
+  }
+  function _dock() {
+    let d = document.getElementById(DOCK_ID);
+    if (d) return d;
+    _ensureDockStyle();
+    d = document.createElement("div");
+    d.id = DOCK_ID;
+    let collapsed = false;
+    try { collapsed = localStorage.getItem("courtly:hud:dock:collapsed") === "1"; } catch (_) {}
+    d.classList.toggle("collapsed", collapsed);
+    d.innerHTML = `<div class="ft-courtly-dock-head"><span>⚜ Court</span><button type="button" data-dock-toggle title="Collapse / expand">${collapsed ? "▸" : "▾"}</button></div>`;
+    d.querySelector("[data-dock-toggle]").addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const c = !d.classList.contains("collapsed");
+      d.classList.toggle("collapsed", c);
+      ev.currentTarget.textContent = c ? "▸" : "▾";
+      try { localStorage.setItem("courtly:hud:dock:collapsed", c ? "1" : "0"); } catch (_) {}
+    });
+    // Drag by the header; remember position.
+    try {
+      const pos = JSON.parse(localStorage.getItem("courtly:hud:dock:pos") || "null");
+      if (pos && Number.isFinite(pos.left) && Number.isFinite(pos.top)) { d.style.left = pos.left + "px"; d.style.top = pos.top + "px"; }
+    } catch (_) {}
+    const head = d.querySelector(".ft-courtly-dock-head");
+    head.addEventListener("pointerdown", (ev) => {
+      if (ev.target.closest("button")) return;
+      const r = d.getBoundingClientRect(); const ox = ev.clientX - r.left, oy = ev.clientY - r.top;
+      const move = (e) => { d.style.left = Math.max(0, e.clientX - ox) + "px"; d.style.top = Math.max(0, e.clientY - oy) + "px"; };
+      const up = () => { window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up);
+        try { localStorage.setItem("courtly:hud:dock:pos", JSON.stringify({ left: parseInt(d.style.left) || 12, top: parseInt(d.style.top) || 60 })); } catch (_) {} };
+      window.addEventListener("pointermove", move); window.addEventListener("pointerup", up);
+    });
+    document.body.appendChild(d);
+    return d;
+  }
+
   function _swapPanel(slotRef, html, bindFn, storageKey, collapsedLabel) {
     const tpl = document.createElement("div");
     tpl.innerHTML = html;
     const fresh = tpl.firstElementChild;
+    const dock = _dock();
     if (!slotRef.el || !document.body.contains(slotRef.el)) {
       slotRef.el = fresh;
-      document.body.appendChild(slotRef.el);
+      dock.appendChild(slotRef.el);
     } else {
       slotRef.el.innerHTML = fresh.innerHTML;
       slotRef.el.style.borderColor = fresh.style.borderColor;
+      if (slotRef.el.parentElement !== dock) dock.appendChild(slotRef.el);
+    }
+    // Keep a stable order inside the dock: Influence, Courtiers, Receipts.
+    for (const id of ["ft-courtly-influence", "ft-courtly-roster", "ft-courtly-secrets"]) {
+      const el = document.getElementById(id); if (el && el.parentElement === dock) dock.appendChild(el);
     }
     if (bindFn) bindFn(slotRef.el);
-    const drag = globalThis._ftMakeHudDraggable;
-    if (typeof drag === "function") drag(slotRef.el, { storageKey, collapsedLabel });
+    // Individual panels are no longer separately draggable — the dock is.
   }
 
   function _teardownAll() {
     if (_infEl) { try { _infEl.remove(); } catch (_) {} _infEl = null; }
     if (_rosEl) { try { _rosEl.remove(); } catch (_) {} _rosEl = null; }
     if (_secEl) { try { _secEl.remove(); } catch (_) {} _secEl = null; }
+    try { document.getElementById(DOCK_ID)?.remove(); } catch (_) {}
     _lastInfA = _lastInfD = _lastSusp = null;
   }
 

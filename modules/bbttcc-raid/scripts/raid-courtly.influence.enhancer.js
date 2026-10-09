@@ -11,7 +11,9 @@
 //     • Intimidate (Violence aura):
 //         1d20 + Intimidation + (Violence OP presence bonus: +1 per 5 current Violence OP, cap +4)
 //         - On fail by 5+, backlash: lose 2 Influence HP.
-// - Damage: winner deals (margin / 2, round up) to the loser’s Influence HP. HP ≤ 0 = social victory.
+// - Damage: winner deals the full margin (min 1) to the loser’s Influence HP. HP ≤ 0 = social victory.
+//   (Ruled 2026-10-09; was ceil(margin/2), which stalemated even duels.)
+// - Coalition OP bonus + court bonus combined cap at +5 per side (ruled 2026-10-09).
 //
 // API surface (attached to game.bbttcc.api.raid):
 //   const court = await game.bbttcc.api.raid.courtly({
@@ -600,6 +602,19 @@
         atkBonus += courtBonusA;
         defBonus += courtBonusD;
 
+        // Balance ruling 2026-10-09 (Dave): coalition OP bonus + court bonus
+        // combined is capped at +COURTLY_BACKING_CAP per side, so lopsided
+        // backing can't blow the duel out before skill and spend matter.
+        const COURTLY_BACKING_CAP = 5;
+        const capNotes = [];
+        const _capBacking = (opInt, cb, who) => {
+          const over = Math.max(0, opInt + Math.max(0, cb) - COURTLY_BACKING_CAP);
+          if (over > 0) capNotes.push(`${who} backing capped at +${COURTLY_BACKING_CAP} (coalition +${opInt}, court ${cb >= 0 ? "+" : ""}${cb}).`);
+          return over;
+        };
+        atkBonus -= _capBacking(atkOpBonusInt, courtBonusA, "Attacker");
+        defBonus -= _capBacking(defOpBonusInt, courtBonusD, "Defender");
+
         // Phase C — Suspicion threshold-5 effects ("Court is uneasy" per
         // spec §4.1). Reads suspicion BEFORE this round's updates.
         const uneasy = state.suspicion >= 5;
@@ -675,10 +690,10 @@
         // Influence damage
         let damageToD = 0;
         let damageToA = 0;
-        let extraNotes = [];
+        let extraNotes = [...capNotes];
 
         if (result === "attacker") {
-          const dmg = Math.max(1, Math.ceil(Math.abs(margin) / 2));
+          const dmg = Math.max(1, Math.abs(margin));
           damageToD += dmg;
 
           // Expose → Scandal if big hit
@@ -693,7 +708,7 @@
             extraNotes.push("Intimidate backlash: defender loses 2 extra Influence.");
           }
         } else if (result === "defender") {
-          const dmg = Math.max(1, Math.ceil(Math.abs(margin) / 2));
+          const dmg = Math.max(1, Math.abs(margin));
           damageToA += dmg;
 
           if (defAct === "expose" && -margin >= 6) {
