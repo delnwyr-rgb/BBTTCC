@@ -94,7 +94,7 @@
 
     // 2. Advance.
     state.currentLayerIdx = idx + 1;
-    const breachPayload = { siegeId: state.siegeId, hexUuid, layerIdx: idx, layerName, nextLayerIdx: state.currentLayerIdx };
+    const breachPayload = { siegeId: state.siegeId, hexUuid, layerIdx: idx, layerName, nextLayerIdx: state.currentLayerIdx, structureActorId: state.layers?.[idx]?.structureActorId || null };
 
     let stormed = false;
     if (state.currentLayerIdx >= state.layers.length) {

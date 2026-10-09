@@ -2,7 +2,7 @@
   "id": "bbttcc-structures",
   "title": "Bad Eden: Structures",
   "description": "Material-BOM hardness model for Rigs, Facilities and fortifications: BOM-derived Plates/Threshold/resists, chip-queue damage path with state transitions and collapse, build/harden/repair/reclamation recipes drawing on faction stockpiles.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "compatibility": {
     "minimum": "13",
     "verified": "13"
@@ -30,7 +30,8 @@
     "scripts/damage-wedge.js",
     "scripts/collapse.js",
     "scripts/recipes.js",
-    "scripts/structure-sheet-panel.enhancer.js"
+    "scripts/structure-sheet-panel.enhancer.js",
+    "scripts/destruction.vfx.js"
   ],
   "styles": [
     "styles/structure-panel.css"
@@ -39,5 +40,6 @@
   "packs": [],
   "url": "",
   "manifest": "",
-  "download": ""
+  "download": "",
+  "socket": true
 }
