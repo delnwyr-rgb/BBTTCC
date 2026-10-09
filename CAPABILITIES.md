@@ -126,6 +126,8 @@ World settings: `overshootEnabled/overshootTierGate/overshootSkillChecks/autoApp
 
 ---
 
+**Rig crew is scene-scoped (2026-10-09, system 0.6.9)**: the Passenger Manifest lists only rigs with a token on the VIEWED scene, and the Crew HUD's pinned / player-character fallback requires the steward's rig on this scene (`_ftRigOnScene`, `_ftStewardRigHere`). **Orphan-crew sweep** (`_ftSweepOrphanCrew`, active GM, on ready / canvasReady / rig token or actor delete): a steward aboard a rig that has a token on NO scene — or whose rig actor is gone — is disembarked via `ftDisembarkSteward` (notification counts them). Manifest re-renders on rig token create/delete.
+
 ## 2. bbttcc-core
 **`game.bbttcc.packs` (dice.js, 2026-10-08) — compendium twins:** `get(rfiPackId)` / `id(rfiPackId)` / `is(pack, rfiPackId)` resolve an RFI-format pack to its dnd5e conversion on dnd5e (`bbttcc-master-content.courtly-secrets` → `bad-eden-5e.courtly-secrets`, `bbttcc-character-options.npc-callings` → `bad-eden-5e.npc-callings`, `bbttcc-tikkun.sparks` → `bad-eden-5e.sparks`); consumers: raid courtly draw, mal-voice npc-dialogue, campaign world-mutation, auto-link npc-builder, tikkun API + beat editor. Tikkun reads spark fields through a per-file `_sparkSys(item)` (system first, `flags.bbttcc-tikkun.spark` second) and maps stored RFI spark UUIDs to the twin via `flags.bad-eden-5e.rfi.id`.
 

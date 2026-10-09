@@ -27461,7 +27461,7 @@ function _ftPickHudSteward() {
   // 0. Passenger-manifest pinned steward wins over token selection.
   if (__ftCrewHudPinnedId) {
     const pinned = game.actors?.get(__ftCrewHudPinnedId);
-    if (pinned && isSteward(pinned) && isBoarded(pinned) && canRead(pinned)) return pinned;
+    if (pinned && isSteward(pinned) && isBoarded(pinned) && canRead(pinned) && _ftStewardRigHere(pinned)) return pinned;
     __ftCrewHudPinnedId = null; // pin expired (disembarked / lost access)
   }
   const stewardInRig = (rig) => {
@@ -27496,7 +27496,7 @@ function _ftPickHudSteward() {
 
   // 2. Player fallback: assigned character if boarded.
   const own = game.user.character;
-  if (own && canRead(own) && isBoarded(own)) return own;
+  if (own && canRead(own) && isBoarded(own) && _ftStewardRigHere(own)) return own;
 
   // 3. Player fallback: any owned token on canvas whose actor is a
   //    boarded steward (covers multi-token rig scenes where the player
@@ -27704,12 +27704,32 @@ Hooks.on("canvasReady", async () => {
 let __ftManifestEl = null;
 let __ftManifestRenderTimer = null;
 
+// 2026-10-09 (owner) — a rig "is here" when it has a token on the scene being viewed;
+// it "exists" when it has a token on ANY scene. Crew of a rig that exists nowhere
+// is disembarked by the active GM (see the sweep below).
+function _ftRigOnScene(rig, scene = canvas?.scene) {
+  if (!rig || !scene) return false;
+  return !!scene.tokens?.some?.(t => t.actorId === rig.id);
+}
+function _ftRigOnAnyScene(rig) {
+  if (!rig) return false;
+  return !!game.scenes?.some?.(sc => sc.tokens?.some?.(t => t.actorId === rig.id));
+}
+function _ftStewardRigHere(steward) {
+  const rigId = steward?.getFlag?.("fourththing", "boardedRig")?.rigId
+    ?? _ftFindRigsForSteward?.(steward?.id)?.[0]?.id;
+  const rig = rigId ? game.actors?.get(rigId) : null;
+  return rig ? _ftRigOnScene(rig) : false;
+}
+
 function _ftCollectManifestEntries() {
   if (!game.user) return [];
   const out = [];
   const canRead = (a) => a?.testUserPermission?.(game.user, "OBSERVER") ?? false;
   for (const rig of (game.actors ?? [])) {
     if (rig?.type !== "rig") continue;
+    // 2026-10-09 (owner) — the manifest belongs to the scene the rig is on.
+    if (!_ftRigOnScene(rig)) continue;
     const slots = rig.system?.crew?.slots ?? [];
     for (const slot of slots) {
       if (!slot?.actorId) continue;
@@ -27784,6 +27804,46 @@ Hooks.on("updateActor", (actor) => {
 });
 Hooks.on("canvasReady", () => _ftRenderPassengerManifest());
 Hooks.once("ready", () => _ftRenderPassengerManifest());
+
+// 2026-10-09 (owner) — "if there are none, disembark the player": crew aboard a rig
+// that has no token on ANY scene (deleted, never placed, rig actor gone) are
+// disembarked. Active GM only; runs on load, scene change and rig token/actor delete.
+let __ftCrewSweepTimer = null;
+function _ftSweepOrphanCrew() {
+  if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) return;
+  if (__ftCrewSweepTimer) clearTimeout(__ftCrewSweepTimer);
+  __ftCrewSweepTimer = setTimeout(async () => {
+    __ftCrewSweepTimer = null;
+    const done = new Set();
+    const off = async (steward, rigId, why) => {
+      if (!steward || done.has(steward.id)) return;
+      done.add(steward.id);
+      try { await ftDisembarkSteward(steward, { rigId }); console.log(`[fourththing] crew sweep: ${steward.name} disembarked (${why})`); }
+      catch (e) { console.warn("[fourththing] crew sweep disembark failed", steward?.name, e); }
+    };
+    for (const rig of (game.actors ?? [])) {
+      if (rig?.type !== "rig") continue;
+      const crew = (rig.system?.crew?.slots ?? []).filter(sl => sl?.actorId);
+      if (!crew.length || _ftRigOnAnyScene(rig)) continue;
+      for (const sl of crew) await off(game.actors?.get(sl.actorId), rig.id, `${rig.name} is on no scene`);
+    }
+    for (const a of (game.actors ?? [])) {
+      const rigId = a?.getFlag?.("fourththing", "boardedRig")?.rigId;
+      if (!rigId) continue;
+      const rig = game.actors?.get(rigId);
+      if (!rig) await off(a, rigId, "rig no longer exists");
+      else if (!_ftRigOnAnyScene(rig)) await off(a, rigId, `${rig.name} is on no scene`);
+    }
+    if (done.size) ui.notifications?.info(`Disembarked ${done.size} steward(s) whose rig is on no scene.`);
+  }, 1500);
+}
+Hooks.once("ready", () => _ftSweepOrphanCrew());
+Hooks.on("canvasReady", () => _ftSweepOrphanCrew());
+Hooks.on("deleteToken", (doc) => { if (doc?.actor?.type === "rig" || game.actors?.get(doc?.actorId)?.type === "rig") _ftSweepOrphanCrew(); });
+Hooks.on("deleteActor", (actor) => { if (actor?.type === "rig") _ftSweepOrphanCrew(); });
+// Re-render the manifest when rig tokens come and go on the viewed scene.
+Hooks.on("createToken", (doc) => { if (game.actors?.get(doc?.actorId)?.type === "rig") _ftRenderPassengerManifest(); });
+Hooks.on("deleteToken", (doc) => { if (game.actors?.get(doc?.actorId)?.type === "rig") { _ftRenderPassengerManifest(); try { _ftRenderCrewHud(); } catch (_) {} } });
 
 // 2026-05-19 — When the active scene changes, open character/rig/npc
 // sheets need to re-render to pick up the new grid distance for the
