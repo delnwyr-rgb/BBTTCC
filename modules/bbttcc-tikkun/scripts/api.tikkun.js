@@ -1,3 +1,7 @@
+// Spark data on either system (2026-10-08): RFI keeps it on item.system; dnd5e (bad-eden-5e.sparks, loot items)
+// carries the same block at flags.bbttcc-tikkun.spark because dnd5e's data model strips unknown system keys.
+const _sparkSys = (it) => (it?.system?.sephirah ? it.system : (it?.flags?.["bbttcc-tikkun"]?.spark ?? it?.system ?? {}));
+
 console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
 /* bbttcc-tikkun/api.tikkun.js — Great Work Core API (C1 + Phase A.1)
  *
@@ -128,7 +132,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
 
     // Pull aligned/misaligned from the item's system data first; fall back to
     // sephirah defaults when arrays are empty.
-    const sys = sparkItemOrFlagSpark?.system ?? sparkItemOrFlagSpark ?? {};
+    const sys = sparkItemOrFlagSpark?.system ? _sparkSys(sparkItemOrFlagSpark) : (sparkItemOrFlagSpark ?? {});   // dnd5e: the flag block
     let aligned    = Array.isArray(sys.alignedMethods)    ? sys.alignedMethods    : null;
     let misaligned = Array.isArray(sys.misalignedMethods) ? sys.misalignedMethods : null;
     if ((!aligned?.length || !misaligned?.length) && sys.sephirah) {
@@ -158,32 +162,36 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
   let _sparkPackIndexCache = null;
   async function _ensureSparkIndex() {
     if (_sparkPackIndexCache) return _sparkPackIndexCache;
-    const pack = game.packs?.get("bbttcc-tikkun.sparks");
+    const pack = game.bbttcc?.packs?.get?.("bbttcc-tikkun.sparks") ?? game.packs?.get("bbttcc-tikkun.sparks");   // dnd5e: the bad-eden-5e twin
     if (!pack) return null;
     try {
-      const idx = await pack.getIndex({ fields: ["name", "type", "img", "system.sephirah", "system.kind", "flags.bbttcc-tikkun.identifier"] });
+      const idx = await pack.getIndex({ fields: ["name", "type", "img", "system.sephirah", "system.kind", "flags.bbttcc-tikkun.identifier", "flags.bbttcc-tikkun.spark.sephirah", "flags.bbttcc-tikkun.spark.kind", "flags.bad-eden-5e.rfi.id"] });
       _sparkPackIndexCache = { pack, idx };
       return _sparkPackIndexCache;
     } catch (e) { return null; }
   }
   // Invalidate when the pack changes so authoring updates land without reload.
-  Hooks.on("createItem",  (doc) => { if (doc?.pack === "bbttcc-tikkun.sparks") _sparkPackIndexCache = null; });
-  Hooks.on("updateItem",  (doc) => { if (doc?.pack === "bbttcc-tikkun.sparks") _sparkPackIndexCache = null; });
-  Hooks.on("deleteItem",  (doc) => { if (doc?.pack === "bbttcc-tikkun.sparks") _sparkPackIndexCache = null; });
+  Hooks.on("createItem",  (doc) => { if (game.bbttcc?.packs?.is?.(doc?.pack, "bbttcc-tikkun.sparks") ?? doc?.pack === "bbttcc-tikkun.sparks") _sparkPackIndexCache = null; });
+  Hooks.on("updateItem",  (doc) => { if (game.bbttcc?.packs?.is?.(doc?.pack, "bbttcc-tikkun.sparks") ?? doc?.pack === "bbttcc-tikkun.sparks") _sparkPackIndexCache = null; });
+  Hooks.on("deleteItem",  (doc) => { if (game.bbttcc?.packs?.is?.(doc?.pack, "bbttcc-tikkun.sparks") ?? doc?.pack === "bbttcc-tikkun.sparks") _sparkPackIndexCache = null; });
 
   async function _resolveSparkItem(keyOrUuid) {
     if (!keyOrUuid) return null;
     const s = String(keyOrUuid);
     // Full UUID path
+    let rfiId = null;
     if (s.startsWith("Compendium.")) {
-      try { return await fromUuid(s); } catch { return null; }
+      try { const doc = await fromUuid(s); if (doc) return doc; } catch { /* fall through */ }
+      // dnd5e (2026-10-08): a stored RFI spark UUID → its bad-eden-5e twin, matched by the RFI id kept in the parity flag
+      if (!s.startsWith("Compendium.bbttcc-tikkun.sparks.")) return null;
+      rfiId = s.split(".").pop();
     }
     const handle = await _ensureSparkIndex();
     if (!handle) return null;
-    // Match by flag identifier or by short item id.
-    const entry = handle.idx.find(e =>
-      String(e.flags?.["bbttcc-tikkun"]?.identifier ?? "") === s ||
-      String(e._id ?? "") === s
+    // Match by flag identifier, by short item id, or (dnd5e twin) by the RFI id.
+    const entry = handle.idx.find(e => rfiId
+      ? String(e.flags?.["bad-eden-5e"]?.rfi?.id ?? "") === rfiId
+      : (String(e.flags?.["bbttcc-tikkun"]?.identifier ?? "") === s || String(e._id ?? "") === s)
     );
     if (!entry) return null;
     try { return await handle.pack.getDocument(entry._id); } catch { return null; }
@@ -219,8 +227,8 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
       : await _resolveSparkItem(key);
     const enriched = item ? {
       name:     sparkCfg.name     ?? item.name,
-      kind:     sparkCfg.kind     ?? item.system?.kind     ?? null,
-      sephirah: sparkCfg.sephirah ?? item.system?.sephirah ?? null,
+      kind:     sparkCfg.kind     ?? _sparkSys(item)?.kind     ?? null,
+      sephirah: sparkCfg.sephirah ?? _sparkSys(item)?.sephirah ?? null,
       sparkUuid: sparkCfg.sparkUuid ?? item.uuid,
       img:      sparkCfg.img ?? item.img
     } : {};
@@ -264,8 +272,8 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     return gatherSpark(actorOrId, {
       key:       extraCfg.key ?? identifier,
       name:      item.name,
-      kind:      item.system?.kind ?? null,
-      sephirah:  item.system?.sephirah ?? null,
+      kind:      _sparkSys(item)?.kind ?? null,
+      sephirah:  _sparkSys(item)?.sephirah ?? null,
       sparkUuid: item.uuid,
       img:       item.img,
       ...extraCfg
@@ -319,7 +327,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
       const item = await _resolveSparkItem(key);
       const identifier = item?.flags?.["bbttcc-tikkun"]?.identifier ?? key;
       s = _ensureSpark(map, identifier, item ? {
-        name: item.name, kind: item.system?.kind ?? null, sephirah: item.system?.sephirah ?? null
+        name: item.name, kind: _sparkSys(item)?.kind ?? null, sephirah: _sparkSys(item)?.sephirah ?? null
       } : {});
       if (item) { s.sparkUuid = item.uuid; s.img = item.img; }
     }

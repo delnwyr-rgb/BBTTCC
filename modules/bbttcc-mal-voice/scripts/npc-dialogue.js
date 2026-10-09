@@ -241,7 +241,7 @@ async function _grantSecret({ npcActor, def, factionId, acquisition, speakerName
   if (!api) return { ok: false, error: "courtly secrets API not available" };
   const faction = game.actors?.get(String(factionId || ""));
   if (!faction) return { ok: false, error: "no faction chosen" };
-  const pack = game.packs?.get(SECRETS_PACK_ID);
+  const pack = game.bbttcc?.packs?.get?.(SECRETS_PACK_ID) ?? game.packs?.get(SECRETS_PACK_ID);   // dnd5e: the bad-eden-5e twin
   const docs = pack ? await pack.getDocuments() : [];
   // Compound-aware template match: exact effect set → same first effect → any
   // (the flags stamped on the clone below carry the real effect list anyway).

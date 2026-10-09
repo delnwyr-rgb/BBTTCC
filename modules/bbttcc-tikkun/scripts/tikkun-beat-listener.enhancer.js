@@ -22,6 +22,10 @@
  * Phase E will implement the "deposit" action (char→faction bridge). For
  * Phase B it's a stub that logs.
  */
+// Spark data on either system (2026-10-08): RFI keeps it on item.system; dnd5e (bad-eden-5e.sparks, loot items)
+// carries the same block at flags.bbttcc-tikkun.spark because dnd5e's data model strips unknown system keys.
+const _sparkSys = (it) => (it?.system?.sephirah ? it.system : (it?.flags?.["bbttcc-tikkun"]?.spark ?? it?.system ?? {}));
+
 
 console.log("[bbttcc-tikkun/beat-listener] LOADED");
 
@@ -57,7 +61,7 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
   }
 
   function _flavorFor(sparkItem) {
-    const seph = String(sparkItem?.system?.sephirah ?? "").toLowerCase();
+    const seph = String(_sparkSys(sparkItem)?.sephirah ?? "").toLowerCase();
     return CORRUPTION_FLAVOR[seph] || "The spark is gathered, but its alignment with its own domain is shaken.";
   }
 
@@ -174,7 +178,7 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
 
     const note = `Beat: ${campaign?.label ?? campaign?.id ?? "campaign"} → ${beat?.label ?? beat?.id ?? "beat"}${methodTag ? ` (method: ${methodTag}, ${alignment})` : ""}`;
     const corruptionReason = corrupted
-      ? `Misaligned method "${methodTag}" on ${sparkItem?.system?.sephirah ?? "(unknown)"} spark`
+      ? `Misaligned method "${methodTag}" on ${_sparkSys(sparkItem)?.sephirah ?? "(unknown)"} spark`
       : null;
 
     try {
@@ -227,7 +231,7 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
     }
 
     // Success notification + audit log
-    const sephKey   = sparkItem?.system?.sephirah ?? "";
+    const sephKey   = _sparkSys(sparkItem)?.sephirah ?? "";
     const sephLabel = sephKey
       ? (game.fourththing?.constants?.SEPHIROTH?.[sephKey]?.label ?? sephKey)
       : "";
@@ -254,7 +258,7 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
         ? `<p style="margin:0.3rem 0 0;font-size:0.82rem;font-style:italic;border-left:2px solid #c03030;padding-left:0.5rem">${flavor}</p>`
         : "";
       const repairHint  = corrupted
-        ? `<p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.65">Repair (Phase D): ${sparkItem?.system?.repair?.materialAmount ?? 1}× ${sparkItem?.system?.repair?.materialKey ?? "—"} + ${(Number(sparkItem?.system?.repair?.opCost?.amount) || 0) * (Number(game.bbttcc?.api?.op?.marksPerOp?.()) || 0)} ${sparkItem?.system?.repair?.opCost?.pool ?? "—"} marks, ritual DC ${sparkItem?.system?.repair?.ritualDC ?? 15}.</p>`
+        ? `<p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.65">Repair (Phase D): ${_sparkSys(sparkItem)?.repair?.materialAmount ?? 1}× ${_sparkSys(sparkItem)?.repair?.materialKey ?? "—"} + ${(Number(_sparkSys(sparkItem)?.repair?.opCost?.amount) || 0) * (Number(game.bbttcc?.api?.op?.marksPerOp?.()) || 0)} ${_sparkSys(sparkItem)?.repair?.opCost?.pool ?? "—"} marks, ritual DC ${_sparkSys(sparkItem)?.repair?.ritualDC ?? 15}.</p>`
         : "";
       ChatMessage.create({
         speaker: ChatMessage.getSpeaker?.({ actor }) ?? {},
@@ -272,7 +276,7 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
       try {
         Hooks.callAll("bbttcc:spark:corrupted", {
           actor, sparkItem, sparkKey, methodTag,
-          sephirah: sparkItem?.system?.sephirah ?? null,
+          sephirah: _sparkSys(sparkItem)?.sephirah ?? null,
           campaign, beat
         });
       } catch (e) { console.warn(TAG, "bbttcc:spark:corrupted listeners failed:", e); }

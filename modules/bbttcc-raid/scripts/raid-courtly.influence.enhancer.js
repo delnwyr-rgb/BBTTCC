@@ -1117,7 +1117,7 @@
         if (!s) return null;
         const targetActor = s === "A" ? A : D;
         const PACK_ID = "bbttcc-master-content.courtly-secrets";
-        const pack = game.packs?.get(PACK_ID);
+        const pack = game.bbttcc?.packs?.get?.(PACK_ID) ?? game.packs?.get(PACK_ID);   // dnd5e: the bad-eden-5e twin
         if (!pack) { await sendChat([`Receipts compendium not found (${PACK_ID}).`], { title: `${label}: Draw` }); return null; }
         const docs = await pack.getDocuments();
         if (!docs.length) { await sendChat([`Receipts compendium is empty — run the seeder macro first.`], { title: `${label}: Draw` }); return null; }

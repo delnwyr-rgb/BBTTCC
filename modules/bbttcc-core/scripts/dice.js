@@ -154,8 +154,24 @@ const types = {
   hasItem: (t) => (globalThis.Item?.TYPES ?? []).includes(t)
 };
 
+/* ── Compendium twins: RFI-format packs → their dnd5e conversions (bad-eden-5e lanes, 2026-10-08) ──
+ * On dnd5e the RFI-native packs aren't registered (the D&D overlay drops them); the bad-eden-5e
+ * converter builds dnd5e twins under these ids. `game.bbttcc.packs.get(rfiId)` returns whichever exists. */
+const PACK_TWINS = {
+  "bbttcc-master-content.courtly-secrets": "bad-eden-5e.courtly-secrets",
+  "bbttcc-character-options.npc-callings": "bad-eden-5e.npc-callings",
+  "bbttcc-tikkun.sparks": "bad-eden-5e.sparks"
+};
+const packs = {
+  id: (rfiId) => (isRFI() ? rfiId : (game.packs?.get(rfiId) ? rfiId : (PACK_TWINS[rfiId] ?? rfiId))),
+  get: (rfiId) => game.packs?.get(packs.id(rfiId)) ?? null,
+  is: (pack, rfiId) => !!pack && (pack === rfiId || pack === PACK_TWINS[rfiId]),
+  TWINS: PACK_TWINS
+};
+
 Hooks.once("init", () => {
   game.bbttcc = game.bbttcc || {};
+  game.bbttcc.packs = packs;
   game.bbttcc.dice = { isRFI, checkFormula, abilityKey, abilityMod, skillRef, skillBonus, skillCheck, check, flatCheck, aeKey, aeChanges, ABILITY, SKILLS, AE_KEYS };
   game.bbttcc.types = types;
   console.log(TAG, `installed game.bbttcc.dice (${isRFI() ? "RFI canon die" : "d20"})`);

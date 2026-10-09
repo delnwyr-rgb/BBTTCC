@@ -399,8 +399,9 @@ function folderDoc(pack, name, parentName = null) {
 /* ── main ────────────────────────────────────────────────────────────────── */
 function main() {
   const files = readdirSync(CONTENT).filter(f => f.endsWith(".json")).sort();
-  const docs = { classes: [], subclasses: [], features: [], powers: [], species: [], tables: [], gear: [], monsters: [] };
-  const folders = { features: new Map(), powers: new Map(), species: new Map(), gear: new Map(), monsters: new Map() };
+  // item lanes route by the content file's `_pack` (default gear): courtly-secrets / npc-callings / sparks (2026-10-08)
+  const docs = { classes: [], subclasses: [], features: [], powers: [], species: [], tables: [], gear: [], monsters: [], "courtly-secrets": [], "npc-callings": [], sparks: [] };
+  const folders = { features: new Map(), powers: new Map(), species: new Map(), gear: new Map(), monsters: new Map(), "courtly-secrets": new Map(), "npc-callings": new Map(), sparks: new Map() };
   const folderFor = (pack, name, parent) => {
     const k = `${parent ? parent + "/" : ""}${name}`;
     if (!folders[pack].has(k)) folders[pack].set(k, folderDoc(pack, name, parent));
@@ -413,7 +414,8 @@ function main() {
     for (const s of data.subclasses ?? []) docs.subclasses.push(subclassDoc(s));
     for (const t of data.tables ?? []) docs.tables.push(tableDoc(t));
     for (const a of data.actors ?? []) docs.monsters.push(rawActorDoc(a, a.folder ? folderFor("monsters", a.folder, null) : null));
-    for (const it of data.items ?? []) docs.gear.push(rawItemDoc(it, it.folder ? folderFor("gear", it.folder, it.folderParent ?? null) : null));
+    const itemPack = docs[data._pack] && folders[data._pack] ? data._pack : "gear";
+    for (const it of data.items ?? []) docs[itemPack].push(rawItemDoc(it, it.folder ? folderFor(itemPack, it.folder, it.folderParent ?? null) : null));
     for (const r of data.races ?? []) { const d = raceDoc(r); if (r.family) d.folder = folderFor("species", r.family, null); docs.species.push(d); }
     for (const f of data.features ?? []) {
       const fid = f.folder ? folderFor("features", f.folder, f.folderParent ?? null) : null;

@@ -785,6 +785,77 @@ function laneCreatures() {
   return { src: actors, out, needsAll, kind: "actors" };
 }
 
+/* ── secrets / callings / sparks lanes (2026-10-08): the RFI-only packs the D&D overlay used to drop ── */
+// Loaders for packs outside master-content: the _source tree of another module (paths relative to modules/).
+const loadModulePack = (rel) => walk(join(ROOT, "..", rel)).map(f => { try { return JSON.parse(readFileSync(f, "utf8")); } catch { return null; } }).filter(d => d && d._id && d.type && !String(d._key ?? "").startsWith("!folders"));
+const slugOf = (prefix, name) => prefix + name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const rfiFlag = (d, pack, extra = {}) => ({ id: d._id, pack, identifier: d.system?.identifier ?? d.flags?.["bbttcc-tikkun"]?.identifier ?? "", hash: sha(JSON.stringify({ n: d.name, s: d.system, f: d.flags ?? {}, ...extra })) });
+const featItem = (d, slug, folder, needs) => {
+  const html = convertText(d.system?.description?.value ?? "");
+  for (const l of leftovers(html)) needs.push(`leftover term "${l}"`);
+  return { slug, name: d.name, type: "feat", img: d.img && !/fourththing/.test(d.img) ? d.img : "icons/svg/book.svg", folder,
+    system: { description: { value: html, chat: "" }, type: { value: "", subtype: "" }, requirements: "", properties: [], uses: { max: "", spent: 0, recovery: [] }, identifier: slug },
+    effects: [], flags: {} };
+};
+
+// Courtly secrets (bbttcc-master-content.courtly-secrets) → dnd5e feats. The secret's engine block
+// (flags.bbttcc-raid.secret: effectKey / acquisition) is carried verbatim — the Courtly engine reads it on both systems.
+function laneSecrets() {
+  const src = loadPack("courtly-secrets").filter(d => d.type === "feat");
+  const out = [], needsAll = [];
+  for (const d of src.sort((a, b) => a.name.localeCompare(b.name))) {
+    const needs = []; const e = featItem(d, slugOf("secret-", d.name), "Courtly Secrets", needs);
+    e.flags = { "bbttcc-raid": JSON.parse(JSON.stringify(d.flags?.["bbttcc-raid"] ?? {})), "bad-eden-5e": { rfi: rfiFlag(d, "courtly-secrets") } };
+    if (!d.flags?.["bbttcc-raid"]?.secret?.effectKey) needs.push("no secret effectKey");
+    out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
+  }
+  return { src, out, needsAll, kind: "items" };
+}
+
+// NPC callings (bbttcc-character-options.npc-callings) → dnd5e feats (dnd5e NPCs don't take classes). The calling
+// rows (category "calling", flags.fourththing.calling {key, tier}) and the 6 calling "class" headers both become feats;
+// the npc-builder reads flags + name, which carry over.
+function laneCallings() {
+  const src = loadModulePack("bbttcc-character-options/packs/_source/npc-callings").filter(d => ["class", "feature"].includes(d.type));
+  const out = [], needsAll = [];
+  for (const d of src.sort((a, b) => a.name.localeCompare(b.name))) {
+    const needs = [];
+    // The "Aptitude kit" through the rubric's rank rule (rank 1 = proficient, rank 2+ = expertise — the creature lane's rule):
+    // signature skill rank = tier → proficient at Tier I, expertise from Tier II; secondary rank = tier − 1 → proficient at Tier II, expertise from Tier III.
+    const kit = (html) => html
+      .replace(/Aptitude kit/g, "Skill kit")
+      .replace(/signature aptitude(<\/?[a-z]+>|\s)*([A-Z][a-z]+)(<\/?[a-z]+>|\s)*rank = tier/g, (_, a1, sk) => skillOf(sk)?.kind === "attack" ? `signature: <strong>${skillText(sk)}</strong> (proficient)` : `signature skill <strong>${skillText(sk)}</strong>: proficient at Tier I, expertise from Tier II`)
+      .replace(/secondary(<\/?[a-z]+>|\s)*([A-Z][a-z]+)(<\/?[a-z]+>|\s)*rank = tier\s*[−-]\s*1/g, (_, a1, sk) => skillOf(sk)?.kind === "attack" ? `secondary: <strong>${skillText(sk)}</strong> (proficient)` : `secondary <strong>${skillText(sk)}</strong>: proficient from Tier II, expertise from Tier III`)
+      .replace(/count Trained \(rank 1\) in one (\w+) aptitude/g, (_, ab) => `count as proficient in one ${ab} skill`);
+    const d2 = { ...d, system: { ...d.system, description: { ...(d.system?.description ?? {}), value: kit(d.system?.description?.value ?? "") } } };
+    const e = featItem(d2, slugOf("calling-", d.name), "NPC Callings", needs);
+    e.system.type = { value: "monster", subtype: "" };
+    e.flags = { fourththing: JSON.parse(JSON.stringify(d.flags?.fourththing ?? {})), "bbttcc-character-options": { rfiType: d.type, category: d.system?.category ?? "calling", tags: d.system?.tags ?? [] }, "bad-eden-5e": { rfi: rfiFlag(d, "npc-callings") } };
+    out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
+  }
+  return { src, out, needsAll, kind: "items" };
+}
+
+// Sparks (bbttcc-tikkun.sparks, authored in bbttcc-tikkun/packs-source/sparks) → dnd5e loot. dnd5e has no `spark`
+// item type and its data model strips unknown system keys, so the whole RFI spark block (sephirah, kind,
+// aligned/misalignedMethods, repair) rides at flags.bbttcc-tikkun.spark; the Tikkun API reads either place.
+function laneSparks() {
+  const src = walk(join(ROOT, "..", "bbttcc-tikkun", "packs-source", "sparks")).filter(f => f.endsWith(".json")).map(f => { try { return JSON.parse(readFileSync(f, "utf8")); } catch { return null; } }).filter(d => d && d.type === "spark");
+  const out = [], needsAll = [];
+  for (const d of src.sort((a, b) => a.name.localeCompare(b.name))) {
+    const needs = []; const ident = d.flags?.["bbttcc-tikkun"]?.identifier ?? d._id;
+    const html = convertText(d.system?.description?.value ?? "");
+    const { description, ...spark } = JSON.parse(JSON.stringify(d.system ?? {}));
+    const e = { slug: slugOf("spark-", ident.replace(/^spark_/, "").replace(/_/g, "-")), name: d.name, type: "loot", img: d.img ?? "icons/magic/light/orb-lightbulb-gray.webp", folder: "Sparks",
+      system: { description: { value: html, chat: "" }, type: { value: "treasure", subtype: "" }, quantity: 1, weight: { value: 0, units: "lb" }, price: { value: 0, denomination: "gp" }, rarity: "rare", identifier: ident },
+      effects: [],
+      flags: { "bbttcc-tikkun": { ...(d.flags?.["bbttcc-tikkun"] ?? {}), spark }, "bad-eden-5e": { rfi: { id: d._id ?? ident, pack: "sparks", identifier: ident, hash: sha(JSON.stringify({ n: d.name, s: d.system, f: d.flags ?? {} })) } } } };
+    if (!spark.sephirah) needs.push("no sephirah");
+    out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
+  }
+  return { src, out, needsAll, kind: "items" };
+}
+
 /* ── overrides + output ──────────────────────────────────────────────────── */
 const deepMerge = (a, b) => { for (const [k, v] of Object.entries(b)) a[k] = v && typeof v === "object" && !Array.isArray(v) && a[k] && typeof a[k] === "object" ? deepMerge(a[k], v) : v; return a; };
 
@@ -793,7 +864,8 @@ function writeLane(name, features, needsAll, about, kind = "features") {
   const overrides = existsSync(ovPath) ? JSON.parse(readFileSync(ovPath, "utf8")) : {};
   let applied = 0;
   for (const f of features) if (overrides[f.slug]) { deepMerge(f, overrides[f.slug]); applied++; }
-  const doc = { _about: about, _generated: { by: "tools/convert-5e.mjs", rubric: RUBRIC.version, at: new Date().toISOString().slice(0, 10), overridesApplied: applied }, [kind]: features };
+  const PACK = { secrets: "courtly-secrets", callings: "npc-callings", sparks: "sparks" };   // build-packs routes items by _pack
+  const doc = { _about: about, ...(PACK[name] ? { _pack: PACK[name] } : {}), _generated: { by: "tools/convert-5e.mjs", rubric: RUBRIC.version, at: new Date().toISOString().slice(0, 10), overridesApplied: applied }, [kind]: features };
   const outPath = join(ROOT, "content", `${name}.json`);
   writeFileSync(outPath, JSON.stringify(doc, null, 2) + "\n");
   mkdirSync(join(ROOT, "content", "_needs-human"), { recursive: true });
@@ -822,12 +894,12 @@ function parity(name, src, features, kind = "features") {
 }
 
 /* ── main ────────────────────────────────────────────────────────────────── */
-const LANES = { techniques: laneTechniques, gear: laneGear, creatures: laneCreatures };
+const LANES = { techniques: laneTechniques, gear: laneGear, creatures: laneCreatures, secrets: laneSecrets, callings: laneCallings, sparks: laneSparks };
 if (!lane || !LANES[lane]) { console.error(`usage: convert-5e.mjs <${Object.keys(LANES).join("|")}> [--write] [--parity]`); process.exit(2); }
 const { src, out, needsAll, kind = "features" } = LANES[lane]();
 if (flag("--parity")) { parity(lane, src, out, kind); }
 else if (flag("--write")) {
-  const ABOUT = { techniques: "The 75 Bad Eden Core techniques as dnd5e feats.", gear: "Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).", creatures: "The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis." };
+  const ABOUT = { techniques: "The 75 Bad Eden Core techniques as dnd5e feats.", gear: "Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).", secrets: "The Courtly Intrigue secrets as dnd5e feats (the secret engine block carried verbatim).", callings: "The NPC callings (trade + trick per tier) as dnd5e monster feats.", sparks: "The 30 Tikkun sparks as dnd5e loot; the RFI spark block rides at flags.bbttcc-tikkun.spark.", creatures: "The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis." };
   const { outPath, applied } = writeLane(lane, out, needsAll, `GENERATED from RFI canon by tools/convert-5e.mjs (rubric v${RUBRIC.version}) — do not hand-edit; put fixes in content/overrides/${lane}.json. ${ABOUT[lane] ?? ""}`, kind);
   console.log(`${lane}: ${out.length} converted → ${outPath} (${applied} override(s) applied); ${needsAll.length} need a human → content/_needs-human/${lane}.md`);
 } else {

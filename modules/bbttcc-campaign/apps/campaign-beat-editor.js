@@ -858,15 +858,16 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     // isn't installed.
     let sparkLinkOptions = [{ uuid: "", label: "— None —" }];
     try {
-      const sparkPack = game.packs?.get("bbttcc-tikkun.sparks");
+      // dnd5e (2026-10-08): the bad-eden-5e twin (loot items carrying flags.bbttcc-tikkun.spark)
+      const sparkPack = game.bbttcc?.packs?.get?.("bbttcc-tikkun.sparks") ?? game.packs?.get("bbttcc-tikkun.sparks");
       if (sparkPack) {
         const idx = await sparkPack.getIndex({
-          fields: ["name", "type", "system.sephirah", "system.kind", "flags.bbttcc-tikkun.identifier"]
+          fields: ["name", "type", "system.sephirah", "system.kind", "flags.bbttcc-tikkun.identifier", "flags.bbttcc-tikkun.spark.sephirah"]
         });
         const entries = idx
-          .filter(e => String(e.type || "").toLowerCase() === "spark")
+          .filter(e => String(e.type || "").toLowerCase() === "spark" || !!e.flags?.["bbttcc-tikkun"]?.spark)
           .map(e => ({
-            uuid:  `Compendium.bbttcc-tikkun.sparks.Item.${e._id}`,
+            uuid:  `Compendium.${sparkPack.collection}.Item.${e._id}`,
             label: e.name
           }))
           .sort((a, b) => a.label.localeCompare(b.label));

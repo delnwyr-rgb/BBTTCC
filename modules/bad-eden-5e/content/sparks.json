@@ -1,0 +1,2169 @@
+{
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/sparks.json. The 30 Tikkun sparks as dnd5e loot; the RFI spark block rides at flags.bbttcc-tikkun.spark.",
+  "_pack": "sparks",
+  "_generated": {
+    "by": "tools/convert-5e.mjs",
+    "rubric": "1.8.1",
+    "at": "2026-10-09",
+    "overridesApplied": 0
+  },
+  "items": [
+    {
+      "slug": "spark-netzach-animate",
+      "name": "Spark of Endurance (Animate)",
+      "type": "loot",
+      "img": "icons/svg/dice-target.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Netzach — Momentum, triumph.</p>\n<p><strong>Aligned methods:</strong> violence, siege, logistics. <strong>Misaligned (causes Corruption):</strong> nonlethal, intrigue.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_netzach_animate"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_netzach_animate",
+          "spark": {
+            "category": "spark",
+            "sephirah": "netzach",
+            "kind": "animate",
+            "alignedMethods": [
+              "violence",
+              "siege",
+              "logistics"
+            ],
+            "misalignedMethods": [
+              "nonlethal",
+              "intrigue"
+            ],
+            "repair": {
+              "materialKey": "freshwater-pearl",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "faith",
+                "amount": 4
+              },
+              "ritualDC": 13
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "netzach",
+              "animate",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "sQUqOs2assyKs2is",
+            "pack": "sparks",
+            "identifier": "spark_netzach_animate",
+            "hash": "aba050e76c67"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-netzach-conceptual",
+      "name": "Spark of Endurance (Conceptual)",
+      "type": "loot",
+      "img": "icons/svg/aura.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Netzach — Momentum, triumph.</p>\n<p><strong>Aligned methods:</strong> violence, siege, logistics. <strong>Misaligned (causes Corruption):</strong> nonlethal, intrigue.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_netzach_conceptual"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_netzach_conceptual",
+          "spark": {
+            "category": "spark",
+            "sephirah": "netzach",
+            "kind": "conceptual",
+            "alignedMethods": [
+              "violence",
+              "siege",
+              "logistics"
+            ],
+            "misalignedMethods": [
+              "nonlethal",
+              "intrigue"
+            ],
+            "repair": {
+              "materialKey": "vow-resin",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "culture",
+                "amount": 2
+              },
+              "ritualDC": 18
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "netzach",
+              "conceptual",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "6UQsaOAgOoUiwwUs",
+            "pack": "sparks",
+            "identifier": "spark_netzach_conceptual",
+            "hash": "4d2cdeb20a55"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-netzach-vestigial",
+      "name": "Spark of Endurance (Vestigial)",
+      "type": "loot",
+      "img": "icons/svg/anchor.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Netzach — Momentum, triumph.</p>\n<p><strong>Aligned methods:</strong> violence, siege, logistics. <strong>Misaligned (causes Corruption):</strong> nonlethal, intrigue.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_netzach_vestigial"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_netzach_vestigial",
+          "spark": {
+            "category": "spark",
+            "sephirah": "netzach",
+            "kind": "vestigial",
+            "alignedMethods": [
+              "violence",
+              "siege",
+              "logistics"
+            ],
+            "misalignedMethods": [
+              "nonlethal",
+              "intrigue"
+            ],
+            "repair": {
+              "materialKey": "anchorstone",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "logistics",
+                "amount": 3
+              },
+              "ritualDC": 15
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "netzach",
+              "vestigial",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "cq4uqEs4esOouwMw",
+            "pack": "sparks",
+            "identifier": "spark_netzach_vestigial",
+            "hash": "8057fa1485e3"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-yesod-animate",
+      "name": "Spark of Foundation (Animate)",
+      "type": "loot",
+      "img": "icons/svg/dice-target.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_yesod_animate"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_yesod_animate",
+          "spark": {
+            "category": "spark",
+            "sephirah": "yesod",
+            "kind": "animate",
+            "alignedMethods": [
+              "intrigue",
+              "soul",
+              "faith"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "freshwater-pearl",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "faith",
+                "amount": 4
+              },
+              "ritualDC": 13
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "yesod",
+              "animate",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "2IweYGIEc80qHWyG",
+            "pack": "sparks",
+            "identifier": "spark_yesod_animate",
+            "hash": "7b968636ec32"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-yesod-conceptual",
+      "name": "Spark of Foundation (Conceptual)",
+      "type": "loot",
+      "img": "icons/svg/aura.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_yesod_conceptual"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_yesod_conceptual",
+          "spark": {
+            "category": "spark",
+            "sephirah": "yesod",
+            "kind": "conceptual",
+            "alignedMethods": [
+              "intrigue",
+              "soul",
+              "faith"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "vow-resin",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "culture",
+                "amount": 2
+              },
+              "ritualDC": 18
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "yesod",
+              "conceptual",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "kc6KuSG8gug6SwI2",
+            "pack": "sparks",
+            "identifier": "spark_yesod_conceptual",
+            "hash": "731e5bf143af"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-yesod-vestigial",
+      "name": "Spark of Foundation (Vestigial)",
+      "type": "loot",
+      "img": "icons/svg/anchor.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_yesod_vestigial"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_yesod_vestigial",
+          "spark": {
+            "category": "spark",
+            "sephirah": "yesod",
+            "kind": "vestigial",
+            "alignedMethods": [
+              "intrigue",
+              "soul",
+              "faith"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "anchorstone",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "logistics",
+                "amount": 3
+              },
+              "ritualDC": 15
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "yesod",
+              "vestigial",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "q2MOGcuqo8oESasU",
+            "pack": "sparks",
+            "identifier": "spark_yesod_vestigial",
+            "hash": "ad46e249d4a1"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-hod-animate",
+      "name": "Spark of Glory (Animate)",
+      "type": "loot",
+      "img": "icons/svg/dice-target.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Hod — Sigils, form, communication.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, softpower. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_hod_animate"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_hod_animate",
+          "spark": {
+            "category": "spark",
+            "sephirah": "hod",
+            "kind": "animate",
+            "alignedMethods": [
+              "intrigue",
+              "diplomacy",
+              "softpower"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "freshwater-pearl",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "faith",
+                "amount": 4
+              },
+              "ritualDC": 13
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "hod",
+              "animate",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "UCM8wuWGIIM6w8Ug",
+            "pack": "sparks",
+            "identifier": "spark_hod_animate",
+            "hash": "a1aeab67f591"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-hod-conceptual",
+      "name": "Spark of Glory (Conceptual)",
+      "type": "loot",
+      "img": "icons/svg/aura.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Hod — Sigils, form, communication.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, softpower. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_hod_conceptual"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_hod_conceptual",
+          "spark": {
+            "category": "spark",
+            "sephirah": "hod",
+            "kind": "conceptual",
+            "alignedMethods": [
+              "intrigue",
+              "diplomacy",
+              "softpower"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "vow-resin",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "culture",
+                "amount": 2
+              },
+              "ritualDC": 18
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "hod",
+              "conceptual",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "0cwOigK8OYKwiKOC",
+            "pack": "sparks",
+            "identifier": "spark_hod_conceptual",
+            "hash": "daed4287c420"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-hod-vestigial",
+      "name": "Spark of Glory (Vestigial)",
+      "type": "loot",
+      "img": "icons/svg/anchor.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Hod — Sigils, form, communication.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, softpower. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_hod_vestigial"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_hod_vestigial",
+          "spark": {
+            "category": "spark",
+            "sephirah": "hod",
+            "kind": "vestigial",
+            "alignedMethods": [
+              "intrigue",
+              "diplomacy",
+              "softpower"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "anchorstone",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "logistics",
+                "amount": 3
+              },
+              "ritualDC": 15
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "hod",
+              "vestigial",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Y8uGa824IQsIOKAA",
+            "pack": "sparks",
+            "identifier": "spark_hod_vestigial",
+            "hash": "2b406c32f10f"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-tiferet-animate",
+      "name": "Spark of Harmony (Animate)",
+      "type": "loot",
+      "img": "icons/svg/dice-target.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_tiferet_animate"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_tiferet_animate",
+          "spark": {
+            "category": "spark",
+            "sephirah": "tiferet",
+            "kind": "animate",
+            "alignedMethods": [
+              "diplomacy",
+              "softpower",
+              "faith"
+            ],
+            "misalignedMethods": [
+              "violence"
+            ],
+            "repair": {
+              "materialKey": "freshwater-pearl",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "faith",
+                "amount": 4
+              },
+              "ritualDC": 13
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "tiferet",
+              "animate",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ukS4saO2Ky6O66Qu",
+            "pack": "sparks",
+            "identifier": "spark_tiferet_animate",
+            "hash": "71581c7916a7"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-tiferet-conceptual",
+      "name": "Spark of Harmony (Conceptual)",
+      "type": "loot",
+      "img": "icons/svg/aura.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_tiferet_conceptual"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_tiferet_conceptual",
+          "spark": {
+            "category": "spark",
+            "sephirah": "tiferet",
+            "kind": "conceptual",
+            "alignedMethods": [
+              "diplomacy",
+              "softpower",
+              "faith"
+            ],
+            "misalignedMethods": [
+              "violence"
+            ],
+            "repair": {
+              "materialKey": "vow-resin",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "culture",
+                "amount": 2
+              },
+              "ritualDC": 18
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "tiferet",
+              "conceptual",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "MO6QYGcGgaackA2Q",
+            "pack": "sparks",
+            "identifier": "spark_tiferet_conceptual",
+            "hash": "c5b9f1b8ca36"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-tiferet-vestigial",
+      "name": "Spark of Harmony (Vestigial)",
+      "type": "loot",
+      "img": "icons/svg/anchor.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_tiferet_vestigial"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_tiferet_vestigial",
+          "spark": {
+            "category": "spark",
+            "sephirah": "tiferet",
+            "kind": "vestigial",
+            "alignedMethods": [
+              "diplomacy",
+              "softpower",
+              "faith"
+            ],
+            "misalignedMethods": [
+              "violence"
+            ],
+            "repair": {
+              "materialKey": "anchorstone",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "logistics",
+                "amount": 3
+              },
+              "ritualDC": 15
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "tiferet",
+              "vestigial",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4cEekSQGgiIiuW2E",
+            "pack": "sparks",
+            "identifier": "spark_tiferet_vestigial",
+            "hash": "09a6d7be263f"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-malkuth-animate",
+      "name": "Spark of Kingdom (Animate)",
+      "type": "loot",
+      "img": "icons/svg/dice-target.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_malkuth_animate"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_malkuth_animate",
+          "spark": {
+            "category": "spark",
+            "sephirah": "malkuth",
+            "kind": "animate",
+            "alignedMethods": [
+              "economy",
+              "logistics",
+              "body"
+            ],
+            "misalignedMethods": [
+              "violence"
+            ],
+            "repair": {
+              "materialKey": "freshwater-pearl",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "faith",
+                "amount": 4
+              },
+              "ritualDC": 13
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "malkuth",
+              "animate",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4GsSOOCOYCKwm0mK",
+            "pack": "sparks",
+            "identifier": "spark_malkuth_animate",
+            "hash": "055aec75cb80"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-malkuth-conceptual",
+      "name": "Spark of Kingdom (Conceptual)",
+      "type": "loot",
+      "img": "icons/svg/aura.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_malkuth_conceptual"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_malkuth_conceptual",
+          "spark": {
+            "category": "spark",
+            "sephirah": "malkuth",
+            "kind": "conceptual",
+            "alignedMethods": [
+              "economy",
+              "logistics",
+              "body"
+            ],
+            "misalignedMethods": [
+              "violence"
+            ],
+            "repair": {
+              "materialKey": "vow-resin",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "culture",
+                "amount": 2
+              },
+              "ritualDC": 18
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "malkuth",
+              "conceptual",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Cw0ewAYIOcYOSKAI",
+            "pack": "sparks",
+            "identifier": "spark_malkuth_conceptual",
+            "hash": "f616519ddad7"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-malkuth-vestigial",
+      "name": "Spark of Kingdom (Vestigial)",
+      "type": "loot",
+      "img": "icons/svg/anchor.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_malkuth_vestigial"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_malkuth_vestigial",
+          "spark": {
+            "category": "spark",
+            "sephirah": "malkuth",
+            "kind": "vestigial",
+            "alignedMethods": [
+              "economy",
+              "logistics",
+              "body"
+            ],
+            "misalignedMethods": [
+              "violence"
+            ],
+            "repair": {
+              "materialKey": "anchorstone",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "logistics",
+                "amount": 3
+              },
+              "ritualDC": 15
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "malkuth",
+              "vestigial",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "QsQiOIEwwaO6ysUg",
+            "pack": "sparks",
+            "identifier": "spark_malkuth_vestigial",
+            "hash": "1fcc1e8a8348"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-chesed-animate",
+      "name": "Spark of Mercy (Animate)",
+      "type": "loot",
+      "img": "icons/svg/dice-target.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Chesed — Healing, generosity.</p>\n<p><strong>Aligned methods:</strong> nonlethal, diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_chesed_animate"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_chesed_animate",
+          "spark": {
+            "category": "spark",
+            "sephirah": "chesed",
+            "kind": "animate",
+            "alignedMethods": [
+              "nonlethal",
+              "diplomacy",
+              "softpower",
+              "faith"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "freshwater-pearl",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "faith",
+                "amount": 4
+              },
+              "ritualDC": 13
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "chesed",
+              "animate",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "sU2Ukm2Goqo88MCM",
+            "pack": "sparks",
+            "identifier": "spark_chesed_animate",
+            "hash": "dc15cd1941e8"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-chesed-conceptual",
+      "name": "Spark of Mercy (Conceptual)",
+      "type": "loot",
+      "img": "icons/svg/aura.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Chesed — Healing, generosity.</p>\n<p><strong>Aligned methods:</strong> nonlethal, diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_chesed_conceptual"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_chesed_conceptual",
+          "spark": {
+            "category": "spark",
+            "sephirah": "chesed",
+            "kind": "conceptual",
+            "alignedMethods": [
+              "nonlethal",
+              "diplomacy",
+              "softpower",
+              "faith"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "vow-resin",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "culture",
+                "amount": 2
+              },
+              "ritualDC": 18
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "chesed",
+              "conceptual",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "C4ey4YUKmoGaGS2K",
+            "pack": "sparks",
+            "identifier": "spark_chesed_conceptual",
+            "hash": "a79bdaae7e79"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-chesed-vestigial",
+      "name": "Spark of Mercy (Vestigial)",
+      "type": "loot",
+      "img": "icons/svg/anchor.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Chesed — Healing, generosity.</p>\n<p><strong>Aligned methods:</strong> nonlethal, diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_chesed_vestigial"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_chesed_vestigial",
+          "spark": {
+            "category": "spark",
+            "sephirah": "chesed",
+            "kind": "vestigial",
+            "alignedMethods": [
+              "nonlethal",
+              "diplomacy",
+              "softpower",
+              "faith"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "anchorstone",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "logistics",
+                "amount": 3
+              },
+              "ritualDC": 15
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "chesed",
+              "vestigial",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "oeo2UwSQUAweowo6",
+            "pack": "sparks",
+            "identifier": "spark_chesed_vestigial",
+            "hash": "97e001f5e854"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-gevurah-animate",
+      "name": "Spark of Severity (Animate)",
+      "type": "loot",
+      "img": "icons/svg/dice-target.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Gevurah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_gevurah_animate"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_gevurah_animate",
+          "spark": {
+            "category": "spark",
+            "sephirah": "gevurah",
+            "kind": "animate",
+            "alignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "misalignedMethods": [
+              "softpower",
+              "diplomacy",
+              "nonlethal"
+            ],
+            "repair": {
+              "materialKey": "freshwater-pearl",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "faith",
+                "amount": 4
+              },
+              "ritualDC": 13
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "gevurah",
+              "animate",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4A4oY4UwKaW448SI",
+            "pack": "sparks",
+            "identifier": "spark_gevurah_animate",
+            "hash": "9e3c3a776121"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-gevurah-conceptual",
+      "name": "Spark of Severity (Conceptual)",
+      "type": "loot",
+      "img": "icons/svg/aura.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Gevurah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_gevurah_conceptual"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_gevurah_conceptual",
+          "spark": {
+            "category": "spark",
+            "sephirah": "gevurah",
+            "kind": "conceptual",
+            "alignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "misalignedMethods": [
+              "softpower",
+              "diplomacy",
+              "nonlethal"
+            ],
+            "repair": {
+              "materialKey": "vow-resin",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "culture",
+                "amount": 2
+              },
+              "ritualDC": 18
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "gevurah",
+              "conceptual",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "eqoECAC6EAekY4mg",
+            "pack": "sparks",
+            "identifier": "spark_gevurah_conceptual",
+            "hash": "5b1f86aefd2a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-gevurah-vestigial",
+      "name": "Spark of Severity (Vestigial)",
+      "type": "loot",
+      "img": "icons/svg/anchor.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Gevurah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_gevurah_vestigial"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_gevurah_vestigial",
+          "spark": {
+            "category": "spark",
+            "sephirah": "gevurah",
+            "kind": "vestigial",
+            "alignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "misalignedMethods": [
+              "softpower",
+              "diplomacy",
+              "nonlethal"
+            ],
+            "repair": {
+              "materialKey": "anchorstone",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "logistics",
+                "amount": 3
+              },
+              "ritualDC": 15
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "gevurah",
+              "vestigial",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "mySICMMec6AgoeWY",
+            "pack": "sparks",
+            "identifier": "spark_gevurah_vestigial",
+            "hash": "dacb207c7468"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-binah-animate",
+      "name": "Spark of Understanding (Animate)",
+      "type": "loot",
+      "img": "icons/svg/dice-target.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_binah_animate"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_binah_animate",
+          "spark": {
+            "category": "spark",
+            "sephirah": "binah",
+            "kind": "animate",
+            "alignedMethods": [
+              "intrigue",
+              "diplomacy",
+              "logistics"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "nonlethal"
+            ],
+            "repair": {
+              "materialKey": "freshwater-pearl",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "faith",
+                "amount": 4
+              },
+              "ritualDC": 13
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "binah",
+              "animate",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "IuUmQUYUCkI6K6aw",
+            "pack": "sparks",
+            "identifier": "spark_binah_animate",
+            "hash": "c997e5da083e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-binah-conceptual",
+      "name": "Spark of Understanding (Conceptual)",
+      "type": "loot",
+      "img": "icons/svg/aura.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_binah_conceptual"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_binah_conceptual",
+          "spark": {
+            "category": "spark",
+            "sephirah": "binah",
+            "kind": "conceptual",
+            "alignedMethods": [
+              "intrigue",
+              "diplomacy",
+              "logistics"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "nonlethal"
+            ],
+            "repair": {
+              "materialKey": "vow-resin",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "culture",
+                "amount": 2
+              },
+              "ritualDC": 18
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "binah",
+              "conceptual",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "gKWSeQG484CoqsEo",
+            "pack": "sparks",
+            "identifier": "spark_binah_conceptual",
+            "hash": "5d603f464eec"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-binah-vestigial",
+      "name": "Spark of Understanding (Vestigial)",
+      "type": "loot",
+      "img": "icons/svg/anchor.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_binah_vestigial"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_binah_vestigial",
+          "spark": {
+            "category": "spark",
+            "sephirah": "binah",
+            "kind": "vestigial",
+            "alignedMethods": [
+              "intrigue",
+              "diplomacy",
+              "logistics"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "nonlethal"
+            ],
+            "repair": {
+              "materialKey": "anchorstone",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "logistics",
+                "amount": 3
+              },
+              "ritualDC": 15
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "binah",
+              "vestigial",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "wgQwuk2qq0CU0Gus",
+            "pack": "sparks",
+            "identifier": "spark_binah_vestigial",
+            "hash": "9b18aed8d0ac"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-keter-animate",
+      "name": "Spark of Unity (Animate)",
+      "type": "loot",
+      "img": "icons/svg/dice-target.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Keter — Unity / nondual force.</p>\n<p><strong>Aligned methods:</strong> faith, soul, diplomacy. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_keter_animate"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_keter_animate",
+          "spark": {
+            "category": "spark",
+            "sephirah": "keter",
+            "kind": "animate",
+            "alignedMethods": [
+              "faith",
+              "soul",
+              "diplomacy"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "nonlethal"
+            ],
+            "repair": {
+              "materialKey": "freshwater-pearl",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "faith",
+                "amount": 4
+              },
+              "ritualDC": 13
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "keter",
+              "animate",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "s4aQg6KQWaMco6aQ",
+            "pack": "sparks",
+            "identifier": "spark_keter_animate",
+            "hash": "add7f07b2091"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-keter-conceptual",
+      "name": "Spark of Unity (Conceptual)",
+      "type": "loot",
+      "img": "icons/svg/aura.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Keter — Unity / nondual force.</p>\n<p><strong>Aligned methods:</strong> faith, soul, diplomacy. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_keter_conceptual"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_keter_conceptual",
+          "spark": {
+            "category": "spark",
+            "sephirah": "keter",
+            "kind": "conceptual",
+            "alignedMethods": [
+              "faith",
+              "soul",
+              "diplomacy"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "nonlethal"
+            ],
+            "repair": {
+              "materialKey": "vow-resin",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "culture",
+                "amount": 2
+              },
+              "ritualDC": 18
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "keter",
+              "conceptual",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "mmYwGeu26Cga2oU4",
+            "pack": "sparks",
+            "identifier": "spark_keter_conceptual",
+            "hash": "bba1e45d047f"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-keter-vestigial",
+      "name": "Spark of Unity (Vestigial)",
+      "type": "loot",
+      "img": "icons/svg/anchor.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Keter — Unity / nondual force.</p>\n<p><strong>Aligned methods:</strong> faith, soul, diplomacy. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_keter_vestigial"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_keter_vestigial",
+          "spark": {
+            "category": "spark",
+            "sephirah": "keter",
+            "kind": "vestigial",
+            "alignedMethods": [
+              "faith",
+              "soul",
+              "diplomacy"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "nonlethal"
+            ],
+            "repair": {
+              "materialKey": "anchorstone",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "logistics",
+                "amount": 3
+              },
+              "ritualDC": 15
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "keter",
+              "vestigial",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Ga8cEcoUkmcE6Kog",
+            "pack": "sparks",
+            "identifier": "spark_keter_vestigial",
+            "hash": "f855b1cb8cf1"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-chokmah-animate",
+      "name": "Spark of Wisdom (Animate)",
+      "type": "loot",
+      "img": "icons/svg/dice-target.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Chokmah — Founding insight.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, logistics. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_chokmah_animate"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_chokmah_animate",
+          "spark": {
+            "category": "spark",
+            "sephirah": "chokmah",
+            "kind": "animate",
+            "alignedMethods": [
+              "intrigue",
+              "soul",
+              "logistics"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "freshwater-pearl",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "faith",
+                "amount": 4
+              },
+              "ritualDC": 13
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "chokmah",
+              "animate",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "akmawWmkKeeuGIqi",
+            "pack": "sparks",
+            "identifier": "spark_chokmah_animate",
+            "hash": "63bcaed0a0ef"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-chokmah-conceptual",
+      "name": "Spark of Wisdom (Conceptual)",
+      "type": "loot",
+      "img": "icons/svg/aura.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Chokmah — Founding insight.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, logistics. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_chokmah_conceptual"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_chokmah_conceptual",
+          "spark": {
+            "category": "spark",
+            "sephirah": "chokmah",
+            "kind": "conceptual",
+            "alignedMethods": [
+              "intrigue",
+              "soul",
+              "logistics"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "vow-resin",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "culture",
+                "amount": 2
+              },
+              "ritualDC": 18
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "chokmah",
+              "conceptual",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "aAAEA4YqyyEkia40",
+            "pack": "sparks",
+            "identifier": "spark_chokmah_conceptual",
+            "hash": "b16757ff7413"
+          }
+        }
+      }
+    },
+    {
+      "slug": "spark-chokmah-vestigial",
+      "name": "Spark of Wisdom (Vestigial)",
+      "type": "loot",
+      "img": "icons/svg/anchor.svg",
+      "folder": "Sparks",
+      "system": {
+        "description": {
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Chokmah — Founding insight.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, logistics. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "treasure",
+          "subtype": ""
+        },
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "rare",
+        "identifier": "spark_chokmah_vestigial"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-tikkun": {
+          "sparkVersion": "1.0.0",
+          "identifier": "spark_chokmah_vestigial",
+          "spark": {
+            "category": "spark",
+            "sephirah": "chokmah",
+            "kind": "vestigial",
+            "alignedMethods": [
+              "intrigue",
+              "soul",
+              "logistics"
+            ],
+            "misalignedMethods": [
+              "violence",
+              "siege"
+            ],
+            "repair": {
+              "materialKey": "anchorstone",
+              "materialAmount": 1,
+              "opCost": {
+                "pool": "logistics",
+                "amount": 3
+              },
+              "ritualDC": 15
+            },
+            "source": "BBTTCC Tikkun v1.0",
+            "tags": [
+              "chokmah",
+              "vestigial",
+              "spark"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "qq4I8w6uU6CSSS46",
+            "pack": "sparks",
+            "identifier": "spark_chokmah_vestigial",
+            "hash": "f10b396fc42f"
+          }
+        }
+      }
+    }
+  ]
+}

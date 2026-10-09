@@ -90,7 +90,7 @@ async function _heritageIndex() {
 }
 
 async function _callingOptions() {
-  const pack = game.packs.get(CALLINGS_PACK);
+  const pack = (game.bbttcc?.packs?.get?.(CALLINGS_PACK) ?? game.packs.get(CALLINGS_PACK));
   if (!pack) return null;
   try {
     const index = await pack.getIndex({ fields: ["type"] });
@@ -108,7 +108,7 @@ async function _callingOptions() {
  * at or below the NPC's tier, and the aptitude kit (signature rank = tier,
  * secondary = tier − 1) read from the class item's flags. */
 async function _grantCalling(actor, callingId, tier) {
-  const pack = game.packs.get(CALLINGS_PACK);
+  const pack = (game.bbttcc?.packs?.get?.(CALLINGS_PACK) ?? game.packs.get(CALLINGS_PACK));
   if (!pack) return;
   const classDoc = await pack.getDocument(callingId);
   const calling = classDoc?.flags?.fourththing?.calling;
@@ -728,7 +728,7 @@ async function _echoGrantGear(actor, callingKey, tier) {
 }
 
 async function _echoCallingClassId(callingKey) {
-  const pack = game.packs.get(CALLINGS_PACK);
+  const pack = (game.bbttcc?.packs?.get?.(CALLINGS_PACK) ?? game.packs.get(CALLINGS_PACK));
   if (!pack) return null;
   const index = await pack.getIndex({ fields: ["type", "flags.fourththing.calling"] });
   const entry = index.find(e => e.type === "class"

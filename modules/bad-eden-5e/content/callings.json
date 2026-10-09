@@ -1,0 +1,1566 @@
+{
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/callings.json. The NPC callings (trade + trick per tier) as dnd5e monster feats.",
+  "_pack": "npc-callings",
+  "_generated": {
+    "by": "tools/convert-5e.mjs",
+    "rubric": "1.8.1",
+    "at": "2026-10-09",
+    "overridesApplied": 0
+  },
+  "items": [
+    {
+      "slug": "calling-bravo",
+      "name": "Bravo",
+      "type": "feat",
+      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Strength Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 AC</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Skill kit:</strong> signature: <strong>melee attack rolls</strong> (proficient); secondary: <strong>melee attack rolls</strong> (proficient).</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Strength</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-bravo"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "faculty": "violence",
+            "signature": "melee",
+            "secondary": "brawl",
+            "pool": "Violence",
+            "awakens": "Aurablade or Bulwark"
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "class",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "bravo",
+            "violence"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingbrv0cls",
+            "pack": "npc-callings",
+            "identifier": "calling-bravo",
+            "hash": "3ce66bd13640"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-bravo-apprentice-tier-i",
+      "name": "Bravo — Apprentice (Tier I)",
+      "type": "feat",
+      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> AC a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Strength).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/short rest)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-bravo-apprentice-tier-i"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 1
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "bravo",
+            "tier-1"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingbrv0t01",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "5e31a546f4bb"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-bravo-archon-tier-iv",
+      "name": "Bravo — Archon (Tier IV)",
+      "type": "feat",
+      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Bravo — Archon</strong> (Tier IV).</p><p><strong>Trade — Raise the wall:</strong> Marshal a settlement's defense; the hex counts one bracket tougher for one raid (GM adjudicates). <span style=\"opacity:0.7\">Standard fee 270 marks (Strength).</span></p><p><strong>Trick — Last Stand</strong> <em>(1/short rest)</em>: When an ally within reach would drop to 0 hit points, the Bravo intercepts, takes the damage, and makes one immediate free strike.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-bravo-archon-tier-iv"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 4
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "bravo",
+            "tier-4"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingbrv0t04",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "de2fe966847c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-bravo-initiate-tier-ii",
+      "name": "Bravo — Initiate (Tier II)",
+      "type": "feat",
+      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count as proficient in one Strength skill for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Strength).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/short rest)</em>: On a hit, the target drops its weapon or takes −2 on its next strike.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-bravo-initiate-tier-ii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 2
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "bravo",
+            "tier-2"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingbrv0t02",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "e18830aa0e2b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-bravo-master-tier-iii",
+      "name": "Bravo — Master (Tier III)",
+      "type": "feat",
+      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Bravo — Master</strong> (Tier III).</p><p><strong>Trade — Muscle for the job:</strong> Accompany one operation as a combatant (full stat participation). <span style=\"opacity:0.7\">Standard fee 90 marks (Strength).</span></p><p><strong>Trick — Veteran's Read</strong> <em>(1/short rest)</em>: Declare one enemy's next move aloud; all allies get +2 to defend against exactly that.</p><p><em>Master step:</em> the Bravo's Knack (Shieldwall) improves at this tier — see the class entry.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-bravo-master-tier-iii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 3
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "bravo",
+            "tier-3"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingbrv0t03",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "24e95eb04f5b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-broker",
+      "name": "Broker",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Charisma Calling — the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack — Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the ±25% tolerance band (Tier IV: the full ±20% swing).</p><p><strong>Skill kit:</strong> signature skill <strong>Persuasion</strong>: proficient at Tier I, expertise from Tier II; secondary <strong>Insight</strong>: proficient from Tier II, expertise from Tier III.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-broker"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "faculty": "presence",
+            "signature": "diplomacy",
+            "secondary": "empathy",
+            "pool": "Diplomacy or Soft Power (GM picks by job)",
+            "awakens": "Harmony Marshal"
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "class",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "broker",
+            "presence"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingbrk0cls",
+            "pack": "npc-callings",
+            "identifier": "calling-broker",
+            "hash": "474b898288ca"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-broker-apprentice-tier-i",
+      "name": "Broker — Apprentice (Tier I)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Broker — Apprentice</strong> (Tier I).</p><p><strong>Trade — Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Read the Room</strong> <em>(1/short rest)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-broker-apprentice-tier-i"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "tier": 1
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "broker",
+            "tier-1"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingbrk0t01",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "ce100eed0924"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-broker-archon-tier-iv",
+      "name": "Broker — Archon (Tier IV)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Broker — Archon</strong> (Tier IV).</p><p><strong>Trade — The table:</strong> Convene a parley between hostile parties who would not otherwise sit. <span style=\"opacity:0.7\">Standard fee 270 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Deal of a Lifetime</strong> <em>(1/short rest)</em>: Mid-scene, produce terms both sides prefer to violence; fighting stops while the offer stands.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-broker-archon-tier-iv"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "tier": 4
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "broker",
+            "tier-4"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingbrk0t04",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "d89fb1780730"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-broker-initiate-tier-ii",
+      "name": "Broker — Initiate (Tier II)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Broker — Initiate</strong> (Tier II).</p><p><strong>Trade — An introduction:</strong> Arrange a meeting with someone one social rung up. <span style=\"opacity:0.7\">Standard fee 30 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Crowd's Ear</strong> <em>(1/short rest)</em>: Sway a crowd's disposition one step (hostile→wary, wary→listening).</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-broker-initiate-tier-ii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "tier": 2
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "broker",
+            "tier-2"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingbrk0t02",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "99535c85fd45"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-broker-master-tier-iii",
+      "name": "Broker — Master (Tier III)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Broker — Master</strong> (Tier III).</p><p><strong>Trade — Shape the story:</strong> Seed or smother one rumor across a settlement over a downtime. <span style=\"opacity:0.7\">Standard fee 90 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Name-Drop</strong> <em>(1/short rest)</em>: Invoke a connection to open one door; the GM decides what string comes attached.</p><p><em>Master step:</em> the Broker's Knack (Fair Price) improves at this tier — see the class entry.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-broker-master-tier-iii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "tier": 3
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "broker",
+            "tier-3"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingbrk0t03",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "57db7fab49b1"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-keeper",
+      "name": "Keeper",
+      "type": "feat",
+      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Wisdom Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Skill kit:</strong> signature skill <strong>Religion</strong>: proficient at Tier I, expertise from Tier II; secondary <strong>Insight</strong>: proficient from Tier II, expertise from Tier III.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-keeper"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "faculty": "soul",
+            "signature": "faith",
+            "secondary": "insight",
+            "pool": "Soft Power",
+            "awakens": "Pactkeeper or Dreamwalker"
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "class",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "keeper",
+            "soul"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingkpr0cls",
+            "pack": "npc-callings",
+            "identifier": "calling-keeper",
+            "hash": "0ea9781ccb0f"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-keeper-apprentice-tier-i",
+      "name": "Keeper — Apprentice (Tier I)",
+      "type": "feat",
+      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Wisdom</strong> <em>(1/short rest)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-keeper-apprentice-tier-i"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "tier": 1
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "keeper",
+            "tier-1"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingkpr0t01",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "ab410841a94a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-keeper-archon-tier-iv",
+      "name": "Keeper — Archon (Tier IV)",
+      "type": "feat",
+      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Keeper — Archon</strong> (Tier IV).</p><p><strong>Trade — Read the omens:</strong> One divination-grade answer per downtime — a true sign about a chosen course, delivered as an omen, not a sentence. <span style=\"opacity:0.7\">Standard fee 270 marks (Soft Power).</span></p><p><strong>Trick — Intercession</strong> <em>(1/short rest)</em>: An ally under the Keeper's care who would drop to 0 Stress holds at 1; the Keeper visibly carries it for them.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-keeper-archon-tier-iv"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "tier": 4
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "keeper",
+            "tier-4"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingkpr0t04",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "a122f823433a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-keeper-initiate-tier-ii",
+      "name": "Keeper — Initiate (Tier II)",
+      "type": "feat",
+      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Keeper — Initiate</strong> (Tier II).</p><p><strong>Trade — Hear the burden:</strong> One confession/counsel session clears one fear- or grief-borne condition. <span style=\"opacity:0.7\">Standard fee 30 marks (Soft Power).</span></p><p><strong>Trick — Warding Sign</strong> <em>(1/short rest)</em>: Impose −2 on one incoming psychic or qliphothic effect.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-keeper-initiate-tier-ii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "tier": 2
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "keeper",
+            "tier-2"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingkpr0t02",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "8e75c006fc86"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-keeper-master-tier-iii",
+      "name": "Keeper — Master (Tier III)",
+      "type": "feat",
+      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Keeper — Master</strong> (Tier III).</p><p><strong>Trade — Consecrate the threshold:</strong> Ward one door/room/camp — first qliphothic or psychic intrusion each encounter is blunted (−2 to its effect). <span style=\"opacity:0.7\">Standard fee 90 marks (Soft Power).</span></p><p><strong>Trick — Rite of Passage</strong> <em>(1/short rest)</em>: End one ongoing spiritual affliction on a willing subject.</p><p><em>Master step:</em> the Keeper's Knack (Hearthlight) improves at this tier — see the class entry.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-keeper-master-tier-iii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "tier": 3
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "keeper",
+            "tier-3"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingkpr0t03",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "da1abbb6778f"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-operator",
+      "name": "Operator",
+      "type": "feat",
+      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><em>\"Everything's a door if you hold it right.\"</em></p><p><strong>Operator</strong> is the Dexterity Calling — the trade that kept its bearers alive after the Shattering. Umbrella: thief, smuggler, spy, courier, fence, hacker, fixer. A profession is a flavor label on the Calling.</p><p><strong>Knack — Underfoot:</strong> In crowds, markets, and streets, the Operator passes unremarked unless actively hunted; Streetwise checks never fumble (at Tier III, also Stealth).</p><p><strong>Skill kit:</strong> signature skill <strong>Stealth</strong>: proficient at Tier I, expertise from Tier II; secondary <strong>Investigation (Persuasion in a town)</strong>: proficient from Tier II, expertise from Tier III.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Dexterity</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Shadow Courier. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-operator"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "operator",
+            "faculty": "intrigue",
+            "signature": "stealth",
+            "secondary": "streetwise",
+            "pool": "Intrigue",
+            "awakens": "Shadow Courier"
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "class",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "operator",
+            "intrigue"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingopr0cls",
+            "pack": "npc-callings",
+            "identifier": "calling-operator",
+            "hash": "380cf45800ea"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-operator-apprentice-tier-i",
+      "name": "Operator — Apprentice (Tier I)",
+      "type": "feat",
+      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Operator — Apprentice</strong> (Tier I).</p><p><strong>Trade — Carry it quiet:</strong> Move a package/message across town, no questions. <span style=\"opacity:0.7\">Standard fee 10 marks (Dexterity).</span></p><p><strong>Trick — Pocketed</strong> <em>(1/short rest)</em>: Produce a mundane Tier-I item they plausibly lifted earlier.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-operator-apprentice-tier-i"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "operator",
+            "tier": 1
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "operator",
+            "tier-1"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingopr0t01",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "31406d9e674d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-operator-archon-tier-iv",
+      "name": "Operator — Archon (Tier IV)",
+      "type": "feat",
+      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Operator — Archon</strong> (Tier IV).</p><p><strong>Trade — Papers, clean:</strong> Forge documents/seals good enough to pass sept or Witness scrutiny once. <span style=\"opacity:0.7\">Standard fee 270 marks (Dexterity).</span></p><p><strong>Trick — Ghost Ledger</strong> <em>(1/short rest)</em>: One small fact of record (a manifest line, a name on a list, a shipment count) has always read the way the Operator needs it to.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-operator-archon-tier-iv"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "operator",
+            "tier": 4
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "operator",
+            "tier-4"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingopr0t04",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "ab30d30b7767"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-operator-initiate-tier-ii",
+      "name": "Operator — Initiate (Tier II)",
+      "type": "feat",
+      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Operator — Initiate</strong> (Tier II).</p><p><strong>Trade — Fence it:</strong> Move stolen goods at ×0.30 instead of the standard fence ×0.25. <span style=\"opacity:0.7\">Standard fee 30 marks (Dexterity).</span></p><p><strong>Trick — Wasn't Me</strong> <em>(1/short rest)</em>: After acting, vanish from the scene's notice if no one has them physically held.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-operator-initiate-tier-ii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "operator",
+            "tier": 2
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "operator",
+            "tier-2"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingopr0t02",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "9e06266531e4"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-operator-master-tier-iii",
+      "name": "Operator — Master (Tier III)",
+      "type": "feat",
+      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Operator — Master</strong> (Tier III).</p><p><strong>Trade — Case the place:</strong> Deliver a floor plan — entrances, watch rotations, one exploitable habit. <span style=\"opacity:0.7\">Standard fee 90 marks (Dexterity).</span></p><p><strong>Trick — Skeleton Key</strong> <em>(1/short rest)</em>: Bypass one lock, checkpoint, or seal, offscreen-grade, no roll.</p><p><em>Master step:</em> the Operator's Knack (Underfoot) improves at this tier — see the class entry.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-operator-master-tier-iii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "operator",
+            "tier": 3
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "operator",
+            "tier-3"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingopr0t03",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "4033ac107c03"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-savant",
+      "name": "Savant",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Intelligence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack — Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier ≤ own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Skill kit:</strong> signature skill <strong>History</strong>: proficient at Tier I, expertise from Tier II; secondary <strong>Investigation</strong>: proficient from Tier II, expertise from Tier III.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-savant"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "faculty": "mind",
+            "signature": "lore",
+            "secondary": "investigation",
+            "pool": "Economy or Soft Power (GM picks by job)",
+            "awakens": "Wyrdlens Adept or Cosmic Linguist"
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "class",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "savant",
+            "mind"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingsav0cls",
+            "pack": "npc-callings",
+            "identifier": "calling-savant",
+            "hash": "c765407ff6ef"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-savant-apprentice-tier-i",
+      "name": "Savant — Apprentice (Tier I)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Savant — Apprentice</strong> (Tier I).</p><p><strong>Trade — Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — I've Read About This</strong> <em>(1/short rest)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-savant-apprentice-tier-i"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "tier": 1
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "savant",
+            "tier-1"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingsav0t01",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "1c3d31466341"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-savant-archon-tier-iv",
+      "name": "Savant — Archon (Tier IV)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Savant — Archon</strong> (Tier IV).</p><p><strong>Trade — Draft the schematic:</strong> Author a crafting recipe for an item of tier ≤ 3 (validator rules still apply). <span style=\"opacity:0.7\">Standard fee 270 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Eureka</strong> <em>(1/short rest)</em>: Solve one technical or lore obstacle outright, offscreen-grade; it simply stops being the blocker.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-savant-archon-tier-iv"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "tier": 4
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "savant",
+            "tier-4"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingsav0t04",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "b3679cba1740"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-savant-initiate-tier-ii",
+      "name": "Savant — Initiate (Tier II)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Savant — Initiate</strong> (Tier II).</p><p><strong>Trade — Patch them up:</strong> Between scenes, restore 2×tier hit points to one patient or clear one physical condition. <span style=\"opacity:0.7\">Standard fee 30 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Diagnosis</strong> <em>(1/short rest)</em>: Name one creature's type and reveal its resistances or a weakness.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-savant-initiate-tier-ii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "tier": 2
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "savant",
+            "tier-2"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingsav0t02",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "657b229b193a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-savant-master-tier-iii",
+      "name": "Savant — Master (Tier III)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Savant — Master</strong> (Tier III).</p><p><strong>Trade — Research a question:</strong> One downtime, one honest answer with sources (GM: truthful, not necessarily complete). <span style=\"opacity:0.7\">Standard fee 90 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Field Solution</strong> <em>(1/short rest)</em>: Jury-rig a one-use tool, antidote, or bypass from what's on hand.</p><p><em>Master step:</em> the Savant's Knack (Library-Brain) improves at this tier — see the class entry.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-savant-master-tier-iii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "tier": 3
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "savant",
+            "tier-3"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingsav0t03",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "885d44c33615"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-stalwart",
+      "name": "Stalwart",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><em>\"The Shattering didn't end the work. Nothing ends the work.\"</em></p><p><strong>Stalwart</strong> is the Constitution Calling — the trade that kept its bearers alive after the Shattering. Umbrella: laborer, teamster, forager, wall-crew, rig-hand, survivor. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hazard-Hardened:</strong> Reduce each environmental hazard/radiation tick by 1 (by 2 at Tier III), and labor output counts double for facility/build work.</p><p><strong>Skill kit:</strong> signature skill <strong>Athletics</strong>: proficient at Tier I, expertise from Tier II; secondary <strong>smith's tools</strong>: proficient from Tier II, expertise from Tier III.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Bulwark or Wisdom-Smith. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-stalwart"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "stalwart",
+            "faculty": "body",
+            "signature": "athletics",
+            "secondary": "plating",
+            "pool": "Economy",
+            "awakens": "Bulwark or Soul-Smith"
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "class",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "stalwart",
+            "body"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingstw0cls",
+            "pack": "npc-callings",
+            "identifier": "calling-stalwart",
+            "hash": "a1884d88b542"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-stalwart-apprentice-tier-i",
+      "name": "Stalwart — Apprentice (Tier I)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Stalwart — Apprentice</strong> (Tier I).</p><p><strong>Trade — Haul and raise:</strong> A day's heavy labor — cargo moved, wall raised, field cleared. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy).</span></p><p><strong>Trick — Put Your Back Into It</strong> <em>(1/short rest)</em>: Auto-succeed one feat of raw strength or endurance of tier-appropriate difficulty.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-stalwart-apprentice-tier-i"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "stalwart",
+            "tier": 1
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "stalwart",
+            "tier-1"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingstw0t01",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "6cf18fb113a0"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-stalwart-archon-tier-iv",
+      "name": "Stalwart — Archon (Tier IV)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Stalwart — Archon</strong> (Tier IV).</p><p><strong>Trade — Foreman:</strong> Run a work crew; a facility's output counts +1 bracket for one turn. <span style=\"opacity:0.7\">Standard fee 270 marks (Economy).</span></p><p><strong>Trick — Too Stubborn to Die</strong> <em>(1/short rest)</em>: Damage that would drop the Stalwart leaves them at 1 hit points, still standing, immovable this round.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-stalwart-archon-tier-iv"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "stalwart",
+            "tier": 4
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "stalwart",
+            "tier-4"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingstw0t04",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "131abafc29bc"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-stalwart-initiate-tier-ii",
+      "name": "Stalwart — Initiate (Tier II)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Stalwart — Initiate</strong> (Tier II).</p><p><strong>Trade — Keep her running:</strong> One rig repair tick between scenes (engineer-grade maintenance). <span style=\"opacity:0.7\">Standard fee 30 marks (Economy).</span></p><p><strong>Trick — Endure</strong> <em>(1/short rest)</em>: Halve one incoming instance of bludgeoning, piercing, or slashing damage.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-stalwart-initiate-tier-ii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "stalwart",
+            "tier": 2
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "stalwart",
+            "tier-2"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingstw0t02",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "5f5f19ccc33c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "calling-stalwart-master-tier-iii",
+      "name": "Stalwart — Master (Tier III)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "folder": "NPC Callings",
+      "system": {
+        "description": {
+          "value": "<p><strong>Stalwart — Master</strong> (Tier III).</p><p><strong>Trade — Guide through:</strong> Lead a party across one hex of hostile terrain, halving travel complications. <span style=\"opacity:0.7\">Standard fee 90 marks (Economy).</span></p><p><strong>Trick — Second Wind</strong> <em>(1/short rest)</em>: Recover hit points equal to 2×tier.</p><p><em>Master step:</em> the Stalwart's Knack (Hazard-Hardened) improves at this tier — see the class entry.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "monster",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "calling-stalwart-master-tier-iii"
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "stalwart",
+            "tier": 3
+          }
+        },
+        "bbttcc-character-options": {
+          "rfiType": "feature",
+          "category": "calling",
+          "tags": [
+            "calling",
+            "stalwart",
+            "tier-3"
+          ]
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "becallingstw0t03",
+            "pack": "npc-callings",
+            "identifier": "",
+            "hash": "aa2a8b2cdda1"
+          }
+        }
+      }
+    }
+  ]
+}

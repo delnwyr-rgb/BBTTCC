@@ -26,6 +26,10 @@
  * Hook fired on success: bbttcc:spark:repaired { actor, sparkKey, sparkItem,
  *   factionId, roll, dc }
  */
+// Spark data on either system (2026-10-08): RFI keeps it on item.system; dnd5e (bad-eden-5e.sparks, loot items)
+// carries the same block at flags.bbttcc-tikkun.spark because dnd5e's data model strips unknown system keys.
+const _sparkSys = (it) => (it?.system?.sephirah ? it.system : (it?.flags?.["bbttcc-tikkun"]?.spark ?? it?.system ?? {}));
+
 
 console.log("[bbttcc-tikkun/repair] LOADED");
 
@@ -216,7 +220,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       return;
     }
 
-    const recipe = sparkItem.system?.repair ?? {};
+    const recipe = _sparkSys(sparkItem)?.repair ?? {};
     const matKey   = String(recipe.materialKey ?? "").trim();
     const matNeed  = Number(recipe.materialAmount) || 0;
     const opPool   = String(recipe.opCost?.pool ?? "").trim();
@@ -240,8 +244,8 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     const members = _getFactionMembers(factionActor.id);
     const memberOpts = members.map(m => `<option value="${m.id}" ${m.id === ownerActor.id ? "selected" : ""}>${m.name}</option>`).join("");
 
-    const sephLabel = sparkItem.system?.sephirah
-      ? (game.fourththing?.constants?.SEPHIROTH?.[sparkItem.system.sephirah]?.label ?? sparkItem.system.sephirah)
+    const sephLabel = _sparkSys(sparkItem)?.sephirah
+      ? (game.fourththing?.constants?.SEPHIROTH?.[_sparkSys(sparkItem)?.sephirah]?.label ?? _sparkSys(sparkItem)?.sephirah)
       : "";
 
     const matLine = matKey
@@ -384,8 +388,8 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     }
 
     // Chat narration.
-    const sephLabel = sparkItem.system?.sephirah
-      ? (game.fourththing?.constants?.SEPHIROTH?.[sparkItem.system.sephirah]?.label ?? sparkItem.system.sephirah)
+    const sephLabel = _sparkSys(sparkItem)?.sephirah
+      ? (game.fourththing?.constants?.SEPHIROTH?.[_sparkSys(sparkItem)?.sephirah]?.label ?? _sparkSys(sparkItem)?.sephirah)
       : "";
     const headerColor = outcome === "success" ? "#6fcf97" : (outcome === "partial" ? "#e8c84a" : "#c03030");
     const headerIcon  = outcome === "success" ? "✦" : (outcome === "partial" ? "⊘" : "⚠");
@@ -445,10 +449,10 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     }
 
     const rows = corrupted.map(({ actor, sparkKey, spark, item }) => {
-      const sephLabel = item?.system?.sephirah
-        ? (game.fourththing?.constants?.SEPHIROTH?.[item.system.sephirah]?.label ?? item.system.sephirah)
+      const sephLabel = _sparkSys(item)?.sephirah
+        ? (game.fourththing?.constants?.SEPHIROTH?.[_sparkSys(item)?.sephirah]?.label ?? _sparkSys(item)?.sephirah)
         : "";
-      const recipe = item?.system?.repair ?? {};
+      const recipe = _sparkSys(item)?.repair ?? {};
       const attempts = Number(spark.repair?.attempts) || 0;
       const baseDC   = Number(recipe.ritualDC) || 15;
       const dc       = Math.max(8, baseDC - 2 * attempts);
@@ -550,10 +554,10 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     }
 
     const rows = pending.map(({ actor, sparkKey, spark, item }) => {
-      const sephLabel = item?.system?.sephirah
-        ? (game.fourththing?.constants?.SEPHIROTH?.[item.system.sephirah]?.label ?? item.system.sephirah)
+      const sephLabel = _sparkSys(item)?.sephirah
+        ? (game.fourththing?.constants?.SEPHIROTH?.[_sparkSys(item)?.sephirah]?.label ?? _sparkSys(item)?.sephirah)
         : (spark.sephirah ?? "");
-      const kindLabel = spark.kind ?? item?.system?.kind ?? "";
+      const kindLabel = spark.kind ?? _sparkSys(item)?.kind ?? "";
       return `
         <tr>
           <td>${item?.name ?? spark.name ?? sparkKey} ${sephLabel ? `<span style="opacity:0.6;font-size:0.74rem">(${sephLabel})</span>` : ""}</td>

@@ -1806,7 +1806,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         let camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null;
         if (!camp && cid) { try { let all = game.settings.get("bbttcc-campaign", "campaigns"); if (typeof all === "string") all = JSON.parse(all); camp = all ? all[cid] : null; } catch (_eC) {} }
         const defaultFid = String((ctx && ctx.factionId) || (camp && camp.factionId) || ((camp && camp.factionIds) || [])[0] || "").replace(/^Actor\./, "");
-        const pack = game.packs ? game.packs.get("bbttcc-master-content.courtly-secrets") : null;
+        const pack = game.bbttcc?.packs?.get?.("bbttcc-master-content.courtly-secrets") ?? (game.packs ? game.packs.get("bbttcc-master-content.courtly-secrets") : null);   // dnd5e: the bad-eden-5e twin
         const docs = pack ? await pack.getDocuments() : [];
         const norm = (v) => (api.normEffectKeys ? api.normEffectKeys(v) : [String(v || "")].filter(Boolean));
         const docKeys = (d) => { const m = d.flags && d.flags["bbttcc-raid"] && d.flags["bbttcc-raid"].secret; return norm(m ? (m.effectKeys != null ? m.effectKeys : m.effectKey) : ""); };
