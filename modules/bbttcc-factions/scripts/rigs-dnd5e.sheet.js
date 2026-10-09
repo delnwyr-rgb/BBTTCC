@@ -60,9 +60,13 @@
     rig = data(a) ?? rig;
     const id = rig.identity, ig = rig.integrity;
     const sel = (options, cur) => options.map(o => ({ value: o, label: o, selected: o === cur }));
+    // Real factions first (A–Z); gauntlet test fixtures ("RAIDGAUNTLET · …", "TRAVELGAUNTLET · …") sink to the
+    // bottom with a 🧪 tag rather than vanish — a gauntlet run may still pick one (2026-10-08).
+    const isFixture = (f) => /^[A-Z]+GAUNTLET\s*·/.test(f.name ?? "");
     const factionActors = (game.actors?.contents ?? [])
       .filter(x => x.getFlag?.(SCOPE, "isFaction"))
-      .map(f => ({ value: f.id, label: f.name, selected: f.id === id.factionOwnerId }));
+      .sort((x, y) => (isFixture(x) - isFixture(y)) || x.name.localeCompare(y.name))
+      .map(f => ({ value: f.id, label: isFixture(f) ? `🧪 ${f.name}` : f.name, selected: f.id === id.factionOwnerId }));
     const out = (typeof I().outputFor === "function" ? I().outputFor(a) : {}) ?? {};
     const base = rig.output?.basePerTurn ?? {};
     const mult = id.state === "parked" ? "×1.0 (parked)" : id.state === "deployed" ? "×0.5 (deployed)" : "×0 (destroyed)";
