@@ -94,7 +94,15 @@ async function update(actor, patch = {}, options = {}) {
 async function create(spec = {}) {
   const { name = "Rig", img, identity = {}, integrity = {}, crew = {}, travel = {}, output = {}, defenses = {}, items = [], token = {}, folder = null, tags = [] } = spec;
   const bracket = integrity.bracket ?? "medium";
-  const max = num(integrity.max, HP_BY_BRACKET[bracket] ?? 30), value = num(integrity.value, max);
+  const tier = num(integrity.tier, 1);
+  // The RFI system recomputes Integrity from the equipped frame in its derived-data pass; dnd5e has no
+  // such pass, so seed HP from a frame in the item list (baseIntegrity + (tier-1) × tierStep) when the
+  // spec carries no explicit max (2026-10-08).
+  const frameGear = isRFI() ? null : (items.map(i => gearOf(i) ?? (i?.flags?.fourththing?.rigFrame ? i.flags.fourththing.rigFrame : null)).find(g => g && (g.subtype === "rig-frame" || g.baseIntegrity != null)) ?? null);
+  const frameMax = frameGear?.baseIntegrity != null ? num(frameGear.baseIntegrity) + (tier - 1) * num(frameGear.tierStep) : null;
+  // like the RFI derived pass, an equipped frame outranks the bracket-seeded number
+  const max = frameMax ?? (integrity.max != null ? num(integrity.max) : (HP_BY_BRACKET[bracket] ?? 30));
+  const value = integrity.value != null ? Math.min(num(integrity.value), max) : max;
   if (isRFI()) {
     const system = { identity: { mobility: "mobile", state: "parked", factionOwnerId: "", archetype: "", binding: { hexId: "", sceneId: "", tokenId: "" }, ...identity },
       crew: { slots: [], capacity: DEFAULT_CAPACITY, crewMin: 1, crewMax: 8, ...crew }, integrity: { value, max, tier: num(integrity.tier, 1), bracket },
@@ -117,8 +125,17 @@ const setOwner = (actor, factionId) => update(actor, { "identity.factionOwnerId"
 const health = (actor) => game.bbttcc?.combat?.getHealth?.(actor) ?? (() => { const d = data(actor); return d ? { value: d.integrity.value, max: d.integrity.max } : { value: null, max: null }; })();
 
 /* ── gear ─────────────────────────────────────────────────────────────────── */
-const gearOf = (item) => item?.flags?.fourththing?.rigGear ?? item?.flags?.bbttcc?.rigGear ?? item?.flags?.[F]?.rigGear ?? null;
-const isFrame = (item) => !!(item?.flags?.fourththing?.rigFrame || gearOf(item)?.subtype === "rig-frame");
+/** The rig-gear flag of an item, with a frame's own block (`rigFrame`: bracket, baseIntegrity, tierStep,
+ *  slots, capacity, actions, travel) folded in — RFI and the rig-builder keep those under `rigFrame`,
+ *  the June runtime expected them inside `rigGear`. Either scope (fourththing / bbttcc / bbttcc-factions). */
+function gearOf(item) {
+  const fl = item?.flags ?? {};
+  const gear = fl.fourththing?.rigGear ?? fl.bbttcc?.rigGear ?? fl[F]?.rigGear ?? null;
+  const frame = fl.fourththing?.rigFrame ?? fl.bbttcc?.rigFrame ?? fl[F]?.rigFrame ?? null;
+  if (!gear && !frame) return null;
+  return frame ? { subtype: "rig-frame", ...(gear ?? {}), ...frame } : gear;
+}
+const isFrame = (item) => !!(item?.flags?.fourththing?.rigFrame || item?.flags?.bbttcc?.rigFrame || gearOf(item)?.subtype === "rig-frame");
 const frameOf = (actor) => actor?.items?.find?.(isFrame) ?? null;
 
 /* ── boarding ─────────────────────────────────────────────────────────────── */

@@ -295,7 +295,9 @@
     if (f.baseIntegrity) {
       const max = Number(f.baseIntegrity) + (tier - 1) * (Number(f.tierStep) || 0);
       patch["integrity.max"] = max;
-      patch["integrity.value"] = Math.min(hpOf(rig).value || max, max);
+      // a rig sitting at its old full value (a fresh mint seeded by bracket) rides up to the new max
+      const hp = hpOf(rig); const atFull = !hp.max || (hp.value ?? 0) >= hp.max;
+      patch["integrity.value"] = atFull ? max : Math.min(hp.value || max, max);
     }
     if (f.bracket) patch["integrity.bracket"] = f.bracket;          // accessor seats dt by bracket
     if (Array.isArray(f.mobilityAllowed) && f.mobilityAllowed.length && !f.mobilityAllowed.includes(d.identity.mobility)) patch["identity.mobility"] = f.mobilityAllowed[0];
