@@ -296,7 +296,7 @@
                 <td class="center">{{default r.outcome "—"}}</td>
               {{else}}
                 <td class="center">
-                  {{#if r.committed}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if (eq r.open false)}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if r.dcFinal}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if r.total}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}<span style="opacity:.8;">Draft</span>{{/if}}{{/if}}{{/if}}{{/if}}
+                  {{!-- Resolved = committed only: total/dcFinal can be set by projection before any commit (trailer playtest 2026-10-09). --}}{{#if r.committed}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if r.cancelled}}<span style="opacity:.8;">Cancelled</span>{{else}}{{#if (eq r.open false)}}<span style="opacity:.8;">Closed</span>{{else}}<span style="opacity:.8;">Draft</span>{{/if}}{{/if}}{{/if}}
                 </td>
                 <td class="center">—</td>
                 <td class="center">—</td>
@@ -326,30 +326,30 @@
                       <div>
                         <h5 style="margin:.25rem 0;">Attacker — {{r.view.attackerName}}</h5>
                         <p style="margin:.25rem 0;">
-                          Bank: <b>{{bbttcc_marks (lookup r.view.bankAtt r.view.cat)}}</b> OP •
-                          Staged: <b>{{bbttcc_marks (default (lookup r.view.staged.att r.view.cat) 0)}}</b> OP •
-                          Remaining: <b>{{bbttcc_marks r.view.remainA}}</b> OP
+                          Bank: <b>{{bbttcc_marks (lookup r.view.bankAtt r.view.cat)}}</b> marks •
+                          Staged: <b>{{bbttcc_marks (default (lookup r.view.staged.att r.view.cat) 0)}}</b> marks •
+                          Remaining: <b>{{bbttcc_marks r.view.remainA}}</b> marks
                         </p>
                         <div class="btnset" style="display:flex; gap:.25rem;">
-                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="-10">−1</button>
-                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+10">+1</button>
-                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+50">+5</button>
-                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+100">+10</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="-10">−10</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+10">+10</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+50">+50</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+100">+100</button>
                         </div>
                       </div>
                         {{#if r.view.hasDef}}
                         <div>
                           <h5 style="margin:.25rem 0;">Defender — {{r.view.defenderName}}</h5>
                           <p style="margin:.25rem 0;">
-                            Bank: <b>{{bbttcc_marks (lookup r.view.bankDef r.view.cat)}}</b> OP •
-                            Staged: <b>{{bbttcc_marks (default (lookup r.view.staged.def r.view.cat) 0)}}</b> OP •
-                            Remaining: <b>{{bbttcc_marks r.view.remainD}}</b> OP
+                            Bank: <b>{{bbttcc_marks (lookup r.view.bankDef r.view.cat)}}</b> marks •
+                            Staged: <b>{{bbttcc_marks (default (lookup r.view.staged.def r.view.cat) 0)}}</b> marks •
+                            Remaining: <b>{{bbttcc_marks r.view.remainD}}</b> marks
                           </p>
                           <div class="btnset" style="display:flex; gap:.25rem;">
-                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="-10">−1</button>
-                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+10">+1</button>
-                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+50">+5</button>
-                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+100">+10</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="-10">−10</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+10">+10</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+50">+50</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+100">+100</button>
                           </div>
                         </div>
                         {{/if}}
@@ -357,16 +357,16 @@
                       <div>
                         <h5 style="margin:.25rem 0;">Your Faction — {{default r.view.playerFactionName "(none)"}}</h5>
                         <p style="margin:.25rem 0;">
-                          Bank: <b>{{bbttcc_marks (default r.view.playerBankCat 0)}}</b> OP •
-                          Staged: <b>{{bbttcc_marks (default r.view.playerStagedCat 0)}}</b> OP •
-                          Remaining: <b>{{bbttcc_marks (default r.view.playerRemainCat 0)}}</b> OP
+                          Bank: <b>{{bbttcc_marks (default r.view.playerBankCat 0)}}</b> marks •
+                          Staged: <b>{{bbttcc_marks (default r.view.playerStagedCat 0)}}</b> marks •
+                          Remaining: <b>{{bbttcc_marks (default r.view.playerRemainCat 0)}}</b> marks
                         </p>
                         {{#if r.view.playerStageWho}}
                         <div class="btnset" style="display:flex; gap:.25rem;">
-                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="-10" data-faction-id="{{r.view.playerStageFactionId}}">−1</button>
-                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+10" data-faction-id="{{r.view.playerStageFactionId}}">+1</button>
-                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+50" data-faction-id="{{r.view.playerStageFactionId}}">+5</button>
-                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+100" data-faction-id="{{r.view.playerStageFactionId}}">+10</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="-10" data-faction-id="{{r.view.playerStageFactionId}}">−10</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+10" data-faction-id="{{r.view.playerStageFactionId}}">+10</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+50" data-faction-id="{{r.view.playerStageFactionId}}">+50</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+100" data-faction-id="{{r.view.playerStageFactionId}}">+100</button>
                         </div>
                         {{else}}
                         <p style="margin:.25rem 0;font-size:.78rem;opacity:.7;"><em>You're not in this raid — staging unavailable.</em></p>

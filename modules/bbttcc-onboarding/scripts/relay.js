@@ -17,6 +17,15 @@ const TAG = "[onboarding/relay]";
 const OPS = Object.create(null); // name -> async (payload) => JSON-serialisable result
 function registerOp(name, fn) { OPS[name] = fn; }
 
+/* Per-page-load id. `_isPrimaryGM` picks a USER, but one GM seat open in
+ * several tabs/windows is several clients sharing that user id — every one of
+ * them "was" the primary and ran each relayed op (trailer onboarding shoot
+ * 2026-10-09: trials + showdown staged ×3 — three Stewards, three sigil sets,
+ * three bosses, three GM whispers). The claim handshake below picks ONE client. */
+const CLIENT_ID = foundry.utils.randomID();
+const PENDING_TTL_MS = 30000;
+const _pending = new Map();   // requestId -> { msg, senderId, at } awaiting the requester's "go"
+
 /** Lowest-id active GM is the single executor (multi-GM de-dupe). */
 function _isPrimaryGM() {
   if (!game.user?.isGM) return false;
@@ -40,9 +49,18 @@ async function runAsGM(op, payload = {}, { timeoutMs = 15000 } = {}) {
   }
   const requestId = foundry.utils.randomID();
   return await new Promise((resolve) => {
-    let done = false;
+    let done = false, chosen = null;
     const onResp = (msg) => {
-      if (msg?.t !== "op-response" || msg.requestId !== requestId) return;
+      if (msg?.requestId !== requestId || done) return;
+      // Every primary-GM client claims; the first claimant gets the "go", the
+      // rest drop the request — exactly one execution however many GM tabs.
+      if (msg.t === "op-claim") {
+        if (chosen) return;
+        chosen = msg.clientId;
+        game.socket.emit(CHANNEL, { t: "op-go", requestId, clientId: chosen });
+        return;
+      }
+      if (msg.t !== "op-response" || (chosen && msg.clientId !== chosen)) return;
       done = true; game.socket.off(CHANNEL, onResp);
       if (!msg.ok) console.warn(TAG, `op "${op}" failed on GM:`, msg.error);
       resolve(msg.ok ? msg.result : null);
@@ -151,10 +169,26 @@ async function _authorize(op, payload, fromUserId) {
   return null;
 }
 
-// GM-side request handler.
+// GM-side request handler: claim on op-request, execute only on our own op-go.
 function _onRequest(msg, senderId) {
-  if (msg?.t !== "op-request") return;
-  if (!_isPrimaryGM()) return;
+  if (msg?.t === "gm-hello") return _onGmHello(msg);
+  if (msg?.t === "op-request") {
+    if (!_isPrimaryGM()) return;
+    const now = Date.now();
+    for (const [id, p] of _pending) if (now - p.at > PENDING_TTL_MS) _pending.delete(id);
+    _pending.set(msg.requestId, { msg, senderId, at: now });
+    try { game.socket.emit(CHANNEL, { t: "op-claim", requestId: msg.requestId, clientId: CLIENT_ID }); } catch (_) {}
+    return;
+  }
+  if (msg?.t !== "op-go") return;
+  const pend = _pending.get(msg.requestId);
+  if (!pend) return;
+  _pending.delete(msg.requestId);
+  if (msg.clientId !== CLIENT_ID) return;      // another tab of this seat won the claim
+  _execRequest(pend.msg, pend.senderId);
+}
+
+function _execRequest(msg, senderId) {
   (async () => {
     let ok = false, result = null, error = null;
     try {
@@ -167,7 +201,7 @@ function _onRequest(msg, senderId) {
       result = await fn(payload);
       ok = true;
     } catch (e) { error = String(e?.message || e); console.warn(TAG, `op "${msg.op}" failed`, e); }
-    try { game.socket.emit(CHANNEL, { t: "op-response", requestId: msg.requestId, ok, result, error }); }
+    try { game.socket.emit(CHANNEL, { t: "op-response", requestId: msg.requestId, clientId: CLIENT_ID, ok, result, error }); }
     catch (_) {}
   })();
 }
@@ -184,10 +218,28 @@ async function resolveToken(sceneId, tokenId) {
   return await _waitFor(() => sc?.tokens?.get?.(tokenId) || null);
 }
 
+/* Same GM seat open twice = every user-gated GM hook in the system runs per
+ * tab, not just this relay (the ×3 "Back on foot" toast was the same trap). Say
+ * so the moment it happens instead of letting a shoot discover it. */
+let _dupWarned = false;
+function _onGmHello(msg) {
+  if (!game.user?.isGM || msg.userId !== game.user.id || msg.clientId === CLIENT_ID) return;
+  if (msg.reply !== true) {
+    try { game.socket.emit(CHANNEL, { t: "gm-hello", userId: game.user.id, clientId: CLIENT_ID, reply: true }); } catch (_) {}
+  }
+  if (_dupWarned) return;
+  _dupWarned = true;
+  console.warn(TAG, `GM seat "${game.user.name}" is open in more than one tab/window (client ${msg.clientId}).`);
+  ui.notifications?.warn?.(`"${game.user.name}" is open in more than one tab or window — GM automation runs once per tab, so spawns, whispers and rolls can double up. Close the extras.`, { permanent: true });
+}
+
 Hooks.once("ready", () => {
   if (!globalThis.__bbttccOnboardingRelayBound) {
     globalThis.__bbttccOnboardingRelayBound = true;
     game.socket?.on?.(CHANNEL, _onRequest);
+  }
+  if (game.user?.isGM) {
+    try { game.socket.emit(CHANNEL, { t: "gm-hello", userId: game.user.id, clientId: CLIENT_ID }); } catch (_) {}
   }
   const ns = globalThis.game?.bbttcc?.onboarding;
   if (ns) {

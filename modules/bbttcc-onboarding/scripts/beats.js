@@ -2737,7 +2737,8 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey
       const gmRes = await _stage()?.openRaidConsoleForGM?.(f.id, {
         playerName: ctx.steward?.name || ctx.user?.name || "",
         activityKey,
-        sceneId: court?.id ?? ""            // courtly raids need the GM viewing the tableau
+        sceneId: court?.id ?? "",           // courtly raids need the GM viewing the tableau
+        target: session.targetUuid ? { targetUuid: session.targetUuid, targetName: session.targetName, defenderId: session.defenderId } : null
       });
       if (!globalThis.game?.user?.isGM) {
         if (gmRes?.ok) await ctx.speak("Your GM's console just lit up on your banner — they run the rounds, you feed them. Stage your OP and pick your maneuvers; they'll roll it.");

@@ -73,7 +73,11 @@ const TOUR_OFFERS = {
   },
   raid_violence: {
     tour: "raid-console",
-    prompt: "Last classroom, One. The Raid Console is where factions bleed. Tour it before your first live round?",
+    // Offered once the GM has opened round one — before that the rounds,
+    // maneuver and commit steps have nothing to anchor to and skip (trailer
+    // shoot 2026-10-09: the tour ran 1 → 4 → 5 and ended).
+    waitFor: (ctx) => _waitForFirstRaidRound(ctx),
+    prompt: "Last classroom, One. Your GM just opened round one — the Raid Console is where factions bleed. Tour it before you stage?",
     label: "Tour the Raid Console",
     resume: "Class dismissed. The console's hot and pre-aimed — pick maneuvers, commit a round or two, then conclude."
   },
@@ -86,6 +90,21 @@ const TOUR_OFFERS = {
 };
 
 function _tours() { return globalThis.game?.bbttcc?.onboarding?.tours || null; }
+
+const FIRST_ROUND_WAIT_MS = 3 * 60 * 1000;
+/** Resolve once the run's faction has a raid round on its session (or after a ceiling). */
+function _waitForFirstRaidRound(ctx) {
+  const fid = ctx?.faction?.id;
+  const hasRound = (a) => (a?.getFlag?.("bbttcc-raid", "raidSession")?.rounds ?? []).length > 0;
+  if (!fid || hasRound(ctx.faction)) return Promise.resolve();
+  return new Promise((resolve) => {
+    let done = false;
+    const finish = () => { if (done) return; done = true; Hooks.off("updateActor", onUpd); clearTimeout(t); resolve(); };
+    const onUpd = (actor) => { if (actor?.id === fid && hasRound(actor)) finish(); };
+    Hooks.on("updateActor", onUpd);
+    const t = setTimeout(finish, FIRST_ROUND_WAIT_MS);
+  });
+}
 function _ui() { return globalThis.game?.bbttcc?.onboarding?.ui || null; }
 
 const OFFER_TITLE = "◇ OPERATOR — Interface Tour";
@@ -250,6 +269,7 @@ Hooks.once("ready", () => {
       enter: async (ctx) => {
         if (originalEnter) await originalEnter(ctx);          // validated flow first
         for (const spec of specs) {
+          if (typeof spec.waitFor === "function") { try { await spec.waitFor(ctx); } catch (_) {} }
           let took = false;
           try { took = await _offerTour(spec); } catch (e) { console.warn(TAG, "tour offer failed", e); }
           // Tours run long — restate the beat's gate so the player lands knowing their next move.

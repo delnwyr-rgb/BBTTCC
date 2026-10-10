@@ -10037,8 +10037,12 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
     ? `${dr.number}${dr.die ?? "d6"}${dr.attribute ? ` + ${ftCap(dr.attribute)}` : ""} ${dr.type ?? "kinetic"} → ${dr.track ?? "integrity"}`
     : "no roll";
   const resBits = (r.shape && r.shape !== "auto") ? r.shape : "auto-apply";
-  const costBits = state.costType && state.costValue
-    ? `${state.costValue} ${state.costType}` : (state.costText || "no fixed cost");
+  const upkeep = (state.maintenanceKey && state.maintenanceKey !== "none" && state.maintenanceKey !== "custom")
+    ? (FT.MAINTENANCE_COSTS?.[state.maintenanceKey]?.label ?? state.maintenanceKey)
+    : String(state.maintenanceCost ?? "").trim();
+  const upfront = (state.costType && state.costType !== "none" && Number(state.costValue) > 0)
+    ? `${state.costValue} ${state.costType}` : (state.costText || "");
+  const costBits = [upfront, upkeep ? `upkeep: ${upkeep}` : ""].filter(Boolean).join(" · ") || "no fixed cost";
 
   // Magnitude v1.1 suggestion banner. Highlights only when the configured
   // tier diverges from what the inputs warrant, otherwise shows a green ✓.
@@ -10075,7 +10079,7 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
         <div style="display:flex;gap:0.5rem;align-items:center;padding:0.3rem;border:1px solid rgba(232,200,74,0.18);border-radius:4px;background:rgba(20,12,40,0.4)">
           <img src="${ftEscapeHtml(iconImg)}" style="width:48px;height:48px;border:1px solid rgba(232,200,74,0.3);border-radius:4px;background:#0a0814;object-fit:cover" alt="manifestation icon"/>
           <button type="button" data-wiz-action="pick-image" style="padding:0.3rem 0.6rem;font-size:0.78rem">Choose from icon library…</button>
-          <span style="font-size:0.72rem;opacity:0.55;flex:1;word-break:break-all">${ftEscapeHtml(iconImg)}</span>
+          <span style="font-size:0.72rem;opacity:0.55;flex:1 1 12rem;min-width:10rem;overflow-wrap:anywhere">${ftEscapeHtml(iconImg)}</span>
         </div>
       </div>
       <div class="ft-cast-field ft-cast-span-2"><label>Signature</label>${_ftWizV2Txt("signature", state.signature, "What tells people this could only have come from you?")}</div>
@@ -10281,8 +10285,17 @@ const _FT_WIZ_V2_CASCADES = {
   }
 };
 
+// WHICH faculty resists is decided by what the manifestation DOES (Function),
+// not by its surface — so a Function's save attribute outranks the generic
+// Interaction Model suggestion. Shape (attack vs save) still follows the surface:
+// Harm + Zone stays an area save. Before this, Command → save Soul was clobbered
+// by Zone → save Body in the same pass: the cast rolled Body while the per-round
+// save stayed Soul (trailer shoot 2026-10-09).
+const _FT_WIZ_V2_CASCADE_RANK = { function: 2 };
+const _FT_WIZ_V2_RANKED_FIELDS = new Set(["resolution.saveAttribute"]);
 function _ftWizV2ApplyCascade(state, changedPaths) {
   state._touched ??= new Set();
+  state._cascadeBy ??= {};
   const writes = [];
   for (const path of changedPaths) {
     const rules = _FT_WIZ_V2_CASCADES[path];
@@ -10290,9 +10303,13 @@ function _ftWizV2ApplyCascade(state, changedPaths) {
     const triggerVal = foundry.utils.getProperty(state, path);
     const targets    = rules[triggerVal];
     if (!targets) continue;
+    const rank = _FT_WIZ_V2_CASCADE_RANK[path] ?? 1;
     for (const [targetPath, targetVal] of Object.entries(targets)) {
       if (state._touched.has(targetPath)) continue;
+      const by = state._cascadeBy[targetPath];
+      if (_FT_WIZ_V2_RANKED_FIELDS.has(targetPath) && by && by !== path && (_FT_WIZ_V2_CASCADE_RANK[by] ?? 1) > rank) continue;
       foundry.utils.setProperty(state, targetPath, targetVal);
+      state._cascadeBy[targetPath] = path;
       writes.push({ from: `${path}=${triggerVal}`, to: `${targetPath}=${targetVal}` });
     }
   }
@@ -10429,7 +10446,7 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
     kind = "power";
   }
   const starterCfg = ftManifestationStarterConfig(starter, kind);
-  const wizardKind = starterCfg?.kind ?? kind;
+  let wizardKind = starterCfg?.kind ?? kind;
   const titleLabel = starterCfg?.label ?? (wizardKind === "weapon" ? "Stable" : "Ephemeral");
 
   // Initial state — defaults + starter overrides + name slot. The
@@ -10473,7 +10490,24 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
     catch (e) { console.warn("Roll for Initiation | wizard edit-overlay failed", e); }
   }
 
-  const STEPS = _ftWizV2Steps(wizardKind);
+  let STEPS = _ftWizV2Steps(wizardKind);
+
+  // The starter only picks the opening posture — the item TYPE follows what the
+  // author actually builds. A "weapon" item is a strikable Form; anything else
+  // (Zone, Mark, Companion, Event…) is a power. Without this a non-TCC's Stable
+  // start stayed a melee `weapon` whatever Form & Function said (trailer shoot
+  // 2026-10-09: a Command · Zone · Scene build saved as a 2d6 kinetic strike).
+  // Edit mode keeps the existing item's type — a document can't change type.
+  const syncKind = () => {
+    if (existingItem) return;
+    const k = state.interactionModel === "weapon" ? "weapon" : "power";
+    if (k === wizardKind) return;
+    wizardKind = k;
+    STEPS = _ftWizV2Steps(k);
+    if (!state._touched?.has?.("img") && ["icons/svg/sword.svg", "icons/svg/aura.svg"].includes(state.img)) {
+      state.img = k === "weapon" ? "icons/svg/sword.svg" : "icons/svg/aura.svg";
+    }
+  };
 
   return new Promise((resolve) => {
     let resolved = false;
@@ -10528,6 +10562,7 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
         // to non-touched downstream fields, so user choices survive.
         const changed = _ftWizV2Harvest(wizRoot, state);
         const cascadeWrites = _ftWizV2ApplyCascade(state, changed);
+        syncKind();
         const errBox = wizRoot.querySelector(".ft-wiz-v2-errors");
         if (errBox) errBox.textContent = "";
 
@@ -24967,6 +25002,26 @@ Hooks.on("preCreateItem", (item, data, options, userId) => {
   }
 });
 
+// Apply-damage buttons, wherever the card copy lives (chat log, notification
+// toast, popout). Routes through the canonical applyDamageFromButton — the old
+// inline writer hit system.derived.<track>.value, a MIRROR re-seeded from
+// system.integrity.value for rigs/bosses, and skipped defense math, triggers and
+// the GM relay (2026-05-19).
+if (!globalThis.__ftApplyDmgDelegated) {
+  globalThis.__ftApplyDmgDelegated = true;
+  document.addEventListener("click", (ev) => {
+    const btn = ev.target?.closest?.(".ft-apply-dmg-btn");
+    if (!btn || btn.disabled || !btn.closest(".chat-message, .message")) return;
+    ev.preventDefault();
+    console.debug("fourththing | apply-damage click", { from: btn.closest("#chat-notifications") ? "toast" : "log", messageId: btn.closest("[data-message-id]")?.dataset?.messageId });
+    if (typeof game?.fourththing?.rolls?.applyDamageFromButton === "function") {
+      game.fourththing.rolls.applyDamageFromButton(btn);
+      return;
+    }
+    ui.notifications.warn("Damage handler unavailable — reload Foundry.");
+  });
+}
+
 // Delegated chat listener — use renderChatMessageHTML (V14+) with fallback to renderChatMessage
 const _chatHook = typeof ChatMessage.prototype.renderHTML !== "undefined"
   ? "renderChatMessageHTML"
@@ -25028,21 +25083,10 @@ Hooks.on(_chatHook, (message, html) => {
     });
   });
 
-  root.querySelectorAll(".ft-apply-dmg-btn").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      if (btn.disabled) return;
-      // 2026-05-19 — Route through the canonical applyDamageFromButton.
-      // The previous inline implementation wrote to system.derived.<track>.value,
-      // which for rigs and bosses is a MIRROR re-seeded from system.integrity.value
-      // on every prepareDerivedData — so damage to a rig never actually landed.
-      // It also bypassed _applyDamageToActor (no defense math, no triggers, no
-      // GM-relay for non-owner targets). The canonical helper handles all of that.
-      if (typeof game?.fourththing?.rolls?.applyDamageFromButton === "function") {
-        return game.fourththing.rolls.applyDamageFromButton(btn);
-      }
-      ui.notifications.warn("Damage handler unavailable — reload Foundry.");
-    });
-  });
+  // .ft-apply-dmg-btn is handled by ONE delegated document listener (above this
+  // hook) rather than per-render binding: the chat-notification toast copy of a
+  // card silently no-op'd on Apply while the log copy worked (trailer playtest
+  // 2026-10-09). Delegation covers log, toast and popout copies identically.
 
   // Save-prompt button (saveByPrompt resolution path). Target's owner clicks
   // to roll their save — the click handler resolves damage + states with the

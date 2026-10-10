@@ -31,5 +31,19 @@
   "FT.Power.ClarityRequired": "Clarity Required",
   "FT.Power.NoiseGain": "Noise Gain",
   "FT.Power.Effect": "Effect",
-  "FT.Power.Damage": "Damage Formula"
+  "FT.Power.Damage": "Damage Formula",
+  "TYPES.Actor.character": "Steward",
+  "TYPES.Actor.npc": "Figure",
+  "TYPES.Actor.rig": "Rig",
+  "TYPES.Item.weapon": "Weapon",
+  "TYPES.Item.armor": "Armor",
+  "TYPES.Item.power": "Manifestation",
+  "TYPES.Item.gear": "Gear",
+  "TYPES.Item.feature": "Feature",
+  "TYPES.Item.feat": "Feat",
+  "TYPES.Item.class": "Class",
+  "TYPES.Item.subclass": "Subclass",
+  "TYPES.Item.race": "Race",
+  "TYPES.Item.species": "Species",
+  "TYPES.Item.spark": "Spark"
 }

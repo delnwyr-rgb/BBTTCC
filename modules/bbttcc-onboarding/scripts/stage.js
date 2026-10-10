@@ -188,6 +188,34 @@ const _lastHit = new Map();          // foe actor id → { userId, value, ts }
 const _billedKills = new Set();      // foe actor ids already billed (one bill per kill)
 let _hitTrackerOn = false;
 
+/* The pre-aimed target must reach the GM's console view, not just the session
+ * flag (trailer shoot 2026-10-09: banner read TARGET: RUST SYNDICATE HOLD while
+ * vm.targetUuid was empty, so Add Round asked for a hex). Re-stamps the session
+ * target if a save wiped it before any round exists, then aims the open console.
+ * Tutorial hexes only — a relayed request can't point a real raid anywhere. */
+async function _aimGmConsole(app, faction, target) {
+  const uuid = String(target?.targetUuid || "");
+  if (!uuid || !faction) return;
+  try {
+    const hex = await fromUuid(uuid).catch(() => null);
+    if (!hex?.getFlag?.(MODULE_ID, "tutorialHex")) return;
+    const aim = {
+      targetType: "hex", targetUuid: uuid,
+      targetName: String(target.targetName || hex.text || "Hostile Hold"),
+      defenderId: String(target.defenderId || "")
+    };
+    const sess = faction.getFlag?.("bbttcc-raid", "raidSession");
+    if (sess && typeof sess === "object" && sess.targetUuid !== uuid && !(sess.rounds || []).length) {
+      await faction.setFlag("bbttcc-raid", "raidSession", { ...sess, ...aim, rev: Math.max(Number(sess.rev) || 0, Date.now()) + 1, ts: Date.now() });
+    }
+    const vm = app?.vm;
+    if (vm && String(vm.attackerId || "") === faction.id && vm.targetUuid !== uuid) {
+      Object.assign(vm, aim);
+      await app.render?.(false);
+    }
+  } catch (e) { console.warn(TAG, "GM console aim failed", e); }
+}
+
 /** Integrity for either actor shape (rigs: system.integrity; npcs/characters: derived). */
 function _integrityOf(actor) {
   // rig accessor (2026-10-08): works on dnd5e vehicles too
@@ -1279,7 +1307,7 @@ function _registerOps() {
   // controls all live behind {{#if isGM}}. A player can stage OP into their
   // commitments but cannot open or resolve a round. So the tutorial hands the GM
   // the console already pointed at the student's faction, and whispers why.
-  reg("openRaidConsoleForGM", async ({ factionId, playerName = "", activityKey = "", sceneId = "" }) => {
+  reg("openRaidConsoleForGM", async ({ factionId, playerName = "", activityKey = "", sceneId = "", target = null }) => {
     const raid = globalThis.game?.bbttcc?.api?.raid;
     const faction = game.actors?.get?.(String(factionId || ""));
     if (!raid?.openConsole || !faction) return { ok: false };
@@ -1294,7 +1322,8 @@ function _registerOps() {
           try { await court.view(); } catch (e) { console.warn(TAG, "GM court view failed", e); }
         }
       }
-      await raid.openConsole({ factionId: faction.id });
+      const app = await raid.openConsole({ factionId: faction.id });
+      await _aimGmConsole(app, faction, target);
       await ChatMessage.create({
         whisper: game.users.filter(u => u.isGM).map(u => u.id),
         speaker: { alias: "◇ OPERATOR" },
@@ -1691,9 +1720,9 @@ async function setRaidSession(factionId, session) {
 }
 
 /** Open the GM's raid console on this faction + whisper them why (raids are GM-run). */
-async function openRaidConsoleForGM(factionId, { playerName = "", activityKey = "", sceneId = "" } = {}) {
+async function openRaidConsoleForGM(factionId, { playerName = "", activityKey = "", sceneId = "", target = null } = {}) {
   if (!factionId) return { ok: false };
-  return (await _runAsGM("openRaidConsoleForGM", { factionId, playerName, activityKey, sceneId })) ?? { ok: false };
+  return (await _runAsGM("openRaidConsoleForGM", { factionId, playerName, activityKey, sceneId, target })) ?? { ok: false };
 }
 
 /** Clear the raid session pointer off the player's real faction. */
