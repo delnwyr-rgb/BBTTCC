@@ -981,26 +981,27 @@ function bbttccHexAbsPoints(doc) {
 // `.stroke({...})`, `.fill({...})`) which threw "glow.poly is not a function"
 // on every scene draw. If/when Foundry moves to PIXI v8, this helper can be
 // simplified back to the v8 fluent API.
-/* Marker registry — type icons (custom PNG art) with FA glyph fallback.
- * Entries with `icon:` use PIXI.Sprite from the GOTTGAIT art set.
- * Entries with `glyph:` use FontAwesome 6 Free (weight 900) PIXI.Text.
+/* Marker registry — type icons (custom DA icon art) with FA glyph fallback.
+ * Entries with `icon:` use PIXI.Sprite from the module's own Bad Eden map-icon
+ * set (DA renders, shippable — the old GOTTGAIT overlays were retired 2026-10-10).
+ * Entries with `glyph:` use Font Awesome (weight 900) PIXI.Text.
  * `color` styles the disc ring + glyph fill; sprites render full color. */
-const HEX_ICON_BASE = "art/bbttcc/GOTTGAIT/ArtForBBTTCCModule/GOTTGAIT%20Art/";
+const HEX_ICON_BASE = "modules/bbttcc-territory/assets/map-icons/";
 function bbttccHexIconUrl(filename) {
   return HEX_ICON_BASE + encodeURIComponent(filename);
 }
 const HEX_TYPE_GLYPHS = {
-  port:       { icon:"bad_eden_map_overlay_port.png",              color:0x06b6d4, label:"Port" },
-  fortress:   { icon:"bad_eden_map_overlay_fortress.png",          color:0xef4444, label:"Fortress" },
-  farm:       { icon:"bad_eden_map_overlay_farm.png",              color:0x16a34a, label:"Farm" },
-  mine:       { icon:"bad_eden_map_overlay_mine.png",              color:0xb45309, label:"Mine" },
-  settlement: { icon:"bad_eden_map_overlay_settlement.png",        color:0x60a5fa, label:"Settlement" },
-  research:   { icon:"bad_eden_map_overlay_research_facility.png", color:0xc084fc, label:"Research" },
-  factory:    { icon:"bad_eden_map_overlay_factory_v2.png",        color:0x94a3b8, label:"Factory" },
-  temple:     { icon:"bad_eden_map_overlay_temple.png",            color:0xfde047, label:"Temple" },
-  wasteland:  { icon:"bad_eden_map_overlay_wasteland.png",         color:0xf87171, label:"Wasteland" },
-  ruins:      { icon:"bad_eden_map_overlay_ruins.png",             color:0xa8a29e, label:"Ruins" },
-  wilderness: { icon:"bad_eden_map_overlay_wilderness.png",        color:0x86efac, label:"Wilderness" }
+  port:       { icon:"port.webp",       color:0x06b6d4, label:"Port" },
+  fortress:   { icon:"fortress.webp",   color:0xef4444, label:"Fortress" },
+  farm:       { icon:"farm.webp",       color:0x16a34a, label:"Farm" },
+  mine:       { icon:"mine.webp",       color:0xb45309, label:"Mine" },
+  settlement: { icon:"settlement.webp", color:0x60a5fa, label:"Settlement" },
+  research:   { icon:"research.webp",   color:0xc084fc, label:"Research" },
+  factory:    { icon:"factory.webp",    color:0x94a3b8, label:"Factory" },
+  temple:     { icon:"temple.webp",     color:0xfde047, label:"Temple" },
+  wasteland:  { icon:"wasteland.webp",  color:0xf87171, label:"Wasteland" },
+  ruins:      { icon:"ruins.webp",      color:0xa8a29e, label:"Ruins" },
+  wilderness: { icon:"wilderness.webp", color:0x86efac, label:"Wilderness" }
 };
 
 const HEX_STAGE_PIP = {
@@ -1154,14 +1155,23 @@ function bbttccBuildHexMarkerOverlay(doc, bounds, size) {
         const sprite = new PIXI.Sprite(tex);
         sprite.anchor.set(0.5, 0.5);
         sprite.x = ix; sprite.y = iy;
-        sprite.width = r * 1.85;  // fits inside the disc with a small margin
-        sprite.height = r * 1.85;
+        // Fit the longest side inside the disc, keeping the art's aspect ratio
+        // (the DA icons are cut-outs, not squares). Textures can still be
+        // loading here, so size on load as well.
+        const fit = () => {
+          const tw = tex.width || 1, th = tex.height || 1;
+          const k = (r * 1.7) / Math.max(tw, th);
+          sprite.scale.set(k, k);
+        };
+        if (tex.baseTexture?.valid) fit();
+        else { sprite.width = sprite.height = r * 1.7; tex.baseTexture?.once?.("loaded", fit); }
         root.addChild(sprite);
       } catch (eIcon) { console.warn("[bbttcc-territory] type sprite failed", typeMeta.icon, eIcon); }
     } else if (typeMeta.glyph) {
       try {
         const text = new PIXI.Text(String(typeMeta.glyph), {
-          fontFamily: "\"Font Awesome 6 Free\", \"FontAwesome\"",
+          // Foundry ships FA Pro (7 on v13+, "5 Pro" alias) — not "6 Free".
+          fontFamily: "\"Font Awesome 7 Pro\", \"Font Awesome 6 Pro\", \"Font Awesome 5 Pro\", \"Font Awesome 6 Free\"",
           fontSize: Math.max(20, Math.round(r * 1.25)),
           fontWeight: "900",
           fill: typeMeta.color,
