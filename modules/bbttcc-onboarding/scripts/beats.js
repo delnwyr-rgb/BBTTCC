@@ -82,8 +82,38 @@ function _sceneLanding(scene, lane = 0) {
 }
 
 /** Dive into a tutorial Scene (GM-solo/non-destructive), falling back to a plain view. */
+/** Exit-time cleanup that LEAVES the player's own Steward/rig tokens standing and
+ *  hands them to the next beat's list (it reaps them at its own exit). Reaping
+ *  them here blacked the board out — no token, no vision — through the founding
+ *  dialog and the trials → showdown hand-off (trailer shoot 2026-10-09). */
+async function _cleanupKeepPlayer(ctx) {
+  const mine = new Set([ctx.steward?.id, ctx.rig?.id].filter(Boolean));
+  const list = ctx._spawned || [];
+  const isMine = (e) => e?.token && !e?.actor && mine.has(String(e.token.actorId ?? e.token.actor?.id ?? ""));
+  try { await _stage()?.cleanup?.(list.filter(e => !isMine(e))); } catch (_) {}
+  return list.filter(isMine).map(e => ({ ...e, _carry: true }));
+}
+
+// Staged entries view the scene BEFORE the beat places the player's token, so
+// Foundry flashed "There is no Token in this Scene which gives you visibility"
+// on every one (trailer shoot 2026-10-09). Mute exactly that warning for a few
+// seconds around a staged entry; every other notification passes through.
+let _muteNoVisionUntil = 0;
+function _armNoVisionMute(ms = 6000) {
+  _muteNoVisionUntil = Date.now() + ms;
+  const n = globalThis.ui?.notifications;
+  if (!n || n.__obNoVisionWrapped) return;
+  const orig = n.warn.bind(n);
+  n.warn = function (message, options) {
+    if (message === "TOKEN.WarningNoVision" && Date.now() < _muteNoVisionUntil) return null;
+    return orig(message, options);
+  };
+  n.__obNoVisionWrapped = true;
+}
+
 async function _enterScene(scene, label, lane = 0) {
   if (!scene) return;
+  _armNoVisionMute();
   const tx = _tx();
   const landAt = _sceneLanding(scene, lane);
   // The dive returns FALSE (not a throw) when it is busy or can't resolve the
@@ -236,8 +266,7 @@ const meatsuit = {
     try { await globalThis.game?.fourththing?.actions?.somaBreak?.(ctx.steward, { confirmed: true }); }
     catch (e) { console.warn(TAG, "meatsuit exit soma break failed", e); }
     await ctx.speak("Reflexes intact, soul bolted in. SOMA BREAK — everything you just spent is restored; the sim picks up the tab. The straw adversary sends its regards— *bzzt* —dismissing it now.");
-    try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
-    ctx._spawned = [];
+    ctx._spawned = await _cleanupKeepPlayer(ctx);
   }
 };
 
@@ -267,7 +296,7 @@ const driving = {
   scope: "personal",
 
   enter: async (ctx) => {
-    ctx._spawned = [];
+    ctx._spawned = (ctx._spawned || []).filter(e => e?._carry);   // meatsuit's standing Steward token, reaped at this exit
     ctx._rig = null;
     ctx._obstacles = [];
     await ctx.speak("Every Steward gets a rig. Yours is parked trackside — let's see if you can move it without folding it into a wall.");
@@ -628,7 +657,9 @@ const outfitting = {
  *  (older system build) — never a paraphrase that can drift out of true. */
 function _glossaryHTML() {
   try {
-    const html = globalThis.game?.fourththing?.manifestationGlossaryHTML?.();
+    // The deck slide IS the glossary — open the <details> so the slide isn't an
+    // empty one-liner until clicked (trailer shoot 2026-10-09).
+    const html = globalThis.game?.fourththing?.manifestationGlossaryHTML?.()?.replace?.('<details class="ft-manifest-glossary">', '<details class="ft-manifest-glossary" open>');
     if (html) return html;
   } catch (e) { console.warn(TAG, "glossary unavailable", e); }
   return `<p><em>The full glossary lives under the Invoke dialog's coach panel — open any manifestation and hit Invoke to read it.</em></p>`;
@@ -800,7 +831,9 @@ const surgeBeat = {
   enter: async (ctx) => {
     const sys = ctx.steward?.system?.system ?? ctx.steward?.system ?? {};
     const cur = Number(sys?.resources?.surge?.value) || 0;
-    const max = Number(sys?.resources?.surge?.max) || 10;
+    // The engine's tier-scaled bank cap (T1 = 4), same number the Spend dialog
+    // shows — the raw resources.surge.max field read 10 (trailer shoot 2026-10-09).
+    const max = Number(globalThis.game?.fourththing?.surge?.cap?.(ctx.steward)) || Number(sys?.resources?.surge?.max) || 10;
 
     await ctx.speak("Next: the currency nobody explains until it's too late. *bzzt* Surge.");
     await _pause(700);
@@ -831,7 +864,15 @@ const surgeBeat = {
       ]
     });
 
-    try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
+    // The button promises the Engagement tab — land there, not on whatever tab
+    // the sheet last had open (trailer shoot 2026-10-09 opened on Inventory).
+    try {
+      const sheet = ctx.steward?.sheet;
+      await sheet?.render(true, { focus: true });
+      await _pause(300);
+      const el = sheet?.element instanceof HTMLElement ? sheet.element : sheet?.element?.[0];
+      el?.querySelector?.('.ft-tabs a[data-tab="combat"]')?.click();
+    } catch (_) {}
     await _pause(600);
     await ctx.speak(cur > 0
       ? `Engagement tab, ✦ Surge panel — you're holding ${cur}. Open Spend and read what's on the menu. You don't have to buy anything; just learn where the shop is.`
@@ -1117,7 +1158,7 @@ const SIM_WAVES = [
     // rifle does half, a manifestation does double. That asymmetry is the
     // damage-type lesson, delivered by the foes rather than by a lecture.
     brief: "Three hollow things on the field. Qliphothic — nobody's home, nothing to save. Put them down.",
-    coach: "Read them before you shoot: they're RESISTANT to kinetic and VULNERABLE to sephirotic. Your rifle will feel blunt; anything with light in it will not. This is what the manifestation you just authored is FOR — mix your damage types, that's the whole trick.",
+    coach: "Read them before you shoot: two of them are RESISTANT to kinetic, all three are VULNERABLE to sephirotic. Your rifle will feel blunt on most of them; anything with light in it will not. This is what the manifestation you just authored is FOR — mix your damage types, that's the whole trick.",
     // fromPack: real pre-gens from the Qliphothic Bestiary (master-content
     // npcs compendium, owner drop 2026-08-26) — authored abilities + art. The
     // resist/vuln pairs still ride along as a mergeDefenses UNION so the
@@ -1126,8 +1167,10 @@ const SIM_WAVES = [
     foes: [
       { name: "Hollow Thing",   fromPack: "Ghagielite Blinder",   foeClass: "qliphothic", body: 4, xFrac: 0.46, yFrac: 0.58,
         resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      // No kinetic resist on this one (owner ruling 2026-10-09): a kinetic-only
+      // support Steward still makes progress; the other two keep the lesson.
       { name: "Hollow Thing",   fromPack: "Nahemoth Husk",        foeClass: "qliphothic", body: 4, xFrac: 0.40, yFrac: 0.46,
-        resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+        resistances: [], vulnerabilities: ["sephirotic"] },
       { name: "Gantry Hollow",  fromPack: "Satariel Veil-Spinner", foeClass: "qliphothic", body: 3, xFrac: 0.52, yFrac: 0.40, elevation: 20, perch: true,
         resistances: ["kinetic"], vulnerabilities: ["sephirotic"] }
     ]
@@ -1180,6 +1223,7 @@ async function _spawnFoeSmart(stage, scene, f, lane, extra = {}) {
       elevation: f.elevation ?? 0, size: f.size ?? 0,
       mergeDefenses: { resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [] },
       conditions: f.conditions ?? [],
+      integrityCap: f.integrityCap ?? 0,
       ..._scenePoint(scene, f.xFrac, f.yFrac, lane),
       ..._at(extra)
     });
@@ -1774,6 +1818,21 @@ async function _pgTakeRelic(steward, key, { flag = true } = {}) {
   return next;
 }
 
+/** Where the graduation camera lands on the live map: the faction's own hold if
+ *  it's on this scene, else the Steward's token, else the centre (the shoot opened
+ *  on an empty corner of hex grid — trailer shoot 2026-10-09). */
+function _graduationFocus(scene, ctx) {
+  try {
+    const fid = ctx.faction?.id;
+    const hold = fid ? (scene.drawings?.contents ?? []).find(d => d.flags?.["bbttcc-territory"]?.isHex && d.flags["bbttcc-territory"].factionId === fid) : null;
+    if (hold) return { x: Math.round(hold.x + (Number(hold.shape?.width) || 0) / 2), y: Math.round(hold.y + (Number(hold.shape?.height) || 0) / 2) };
+    const g = Number(scene.grid?.size) || 100;
+    const tok = ctx.steward ? (scene.tokens?.contents ?? []).find(t => t.actorId === ctx.steward.id) : null;
+    if (tok) return { x: Math.round(tok.x + (Number(tok.width) || 1) * g / 2), y: Math.round(tok.y + (Number(tok.height) || 1) * g / 2) };
+  } catch (_) {}
+  return _scenePoint(scene, 0.5, 0.5, ART_LANE);
+}
+
 /* ───────────────────────── PROVING TRIALS ───────────────────────── */
 const provingTrials = {
   id: "proving_trials",
@@ -2183,8 +2242,7 @@ const provingTrials = {
   exit: async (ctx) => {
     const n = _pgRelics(ctx.steward).length;
     await ctx.speak(`${n} of ${PG_TRIALS.length} anchors in hand. The pull's still there — I can feel it in the tick rate — but the ground will hold long enough for what comes next.`);
-    try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
-    ctx._spawned = [];
+    ctx._spawned = await _cleanupKeepPlayer(ctx);
     ctx._pg = null;
   }
 };
@@ -2232,10 +2290,10 @@ const PG_APPROACHES = {
     // The Pull wears the Avatar of the Veil (Reality Rearranges / Veil-
     // Severance / Thinning Aura — it IS the thing pulling at the world model).
     foes: [
-      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, foeClass: "qliphothic", body: 4, xFrac: 0.63, yFrac: 0.73, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
-      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, foeClass: "qliphothic", body: 4, xFrac: 0.73, yFrac: 0.74, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
-      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, foeClass: "qliphothic", body: 4, xFrac: 0.60, yFrac: 0.86, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
-      { name: "The Pull",     fromPack: "Avatar of the Veil", keepName: true, foeClass: "qliphothic", body: 8, size: 2, xFrac: 0.68, yFrac: 0.85, resistances: ["kinetic", "qliphothic"], vulnerabilities: ["sephirotic"] }
+      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, integrityCap: 20, foeClass: "qliphothic", body: 4, xFrac: 0.63, yFrac: 0.73, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, integrityCap: 20, foeClass: "qliphothic", body: 4, xFrac: 0.73, yFrac: 0.74, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, integrityCap: 20, foeClass: "qliphothic", body: 4, xFrac: 0.60, yFrac: 0.86, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "The Pull",     fromPack: "Avatar of the Veil", keepName: true, integrityCap: 60, foeClass: "qliphothic", body: 8, size: 2, xFrac: 0.68, yFrac: 0.85, resistances: ["kinetic", "qliphothic"], vulnerabilities: ["sephirotic"] }
     ]
   },
   intrigue: {
@@ -2245,8 +2303,8 @@ const PG_APPROACHES = {
     coach: "Fewer of them, and they start SURPRISED — they cannot act on the first round. That round is a gift; spend it on the big one, not the small ones.",
     // Quiet means fewer, and the system's own surprise rule buys the free round.
     foes: [
-      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, foeClass: "qliphothic", body: 4, xFrac: 0.63, yFrac: 0.73, resistances: ["kinetic"], vulnerabilities: ["sephirotic"], conditions: ["surprise"] },
-      { name: "The Pull",     fromPack: "Avatar of the Veil", keepName: true, foeClass: "qliphothic", body: 8, size: 2, xFrac: 0.68, yFrac: 0.85, resistances: ["kinetic", "qliphothic"], vulnerabilities: ["sephirotic"], conditions: ["surprise"] }
+      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, integrityCap: 20, foeClass: "qliphothic", body: 4, xFrac: 0.63, yFrac: 0.73, resistances: ["kinetic"], vulnerabilities: ["sephirotic"], conditions: ["surprise"] },
+      { name: "The Pull",     fromPack: "Avatar of the Veil", keepName: true, integrityCap: 60, foeClass: "qliphothic", body: 8, size: 2, xFrac: 0.68, yFrac: 0.85, resistances: ["kinetic", "qliphothic"], vulnerabilities: ["sephirotic"], conditions: ["surprise"] }
     ]
   }
 };
@@ -2269,7 +2327,8 @@ const finalShowdown = {
 
     // Shared stage: the circle deserves a clean floor — reap anything a prior
     // run (or the trials, if they crashed mid-beat) left standing.
-    try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
+    // Keep the player's own tokens standing through the trials → showdown hand-off (no dark flash).
+    try { if (scene) await _stage()?.sweepScene?.(scene, { keepActorIds: [ctx.steward?.id, ctx.rig?.id].filter(Boolean) }); } catch (_) {}
 
     if (held.length < PG_TRIALS.length) {
       // Sealed. The owner's ruling: all four or the circle stays inert.
@@ -2645,10 +2704,15 @@ const travel = {
   detect: (ctx, done) => {
     const hostileUuid = ctx._finale?.hostileHex?.hexUuid;
     const sceneId = ctx._finale?.scene?.id;
+    // travelHex hands listeners the destination PLACEABLE (`to.document.uuid`),
+    // not the Drawing document — reading `to.uuid` never matched, so the beat
+    // waited on the fallback button after a real crossing (trailer shoot 2026-10-09).
     const onTravel = (data = {}) => {
-      const toUuid = data?.to?.uuid;
-      const onScene = (data?.to?.obj?.parent?.id === sceneId) || (data?.hexTo?.parent?.id === sceneId);
-      if ((hostileUuid && toUuid === hostileUuid) || (sceneId && onScene)) done();
+      const to = data?.to;
+      const doc = to?.document ?? to;
+      const toUuid = doc?.uuid ?? data?.toUuid ?? "";
+      const toScene = doc?.parent?.id ?? to?.scene?.id ?? data?.hexTo?.parent?.id ?? "";
+      if ((hostileUuid && toUuid === hostileUuid) || (sceneId && toScene === sceneId)) done();
     };
     Hooks.on("bbttcc:afterTravel", onTravel);
     // Fallback — never trap the player if Travel won't drive on a practice scene.
@@ -2878,7 +2942,7 @@ const graduation = {
     const main = ns?.resolve?.mainMap?.();
     const tx = _tx();
     if (main && tx?.dive) {
-      try { await tx.dive(main.uuid, { focus: _scenePoint(main, 0.5, 0.5, ctx.lane), audience, label: "Bad Eden" }); }
+      try { await tx.dive(main.uuid, { focus: _graduationFocus(main, ctx), audience, label: "Bad Eden" }); }
       catch (e) { console.warn(TAG, "graduation dive failed; viewing instead", e); try { await main.view?.(); } catch (_) {} }
     } else if (main) {
       try { await main.view?.(); } catch (_) {}

@@ -494,7 +494,7 @@
       <div class="ft-combat-section ft-resource-panel">
         <h3>✦ Surge <span class="ft-resource-tag">Meta</span></h3>
         <div class="ft-resource-row">
-          <span class="ft-resource-count ft-surge-count">{{resources.surge.value}} / {{#if ftFoeSurge.isFoe}}{{ftFoeSurge.cap}}{{else}}{{resources.surge.max}}{{/if}}</span>
+          <span class="ft-resource-count ft-surge-count">{{resources.surge.value}} / {{#if ftFoeSurge.isFoe}}{{ftFoeSurge.cap}}{{else}}{{#if ftSurgeCap}}{{ftSurgeCap}}{{else}}{{resources.surge.max}}{{/if}}{{/if}}</span>
           <div class="ft-edit-only ft-resource-edit">
             <input type="number" name="system.resources.surge.value" value="{{resources.surge.value}}" min="0" style="width:40px" data-tooltip="Current"/>
             <span style="opacity:0.4">/</span>

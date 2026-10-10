@@ -2021,12 +2021,20 @@ function _ftTokenEdgeGapFt(tokenA, tokenB) {
 // 2026-05-29 (playtest #1) — Effective range in feet for any weapon/manifestation
 // item. Real numeric ranges replacing flavor "near/far". Resolution order:
 //   1. explicit `system.manifestation.rangeFt` override (>0)
-//   2. weapon `system.range.long`/`.short` (small values treated as squares ×5)
+//   2. weapon `system.range.long`/`.short` (multiples of 5 = feet, else squares ×5)
 //   3. power categorical `system.range` ("near"/"far"/...) mapped to feet
 // Returns 0 when nothing meaningful is authored → callers skip the range check
 // (covers self/touch/unlimited). Centralizes the mapping so no data migration is
 // needed; the explicit field just overrides when an author wants a precise number.
 const _FT_RANGE_LABEL_FT = { self: 0, personal: 0, touch: 5, close: 15, near: 30, medium: 60, far: 60, long: 120, sight: 120, hex: 300, scene: 0, unlimited: 0 };
+// Weapon range units: the content mixes squares (Scrap-Throw 4/12, Mind-Spike
+// 12/36, rig autocannons 12) with feet (Laser Pistol 30/120, Slug Pistol 20/80,
+// melee 5/5). One rule fits every authored value: multiples of 5 are feet,
+// anything else is squares. The old "≤4 = squares" cut read a 12-square
+// autocannon as 12 ft while its chip said 12 sq (trailer playtest 2026-10-09).
+function _ftWeaponRangeIsFeet(v) { const n = Number(v); return Number.isFinite(n) && n > 0 && n % 5 === 0; }
+function _ftWeaponRangeToFt(v) { const n = Number(v) || 0; return _ftWeaponRangeIsFeet(n) ? n : n * 5; }
+
 function _ftItemRangeFt(item) {
   const sys = item?.system ?? {};
   const explicit = Number(sys?.manifestation?.rangeFt);
@@ -2035,7 +2043,7 @@ function _ftItemRangeFt(item) {
   const long  = Number(sys?.range?.long);
   const short = Number(sys?.range?.short);
   const wr = (Number.isFinite(long) && long > 0) ? long : ((Number.isFinite(short) && short > 0) ? short : 0);
-  if (wr > 0) return wr <= 4 ? wr * 5 : wr;
+  if (wr > 0) return _ftWeaponRangeToFt(wr);
   // Power categorical label (string form) or rangeAreaText fallback.
   const cat = String(sys?.range ?? sys?.power?.range ?? "").trim().toLowerCase();
   if (cat in _FT_RANGE_LABEL_FT) return _FT_RANGE_LABEL_FT[cat];
@@ -3358,7 +3366,7 @@ function ftItemStatStrip(item, systemOverride = null) {
   const act = mf.activation?.type ?? sys.activation?.type;
   if (act && act !== "none") add("⏱", ftCap(act), "Action type to use");
   const rng = Number(mf.rangeFt) ? `${mf.rangeFt} ft`
-    : (sys.range?.short ? `${sys.range.short}/${sys.range.long ?? sys.range.short} sq` : (mf.rangeAreaText || ""));
+    : (sys.range?.short ? `${sys.range.short}/${sys.range.long ?? sys.range.short} ${_ftWeaponRangeIsFeet(sys.range.long ?? sys.range.short) ? "ft" : "sq"}` : (mf.rangeAreaText || ""));
   add("→", rng, "Range");
   if (mf.area?.shape && mf.area.shape !== "none") add("◎", `${mf.area.size} ft ${mf.area.shape}`, "Area of effect");
   add("◌", mf.targetText, "Target");
@@ -3719,7 +3727,9 @@ function buildManifestationGlossaryHTML() {
     ["Banked reroll", "A reroll-lowest waiting on your sheet (Aid, Rallying Words, Tactical Reserve, Pressure Tested …). Auto-fires on your next check / save / attack / defense / initiative roll."]
   ];
   const items = rows.map(([term, body]) =>
-    `<div class="ft-manifest-glossary-row"><b>${term}</b><span> — ${ftEscapeHtml(body)}</span></div>`
+    // Bodies are authored constants carrying intentional <b> emphasis — escaping
+    // them printed raw "<b>…</b>" (trailer shoot 2026-10-09).
+    `<div class="ft-manifest-glossary-row"><b>${term}</b><span> — ${body}</span></div>`
   ).join("");
   return `
   <div class="ft-manifest-coach-section">
@@ -14326,6 +14336,8 @@ Hooks.once("init", function () {
         const t = Number(tier ?? _ftCasterTier(actor));
         return _ftSurgeExecute(actor, key, c, cur, t);
       },
+      // The bank cap the engine actually enforces (tier-scaled; foes may override).
+      cap: (actorOrId) => _ftSurgeCap(typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId),
       // Enumerate the spend-table entries this actor can actually use — same
       // filter the dialog applies (class/forge/mandate/trance/path/route/
       // doctrine/refraction). Gauntlet runner drives spends through this.
@@ -20954,6 +20966,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         })(),
         ftFlags:       actor.flags?.fourththing ?? {},
         ftFoeSurge:    _ftFoeSurgeContext(actor),
+        ftSurgeCap:    _ftSurgeCap(actor),
         bankedRerolls: _ftBankedRerollContext(actor),
         restraintDie:  _ftRestraintContext(actor),
         resources,
@@ -27266,6 +27279,26 @@ function _ftMakeHudDraggable(el, opts = {}) {
   const storageKey   = opts.storageKey   ?? "anon";
   const collapsedLabel = opts.collapsedLabel ?? "•••";
   const skipReset    = !!opts.skipReset;
+  // The HUD's AUTHORED size (its inline width/height at first wiring). Expand
+  // and Reset fall back to it when the user never resized — clearing it left a
+  // fixed-width panel shrink-to-fit, so it opened wide and GREW as it was dragged
+  // left (Siege HUD, trailer shoot 2026-10-09).
+  if (el.dataset.ftHudBaseW === undefined) {
+    el.dataset.ftHudBaseW = el.style.width || "";
+    el.dataset.ftHudBaseH = el.style.height || "";
+  }
+  // Keep an expanded HUD fully on screen (a pill parked near an edge expanded off it).
+  const keepOnScreen = () => requestAnimationFrame(() => {
+    if (!el.isConnected || el.classList.contains("ft-hud-collapsed")) return;
+    const r = el.getBoundingClientRect();
+    let left = r.left, top = r.top;
+    if (r.right > window.innerWidth - 4)   left = Math.max(0, window.innerWidth - r.width - 8);
+    if (r.bottom > window.innerHeight - 4) top  = Math.max(0, window.innerHeight - r.height - 8);
+    if (left !== r.left || top !== r.top) {
+      el.style.left = Math.round(left) + "px"; el.style.top = Math.round(top) + "px";
+      el.style.right = "auto"; el.style.bottom = "auto"; el.style.transform = "none";
+    }
+  });
 
   const STORAGE = `ft-hud-pos:${(game?.user?.id) || "anon"}:${storageKey}`;
   const load = () => { try { return JSON.parse(localStorage.getItem(STORAGE) || "null") || {}; } catch { return {}; } };
@@ -27314,10 +27347,11 @@ function _ftMakeHudDraggable(el, opts = {}) {
       if (c) { el.style.width = ""; el.style.height = ""; }
       else {
         const sz = load();
-        if (sz.width  != null) el.style.width  = sz.width  + "px";
-        if (sz.height != null) el.style.height = sz.height + "px";
+        el.style.width  = sz.width  != null ? sz.width  + "px" : el.dataset.ftHudBaseW;
+        el.style.height = sz.height != null ? sz.height + "px" : el.dataset.ftHudBaseH;
       }
     }
+    if (!c) keepOnScreen();
     save({ ...load(), collapsed: c });
     // Refresh ctrl-bar's collapse-button label.
     const btnCollapse = ctrl.querySelector("[data-act=collapse]");
@@ -27335,7 +27369,7 @@ function _ftMakeHudDraggable(el, opts = {}) {
       el.style.right = "";
       el.style.bottom = "";
       el.style.transform = "";
-      if (opts.resize) { el.style.width = ""; el.style.height = ""; }
+      if (opts.resize) { el.style.width = el.dataset.ftHudBaseW; el.style.height = el.dataset.ftHudBaseH; }
       if (isCollapsed()) setCollapsed(false);
       ui.notifications?.info?.(opts.resize ? "HUD size & position reset." : "HUD position reset.");
     }));

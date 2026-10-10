@@ -923,7 +923,16 @@ export async function mintEchoMember(opts = {}) {
   }
 
   const folderId = await _echoFolder(steward.name);
-  const portrait = String(member.portrait ?? "").trim();
+  // No authored portrait → the ancestry's character-option art (species items
+  // carry portraits, e.g. Circuitborn_1.png) rather than the mystery-man
+  // default (trailer shoot 2026-10-09: Corvan Ustile minted blank).
+  let portrait = String(member.portrait ?? "").trim();
+  if (!portrait && ancestryId) {
+    try {
+      const img = String(game.packs.get(ANCESTRIES_PACK)?.index?.get?.(ancestryId)?.img ?? "");
+      if (img && !img.startsWith("icons/") && !img.includes("mystery-man")) portrait = img;
+    } catch (_) {}
+  }
   const data = {
     name: member.name,
     type: "character",

@@ -458,7 +458,10 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
       try {
         const v2 = foundry?.applications?.instances;
         for (const a of (v2?.values ? Array.from(v2.values()) : [])) {
-          const t = a?.window?.title ?? a?.options?.window?.title ?? "";
+          // AppV2 `window.title` is the heading ELEMENT ("[object HTMLHeadingElement]"
+          // never matched — the Hex Sheet outlived its beat, trailer shoot 2026-10-09);
+          // `app.title` is the localized string.
+          const t = (typeof a?.title === "string" ? a.title : "") || a?.options?.window?.title || a?.window?.title?.textContent || "";
           if (APP_TITLE_RE.test(String(t))) { try { a.close(); } catch (_) {} }
         }
         for (const a of Object.values(ui.windows ?? {})) {
@@ -475,6 +478,10 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
 
     p = _progress(steward);
     p.currentStep = null;
+    // Stamp completion once every beat in the arc is done (status() read
+    // completedAt: null after a full graduation — trailer shoot 2026-10-09).
+    // Class members never stamp here; the conductor graduates the class.
+    if (!co && !_abortRun && !p.completedAt && _beats.every(b => p.steps?.[b.id]?.done)) p.completedAt = Date.now();
     await _setProgress(steward, p);
     console.log(TAG, "Run finished. Completed beats:", Object.keys(p.steps || {}));
     if (co) return { ok: true, ran, aborted: _abortRun };

@@ -385,12 +385,17 @@ function sceneWiring() {
  *   3) the active scene if it isn't a tutorial scene,
  *   4) null (caller falls back to a plain teardown without a dive).
  */
+const DEFAULT_KICKOFF_SCENE_ID = "AEopElWBbH3kTzrs";
 function resolveMainMap() {
   try {
     const scenes = (game.scenes?.contents ?? []);
     const isTut = (s) => !!s.getFlag?.(MODULE_ID, "tutorialScene");
     const opted = scenes.find(s => s.getFlag?.(MODULE_ID, "mainMap"));
     if (opted) return opted;
+    // Owner's pick (2026-10-09): graduates land here when the world has it,
+    // instead of the densest hex map (the Iron Reaches). setKickoffMap overrides.
+    const preferred = game.scenes?.get?.(DEFAULT_KICKOFF_SCENE_ID);
+    if (preferred && !isTut(preferred)) return preferred;
     const hexCount = (s) => {
       try { return (s.drawings?.contents ?? Array.from(s.drawings ?? [])).filter(d => d.getFlag?.("bbttcc-territory", "isHex") || d.flags?.["bbttcc-territory"]?.isHex).length; }
       catch (_) { return 0; }

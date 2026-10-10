@@ -16,6 +16,26 @@ function _ftMakeHudDraggable(el, opts = {}) {
   const storageKey   = opts.storageKey   ?? "anon";
   const collapsedLabel = opts.collapsedLabel ?? "•••";
   const skipReset    = !!opts.skipReset;
+  // The HUD's AUTHORED size (its inline width/height at first wiring). Expand
+  // and Reset fall back to it when the user never resized — clearing it left a
+  // fixed-width panel shrink-to-fit, so it opened wide and GREW as it was dragged
+  // left (Siege HUD, trailer shoot 2026-10-09).
+  if (el.dataset.ftHudBaseW === undefined) {
+    el.dataset.ftHudBaseW = el.style.width || "";
+    el.dataset.ftHudBaseH = el.style.height || "";
+  }
+  // Keep an expanded HUD fully on screen (a pill parked near an edge expanded off it).
+  const keepOnScreen = () => requestAnimationFrame(() => {
+    if (!el.isConnected || el.classList.contains("ft-hud-collapsed")) return;
+    const r = el.getBoundingClientRect();
+    let left = r.left, top = r.top;
+    if (r.right > window.innerWidth - 4)   left = Math.max(0, window.innerWidth - r.width - 8);
+    if (r.bottom > window.innerHeight - 4) top  = Math.max(0, window.innerHeight - r.height - 8);
+    if (left !== r.left || top !== r.top) {
+      el.style.left = Math.round(left) + "px"; el.style.top = Math.round(top) + "px";
+      el.style.right = "auto"; el.style.bottom = "auto"; el.style.transform = "none";
+    }
+  });
 
   const STORAGE = `ft-hud-pos:${(game?.user?.id) || "anon"}:${storageKey}`;
   const load = () => { try { return JSON.parse(localStorage.getItem(STORAGE) || "null") || {}; } catch { return {}; } };
@@ -64,10 +84,11 @@ function _ftMakeHudDraggable(el, opts = {}) {
       if (c) { el.style.width = ""; el.style.height = ""; }
       else {
         const sz = load();
-        if (sz.width  != null) el.style.width  = sz.width  + "px";
-        if (sz.height != null) el.style.height = sz.height + "px";
+        el.style.width  = sz.width  != null ? sz.width  + "px" : el.dataset.ftHudBaseW;
+        el.style.height = sz.height != null ? sz.height + "px" : el.dataset.ftHudBaseH;
       }
     }
+    if (!c) keepOnScreen();
     save({ ...load(), collapsed: c });
     // Refresh ctrl-bar's collapse-button label.
     const btnCollapse = ctrl.querySelector("[data-act=collapse]");
@@ -85,7 +106,7 @@ function _ftMakeHudDraggable(el, opts = {}) {
       el.style.right = "";
       el.style.bottom = "";
       el.style.transform = "";
-      if (opts.resize) { el.style.width = ""; el.style.height = ""; }
+      if (opts.resize) { el.style.width = el.dataset.ftHudBaseW; el.style.height = el.dataset.ftHudBaseH; }
       if (isCollapsed()) setCollapsed(false);
       ui.notifications?.info?.(opts.resize ? "HUD size & position reset." : "HUD position reset.");
     }));

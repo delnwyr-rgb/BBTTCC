@@ -148,6 +148,26 @@
     }
   });
 
+  // Rigs too (trailer playtest 2026-10-09: Test Track wrecks kept their showroom
+  // art). bbttcc:rig:destroyed fires on the client that landed the killing hit;
+  // ruin() relays the token write for player seats.
+  Hooks.on("bbttcc:rig:destroyed", ({ rig } = {}) => {
+    if (!rig || _dupe(rig.id)) return;
+    play(rig, "razed");
+  });
+  // No rig-repair hook exists: the active GM restores a wreck's look once its
+  // integrity is back above zero.
+  Hooks.on("updateActor", (actor) => {
+    try {
+      if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) return;
+      const R = game.bbttcc?.rigs;
+      if (!(R?.isRig ? R.isRig(actor) : actor?.type === "rig")) return;
+      const integ = Number(R?.data?.(actor)?.integrity?.value ?? actor.system?.integrity?.value);
+      if (!(integ > 0)) return;
+      for (const t of _tokensOf(actor)) if ((t.document ?? t).getFlag?.(MOD, "ruinLook")) restore(t);
+    } catch (_) {}
+  });
+
   // Fires on every client (GM callAll + socket relay) — only the active GM plays it.
   Hooks.on("bbttcc:siege:layerBreached", (p = {}) => {
     if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) return;

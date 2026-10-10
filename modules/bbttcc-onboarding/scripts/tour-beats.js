@@ -36,7 +36,7 @@ const TOUR_OFFERS = {
   },
   stewardship_claim: {
     tour: "hex-sheet",
-    prompt: "You just claimed land. Land is an interface too — yields, holdings, radiation, the works. Tour the hex before you steward it?",
+    prompt: "That hold is about to be yours. Land is an interface too — yields, holdings, radiation, the works. Tour the hex before you plant the banner?",
     label: "Show me the land",
     resume: "Tour's over — now make it official. Plant the banner on Tutelary Hold with the button I left you."
   },

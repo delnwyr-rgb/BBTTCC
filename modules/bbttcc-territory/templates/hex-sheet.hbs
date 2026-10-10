@@ -215,6 +215,15 @@
     @media (max-width: 860px){
       .bbttcc-hex-sheet-root .bbttcc-layout{ grid-template-columns: 1fr; }
     }
+    /* Two-column layout: the hex card (left) stays in view while the long
+       right column scrolls — the grid row is as tall as the right column, so
+       a scrolled sheet showed an apparently EMPTY left column (trailer shoot
+       2026-10-09: card at the top, sheet scrolled 836px down). */
+    @media (min-width: 861px){
+      .bbttcc-hex-sheet-root .bbttcc-layout > aside.bbttcc-pane{
+        position: sticky; top: 0; align-self: start;
+      }
+    }
 
     /* Dossier tabs */
     .bbttcc-hex-sheet-root .bbttcc-tabs{

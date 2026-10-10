@@ -59,8 +59,37 @@ function _awaitForgedSteward() {
 
 async function _forgeSteward(user) {
   const ns = _ns();
-  const existing = ns?.resolve?.steward?.(user);
-  if (existing) return existing;
+  // Only an ASSIGNED character counts as "already has a Steward". resolve.steward
+  // falls back to any owned PC, so a player with other characters (a returning
+  // player, or the trailer shoot's Mags seat, 2026-10-09) silently skipped the
+  // forge. Owning PCs without one assigned now gets an explicit choice.
+  if (user?.character) return user.character;
+  if (!user?.isGM && user?.id === game.user.id) {
+    const owned = (game.actors?.contents ?? []).filter(a => a.type === "character" && a.testUserPermission?.(user, "OWNER"));
+    if (owned.length) {
+      const pick = await ns?.ui?.choose?.({
+        title: "◇ OPERATOR — Your Steward",
+        content: `<p><b>You've got bodies on file already, One.</b> Pour a fresh Steward for this run, or walk one of yours through the program?</p>`,
+        options: [
+          { action: "forge", label: "Forge a new Steward" },
+          ...owned.slice(0, 6).map(a => ({ action: `use:${a.id}`, label: `Play ${a.name}` }))
+        ],
+        fallback: "cancel"
+      }) ?? "forge";
+      if (pick === "cancel") {
+        await _speak("Forge's still warm whenever you are. Rerun onboarding when you've picked a body.", { audience: "self" });
+        return null;
+      }
+      if (String(pick).startsWith("use:")) {
+        const chosen = game.actors.get(String(pick).slice(4));
+        if (chosen) {
+          try { await game.user.update({ character: chosen.id }); }
+          catch (e) { console.warn(TAG, "user.character assignment failed", e); }
+          return chosen;
+        }
+      }
+    }
+  }
 
   const openWizard = game.bbttcc?.openTreeWizardV2;
   if (typeof openWizard !== "function") {
@@ -117,9 +146,14 @@ function _registerFoundingOp() {
     // births one — api.factions.applyStartingPackage("standard") right after create (caps, bank seed,
     // tracks, stockpile, doctrine, starter rig). Onboarding beats still claim the home hex.
 
+    // Born wearing the founder's art (owner call 2026-10-09: a fresh banner sat on
+    // the mystery-man through the faction tour). Swap in a real crest anytime.
+    const founderImg = steward.img && !String(steward.img).includes("mystery-man") ? steward.img : null;
+    const founderTok = steward.prototypeToken?.texture?.src || founderImg;
     const faction = await Actor.create({
       name,
       type: "npc",
+      ...(founderImg ? { img: founderImg, prototypeToken: { texture: { src: founderTok } } } : {}),
       ownership,
       flags: {
         [FMOD]: {
@@ -149,11 +183,44 @@ function _registerFoundingOp() {
 /** Operator founding ceremony: name + creed → relay-created faction. */
 async function _foundFaction(ctx) {
   const ns = _ns();
-  const existing = ns?.resolve?.faction?.(ctx.user, ctx.steward);
+  // Bound = the Steward's own factionId flag. resolve.faction also falls back to
+  // ANY faction the player owns, which handed a freshly forged Steward someone's
+  // old banner and skipped the founding (trailer shoot 2026-10-09).
+  const fid = ctx.steward?.getFlag?.(FMOD, "factionId");
+  const bound = fid ? (game.actors?.get?.(fid) ?? null) : null;
   // A faction bound mid-run (GM by hand, or a founding relay that timed out but
   // landed) must reach the remaining beats — ctx.faction was computed at start().
-  if (existing) { if (ctx && !ctx.faction) ctx.faction = existing; return existing; }
+  if (bound) { if (ctx) ctx.faction = bound; return bound; }
   if (!ctx.steward) return null;
+
+  const user = ctx.user || game.user;
+  if (!user?.isGM && user?.id === game.user.id) {
+    const owned = (game.actors?.contents ?? []).filter(a => a.getFlag?.(FMOD, "isFaction") && a.testUserPermission?.(user, "OWNER"));
+    if (owned.length) {
+      const pick = await ns?.ui?.choose?.({
+        title: "◇ OPERATOR — Your Banner",
+        content: `<p><b>${foundry.utils.escapeHTML(ctx.steward.name)} needs a banner.</b> Raise a new faction, or march under one you already lead?</p>`,
+        options: [
+          { action: "found", label: "Found a new faction" },
+          ...owned.slice(0, 6).map(f => ({ action: `join:${f.id}`, label: `Join ${f.name}` }))
+        ],
+        fallback: "found"
+      }) ?? "found";
+      if (String(pick).startsWith("join:")) {
+        const f = game.actors.get(String(pick).slice(5));
+        if (f) {
+          try {
+            await ctx.steward.setFlag(FMOD, "factionId", f.id);
+            const roster = Array.isArray(f.getFlag(FMOD, "roster")) ? f.getFlag(FMOD, "roster") : [];
+            if (!roster.some(r => String(r).split(".").pop() === ctx.steward.id)) await f.setFlag(FMOD, "roster", [...roster, ctx.steward.uuid]);
+          } catch (e) { console.warn(TAG, "joining an existing faction failed", e); }
+          if (ctx) ctx.faction = f;
+          await ctx.speak(`${ctx.steward.name}, under the ${f.name} banner. Rostered. Let's see what the two of you can break.`);
+          return f;
+        }
+      }
+    }
+  }
 
   await ctx.speak("A body needs a banner, One. Before you drive, claim, or raid, the world wants to know: in whose name?");
 
@@ -209,7 +276,7 @@ async function _foundFaction(ctx) {
   const faction = await ns.relay.resolveActor(res.factionId);
   if (ctx && faction) ctx.faction = faction; // refresh the beat context in place
 
-  await ctx.speak(`${faction?.name || picked.name} — raised, rostered, and yours. OP banks empty, reputation unwritten. Best possible start— *bzzt* —nowhere to go but everywhere.`);
+  await ctx.speak(`${faction?.name || picked.name} — raised, rostered, and yours. Banks seeded, reputation unwritten. Best possible start— *bzzt* —nowhere to go but everywhere.`);
 
   // Every new banner comes with its free starter Hexmobile — minted NOW, named by the
   // player, owned by the player (the driving beat and rig tour both need that ownership).

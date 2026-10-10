@@ -137,15 +137,17 @@ export async function build(recipeId, factionActor, opts = {}) {
   if (!api?.stampBOM) return { ok: false, error: "Structures API not loaded" };
 
   // Withdraw materials
+  // Check the rig accessor BEFORE charging: a world without bbttcc-core's rigs.js
+  // (Ember, 2026-10-09) withdrew the cost and then failed the build.
+  const R = game.bbttcc?.rigs;
+  if (!R?.create) return { ok: false, error: "Rig accessor (game.bbttcc.rigs) not loaded — nothing was charged" };
   if (!opts.skipCostCheck) {
     const w = await withdraw(factionActor, cost);
     if (!w.ok) return { ok: false, error: w.error ?? "Withdrawal failed" };
   }
 
   // Create the Rig actor
-  // rig accessor (2026-10-08): works on dnd5e vehicles too
-  const R = game.bbttcc?.rigs;
-  if (!R?.create) return { ok: false, error: "Rig accessor (game.bbttcc.rigs) not loaded" };
+  // rig accessor (2026-10-08): works on dnd5e vehicles too (checked BEFORE the withdrawal above)
   const actorName = opts.actorName ?? recipe.name;
   const newActor = await R.create({
     name: actorName,

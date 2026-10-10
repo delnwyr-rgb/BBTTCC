@@ -244,7 +244,9 @@
     });
     new Dialog({
       title: "Open Sheet",
-      content: `<p style="margin:0 0 6px;">You're piloting more than one thing — open which sheet?</p>`,
+      // The list is the Steward + any of their rigs on this scene, boarded or not —
+      // "piloting more than one thing" read wrong right after a disembark (2026-10-09).
+      content: `<p style="margin:0 0 6px;">${bRig ? "Your Steward is aboard a rig" : "Your rig is on this scene"} — open which sheet?</p>`,
       buttons,
       default: "t0"
     }, { width: 420 }).render(true);

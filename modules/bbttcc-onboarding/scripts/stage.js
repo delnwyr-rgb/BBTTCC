@@ -602,7 +602,7 @@ function _registerOps() {
   // bestiary author gave the creature.
   reg("spawnFromPack", async ({ sceneId, actorName = "", packId = "bbttcc-master-content.npcs",
                                 x = 1000, y = 1000, elevation = 0, size = 0, displayName = "",
-                                mergeDefenses = null, conditions = [], ownerUserId = "", ownerKey = "" }) => {
+                                mergeDefenses = null, conditions = [], integrityCap = 0, ownerUserId = "", ownerKey = "" }) => {
     const shared = ownerKey ? { ownerKey } : {};   // a class's shared foe (group induction Phase 1)
     const scene = game.scenes?.get?.(String(sceneId || ""));
     const pack = game.packs?.get?.(String(packId));
@@ -630,6 +630,22 @@ function _registerOps() {
       }
       const actor = await Actor.create(data);
       if (!actor) return null;
+      // Onboarding-scale copy (owner ruling 2026-10-09: short showdown, messenger
+      // after ~3–4 solid hits): pack bosses arrive at full bestiary pools (The
+      // Pull ≈ 321). Trim THIS copy's max through the derive's aeBonus channel —
+      // the compendium statblock is untouched.
+      const cap = Math.floor(Number(integrityCap) || 0);
+      if (cap > 0) {
+        try {
+          const sys0 = actor.system?.system ?? actor.system;
+          const max0 = Number(sys0?.derived?.integrity?.max) || 0;
+          if (max0 > cap) await actor.createEmbeddedDocuments("ActiveEffect", [{
+            name: "Onboarding scale", img: "icons/svg/downgrade.svg",
+            changes: [{ key: "system.derived.integrity.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(cap - max0) }],
+            flags: { [MODULE_ID]: { spawned: true, kind: "onboardingScale" } }
+          }]);
+        } catch (e) { console.warn(TAG, "pack foe integrity cap failed", e); }
+      }
       // Fill the tracks AFTER create — max is derived (same two-step spawnFoe uses).
       let integrityMax = 0;
       try {
@@ -1036,18 +1052,30 @@ function _registerOps() {
     // rig accessor (2026-10-08): works on dnd5e vehicles too — create through the
     // accessor (rig on RFI, vehicle+flags on dnd5e), then stamp ownership + the
     // spawned flag the accessor's spec doesn't carry.
+    // Fallback: a world without bbttcc-core's rigs.js (Ember, 2026-10-09 — the
+    // rig port isn't deployed there) creates the RFI rig directly, as before the
+    // port. Without it every wreck silently came back null: an empty Test Track.
     const R = globalThis.game?.bbttcc?.rigs;
-    if (!R?.create) { console.warn(TAG, "spawnObstacle: rig accessor not loaded"); return null; }
-    const actor = await R.create({
-      name, folder: folder?.id, img: img || "icons/svg/hazard.svg",
-      identity: { mobility: "stationary", state: "parked", factionOwnerId: "" },
-      integrity: { value: hp, max: hp, tier: 1, bracket },
-      token: Object.assign(
-        { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name, width: size, height: size },
-        img ? { texture: { src: img } } : {}
-      )
-    });
-    if (!actor) return null;
+    const tokenSpec = Object.assign(
+      { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name, width: size, height: size },
+      img ? { texture: { src: img } } : {}
+    );
+    const actor = R?.create
+      ? await R.create({
+          name, folder: folder?.id, img: img || "icons/svg/hazard.svg",
+          identity: { mobility: "stationary", state: "parked", factionOwnerId: "" },
+          integrity: { value: hp, max: hp, tier: 1, bracket },
+          token: tokenSpec
+        })
+      : await Actor.create({
+          name, type: "rig", folder: folder?.id, img: img || "icons/svg/hazard.svg",
+          prototypeToken: tokenSpec,
+          system: {
+            identity: { mobility: "stationary", state: "parked", factionOwnerId: "" },
+            integrity: { value: hp, max: hp, tier: 1, bracket }
+          }
+        });
+    if (!actor) { console.warn(TAG, "spawnObstacle: rig create returned nothing"); return null; }
     try {
       await actor.update({
         ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
