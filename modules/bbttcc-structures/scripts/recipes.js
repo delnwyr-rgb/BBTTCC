@@ -137,19 +137,30 @@ export async function build(recipeId, factionActor, opts = {}) {
   if (!api?.stampBOM) return { ok: false, error: "Structures API not loaded" };
 
   // Withdraw materials
-  // Check the rig accessor BEFORE charging: a world without bbttcc-core's rigs.js
-  // (Ember, 2026-10-09) withdrew the cost and then failed the build.
-  const R = game.bbttcc?.rigs;
-  if (!R?.create) return { ok: false, error: "Rig accessor (game.bbttcc.rigs) not loaded — nothing was charged" };
   if (!opts.skipCostCheck) {
     const w = await withdraw(factionActor, cost);
     if (!w.ok) return { ok: false, error: w.error ?? "Withdrawal failed" };
   }
 
   // Create the Rig actor
-  // rig accessor (2026-10-08): works on dnd5e vehicles too (checked BEFORE the withdrawal above)
+  // rig accessor (2026-10-08): works on dnd5e vehicles too. A world without
+  // bbttcc-core's rigs.js (Ember, 2026-10-10 — the rig port is not deployed
+  // there) creates the native RFI rig exactly as before the port.
+  const R = game.bbttcc?.rigs;
   const actorName = opts.actorName ?? recipe.name;
-  const newActor = await R.create({
+  const newActor = !R?.create ? await Actor.create({
+    name: actorName,
+    type: "rig",
+    img: recipe.tokenImg ?? "icons/svg/castle.svg",
+    system: {
+      identity: {
+        archetype: `Structure: ${recipe.name}`,
+        mobility: "stationary",
+        state: "parked",
+        factionOwnerId: factionActor?.id ?? ""
+      }
+    }
+  }) : await R.create({
     name: actorName,
     img: recipe.tokenImg ?? "icons/svg/castle.svg",
     identity: {
