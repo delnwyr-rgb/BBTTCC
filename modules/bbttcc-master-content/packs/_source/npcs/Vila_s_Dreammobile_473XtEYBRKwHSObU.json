@@ -405,7 +405,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/cyberpunk-vehicles-air-car-coup-1-2x3.png",
+      "src": "modules/bbttcc-core/assets/rigs/personal_rig_7.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -524,7 +524,7 @@
     "appendNumber": false,
     "prependAdjective": false
   },
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/cyberpunk-vehicles-air-car-coup-1-2x3.png",
+  "img": "modules/bbttcc-core/assets/rigs/personal_rig_7.webp",
   "items": [
     {
       "name": "Twin Autocannons",

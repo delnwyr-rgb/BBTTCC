@@ -184,27 +184,27 @@
     { name: "Dust Skiff",          tier: "I",  bracket: "personal", mobility: "mobile",
       civilian: true,  currency: "economy",   archetype: "dust-skiff",
       speed: 3, range: 12, hazardResist: 0, tags: ["civilian", "commuter"],
-      img: "icons/environment/wilderness/cave-entry-dwarven-hidden.webp" },
+      img: "modules/bbttcc-core/assets/rigs/personal_rig_13.webp" },
     { name: "Hex-Jumper Bike",     tier: "I",  bracket: "personal", mobility: "mobile",
       currency: "violence",  archetype: "hex-jumper",
       speed: 5, range: 8,  hazardResist: 1, tags: ["military", "scout"],
-      img: "icons/commodities/tech/wheel-spoked-wood.webp" },
+      img: "modules/bbttcc-core/assets/rigs/personal_rig_9.webp" },
     { name: "Salvage Trike",       tier: "I",  bracket: "personal", mobility: "mobile",
       civilian: true,  currency: "economy",   archetype: "salvage-trike",
       speed: 2, range: 14, hazardResist: 1, tags: ["civilian", "scavenger"],
-      img: "icons/commodities/tech/cog-bronze.webp" },
+      img: "modules/bbttcc-core/assets/rigs/personal_rig_6.webp" },
     { name: "Septlight Speeder",   tier: "II", bracket: "personal", mobility: "mobile",
       currency: "softpower", archetype: "septlight-speeder",
       speed: 6, range: 10, hazardResist: 1, tags: ["sept", "courier"],
-      img: "icons/sundries/lights/lantern-iron-yellow.webp" },
+      img: "modules/bbttcc-core/assets/rigs/personal_rig_2.webp" },
     { name: "Witness-Sled",        tier: "II", bracket: "personal", mobility: "hybrid",
       currency: "intrigue",  archetype: "witness-sled",
       speed: 4, range: 12, hazardResist: 2, tags: ["spy", "covert"],
-      img: "icons/commodities/tech/lens-glass.webp" },
+      img: "modules/bbttcc-core/assets/rigs/personal_rig_11.webp" },
     { name: "Oathbound Courser",   tier: "III",bracket: "personal", mobility: "mobile",
       currency: "diplomacy", archetype: "oathbound-courser",
       speed: 7, range: 18, hazardResist: 3, tags: ["diplomatic", "envoy"],
-      img: "icons/sundries/documents/document-sealed-tan.webp" }
+      img: "modules/bbttcc-core/assets/rigs/personal_rig_10.webp" }
   ];
 
   // ── WAR RIGS (5) ────────────────────────────────────────────────────────
@@ -212,25 +212,25 @@
     { name: "Scout Cycle",         tier: "II", bracket: "light",  mobility: "mobile",
       gunnerSlots: 1, crewSlots: 1,
       speed: 6, range: 15, hazardResist: 1, tags: ["military", "scout"],
-      img: "icons/commodities/tech/wheel-spoked-iron.webp" },
+      img: "modules/bbttcc-core/assets/rigs/personal_rig_8.webp" },
     { name: "Sail Barge",          tier: "II", bracket: "medium", mobility: "hybrid",
       civilian: true, currency: "economy",
       gunnerSlots: 1, engineerSlots: 1, crewSlots: 4,
       speed: 3, range: 25, hazardResist: 2, tags: ["civilian", "trade"],
       basePerTurn: { economy: 5 },
-      img: "icons/environment/wilderness/water-river.webp" },
+      img: "modules/bbttcc-core/assets/rigs/personal_rig_12.webp" },
     { name: "Heart-Iron War Rig",  tier: "III",bracket: "heavy",  mobility: "mobile",
       gunnerSlots: 3, engineerSlots: 1, crewSlots: 3,
       speed: 4, range: 20, hazardResist: 3, tags: ["military", "war-rig"],
-      img: "icons/commodities/tech/cog-steel.webp" },
+      img: "modules/bbttcc-core/assets/rigs/medium_rig_1.webp" },
     { name: "Iron Howdah",         tier: "III",bracket: "heavy",  mobility: "mobile",
       gunnerSlots: 4, engineerSlots: 1, crewSlots: 2,
       speed: 3, range: 18, hazardResist: 4, tags: ["military", "mounted-platform"],
-      img: "icons/environment/creatures/elephant.webp" },
+      img: "modules/bbttcc-core/assets/rigs/mechsuit_4.webp" },
     { name: "Hex-Cannon Platform", tier: "IV", bracket: "siege",  mobility: "hybrid",
       gunnerSlots: 2, engineerSlots: 2, crewSlots: 4,
       speed: 1, range: 8,  hazardResist: 5, tags: ["military", "siege"],
-      img: "icons/weapons/artillery/cannon-engraved.webp" }
+      img: "modules/bbttcc-core/assets/rigs/mechsuit_2.webp" }
   ];
 
   // ── FACILITIES (5) — stationary rigs with monthly yield ─────────────────
@@ -239,7 +239,7 @@
       civilian: true, currency: "economy",
       monthlyYieldMarks: 60, basePerTurn: { economy: 2 },
       tags: ["facility", "forge"],
-      img: "icons/environment/settlement/forge.webp" },
+      img: "modules/bbttcc-core/assets/rigs/infrastructure_1.webp" },
     { name: "Yesodium Mine",       tier: "III",bracket: "siege",  mobility: "stationary",
       civilian: true, currency: "economy",
       monthlyYieldMarks: 200, basePerTurn: { economy: 7 },
@@ -249,7 +249,7 @@
       civilian: true, currency: "economy",
       monthlyYieldMarks: 90, basePerTurn: { economy: 3 },
       tags: ["facility", "commerce"],
-      img: "icons/environment/settlement/building-trade.webp" },
+      img: "modules/bbttcc-core/assets/rigs/infrastructure_2.webp" },
     { name: "Septhouse",           tier: "II", bracket: "siege",  mobility: "stationary",
       currency: "softpower",
       monthlyYieldMarks: 75, basePerTurn: { softpower: 3 },
@@ -259,7 +259,7 @@
       currency: "violence",
       monthlyYieldMarks: 75, basePerTurn: { violence: 3 },
       tags: ["facility", "military", "drill"],
-      img: "icons/environment/settlement/wall-stone.webp" }
+      img: "modules/bbttcc-core/assets/rigs/infrastructure_3.webp" }
   ];
 
   // ── BOSSES (4) ──────────────────────────────────────────────────────────

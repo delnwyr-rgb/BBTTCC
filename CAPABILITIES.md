@@ -149,7 +149,11 @@ World settings: `overshootEnabled/overshootTierGate/overshootSkillChecks/autoApp
 - Global: `Dialog` replaced resizable-by-default (`window-defaults.enhancer.js:51`); all `.window-content` get scroll defaults.
 
 ### Settings
-`gmEditMode` (world, visible — gates territory build-unit buttons) · `gmAuditLog`, `worldState`, `gottgaitStoryState` (hidden). No hooks emitted, no tools.
+`gmEditMode` (world, visible — gates territory build-unit buttons) · `gmAuditLog`, `worldState`, `gottgaitStoryState` (hidden). No hooks emitted.
+
+### Assets / tools
+- **`assets/rigs/` (2026-10-10)** — Bad Eden DA rig icons, top-down 512 px webp: `personal_rig_1–13`, `medium_rig_1`, `mechsuit_1–6`, `infrastructure_1–4`, `watchtower`, `wall`, `junk_wall_1–2`, `pylon` (CREDITS.md). Shippable replacement for third-party token packs (`cyberpunk-vehicles-*`, `devin-knight/*`), GOTTGAIT wasteland structures and core-svg placeholders. `seed-rigs-facilities-bosses.macro.js` seeds with them.
+- `tools/restamp-rig-art-2026-10-10.macro.js` — DRY_RUN GM macro (ember): restamps 17 ember rig/structure actors by id+name (actor img + prototype token + placed tokens still showing the old art) and Vila's Dreammobile in `bbttcc-master-content.npcs`.
 
 ⚠ `bbttcc-core.worldState` (api.gm) vs `bbttcc-world.worldState` — **two divergent world-state spines**, nothing reconciles them (Appendix A #14). `combat.dnd5e.js` is a no-op in the RFI world by design.
 

@@ -15,7 +15,8 @@ http://creativecommons.org/licenses/by/4.0/):
 | wilderness.webp | Wheat | KillTheSaint | https://sketchfab.com/3d-models/wheat-8d2edddda3104aab8108dffa1bbab6b2 |
 | wilderness.webp | Tumbleweed 5 | Anatomy by Doctor Jana | https://sketchfab.com/3d-models/tumbleweed-5-310ed28a89844d2893255346184357a6 |
 
-factory / farm / fortress / port / ruins / settlement: source models TBC (Dave to confirm —
-DA library vs. an earlier CC-BY batch).
+farm.webp, port.webp: third-party models imported into Dungeon Alchemist; their
+credits are recorded with the DA custom-asset imports.
 
-ruins.webp: broken column — source model TBC (same question as above).
+factory.webp, fortress.webp, settlement.webp, ruins.webp: native Dungeon Alchemist
+library assets (no third-party attribution owed).
