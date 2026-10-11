@@ -112,3 +112,79 @@
     console.log(TAG, "render-time scroll defaults installed across V1 + V2 hooks.");
   });
 })();
+
+/* ---------------------------------------------------------------------
+ * 3) Hidden-tab video load guard (2026-10-11)
+ *
+ * A video texture (e.g. a .webm scene background) whose load STARTS while
+ * the browser tab is hidden (background tab, covered window) never resolves
+ * in Chrome — not even after the tab comes back — so the scene sits at
+ * "98% Loading" forever. Measured on Ember: 52/53 files loaded, the .webm
+ * still pending after 5+ min; a fresh load of the same file then took
+ * 0.77 s, and a refresh with the tab in front drew the scene in 8 s.
+ *
+ * Fix, video sources only:
+ *   a) don't start the load until the tab is visible;
+ *   b) if the tab is hidden mid-load and the load is still pending once the
+ *      tab is visible again, retry under a cache-busted URL (a fresh PIXI
+ *      asset) and cache it under the original src.
+ * Image loads are untouched.
+ * ------------------------------------------------------------------- */
+(() => {
+  const TAG = "[bbttcc-core/hidden-tab-video]";
+  const GRACE_MS = 1500;
+
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+  const whenVisible = () => !document.hidden ? Promise.resolve() : new Promise(res => {
+    const on = () => { if (!document.hidden) { document.removeEventListener("visibilitychange", on); res(); } };
+    document.addEventListener("visibilitychange", on);
+  });
+
+  function install() {
+    const TL = foundry?.canvas?.TextureLoader;
+    const VH = foundry?.helpers?.media?.VideoHelper;
+    if (!TL?.prototype?.loadTexture || typeof VH?.hasVideoExtension !== "function") {
+      console.warn(TAG, "TextureLoader / VideoHelper not found — guard not installed.");
+      return;
+    }
+    const orig = TL.prototype.loadTexture;
+    if (orig.__bbttccHiddenTabGuard) return;
+
+    const guarded = async function (src) {
+      if (typeof src !== "string" || !VH.hasVideoExtension(src)) return orig.call(this, src);
+
+      if (document.hidden) console.log(TAG, `tab hidden — holding video load until visible: ${src}`);
+      await whenVisible();
+
+      let wasHidden = false;
+      const onVis = () => { if (document.hidden) wasHidden = true; };
+      document.addEventListener("visibilitychange", onVis);
+      try {
+        let done = false;
+        const first = orig.call(this, src);
+        const settled = first.then(v => ({ v }), e => ({ e })).finally(() => { done = true; });
+        while (!done) {
+          const r = await Promise.race([settled, sleep(GRACE_MS).then(() => null)]);
+          if (r) { if ("e" in r) throw r.e; return r.v; }
+          if (wasHidden && !document.hidden) break;   // hidden mid-load, back now, still pending
+        }
+        if (done) return first;
+
+        console.warn(TAG, `video load stalled after the tab was hidden — retrying: ${src}`);
+        const asset = await PIXI.Assets.load(foundry.utils.getCacheBustURL(src));
+        const base = asset?.baseTexture ?? null;
+        if (!base?.valid) return first;                // retry failed — fall back to the original wait
+        this.setCache(src, base);
+        return base;
+      } finally {
+        document.removeEventListener("visibilitychange", onVis);
+      }
+    };
+    guarded.__bbttccHiddenTabGuard = true;
+    TL.prototype.loadTexture = guarded;
+    console.log(TAG, "installed (video textures wait for a visible tab; stalled loads retry).");
+  }
+
+  // init runs before setup → canvas draw, so the first scene load is covered.
+  Hooks.once("init", install);
+})();
