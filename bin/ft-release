@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+"""ft-release — cut a GitHub Release that installs Bad Eden as ONE thing (2026-10-11).
+
+One release carries every part as assets:  <id>.zip  +  <id>.module.json  (the system: fourththing.zip +
+fourththing.system.json).  Every manifest in the REPO is stamped with the stable URLs
+    manifest: https://github.com/<repo>/releases/latest/download/<id>.module.json
+    download: https://github.com/<repo>/releases/latest/download/<id>.zip
+so Foundry's "Install Module → Manifest URL" works for any part, and the front door
+(roll-for-initiation-bad-eden) lists each required part's manifest in relationships.requires so
+Foundry offers to install the lot with it.  `releases/latest/download/…` always resolves to the newest
+release, so re-cutting = `ft-release` again (assets are replaced in place).
+
+  ft-release --dry            stamp manifests + build zips into the scratch dir, upload nothing
+  ft-release                  stamp + zip + create/update the release tagged bad-eden-v<front-door version>
+  ft-release --tag <tag>      use another tag
+
+Parts = the front door's flags.roll-for-initiation-bad-eden.parts + the front door + systems/fourththing.
+Zips exclude node_modules, packs/_source, .backup*, archive, .DS_Store.  bad-eden-5e's packs are
+git-ignored build output: build them first (node modules/bad-eden-5e/tools/build-packs.mjs).
+After a cut: commit the stamped manifests (they're the source of truth) — and remember every module.json
+change means pm2 restart + a full client cache bust on the next deploy.
+"""
+import json, os, subprocess, sys, tempfile, zipfile
+
+REPO_DIR = "/Users/gamingaccount"
+GH_REPO = "delnwyr-rgb/BBTTCC"
+BASE = f"https://github.com/{GH_REPO}/releases/latest/download"
+FRONT = "roll-for-initiation-bad-eden"
+EXCLUDE_DIRS = {"node_modules", "_source", "archive", ".git"}
+args = sys.argv[1:]
+dry = "--dry" in args
+tag = args[args.index("--tag") + 1] if "--tag" in args else None
+
+def load(p): return json.load(open(p))
+def save(p, d): open(p, "w").write(json.dumps(d, indent=2, ensure_ascii=False) + "\n")
+
+front_path = os.path.join(REPO_DIR, "modules", FRONT, "module.json")
+front = load(front_path)
+parts = list(front["flags"][FRONT]["parts"]) + [FRONT]
+tag = tag or f"bad-eden-v{front['version']}"
+
+def stamp(kind, pid, path):
+    """Stamp url/manifest/download; return True if the file changed."""
+    m = load(path)
+    want = {"url": f"https://github.com/{GH_REPO}", "manifest": f"{BASE}/{pid}.{kind}.json", "download": f"{BASE}/{pid}.zip"}
+    changed = any(m.get(k) != v for k, v in want.items())
+    m.update(want)
+    if pid == FRONT:   # the front door names each required part's manifest so Foundry can install them with it
+        for rel in m.get("relationships", {}).get("requires", []) + m.get("relationships", {}).get("recommends", []):
+            mf = f"{BASE}/{rel['id']}.module.json"
+            if rel.get("manifest") != mf: rel["manifest"] = mf; changed = True
+    if changed: save(path, m)
+    return changed
+
+def zip_dir(src, out):
+    n = 0
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+        for root, dirs, files in os.walk(src):
+            dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS and not d.startswith(".backup")]
+            for f in files:
+                if f in (".DS_Store", "LOCK") or f.endswith((".tgz", ".tar.gz", ".zip", ".bak")): continue   # stray archives/backups never ship
+                full = os.path.join(root, f)
+                z.write(full, os.path.relpath(full, src)); n += 1
+    return n
+
+work = tempfile.mkdtemp(prefix="ft-release-")
+assets, stamped = [], []
+targets = [("module", pid, os.path.join(REPO_DIR, "modules", pid)) for pid in parts] + [("system", "fourththing", os.path.join(REPO_DIR, "systems", "fourththing"))]
+for kind, pid, d in targets:
+    man = os.path.join(d, f"{kind}.json")
+    if not os.path.isfile(man): print(f"!! {pid}: no {kind}.json at {d}"); sys.exit(1)
+    if pid == "bad-eden-5e" and not os.path.isfile(os.path.join(d, "packs", "classes", "CURRENT")):
+        print("!! bad-eden-5e packs not built — run node modules/bad-eden-5e/tools/build-packs.mjs first"); sys.exit(1)
+    if stamp(kind, pid, man): stamped.append(pid)
+    zpath = os.path.join(work, f"{pid}.zip"); n = zip_dir(d, zpath)
+    mpath = os.path.join(work, f"{pid}.{kind}.json"); save(mpath, load(man))
+    assets += [zpath, mpath]
+    print(f"{pid:32} {n:5} files  {os.path.getsize(zpath) / 1e6:6.1f} MB  {'(manifest stamped)' if pid in stamped else ''}")
+print(f"\n{len(targets)} parts → {len(assets)} assets in {work}; manifests stamped: {len(stamped)}")
+if dry: print("--dry: nothing uploaded"); sys.exit(0)
+
+exists = subprocess.run(["gh", "release", "view", tag, "--repo", GH_REPO], capture_output=True, text=True).returncode == 0
+notes = (f"Roll For Initiation – Bad Eden, release {tag}.\n\n"
+         f"**Install:** Foundry → Add-on Modules → Install Module → paste `{BASE}/{FRONT}.module.json` — the front door lists every part, "
+         f"so Foundry offers to install them with it. For Roll For Initiation play install the system first: Game Systems → Install System → `{BASE}/fourththing.system.json`. "
+         f"Bad Eden 5E (D&D 5E) parts: `bad-eden-5e`, `surge-powers`, `dnd5e-table-kit` (dnd5e 6+).\n\nParts: " + ", ".join(parts) + ".")
+if exists:
+    r = subprocess.run(["gh", "release", "upload", tag, *assets, "--repo", GH_REPO, "--clobber"], text=True)
+else:
+    r = subprocess.run(["gh", "release", "create", tag, *assets, "--repo", GH_REPO, "--title", f"Roll For Initiation – Bad Eden {tag}", "--notes", notes, "--latest"], text=True)
+if r.returncode: sys.exit(r.returncode)
+print(f"release {tag} {'updated' if exists else 'created'}: https://github.com/{GH_REPO}/releases/tag/{tag}")

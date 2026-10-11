@@ -24,5 +24,8 @@
       "name": "English",
       "path": "lang/en.json"
     }
-  ]
+  ],
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-market.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-market.zip"
 }

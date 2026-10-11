@@ -14,7 +14,7 @@
       "email": ""
     }
   ],
-  "url": "",
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
   "license": "MIT",
   "esmodules": [
     "scripts/module.js"
@@ -40,5 +40,7 @@
       "isCore": false,
       "role": "encounters"
     }
-  }
+  },
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-encounters.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-encounters.zip"
 }

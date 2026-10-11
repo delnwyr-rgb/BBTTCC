@@ -39,5 +39,8 @@
   "styles": [
     "styles/onboarding.css"
   ],
-  "socket": true
+  "socket": true,
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-onboarding.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-onboarding.zip"
 }

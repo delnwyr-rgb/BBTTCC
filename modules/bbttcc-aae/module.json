@@ -16,7 +16,7 @@
       "name": "ChatGPT"
     }
   ],
-  "url": "https://example.com/bbttcc-aae",
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
   "esmodules": [
     "scripts/module.js"
   ],
@@ -37,5 +37,7 @@
         }
       }
     ]
-  }
+  },
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-aae.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-aae.zip"
 }

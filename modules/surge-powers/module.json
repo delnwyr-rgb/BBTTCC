@@ -25,5 +25,8 @@
     "scripts/surge-runtime.js",
     "scripts/surge-powers.js",
     "scripts/surge-ui.js"
-  ]
+  ],
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/surge-powers.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/surge-powers.zip"
 }

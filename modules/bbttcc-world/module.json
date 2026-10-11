@@ -27,5 +27,8 @@
   },
   "relationships": {
     "requires": []
-  }
+  },
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-world.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-world.zip"
 }

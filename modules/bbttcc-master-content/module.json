@@ -113,5 +113,8 @@
   ],
   "esmodules": [
     "scripts/np-ancestries-router.js"
-  ]
+  ],
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-master-content.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-master-content.zip"
 }

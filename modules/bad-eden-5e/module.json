@@ -157,7 +157,10 @@
       "path": "packs/character-archetypes",
       "type": "Item",
       "system": "dnd5e",
-      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "crew-types",
@@ -165,7 +168,10 @@
       "path": "packs/crew-types",
       "type": "Item",
       "system": "dnd5e",
-      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "enlightenment-levels",
@@ -173,7 +179,10 @@
       "path": "packs/enlightenment-levels",
       "type": "Item",
       "system": "dnd5e",
-      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "occult-associations",
@@ -181,7 +190,10 @@
       "path": "packs/occult-associations",
       "type": "Item",
       "system": "dnd5e",
-      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "political-affiliations",
@@ -189,7 +201,10 @@
       "path": "packs/political-affiliations",
       "type": "Item",
       "system": "dnd5e",
-      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "sephirothic-alignments",
@@ -197,7 +212,10 @@
       "path": "packs/sephirothic-alignments",
       "type": "Item",
       "system": "dnd5e",
-      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "doctrines",
@@ -205,7 +223,10 @@
       "path": "packs/doctrines",
       "type": "Item",
       "system": "dnd5e",
-      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "vehicles",
@@ -213,7 +234,10 @@
       "path": "packs/vehicles",
       "type": "Actor",
       "system": "dnd5e",
-      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -249,5 +273,8 @@
       ]
     }
   ],
-  "flags": {}
+  "flags": {},
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bad-eden-5e.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bad-eden-5e.zip"
 }

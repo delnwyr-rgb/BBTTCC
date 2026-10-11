@@ -14,7 +14,7 @@
       "email": ""
     }
   ],
-  "url": "",
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
   "license": "MIT",
   "esmodules": [
     "scripts/audio/beat-audio-manager.js",
@@ -70,5 +70,7 @@
       "role": "campaigns",
       "isCore": false
     }
-  }
+  },
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-campaign.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-campaign.zip"
 }

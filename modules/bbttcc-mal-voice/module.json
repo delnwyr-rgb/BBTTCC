@@ -21,7 +21,13 @@
           "verified": "14"
         }
       },
-      { "id": "dnd5e", "type": "system", "compatibility": { "verified": "6" } }
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "verified": "6"
+        }
+      }
     ],
     "requires": [
       {
@@ -44,5 +50,8 @@
     "scripts/advisor-triggers.js",
     "scripts/npc-dialogue.js"
   ],
-  "socket": false
+  "socket": false,
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-mal-voice.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-mal-voice.zip"
 }

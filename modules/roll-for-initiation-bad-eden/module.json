@@ -36,147 +36,168 @@
         "type": "module",
         "compatibility": {
           "minimum": "1.0.0"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-aae.module.json"
       },
       {
         "id": "bbttcc-auto-link",
         "type": "module",
         "compatibility": {
           "minimum": "0.8.2"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-auto-link.module.json"
       },
       {
         "id": "bbttcc-banks",
         "type": "module",
         "compatibility": {
           "minimum": "0.1.0"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-banks.module.json"
       },
       {
         "id": "bbttcc-campaign",
         "type": "module",
         "compatibility": {
           "minimum": "1.0.1"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-campaign.module.json"
       },
       {
         "id": "bbttcc-character-options",
         "type": "module",
         "compatibility": {
           "minimum": "1.2.0"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-character-options.module.json"
       },
       {
         "id": "bbttcc-core",
         "type": "module",
         "compatibility": {
           "minimum": "13.1.17"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-core.module.json"
       },
       {
         "id": "bbttcc-encounters",
         "type": "module",
         "compatibility": {
           "minimum": "1.0.0"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-encounters.module.json"
       },
       {
         "id": "bbttcc-facility-console",
         "type": "module",
         "compatibility": {
           "minimum": "1.0.0"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-facility-console.module.json"
       },
       {
         "id": "bbttcc-factions",
         "type": "module",
         "compatibility": {
           "minimum": "1.3.17"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-factions.module.json"
       },
       {
         "id": "bbttcc-fx-integration",
         "type": "module",
         "compatibility": {
           "minimum": "0.1.0"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-fx-integration.module.json"
       },
       {
         "id": "bbttcc-mal-voice",
         "type": "module",
         "compatibility": {
           "minimum": "0.1.0"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-mal-voice.module.json"
       },
       {
         "id": "bbttcc-market",
         "type": "module",
         "compatibility": {
           "minimum": "0.2.2"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-market.module.json"
       },
       {
         "id": "bbttcc-master-content",
         "type": "module",
         "compatibility": {
           "minimum": "13.1.16"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-master-content.module.json"
       },
       {
         "id": "bbttcc-radiation",
         "type": "module",
         "compatibility": {
           "minimum": "13.1.16"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-radiation.module.json"
       },
       {
         "id": "bbttcc-raid",
         "type": "module",
         "compatibility": {
           "minimum": "1.3.14.5"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-raid.module.json"
       },
       {
         "id": "bbttcc-sorting-engine",
         "type": "module",
         "compatibility": {
           "minimum": "1.0.0"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-sorting-engine.module.json"
       },
       {
         "id": "bbttcc-structures",
         "type": "module",
         "compatibility": {
           "minimum": "0.1.2"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-structures.module.json"
       },
       {
         "id": "bbttcc-territory",
         "type": "module",
         "compatibility": {
           "minimum": "1.3.20"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-territory.module.json"
       },
       {
         "id": "bbttcc-tikkun",
         "type": "module",
         "compatibility": {
           "minimum": "13.1.16"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-tikkun.module.json"
       },
       {
         "id": "bbttcc-travel",
         "type": "module",
         "compatibility": {
           "minimum": "1.4.0"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-travel.module.json"
       },
       {
         "id": "bbttcc-world",
         "type": "module",
         "compatibility": {
           "minimum": "0.1.0"
-        }
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-world.module.json"
       }
     ],
     "recommends": [
@@ -186,7 +207,8 @@
         "compatibility": {
           "minimum": "0.4.0"
         },
-        "reason": "Bad Eden 5E (dnd5e) only"
+        "reason": "Bad Eden 5E (dnd5e) only",
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bad-eden-5e.module.json"
       },
       {
         "id": "bbttcc-epic",
@@ -194,7 +216,8 @@
         "compatibility": {
           "minimum": "0.1.0"
         },
-        "reason": "Roll For Initiation (fourththing) only"
+        "reason": "Roll For Initiation (fourththing) only",
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-epic.module.json"
       },
       {
         "id": "bbttcc-onboarding",
@@ -202,7 +225,8 @@
         "compatibility": {
           "minimum": "0.4.0"
         },
-        "reason": "Roll For Initiation (fourththing) only"
+        "reason": "Roll For Initiation (fourththing) only",
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-onboarding.module.json"
       },
       {
         "id": "dnd5e-table-kit",
@@ -210,7 +234,8 @@
         "compatibility": {
           "minimum": "1.0.0"
         },
-        "reason": "Bad Eden 5E (dnd5e) only"
+        "reason": "Bad Eden 5E (dnd5e) only",
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/dnd5e-table-kit.module.json"
       },
       {
         "id": "surge-powers",
@@ -218,13 +243,14 @@
         "compatibility": {
           "minimum": "1.2.0"
         },
-        "reason": "Bad Eden 5E (dnd5e) only"
+        "reason": "Bad Eden 5E (dnd5e) only",
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/surge-powers.module.json"
       }
     ]
   },
   "url": "https://github.com/delnwyr-rgb/BBTTCC",
-  "manifest": "",
-  "download": "",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/roll-for-initiation-bad-eden.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/roll-for-initiation-bad-eden.zip",
   "socket": false,
   "flags": {
     "roll-for-initiation-bad-eden": {

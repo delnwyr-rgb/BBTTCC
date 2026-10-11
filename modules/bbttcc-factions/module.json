@@ -80,5 +80,8 @@
     }
   ],
   "packs": [],
-  "socket": true
+  "socket": true,
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-factions.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-factions.zip"
 }

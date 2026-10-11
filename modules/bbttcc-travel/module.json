@@ -77,8 +77,8 @@
     }
   },
   "url": "https://github.com/delnwyr-rgb/BBTTCC",
-  "manifest": "modules/bbttcc-travel/module.json",
-  "download": "",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-travel.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-travel.zip",
   "license": "LICENSE.txt",
   "readme": "README.md"
 }

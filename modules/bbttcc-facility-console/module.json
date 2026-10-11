@@ -34,5 +34,8 @@
   "compatibility": {
     "minimum": "12",
     "verified": "13"
-  }
+  },
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-facility-console.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-facility-console.zip"
 }

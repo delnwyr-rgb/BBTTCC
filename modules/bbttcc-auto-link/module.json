@@ -45,7 +45,7 @@
     ],
     "requires": []
   },
-  "url": "",
-  "manifest": "",
-  "download": ""
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-auto-link.module.json",
+  "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-auto-link.zip"
 }
