@@ -1,0 +1,95 @@
+{
+  "name": "Occult Association: Rosicrucian (Tier 4)",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "<p><strong>Tier 4 — Rosicrucian</strong></p><p><strong>“When the Spark arrives, my people already have a place to put it.”</strong></p><p>At Tier 4, your order stops feeling like a club and starts feeling like infrastructure. When your faction achieves a Spark recovery, your network amplifies the downstream benefit.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction successfully gathers a Spark of Light for the Great Work, increase the resulting <strong>Faction Resource Injection</strong> by <strong>20%</strong></li></ul><p>The Great Work is not just discovery. It is what happens <em>after</em> discovery — and you are built for that.</p><p><strong>Cost:</strong> once your network becomes the obvious place recovered value flows through, rivals, allies, and dependents all begin measuring you by whether that flow ever stops.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 17+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-rosicrucian-t4",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "rosicrucian",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:rosicrucian",
+          "bbttcc:tier:4",
+          "bbttcc:domain:continuity",
+          "bbttcc:domain:sparks",
+          "bbttcc:domain:resource-injection",
+          "bbttcc:scope:faction",
+          "bbttcc:scope:great-work",
+          "bbttcc:when:great_work:spark_recovery",
+          "bbttcc:effect:resource_injection:+20%",
+          "bbttcc:resonance:netzach",
+          "bbttcc:drift:cooperative",
+          "bbttcc:cost:visibility",
+          "bbttcc:cost:dependency",
+          "bbttcc:theme:downstream-amplification",
+          "bbttcc:theme:network-as-infrastructure"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+  "folder": "k8ziUxOPhaNTau2q",
+  "_stats": {
+    "compendiumSource": "Item.qQHZyChzcNAE5Uw3",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.qQHZyChzcNAE5Uw3",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774987100132,
+    "modifiedTime": 1775063035644,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "9iUzBAc0Id4l63v2",
+  "sort": -200000,
+  "_key": "!items!9iUzBAc0Id4l63v2"
+}

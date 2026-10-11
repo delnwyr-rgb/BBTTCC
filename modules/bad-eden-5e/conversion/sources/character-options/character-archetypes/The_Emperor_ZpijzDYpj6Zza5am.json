@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "The Emperor",
+  "color": null,
+  "sorting": "a",
+  "_id": "ZpijzDYpj6Zza5am",
+  "description": "",
+  "sort": 1200000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773893508036,
+    "modifiedTime": 1774995500464,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!ZpijzDYpj6Zza5am"
+}

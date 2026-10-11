@@ -1,0 +1,66 @@
+{
+  "name": "Political Affiliation: Technocrat",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "Science-based ruler. +2 Soft Power, +1 Economy OPs",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "political-affiliation-technocrat",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "political-affiliations",
+      "bonuses": {
+        "softpower": 2,
+        "economy": 1
+      }
+    }
+  },
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+  "effects": [],
+  "folder": null,
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1759971204514,
+    "modifiedTime": 1775063043101,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3
+  },
+  "_id": "fALS6fgZOrMWHf9W",
+  "sort": 100049,
+  "_key": "!items!fALS6fgZOrMWHf9W"
+}

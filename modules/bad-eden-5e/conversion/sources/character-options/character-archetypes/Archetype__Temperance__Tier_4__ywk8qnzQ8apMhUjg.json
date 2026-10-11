@@ -1,0 +1,81 @@
+{
+  "name": "Archetype: Temperance (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Tier 4 — Temperance</strong></p><ul><li><strong>Strategic:</strong> −1 OP cost when hitting extremes (empty/full).</li></ul>",
+      "chat": ""
+    },
+    "identifier": "archetype-temperance-t4",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "key": "temperance",
+        "tier": 4,
+        "tags": [
+          "bbttcc:temperance",
+          "bbttcc:op_cost:-1",
+          "bbttcc:conditional:extreme"
+        ],
+        "category": "archetype",
+        "progressionType": "level",
+        "levelMin": 4,
+        "levelMax": 4
+      },
+      "category": "archetype"
+    }
+  },
+  "effects": [],
+  "folder": "oS7yNriqw8Jq5RHo",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.5VME9qj2YfWXLF9r",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774986658337,
+    "modifiedTime": 1775063022585,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "ywk8qnzQ8apMhUjg",
+  "sort": 275000,
+  "_key": "!items!ywk8qnzQ8apMhUjg"
+}

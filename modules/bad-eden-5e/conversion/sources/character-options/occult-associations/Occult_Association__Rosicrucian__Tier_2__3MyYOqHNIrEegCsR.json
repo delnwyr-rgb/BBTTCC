@@ -1,0 +1,96 @@
+{
+  "name": "Occult Association: Rosicrucian (Tier 2)",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "<p><strong>Tier 2 — Rosicrucian</strong></p><p><strong>“I don’t preach Enlightenment. I smuggle it.”</strong></p><p>Your network makes progress easier to sustain. People advance faster when the path is lit — and when someone is quietly removing the traps.</p><p><strong>Strategic (Faction / Party Scale)</strong></p><ul><li>When the party earns Enlightenment Points or meets narrative criteria for advancement, increase the rate of progress by <strong>10%</strong> (GM adjudicates exact pacing benefits)</li></ul><p>This is not a miracle. This is logistics — and Rosicrucians have always been very good at logistics.</p><p><strong>Cost:</strong> accelerated progress strains the chain supporting it. Expect supply burden, mentor fatigue, increased expectations, or rival attention once advancement starts looking organized instead of accidental.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 5+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-rosicrucian-t2",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "rosicrucian",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:rosicrucian",
+          "bbttcc:tier:2",
+          "bbttcc:domain:continuity",
+          "bbttcc:domain:enlightenment",
+          "bbttcc:domain:logistics",
+          "bbttcc:scope:party",
+          "bbttcc:scope:faction",
+          "bbttcc:when:advancement",
+          "bbttcc:when:enlightenment_gain",
+          "bbttcc:effect:progress_rate:enlightenment:+10%",
+          "bbttcc:resonance:netzach",
+          "bbttcc:drift:cooperative",
+          "bbttcc:cost:burden",
+          "bbttcc:cost:expectation",
+          "bbttcc:theme:smuggled-enlightenment",
+          "bbttcc:theme:quiet-acceleration"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+  "folder": "k8ziUxOPhaNTau2q",
+  "_stats": {
+    "compendiumSource": "Item.GlCLeD0x5PDCHBjv",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.GlCLeD0x5PDCHBjv",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774987100132,
+    "modifiedTime": 1775063034644,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "3MyYOqHNIrEegCsR",
+  "sort": -100000,
+  "_key": "!items!3MyYOqHNIrEegCsR"
+}

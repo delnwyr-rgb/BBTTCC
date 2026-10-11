@@ -1,0 +1,4376 @@
+{
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/crew.json. The Crew Types (bbttcc-character-options.crew-types) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
+  "_pack": "crew-types",
+  "_generated": {
+    "by": "tools/convert-5e.mjs",
+    "rubric": "1.8.1",
+    "at": "2026-10-11",
+    "overridesApplied": 0
+  },
+  "items": [
+    {
+      "slug": "crew-abyssal-cartographers",
+      "name": "Crew Type: Abyssal Cartographers",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "folder": "Abyssal Cartographer",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Abyssal Cartographers.</em></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Survival and Investigation.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Dexterity OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-abyssal-cartographers"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "intrigue": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "abyssal-cartographers",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "travel",
+              "discovery"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:abyssal-cartographers",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:discovery",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:intrigue:+8",
+              "bbttcc:theme:hidden-routes",
+              "bbttcc:theme:depth-navigation",
+              "bbttcc:theme:discovery",
+              "bbttcc:theme:under-map"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Y2ecYe4c61lDxp5A",
+            "pack": "crew-types",
+            "identifier": "crew-abyssal-cartographers",
+            "hash": "6d5e057263a3"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-abyssal-cartographers-t1",
+      "name": "Crew Type: Abyssal Cartographers (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "folder": "Abyssal Cartographer",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve learned the first law of deep travel: the visible route is usually the stupid one.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Survival and Investigation.</li><li><strong>Strategic:</strong> In River, Lake, Sea, Ocean, or Cavern-adjacent routes, discovery and route-finding are more reliable.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-abyssal-cartographers-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "abyssal-cartographers",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "discovery",
+              "intel"
+            ],
+            "terrains": [
+              "river",
+              "lake",
+              "sea",
+              "ocean",
+              "cavern"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:abyssal-cartographers",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:discovery",
+              "bbttcc:domain:intel",
+              "bbttcc:terrain:river",
+              "bbttcc:terrain:lake",
+              "bbttcc:terrain:sea",
+              "bbttcc:terrain:ocean",
+              "bbttcc:terrain:cavern",
+              "bbttcc:scope:hex",
+              "bbttcc:when:origin_terrain:river",
+              "bbttcc:when:origin_terrain:lake",
+              "bbttcc:when:origin_terrain:sea",
+              "bbttcc:when:origin_terrain:ocean",
+              "bbttcc:when:origin_terrain:cavern",
+              "bbttcc:effect:travel:hidden_route_detection:+1step",
+              "bbttcc:effect:discovery:reliability:+1step",
+              "bbttcc:theme:hidden-routes",
+              "bbttcc:theme:depth-navigation",
+              "bbttcc:theme:discovery"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Ltx4gC3Bx0tXFe7l",
+            "pack": "crew-types",
+            "identifier": "crew-abyssal-cartographers-t1",
+            "hash": "5dfafecb95df"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-abyssal-cartographers-t2",
+      "name": "Crew Type: Abyssal Cartographers (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "folder": "Abyssal Cartographer",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve stopped following waterways and started interrogating them.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Your faction can uncover hidden passages, submerged shortcuts, and alternate route links through water- or cavern-connected terrain more efficiently.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-abyssal-cartographers-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "abyssal-cartographers",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "travel",
+              "discovery",
+              "pathing"
+            ],
+            "terrains": [
+              "river",
+              "lake",
+              "sea",
+              "ocean",
+              "cavern"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:abyssal-cartographers",
+              "bbttcc:tier:2",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:discovery",
+              "bbttcc:domain:pathing",
+              "bbttcc:terrain:river",
+              "bbttcc:terrain:lake",
+              "bbttcc:terrain:sea",
+              "bbttcc:terrain:ocean",
+              "bbttcc:terrain:cavern",
+              "bbttcc:scope:hex",
+              "bbttcc:when:action:discover_hidden_passage",
+              "bbttcc:when:action:establish_alt_route",
+              "bbttcc:when:origin_terrain:river",
+              "bbttcc:when:origin_terrain:lake",
+              "bbttcc:when:origin_terrain:sea",
+              "bbttcc:when:origin_terrain:ocean",
+              "bbttcc:when:origin_terrain:cavern",
+              "bbttcc:effect:pathing:shortcut_unlock:true",
+              "bbttcc:effect:travel:alt_route_establish:true",
+              "bbttcc:effect:travel:route_cost:-1step",
+              "bbttcc:theme:hidden-routes",
+              "bbttcc:theme:under-map",
+              "bbttcc:theme:shortcut-mastery"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "z3TaBpU5PNO89Fif",
+            "pack": "crew-types",
+            "identifier": "crew-abyssal-cartographers-t2",
+            "hash": "bb5b848d9cb6"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-abyssal-cartographers-t3",
+      "name": "Crew Type: Abyssal Cartographers (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "folder": "Abyssal Cartographer",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve learned to tell the difference between a dead passage and a sleeping one.</em></p><ul><li><strong>Tactical:</strong> You have advantage on checks made to navigate submerged or cavernous terrain, interpret spatial anomalies, or locate hidden access points and sealed routes.</li><li><strong>Strategic:</strong> Your faction is better at identifying unusual discovery sites and Spark-adjacent locations tied to water, depths, or buried passageways.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-abyssal-cartographers-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "abyssal-cartographers",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "travel",
+              "intel",
+              "sparks",
+              "discovery"
+            ],
+            "terrains": [
+              "river",
+              "lake",
+              "sea",
+              "ocean",
+              "cavern"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:abyssal-cartographers",
+              "bbttcc:tier:3",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:sparks",
+              "bbttcc:domain:discovery",
+              "bbttcc:terrain:river",
+              "bbttcc:terrain:lake",
+              "bbttcc:terrain:sea",
+              "bbttcc:terrain:ocean",
+              "bbttcc:terrain:cavern",
+              "bbttcc:scope:hex",
+              "bbttcc:when:action:navigate_submerged_terrain",
+              "bbttcc:when:action:interpret_spatial_anomaly",
+              "bbttcc:when:action:locate_hidden_access",
+              "bbttcc:when:action:locate_sealed_route",
+              "bbttcc:effect:check:advantage:navigate_submerged_terrain",
+              "bbttcc:effect:check:advantage:interpret_spatial_anomaly",
+              "bbttcc:effect:check:advantage:locate_hidden_access",
+              "bbttcc:effect:check:advantage:locate_sealed_route",
+              "bbttcc:effect:discovery:spark_adjacent_detection:+1step",
+              "bbttcc:theme:depth-navigation",
+              "bbttcc:theme:spatial-weirdness",
+              "bbttcc:theme:spark-hunting",
+              "bbttcc:theme:under-map"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "hiS1RgUoz5iKI5Fj",
+            "pack": "crew-types",
+            "identifier": "crew-abyssal-cartographers-t3",
+            "hash": "976241991246"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-abyssal-cartographers-t4",
+      "name": "Crew Type: Abyssal Cartographers (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "folder": "Abyssal Cartographer",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You no longer discover secret routes. You administer a second geography.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Your faction gains strong regional control over hidden route logic in water- and cavern-linked terrain. Travel becomes more flexible for allies, less predictable for enemies, and deep-route discoveries yield greater long-term value.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-abyssal-cartographers-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "abyssal-cartographers",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "region",
+              "travel",
+              "discovery",
+              "pathing"
+            ],
+            "terrains": [
+              "river",
+              "lake",
+              "sea",
+              "ocean",
+              "cavern"
+            ],
+            "scope": "region",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:abyssal-cartographers",
+              "bbttcc:tier:4",
+              "bbttcc:domain:region",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:discovery",
+              "bbttcc:domain:pathing",
+              "bbttcc:terrain:river",
+              "bbttcc:terrain:lake",
+              "bbttcc:terrain:sea",
+              "bbttcc:terrain:ocean",
+              "bbttcc:terrain:cavern",
+              "bbttcc:scope:region",
+              "bbttcc:when:target:regional_route_network",
+              "bbttcc:effect:travel:ally_route_flexibility:+regional",
+              "bbttcc:effect:enemy_pathing:predictability:-regional",
+              "bbttcc:effect:discovery:deep_route_value:+regional",
+              "bbttcc:theme:under-map",
+              "bbttcc:theme:hidden-routes",
+              "bbttcc:theme:regional-geography",
+              "bbttcc:theme:deep-discovery"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "rvBVx5PIMb6eIOI3",
+            "pack": "crew-types",
+            "identifier": "crew-abyssal-cartographers-t4",
+            "hash": "9f0d2a700eb8"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-ashbound-survivors",
+      "name": "Crew Type: Ashbound Survivors",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "folder": "Ashbound Survivors",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Ashbound Survivors.</em></p><p><strong>“You don’t conquer the wasteland. You outlast it.”</strong></p><p>Ashbound Survivors know how to live where maps stop pretending. They ration breath, read heat shimmer like scripture, and treat hostile terrain as a negotiation instead of a death sentence.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Survival and Nature.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Economy OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-ashbound-survivors"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "economy": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "ashbound-survivors",
+            "progressionType": "level",
+            "domains": [
+              "op"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ashbound-survivors",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:economy:+8",
+              "bbttcc:theme:endurance",
+              "bbttcc:theme:survival",
+              "bbttcc:theme:attrition",
+              "bbttcc:theme:wasteland-mastery"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "F7XXOmz2TbhM0anI",
+            "pack": "crew-types",
+            "identifier": "crew-ashbound-survivors",
+            "hash": "5caae1dd773c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-ashbound-survivors-t1",
+      "name": "Crew Type: Ashbound Survivors (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "folder": "Ashbound Survivors",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Ashbound Survivors</strong></p><p><em>You’ve learned the first mercy of dead land: preparation beats optimism.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Survival and Nature.</li><li><strong>Strategic:</strong> In Desert, Ash Wastes, and Wasteland hexes, environmental travel penalties are reduced and hazard pressure is easier to withstand.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-ashbound-survivors-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "category": "crew",
+            "key": "ashbound-survivors",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "encounter"
+            ],
+            "terrains": [
+              "desert",
+              "wasteland",
+              "ash-wastes"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ashbound-survivors",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:encounter",
+              "bbttcc:terrain:desert",
+              "bbttcc:terrain:ash-wastes",
+              "bbttcc:terrain:wasteland",
+              "bbttcc:scope:hex",
+              "bbttcc:when:origin_terrain:desert",
+              "bbttcc:when:origin_terrain:ash-wastes",
+              "bbttcc:when:origin_terrain:wasteland",
+              "bbttcc:effect:travel:environmental_penalty:-1step",
+              "bbttcc:effect:encounter:hazard_resistance:+1step",
+              "bbttcc:theme:endurance",
+              "bbttcc:theme:survival"
+            ],
+            "progressionType": "level"
+          },
+          "category": "crew"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Vk2z4En0VqIJYIrP",
+            "pack": "crew-types",
+            "identifier": "crew-ashbound-survivors-t1",
+            "hash": "5de27c848999"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-ashbound-survivors-t2",
+      "name": "Crew Type: Ashbound Survivors (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "folder": "Ashbound Survivors",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Ashbound Survivors</strong></p><p><em>You’ve stopped fearing hardship and started budgeting it.</em></p><ul><li><strong>Strategic:</strong> When your faction survives or resolves hazard encounters in Desert, Ash Wastes, or Wasteland terrain, it can convert that hardship into useful recovery, salvage, or logistical gain.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-ashbound-survivors-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "category": "crew",
+            "key": "ashbound-survivors",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "encounter",
+              "op",
+              "travel"
+            ],
+            "terrains": [
+              "desert",
+              "wasteland",
+              "ash-wastes"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ashbound-survivors",
+              "bbttcc:tier:2",
+              "bbttcc:domain:encounter",
+              "bbttcc:domain:op",
+              "bbttcc:domain:travel",
+              "bbttcc:terrain:desert",
+              "bbttcc:terrain:ash-wastes",
+              "bbttcc:terrain:wasteland",
+              "bbttcc:scope:faction",
+              "bbttcc:when:encounter:hazard_survived",
+              "bbttcc:when:origin_terrain:desert",
+              "bbttcc:when:origin_terrain:ash-wastes",
+              "bbttcc:when:origin_terrain:wasteland",
+              "bbttcc:effect:op:recovery:+conditional",
+              "bbttcc:effect:travel:salvage_gain:+conditional",
+              "bbttcc:effect:logistics:pressure_relief:+conditional",
+              "bbttcc:theme:attrition",
+              "bbttcc:theme:salvage",
+              "bbttcc:theme:survival"
+            ],
+            "progressionType": "level"
+          },
+          "category": "crew"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "2YlzSvEn1jFrhycK",
+            "pack": "crew-types",
+            "identifier": "crew-ashbound-survivors-t2",
+            "hash": "bfc99dcd12ea"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-ashbound-survivors-t3",
+      "name": "Crew Type: Ashbound Survivors (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "folder": "Ashbound Survivors",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Ashbound Survivors</strong></p><p><em>You’ve learned to make the bad route pay for itself.</em></p><ul><li><strong>Tactical:</strong> You have advantage on checks made to endure environmental strain, locate shelter, scavenge sustenance, or navigate by ruin-sign, stars, or ashfall.</li><li><strong>Strategic:</strong> Failed or costly travel through harsh terrain is less likely to become pure loss; wasteland movement can generate trace gain, salvage, or reduced attrition instead.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-ashbound-survivors-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "category": "crew",
+            "key": "ashbound-survivors",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "travel",
+              "intel",
+              "encounter"
+            ],
+            "terrains": [
+              "desert",
+              "wasteland",
+              "ash-wastes"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ashbound-survivors",
+              "bbttcc:tier:3",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:encounter",
+              "bbttcc:terrain:desert",
+              "bbttcc:terrain:ash-wastes",
+              "bbttcc:terrain:wasteland",
+              "bbttcc:scope:hex",
+              "bbttcc:when:origin_terrain:desert",
+              "bbttcc:when:origin_terrain:ash-wastes",
+              "bbttcc:when:origin_terrain:wasteland",
+              "bbttcc:when:travel:failure_or_costly_result",
+              "bbttcc:effect:travel:loss_to_trace_gain:true",
+              "bbttcc:effect:travel:attrition_reduction:+1step",
+              "bbttcc:effect:encounter:scavenge_window:open",
+              "bbttcc:theme:endurance",
+              "bbttcc:theme:salvage",
+              "bbttcc:theme:hardship-conversion"
+            ],
+            "progressionType": "level"
+          },
+          "category": "crew"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Lii6D95t6UcjyAoW",
+            "pack": "crew-types",
+            "identifier": "crew-ashbound-survivors-t3",
+            "hash": "fced965c5d49"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-ashbound-survivors-t4",
+      "name": "Crew Type: Ashbound Survivors (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "folder": "Ashbound Survivors",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Ashbound Survivors</strong></p><p><em>The wasteland is no longer a penalty. It is infrastructure with bad manners.</em></p><ul><li><strong>Strategic:</strong> Controlled Desert, Ash Wastes, and Wasteland hexes become far more livable and productive for your faction. Harsh terrain drains less, supports movement more reliably, and can produce meaningful recovery or economic value over time.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-ashbound-survivors-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "category": "crew",
+            "key": "ashbound-survivors",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "hex",
+              "region",
+              "op"
+            ],
+            "terrains": [
+              "desert",
+              "wasteland",
+              "ash-wastes"
+            ],
+            "scope": "controlled_hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ashbound-survivors",
+              "bbttcc:tier:4",
+              "bbttcc:domain:hex",
+              "bbttcc:domain:region",
+              "bbttcc:domain:op",
+              "bbttcc:terrain:desert",
+              "bbttcc:terrain:ash-wastes",
+              "bbttcc:terrain:wasteland",
+              "bbttcc:scope:controlled_hex",
+              "bbttcc:when:target:controlled_hex",
+              "bbttcc:effect:terrain:hostility:-major",
+              "bbttcc:effect:travel:reliability:+regional",
+              "bbttcc:effect:op:economy_from_harsh_terrain:+regional",
+              "bbttcc:effect:attrition:reduction:+regional",
+              "bbttcc:theme:wasteland-mastery",
+              "bbttcc:theme:endurance",
+              "bbttcc:theme:economic-conversion"
+            ],
+            "progressionType": "level"
+          },
+          "category": "crew"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "52najZqVR5riorMv",
+            "pack": "crew-types",
+            "identifier": "crew-ashbound-survivors-t4",
+            "hash": "8826aaf113a9"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-covert-ops-cell",
+      "name": "Crew Type: Covert Ops Cell",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "folder": "Covert Ops Cell",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Covert Ops Cell.</em></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Stealth and with Thieves' Tools.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Dexterity OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-covert-ops-cell"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "intrigue": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "covert-ops-cell",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "intel",
+              "infiltration"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:covert-ops-cell",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:infiltration",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:intrigue:+8",
+              "bbttcc:theme:stealth",
+              "bbttcc:theme:subterfuge",
+              "bbttcc:theme:infiltration",
+              "bbttcc:theme:denial"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bG4aAhYeDrO1OJqY",
+            "pack": "crew-types",
+            "identifier": "crew-covert-ops-cell",
+            "hash": "f3145af88c5d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-covert-ops-cell-t1",
+      "name": "Crew Type: Covert Ops Cell (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "folder": "Covert Ops Cell",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Stealth and with Thieves' Tools.</li><li><strong>Strategic:</strong> Your faction starts with +1 Dexterity OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-covert-ops-cell-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "covert-ops-cell",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "intel",
+              "infiltration"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:covert-ops-cell",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:infiltration",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:intrigue:+8",
+              "bbttcc:effect:intel:stealth_baseline:true",
+              "bbttcc:effect:infiltration:tools_access:thieves_tools",
+              "bbttcc:theme:stealth",
+              "bbttcc:theme:subterfuge",
+              "bbttcc:theme:infiltration",
+              "bbttcc:theme:denial"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "IhNnHQi8883LhK2u",
+            "pack": "crew-types",
+            "identifier": "crew-covert-ops-cell-t1",
+            "hash": "441a1c8b5e4e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-covert-ops-cell-t2",
+      "name": "Crew Type: Covert Ops Cell (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "folder": "Covert Ops Cell",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When undertaking an Infiltration scenario, the Alarm Level threshold is increased, allowing for more failures before a full alert is triggered.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-covert-ops-cell-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "covert-ops-cell",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "infiltration",
+              "scenario_control"
+            ],
+            "scope": "scenario",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:covert-ops-cell",
+              "bbttcc:tier:2",
+              "bbttcc:domain:infiltration",
+              "bbttcc:domain:scenario_control",
+              "bbttcc:scope:scenario",
+              "bbttcc:when:scenario:infiltration",
+              "bbttcc:effect:alarm_threshold:+1",
+              "bbttcc:theme:stealth",
+              "bbttcc:theme:infiltration",
+              "bbttcc:theme:pressure-control"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "PEGwBXMpuXVPwqyi",
+            "pack": "crew-types",
+            "identifier": "crew-covert-ops-cell-t2",
+            "hash": "da1755b9f43f"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-covert-ops-cell-t3",
+      "name": "Crew Type: Covert Ops Cell (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "folder": "Covert Ops Cell",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You can move at a normal pace while traveling stealthily and gain advantage on checks made to create or bypass security systems.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-covert-ops-cell-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "covert-ops-cell",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "travel",
+              "intel",
+              "security"
+            ],
+            "scope": "self",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:covert-ops-cell",
+              "bbttcc:tier:3",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:security",
+              "bbttcc:scope:self",
+              "bbttcc:when:travel:stealth",
+              "bbttcc:when:action:create_security",
+              "bbttcc:when:action:bypass_security",
+              "bbttcc:effect:travel:stealth_normal_pace:true",
+              "bbttcc:effect:check:advantage:create_security",
+              "bbttcc:effect:check:advantage:bypass_security",
+              "bbttcc:theme:stealth",
+              "bbttcc:theme:subterfuge",
+              "bbttcc:theme:security"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "hj4wIlsCBqKkGJ86",
+            "pack": "crew-types",
+            "identifier": "crew-covert-ops-cell-t3",
+            "hash": "d27b5ee3ff2d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-covert-ops-cell-t4",
+      "name": "Crew Type: Covert Ops Cell (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "folder": "Covert Ops Cell",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The Adaptive Adversary Engine has difficulty tracking you. In Bunker Busters scenarios, there is a 50% chance its resource shifts to counter your Dexterity-focused actions fail.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-covert-ops-cell-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "covert-ops-cell",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "aae",
+              "scenario_control",
+              "intel"
+            ],
+            "scope": "scenario",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:covert-ops-cell",
+              "bbttcc:tier:4",
+              "bbttcc:domain:aae",
+              "bbttcc:domain:scenario_control",
+              "bbttcc:domain:intel",
+              "bbttcc:scope:scenario",
+              "bbttcc:when:scenario:bunker_busters",
+              "bbttcc:when:enemy_response:aae_tracking",
+              "bbttcc:when:counter:intrigue_focused_action",
+              "bbttcc:effect:aae:tracking_penalty:true",
+              "bbttcc:effect:aae:counter_shift_fail_chance:50pct",
+              "bbttcc:theme:stealth",
+              "bbttcc:theme:subterfuge",
+              "bbttcc:theme:counter-intelligence",
+              "bbttcc:theme:denial"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "lHhAp4GCqILHdXRG",
+            "pack": "crew-types",
+            "identifier": "crew-covert-ops-cell-t4",
+            "hash": "a7fda6ff10a6"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-cultural-ambassadors",
+      "name": "Crew Type: Cultural Ambassadors",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "folder": "Cultural Ambassadors",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Cultural Ambassadors.</em></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Performance and Persuasion.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Soft Power OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-cultural-ambassadors"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "softpower": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "cultural-ambassadors",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "social",
+              "propaganda"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:cultural-ambassadors",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:social",
+              "bbttcc:domain:propaganda",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:softpower:+8",
+              "bbttcc:theme:hospitality",
+              "bbttcc:theme:propaganda",
+              "bbttcc:theme:cultural-pressure",
+              "bbttcc:theme:hope-shaping"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "U54gDJsUommzLBJx",
+            "pack": "crew-types",
+            "identifier": "crew-cultural-ambassadors",
+            "hash": "d764c3b47d57"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-cultural-ambassadors-t1",
+      "name": "Crew Type: Cultural Ambassadors (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "folder": "Cultural Ambassadors",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Performance and Persuasion.</li><li><strong>Strategic:</strong> Your faction starts with +1 Soft Power OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-cultural-ambassadors-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "cultural-ambassadors",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "social",
+              "propaganda"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:cultural-ambassadors",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:social",
+              "bbttcc:domain:propaganda",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:softpower:+8",
+              "bbttcc:effect:social:cultural_access:true",
+              "bbttcc:theme:hospitality",
+              "bbttcc:theme:propaganda",
+              "bbttcc:theme:cultural-pressure",
+              "bbttcc:theme:hope-shaping"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4HYw89SuBVBuEx0l",
+            "pack": "crew-types",
+            "identifier": "crew-cultural-ambassadors-t1",
+            "hash": "f5bd7ddbdf46"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-cultural-ambassadors-t2",
+      "name": "Crew Type: Cultural Ambassadors (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "folder": "Cultural Ambassadors",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Soft Power OPs for psychological warfare or propaganda during a Siege scenario, the effect on enemy morale is increased by 25%.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-cultural-ambassadors-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "cultural-ambassadors",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "propaganda",
+              "siege",
+              "op"
+            ],
+            "scope": "scenario",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:cultural-ambassadors",
+              "bbttcc:tier:2",
+              "bbttcc:domain:propaganda",
+              "bbttcc:domain:siege",
+              "bbttcc:domain:op",
+              "bbttcc:scope:scenario",
+              "bbttcc:when:scenario:siege",
+              "bbttcc:when:op_spend:softpower",
+              "bbttcc:when:action:psychological_warfare",
+              "bbttcc:when:action:propaganda",
+              "bbttcc:effect:enemy_morale_pressure:+25pct",
+              "bbttcc:theme:propaganda",
+              "bbttcc:theme:psywar",
+              "bbttcc:theme:morale-pressure"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "p70fPz8LpzJsWZJc",
+            "pack": "crew-types",
+            "identifier": "crew-cultural-ambassadors-t2",
+            "hash": "53d2f001be83"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-cultural-ambassadors-t3",
+      "name": "Crew Type: Cultural Ambassadors (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "folder": "Cultural Ambassadors",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You have advantage on Charisma checks made to influence crowds, inspire hope, or spread information and rumors in a settlement.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-cultural-ambassadors-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "cultural-ambassadors",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "social",
+              "settlement",
+              "propaganda"
+            ],
+            "scope": "self",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:cultural-ambassadors",
+              "bbttcc:tier:3",
+              "bbttcc:domain:social",
+              "bbttcc:domain:settlement",
+              "bbttcc:domain:propaganda",
+              "bbttcc:scope:self",
+              "bbttcc:when:location:settlement",
+              "bbttcc:when:action:influence_crowds",
+              "bbttcc:when:action:inspire_hope",
+              "bbttcc:when:action:spread_information",
+              "bbttcc:when:action:spread_rumors",
+              "bbttcc:effect:check:advantage:influence_crowds",
+              "bbttcc:effect:check:advantage:inspire_hope",
+              "bbttcc:effect:check:advantage:spread_information",
+              "bbttcc:effect:check:advantage:spread_rumors",
+              "bbttcc:theme:hospitality",
+              "bbttcc:theme:hope-shaping",
+              "bbttcc:theme:crowd-control",
+              "bbttcc:theme:narrative-pressure"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "gUc6xbo1GJsoszum",
+            "pack": "crew-types",
+            "identifier": "crew-cultural-ambassadors-t3",
+            "hash": "bd6d6a11e873"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-cultural-ambassadors-t4",
+      "name": "Crew Type: Cultural Ambassadors (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "folder": "Cultural Ambassadors",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Once per strategic turn, you can attempt to shift the alignment of an adjacent neutral Hex toward your faction’s political affiliation without spending OPs.</li></ul><p><strong>Soft Annex</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Shift the alignment of an adjacent neutral Hex toward your faction's political affiliation without spending OPs.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-cultural-ambassadors-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "cultural-ambassadors",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "hex",
+              "alignment",
+              "politics"
+            ],
+            "scope": "adjacent_hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:cultural-ambassadors",
+              "bbttcc:tier:4",
+              "bbttcc:domain:hex",
+              "bbttcc:domain:alignment",
+              "bbttcc:domain:politics",
+              "bbttcc:scope:adjacent_hex",
+              "bbttcc:when:phase:strategic_turn",
+              "bbttcc:when:target:adjacent_neutral_hex",
+              "bbttcc:effect:alignment_shift:toward_faction_politics",
+              "bbttcc:effect:op_cost:0",
+              "bbttcc:effect:usage:per_strategic_turn:1",
+              "bbttcc:theme:cultural-pressure",
+              "bbttcc:theme:political-drift",
+              "bbttcc:theme:soft-expansion",
+              "bbttcc:theme:narrative-territory"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "8OgA6QprirzV5XVH",
+            "pack": "crew-types",
+            "identifier": "crew-cultural-ambassadors-t4",
+            "hash": "149497d83693"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-diplomatic-envoys",
+      "name": "Crew Type: Diplomatic Envoys",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "folder": "Diplomatic Envoys",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Diplomatic Envoys.</em></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Insight and Persuasion, and you learn one extra language.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Diplomacy OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-diplomatic-envoys"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "diplomacy": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "diplomatic-envoys",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "social",
+              "negotiation"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:diplomatic-envoys",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:social",
+              "bbttcc:domain:negotiation",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:diplomacy:+8",
+              "bbttcc:theme:diplomacy",
+              "bbttcc:theme:negotiation",
+              "bbttcc:theme:soft-control",
+              "bbttcc:theme:integration"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "XYipYcYWz96JtbLX",
+            "pack": "crew-types",
+            "identifier": "crew-diplomatic-envoys",
+            "hash": "f90d621a90d7"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-diplomatic-envoys-t1",
+      "name": "Crew Type: Diplomatic Envoys (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "folder": "Diplomatic Envoys",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Persuasion, and you learn one extra language.</li><li><strong>Strategic:</strong> Your faction starts with +1 Diplomacy OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-diplomatic-envoys-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "diplomatic-envoys",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "social",
+              "negotiation",
+              "intel"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:diplomatic-envoys",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:social",
+              "bbttcc:domain:negotiation",
+              "bbttcc:domain:intel",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:diplomacy:+8",
+              "bbttcc:effect:intel:read_intent:true",
+              "bbttcc:effect:social:extra_language:+1",
+              "bbttcc:theme:diplomacy",
+              "bbttcc:theme:negotiation",
+              "bbttcc:theme:soft-control",
+              "bbttcc:theme:integration"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "cKFMnGLMQYGUKrKL",
+            "pack": "crew-types",
+            "identifier": "crew-diplomatic-envoys-t1",
+            "hash": "63416cf5c436"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-diplomatic-envoys-t2",
+      "name": "Crew Type: Diplomatic Envoys (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "folder": "Diplomatic Envoys",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During Courtly Dexterity (Social Combat) scenarios, your faction deals 20% more influence damage when spending Diplomacy or Soft Power OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-diplomatic-envoys-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "diplomatic-envoys",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "courtly_intrigue",
+              "social",
+              "op"
+            ],
+            "scope": "scenario",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:diplomatic-envoys",
+              "bbttcc:tier:2",
+              "bbttcc:domain:courtly_intrigue",
+              "bbttcc:domain:social",
+              "bbttcc:domain:op",
+              "bbttcc:scope:scenario",
+              "bbttcc:when:scenario:courtly_intrigue",
+              "bbttcc:when:op_spend:diplomacy",
+              "bbttcc:when:op_spend:softpower",
+              "bbttcc:effect:influence_damage:+20pct",
+              "bbttcc:theme:diplomacy",
+              "bbttcc:theme:social-combat",
+              "bbttcc:theme:pressure-control"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "SXFhOwBcUWTglWym",
+            "pack": "crew-types",
+            "identifier": "crew-diplomatic-envoys-t2",
+            "hash": "d4f682e0397b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-diplomatic-envoys-t3",
+      "name": "Crew Type: Diplomatic Envoys (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "folder": "Diplomatic Envoys",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 3 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> Once per session, you can initiate a Parley during a combat encounter, forcing a brief ceasefire (1 round) to allow for negotiation, provided the enemies are intelligent and not fanatical.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-diplomatic-envoys-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "diplomatic-envoys",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "social",
+              "negotiation",
+              "combat_control"
+            ],
+            "scope": "self",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:diplomatic-envoys",
+              "bbttcc:tier:3",
+              "bbttcc:domain:social",
+              "bbttcc:domain:negotiation",
+              "bbttcc:domain:combat_control",
+              "bbttcc:scope:self",
+              "bbttcc:when:encounter:combat",
+              "bbttcc:when:target:intelligent_nonfanatical",
+              "bbttcc:effect:ability:parley:true",
+              "bbttcc:effect:ability:uses_per_session:1",
+              "bbttcc:effect:combat:ceasefire_rounds:1",
+              "bbttcc:theme:diplomacy",
+              "bbttcc:theme:parley",
+              "bbttcc:theme:ceasefire",
+              "bbttcc:theme:soft-control"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "qMTM6FVvqWSe4UTV",
+            "pack": "crew-types",
+            "identifier": "crew-diplomatic-envoys-t3",
+            "hash": "ea13e21dff17"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-diplomatic-envoys-t4",
+      "name": "Crew Type: Diplomatic Envoys (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "folder": "Diplomatic Envoys",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The OP cost to achieve a Best Friends/Integration outcome (merging factions) is reduced by 30%.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-diplomatic-envoys-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "diplomatic-envoys",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "integration",
+              "faction_state",
+              "op"
+            ],
+            "scope": "scenario",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:diplomatic-envoys",
+              "bbttcc:tier:4",
+              "bbttcc:domain:integration",
+              "bbttcc:domain:faction_state",
+              "bbttcc:domain:op",
+              "bbttcc:scope:scenario",
+              "bbttcc:when:outcome:best_friends_integration",
+              "bbttcc:effect:op_cost:-30pct",
+              "bbttcc:theme:diplomacy",
+              "bbttcc:theme:integration",
+              "bbttcc:theme:coalition-building",
+              "bbttcc:theme:merger"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "lGTnqYnN4KWefuyN",
+            "pack": "crew-types",
+            "identifier": "crew-diplomatic-envoys-t4",
+            "hash": "575859f8993f"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-gridbreakers",
+      "name": "Crew Type: Gridbreakers",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "folder": "Gridbreaker",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Gridbreakers.</em></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Investigation and Tinker's Tools.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Economy OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-gridbreakers"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "economy": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "gridbreakers",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "economy",
+              "infrastructure"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:gridbreakers",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:economy",
+              "bbttcc:domain:infrastructure",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:economy:+8",
+              "bbttcc:theme:urban-recovery",
+              "bbttcc:theme:salvage",
+              "bbttcc:theme:infrastructure",
+              "bbttcc:theme:reactivation"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "kAkHKWLz1blNTViq",
+            "pack": "crew-types",
+            "identifier": "crew-gridbreakers",
+            "hash": "0a0a8805c725"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-gridbreakers-t1",
+      "name": "Crew Type: Gridbreakers (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "folder": "Gridbreaker",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You’ve learned the first law of a dead city: if it still sparks, it still negotiates.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Investigation and Tinker's Tools.</li><li><strong>Strategic:</strong> In Ruins or Urban Wreckage hexes, salvage and material recovery are easier and more reliable.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-gridbreakers-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "gridbreakers",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "economy",
+              "infrastructure",
+              "salvage"
+            ],
+            "terrains": [
+              "ruins",
+              "urban-wreckage"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:gridbreakers",
+              "bbttcc:tier:1",
+              "bbttcc:domain:economy",
+              "bbttcc:domain:infrastructure",
+              "bbttcc:domain:salvage",
+              "bbttcc:terrain:ruins",
+              "bbttcc:terrain:urban-wreckage",
+              "bbttcc:scope:hex",
+              "bbttcc:when:origin_terrain:ruins",
+              "bbttcc:when:origin_terrain:urban-wreckage",
+              "bbttcc:effect:salvage:yield:+1step",
+              "bbttcc:effect:recovery:materials_reliability:+1step",
+              "bbttcc:theme:urban-recovery",
+              "bbttcc:theme:salvage",
+              "bbttcc:theme:infrastructure"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "NvA045Pp0z1fI4ct",
+            "pack": "crew-types",
+            "identifier": "crew-gridbreakers-t1",
+            "hash": "3686e8d9f6fe"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-gridbreakers-t2",
+      "name": "Crew Type: Gridbreakers (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "folder": "Gridbreaker",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You’ve stopped scavenging ruins and started running them.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Your faction can restore or jury-rig infrastructure in Ruins/Urban Wreckage more efficiently. Facilities and urban systems are cheaper to reactivate, repair, or stabilize.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-gridbreakers-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "gridbreakers",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "infrastructure",
+              "facility",
+              "economy"
+            ],
+            "terrains": [
+              "ruins",
+              "urban-wreckage"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:gridbreakers",
+              "bbttcc:tier:2",
+              "bbttcc:domain:infrastructure",
+              "bbttcc:domain:facility",
+              "bbttcc:domain:economy",
+              "bbttcc:terrain:ruins",
+              "bbttcc:terrain:urban-wreckage",
+              "bbttcc:scope:hex",
+              "bbttcc:when:target:facility",
+              "bbttcc:when:origin_terrain:ruins",
+              "bbttcc:when:origin_terrain:urban-wreckage",
+              "bbttcc:effect:facility:repair_cost:-20pct",
+              "bbttcc:effect:facility:reactivation_cost:-20pct",
+              "bbttcc:effect:infrastructure:stabilize:true",
+              "bbttcc:theme:urban-recovery",
+              "bbttcc:theme:reactivation",
+              "bbttcc:theme:system-hacking"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "9tbmZz8vXa1UPcGX",
+            "pack": "crew-types",
+            "identifier": "crew-gridbreakers-t2",
+            "hash": "6805487998b1"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-gridbreakers-t3",
+      "name": "Crew Type: Gridbreakers (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "folder": "Gridbreaker",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You’ve learned how to make a dead system blink one more time.</em></p><ul><li><strong>Tactical:</strong> You have advantage on checks made to investigate urban systems, disable hostile mechanisms, or restore partial function to broken infrastructure.</li><li><strong>Strategic:</strong> Once per strategic turn, you can temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit.</li></ul><p><strong>Reactivate Asset</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-gridbreakers-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "gridbreakers",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "intel",
+              "infrastructure",
+              "settlement"
+            ],
+            "terrains": [
+              "ruins",
+              "urban-wreckage"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:gridbreakers",
+              "bbttcc:tier:3",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:infrastructure",
+              "bbttcc:domain:settlement",
+              "bbttcc:terrain:ruins",
+              "bbttcc:terrain:urban-wreckage",
+              "bbttcc:scope:hex",
+              "bbttcc:when:action:investigate_urban_systems",
+              "bbttcc:when:action:disable_mechanism",
+              "bbttcc:when:action:restore_partial_function",
+              "bbttcc:when:phase:strategic_turn",
+              "bbttcc:effect:check:advantage:investigate_urban_systems",
+              "bbttcc:effect:check:advantage:disable_mechanism",
+              "bbttcc:effect:check:advantage:restore_partial_function",
+              "bbttcc:effect:asset:temporary_reactivation:true",
+              "bbttcc:effect:usage:per_strategic_turn:1",
+              "bbttcc:theme:system-hacking",
+              "bbttcc:theme:reactivation",
+              "bbttcc:theme:urban-control"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "6YZZaCHskbbz3ExK",
+            "pack": "crew-types",
+            "identifier": "crew-gridbreakers-t3",
+            "hash": "1c05171a09fb"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-gridbreakers-t4",
+      "name": "Crew Type: Gridbreakers (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "folder": "Gridbreaker",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You no longer survive the dead city. You administer it.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled Ruins and Urban Wreckage hexes become significantly more productive. Dormant infrastructure is easier to exploit, and ruined zones contribute meaningful economic and logistical value to your faction over time.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-gridbreakers-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "gridbreakers",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "hex",
+              "region",
+              "economy",
+              "infrastructure"
+            ],
+            "terrains": [
+              "ruins",
+              "urban-wreckage"
+            ],
+            "scope": "controlled_hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:gridbreakers",
+              "bbttcc:tier:4",
+              "bbttcc:domain:hex",
+              "bbttcc:domain:region",
+              "bbttcc:domain:economy",
+              "bbttcc:domain:infrastructure",
+              "bbttcc:terrain:ruins",
+              "bbttcc:terrain:urban-wreckage",
+              "bbttcc:scope:controlled_hex",
+              "bbttcc:when:target:controlled_hex",
+              "bbttcc:effect:economy:urban_ruin_value:+regional",
+              "bbttcc:effect:logistics:urban_reliability:+regional",
+              "bbttcc:effect:infrastructure:dormant_asset_exploitation:+regional",
+              "bbttcc:theme:urban-recovery",
+              "bbttcc:theme:city-control",
+              "bbttcc:theme:reactivation",
+              "bbttcc:theme:economic-conversion"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "rerObnuoCANNrQ8F",
+            "pack": "crew-types",
+            "identifier": "crew-gridbreakers-t4",
+            "hash": "7aef8095a08d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-ironbound-ascendants",
+      "name": "Crew Type: Ironbound Ascendants",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "folder": "Ironbound Ascendants",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Ironbound Ascendants.</em></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Athletics and Survival.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Logistics OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-ironbound-ascendants"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "logistics": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "ironbound-ascendants",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "logistics",
+              "defense"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ironbound-ascendants",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:logistics",
+              "bbttcc:domain:defense",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:logistics:+8",
+              "bbttcc:theme:elevation",
+              "bbttcc:theme:fortification",
+              "bbttcc:theme:chokepoints",
+              "bbttcc:theme:mountain-discipline"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "brAELAWiggUsnsox",
+            "pack": "crew-types",
+            "identifier": "crew-ironbound-ascendants",
+            "hash": "399716266cde"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-ironbound-ascendants-t1",
+      "name": "Crew Type: Ironbound Ascendants (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "folder": "Ironbound Ascendants",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Athletics and Survival.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your faction and elevation penalties are easier to manage.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-ironbound-ascendants-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "ironbound-ascendants",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "logistics",
+              "defense"
+            ],
+            "terrains": [
+              "mountain",
+              "highlands"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ironbound-ascendants",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:logistics",
+              "bbttcc:domain:defense",
+              "bbttcc:terrain:mountain",
+              "bbttcc:terrain:highlands",
+              "bbttcc:scope:hex",
+              "bbttcc:when:origin_terrain:mountain",
+              "bbttcc:when:origin_terrain:highlands",
+              "bbttcc:effect:travel:cost_reduction:+1step",
+              "bbttcc:effect:travel:elevation_penalty:-1step",
+              "bbttcc:theme:elevation",
+              "bbttcc:theme:mountain-discipline",
+              "bbttcc:theme:chokepoints"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "BTTDmoKyELWALp7a",
+            "pack": "crew-types",
+            "identifier": "crew-ironbound-ascendants-t1",
+            "hash": "475704aa5b2a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-ironbound-ascendants-t2",
+      "name": "Crew Type: Ironbound Ascendants (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "folder": "Ironbound Ascendants",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve stopped crossing high ground and started governing it.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When defending from Mountains or Highlands, your faction gains a meaningful positional edge. Raids and hostile actions launched uphill against you are harder to execute cleanly.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-ironbound-ascendants-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "ironbound-ascendants",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "raid",
+              "defense",
+              "positioning"
+            ],
+            "terrains": [
+              "mountain",
+              "highlands"
+            ],
+            "scope": "scenario",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ironbound-ascendants",
+              "bbttcc:tier:2",
+              "bbttcc:domain:raid",
+              "bbttcc:domain:defense",
+              "bbttcc:domain:positioning",
+              "bbttcc:terrain:mountain",
+              "bbttcc:terrain:highlands",
+              "bbttcc:scope:scenario",
+              "bbttcc:when:action:defend",
+              "bbttcc:when:origin_terrain:mountain",
+              "bbttcc:when:origin_terrain:highlands",
+              "bbttcc:effect:raid:defense_margin:+1",
+              "bbttcc:effect:enemy_assault:reliability:-1step",
+              "bbttcc:theme:elevation",
+              "bbttcc:theme:fortification",
+              "bbttcc:theme:uphill-war"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "1t5uJJswhhFmjdbA",
+            "pack": "crew-types",
+            "identifier": "crew-ironbound-ascendants-t2",
+            "hash": "61b870c98eb5"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-ironbound-ascendants-t3",
+      "name": "Crew Type: Ironbound Ascendants (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "folder": "Ironbound Ascendants",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve learned how to make distance and gravity part of the argument.</em></p><ul><li><strong>Tactical:</strong> You have advantage on checks made to climb, endure thin air or treacherous footing, and establish or contest a fortified high-ground position.</li><li><strong>Strategic:</strong> Enemy movement through your controlled Mountains/Highlands is less flexible and easier to predict.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-ironbound-ascendants-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "ironbound-ascendants",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "travel",
+              "positioning",
+              "intel"
+            ],
+            "terrains": [
+              "mountain",
+              "highlands"
+            ],
+            "scope": "controlled_hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ironbound-ascendants",
+              "bbttcc:tier:3",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:positioning",
+              "bbttcc:domain:intel",
+              "bbttcc:terrain:mountain",
+              "bbttcc:terrain:highlands",
+              "bbttcc:scope:controlled_hex",
+              "bbttcc:when:target:controlled_hex",
+              "bbttcc:when:action:climb",
+              "bbttcc:when:action:endure_elevation",
+              "bbttcc:when:action:contest_high_ground",
+              "bbttcc:effect:check:advantage:climb",
+              "bbttcc:effect:check:advantage:endure_elevation",
+              "bbttcc:effect:check:advantage:contest_high_ground",
+              "bbttcc:effect:enemy_movement:flexibility:-1step",
+              "bbttcc:effect:intel:route_predictability:+1step",
+              "bbttcc:theme:elevation",
+              "bbttcc:theme:mountain-discipline",
+              "bbttcc:theme:terrain-control"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ZB4P2ZQHLMSprBfT",
+            "pack": "crew-types",
+            "identifier": "crew-ironbound-ascendants-t3",
+            "hash": "8f195e0c1efa"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-ironbound-ascendants-t4",
+      "name": "Crew Type: Ironbound Ascendants (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "folder": "Ironbound Ascendants",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You no longer defend the mountains. The mountains defend you.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled Mountains and Highlands become severe positional assets. Enemy movement through them is slower, less reliable, and more costly, while your faction gains strong defensive and logistical superiority across the region.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-ironbound-ascendants-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "ironbound-ascendants",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "region",
+              "defense",
+              "logistics",
+              "positioning"
+            ],
+            "terrains": [
+              "mountain",
+              "highlands"
+            ],
+            "scope": "controlled_hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ironbound-ascendants",
+              "bbttcc:tier:4",
+              "bbttcc:domain:region",
+              "bbttcc:domain:defense",
+              "bbttcc:domain:logistics",
+              "bbttcc:domain:positioning",
+              "bbttcc:terrain:mountain",
+              "bbttcc:terrain:highlands",
+              "bbttcc:scope:controlled_hex",
+              "bbttcc:when:target:controlled_hex",
+              "bbttcc:effect:enemy_movement:cost:+regional",
+              "bbttcc:effect:enemy_movement:reliability:-regional",
+              "bbttcc:effect:defense:altitude_superiority:+regional",
+              "bbttcc:effect:logistics:highland_efficiency:+regional",
+              "bbttcc:theme:elevation",
+              "bbttcc:theme:chokepoints",
+              "bbttcc:theme:fortification",
+              "bbttcc:theme:terrain-sovereignty"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "h03Jv8AJIOvuNN8E",
+            "pack": "crew-types",
+            "identifier": "crew-ironbound-ascendants-t4",
+            "hash": "8764df8254bb"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-mercenary-band",
+      "name": "Crew Type: Mercenary Band",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "folder": "Mercenary Band",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Mercenary Band.</em></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency with Medium Armor and one Martial Weapon of your choice.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Strength OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-mercenary-band"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "violence": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "mercenary-band",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "combat"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:mercenary-band",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:combat",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:violence:+8",
+              "bbttcc:effect:op:diplomacy:-3",
+              "bbttcc:theme:contract-violence",
+              "bbttcc:theme:professional-soldiers",
+              "bbttcc:theme:battlefield-pressure",
+              "bbttcc:theme:paid-force"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "WatHUkAsyCarniyX",
+            "pack": "crew-types",
+            "identifier": "crew-mercenary-band",
+            "hash": "66a6aa34e3e2"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-mercenary-band-t1",
+      "name": "Crew Type: Mercenary Band (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "folder": "Mercenary Band",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency with Medium Armor and one Martial Weapon of your choice.</li><li><strong>Strategic:</strong> Your faction starts with +1 Strength OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-mercenary-band-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "mercenary-band",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "combat"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:mercenary-band",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:combat",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:violence:+8",
+              "bbttcc:effect:op:diplomacy:-3",
+              "bbttcc:effect:combat:armor_training:medium",
+              "bbttcc:effect:combat:weapon_training:martial_choice:1",
+              "bbttcc:theme:contract-violence",
+              "bbttcc:theme:professional-soldiers",
+              "bbttcc:theme:battlefield-pressure",
+              "bbttcc:theme:paid-force"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "0kqmEmiYWdXH2i1V",
+            "pack": "crew-types",
+            "identifier": "crew-mercenary-band-t1",
+            "hash": "a186b9f01cff"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-mercenary-band-t2",
+      "name": "Crew Type: Mercenary Band (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "folder": "Mercenary Band",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During Siege and Battlefield scenarios, your faction gains a +1 bonus on Strength rolls.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-mercenary-band-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "mercenary-band",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "battlefield",
+              "siege",
+              "combat"
+            ],
+            "scope": "scenario",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:mercenary-band",
+              "bbttcc:tier:2",
+              "bbttcc:domain:battlefield",
+              "bbttcc:domain:siege",
+              "bbttcc:domain:combat",
+              "bbttcc:scope:scenario",
+              "bbttcc:when:scenario:siege",
+              "bbttcc:when:scenario:battlefield",
+              "bbttcc:effect:roll_bonus:violence:+1",
+              "bbttcc:theme:contract-violence",
+              "bbttcc:theme:battlefield-pressure",
+              "bbttcc:theme:shock-force"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "hQ9IwDUl85EtvacP",
+            "pack": "crew-types",
+            "identifier": "crew-mercenary-band-t2",
+            "hash": "4ff10bd041c0"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-mercenary-band-t3",
+      "name": "Crew Type: Mercenary Band (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "folder": "Mercenary Band",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> When you score a critical hit with a weapon attack, you gain temporary hit points equal to your character level.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-mercenary-band-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "mercenary-band",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "combat",
+              "survival"
+            ],
+            "scope": "self",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:mercenary-band",
+              "bbttcc:tier:3",
+              "bbttcc:domain:combat",
+              "bbttcc:domain:survival",
+              "bbttcc:scope:self",
+              "bbttcc:when:attack:weapon_critical_hit",
+              "bbttcc:effect:temp_hp:on_crit:level",
+              "bbttcc:theme:aggression",
+              "bbttcc:theme:battlefield-momentum",
+              "bbttcc:theme:shock-force"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "AIfz5iYKK5MaGpBF",
+            "pack": "crew-types",
+            "identifier": "crew-mercenary-band-t3",
+            "hash": "2684e9534211"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-mercenary-band-t4",
+      "name": "Crew Type: Mercenary Band (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "folder": "Mercenary Band",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The Strength Point Attrition (war-weariness) mechanic affects your faction 50% less than normal. The cost to replenish Strength OPs is reduced by 10%.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-mercenary-band-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "mercenary-band",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "attrition",
+              "op",
+              "combat"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:mercenary-band",
+              "bbttcc:tier:4",
+              "bbttcc:domain:attrition",
+              "bbttcc:domain:op",
+              "bbttcc:domain:combat",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:attrition:violence:x0.5",
+              "bbttcc:effect:op_replenish_cost:violence:-10pct",
+              "bbttcc:theme:contract-violence",
+              "bbttcc:theme:war-weariness",
+              "bbttcc:theme:professional-soldiers",
+              "bbttcc:theme:sustained-conflict"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "vQInURnJTCqNd8OV",
+            "pack": "crew-types",
+            "identifier": "crew-mercenary-band-t4",
+            "hash": "0b0b98e3183e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-peacekeeper-corps",
+      "name": "Crew Type: Peacekeeper Corps",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "folder": "Peacekeeper Corps",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Peacekeeper Corps.</em></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Insight and Investigation.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Non-Lethal OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-peacekeeper-corps"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "nonlethal": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "peacekeeper-corps",
+            "progressionType": "level",
+            "domains": [
+              "op"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:peacekeeper-corps",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:nonlethal:+8",
+              "bbttcc:theme:order",
+              "bbttcc:theme:stability",
+              "bbttcc:theme:de-escalation",
+              "bbttcc:theme:enforcement"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "VuzqvsAB2qXH69YT",
+            "pack": "crew-types",
+            "identifier": "crew-peacekeeper-corps",
+            "hash": "f04c5ee6cb6e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-peacekeeper-corps-t1",
+      "name": "Crew Type: Peacekeeper Corps (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "folder": "Peacekeeper Corps",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Investigation.</li><li><strong>Strategic:</strong> Your faction starts with +1 Non-Lethal OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-peacekeeper-corps-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "peacekeeper-corps",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "intel"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:peacekeeper-corps",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:intel",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:nonlethal:+8",
+              "bbttcc:effect:intel:read_tension:true",
+              "bbttcc:theme:order",
+              "bbttcc:theme:stability",
+              "bbttcc:theme:de-escalation",
+              "bbttcc:theme:investigation"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "CanZXdkMSrwSRrCt",
+            "pack": "crew-types",
+            "identifier": "crew-peacekeeper-corps-t1",
+            "hash": "9fbfb420d54e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-peacekeeper-corps-t2",
+      "name": "Crew Type: Peacekeeper Corps (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "folder": "Peacekeeper Corps",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> In Tower Trashers (Tactical Defense) scenarios, your faction's defensive structures have 25% more durability, and Demolition units are less effective.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-peacekeeper-corps-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "peacekeeper-corps",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "raid",
+              "defense"
+            ],
+            "scope": "scenario",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:peacekeeper-corps",
+              "bbttcc:tier:2",
+              "bbttcc:domain:raid",
+              "bbttcc:domain:defense",
+              "bbttcc:scope:scenario",
+              "bbttcc:when:scenario:tower_trashers",
+              "bbttcc:effect:defense:durability:+25pct",
+              "bbttcc:effect:demolition:effectiveness:-25pct",
+              "bbttcc:theme:order",
+              "bbttcc:theme:fortification",
+              "bbttcc:theme:stability",
+              "bbttcc:theme:enforcement"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "5cAJRmXpbK1yOS3D",
+            "pack": "crew-types",
+            "identifier": "crew-peacekeeper-corps-t2",
+            "hash": "187e3c622d99"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-peacekeeper-corps-t3",
+      "name": "Crew Type: Peacekeeper Corps (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "folder": "Peacekeeper Corps",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You have advantage on Charisma (Persuasion) checks made to de-escalate violence or negotiate a surrender, and on checks to grapple or restrain.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-peacekeeper-corps-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "peacekeeper-corps",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "raid",
+              "social",
+              "control"
+            ],
+            "scope": "self",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:peacekeeper-corps",
+              "bbttcc:tier:3",
+              "bbttcc:domain:raid",
+              "bbttcc:domain:social",
+              "bbttcc:domain:control",
+              "bbttcc:scope:self",
+              "bbttcc:when:action:de_escalate",
+              "bbttcc:when:action:negotiate_surrender",
+              "bbttcc:when:action:grapple",
+              "bbttcc:when:action:restrain",
+              "bbttcc:effect:check:advantage:de_escalate",
+              "bbttcc:effect:check:advantage:negotiate_surrender",
+              "bbttcc:effect:check:advantage:grapple",
+              "bbttcc:effect:check:advantage:restrain",
+              "bbttcc:theme:de-escalation",
+              "bbttcc:theme:order",
+              "bbttcc:theme:control",
+              "bbttcc:theme:restraint"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "C0iLjp8PBjMfnOgM",
+            "pack": "crew-types",
+            "identifier": "crew-peacekeeper-corps-t3",
+            "hash": "7f1aeac2c772"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-peacekeeper-corps-t4",
+      "name": "Crew Type: Peacekeeper Corps (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "folder": "Peacekeeper Corps",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled Hexes are highly stable. The OP cost to prevent rebellion in Triumphant Hexes is reduced by 2, and it is easier to shift Hexes towards Gevurah (Severity/Order).</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-peacekeeper-corps-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "peacekeeper-corps",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "hex",
+              "region",
+              "alignment"
+            ],
+            "scope": "controlled_hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:peacekeeper-corps",
+              "bbttcc:tier:4",
+              "bbttcc:domain:hex",
+              "bbttcc:domain:region",
+              "bbttcc:domain:alignment",
+              "bbttcc:scope:controlled_hex",
+              "bbttcc:when:target:controlled_hex",
+              "bbttcc:when:hex_state:triumphant",
+              "bbttcc:effect:hex_stability:high",
+              "bbttcc:effect:rebellion:cost:-2",
+              "bbttcc:effect:alignment_shift:gevurah:+easy",
+              "bbttcc:theme:order",
+              "bbttcc:theme:stability",
+              "bbttcc:theme:control",
+              "bbttcc:theme:severity"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "BD5uZaF7a60rMurQ",
+            "pack": "crew-types",
+            "identifier": "crew-peacekeeper-corps-t4",
+            "hash": "ef842d1268c6"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-storm-wardens",
+      "name": "Crew Type: Storm Wardens",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "folder": "Storm Wardens",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Storm Wardens.</em></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Nature and Religion.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Faith OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-storm-wardens"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "faith": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "storm-wardens",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "hazard",
+              "weather"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:storm-wardens",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:hazard",
+              "bbttcc:domain:weather",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:faith:+8",
+              "bbttcc:theme:weather-control",
+              "bbttcc:theme:hazard-mitigation",
+              "bbttcc:theme:environmental-authority",
+              "bbttcc:theme:storm-discipline"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "1YeZ2LpzbyIhUa8X",
+            "pack": "crew-types",
+            "identifier": "crew-storm-wardens",
+            "hash": "a05b35dae017"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-storm-wardens-t1",
+      "name": "Crew Type: Storm Wardens (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "folder": "Storm Wardens",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve learned the first law of bad weather: panic is usually deadlier than the rain.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Nature and Religion.</li><li><strong>Strategic:</strong> In hazardous weather or corrupted environmental conditions, your faction reduces travel and exposure penalties.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-storm-wardens-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "storm-wardens",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "hazard",
+              "weather"
+            ],
+            "terrains": [
+              "swamp",
+              "mire",
+              "wasteland",
+              "desert"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:storm-wardens",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:hazard",
+              "bbttcc:domain:weather",
+              "bbttcc:terrain:swamp",
+              "bbttcc:terrain:mire",
+              "bbttcc:terrain:wasteland",
+              "bbttcc:terrain:desert",
+              "bbttcc:scope:hex",
+              "bbttcc:when:hazard:weather",
+              "bbttcc:when:hazard:environmental",
+              "bbttcc:when:origin_terrain:swamp",
+              "bbttcc:when:origin_terrain:mire",
+              "bbttcc:when:origin_terrain:wasteland",
+              "bbttcc:when:origin_terrain:desert",
+              "bbttcc:effect:travel:hazard_penalty:-1step",
+              "bbttcc:effect:hazard:exposure_reduction:+1step",
+              "bbttcc:theme:weather-control",
+              "bbttcc:theme:hazard-mitigation",
+              "bbttcc:theme:storm-discipline"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "gmYnWhFhMfFVAPt4",
+            "pack": "crew-types",
+            "identifier": "crew-storm-wardens-t1",
+            "hash": "0bd3a391dac6"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-storm-wardens-t2",
+      "name": "Crew Type: Storm Wardens (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "folder": "Storm Wardens",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve stopped enduring storms and started assigning them paperwork.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Once per strategic turn, your faction can suppress, blunt, or redirect a weather-based hazard affecting a local route, hex, or operation.</li></ul><p><strong>Weather Veto</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Suppress, blunt, or redirect a weather-based hazard affecting a local route, hex, or operation.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-storm-wardens-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "storm-wardens",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "weather",
+              "hazard",
+              "pathing"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:storm-wardens",
+              "bbttcc:tier:2",
+              "bbttcc:domain:weather",
+              "bbttcc:domain:hazard",
+              "bbttcc:domain:pathing",
+              "bbttcc:scope:hex",
+              "bbttcc:when:phase:strategic_turn",
+              "bbttcc:when:hazard:weather",
+              "bbttcc:effect:weather:suppress_local:true",
+              "bbttcc:effect:hazard:redirect_local:true",
+              "bbttcc:effect:usage:per_strategic_turn:1",
+              "bbttcc:theme:weather-control",
+              "bbttcc:theme:environmental-authority",
+              "bbttcc:theme:route-protection"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "0oO8n0Mvp7v6wEi3",
+            "pack": "crew-types",
+            "identifier": "crew-storm-wardens-t2",
+            "hash": "fcf246150639"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-storm-wardens-t3",
+      "name": "Crew Type: Storm Wardens (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "folder": "Storm Wardens",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve learned to hear danger in the air before it becomes visible.</em></p><ul><li><strong>Tactical:</strong> You have advantage on checks made to predict hazardous weather, navigate storms, resist environmental contamination, or stabilize people and equipment under severe conditions.</li><li><strong>Strategic:</strong> Your faction more reliably detects incoming environmental threats and corruption-weather events.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-storm-wardens-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "storm-wardens",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "hazard",
+              "intel",
+              "weather",
+              "corruption"
+            ],
+            "scope": "self",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:storm-wardens",
+              "bbttcc:tier:3",
+              "bbttcc:domain:hazard",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:weather",
+              "bbttcc:domain:corruption",
+              "bbttcc:scope:self",
+              "bbttcc:when:action:predict_weather",
+              "bbttcc:when:action:navigate_storm",
+              "bbttcc:when:action:resist_contamination",
+              "bbttcc:when:action:stabilize_under_severe_conditions",
+              "bbttcc:effect:check:advantage:predict_weather",
+              "bbttcc:effect:check:advantage:navigate_storm",
+              "bbttcc:effect:check:advantage:resist_contamination",
+              "bbttcc:effect:check:advantage:stabilize_under_severe_conditions",
+              "bbttcc:effect:intel:incoming_hazard_detection:+1step",
+              "bbttcc:theme:storm-discipline",
+              "bbttcc:theme:hazard-forecasting",
+              "bbttcc:theme:corruption-watch"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "vDE0n97vjZssTc2a",
+            "pack": "crew-types",
+            "identifier": "crew-storm-wardens-t3",
+            "hash": "7bb854dd7fc3"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-storm-wardens-t4",
+      "name": "Crew Type: Storm Wardens (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "folder": "Storm Wardens",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You no longer survive hostile weather. You set policy for it.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled hazardous regions become significantly safer and more reliable for your faction. Environmental penalties, weather disruptions, and corruption-weather pressure are reduced across the region, while enemy operations remain exposed.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-storm-wardens-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "storm-wardens",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "region",
+              "weather",
+              "hazard",
+              "corruption"
+            ],
+            "scope": "controlled_hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:storm-wardens",
+              "bbttcc:tier:4",
+              "bbttcc:domain:region",
+              "bbttcc:domain:weather",
+              "bbttcc:domain:hazard",
+              "bbttcc:domain:corruption",
+              "bbttcc:scope:controlled_hex",
+              "bbttcc:when:target:controlled_hex",
+              "bbttcc:when:hazard:weather",
+              "bbttcc:when:hazard:environmental",
+              "bbttcc:effect:weather:regional_penalty:-major",
+              "bbttcc:effect:hazard:regional_exposure:-major",
+              "bbttcc:effect:corruption_weather:regional_pressure:-major",
+              "bbttcc:effect:enemy_operation:weather_exposure:normal",
+              "bbttcc:theme:environmental-authority",
+              "bbttcc:theme:weather-control",
+              "bbttcc:theme:hazard-mitigation",
+              "bbttcc:theme:regional-sanctuary"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "zHrCX1XvhSSyDwvY",
+            "pack": "crew-types",
+            "identifier": "crew-storm-wardens-t4",
+            "hash": "640fb4ca4603"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-survivors-militia",
+      "name": "Crew Type: Survivors / Militia",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "folder": "Survivors/Militia",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Survivors / Militia.</em></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Survival and Medicine.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Non-Lethal OP and +1 Economy OP.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-survivors-militia"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "nonlethal": 1,
+            "economy": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "survivors-militia",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "survival",
+              "recovery"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:survivors-militia",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:survival",
+              "bbttcc:domain:recovery",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:violence:+2",
+              "bbttcc:effect:op:nonlethal:+2",
+              "bbttcc:effect:op:economy:+2",
+              "bbttcc:effect:op:softpower:+2",
+              "bbttcc:theme:resilience",
+              "bbttcc:theme:hardship",
+              "bbttcc:theme:mutual-aid",
+              "bbttcc:theme:continuity"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "nywioz6KRfDEG2tR",
+            "pack": "crew-types",
+            "identifier": "crew-survivors-militia",
+            "hash": "1d548f80f48c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-survivors-militia-t1",
+      "name": "Crew Type: Survivors / Militia (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "folder": "Survivors/Militia",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>You’ve learned the first law of bad times: everyone becomes useful or everyone dies tired.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Survival and Medicine.</li><li><strong>Strategic:</strong> Your faction starts with +1 Non-Lethal OP and +1 Economy OP.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-survivors-militia-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "survivors-militia",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "survival",
+              "recovery"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:survivors-militia",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:survival",
+              "bbttcc:domain:recovery",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:violence:+2",
+              "bbttcc:effect:op:nonlethal:+2",
+              "bbttcc:effect:op:economy:+2",
+              "bbttcc:effect:op:softpower:+2",
+              "bbttcc:effect:recovery:baseline_stability:true",
+              "bbttcc:theme:resilience",
+              "bbttcc:theme:hardship",
+              "bbttcc:theme:mutual-aid",
+              "bbttcc:theme:continuity"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Mrrp0XKnx1DLl4Sw",
+            "pack": "crew-types",
+            "identifier": "crew-survivors-militia-t1",
+            "hash": "6b91c399f742"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-survivors-militia-t2",
+      "name": "Crew Type: Survivors / Militia (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "folder": "Survivors/Militia",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>You’ve moved from scraping by to teaching scarcity some manners.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During resource regeneration, your faction gains +10% additional OP regeneration.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-survivors-militia-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "survivors-militia",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "op",
+              "recovery"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:survivors-militia",
+              "bbttcc:tier:2",
+              "bbttcc:domain:op",
+              "bbttcc:domain:recovery",
+              "bbttcc:scope:faction",
+              "bbttcc:when:phase:resource_regen",
+              "bbttcc:effect:op_regen:capacity_bonus:+10pct",
+              "bbttcc:theme:resilience",
+              "bbttcc:theme:recovery",
+              "bbttcc:theme:continuity"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "lZxpgHEEDmFBnM7C",
+            "pack": "crew-types",
+            "identifier": "crew-survivors-militia-t2",
+            "hash": "31e9cb9679e2"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-survivors-militia-t3",
+      "name": "Crew Type: Survivors / Militia (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "folder": "Survivors/Militia",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>You’ve become difficult to kill, harder to scare, and annoying to outlast.</em></p><ul><li><strong>Tactical:</strong> You have advantage on saves or checks made against Stress and environmental hazards. Your hit points maximum increases by an amount equal to your level.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-survivors-militia-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "survivors-militia",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "survival",
+              "recovery",
+              "defense"
+            ],
+            "scope": "self",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:survivors-militia",
+              "bbttcc:tier:3",
+              "bbttcc:domain:survival",
+              "bbttcc:domain:recovery",
+              "bbttcc:domain:defense",
+              "bbttcc:scope:self",
+              "bbttcc:when:hazard:environmental",
+              "bbttcc:when:pressure:exhaustion",
+              "bbttcc:effect:save:advantage:exhaustion",
+              "bbttcc:effect:save:advantage:environmental_hazard",
+              "bbttcc:effect:hp_max:bonus:+level",
+              "bbttcc:theme:endurance",
+              "bbttcc:theme:hardship",
+              "bbttcc:theme:resilience"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "QcesrAhQUGNKjWgm",
+            "pack": "crew-types",
+            "identifier": "crew-survivors-militia-t3",
+            "hash": "63bfc0308169"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-survivors-militia-t4",
+      "name": "Crew Type: Survivors / Militia (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "folder": "Survivors/Militia",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>When everyone else calls it over, you call it relocation.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> If your faction loses its last controlled Hex, it does not dissolve immediately. Instead, it may reform as a Nomad faction and retain 25% of its OP reserve.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-survivors-militia-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "survivors-militia",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "collapse",
+              "recovery",
+              "faction_state"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:survivors-militia",
+              "bbttcc:tier:4",
+              "bbttcc:domain:collapse",
+              "bbttcc:domain:recovery",
+              "bbttcc:domain:faction_state",
+              "bbttcc:scope:faction",
+              "bbttcc:when:faction:last_controlled_hex_lost",
+              "bbttcc:effect:fallback:reform_as:nomad",
+              "bbttcc:effect:fallback:op_pool_pct:25",
+              "bbttcc:theme:last-stand",
+              "bbttcc:theme:continuity",
+              "bbttcc:theme:resilience",
+              "bbttcc:theme:collapse-survival"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ppkofnKRyzNx6MtK",
+            "pack": "crew-types",
+            "identifier": "crew-survivors-militia-t4",
+            "hash": "d8b1251ad689"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-verdant-stalkers",
+      "name": "Crew Type: Verdant Stalkers",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "folder": "Verdant Stalkers",
+      "system": {
+        "description": {
+          "value": "<p><em>Crew Type (BBTTCC): Verdant Stalkers.</em></p><p><strong>“If the forest sees you, you’re already late.”</strong></p><p>Verdant Stalkers move through living terrain like they were invited. They conceal routes, read pressure from broken twigs and bent moss, and make hostile wilderness feel personal.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Stealth and Survival.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Dexterity OPs.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-verdant-stalkers"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "intrigue": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "verdant-stalkers",
+            "progressionType": "level",
+            "domains": [
+              "op"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:verdant-stalkers",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:intrigue:+8",
+              "bbttcc:theme:ambush",
+              "bbttcc:theme:recon",
+              "bbttcc:theme:hidden-routes"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "OlbPKeA5xuiYD3LW",
+            "pack": "crew-types",
+            "identifier": "crew-verdant-stalkers",
+            "hash": "9dfba9804f69"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-verdant-stalkers-t1",
+      "name": "Crew Type: Verdant Stalkers (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "folder": "Verdant Stalkers",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Verdant Stalkers</strong></p><p><em>You’ve learned the first rule of green country: visibility is a choice.</em></p><ul><li><strong>Tactical:</strong> Stealth + Survival proficiency.</li><li><strong>Strategic:</strong> In Forest or Jungle hexes, encounter rolls are made twice and you choose the result. Routes may be concealed.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-verdant-stalkers-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "category": "crew",
+            "key": "verdant-stalkers",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "encounter"
+            ],
+            "terrains": [
+              "forest",
+              "jungle"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:verdant-stalkers",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:encounter",
+              "bbttcc:terrain:forest",
+              "bbttcc:terrain:jungle",
+              "bbttcc:scope:hex",
+              "bbttcc:when:origin_terrain:forest",
+              "bbttcc:when:origin_terrain:jungle",
+              "bbttcc:effect:encounter:roll_twice_choose:true",
+              "bbttcc:effect:travel:conceal_routes:true",
+              "bbttcc:theme:ambush",
+              "bbttcc:theme:recon"
+            ],
+            "progressionType": "level"
+          },
+          "category": "crew"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "MSENeApUbgbL4VQc",
+            "pack": "crew-types",
+            "identifier": "crew-verdant-stalkers-t1",
+            "hash": "8ec2e2e9ba28"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-verdant-stalkers-t2",
+      "name": "Crew Type: Verdant Stalkers (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "folder": "Verdant Stalkers",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Verdant Stalkers</strong></p><p><em>You no longer travel through the wild. You edit it.</em></p><ul><li><strong>Strategic:</strong> Raids initiated from Forest/Jungle hexes gain +1 margin. Hidden routes and safe approaches can be established.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-verdant-stalkers-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "category": "crew",
+            "key": "verdant-stalkers",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "domains": [
+              "raid",
+              "travel"
+            ],
+            "terrains": [
+              "forest",
+              "jungle"
+            ],
+            "scope": "scenario",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:verdant-stalkers",
+              "bbttcc:tier:2",
+              "bbttcc:domain:raid",
+              "bbttcc:domain:travel",
+              "bbttcc:terrain:forest",
+              "bbttcc:terrain:jungle",
+              "bbttcc:scope:scenario",
+              "bbttcc:when:action:raid_initiation",
+              "bbttcc:when:origin_terrain:forest",
+              "bbttcc:when:origin_terrain:jungle",
+              "bbttcc:effect:raid:initiation_margin:+1",
+              "bbttcc:effect:travel:reveal_hidden_route:true",
+              "bbttcc:effect:travel:safe_approach:true",
+              "bbttcc:theme:ambush",
+              "bbttcc:theme:hidden-routes"
+            ],
+            "progressionType": "level"
+          },
+          "category": "crew"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Hc2zCPrsjxocabLb",
+            "pack": "crew-types",
+            "identifier": "crew-verdant-stalkers-t2",
+            "hash": "ff91a99107e8"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-verdant-stalkers-t3",
+      "name": "Crew Type: Verdant Stalkers (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "folder": "Verdant Stalkers",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Verdant Stalkers</strong></p><p><em>You hide intent, not just presence.</em></p><ul><li><strong>Tactical:</strong> advantage on Stealth (natural terrain) and Survival (tracking/ambush).</li><li><strong>Strategic:</strong> Movement, routes, and ownership signals can be masked.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-verdant-stalkers-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "category": "crew",
+            "key": "verdant-stalkers",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "domains": [
+              "intel"
+            ],
+            "terrains": [
+              "forest",
+              "jungle"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:verdant-stalkers",
+              "bbttcc:tier:3",
+              "bbttcc:domain:intel",
+              "bbttcc:terrain:forest",
+              "bbttcc:terrain:jungle",
+              "bbttcc:scope:hex",
+              "bbttcc:effect:intel:mask_presence:true",
+              "bbttcc:effect:intel:mask_route_usage:true",
+              "bbttcc:effect:intel:mask_ownership_signals:true",
+              "bbttcc:theme:deception",
+              "bbttcc:theme:recon"
+            ],
+            "progressionType": "level"
+          },
+          "category": "crew"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "wCrUNqtvlyhRaTXr",
+            "pack": "crew-types",
+            "identifier": "crew-verdant-stalkers-t3",
+            "hash": "d21d3bec29ab"
+          }
+        }
+      }
+    },
+    {
+      "slug": "crew-verdant-stalkers-t4",
+      "name": "Crew Type: Verdant Stalkers (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "folder": "Verdant Stalkers",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Verdant Stalkers</strong></p><p><em>The wild now participates. Operationally.</em></p><ul><li><strong>Strategic:</strong> Controlled Forest/Jungle regions become hostile to invaders. Enemy movement, scouting, and first contact are degraded; ambush pressure increases.</li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "crew-verdant-stalkers-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "category": "crew",
+            "key": "verdant-stalkers",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "domains": [
+              "region",
+              "defense"
+            ],
+            "terrains": [
+              "forest",
+              "jungle"
+            ],
+            "scope": "region",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:verdant-stalkers",
+              "bbttcc:tier:4",
+              "bbttcc:domain:region",
+              "bbttcc:domain:defense",
+              "bbttcc:terrain:forest",
+              "bbttcc:terrain:jungle",
+              "bbttcc:scope:region",
+              "bbttcc:when:target:controlled_hex",
+              "bbttcc:effect:enemy_movement:reliability:-major",
+              "bbttcc:effect:enemy_scouting:reliability:-major",
+              "bbttcc:effect:defense:friction:auto",
+              "bbttcc:effect:ambush_pressure:+regional",
+              "bbttcc:effect:initiative:preservation:+regional",
+              "bbttcc:theme:territorial-control"
+            ],
+            "progressionType": "level"
+          },
+          "category": "crew"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "9FgaTPN5vRZAhKlS",
+            "pack": "crew-types",
+            "identifier": "crew-verdant-stalkers-t4",
+            "hash": "8bf4a9f3ecdb"
+          }
+        }
+      }
+    }
+  ]
+}

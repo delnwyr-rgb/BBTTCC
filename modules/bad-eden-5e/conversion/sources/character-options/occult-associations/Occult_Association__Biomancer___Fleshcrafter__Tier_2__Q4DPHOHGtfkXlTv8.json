@@ -1,0 +1,84 @@
+{
+  "name": "Occult Association: Biomancer / Fleshcrafter (Tier 2)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Biomancer</strong></p><p><strong>“Not all damage needs to land where it started.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per Scenario, reduce casualty severity for your faction by one step</li><li>Alternatively, convert a catastrophic loss into a contained loss with consequences</li></ul><p><strong>Cost:</strong> transferred damage becomes mutation, instability, or long-term degradation.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"biomT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Casualty Conversion</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scenario &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reduce casualty severity by one step, OR convert a catastrophic loss into a contained loss with consequences.</div>\n</div>",
+      "chat": ""
+    },
+    "identifier": "occult-association-biomancer-t2",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "tags": [
+          "bbttcc:tier:2",
+          "bbttcc:effect:casualty:-1-step",
+          "bbttcc:effect:convert:catastrophic->contained",
+          "bbttcc:cost:degradation"
+        ],
+        "category": "occult",
+        "key": "biomancer",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2
+      },
+      "category": "occult"
+    }
+  },
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+  "effects": [],
+  "folder": "3oMsaUpGcyqokYqu",
+  "_stats": {
+    "compendiumSource": "Item.UwI71SGZIq25uKky",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.UwI71SGZIq25uKky",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987087005,
+    "modifiedTime": 1777339606711,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Q4DPHOHGtfkXlTv8",
+  "sort": -100000,
+  "_key": "!items!Q4DPHOHGtfkXlTv8"
+}

@@ -12,6 +12,8 @@ const GUIDED_KEY = "guidedCharacterCreation";
 
 const log = (...a) => console.log("[" + MOD + "]", ...a);
 const warn = (...a) => console.warn("[" + MOD + "]", ...a);
+// bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
 
 /* ──────────────────────────────────────────────────────────────────────────
  * Aptitude-grant integrity guard — THE durable fix for the recurring
@@ -327,7 +329,7 @@ function docToPreview(doc, fallback) {
 }
 
 async function indexPackChoices(packKey) {
-  const pack = game.packs.get(packKey);
+  const pack = _pack(packKey);
   if (!pack) return [];
   const idx = await pack.getIndex({ fields: ["name", "type", "img", "system.identifier", "flags.bbttcc-character-options.option.key"] });
   const rows = idx.filter(function (e) {
@@ -353,7 +355,7 @@ async function indexPackChoices(packKey) {
 }
 
 async function loadPackDocument(key, id) {
-  const pack = game.packs.get(key);
+  const pack = _pack(key);
   if (!pack || !id) return null;
   try {
     return await pack.getDocument(id);
@@ -364,7 +366,7 @@ async function loadPackDocument(key, id) {
 
 async function findDefaultEnlightenmentChoice() {
   const packKey = PACK_KEYS.enlight;
-  const pack = game.packs.get(packKey);
+  const pack = _pack(packKey);
   if (!pack) return null;
   try {
     const idx = await pack.getIndex({ fields: ["name", "type", "img", "system.identifier", "flags.bbttcc-character-options.option.key"] });
@@ -395,7 +397,7 @@ async function findDefaultEnlightenmentChoice() {
 async function indexBBTTCCItemChoicesByType(kind) {
   const out = [];
   for (const collection of BBTTCC_ITEM_PACKS) {
-    const pack = game.packs.get(collection);
+    const pack = _pack(collection);
     if (!pack) continue;
     try {
       const meta = pack.metadata || {};

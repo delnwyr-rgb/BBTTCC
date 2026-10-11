@@ -69,6 +69,8 @@ const FACULTY_STARTING_ARRAY = [5, 4, 3, 3, 2, 2];
 // ============================================================================
 
 const isDnd = () => game.system?.id === "dnd5e";
+// bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
 const DND_ABILITIES = ["str", "dex", "con", "int", "wis", "cha"];
 const DND_ABILITY_LABELS = { str: "Strength", dex: "Dexterity", con: "Constitution", int: "Intelligence", wis: "Wisdom", cha: "Charisma" };
 const DND_STANDARD_ARRAY = [15, 14, 13, 12, 10, 8];
@@ -532,7 +534,7 @@ async function _loadPackIndex(category) {
   let foundAny = false;
 
   for (const packKey of candidates) {
-    const pack = game.packs?.get(packKey);
+    const pack = _pack(packKey);
     if (!pack) {
       triedPacks.push(`${packKey}: not registered`);
       continue;
@@ -546,7 +548,7 @@ async function _loadPackIndex(category) {
         if (processedName == null) continue;  // skipped by rules
         const norm = _normalizeOptionName(processedName);
         if (!map.has(norm)) {
-          map.set(norm, { id: entry._id, img: entry.img || "", packKey, displayName: entry.name, processedName });
+          map.set(norm, { id: entry._id, img: entry.img || "", packKey: pack.collection, displayName: entry.name, processedName });
           added++;
         }
       }
@@ -621,7 +623,7 @@ async function _loadDescription(category, optionName) {
   const cacheKey = `${category}:${entry.id}`;
   if (_SE_DOC_CACHE.has(cacheKey)) return _SE_DOC_CACHE.get(cacheKey);
 
-  const pack = game.packs.get(entry.packKey);
+  const pack = _pack(entry.packKey);
   try {
     const doc = await pack.getDocument(entry.id);
     if (!doc) return { name: optionName, img: entry.img, descriptionHtml: "<p><em>Document not found.</em></p>" };
@@ -1188,7 +1190,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
           const norm = _normalizeOptionName(name);
           const entry = idx.get(norm) || _fuzzyFindEntry(idx, norm);
           if (!entry) continue;
-          const pack = game.packs?.get(entry.packKey);
+          const pack = _pack(entry.packKey);
           const doc  = pack ? await pack.getDocument(entry.id) : null;
           if (!doc) continue;
           const desc = doc.system?.description?.value ?? "";
@@ -2111,7 +2113,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
         const norm = _normalizeOptionName(name);
         const entry = idx.get(norm) || _fuzzyFindEntry(idx, norm);
         if (!entry) { warn.push(`${cat}: no pack match for "${name}"`); continue; }
-        const pack = game.packs.get(entry.packKey);
+        const pack = _pack(entry.packKey);
         const doc  = pack ? await pack.getDocument(entry.id) : null;
         if (!doc)  { warn.push(`${cat}: failed to load doc ${entry.id}`); continue; }
         if (existingNames.has(doc.name)) {
@@ -2802,7 +2804,7 @@ Hooks.once("ready", () => {
       const candidates = Array.isArray(raw) ? raw : [raw];
       const found = [];
       for (const packKey of candidates) {
-        const pack = game.packs?.get(packKey);
+        const pack = _pack(packKey);
         if (!pack) {
           found.push({ packKey, status: "NOT REGISTERED" });
           continue;

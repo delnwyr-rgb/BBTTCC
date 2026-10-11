@@ -303,6 +303,8 @@ function resolveFactionActor(factionActorOrId) {
 // - Display/open/drag prefer the compendium entry when available.
 // -----------------------------------------------------------------
 const BBTTCC_DOCTRINE_PACK = "bbttcc-master-content.doctrines";
+// bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+const _bbttccPack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
 const __bbttccDoctrinePackCache = {
   ts: 0,
   map: null,  // Map "kind:key" -> { packId, docId, uuid, name, img }
@@ -316,7 +318,7 @@ async function _bbttccGetDoctrineIndexMap() {
       return __bbttccDoctrinePackCache.map;
     }
 
-    const pack = game.packs?.get?.(BBTTCC_DOCTRINE_PACK) || null;
+    const pack = _bbttccPack(BBTTCC_DOCTRINE_PACK);
     if (!pack) return new Map();
 
     let index = null;
@@ -336,9 +338,9 @@ async function _bbttccGetDoctrineIndexMap() {
       if (!kind || !key || !docId) continue;
 
       map.set(kind + ":" + key, {
-        packId: BBTTCC_DOCTRINE_PACK,
+        packId: pack.collection,
         docId,
-        uuid: `Compendium.${BBTTCC_DOCTRINE_PACK}.Item.${docId}`,
+        uuid: `Compendium.${pack.collection}.Item.${docId}`,
         name: r.name || "",
         img: r.img || ""
       });
@@ -3177,7 +3179,7 @@ async function _bbttccOpenDoctrineEntry(kind, key, fallbackItemUuid=null) {
   try {
     const hit = await _bbttccResolveDoctrinePackEntry(kind, key);
     if (hit && hit.packId && hit.docId) {
-      const pack = game.packs.get(hit.packId);
+      const pack = _bbttccPack(hit.packId);
       const doc = await pack.getDocument(hit.docId);
       if (doc?.sheet) {
         doc.sheet.render(true, { focus: true });

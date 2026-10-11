@@ -1,0 +1,73 @@
+{
+  "name": "Alignment: Malkuth",
+  "type": "feat",
+  "system": {
+    "source": {
+      "custom": "BBTTCC",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "description": {
+      "value": "The Kingdom - Reality that must work. +1 Economy, +1 Logistics OPs\n\nMalkuth is grounded stewardship: land, labor, roads, walls, and the actual world. It rewards hex development, infrastructure, and practical leadership that makes civilization durable.",
+      "chat": ""
+    },
+    "identifier": "alignment-malkuth",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_throne_1.png",
+  "effects": [],
+  "folder": "RAOWJYon3t34M5XY",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "sephirothic-alignments",
+      "bonuses": {
+        "economy": 1,
+        "logistics": 1
+      },
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.q53inPEbjgWtS6KS",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.ioIlSBdwpfrIgWyf",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774978150205,
+    "modifiedTime": 1775063045900,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "uczM9QF2Ccb50Rd5",
+  "sort": 700000,
+  "_key": "!items!uczM9QF2Ccb50Rd5"
+}

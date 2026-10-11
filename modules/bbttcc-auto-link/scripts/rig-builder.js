@@ -16,6 +16,8 @@
  */
 
 const MOD = "bbttcc-auto-link";
+// bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
 
 const BRACKETS = [
   { key: "personal", label: "Personal", base: 10, speed: 3, range: 8 },
@@ -1677,7 +1679,7 @@ async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
   if (!actor || !loadout) return;
   const TAG = "[bbttcc-auto-link/rig-builder/_seedLoadout]";
   const PACK_ID = "bbttcc-master-content.items";
-  const pack = game.packs?.get?.(PACK_ID);
+  const pack = _pack(PACK_ID);
   if (!pack && (typeof loadout.frame === "string" || loadout.weapons?.length || loadout.systems?.length)) {
     console.warn(TAG, `Compendium pack '${PACK_ID}' not found — only synthetic frame (if any) will be created.`);
   }

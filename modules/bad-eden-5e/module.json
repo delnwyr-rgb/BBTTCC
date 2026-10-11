@@ -2,7 +2,7 @@
   "id": "bad-eden-5e",
   "title": "Bad Eden 5E",
   "description": "Bad Eden for D&D 5E: the Flow and Artifice (points-based casting), the Flow Wolves (Theurge, Warden, Vigilant) and the Gearwright, and their powers. D&D-only content; the RFI system never loads this module.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "authors": [
     {
       "name": "David English"
@@ -150,6 +150,70 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "name": "character-archetypes",
+      "label": "Bad Eden Character Archetypes",
+      "path": "packs/character-archetypes",
+      "type": "Item",
+      "system": "dnd5e",
+      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+    },
+    {
+      "name": "crew-types",
+      "label": "Bad Eden Crew Types",
+      "path": "packs/crew-types",
+      "type": "Item",
+      "system": "dnd5e",
+      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+    },
+    {
+      "name": "enlightenment-levels",
+      "label": "Bad Eden Enlightenment Levels",
+      "path": "packs/enlightenment-levels",
+      "type": "Item",
+      "system": "dnd5e",
+      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+    },
+    {
+      "name": "occult-associations",
+      "label": "Bad Eden Occult Associations",
+      "path": "packs/occult-associations",
+      "type": "Item",
+      "system": "dnd5e",
+      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+    },
+    {
+      "name": "political-affiliations",
+      "label": "Bad Eden Political Affiliations",
+      "path": "packs/political-affiliations",
+      "type": "Item",
+      "system": "dnd5e",
+      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+    },
+    {
+      "name": "sephirothic-alignments",
+      "label": "Bad Eden Sephirothic Alignments",
+      "path": "packs/sephirothic-alignments",
+      "type": "Item",
+      "system": "dnd5e",
+      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+    },
+    {
+      "name": "doctrines",
+      "label": "Bad Eden Doctrines",
+      "path": "packs/doctrines",
+      "type": "Item",
+      "system": "dnd5e",
+      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
+    },
+    {
+      "name": "vehicles",
+      "label": "Bad Eden Rigs",
+      "path": "packs/vehicles",
+      "type": "Actor",
+      "system": "dnd5e",
+      "ownership": { "PLAYER": "OBSERVER", "ASSISTANT": "OWNER" }
     }
   ],
   "packFolders": [
@@ -165,6 +229,23 @@
         "tables",
         "gear",
         "monsters"
+      ]
+    },
+    {
+      "name": "Bad Eden 5E · RFI twins",
+      "sorting": "m",
+      "packs": [
+        "courtly-secrets",
+        "npc-callings",
+        "sparks",
+        "character-archetypes",
+        "crew-types",
+        "enlightenment-levels",
+        "occult-associations",
+        "political-affiliations",
+        "sephirothic-alignments",
+        "doctrines",
+        "vehicles"
       ]
     }
   ],

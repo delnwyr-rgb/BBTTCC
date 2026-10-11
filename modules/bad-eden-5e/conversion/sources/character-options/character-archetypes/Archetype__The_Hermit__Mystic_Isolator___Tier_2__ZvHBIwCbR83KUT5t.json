@@ -1,0 +1,80 @@
+{
+  "name": "Archetype: The Hermit (Mystic-Isolator) (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+  "system": {
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "description": {
+      "value": "<p><strong>Tier 2 (Level 5) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During meditation, retreat, hidden study, or covert preparation scenarios, the time or resource cost is reduced by 25%.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "archetype-hermit-t2",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "BBTTCC – Archetype: The Hermit (Mystic-Isolator) (Tier 2)",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 5+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "IOjnhZoMwrcOAdaa",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "hermit",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:hermit",
+          "bbttcc:expression:mystic-isolator",
+          "bbttcc:tier:2",
+          "bbttcc:prep_cost:-25%"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773893630634,
+    "modifiedTime": 1775063014612,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "ZvHBIwCbR83KUT5t",
+  "sort": 150000,
+  "_key": "!items!ZvHBIwCbR83KUT5t"
+}

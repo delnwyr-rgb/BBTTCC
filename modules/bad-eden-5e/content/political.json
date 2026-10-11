@@ -1,0 +1,565 @@
+{
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/political.json. The Political Affiliations (bbttcc-character-options.political-affiliations) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
+  "_pack": "political-affiliations",
+  "_generated": {
+    "by": "tools/convert-5e.mjs",
+    "rubric": "1.8.1",
+    "at": "2026-10-11",
+    "overridesApplied": 0
+  },
+  "items": [
+    {
+      "slug": "political-affiliation-anarchist",
+      "name": "Political Affiliation: Anarchist",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Anti-authority rebel. +2 Strength, +1 Dexterity OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-anarchist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "violence": 2,
+            "intrigue": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "orSaMEPikIfI3bM5",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-anarchist",
+            "hash": "6a84f2d267ad"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-corporate-loyalist",
+      "name": "Political Affiliation: Corporate Loyalist",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Business believer. +2 Economy, +1 Soft Power OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-corporate-loyalist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "economy": 2,
+            "softpower": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ggKmav3CTBPjxDxR",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-corporate-loyalist",
+            "hash": "3ae5ed036b42"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-democratic-socialist",
+      "name": "Political Affiliation: Democratic Socialist",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Equality advocate. +2 Diplomacy, +1 Soft Power OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-democratic-socialist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "diplomacy": 2,
+            "softpower": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "piZcOXzSJMLBfXjA",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-democratic-socialist",
+            "hash": "e8d8e9b14fe9"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-environmentalist",
+      "name": "Political Affiliation: Environmentalist",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Nature protector. +2 Soft Power, +1 Diplomacy OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-environmentalist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "softpower": 2,
+            "diplomacy": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "T3d3hxE5PItS1JoN",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-environmentalist",
+            "hash": "6c3cf2c4ceae"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-fascist",
+      "name": "Political Affiliation: Fascist",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Authoritarian nationalist. +2 Strength, +1 Non-Lethal OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-fascist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "violence": 2,
+            "nonlethal": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "KUX28iTEsltKDiBK",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-fascist",
+            "hash": "cd7cdcee5ecb"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-liberal",
+      "name": "Political Affiliation: Liberal",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Progressive reformer. +2 Diplomacy, +1 Economy OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-liberal"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "diplomacy": 2,
+            "economy": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "FMKtMWBDBF5FkbVH",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-liberal",
+            "hash": "3084f3991863"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-libertarian",
+      "name": "Political Affiliation: Libertarian",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Freedom maximizer. +2 Economy, +1 Dexterity OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-libertarian"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "economy": 2,
+            "intrigue": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "gE2ThWEw7F7o2GCi",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-libertarian",
+            "hash": "f46e5e30f01d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-monarchist",
+      "name": "Political Affiliation: Monarchist",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Royal authority supporter. +2 Diplomacy, +1 Soft Power OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-monarchist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "diplomacy": 2,
+            "softpower": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "h4gcSEH4MEx55pe1",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-monarchist",
+            "hash": "bd69df6ddaed"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-nationalist",
+      "name": "Political Affiliation: Nationalist",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Cultural supremacist. +2 Strength, +1 Diplomacy OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-nationalist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "violence": 2,
+            "diplomacy": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ytJ4W9XTb6hqUu5C",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-nationalist",
+            "hash": "0353950ad1ce"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-oligarch-militarist-coalition",
+      "name": "Political Affiliation: Oligarch/Militarist Coalition",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "A league of warlords ruled by reputation, power, and council. High capability but prone to internal conflicts.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-oligarch-militarist-coalition"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {},
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "8yNFvm02LSI8Fszq",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-oligarch-militarist-coalition",
+            "hash": "a7ef21e1aac5"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-progressive",
+      "name": "Political Affiliation: Progressive",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Social reformer. +2 Soft Power, +1 Diplomacy OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-progressive"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "softpower": 2,
+            "diplomacy": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "iQF02bsnjvr0aoY4",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-progressive",
+            "hash": "7664a8a66b81"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-reactionary",
+      "name": "Political Affiliation: Reactionary",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Traditionalist restorer. +2 Strength, +1 Soft Power OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-reactionary"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "violence": 2,
+            "softpower": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ysPaCr9KvqAIGUMZ",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-reactionary",
+            "hash": "cbe6391de39a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-technocrat",
+      "name": "Political Affiliation: Technocrat",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Science-based ruler. +2 Soft Power, +1 Economy OPs",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-technocrat"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "softpower": 2,
+            "economy": 1
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "fALS6fgZOrMWHf9W",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-technocrat",
+            "hash": "e6a1edba38c8"
+          }
+        }
+      }
+    }
+  ]
+}

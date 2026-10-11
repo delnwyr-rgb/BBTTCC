@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "The Devil",
+  "color": null,
+  "sorting": "a",
+  "_id": "zfZK3jbZA2X3MQRy",
+  "description": "",
+  "sort": 1400000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1774986687372,
+    "modifiedTime": 1774995500464,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!zfZK3jbZA2X3MQRy"
+}

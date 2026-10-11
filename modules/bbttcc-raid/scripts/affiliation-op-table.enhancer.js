@@ -154,14 +154,15 @@ function _primePackIndex(packId){
   catch (_e) { _primedPacks.delete(packId); }
 }
 Hooks.once("ready", () => {
-  try { for (const p of (game.packs || [])) if (p.documentName === "Item" && String(p.metadata?.packageName || "").startsWith("bbttcc")) _primePackIndex(p.collection); } catch (_e) {}
+  try { for (const p of (game.packs || [])) if (p.documentName === "Item" && (String(p.metadata?.packageName || "").startsWith("bbttcc") || p.metadata?.packageName === "bad-eden-5e")) _primePackIndex(p.collection); } catch (_e) {}
 });
 
 function _slotItemDoc(slot){
   try {
     if (!slot || typeof slot !== "object") return null;
     const id = slot.id;
-    const pack = slot.pack;
+    // Stored slot packs are RFI ids; bbttcc-core maps them to the bad-eden-5e twin on dnd5e (no-op on fourththing).
+    const pack = slot.pack ? (game.bbttcc?.packs?.id?.(slot.pack) ?? slot.pack) : slot.pack;
     if (!id || !pack) return null;
     _primePackIndex(pack);
     const uuid = `Compendium.${pack}.Item.${id}`;

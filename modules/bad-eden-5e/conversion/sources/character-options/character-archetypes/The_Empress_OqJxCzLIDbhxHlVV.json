@@ -1,0 +1,22 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "The Empress",
+  "color": null,
+  "sorting": "a",
+  "_id": "OqJxCzLIDbhxHlVV",
+  "description": "",
+  "sort": 800000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB",
+    "modifiedTime": 1774995492485
+  },
+  "_key": "!folders!OqJxCzLIDbhxHlVV"
+}

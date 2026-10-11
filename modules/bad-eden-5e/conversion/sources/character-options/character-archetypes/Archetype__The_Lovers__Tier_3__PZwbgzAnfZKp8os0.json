@@ -1,0 +1,81 @@
+{
+  "name": "Archetype: The Lovers (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Tier 3 — The Lovers</strong></p><ul><li><strong>Tactical:</strong> Advantage vs charm/fear near allies.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "archetype-lovers-t3",
+    "requirements": "Level 11+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "key": "lovers",
+        "tier": 3,
+        "tags": [
+          "bbttcc:lovers",
+          "bbttcc:adv_vs:charmed",
+          "bbttcc:adv_vs:frightened"
+        ],
+        "category": "archetype",
+        "progressionType": "level",
+        "levelMin": 3,
+        "levelMax": 3
+      },
+      "category": "archetype"
+    }
+  },
+  "effects": [],
+  "folder": "yQL9oYdZ12Vtohtl",
+  "_stats": {
+    "compendiumSource": "Item.blOiv2rH6MeURiDs",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.blOiv2rH6MeURiDs",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774986761329,
+    "modifiedTime": 1775063011631,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "PZwbgzAnfZKp8os0",
+  "sort": -200000,
+  "_key": "!items!PZwbgzAnfZKp8os0"
+}

@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "The Sun",
+  "color": null,
+  "sorting": "a",
+  "_id": "WkdkvtsuQtccxv6W",
+  "description": "",
+  "sort": 1000000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1774986794505,
+    "modifiedTime": 1774995500464,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!WkdkvtsuQtccxv6W"
+}

@@ -1,0 +1,81 @@
+{
+  "name": "Archetype: The Lovers (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Tier 4 — The Lovers</strong></p><ul><li><strong>Strategic:</strong> −1 coordination penalty, coalition rolls gain Advantage.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "archetype-lovers-t4",
+    "requirements": "Level 17+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "key": "lovers",
+        "tier": 4,
+        "tags": [
+          "bbttcc:lovers",
+          "bbttcc:coordination_penalty:-1",
+          "bbttcc:coalition_advantage"
+        ],
+        "category": "archetype",
+        "progressionType": "level",
+        "levelMin": 4,
+        "levelMax": 4
+      },
+      "category": "archetype"
+    }
+  },
+  "effects": [],
+  "folder": "yQL9oYdZ12Vtohtl",
+  "_stats": {
+    "compendiumSource": "Item.kJxtES4IvL2EuBVc",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.kJxtES4IvL2EuBVc",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774986761329,
+    "modifiedTime": 1775063013403,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "YS29e2SkiCjpa6mB",
+  "sort": -150000,
+  "_key": "!items!YS29e2SkiCjpa6mB"
+}

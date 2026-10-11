@@ -17,6 +17,8 @@ const MOD = "bbttcc-auto-link";
 const CALLINGS_PACK = "bbttcc-character-options.npc-callings";
 const ANCESTRIES_PACK = "bbttcc-master-content.ancestries";
 const BRIDGE_PATH = "systems/fourththing/bbttcc-bridge.js";
+// bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
 
 /* Ancestry + heritage enumeration mirrors the steward sheet's indexers
  * (ftIndexItemPackByType / ftIndexHeritagePack in bbttcc-bridge.js — not
@@ -30,7 +32,7 @@ const _normFam = (s) => String(s ?? "").toLowerCase().replace(/-/g, "_");
 const CROSS_CUTTING_HERITAGE_FAMILIES = new Set(["sephirotic"]);
 
 async function _ancestryIndex() {
-  const pack = game.packs.get(ANCESTRIES_PACK);
+  const pack = _pack(ANCESTRIES_PACK);
   if (!pack) return [];
   try {
     const idx = await pack.getIndex({ fields: ["name", "type", "system.identifier", "flags.bbttcc.family", "flags.bbttcc.ancestryKey"] });
@@ -53,7 +55,7 @@ async function _ancestryIndex() {
 }
 
 async function _heritageIndex() {
-  const pack = game.packs.get(ANCESTRIES_PACK);
+  const pack = _pack(ANCESTRIES_PACK);
   if (!pack) return [];
   try {
     const idx = await pack.getIndex({ fields: ["name", "type", "system.identifier", "flags.bbttcc.kind", "flags.bbttcc.family"] });
@@ -90,7 +92,7 @@ async function _heritageIndex() {
 }
 
 async function _callingOptions() {
-  const pack = (game.bbttcc?.packs?.get?.(CALLINGS_PACK) ?? game.packs.get(CALLINGS_PACK));
+  const pack = _pack(CALLINGS_PACK);
   if (!pack) return null;
   try {
     const index = await pack.getIndex({ fields: ["type"] });
@@ -108,7 +110,7 @@ async function _callingOptions() {
  * at or below the NPC's tier, and the aptitude kit (signature rank = tier,
  * secondary = tier − 1) read from the class item's flags. */
 async function _grantCalling(actor, callingId, tier) {
-  const pack = (game.bbttcc?.packs?.get?.(CALLINGS_PACK) ?? game.packs.get(CALLINGS_PACK));
+  const pack = _pack(CALLINGS_PACK);
   if (!pack) return;
   const classDoc = await pack.getDocument(callingId);
   const calling = classDoc?.flags?.fourththing?.calling;
@@ -711,7 +713,7 @@ function _echoBoonItemData({ family, kind, tier, stewardName, entryName, memberN
 }
 
 async function _echoGrantGear(actor, callingKey, tier) {
-  const pack = game.packs.get(ITEMS_PACK);
+  const pack = _pack(ITEMS_PACK);
   if (!pack) { console.warn(`[${MOD}/echo-mint] items pack ${ITEMS_PACK} missing — no gear granted`); return []; }
   const kit = (ECHO_GEAR_KITS[callingKey]?.[tier] ?? []).concat(ECHO_GEAR_ALWAYS);
   if (!kit.length) return [];
@@ -728,7 +730,7 @@ async function _echoGrantGear(actor, callingKey, tier) {
 }
 
 async function _echoCallingClassId(callingKey) {
-  const pack = (game.bbttcc?.packs?.get?.(CALLINGS_PACK) ?? game.packs.get(CALLINGS_PACK));
+  const pack = _pack(CALLINGS_PACK);
   if (!pack) return null;
   const index = await pack.getIndex({ fields: ["type", "flags.fourththing.calling"] });
   const entry = index.find(e => e.type === "class"
@@ -929,7 +931,7 @@ export async function mintEchoMember(opts = {}) {
   let portrait = String(member.portrait ?? "").trim();
   if (!portrait && ancestryId) {
     try {
-      const img = String(game.packs.get(ANCESTRIES_PACK)?.index?.get?.(ancestryId)?.img ?? "");
+      const img = String(_pack(ANCESTRIES_PACK)?.index?.get?.(ancestryId)?.img ?? "");
       if (img && !img.startsWith("icons/") && !img.includes("mystery-man")) portrait = img;
     } catch (_) {}
   }

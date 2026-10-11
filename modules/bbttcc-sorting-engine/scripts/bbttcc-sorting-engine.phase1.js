@@ -589,6 +589,9 @@
 
   function getPackByKey(key) {
     try {
+      // bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+      var packs = game.bbttcc && game.bbttcc.packs;
+      if (packs && typeof packs.get === "function") return packs.get(key);
       return game.packs.get(key);
     } catch (_err) {
       return null;

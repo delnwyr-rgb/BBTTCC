@@ -1,0 +1,270 @@
+{
+  "id": "roll-for-initiation-bad-eden",
+  "title": "Roll For Initiation – Bad Eden",
+  "description": "<p><strong>Bad Eden</strong>, the Roll For Initiation campaign engine, as one install: enable this module and every part of Bad Eden (factions, territory, raids, travel, the Director, Tikkun, the Mal voice, the content packs) is pulled in with it. Plays on the Roll For Initiation system (<code>fourththing</code>) and, with the Bad Eden 5E parts, on D&amp;D 5E (<code>dnd5e</code> 6+).</p>",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "Shattered Lens Studios"
+    }
+  ],
+  "esmodules": [
+    "scripts/module.js"
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "fourththing",
+        "type": "system",
+        "compatibility": {}
+      },
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "6.0.0"
+        }
+      }
+    ],
+    "requires": [
+      {
+        "id": "bbttcc-aae",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.0.0"
+        }
+      },
+      {
+        "id": "bbttcc-auto-link",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.8.2"
+        }
+      },
+      {
+        "id": "bbttcc-banks",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.1.0"
+        }
+      },
+      {
+        "id": "bbttcc-campaign",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.0.1"
+        }
+      },
+      {
+        "id": "bbttcc-character-options",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.2.0"
+        }
+      },
+      {
+        "id": "bbttcc-core",
+        "type": "module",
+        "compatibility": {
+          "minimum": "13.1.17"
+        }
+      },
+      {
+        "id": "bbttcc-encounters",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.0.0"
+        }
+      },
+      {
+        "id": "bbttcc-facility-console",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.0.0"
+        }
+      },
+      {
+        "id": "bbttcc-factions",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.3.17"
+        }
+      },
+      {
+        "id": "bbttcc-fx-integration",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.1.0"
+        }
+      },
+      {
+        "id": "bbttcc-mal-voice",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.1.0"
+        }
+      },
+      {
+        "id": "bbttcc-market",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.2.2"
+        }
+      },
+      {
+        "id": "bbttcc-master-content",
+        "type": "module",
+        "compatibility": {
+          "minimum": "13.1.16"
+        }
+      },
+      {
+        "id": "bbttcc-radiation",
+        "type": "module",
+        "compatibility": {
+          "minimum": "13.1.16"
+        }
+      },
+      {
+        "id": "bbttcc-raid",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.3.14.5"
+        }
+      },
+      {
+        "id": "bbttcc-sorting-engine",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.0.0"
+        }
+      },
+      {
+        "id": "bbttcc-structures",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.1.2"
+        }
+      },
+      {
+        "id": "bbttcc-territory",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.3.20"
+        }
+      },
+      {
+        "id": "bbttcc-tikkun",
+        "type": "module",
+        "compatibility": {
+          "minimum": "13.1.16"
+        }
+      },
+      {
+        "id": "bbttcc-travel",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.4.0"
+        }
+      },
+      {
+        "id": "bbttcc-world",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.1.0"
+        }
+      }
+    ],
+    "recommends": [
+      {
+        "id": "bad-eden-5e",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.4.0"
+        },
+        "reason": "Bad Eden 5E (dnd5e) only"
+      },
+      {
+        "id": "bbttcc-epic",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.1.0"
+        },
+        "reason": "Roll For Initiation (fourththing) only"
+      },
+      {
+        "id": "bbttcc-onboarding",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.4.0"
+        },
+        "reason": "Roll For Initiation (fourththing) only"
+      },
+      {
+        "id": "dnd5e-table-kit",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.0.0"
+        },
+        "reason": "Bad Eden 5E (dnd5e) only"
+      },
+      {
+        "id": "surge-powers",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.2.0"
+        },
+        "reason": "Bad Eden 5E (dnd5e) only"
+      }
+    ]
+  },
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "",
+  "download": "",
+  "socket": false,
+  "flags": {
+    "roll-for-initiation-bad-eden": {
+      "parts": [
+        "bad-eden-5e",
+        "bbttcc-aae",
+        "bbttcc-auto-link",
+        "bbttcc-banks",
+        "bbttcc-campaign",
+        "bbttcc-character-options",
+        "bbttcc-core",
+        "bbttcc-encounters",
+        "bbttcc-epic",
+        "bbttcc-facility-console",
+        "bbttcc-factions",
+        "bbttcc-fx-integration",
+        "bbttcc-mal-voice",
+        "bbttcc-market",
+        "bbttcc-master-content",
+        "bbttcc-onboarding",
+        "bbttcc-radiation",
+        "bbttcc-raid",
+        "bbttcc-sorting-engine",
+        "bbttcc-structures",
+        "bbttcc-territory",
+        "bbttcc-tikkun",
+        "bbttcc-travel",
+        "bbttcc-world",
+        "dnd5e-table-kit",
+        "surge-powers"
+      ],
+      "rfiOnly": [
+        "bbttcc-epic",
+        "bbttcc-onboarding"
+      ],
+      "dnd5eOnly": [
+        "bad-eden-5e",
+        "dnd5e-table-kit",
+        "surge-powers"
+      ]
+    }
+  }
+}

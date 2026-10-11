@@ -12,6 +12,8 @@ const warn = (...a) => console.warn(`[${MOD}]`, ...a);
 const PACK_ARCHETYPES = "bbttcc-character-options.character-archetypes";
 const PACK_CREWTYPES  = "bbttcc-character-options.crew-types";
 const PACK_OCCULT     = "bbttcc-character-options.occult-associations";
+// bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
 
 // OP buckets
 const OP_KEYS = [
@@ -489,7 +491,7 @@ async function resolveArchetypeOptionGeneric(actor, identity) {
   const packKey = slot.pack || PACK_ARCHETYPES;
 
   try {
-    const pack = game.packs.get(packKey);
+    const pack = _pack(packKey);
     if (!pack) {
       warn("resolveArchetypeOptionGeneric — pack not found", packKey);
       return {
@@ -572,7 +574,7 @@ async function loadArchetypeTierDoc(packKey, identifierStem, displayName, tier) 
   const expectedIdentifier = buildTierIdentifier("archetype", identifierStem, tier);
   const expectedNames = buildTierNameVariants("Archetype", displayName, tier);
 
-  const pack = game.packs.get(packKey || PACK_ARCHETYPES);
+  const pack = _pack(packKey || PACK_ARCHETYPES);
   if (!pack) {
     warn("TierEngine[Archetype] — pack not found", packKey);
     return null;
@@ -730,7 +732,7 @@ async function resolveCrewOptionGeneric(actor, identity) {
   const packKey = slot.pack || PACK_CREWTYPES;
 
   try {
-    const pack = game.packs.get(packKey);
+    const pack = _pack(packKey);
     if (!pack) {
       warn("resolveCrewOptionGeneric — pack not found", packKey);
       return {
@@ -813,7 +815,7 @@ async function loadCrewTierDoc(packKey, identifierStem, displayName, tier) {
   const expectedIdentifier = buildTierIdentifier("crew", identifierStem, tier);
   const expectedNames = buildTierNameVariants("Crew Type", displayName, tier);
 
-  const pack = game.packs.get(packKey || PACK_CREWTYPES);
+  const pack = _pack(packKey || PACK_CREWTYPES);
   if (!pack) {
     warn("TierEngine[Crew] — pack not found", packKey);
     return null;
@@ -971,7 +973,7 @@ async function resolveOccultOptionGeneric(actor, identity) {
   const packKey = slot.pack || PACK_OCCULT;
 
   try {
-    const pack = game.packs.get(packKey);
+    const pack = _pack(packKey);
     if (!pack) {
       warn("resolveOccultOptionGeneric — pack not found", packKey);
       return {
@@ -1054,7 +1056,7 @@ async function loadOccultTierDoc(packKey, identifierStem, displayName, tier) {
   const expectedIdentifier = buildTierIdentifier("occult", identifierStem, tier);
   const expectedNames = buildTierNameVariants("Occult Association", displayName, tier);
 
-  const pack = game.packs.get(packKey || PACK_OCCULT);
+  const pack = _pack(packKey || PACK_OCCULT);
   if (!pack) {
     warn("TierEngine[Occult] — pack not found", packKey);
     return null;

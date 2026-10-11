@@ -104,3 +104,7 @@ bad-eden-5e/packs/
 
 # macOS AppleDouble resource forks (created on non-HFS volumes)
 **/._*
+
+# the front-door module (2026-10-11): one install that requires every Bad Eden part
+!roll-for-initiation-bad-eden/
+!roll-for-initiation-bad-eden/**

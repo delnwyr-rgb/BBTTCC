@@ -1,0 +1,408 @@
+{
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/alignments.json. The Sephirothic Alignments (bbttcc-character-options.sephirothic-alignments) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
+  "_pack": "sephirothic-alignments",
+  "_generated": {
+    "by": "tools/convert-5e.mjs",
+    "rubric": "1.8.1",
+    "at": "2026-10-11",
+    "overridesApplied": 0
+  },
+  "items": [
+    {
+      "slug": "alignment-binah",
+      "name": "Alignment: Binah",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "folder": "Sephirotic Alignments",
+      "system": {
+        "description": {
+          "value": "Understanding - Structure gives shape to power. +1 Dexterity, +1 Logistics OPs\n\nBinah is discernment, containment, and the discipline to make dangerous ideas survivable. It rewards planning, governance, and strategic control that turns chaos into infrastructure.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "alignment-binah"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "logistics": 1,
+            "intrigue": 1
+          },
+          "option": {}
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "CsOtf4GflVPZePHJ",
+            "pack": "sephirothic-alignments",
+            "identifier": "alignment-binah",
+            "hash": "bad07cfdca11"
+          }
+        }
+      }
+    },
+    {
+      "slug": "alignment-chesed",
+      "name": "Alignment: Chesed",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dwarf.png",
+      "folder": "Sephirotic Alignments",
+      "system": {
+        "description": {
+          "value": "Mercy - Expansion without fear. +1 Diplomacy, +1 Culture OPs\n\nChesed creates room for others to live, recover, and belong. It rewards community-building, morale recovery, and factions that grow stronger by sheltering rather than merely surviving.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "alignment-chesed"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "diplomacy": 1,
+            "culture": 1
+          },
+          "option": {}
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "xUnl5SPUxJmY3241",
+            "pack": "sephirothic-alignments",
+            "identifier": "alignment-chesed",
+            "hash": "6e229fb132c6"
+          }
+        }
+      }
+    },
+    {
+      "slug": "alignment-chokmah",
+      "name": "Alignment: Chokmah",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_staff.png",
+      "folder": "Sephirotic Alignments",
+      "system": {
+        "description": {
+          "value": "Wisdom - Creative energy. +1 Strength, +1 Soft Power OPs\n\nCreation arrives all at once. Chokmah rewards decisive action, inspired leadership, and bold openers that turn possibility into momentum before anyone else is ready.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "alignment-chokmah"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "softpower": 1,
+            "violence": 1
+          },
+          "option": {}
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "SO8CCo1JqxifZ2c0",
+            "pack": "sephirothic-alignments",
+            "identifier": "alignment-chokmah",
+            "hash": "bfdd128f95a7"
+          }
+        }
+      }
+    },
+    {
+      "slug": "alignment-geburah",
+      "name": "Alignment: Geburah",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_1.png",
+      "folder": "Sephirotic Alignments",
+      "system": {
+        "description": {
+          "value": "Judgment - Necessary force. +1 Strength, +1 Logistics OPs\n\nGeburah draws the line. It rewards discipline, enforcement, and decisive action against fortified problems, but always risks becoming cruelty if severity outruns wisdom.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "alignment-geburah"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "violence": 1,
+            "logistics": 1
+          },
+          "option": {}
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "iMPSWMqenjUBpnMd",
+            "pack": "sephirothic-alignments",
+            "identifier": "alignment-geburah",
+            "hash": "0a7ac1963f28"
+          }
+        }
+      }
+    },
+    {
+      "slug": "alignment-hod",
+      "name": "Alignment: Hod",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_1.png",
+      "folder": "Sephirotic Alignments",
+      "system": {
+        "description": {
+          "value": "Splendor - Meaning made visible. +1 Dexterity, +1 Diplomacy OPs\n\nHod renders truth through language, symbol, and presentation. It rewards courtly play, ritual precision, and the ability to turn naming, framing, and interpretation into strategic force.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "alignment-hod"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "intrigue": 1,
+            "diplomacy": 1
+          },
+          "option": {}
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "aYGsfvm8EuKcBjLP",
+            "pack": "sephirothic-alignments",
+            "identifier": "alignment-hod",
+            "hash": "69e994f4165d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "alignment-kether",
+      "name": "Alignment: Kether",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-1.png",
+      "folder": "Sephirotic Alignments",
+      "system": {
+        "description": {
+          "value": "The Crown - Divine unity. +1 Soft Power, +1 Diplomacy OPs\n\nYou are called upward toward unity, legitimacy, and the better shape of the world. Kether rewards coalition-building, visionary leadership, and factions that hold together under pressure.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "alignment-kether"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "diplomacy": 1,
+            "softpower": 1
+          },
+          "option": {}
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Yb7rLajuzX3HWtmx",
+            "pack": "sephirothic-alignments",
+            "identifier": "alignment-kether",
+            "hash": "6b8ac9d8b08d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "alignment-malkuth",
+      "name": "Alignment: Malkuth",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_throne_1.png",
+      "folder": "Sephirotic Alignments",
+      "system": {
+        "description": {
+          "value": "The Kingdom - Reality that must work. +1 Economy, +1 Logistics OPs\n\nMalkuth is grounded stewardship: land, labor, roads, walls, and the actual world. It rewards hex development, infrastructure, and practical leadership that makes civilization durable.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "alignment-malkuth"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "economy": 1,
+            "logistics": 1
+          },
+          "option": {}
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "uczM9QF2Ccb50Rd5",
+            "pack": "sephirothic-alignments",
+            "identifier": "alignment-malkuth",
+            "hash": "01f4f24d71b1"
+          }
+        }
+      }
+    },
+    {
+      "slug": "alignment-netzach",
+      "name": "Alignment: Netzach",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heart_1.png",
+      "folder": "Sephirotic Alignments",
+      "system": {
+        "description": {
+          "value": "Victory - Endurance becomes momentum. +1 Strength, +1 Culture OPs\n\nNetzach is passion that refuses extinction. It rewards morale, persistence, and the emotional drive to keep moving when a lesser faction would break or quietly go home.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "alignment-netzach"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "culture": 1,
+            "violence": 1
+          },
+          "option": {}
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "kkYWhpM2uCB1zi6O",
+            "pack": "sephirothic-alignments",
+            "identifier": "alignment-netzach",
+            "hash": "e78792057ffa"
+          }
+        }
+      }
+    },
+    {
+      "slug": "alignment-tiphareth",
+      "name": "Alignment: Tiphareth",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+      "folder": "Sephirotic Alignments",
+      "system": {
+        "description": {
+          "value": "Beauty - Balance that costs something. +1 Diplomacy, +1 Soft Power OPs\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "alignment-tiphareth"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "diplomacy": 1,
+            "softpower": 1
+          },
+          "option": {}
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ammb5TPGcVEbjCXb",
+            "pack": "sephirothic-alignments",
+            "identifier": "alignment-tiphareth",
+            "hash": "3faf0d44a67f"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "name": "Occult Association: Kabbalist (Tier 4)",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "<p><strong>Tier 4 — Kabbalist</strong></p><p><strong>“You don’t cleanse a Hex. You convince it to remember what it was meant to be.”</strong></p><p>At Tier 4, you are no longer merely a reader of alignment. You are a <em>shifter</em>. When your faction pushes a Hex toward a Sephirah, you can feel where the resistance is and where to apply pressure so the world gives way instead of breaking.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Alignment Authority:</strong> when your faction attempts to shift a Hex’s alignment toward a Sephirah, choose one:</li><ul><li>gain <strong>Advantage</strong> on the Opposed Strategic Roll, <em>or</em></li><li>reduce the OP cost of the shift by <strong>10%</strong> (minimum reduction 1 OP when spending 10+ OP; otherwise GM adjudicates)</li></ul></ul><p><em>The Tree hears you more clearly than it hears most people.</em></p><p><strong>Cost:</strong> forced alignment is never free. Expect backlash, revealed contradictions, metaphysical strain, or nearby instability when you make the world remember too quickly.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 17+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-kabbalist-t4",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "kabbalist",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:kabbalist",
+          "bbttcc:tier:4",
+          "bbttcc:domain:tikkun",
+          "bbttcc:domain:alignment-shift",
+          "bbttcc:domain:hex",
+          "bbttcc:scope:hex",
+          "bbttcc:scope:faction",
+          "bbttcc:when:hex_alignment_shift:sephirah",
+          "bbttcc:effect:alignment_shift:advantage",
+          "bbttcc:effect:alignment_shift:op_cost:-10%",
+          "bbttcc:resonance:tree",
+          "bbttcc:resonance:binah",
+          "bbttcc:drift:order",
+          "bbttcc:cost:backlash",
+          "bbttcc:cost:strain",
+          "bbttcc:cost:local-instability",
+          "bbttcc:theme:sephirothic-restoration",
+          "bbttcc:theme:world-remembrance"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+  "folder": "KAgSLTue8mMAy0rF",
+  "_stats": {
+    "compendiumSource": "Item.4FzEyZdIHSuOxrPZ",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.4FzEyZdIHSuOxrPZ",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774987095107,
+    "modifiedTime": 1775063040940,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "mEJpkAW9VZWVfunU",
+  "sort": -150000,
+  "_key": "!items!mEJpkAW9VZWVfunU"
+}

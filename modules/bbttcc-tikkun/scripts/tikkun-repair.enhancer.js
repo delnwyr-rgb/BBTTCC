@@ -327,6 +327,10 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     const sys      = contributor.system?.system ?? contributor.system ?? {};
     const ritSkill = dice ? dice.skillBonus(contributor, "ritual", "soul")
       : Number(sys.skills?.ritual?.value ?? 0) + Number(sys.attributes?.soul?.value ?? 2);
+    // The card's breakdown — RFI = the canon pair (ritual rank + soul), dnd5e = the one skill total. (The 2026-10-08
+    // dice split dropped ritRank/soulAttr but the card kept reading them → ReferenceError AFTER the spend; 2026-10-11.)
+    const breakdown = dice?.isRFI?.() === false ? [["ritual skill", ritSkill]]
+      : [["ritual", Number(sys.skills?.ritual?.value ?? 0)], ["soul", Number(sys.attributes?.soul?.value ?? 2)]];
     const totalBonus = ritSkill + extraOp + opNeed; // OP cost itself contributes too
     const formula  = `${dice?.checkFormula?.() ?? (game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${totalBonus}`;   // the check die
     const roll = await new Roll(formula).roll();
@@ -407,8 +411,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
         <p style="margin:0.2rem 0;font-size:0.82rem">${contributor.name} performs the repair ritual on <b>${ownerActor.name}</b>'s ${sephLabel ? `<i>${sephLabel}</i> ` : ""}spark.</p>
         <div class="ft-roll-formula">
           <span class="ft-fp" title="check die">${(roll.terms[0]?.results ?? []).map(r => r.result).join(" + ")}</span>
-          <span class="ft-fp" title="ritual">+${ritRank}</span>
-          <span class="ft-fp" title="soul">+${soulAttr}</span>
+          ${breakdown.map(([t, v]) => `<span class="ft-fp" title="${t}">+${v}</span>`).join("\n          ")}
           ${extraOp ? `<span class="ft-fp" title="extra ${opPool} spend (${extraOp * mpo} marks)">+${extraOp}</span>` : ""}
           <span class="ft-fp" title="${opPool} cost (${opNeed * mpo} marks)">+${opNeed}</span>
         </div>

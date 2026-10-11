@@ -160,7 +160,16 @@ const types = {
 const PACK_TWINS = {
   "bbttcc-master-content.courtly-secrets": "bad-eden-5e.courtly-secrets",
   "bbttcc-character-options.npc-callings": "bad-eden-5e.npc-callings",
-  "bbttcc-tikkun.sparks": "bad-eden-5e.sparks"
+  "bbttcc-tikkun.sparks": "bad-eden-5e.sparks",
+  // 2026-10-11: the character-options pickers, the doctrine compendium and the faction rigs (a D&D world on Ember)
+  "bbttcc-character-options.character-archetypes": "bad-eden-5e.character-archetypes",
+  "bbttcc-character-options.crew-types": "bad-eden-5e.crew-types",
+  "bbttcc-character-options.enlightenment-levels": "bad-eden-5e.enlightenment-levels",
+  "bbttcc-character-options.occult-associations": "bad-eden-5e.occult-associations",
+  "bbttcc-character-options.political-affiliations": "bad-eden-5e.political-affiliations",
+  "bbttcc-character-options.sephirothic-alignments": "bad-eden-5e.sephirothic-alignments",
+  "bbttcc-master-content.doctrines": "bad-eden-5e.doctrines",
+  "bbttcc-master-content.vehicles": "bad-eden-5e.vehicles"
 };
 const packs = {
   id: (rfiId) => (isRFI() ? rfiId : (game.packs?.get(rfiId) ? rfiId : (PACK_TWINS[rfiId] ?? rfiId))),

@@ -296,6 +296,8 @@
   // to the hex via the raid battle-scenes API (Scenes panel + Holdings deploy
   // come free), and drop building tokens on it.
   const SCENE_PACK = "bbttcc-master-content.scenes";
+  // bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+  const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
   const SCENE_TEMPLATE_RX = /^hex_flooded_town_\d+$|^liberated town$/i;
 
   function settlementScene(settlement) {
@@ -311,7 +313,7 @@
   }
 
   async function templateSceneChoices() {
-    const pack = game.packs?.get(SCENE_PACK);
+    const pack = _pack(SCENE_PACK);
     if (!pack) return [];
     const index = await pack.getIndex();
     return index.filter(e => SCENE_TEMPLATE_RX.test(String(e.name || "").trim()))
@@ -354,7 +356,7 @@
     if (!settlement) return { ok: false, error: "Build something first — the town needs at least one building." };
     if (settlementScene(settlement)) return { ok: false, error: "This settlement already has a town map." };
 
-    const pack = game.packs?.get(SCENE_PACK);
+    const pack = _pack(SCENE_PACK);
     if (!pack) return { ok: false, error: `Scenes pack ${SCENE_PACK} not found.` };
     const src = await pack.getDocument(templateId);
     if (!src) return { ok: false, error: "Template scene not found in pack." };

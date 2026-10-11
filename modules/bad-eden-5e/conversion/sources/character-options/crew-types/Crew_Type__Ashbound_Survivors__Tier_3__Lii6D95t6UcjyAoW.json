@@ -1,0 +1,111 @@
+{
+  "name": "Crew Type: Ashbound Survivors (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Ashbound Survivors</strong></p><p><em>You’ve learned to make the bad route pay for itself.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to endure environmental strain, locate shelter, scavenge sustenance, or navigate by ruin-sign, stars, or ashfall.</li><li><strong>Strategic:</strong> Failed or costly travel through harsh terrain is less likely to become pure loss; wasteland movement can generate trace gain, salvage, or reduced attrition instead.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-ashbound-survivors-t3",
+    "requirements": "Level 11+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "category": "crew",
+        "key": "ashbound-survivors",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "domains": [
+          "travel",
+          "intel",
+          "encounter"
+        ],
+        "terrains": [
+          "desert",
+          "wasteland",
+          "ash-wastes"
+        ],
+        "scope": "hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:ashbound-survivors",
+          "bbttcc:tier:3",
+          "bbttcc:domain:travel",
+          "bbttcc:domain:intel",
+          "bbttcc:domain:encounter",
+          "bbttcc:terrain:desert",
+          "bbttcc:terrain:ash-wastes",
+          "bbttcc:terrain:wasteland",
+          "bbttcc:scope:hex",
+          "bbttcc:when:origin_terrain:desert",
+          "bbttcc:when:origin_terrain:ash-wastes",
+          "bbttcc:when:origin_terrain:wasteland",
+          "bbttcc:when:travel:failure_or_costly_result",
+          "bbttcc:effect:travel:loss_to_trace_gain:true",
+          "bbttcc:effect:travel:attrition_reduction:+1step",
+          "bbttcc:effect:encounter:scavenge_window:open",
+          "bbttcc:theme:endurance",
+          "bbttcc:theme:salvage",
+          "bbttcc:theme:hardship-conversion"
+        ],
+        "progressionType": "level"
+      },
+      "category": "crew"
+    }
+  },
+  "folder": "EV3LjQRYeE2vKgof",
+  "_stats": {
+    "compendiumSource": "Item.i3x317qgDYERoWok",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.i3x317qgDYERoWok",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986941276,
+    "modifiedTime": 1777515322401,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Lii6D95t6UcjyAoW",
+  "sort": -200000,
+  "_key": "!items!Lii6D95t6UcjyAoW"
+}

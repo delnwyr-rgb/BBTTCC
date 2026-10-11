@@ -47,6 +47,8 @@ import "./bestiary-bounty.js";
 const MOD = "bbttcc-auto-link";
 const PACK_ID = "bbttcc-master-content.npcs";
 const ROOT_FOLDER = "Bad Eden Monsters";
+// bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
 
 /* ──────────────────────────────────────────────────────────────────────────
  *  CANON TABLES (envelopes match seed-bestiary + backfill-bestiary-lineage)
@@ -394,7 +396,7 @@ async function loadExemplarIndex({ force = false } = {}) {
   const rows = [];
   const F = "flags.fourththing.rfi.actor";
   try {
-    const pack = game.packs.get(PACK_ID);
+    const pack = _pack(PACK_ID);
     if (pack) {
       const index = await pack.getIndex({ fields: [`${F}.lineage`, `${F}.subLineage`, `${F}.tier`, `${F}.bracket`, `${F}.exemplar`, `${F}.title`, "system.role", "img", "folder"] });
       for (const e of index) {
@@ -424,7 +426,7 @@ function listExemplars(lineage) {
  * of its lineage. Unlocks / re-locks the pack around the write. */
 async function saveAsExemplar(actor) {
   if (!game.user.isGM) throw new Error("GM only.");
-  const pack = game.packs.get(PACK_ID);
+  const pack = _pack(PACK_ID);
   if (!pack) throw new Error(`Pack ${PACK_ID} not found.`);
   const wasLocked = pack.locked;
   if (wasLocked) await pack.configure({ locked: false });

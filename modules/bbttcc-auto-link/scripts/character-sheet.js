@@ -44,6 +44,8 @@ const MOD  = "bbttcc-auto-link";
 const AAE_SCOPE = "bbttcc-aae";
 const LOG  = (...a) => console.log(`[${MOD}]`, ...a);
 const WARN = (...a) => console.warn(`[${MOD}]`, ...a);
+// bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
 
 /* Bad Eden TAB HEALER (multi-sheet) */
 /* Bad Eden TAB HEALER (multi-sheet)
@@ -719,7 +721,7 @@ let _bbttccResourceItemIndexCache = null;
 async function _bbttccGetResourceItemIndex({ force = false } = {}) {
   if (_bbttccResourceItemIndexCache && !force) return _bbttccResourceItemIndexCache;
   try {
-    const pack = game.packs?.get?.(BBTTCC_RESOURCE_PACK);
+    const pack = _pack(BBTTCC_RESOURCE_PACK);
     if (!pack) {
       _bbttccResourceItemIndexCache = new Map();
       return _bbttccResourceItemIndexCache;
@@ -2278,7 +2280,7 @@ const IDENTITY_SLOTS = {
 };
 
 async function indexPack(key, extraTypes) {
-  const pack = game.packs.get(key);
+  const pack = _pack(key);
   if (!pack) return [];
   const idx = await pack.getIndex({ fields: ["name", "type"] });
 
@@ -3601,7 +3603,7 @@ async function applyIdentitySlotChange(actor, slotKey, newKey) {
     return patch;
   }
 
-  const p = game.packs.get(pack);
+  const p = _pack(pack);
   if (!p) {
     WARN("applyIdentitySlotChange — pack not found", slotKey, pack);
     patch[slotKey] = { key: newKey, id: newKey, pack, category: categories[0] };
@@ -3725,7 +3727,7 @@ async function reconcileIdentityFromSection(actor, section) {
       continue;
     }
 
-    const p = game.packs.get(cfg.pack);
+    const p = _pack(cfg.pack);
     if (!p) {
       WARN("reconcileIdentityFromSection — pack not found", slotKey, cfg.pack);
       nextFlags[slotKey] = {

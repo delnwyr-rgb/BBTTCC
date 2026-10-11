@@ -2,10 +2,10 @@
   "id": "bbttcc-structures",
   "title": "Bad Eden: Structures",
   "description": "Material-BOM hardness model for Rigs, Facilities and fortifications: BOM-derived Plates/Threshold/resists, chip-queue damage path with state transitions and collapse, build/harden/repair/reclamation recipes drawing on faction stockpiles.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "compatibility": {
     "minimum": "13",
-    "verified": "13"
+    "verified": "14"
   },
   "authors": [
     {
@@ -19,6 +19,13 @@
         "type": "system",
         "compatibility": {
           "verified": "14"
+        }
+      },
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "6.0.0"
         }
       }
     ],

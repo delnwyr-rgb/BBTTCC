@@ -1,0 +1,3297 @@
+{
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/occult.json. The Occult Associations (bbttcc-character-options.occult-associations) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
+  "_pack": "occult-associations",
+  "_generated": {
+    "by": "tools/convert-5e.mjs",
+    "rubric": "1.8.1",
+    "at": "2026-10-11",
+    "overridesApplied": 0
+  },
+  "items": [
+    {
+      "slug": "occult-association-alchemist",
+      "name": "Occult Association: Alchemist",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "folder": "Alchemist",
+      "system": {
+        "description": {
+          "value": "<p><em>Occult Association (BBTTCC): Alchemist.</em></p><p><strong>“Reality is a solvent. I’m the one shaking the bottle.”</strong></p><p>Alchemists do not seek purity. They seek <strong>conversion</strong>.</p><p>Where others pursue the Great Work through revelation, alignment, or doctrine, the Alchemist treats it as a throughput problem. Matter, belief, institutions, and people are all half-finished reactions waiting for the right catalyst.</p><p>An Alchemist does not ask <em>what should this be?</em> They ask <em>what can I turn this into before it detonates?</em></p><p>They stabilize supply chains with miracles, turn contamination into leverage, and force abundance out of systems that should already have collapsed. Nothing they do is free. Every refinement leaves residue.</p><p><strong>How Alchemists pursue the Great Work:</strong></p><ul><li>By converting one form of value into another</li><li>By stabilizing volatile systems just long enough to matter</li><li>By treating Sparks, OPs, and infrastructure as reactive states</li><li>By accepting that every solution leaves chemical, moral, or metaphysical residue</li></ul><p><strong>Resonance:</strong> <strong>Yesod</strong> — foundation, transfer, containment, and the unstable bridge between idea and matter.</p><p><strong>Tell-tales:</strong> antiseptic, ozone, burnt sugar, stained gloves, reinforced glass where glass should not survive.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Economy OP rolls</strong> (especially production, infrastructure, and supply stabilization)</li></ul><p><strong>Cost Principle:</strong> Alchemical victories leave residue. Expect shortages, contamination, attention, moral debt, or unstable downstream consequences when you push too hard.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-alchemist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {
+            "economy": 1
+          },
+          "option": {
+            "category": "occult",
+            "key": "alchemist",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:alchemist",
+              "bbttcc:base",
+              "bbttcc:domain:transmutation",
+              "bbttcc:domain:op",
+              "bbttcc:domain:infrastructure",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:effect:op_roll:economy:+3",
+              "bbttcc:resonance:yesod",
+              "bbttcc:drift:utilitarian",
+              "bbttcc:cost:residue",
+              "bbttcc:theme:conversion",
+              "bbttcc:theme:unstable-abundance"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "OyXYbyCH9EeK2Cl4",
+            "pack": "occult-associations",
+            "identifier": "occult-association-alchemist",
+            "hash": "b1ff1133370e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-alchemist-t1",
+      "name": "Occult Association: Alchemist (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "folder": "Alchemist",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Alchemist</strong></p><p><strong>“You’re not powerful yet. You’re noticeable.”</strong></p><p>At Tier 1, you learn the first dangerous lesson: <strong>matter listens</strong>.</p><p>You are not generating value yet. You are accelerating reactions, shortening timelines, and making crude but effective substitutions when a system would otherwise stall out.</p><p>People start bringing you problems that smell like “this should not work.”</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain proficiency with <strong>Alchemist’s Supplies</strong></li><li>When crafting basic alchemical items, the time required is halved</li><li>You can identify substances, compounds, and chemical hazards in minutes instead of hours</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Production Reliability:</strong> once per Strategic Turn, when your faction spends <strong>Economy OP</strong> on production, infrastructure, or supply stabilization, reduce that spend by <strong>1</strong> (minimum 1)</li></ul><p><strong>Cost:</strong> every use leaves evidence — fumes, scarcity elsewhere, suspicious efficiency, or a process that now depends on you.</p><p><strong>Production Reliability</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — When faction spends Economy OP on production / infrastructure / supply, reduce spend by 1 (min 1).</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-alchemist-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "alchemist",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:alchemist",
+              "bbttcc:tier:1",
+              "bbttcc:domain:transmutation",
+              "bbttcc:domain:economy",
+              "bbttcc:domain:craft",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:crafting",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:effect:craft_time:basic-alchemy:half",
+              "bbttcc:effect:identify:substances:rapid",
+              "bbttcc:effect:op_cost:economy:-1",
+              "bbttcc:resonance:yesod",
+              "bbttcc:drift:utilitarian",
+              "bbttcc:cost:attention",
+              "bbttcc:cost:dependency",
+              "bbttcc:theme:throughput",
+              "bbttcc:theme:reactive-systems"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Q77R8tGoINHmlzPV",
+            "pack": "occult-associations",
+            "identifier": "occult-association-alchemist-t1",
+            "hash": "6a77d9e4fc6d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-alchemist-t2",
+      "name": "Occult Association: Alchemist (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "folder": "Alchemist",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Alchemist</strong></p><p><strong>“Your practice has habits now. So do your consequences.”</strong></p><p>At Tier 2, you stop treating OPs as abstract resources. You treat them as <strong>states of matter</strong>.</p><p>Economy becomes influence. Influence becomes stability. Stability becomes leverage. You have learned how to rebalance a system without improving it — which is often exactly what survival requires.</p><p>You can now perform controlled conversions. They are never free.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Propaganda Distillate:</strong> once per Strategic Turn, convert <strong>3 Economy OP → 3 Soft Power OP</strong> <em>or</em> <strong>3 Soft Power OP → 3 Economy OP</strong></li><li>This conversion does not count as OP generation and does not trigger “on generation” effects</li><li>It leaves narrative residue: attention, rumors, audits, market weirdness, or opportunists</li></ul><p><strong>Cost:</strong> conversion creates imbalance somewhere else. The books may still add up. The world will not.</p><p><strong>Propaganda Distillate</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Convert 3 Economy ↔ 3 Soft Power. Doesn't count as OP generation. Leaves narrative residue.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-alchemist-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "alchemist",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:alchemist",
+              "bbttcc:tier:2",
+              "bbttcc:domain:transmutation",
+              "bbttcc:domain:op",
+              "bbttcc:domain:soft-power",
+              "bbttcc:domain:economy",
+              "bbttcc:scope:faction",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:effect:op_convert:economy:softpower:3",
+              "bbttcc:effect:op_convert:softpower:economy:3",
+              "bbttcc:effect:generation_trigger:bypass",
+              "bbttcc:resonance:yesod",
+              "bbttcc:drift:utilitarian",
+              "bbttcc:cost:residue",
+              "bbttcc:cost:audit-risk",
+              "bbttcc:cost:instability",
+              "bbttcc:theme:conversion",
+              "bbttcc:theme:value-reassignment"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ibPhnHWGrbISnZmw",
+            "pack": "occult-associations",
+            "identifier": "occult-association-alchemist-t2",
+            "hash": "131ca4cbc0e5"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-alchemist-t3",
+      "name": "Occult Association: Alchemist (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "folder": "Alchemist",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Alchemist</strong></p><p><strong>“You can do it on purpose now. That’s worse.”</strong></p><p>By Tier 3, your body has adapted to your work. So has the world around you.</p><p>You understand instability not as danger, but as stored energy. You can touch volatile substances — physical or systemic — without flinching, and you know exactly how long you can keep your hands there.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain resistance to <strong>acid</strong> and <strong>poison</strong> damage</li><li>You can identify the properties and risks of a strange substance within <strong>1 minute</strong></li><li>You have advantage on checks involving contamination, purification, or controlled degradation</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>During a Scenario involving toxic environments, industrial hazards, contamination cleanup, or unstable compounds, your faction gains <strong>Advantage</strong> on <strong>one</strong> relevant Opposed Strategic Roll</li></ul><p><strong>Cost:</strong> every hazard you normalize changes your threshold for “acceptable.” The line between mastery and acclimation gets thin.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-alchemist-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "alchemist",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:alchemist",
+              "bbttcc:tier:3",
+              "bbttcc:domain:hazard",
+              "bbttcc:domain:purification",
+              "bbttcc:domain:transmutation",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:scenario:toxic",
+              "bbttcc:when:scenario:industrial-hazard",
+              "bbttcc:when:scenario:corruption-cleanup",
+              "bbttcc:effect:resist:acid",
+              "bbttcc:effect:resist:poison",
+              "bbttcc:effect:identify:strange-substance:1-minute",
+              "bbttcc:effect:advantage:checks:contamination-purification-degradation",
+              "bbttcc:effect:scenario_advantage:one_relevant_roll",
+              "bbttcc:resonance:yesod",
+              "bbttcc:drift:utilitarian",
+              "bbttcc:cost:desensitization",
+              "bbttcc:cost:contamination-risk",
+              "bbttcc:theme:hazard-mastery",
+              "bbttcc:theme:controlled-instability"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "dpyIihEjHayk27UJ",
+            "pack": "occult-associations",
+            "identifier": "occult-association-alchemist-t3",
+            "hash": "6605fd498157"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-alchemist-t4",
+      "name": "Occult Association: Alchemist (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "folder": "Alchemist",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Alchemist</strong></p><p><strong>“At this point, the world has started adjusting around you.”</strong></p><p>At Tier 4, you are no longer reacting to instability. You <strong>schedule it</strong>.</p><p>You can brew solutions that temporarily override institutional limits. They do not last. They do not pretend to. But for the duration, your faction operates as if scarcity were a suggestion.</p><p>This is how Alchemists leave their mark on the Great Work: by making impossible pushes <em>just possible enough</em>.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Elixir of Fortitude:</strong> once per Strategic Turn, spend <strong>5 Economy OP</strong>. Choose one OP category: <strong>Strength, Non-Lethal, Dexterity, Soft Power, or Diplomacy</strong></li><li>That category gains <strong>+3 OP</strong> for the duration of <strong>one entire Scenario</strong></li><li>When the Scenario ends, the bonus expires. Unspent bonus OP is lost</li></ul><p><strong>Cost:</strong> this always leaves residue: shortages, scrutiny, instability, moral debt, or a local system that now expects impossible output as normal.</p><p><strong>The Great Work notices when you do this.</strong></p><p><strong>Elixir of Fortitude</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic (5 Eco))</em> — Spend 5 Economy OP. Pick an OP category: gains +3 OP for one Scenario. Unspent expires.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-alchemist-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "alchemist",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:alchemist",
+              "bbttcc:tier:4",
+              "bbttcc:domain:transmutation",
+              "bbttcc:domain:scenario",
+              "bbttcc:domain:op",
+              "bbttcc:scope:faction",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:when:scenario:start",
+              "bbttcc:effect:op_cost:economy:-5",
+              "bbttcc:effect:scenario_temp_boost:violence:+3",
+              "bbttcc:effect:scenario_temp_boost:nonlethal:+3",
+              "bbttcc:effect:scenario_temp_boost:intrigue:+3",
+              "bbttcc:effect:scenario_temp_boost:softpower:+3",
+              "bbttcc:effect:scenario_temp_boost:diplomacy:+3",
+              "bbttcc:effect:scenario_bonus_op:expires",
+              "bbttcc:resonance:yesod",
+              "bbttcc:drift:utilitarian",
+              "bbttcc:cost:residue",
+              "bbttcc:cost:shortage",
+              "bbttcc:cost:attention",
+              "bbttcc:cost:instability",
+              "bbttcc:theme:override",
+              "bbttcc:theme:impossible-push"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "iIWr8FA5jopE1Vfo",
+            "pack": "occult-associations",
+            "identifier": "occult-association-alchemist-t4",
+            "hash": "6fa53d0a3e2c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-biomancer",
+      "name": "Occult Association: Biomancer / Fleshcrafter",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "folder": "Biomancer",
+      "system": {
+        "description": {
+          "value": "<p><em>Occult Association (BBTTCC): Biomancer / Fleshcrafter.</em></p><p><strong>“You don’t survive the world. You rewrite what survival means.”</strong></p><p>Biomancers do not treat life as sacred. They treat it as <strong>modifiable</strong>.</p><p>Where Alchemists convert matter and Shamans negotiate with ecosystems, Biomancers operate at a more intimate scale: flesh, bone, instinct, and adaptation. To them, evolution is not a process. It is a toolkit.</p><p>The Great Work, in their hands, is not about restoring what was lost. It is about building something that can survive what is coming.</p><p><strong>How Biomancers pursue the Great Work:</strong></p><ul><li>By modifying bodies to survive hostile conditions</li><li>By reducing loss through biological adaptation</li><li>By converting harm into resilience</li><li>By treating mutation as both tool and risk</li></ul><p><strong>Resonance:</strong> <strong>Yesod / Life-State</strong> — transformation, embodiment, and the unstable boundary between identity and function.</p><p><strong>Tell-tales:</strong> asymmetry, controlled mutation, eyes that adapt faster than they should.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on survival, endurance, or recovery-related OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> adaptation changes you. Expect mutation, instability, and moments where you are no longer certain what “baseline” meant.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-biomancer"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "biomancer",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:biomancer",
+              "bbttcc:base",
+              "bbttcc:domain:mutation",
+              "bbttcc:domain:survival",
+              "bbttcc:domain:radiation",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op_roll:survival:+1",
+              "bbttcc:resonance:yesod",
+              "bbttcc:drift:adaptive-pragmatic",
+              "bbttcc:cost:mutation",
+              "bbttcc:cost:instability",
+              "bbttcc:theme:body-as-system",
+              "bbttcc:theme:forced-evolution"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "3fQpcDAkwjD7XVO8",
+            "pack": "occult-associations",
+            "identifier": "occult-association-biomancer",
+            "hash": "c32a96a8cbfa"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-biomancer-t1",
+      "name": "Occult Association: Biomancer / Fleshcrafter (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "folder": "Biomancer",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Biomancer</strong></p><p><strong>“Pain is information.”</strong></p><p>You begin learning how to adjust biological response in real time.</p><p><strong>Tactical</strong></p><ul><li>gain advantage on saves against poison, disease, or environmental hazards</li></ul><p><strong>Strategic</strong></p><ul><li>Once per Strategic Turn, reduce one survival, hazard, or casualty-related penalty by one step</li></ul><p><strong>Cost:</strong> minor mutation begins — cosmetic or behavioral shifts may occur.</p><p><strong>Reduce Survival Penalty</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Reduce one survival/hazard/casualty penalty by one step.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-biomancer-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:1",
+              "bbttcc:effect:advantage:hazard_saves",
+              "bbttcc:effect:penalty:-1-step",
+              "bbttcc:cost:mutation"
+            ],
+            "category": "occult",
+            "key": "biomancer",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1
+          },
+          "category": "occult"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "EqWKbjJ04vpc1hfO",
+            "pack": "occult-associations",
+            "identifier": "occult-association-biomancer-t1",
+            "hash": "a287e0c33095"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-biomancer-t2",
+      "name": "Occult Association: Biomancer / Fleshcrafter (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "folder": "Biomancer",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Biomancer</strong></p><p><strong>“Not all damage needs to land where it started.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per Scenario, reduce casualty severity for your faction by one step</li><li>Alternatively, convert a catastrophic loss into a contained loss with consequences</li></ul><p><strong>Cost:</strong> transferred damage becomes mutation, instability, or long-term degradation.</p><p><strong>Casualty Conversion</strong> <em>(Recovery: 1/Scenario · Action: Strategic)</em> — Reduce casualty severity by one step, OR convert a catastrophic loss into a contained loss with consequences.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-biomancer-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:2",
+              "bbttcc:effect:casualty:-1-step",
+              "bbttcc:effect:convert:catastrophic->contained",
+              "bbttcc:cost:degradation"
+            ],
+            "category": "occult",
+            "key": "biomancer",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2
+          },
+          "category": "occult"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Q4DPHOHGtfkXlTv8",
+            "pack": "occult-associations",
+            "identifier": "occult-association-biomancer-t2",
+            "hash": "4a1e4db4c922"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-biomancer-t3",
+      "name": "Occult Association: Biomancer / Fleshcrafter (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "folder": "Biomancer",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Biomancer</strong></p><p><strong>“You are no longer baseline.”</strong></p><p><strong>Tactical</strong></p><ul><li>Resistance to environmental, radiation, or corruption-based damage</li></ul><p><strong>Strategic</strong></p><ul><li>gain advantage on one roll involving hostile environments or biological stress per Scenario</li></ul><p><strong>Cost:</strong> visible or behavioral mutation becomes harder to conceal.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-biomancer-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:3",
+              "bbttcc:effect:resist:environment",
+              "bbttcc:effect:scenario_advantage",
+              "bbttcc:cost:visible-mutation"
+            ],
+            "category": "occult",
+            "key": "biomancer",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3
+          },
+          "category": "occult"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "lYkcOs9rxQX9PC5E",
+            "pack": "occult-associations",
+            "identifier": "occult-association-biomancer-t3",
+            "hash": "d13bd57876d3"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-biomancer-t4",
+      "name": "Occult Association: Biomancer / Fleshcrafter (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "folder": "Biomancer",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Biomancer</strong></p><p><strong>“This is what comes after survival.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per Strategic Turn, negate a major environmental, casualty, or biological crisis affecting your faction</li><li>Alternatively, convert a lethal condition into a survivable but transformed state</li></ul><p><strong>Cost:</strong> major mutation event — identity, physiology, or faction perception permanently altered.</p><p><strong>Negate Crisis</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Negate a major environmental/casualty/biological crisis affecting your faction, OR convert a lethal condition into a survivable but transformed state.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-biomancer-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:4",
+              "bbttcc:effect:negate:crisis",
+              "bbttcc:effect:convert:lethal->survivable",
+              "bbttcc:cost:major-mutation"
+            ],
+            "category": "occult",
+            "key": "biomancer",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4
+          },
+          "category": "occult"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "tXWSXpFFFzByfAwY",
+            "pack": "occult-associations",
+            "identifier": "occult-association-biomancer-t4",
+            "hash": "9b50d5d87678"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-exorcist",
+      "name": "Occult Association: Exorcist / Purifier",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "folder": "Exorcist/Purifier",
+      "system": {
+        "description": {
+          "value": "<p><em>Occult Association (BBTTCC): Exorcist / Purifier.</em></p><p><strong>“You don’t negotiate with the darkness. You end it.”</strong></p><p>Exorcists do not bargain. They do not reinterpret. They do not accept corruption as a usable state.</p><p>To an Exorcist, the Great Work is not about managing the broken world. It is about <strong>removing what should not be there</strong> and restoring the conditions under which something honest can exist again.</p><p>Where Goetics bind, Exorcists sever. Where Shamans listen, Exorcists intervene. Where Kabbalists align, Exorcists cleanse.</p><p><strong>How Exorcists pursue the Great Work:</strong></p><ul><li>By removing Qliphothic influence and corruption</li><li>By stabilizing Hexes under Darkness pressure</li><li>By preventing the spread of systemic decay</li><li>By refusing to let harmful systems persist just because they are useful</li></ul><p><strong>Resonance:</strong> <strong>Tiferet / Purity</strong> — clarity, balance, and the reassertion of what should be.</p><p><strong>Tell-tales:</strong> still air where there should be movement, silence after tension, things that stop being wrong without explanation.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on actions involving stabilization, cleansing, or anti-corruption pressure</strong></li></ul><p><strong>Cost Principle:</strong> removal is violent in its own way. Expect rigidity, collateral suppression, and consequences when something removed turns out to have been holding something worse in place.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-exorcist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "option": {
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:exorcist",
+              "bbttcc:base",
+              "bbttcc:domain:anti-darkness",
+              "bbttcc:domain:cleansing",
+              "bbttcc:domain:stabilization",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op_roll:stabilization:+1",
+              "bbttcc:resonance:tiferet",
+              "bbttcc:drift:rigid-order",
+              "bbttcc:cost:rigidity",
+              "bbttcc:cost:overcorrection",
+              "bbttcc:theme:purification",
+              "bbttcc:theme:removal"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "uzklMVc8EUDpGBA7",
+            "pack": "occult-associations",
+            "identifier": "occult-association-exorcist",
+            "hash": "c84753783841"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-exorcist-t1",
+      "name": "Occult Association: Exorcist / Purifier (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "folder": "Exorcist/Purifier",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Exorcist</strong></p><p><strong>“That should not be here.”</strong></p><p>You can identify corruption, spiritual pressure, and Qliphothic influence.</p><p><strong>Tactical</strong></p><ul><li>advantage on saves vs corruption, fear, or possession</li></ul><p><strong>Strategic</strong></p><ul><li>When entering a Hex, automatically detect presence of corruption or unnatural influence</li></ul><p><strong>Cost:</strong> constant awareness of corruption creates strain and intolerance for ambiguity.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-exorcist-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:1",
+              "bbttcc:effect:detect:corruption",
+              "bbttcc:effect:advantage:saves:corruption",
+              "bbttcc:cost:strain"
+            ],
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1
+          },
+          "category": "occult"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "g4kakZwUuA2FGPgJ",
+            "pack": "occult-associations",
+            "identifier": "occult-association-exorcist-t1",
+            "hash": "b6c47504290e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-exorcist-t2",
+      "name": "Occult Association: Exorcist / Purifier (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "folder": "Exorcist/Purifier",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Exorcist</strong></p><p><strong>“Get out.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per Strategic Turn, reduce Darkness or corruption pressure in a Hex by one step</li><li>Remove one minor corruption effect from a scenario</li></ul><p><strong>Cost:</strong> removed corruption may manifest elsewhere or return later in altered form.</p><p><strong>Reduce Darkness</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Reduce Darkness/corruption pressure in a Hex by one step, OR remove one minor corruption effect from a scenario.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-exorcist-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:2",
+              "bbttcc:effect:darkness:-1",
+              "bbttcc:effect:remove:minor_corruption",
+              "bbttcc:cost:displacement"
+            ],
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2
+          },
+          "category": "occult"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "OAbX4YDZQscnB2H1",
+            "pack": "occult-associations",
+            "identifier": "occult-association-exorcist-t2",
+            "hash": "9a88411c9334"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-exorcist-t3",
+      "name": "Occult Association: Exorcist / Purifier (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "folder": "Exorcist/Purifier",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Exorcist</strong></p><p><strong>“This place holds.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per Scenario, negate one corruption-based penalty or hostile effect</li><li>gain advantage on rolls involving purification, stabilization, or resisting Darkness</li></ul><p><strong>Cost:</strong> stability reduces flexibility; your faction may struggle with unconventional or adaptive approaches.</p><p><strong>Negate Corruption</strong> <em>(Recovery: 1/Scenario · Action: Strategic)</em> — Negate one corruption-based penalty or hostile effect.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-exorcist-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:3",
+              "bbttcc:effect:ignore:corruption_penalty",
+              "bbttcc:effect:advantage:stabilization",
+              "bbttcc:cost:rigidity"
+            ],
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3
+          },
+          "category": "occult"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Eb7jpJSc0Ms5o9c8",
+            "pack": "occult-associations",
+            "identifier": "occult-association-exorcist-t3",
+            "hash": "e4d1966f9e5e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-exorcist-t4",
+      "name": "Occult Association: Exorcist / Purifier (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "folder": "Exorcist/Purifier",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Exorcist</strong></p><p><strong>“This ends now.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per Strategic Turn, fully purge a major corruption event, Qliphothic effect, or Darkness spike</li><li>Negate a major hostile environmental or metaphysical threat</li></ul><p><strong>Cost:</strong> major purges risk backlash, collateral loss, or removal of systems that were quietly stabilizing something worse.</p><p><strong>Major Purge</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Fully purge a major corruption event / Qliphothic effect / Darkness spike, OR negate a major hostile environmental / metaphysical threat.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-exorcist-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:4",
+              "bbttcc:effect:purge:major_corruption",
+              "bbttcc:effect:negate:darkness_event",
+              "bbttcc:cost:backlash",
+              "bbttcc:cost:overcorrection"
+            ],
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4
+          },
+          "category": "occult"
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "qkQsUCKgO1W6Jbd4",
+            "pack": "occult-associations",
+            "identifier": "occult-association-exorcist-t4",
+            "hash": "403c33c5f4f5"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-gnostic",
+      "name": "Occult Association: Gnostic",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "folder": "Gnostic",
+      "system": {
+        "description": {
+          "value": "<p><em>Occult Association (BBTTCC): Gnostic.</em></p><p><strong>“I don’t believe. I remember.”</strong></p><p>Gnostics approach the Great Work as a recovery operation. The world is not merely broken. It is <em>obscured</em>.</p><p>Truth exists beneath propaganda, false heavens, corrupted consensus, and all the symbolic machinery that keeps frightened systems stable. Where others try to fix the world, the Gnostic strips it down. They interrogate assumptions, dismantle illusions, and treat certainty as a hostile force when it has not earned the right to exist.</p><p>To a Gnostic, the Great Work is not invention. It is <strong>remembrance</strong>. What is real was already real before the lie got organized.</p><p><strong>How Gnostics pursue the Great Work:</strong></p><ul><li>By exposing false narratives and corrupted consensus</li><li>By resisting manipulation, propaganda, and symbolic control</li><li>By recovering truths the world insists never existed</li><li>By making deception expensive to maintain</li></ul><p><strong>Resonance:</strong> <strong>Tiferet</strong> — truth, clarity, revelation, and the painful coherence that follows honest sight.</p><p><strong>Tell-tales:</strong> eyes that track patterns no one else admits are there, a habit of pausing just before the lie finishes speaking.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Soft Power OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> truth is destabilizing. Expect alienation, exposed contradictions, social friction, and pressure from systems that depended on confusion to survive.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-gnostic"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {
+            "softpower": 1
+          },
+          "option": {
+            "category": "occult",
+            "key": "gnostic",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:gnostic",
+              "bbttcc:base",
+              "bbttcc:domain:tikkun",
+              "bbttcc:domain:truth",
+              "bbttcc:domain:soft-power",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:effect:op_roll:softpower:+3",
+              "bbttcc:resonance:tiferet",
+              "bbttcc:drift:anti-authority",
+              "bbttcc:cost:alienation",
+              "bbttcc:cost:friction",
+              "bbttcc:theme:remembrance",
+              "bbttcc:theme:truth-pressure"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "PElT2vqbF4yMqNsJ",
+            "pack": "occult-associations",
+            "identifier": "occult-association-gnostic",
+            "hash": "17bf4b69518d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-gnostic-t1",
+      "name": "Occult Association: Gnostic (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "folder": "Gnostic",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Gnostic</strong></p><p><strong>“The lie is structural.”</strong></p><p>You can feel distortion now. Propaganda scrapes. Illusions itch. You may not yet know the truth, but you know when something is <em>false</em>.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain proficiency in <strong>Insight</strong></li><li>gain advantage on saving throws against <strong>Illusion</strong> effects</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction resists propaganda, misinformation, or psychological manipulation, gain <strong>+1 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> once you can feel falsehood structurally, ordinary social comfort gets harder. Expect friction when you refuse to participate in convenient lies.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-gnostic-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "gnostic",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:gnostic",
+              "bbttcc:tier:1",
+              "bbttcc:domain:truth",
+              "bbttcc:domain:illusion",
+              "bbttcc:domain:propaganda",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:resist:propaganda",
+              "bbttcc:when:resist:misinformation",
+              "bbttcc:when:resist:psychological-manipulation",
+              "bbttcc:effect:proficiency:insight",
+              "bbttcc:effect:advantage:saves:illusion",
+              "bbttcc:effect:op_roll:softpower:+3",
+              "bbttcc:resonance:tiferet",
+              "bbttcc:drift:anti-authority",
+              "bbttcc:cost:alienation",
+              "bbttcc:cost:social-friction",
+              "bbttcc:theme:structural-lie",
+              "bbttcc:theme:falsehood-detection"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "d7VNpH22vk20QPFL",
+            "pack": "occult-associations",
+            "identifier": "occult-association-gnostic-t1",
+            "hash": "aeea6a806818"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-gnostic-t2",
+      "name": "Occult Association: Gnostic (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "folder": "Gnostic",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Gnostic</strong></p><p><strong>“Noise is the enemy.”</strong></p><p>You have learned to reduce interference. Your faction becomes harder to sway, harder to confuse, and harder to redirect with polished lies.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Enemy <strong>Soft Power</strong> actions targeting your faction or controlled Hexes suffer <strong>–3 to their OP roll</strong> (minimum 0 penalty floor as adjudicated by the table’s OP logic)</li></ul><p>This does not make you popular. It makes you <em>inconvenient</em>.</p><p><strong>Cost:</strong> clarity makes soft control fail, but it also makes diplomacy messier. Expect brittle relationships, exposed tensions, and institutions that resent becoming legible.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-gnostic-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "gnostic",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:gnostic",
+              "bbttcc:tier:2",
+              "bbttcc:domain:truth",
+              "bbttcc:domain:soft-power",
+              "bbttcc:domain:anti-propaganda",
+              "bbttcc:scope:faction",
+              "bbttcc:scope:hex",
+              "bbttcc:when:targeted_by:softpower",
+              "bbttcc:effect:enemy_op_roll:softpower:-3",
+              "bbttcc:resonance:tiferet",
+              "bbttcc:drift:anti-authority",
+              "bbttcc:cost:friction",
+              "bbttcc:cost:relationship-strain",
+              "bbttcc:theme:noise-reduction",
+              "bbttcc:theme:inconvenient-clarity"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "esSfzalfO1cWe8pU",
+            "pack": "occult-associations",
+            "identifier": "occult-association-gnostic-t2",
+            "hash": "9b9ee0eba08e"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-gnostic-t3",
+      "name": "Occult Association: Gnostic (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "folder": "Gnostic",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Gnostic</strong></p><p><strong>“They can’t lie to me anymore.”</strong></p><p>You recognize deception instantly — not by tells, but by structure. Falsehoods do not hold their shape around you.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>gain advantage on <strong>Insight</strong> checks to detect deception</li><li>You cannot be magically <strong>charmed</strong></li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Scenario, your faction may automatically ignore a single deception-based complication without spending OPs</li></ul><p><strong>Cost:</strong> immunity to manipulation also erodes comforting ambiguity. Expect personal distance, reduced tolerance for pageantry, and situations where your honesty becomes socially expensive.</p><p><strong>Ignore Deception</strong> <em>(Recovery: 1/Scenario · Action: Strategic)</em> — Automatically ignore a single deception-based complication without spending OPs.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-gnostic-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "gnostic",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:gnostic",
+              "bbttcc:tier:3",
+              "bbttcc:domain:truth",
+              "bbttcc:domain:deception",
+              "bbttcc:domain:anti-complication",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:scenario:once",
+              "bbttcc:effect:advantage:insight_checks:detect_deception",
+              "bbttcc:effect:immune:magical_charm",
+              "bbttcc:effect:ignore:deception_complication:once_per_scenario",
+              "bbttcc:resonance:tiferet",
+              "bbttcc:drift:anti-authority",
+              "bbttcc:cost:distance",
+              "bbttcc:cost:honesty-pressure",
+              "bbttcc:theme:structural-detection",
+              "bbttcc:theme:complication-denial"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "WyPQr6NkzYVeLlYD",
+            "pack": "occult-associations",
+            "identifier": "occult-association-gnostic-t3",
+            "hash": "c5daea7b366a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-gnostic-t4",
+      "name": "Occult Association: Gnostic (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "folder": "Gnostic",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Gnostic</strong></p><p><strong>“The archons have no leverage left.”</strong></p><p>At this level, misinformation simply fails around you. False peace offers unravel. Illusions collapse under scrutiny. The system cannot trick what no longer participates in its symbolic shortcuts.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When pursuing the <strong>Spark of Truth (Tiferet)</strong>, enemy factions cannot gain bonuses from deception, misinformation, or false alliances</li></ul><p>The Great Work recognizes clarity. So do the things that depended on confusion.</p><p><strong>Cost:</strong> when truth reaches this level of force, it breaks camouflage for everyone nearby. Expect retaliation, exposed conflict lines, and enemies who prefer open hostility to further revelation.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-gnostic-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "gnostic",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:gnostic",
+              "bbttcc:tier:4",
+              "bbttcc:domain:tikkun",
+              "bbttcc:domain:truth",
+              "bbttcc:domain:anti-deception",
+              "bbttcc:scope:faction",
+              "bbttcc:scope:great-work",
+              "bbttcc:when:great_work:spark_of_truth:tiferet",
+              "bbttcc:effect:enemy_bonus_block:deception",
+              "bbttcc:effect:enemy_bonus_block:misinformation",
+              "bbttcc:effect:enemy_bonus_block:false_alliances",
+              "bbttcc:resonance:tiferet",
+              "bbttcc:drift:anti-authority",
+              "bbttcc:cost:retaliation-risk",
+              "bbttcc:cost:exposure",
+              "bbttcc:theme:spark-of-truth",
+              "bbttcc:theme:archon-denial"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "H1FmFMfB1syR1inC",
+            "pack": "occult-associations",
+            "identifier": "occult-association-gnostic-t4",
+            "hash": "da48b9f9de4b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-goetic-summoner",
+      "name": "Occult Association: Goetic Summoner",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "folder": "Goetic Summoner",
+      "system": {
+        "description": {
+          "value": "<p><em>Occult Association (BBTTCC): Goetic Summoner.</em></p><p><strong>“I have friends. They’re just… contractual.”</strong></p><p>Goetic Summoners do not worship. They do not submit. They <em>negotiate</em>.</p><p>To a Goetic, the Great Work is not merely a path of purification. It is a war over <strong>leverage</strong>. Power exists in the Shatterlands, and much of it has teeth, names, appetites, and terms. If you can name it, you can sometimes bind it. If you can bind it, you can make it useful. For a while.</p><p>Goetics build circles, memorize taboos, track debts, and turn predatory forces into temporary infrastructure. They call this control. The world calls it an incident report waiting to happen.</p><p><strong>How Goetics pursue the Great Work:</strong></p><ul><li>By extracting leverage from Qliphothic forces instead of merely resisting them</li><li>By binding hazards into assets and paying the price later</li><li>By treating Darkness as a resource with teeth</li><li>By weaponizing fear, coercion, and forbidden access where cleaner traditions would hesitate</li></ul><p><strong>Resonance:</strong> <strong>Qliphoth / Shadow</strong> — rupture, appetite, inversion, and the dangerous intelligence inside corruption.</p><p><strong>Tell-tales:</strong> counted names, precise circles, a room that feels like it already agreed to terms before anyone spoke.</p><p><strong>Faction Effects (Passive):</strong></p><ul><li><strong>+1 to Strength OP rolls</strong></li><li><strong>+1 to Dexterity OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> every Goetic gain creates obligation. Expect Debt, escalating Darkness pressure, hostile notice, and consequences that remember your name longer than you wanted them to.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-goetic-summoner"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {
+            "violence": 1,
+            "intrigue": 1
+          },
+          "option": {
+            "category": "occult",
+            "key": "goetic-summoner",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:goetic-summoner",
+              "bbttcc:base",
+              "bbttcc:domain:darkness",
+              "bbttcc:domain:binding",
+              "bbttcc:domain:intrigue",
+              "bbttcc:domain:violence",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:resonance:qliphoth",
+              "bbttcc:drift:pragmatic-corruptive",
+              "bbttcc:cost:debt",
+              "bbttcc:cost:darkness-pressure",
+              "bbttcc:theme:contractual-power",
+              "bbttcc:theme:predator-management",
+              "bbttcc:effect:op_roll:violence:+1",
+              "bbttcc:effect:op_roll:intrigue:+1"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "hRYPYVvWp8VaE11I",
+            "pack": "occult-associations",
+            "identifier": "occult-association-goetic-summoner",
+            "hash": "63e5d9e63312"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-goetic-summoner-t1",
+      "name": "Occult Association: Goetic Summoner (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "folder": "Goetic Summoner",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Goetic Summoner</strong></p><p><strong>“First lesson: the circle protects you. Second lesson: only if it’s perfect.”</strong></p><p>You learn the etiquette of predators: names, constraints, and the price of eye contact. You are not yet strong enough to command, but you are strong enough to be heard.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain proficiency in <strong>Arcana</strong> and <strong>Intimidation</strong></li><li>Learn <strong>Find Familiar</strong>, flavored as unsettling, watchful, or veil-adjacent</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction attempts intimidation, coercion, or violent leverage, gain <strong>+1 to the relevant Strength OP roll</strong></li><li>When your faction runs reconnaissance, blackmail, or covert acquisition, gain <strong>+1 to the relevant Dexterity OP roll</strong></li><li>When your faction attempts goodwill, legitimacy, or mass persuasion, suffer <strong>–1 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> early Goetic work leaves an obvious scent. Expect attention from the wrong entities, fear from the right people, and a reputation that arrives before you do.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-goetic-summoner-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "goetic-summoner",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:goetic-summoner",
+              "bbttcc:tier:1",
+              "bbttcc:domain:darkness",
+              "bbttcc:domain:coercion",
+              "bbttcc:domain:recon",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:coercion",
+              "bbttcc:when:recon",
+              "bbttcc:when:goodwill",
+              "bbttcc:effect:proficiency:arcana",
+              "bbttcc:effect:proficiency:intimidation",
+              "bbttcc:effect:spell:find-familiar",
+              "bbttcc:effect:op_roll:violence:+2",
+              "bbttcc:effect:op_roll:intrigue:+2",
+              "bbttcc:effect:op_roll:softpower:-1",
+              "bbttcc:resonance:qliphoth",
+              "bbttcc:drift:pragmatic-corruptive",
+              "bbttcc:cost:attention",
+              "bbttcc:cost:fear-reputation",
+              "bbttcc:theme:predator-etiquette",
+              "bbttcc:theme:first-circle"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "L0VOUarAjLLFeP9h",
+            "pack": "occult-associations",
+            "identifier": "occult-association-goetic-summoner-t1",
+            "hash": "73da79a7c410"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-goetic-summoner-t2",
+      "name": "Occult Association: Goetic Summoner (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "folder": "Goetic Summoner",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Goetic Summoner</strong></p><p><strong>“You don’t fight the corruption. You aim it.”</strong></p><p>At Tier 2, you stop pretending the veil is a barrier. It is a marketplace.</p><p>You have enough practice to exploit corrupted environments without being swallowed by them. Usually. Your faction becomes frighteningly competent in places others cannot operate.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When dealing with Qliphothic entities or running Scenarios in corrupted Hexes, gain <strong>Advantage</strong> on one relevant Strategic Roll per Scenario</li><li>If the opposition is attempting to deceive, terrorize, or destabilize via Darkness-as-pressure, gain <strong>+1 to the relevant Dexterity OP roll</strong> instead</li></ul><p><strong>Cost:</strong> every time you leverage this understanding, the GM is encouraged to record a <strong>Debt</strong> in the fiction. Not a number. A <em>name</em>.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-goetic-summoner-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "goetic-summoner",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:goetic-summoner",
+              "bbttcc:tier:2",
+              "bbttcc:domain:darkness",
+              "bbttcc:domain:qliphoth",
+              "bbttcc:domain:corrupted-hex",
+              "bbttcc:scope:faction",
+              "bbttcc:when:scenario:qliphothic",
+              "bbttcc:when:scenario:corrupted_hex",
+              "bbttcc:when:enemy_pressure:darkness",
+              "bbttcc:effect:scenario_advantage:one_relevant_roll",
+              "bbttcc:effect:op_roll:intrigue:+2",
+              "bbttcc:resonance:qliphoth",
+              "bbttcc:drift:pragmatic-corruptive",
+              "bbttcc:cost:debt",
+              "bbttcc:cost:attention",
+              "bbttcc:theme:marketplace-of-the-veil",
+              "bbttcc:theme:weaponized-corruption"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "WpQP8AEanXoj9hDi",
+            "pack": "occult-associations",
+            "identifier": "occult-association-goetic-summoner-t2",
+            "hash": "7eff15ec0690"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-goetic-summoner-t3",
+      "name": "Occult Association: Goetic Summoner (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "folder": "Goetic Summoner",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Goetic Summoner</strong></p><p><strong>“Now we can talk like professionals.”</strong></p><p>You can negotiate across the veil without begging. You know the difference between a threat and an offer, and you can make either one land.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>You have advantage on Charisma checks when interacting with Fiends or Celestials</li><li>You can cast <strong>Magic Circle</strong> 1/long rest</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a Scenario begins, you may declare a <strong>Binding Posture</strong></li><li>Gain <strong>+3 to a single Dexterity OP roll</strong> made during that Scenario</li><li>If you fail a key check during the Scenario, the GM may introduce a meaningful complication tied to your bindings, terms, or assumptions</li></ul><p><strong>Cost:</strong> the more fluently you bargain, the more the other side expects you to keep bargaining. Precision does not protect you from consequences. It only makes them legally enforceable.</p><p><strong>Binding Posture</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic (declare))</em> — Before a Scenario, declare a Binding Posture: +3 to one Dexterity OP roll during it. (Failure may introduce a binding-tied complication.)</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-goetic-summoner-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "goetic-summoner",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:goetic-summoner",
+              "bbttcc:tier:3",
+              "bbttcc:domain:binding",
+              "bbttcc:domain:negotiation",
+              "bbttcc:domain:intrigue",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:long_rest:once",
+              "bbttcc:when:scenario:start",
+              "bbttcc:effect:advantage:charisma_checks:fiends-and-celestials",
+              "bbttcc:effect:spell:magic-circle:1-per-long-rest",
+              "bbttcc:effect:op_roll:intrigue:+3",
+              "bbttcc:effect:complication:on-key-failure",
+              "bbttcc:resonance:qliphoth",
+              "bbttcc:drift:pragmatic-corruptive",
+              "bbttcc:cost:contractual-obligation",
+              "bbttcc:cost:complication",
+              "bbttcc:theme:binding-posture",
+              "bbttcc:theme:professional-bargain"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "5wqTnCaItw8ZeFMC",
+            "pack": "occult-associations",
+            "identifier": "occult-association-goetic-summoner-t3",
+            "hash": "1d58c3226098"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-goetic-summoner-t4",
+      "name": "Occult Association: Goetic Summoner (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "folder": "Goetic Summoner",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Goetic Summoner</strong></p><p><strong>“The monster is defeated. Good. Now sign here.”</strong></p><p>At Tier 4, you stop acting like the Darkness is weather. You treat it like an army.</p><p>You can attempt to bind a major Qliphothic entity your faction has defeated and turn it into an asset. This is not safe. It is useful.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Major Binding:</strong> after your faction defeats a major Qliphothic entity in a Scenario, you may attempt to bind it</li><li>Spend <strong>10 Dexterity OP</strong>, then make an appropriate Strategic Roll as adjudicated by the GM</li><li>On success: gain a bound entity asset that grants <strong>+5 to Strength or Dexterity OP rolls</strong> (choose one) while it remains bound</li><li>On failure: the entity escapes with a grudge, and the fallout becomes a Campaign problem</li></ul><p><strong>Cost:</strong> while the entity remains bound, regional <strong>Darkness pressure escalates</strong>. This is the price of keeping a predator on a leash.</p><p><strong>Major Binding</strong> <em>(Recovery: 1/Scenario · Action: Strategic (10 Int))</em> — After defeating a major Qliphothic entity: spend 10 Dexterity OP, GM-adjudicated roll. Success: bound asset (+5 Vio or Int rolls). Failure: entity escapes with a grudge.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-goetic-summoner-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "goetic-summoner",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:goetic-summoner",
+              "bbttcc:tier:4",
+              "bbttcc:domain:darkness",
+              "bbttcc:domain:binding",
+              "bbttcc:domain:asset-creation",
+              "bbttcc:scope:faction",
+              "bbttcc:scope:region",
+              "bbttcc:when:post_scenario:defeat_major_qliphothic_entity",
+              "bbttcc:effect:op_cost:intrigue:-10",
+              "bbttcc:effect:asset:bound-entity",
+              "bbttcc:effect:op_roll:violence:+5",
+              "bbttcc:effect:op_roll:intrigue:+5",
+              "bbttcc:effect:failure:campaign_problem",
+              "bbttcc:effect:darkness_pressure:regional:+1",
+              "bbttcc:resonance:qliphoth",
+              "bbttcc:drift:pragmatic-corruptive",
+              "bbttcc:cost:darkness-pressure",
+              "bbttcc:cost:grudge-risk",
+              "bbttcc:cost:bound-predator",
+              "bbttcc:theme:major-binding",
+              "bbttcc:theme:weaponized-monster"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "fj2m8VaRXrqz760x",
+            "pack": "occult-associations",
+            "identifier": "occult-association-goetic-summoner-t4",
+            "hash": "3147aa31bae5"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-kabbalist",
+      "name": "Occult Association: Kabbalist",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "folder": "Kabbalist",
+      "system": {
+        "description": {
+          "value": "<p><em>Occult Association (BBTTCC): Kabbalist.</em></p><p><strong>“The map is not the territory. The territory is also not the territory.”</strong></p><p>Kabbalists are not wizards. They are <em>cartographers of meaning</em> — the kind who draw a line and the world decides it has always been there.</p><p>They study the Tree the way an engineer studies a bridge: load, strain, failure points, and where the pressure is going when nobody is looking. Sephiroth is flow. Qliphoth is leak. And if you learn the geometry well enough, you can reroute the flood before it drowns the region.</p><p>To a Kabbalist, the Great Work is not aspiration. It is <strong>alignment</strong>. Name the thing correctly, place it correctly, and reality stops wasting energy pretending to be something else.</p><p><strong>How Kabbalists pursue the Great Work:</strong></p><ul><li>By reading Hexes like paragraphs — sephirothic intent, qliphothic rot, and the lies in-between</li><li>By reducing the cost of identifying Sparks and metaphysical conditions</li><li>By treating the Tree as infrastructure rather than metaphor</li><li>By shifting alignment deliberately, even when the world pushes back</li></ul><p><strong>Resonance:</strong> <strong>Tree / Binah-Tiferet axis</strong> — structure, pattern-recognition, and the disciplined naming of what is actually happening.</p><p><strong>Tell-tales:</strong> finger-traced grids, muttered node-names, diagrams drawn over maps that somehow make the maps more true.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Soft Power OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> Kabbalistic order clarifies, but clarification creates strain. When you force alignment, hidden contradictions surface somewhere else.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-kabbalist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {
+            "softpower": 1
+          },
+          "option": {
+            "category": "occult",
+            "key": "kabbalist",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:kabbalist",
+              "bbttcc:base",
+              "bbttcc:domain:tikkun",
+              "bbttcc:domain:alignment",
+              "bbttcc:domain:leylines",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:effect:op_roll:softpower:+3",
+              "bbttcc:resonance:tree",
+              "bbttcc:resonance:binah",
+              "bbttcc:drift:order",
+              "bbttcc:cost:strain",
+              "bbttcc:theme:cartography-of-meaning",
+              "bbttcc:theme:alignment-engineering"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "8inCnS9R4TZGV69D",
+            "pack": "occult-associations",
+            "identifier": "occult-association-kabbalist",
+            "hash": "b683c2dd7f0b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-kabbalist-t1",
+      "name": "Occult Association: Kabbalist (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "folder": "Kabbalist",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Kabbalist</strong></p><p><strong>“The map is not the territory. The territory is also not the territory.”</strong></p><p>At Tier 1, you have learned to <em>see</em> what other people are walking through. The Tree leaves fingerprints on everything. You have merely trained yourself to stop ignoring them.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain proficiency in <strong>Religion</strong>. If you already have it, take another GM-approved skill proficiency.</li><li><strong>Sense the Leak:</strong> you can cast <em>Detect Evil and Good</em> 1/long rest, flavored as sensing sephirothic flow and qliphothic pressure.</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Read:</strong> upon entering a new Hex, you immediately learn its dominant <strong>Sephirothic</strong> or <strong>Qliphothic</strong> alignment, if any.</li><li><strong>Soft Power Precision:</strong> your faction’s <strong>Soft Power OP rolls</strong> gain <strong>+3</strong>.</li></ul><p><strong>Cost:</strong> perception is not neutral. Once you can see the leak, you stop being able to ignore it. Expect strain, attention, or moral pressure when you name what others would rather leave vague.</p><p><strong>Sense the Leak</strong> <em>(Recovery: 1/long rest · Action: Action)</em> — Cast Detect Evil and Good (sephirothic flow / qliphothic pressure).</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-kabbalist-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "kabbalist",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:kabbalist",
+              "bbttcc:tier:1",
+              "bbttcc:domain:tikkun",
+              "bbttcc:domain:alignment",
+              "bbttcc:domain:hex-reading",
+              "bbttcc:scope:self",
+              "bbttcc:scope:hex",
+              "bbttcc:scope:faction",
+              "bbttcc:when:hex_entry",
+              "bbttcc:when:long_rest:once",
+              "bbttcc:effect:proficiency:religion",
+              "bbttcc:effect:sense:hex_alignment",
+              "bbttcc:effect:spell:detect-evil-and-good:1-per-long-rest",
+              "bbttcc:effect:op_roll:softpower:+3",
+              "bbttcc:resonance:tree",
+              "bbttcc:resonance:binah",
+              "bbttcc:drift:order",
+              "bbttcc:cost:strain",
+              "bbttcc:cost:attention",
+              "bbttcc:theme:seeing-the-pattern",
+              "bbttcc:theme:metaphysical-survey"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "k8reKRIa2p6Huct3",
+            "pack": "occult-associations",
+            "identifier": "occult-association-kabbalist-t1",
+            "hash": "333de588da0a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-kabbalist-t2",
+      "name": "Occult Association: Kabbalist (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "folder": "Kabbalist",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Kabbalist</strong></p><p><strong>“You don’t hunt Sparks. You classify them — and classification is power.”</strong></p><p>At Tier 2, you stop mistaking mystery for depth. Most mysteries are just unlabeled containers. You bring labels.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Identification Efficiency:</strong> during the <strong>Identification</strong> phase of the Great Work, reduce the <strong>OP cost</strong> or <strong>time/resources required</strong> to identify a required Spark by <strong>25%</strong> (GM adjudicates narrative reductions as needed).</li></ul><p><em>Mechanically, you waste fewer resources on the wrong answer. Narratively, the world stops wasting your time.</em></p><p><strong>Cost:</strong> every act of correct classification closes some other possibility. Expect rigidity, social friction, or backlash from people who preferred the ambiguity.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-kabbalist-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "kabbalist",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:kabbalist",
+              "bbttcc:tier:2",
+              "bbttcc:domain:tikkun",
+              "bbttcc:domain:sparks",
+              "bbttcc:domain:identification",
+              "bbttcc:scope:faction",
+              "bbttcc:scope:great-work",
+              "bbttcc:when:great_work:identification",
+              "bbttcc:effect:identify_cost:required_spark:-25%",
+              "bbttcc:effect:identify_time:required_spark:-25%",
+              "bbttcc:resonance:tree",
+              "bbttcc:resonance:binah",
+              "bbttcc:drift:order",
+              "bbttcc:cost:rigidity",
+              "bbttcc:cost:friction",
+              "bbttcc:theme:classification",
+              "bbttcc:theme:correct-naming"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "fRTno7Cf4DQMfA8V",
+            "pack": "occult-associations",
+            "identifier": "occult-association-kabbalist-t2",
+            "hash": "9ae5fce3c02c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-kabbalist-t3",
+      "name": "Occult Association: Kabbalist (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "folder": "Kabbalist",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Kabbalist</strong></p><p><strong>“Qliphoth lies, but it lies in consistent ways.”</strong></p><p>At Tier 3, you can read the Shells like weather. You are not immune to corruption. You are simply harder to fool.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li><strong>Ritual Literacy:</strong> you have advantage on Intelligence (Religion) checks to understand the nature, weaknesses, bindings, and rituals of Qliphothic entities.</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Read the Rot:</strong> once per Scenario involving Qliphothic forces or corrupted Hex conditions, gain <strong>Advantage</strong> on one relevant Strategic Roll, chosen when you roll.</li></ul><p><strong>Cost:</strong> pattern-recognition cuts both ways. Repeated exposure to the Shells can normalize ugliness, invite obsession, or tempt you into treating corruption as merely another readable system.</p><p><strong>Read the Rot</strong> <em>(Recovery: 1/Scenario · Action: Strategic)</em> — In a Scenario involving Qliphothic forces or corrupted Hex conditions, gain advantage on one relevant Strategic Roll.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-kabbalist-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "kabbalist",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:kabbalist",
+              "bbttcc:tier:3",
+              "bbttcc:domain:qliphoth",
+              "bbttcc:domain:corruption",
+              "bbttcc:domain:ritual-analysis",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:scenario:qliphothic",
+              "bbttcc:when:scenario:corrupted_hex",
+              "bbttcc:effect:advantage:religion_checks:qliphothic-analysis",
+              "bbttcc:effect:scenario_advantage:one_relevant_roll",
+              "bbttcc:resonance:tree",
+              "bbttcc:resonance:binah",
+              "bbttcc:drift:order",
+              "bbttcc:cost:obsession",
+              "bbttcc:cost:desensitization",
+              "bbttcc:theme:read-the-shells",
+              "bbttcc:theme:corruption-literacy"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "14KxBu2puGU8MWsF",
+            "pack": "occult-associations",
+            "identifier": "occult-association-kabbalist-t3",
+            "hash": "1565ac7a45a8"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-kabbalist-t4",
+      "name": "Occult Association: Kabbalist (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "folder": "Kabbalist",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Kabbalist</strong></p><p><strong>“You don’t cleanse a Hex. You convince it to remember what it was meant to be.”</strong></p><p>At Tier 4, you are no longer merely a reader of alignment. You are a <em>shifter</em>. When your faction pushes a Hex toward a Sephirah, you can feel where the resistance is and where to apply pressure so the world gives way instead of breaking.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Alignment Authority:</strong> when your faction attempts to shift a Hex’s alignment toward a Sephirah, choose one:</li><ul><li>gain <strong>Advantage</strong> on the Opposed Strategic Roll, <em>or</em></li><li>reduce the OP cost of the shift by <strong>10%</strong> (minimum reduction 1 OP when spending 10+ OP; otherwise GM adjudicates)</li></ul></ul><p><em>The Tree hears you more clearly than it hears most people.</em></p><p><strong>Cost:</strong> forced alignment is never free. Expect backlash, revealed contradictions, metaphysical strain, or nearby instability when you make the world remember too quickly.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-kabbalist-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "kabbalist",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:kabbalist",
+              "bbttcc:tier:4",
+              "bbttcc:domain:tikkun",
+              "bbttcc:domain:alignment-shift",
+              "bbttcc:domain:hex",
+              "bbttcc:scope:hex",
+              "bbttcc:scope:faction",
+              "bbttcc:when:hex_alignment_shift:sephirah",
+              "bbttcc:effect:alignment_shift:advantage",
+              "bbttcc:effect:alignment_shift:op_cost:-10%",
+              "bbttcc:resonance:tree",
+              "bbttcc:resonance:binah",
+              "bbttcc:drift:order",
+              "bbttcc:cost:backlash",
+              "bbttcc:cost:strain",
+              "bbttcc:cost:local-instability",
+              "bbttcc:theme:sephirothic-restoration",
+              "bbttcc:theme:world-remembrance"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "mEJpkAW9VZWVfunU",
+            "pack": "occult-associations",
+            "identifier": "occult-association-kabbalist-t4",
+            "hash": "2841cedd2347"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-prophet-oracle",
+      "name": "Occult Association: Prophet / Oracle",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "folder": "Prophet/Oracle",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Occult Association (BBTTCC): Prophet / Oracle.</em></p><p><strong>“The future is not hidden. It is just expensive to hear clearly.”</strong></p><p>Prophets do not control the future. They endure proximity to it.</p><p>Where Tarot Mages manipulate timing and probability like gamblers with dangerous discipline, Prophets stand closer to the signal itself. They hear pattern before it becomes event, consequence before it becomes story, and warning before anyone else admits there is something to warn about.</p><p>To a Prophet, the Great Work is not just about choosing well. It is about seeing the shape of what is coming early enough to alter who is prepared for it.</p><p><strong>How Prophets pursue the Great Work:</strong></p><ul><li>By reading emerging pressure before it resolves into action</li><li>By recognizing encounter patterns before they fully manifest</li><li>By turning foresight into factional advantage</li><li>By making ignorance more expensive than preparation</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal</strong> — possibility, revelation, pattern-emergence, and the unbearable weight of glimpsing too much too early.</p><p><strong>Tell-tales:</strong> pauses before bad news, unfinished sentences that become correct later, eyes that track causes before effects.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Dexterity, planning, or foresight-adjacent OP rolls</strong> (GM adjudicates the exact lane)</li></ul><p><strong>Cost Principle:</strong> foresight creates burden. Expect omen pressure, emotional Stress, false-positive anxiety, and resentment from people who preferred not to know what was coming.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-prophet-oracle"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {
+            "intrigue": 1
+          },
+          "option": {
+            "category": "occult",
+            "key": "prophet-oracle",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:prophet-oracle",
+              "bbttcc:base",
+              "bbttcc:domain:signal",
+              "bbttcc:domain:future",
+              "bbttcc:domain:foresight",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:effect:op_roll:foresight-facing:+1",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:watchful-detached",
+              "bbttcc:cost:burden",
+              "bbttcc:cost:omen-pressure",
+              "bbttcc:theme:early-warning",
+              "bbttcc:theme:signal-reception"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Kb4nKMfJtxW6rvH0",
+            "pack": "occult-associations",
+            "identifier": "occult-association-prophet-oracle",
+            "hash": "ae786c08f629"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-prophet-oracle-t1",
+      "name": "Occult Association: Prophet / Oracle (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "folder": "Prophet/Oracle",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Prophet / Oracle</strong></p><p><strong>“You don’t know the future. You just know when something has started.”</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain proficiency in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/long rest, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your faction is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><p><strong>Omen Question</strong> <em>(Recovery: 1/long rest · Action: Free)</em> — Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-prophet-oracle-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "prophet-oracle",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:prophet-oracle",
+              "bbttcc:tier:1",
+              "bbttcc:domain:signal",
+              "bbttcc:domain:omens",
+              "bbttcc:domain:planning",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:long_rest:once",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:effect:proficiency:insight",
+              "bbttcc:effect:proficiency:perception",
+              "bbttcc:effect:ask:one_omen_question",
+              "bbttcc:effect:op_roll:planning-facing:+2",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:watchful-detached",
+              "bbttcc:cost:unease",
+              "bbttcc:cost:attention-strain",
+              "bbttcc:theme:first-omens",
+              "bbttcc:theme:edge-of-event"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "fhbiUUQ9B3QrThXa",
+            "pack": "occult-associations",
+            "identifier": "occult-association-prophet-oracle-t1",
+            "hash": "0df99fd42722"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-prophet-oracle-t2",
+      "name": "Occult Association: Prophet / Oracle (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "folder": "Prophet/Oracle",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Prophet / Oracle</strong></p><p><strong>“You are no longer guessing. You are biasing arrival.”</strong></p><p>At Tier 2, you begin to influence what kind of event emerges first. Not by commanding the future outright, but by strengthening one probability path and starving another.</p><p><strong>Strategic (Faction / Campaign Scale)</strong></p><ul><li>Once per Scenario, when an encounter, complication, or emerging situation is about to be introduced, you may ask the GM to bias it toward one broad category: <strong>warning, negotiation, hazard, omen, hostile contact, or opportunity</strong></li><li>The GM retains final authorship, but should honor the bias where reasonably possible</li></ul><p><strong>Additional Benefit:</strong> when your faction prepares for a known threat, the GM should treat you as unusually difficult to catch flat-footed.</p><p><strong>Cost:</strong> when you bias arrival, you also shape what fails to happen. Expect displaced complications, missed opportunities, or consequences that reappear later wearing a different face.</p><p><strong>Bias the Arrival</strong> <em>(Recovery: 1/Scenario · Action: Strategic)</em> — When a complication is about to be introduced, ask GM to bias it toward a category: warning / negotiation / hazard / omen / hostile contact / opportunity.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-prophet-oracle-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "prophet-oracle",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:prophet-oracle",
+              "bbttcc:tier:2",
+              "bbttcc:domain:future",
+              "bbttcc:domain:encounters",
+              "bbttcc:domain:campaign",
+              "bbttcc:scope:scenario",
+              "bbttcc:scope:campaign",
+              "bbttcc:when:scenario:once",
+              "bbttcc:when:encounter_introduction",
+              "bbttcc:effect:bias:encounter_category",
+              "bbttcc:effect:preparedness:anti-ambush",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:watchful-detached",
+              "bbttcc:cost:displacement",
+              "bbttcc:cost:missed-opportunity",
+              "bbttcc:theme:biasing-arrival",
+              "bbttcc:theme:future-pressure-routing"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "LyQ4S9FyNF4IPuCg",
+            "pack": "occult-associations",
+            "identifier": "occult-association-prophet-oracle-t2",
+            "hash": "fac68ad46328"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-prophet-oracle-t3",
+      "name": "Occult Association: Prophet / Oracle (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "folder": "Prophet/Oracle",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Prophet / Oracle</strong></p><p><strong>“I know which failure matters.”</strong></p><p>At Tier 3, foresight stops being vague and starts becoming operational. You may not know everything that will happen, but you know which branch is dangerous enough to deserve intervention first.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>1/long rest, before a roll is made, declare a creature, ally, or visible event-thread and grant <strong>Advantage</strong> on one attack roll, saving throw, or attribute check tied to avoiding a meaningful failure</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Scenario, after a failed key check, you may identify it as a <strong>foreseen failure</strong> and either:</li><ul><li>reroll the check, taking the new result, <em>or</em></li><li>accept the failure but downgrade one attached narrative consequence by one step</li></ul></ul><p><strong>Cost:</strong> strong foresight creates emotional wear and inevitability-dread. Expect fatigue, dread, or the unsettling feeling that saving one branch made another one brighter instead of dimmer.</p><p><strong>Foreseen Failure</strong> <em>(Recovery: 1/long rest · Action: Free (before roll))</em> — Declare a creature/ally/event-thread; grant advantage on one attack/save/check tied to avoiding meaningful failure.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-prophet-oracle-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "prophet-oracle",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:prophet-oracle",
+              "bbttcc:tier:3",
+              "bbttcc:domain:future",
+              "bbttcc:domain:failure-mitigation",
+              "bbttcc:domain:scenario",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:long_rest:once",
+              "bbttcc:when:scenario:once",
+              "bbttcc:when:post_failure",
+              "bbttcc:effect:advantage:one_avoidance_roll",
+              "bbttcc:effect:reroll:failed_key_check",
+              "bbttcc:effect:consequence_severity:-1-step",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:watchful-detached",
+              "bbttcc:cost:fatigue",
+              "bbttcc:cost:inevitability-dread",
+              "bbttcc:theme:foreseen-failure",
+              "bbttcc:theme:branch-intervention"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "76uQooF6dL1qYP7b",
+            "pack": "occult-associations",
+            "identifier": "occult-association-prophet-oracle-t3",
+            "hash": "b858ca4bef1d"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-prophet-oracle-t4",
+      "name": "Occult Association: Prophet / Oracle (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "folder": "Prophet/Oracle",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Prophet / Oracle</strong></p><p><strong>“The campaign is already telling you what it wants. I just hear it louder.”</strong></p><p>At Tier 4, prophecy becomes campaign-facing. You are no longer reacting to immediate danger alone. You can perceive approaching pattern at the level of factions, arcs, and emerging catastrophe.</p><p><strong>Strategic (Campaign / Faction Scale)</strong></p><ul><li>Once per Strategic Turn, ask the GM one major foresight question about an impending threat, faction move, campaign complication, or likely point of fracture</li><li>The answer should be truthful, though it may be symbolic, partial, or framed as pressure rather than exposition</li><li>Additionally, once per Scenario, your faction may treat one future-facing preparation action as if it had unusually accurate intelligence behind it</li></ul><p><strong>Cost:</strong> large-scale prophecy is never clean. Expect doom-bias, enemy counter-divination, omen bleed, or narrative consequences that punish overconfidence in what was seen.</p><p><strong>Major Foresight</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Ask GM one major foresight question about an impending threat / faction move / fracture point. (Tier 4 also has a 1/Scenario unusually-accurate prep — separate.)</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-prophet-oracle-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "prophet-oracle",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:prophet-oracle",
+              "bbttcc:tier:4",
+              "bbttcc:domain:signal",
+              "bbttcc:domain:campaign",
+              "bbttcc:domain:foresight",
+              "bbttcc:scope:campaign",
+              "bbttcc:scope:faction",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:when:scenario:once",
+              "bbttcc:effect:ask:one_major_foresight_question",
+              "bbttcc:effect:preparation:accurate-intelligence",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:watchful-detached",
+              "bbttcc:cost:doom-bias",
+              "bbttcc:cost:counter-divination",
+              "bbttcc:cost:overconfidence-risk",
+              "bbttcc:theme:campaign-prophecy",
+              "bbttcc:theme:high-signal-reception"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "h4N0B00aOmAMKUQ9",
+            "pack": "occult-associations",
+            "identifier": "occult-association-prophet-oracle-t4",
+            "hash": "bf010bc7cdc6"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-rosicrucian",
+      "name": "Occult Association: Rosicrucian",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "folder": "Rosicrucian",
+      "system": {
+        "description": {
+          "value": "<p><em>Occult Association (BBTTCC): Rosicrucian.</em></p><p><strong>“I carry the old codes. I also carry a knife.”</strong></p><p>Rosicrucians approach the Great Work like a courier network running through a burning city.</p><p>They preserve forbidden manuals, safeguard rituals, move people and knowledge between surviving nodes, and keep the chain of instruction alive when the world would prefer amnesia. Where some occult paths seek revelation or force, the Rosicrucian seeks <strong>continuity</strong>. The world cannot be repaired if the instructions are lost, the routes are severed, or the people who remember how to proceed are already dead.</p><p>To a Rosicrucian, the Great Work is not merely discovery. It is <strong>preservation, transit, and successful handoff</strong>.</p><p><strong>How Rosicrucians pursue the Great Work:</strong></p><ul><li>By keeping archives, techniques, and living instruction intact</li><li>By building bridges between factions before they harden into wars</li><li>By turning safe passage into a strategic asset</li><li>By making recovered Sparks actually matter after recovery</li></ul><p><strong>Resonance:</strong> <strong>Netzach / Continuity</strong> — endurance, persistence, route-memory, and the stubborn survival of useful truth.</p><p><strong>Tell-tales:</strong> precise manners, hidden caches, backup plans nested inside backup plans, and the calm confidence of someone who already mapped the exit.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Diplomacy OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> continuity creates obligation. Expect favors, route maintenance, political visibility, and pressure from everyone who now assumes your network will keep holding.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-rosicrucian"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {
+            "diplomacy": 1
+          },
+          "option": {
+            "category": "occult",
+            "key": "rosicrucian",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:rosicrucian",
+              "bbttcc:base",
+              "bbttcc:domain:continuity",
+              "bbttcc:domain:network",
+              "bbttcc:domain:diplomacy",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:effect:op_roll:diplomacy:+3",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:cooperative",
+              "bbttcc:cost:obligation",
+              "bbttcc:cost:visibility",
+              "bbttcc:theme:living-archive",
+              "bbttcc:theme:route-preservation"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bZmsfKEIaPqavJDj",
+            "pack": "occult-associations",
+            "identifier": "occult-association-rosicrucian",
+            "hash": "b56337e2ace5"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-rosicrucian-t1",
+      "name": "Occult Association: Rosicrucian (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "folder": "Rosicrucian",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Rosicrucian</strong></p><p><strong>“The secret isn’t the symbol. It’s the route.”</strong></p><p>You become a bearer of old codes and practical protocols. You know how to talk to people who do not want to be found — and how to survive when they find you first.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain proficiency in <strong>History</strong> and <strong>Persuasion</strong></li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction negotiates treaties, ceasefires, trade pacts, or alliances, gain <strong>+1 to the relevant Diplomacy OP roll</strong></li><li>You begin play with one established positive relationship with a neutral NPC faction (GM chooses or you propose)</li></ul><p><strong>Cost:</strong> every functioning backchannel creates expectations. Old contacts become live liabilities the moment you prove the network still works.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-rosicrucian-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "rosicrucian",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:rosicrucian",
+              "bbttcc:tier:1",
+              "bbttcc:domain:continuity",
+              "bbttcc:domain:diplomacy",
+              "bbttcc:domain:relationship",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:negotiate:treaty",
+              "bbttcc:when:negotiate:ceasefire",
+              "bbttcc:when:negotiate:trade-pact",
+              "bbttcc:when:negotiate:alliance",
+              "bbttcc:effect:proficiency:history",
+              "bbttcc:effect:proficiency:persuasion",
+              "bbttcc:effect:op_roll:diplomacy:+3",
+              "bbttcc:effect:relationship:neutral-faction:positive",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:cooperative",
+              "bbttcc:cost:obligation",
+              "bbttcc:cost:contact-exposure",
+              "bbttcc:theme:old-codes",
+              "bbttcc:theme:backchannel-access"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "36oh7xp6vQr6Fp5l",
+            "pack": "occult-associations",
+            "identifier": "occult-association-rosicrucian-t1",
+            "hash": "8ed5bd983375"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-rosicrucian-t2",
+      "name": "Occult Association: Rosicrucian (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "folder": "Rosicrucian",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Rosicrucian</strong></p><p><strong>“I don’t preach Enlightenment. I smuggle it.”</strong></p><p>Your network makes progress easier to sustain. People advance faster when the path is lit — and when someone is quietly removing the traps.</p><p><strong>Strategic (Faction / Party Scale)</strong></p><ul><li>When the party earns Enlightenment Points or meets narrative criteria for advancement, increase the rate of progress by <strong>10%</strong> (GM adjudicates exact pacing benefits)</li></ul><p>This is not a miracle. This is logistics — and Rosicrucians have always been very good at logistics.</p><p><strong>Cost:</strong> accelerated progress strains the chain supporting it. Expect supply burden, mentor fatigue, increased expectations, or rival attention once advancement starts looking organized instead of accidental.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-rosicrucian-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "rosicrucian",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:rosicrucian",
+              "bbttcc:tier:2",
+              "bbttcc:domain:continuity",
+              "bbttcc:domain:enlightenment",
+              "bbttcc:domain:logistics",
+              "bbttcc:scope:party",
+              "bbttcc:scope:faction",
+              "bbttcc:when:advancement",
+              "bbttcc:when:enlightenment_gain",
+              "bbttcc:effect:progress_rate:enlightenment:+10%",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:cooperative",
+              "bbttcc:cost:burden",
+              "bbttcc:cost:expectation",
+              "bbttcc:theme:smuggled-enlightenment",
+              "bbttcc:theme:quiet-acceleration"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "3MyYOqHNIrEegCsR",
+            "pack": "occult-associations",
+            "identifier": "occult-association-rosicrucian-t2",
+            "hash": "47c34221f9df"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-rosicrucian-t3",
+      "name": "Occult Association: Rosicrucian (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "folder": "Rosicrucian",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 3 — Rosicrucian</strong></p><p><strong>“Civilization still has back doors.”</strong></p><p>You can reliably find shelter and safe passage in civilized places — not because they are safe, but because somebody still owes your order a favor.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>You can secure safe shelter, cover, or passage in GenPop Hexes without spending OPs, though the GM may require a short scene or check if the area is actively hostile</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, negate a single “lost time” complication caused by bureaucracy, checkpoints, or local authorities during a Diplomacy-forward operation</li></ul><p><strong>Cost:</strong> every route you use becomes a route you may have to protect. Shelter is never free when people can trace who provided it.</p><p><strong>Bypass Bureaucracy</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic (Diplo op))</em> — Negate a single 'lost time' complication caused by bureaucracy / checkpoints / local authorities during a Diplomacy-forward op.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-rosicrucian-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "rosicrucian",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:rosicrucian",
+              "bbttcc:tier:3",
+              "bbttcc:domain:continuity",
+              "bbttcc:domain:safe-passage",
+              "bbttcc:domain:bureaucracy-bypass",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:scope:hex",
+              "bbttcc:when:genpop_hex",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:when:complication:bureaucracy",
+              "bbttcc:when:complication:checkpoints",
+              "bbttcc:when:complication:local-authorities",
+              "bbttcc:effect:shelter:secure",
+              "bbttcc:effect:passage:safe",
+              "bbttcc:effect:ignore:lost-time-complication:once_per_turn",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:cooperative",
+              "bbttcc:cost:route-exposure",
+              "bbttcc:cost:protection-burden",
+              "bbttcc:theme:back-doors-of-civilization",
+              "bbttcc:theme:hidden-corridors"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "YwZo5mxbQUL5WqHi",
+            "pack": "occult-associations",
+            "identifier": "occult-association-rosicrucian-t3",
+            "hash": "7e527e986de9"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-rosicrucian-t4",
+      "name": "Occult Association: Rosicrucian (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "folder": "Rosicrucian",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Rosicrucian</strong></p><p><strong>“When the Spark arrives, my people already have a place to put it.”</strong></p><p>At Tier 4, your order stops feeling like a club and starts feeling like infrastructure. When your faction achieves a Spark recovery, your network amplifies the downstream benefit.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction successfully gathers a Spark of Light for the Great Work, increase the resulting <strong>Faction Resource Injection</strong> by <strong>20%</strong></li></ul><p>The Great Work is not just discovery. It is what happens <em>after</em> discovery — and you are built for that.</p><p><strong>Cost:</strong> once your network becomes the obvious place recovered value flows through, rivals, allies, and dependents all begin measuring you by whether that flow ever stops.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-rosicrucian-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "rosicrucian",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:rosicrucian",
+              "bbttcc:tier:4",
+              "bbttcc:domain:continuity",
+              "bbttcc:domain:sparks",
+              "bbttcc:domain:resource-injection",
+              "bbttcc:scope:faction",
+              "bbttcc:scope:great-work",
+              "bbttcc:when:great_work:spark_recovery",
+              "bbttcc:effect:resource_injection:+20%",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:cooperative",
+              "bbttcc:cost:visibility",
+              "bbttcc:cost:dependency",
+              "bbttcc:theme:downstream-amplification",
+              "bbttcc:theme:network-as-infrastructure"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "9iUzBAc0Id4l63v2",
+            "pack": "occult-associations",
+            "identifier": "occult-association-rosicrucian-t4",
+            "hash": "1860af9cffc2"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-shaman",
+      "name": "Occult Association: Shaman",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "folder": "Shaman",
+      "system": {
+        "description": {
+          "value": "<p><em>Occult Association (BBTTCC): Shaman.</em></p><p><strong>“You don’t fix the world. You listen to what it’s trying to become.”</strong></p><p>Shamans do not impose order. They enter into relationship.</p><p>To a Shaman, the Great Work is not about forcing alignment onto a dead world. It is about hearing the pulse that is still there and deciding whether to protect it, guide it, or stand aside long enough for it to speak clearly. Every Hex is alive in some way. Every leyline has mood. Every storm is making a decision. Every spirit remembers who treated the land like a partner and who treated it like inventory.</p><p>Where Kabbalists map structure and Alchemists force conversion, Shamans work by <strong>attunement</strong>. They negotiate with terrain, weather, spirits, and flow-states that existed before factions learned to count OP.</p><p><strong>How Shamans pursue the Great Work:</strong></p><ul><li>By listening to terrain, weather, and spirit pressure</li><li>By stabilizing living systems instead of extracting from them</li><li>By redirecting corruption rather than merely containing it</li><li>By treating Hexes as relationships, not assets</li></ul><p><strong>Resonance:</strong> <strong>Netzach / Living Flow</strong> — endurance, ecology, instinctive continuity, and the intelligence of systems nobody designed.</p><p><strong>Tell-tales:</strong> mud where there should not be mud, animals that stop running, weather that feels briefly conversational.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on relevant terrain, travel, weather, or wilderness-facing OP rolls</strong> (GM adjudicates the exact OP lane)</li></ul><p><strong>Cost Principle:</strong> attunement creates obligation. The more the land speaks to you, the less you can pretend not to hear it. Expect spirit attention, place-based duty, and backlash when your faction acts against the needs of a living Hex.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-shaman"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "shaman",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:shaman",
+              "bbttcc:base",
+              "bbttcc:domain:leylines",
+              "bbttcc:domain:terrain",
+              "bbttcc:domain:weather",
+              "bbttcc:domain:spirits",
+              "bbttcc:scope:hex",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:effect:op_roll:wilderness-facing:+1",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:communal-ecological",
+              "bbttcc:cost:obligation",
+              "bbttcc:cost:spirit-attention",
+              "bbttcc:theme:living-systems",
+              "bbttcc:theme:attunement"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Tm6WRcdeIHMUga7F",
+            "pack": "occult-associations",
+            "identifier": "occult-association-shaman",
+            "hash": "cbf0613c3388"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-shaman-t1",
+      "name": "Occult Association: Shaman (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "folder": "Shaman",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 — Shaman</strong></p><p><strong>“It was talking before. You just couldn’t hear it yet.”</strong></p><p>At Tier 1, you become perceptible to the world and the world becomes perceptible to you.</p><p>You can feel when a place is hungry, when a storm is about to turn mean, and when a Hex is carrying more pressure than its surface suggests. You are not commanding nature yet. You are learning its tone.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain proficiency in <strong>Nature</strong> and <strong>Survival</strong></li><li>You can perform a brief attunement to sense whether a nearby area is spiritually calm, distressed, corrupted, or unusually resonant</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Attunement:</strong> upon entering a new Hex, you learn one of the following about it: dominant flow-state, unusual weather pressure, leyline disturbance, or corruption presence</li><li>Once per Strategic Turn, gain <strong>+1</strong> to one relevant travel, terrain, or wilderness-facing OP roll</li></ul><p><strong>Cost:</strong> once the world starts speaking to you, silence gets rare. Expect distraction, omen pressure, or spirit agitation when your faction ignores what a place is telling you.</p><p><strong>Hex Attunement</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — +1 to one travel/terrain/wilderness OP roll. (On-entry hex read is passive.)</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-shaman-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "shaman",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:shaman",
+              "bbttcc:tier:1",
+              "bbttcc:domain:terrain",
+              "bbttcc:domain:weather",
+              "bbttcc:domain:spirits",
+              "bbttcc:scope:self",
+              "bbttcc:scope:hex",
+              "bbttcc:scope:faction",
+              "bbttcc:when:hex_entry",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:effect:proficiency:nature",
+              "bbttcc:effect:proficiency:survival",
+              "bbttcc:effect:sense:hex_pressure",
+              "bbttcc:effect:op_roll:wilderness-facing:+2",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:communal-ecological",
+              "bbttcc:cost:omen-pressure",
+              "bbttcc:cost:spirit-agitation",
+              "bbttcc:theme:first-attunement",
+              "bbttcc:theme:hex-listening"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Fg5nSg0gzt1JIr0R",
+            "pack": "occult-associations",
+            "identifier": "occult-association-shaman-t1",
+            "hash": "b11956f7578b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-shaman-t2",
+      "name": "Occult Association: Shaman (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "folder": "Shaman",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 2 — Shaman</strong></p><p><strong>“You can ask now. That doesn’t mean the answer will be polite.”</strong></p><p>At Tier 2, you stop merely perceiving living systems and begin negotiating with them. A storm can be persuaded to pass slightly east. A treeline can hide you if it likes your reasons. The road does not get easier. It gets more willing.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, when your faction faces travel hazard, severe weather, or terrain-based difficulty, choose one:</li><ul><li>reduce the severity of one weather or terrain complication by one step, <em>or</em></li><li>gain <strong>Advantage</strong> on one relevant travel or wilderness-facing Strategic Roll</li></ul></ul><p><strong>Additional Benefit:</strong> when planning movement through hostile terrain, the GM should treat your faction as unusually competent at reading the path of least spiritual resistance.</p><p><strong>Cost:</strong> every favor asked of the land becomes a relationship to maintain. Expect localized spirits, weather memory, or ecological resentment if your faction takes the benefit without reciprocity.</p><p><strong>Read the Path</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Reduce one weather/terrain complication by one step OR gain advantage on one travel/wilderness Strategic Roll.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-shaman-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "shaman",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:shaman",
+              "bbttcc:tier:2",
+              "bbttcc:domain:weather",
+              "bbttcc:domain:terrain",
+              "bbttcc:domain:travel",
+              "bbttcc:scope:faction",
+              "bbttcc:scope:hex",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:when:travel_hazard",
+              "bbttcc:when:weather_complication",
+              "bbttcc:effect:complication_severity:-1-step",
+              "bbttcc:effect:scenario_advantage:one_relevant_travel_roll",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:communal-ecological",
+              "bbttcc:cost:reciprocity-debt",
+              "bbttcc:cost:ecological-resentment",
+              "bbttcc:theme:weather-negotiation",
+              "bbttcc:theme:path-of-least-resistance"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ue9tX6vXRWNRzIOw",
+            "pack": "occult-associations",
+            "identifier": "occult-association-shaman-t2",
+            "hash": "7db12ae7cdba"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-shaman-t3",
+      "name": "Occult Association: Shaman (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "folder": "Shaman",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Shaman</strong></p><p><strong>“Corruption is still a conversation. It just stopped using words you like.”</strong></p><p>At Tier 3, you learn that wounded places do not need to be dominated to be changed. Corruption has rhythm, pressure, and predictable hungers. Terrain remembers what happened to it. Spirits remember what they lost. You can work with that.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>You have advantage on checks involving wilderness spirits, corrupted landscapes, natural omens, or reading environmental imbalance</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Scenario involving corrupted terrain, distressed leyline flow, unnatural weather, or spirit unrest, choose one:</li><ul><li>gain <strong>Advantage</strong> on one relevant Strategic Roll, <em>or</em></li><li>negate one terrain- or corruption-based penalty affecting your faction for that Scene or operation</li></ul></ul><p><strong>Cost:</strong> working with wounded places means taking some of the wound into yourself. Expect emotional residue, spirit attachment, or moments where your own instincts start sounding suspiciously like the land’s pain.</p><p><strong>Spirit-Walk</strong> <em>(Recovery: 1/Scenario · Action: Strategic)</em> — In a corrupted-terrain / leyline / weather / spirit unrest scenario: advantage on one Strategic Roll OR negate one terrain/corruption penalty.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-shaman-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "shaman",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:shaman",
+              "bbttcc:tier:3",
+              "bbttcc:domain:corruption",
+              "bbttcc:domain:leylines",
+              "bbttcc:domain:spirits",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:scenario:corrupted_terrain",
+              "bbttcc:when:scenario:distressed_flow",
+              "bbttcc:when:scenario:unnatural_weather",
+              "bbttcc:effect:advantage:checks:wilderness-spirit-corruption-reading",
+              "bbttcc:effect:scenario_advantage:one_relevant_roll",
+              "bbttcc:effect:ignore:terrain_or_corruption_penalty",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:communal-ecological",
+              "bbttcc:cost:emotional-residue",
+              "bbttcc:cost:spirit-attachment",
+              "bbttcc:theme:wounded-places",
+              "bbttcc:theme:corruption-negotiation"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "2y4I9h3izA8RUkTN",
+            "pack": "occult-associations",
+            "identifier": "occult-association-shaman-t3",
+            "hash": "fbe7198e7fca"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-shaman-t4",
+      "name": "Occult Association: Shaman (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "folder": "Shaman",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Shaman</strong></p><p><strong>“For a moment, the Hex remembers how to breathe.”</strong></p><p>At Tier 4, you do not merely survive living systems. You can reintroduce them to themselves.</p><p>You can persuade a place to recover its flow-state, quiet a spiritually violent weather pattern, or create a brief pocket of remembered balance in a Hex that has forgotten how to hold one.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, target one Hex your faction occupies, traverses, or is directly affecting. Choose one:</li><ul><li>temporarily stabilize a distressed leyline or hostile environmental state for one Scenario or one meaningful operation, <em>or</em></li><li>reduce one relevant corruption, weather, or terrain pressure affecting that Hex or operation by one significant step</li></ul></ul><p><strong>Additional Effect:</strong> when used in defense of a Hex aligned with living systems, the GM may treat your faction as having overwhelming positional sympathy with the terrain.</p><p><strong>Cost:</strong> restoration is never free. A Hex that remembers balance may ask to keep it. Expect duty, spirit claims, or consequences if your faction stabilizes a place only to exploit it immediately afterward.</p><p><strong>Stabilize the Hex</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic)</em> — Target a Hex: stabilize a leyline/environmental state for one Scenario, OR reduce a corruption/weather/terrain pressure by one significant step.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-shaman-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "shaman",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:shaman",
+              "bbttcc:tier:4",
+              "bbttcc:domain:leylines",
+              "bbttcc:domain:restoration",
+              "bbttcc:domain:hex",
+              "bbttcc:scope:hex",
+              "bbttcc:scope:faction",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:when:target_hex:occupied_or_traversed",
+              "bbttcc:effect:stabilize:leyline_or_environmental_state",
+              "bbttcc:effect:pressure:corruption_weather_terrain:-1-step",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:communal-ecological",
+              "bbttcc:cost:duty",
+              "bbttcc:cost:spirit-claim",
+              "bbttcc:cost:anti-exploitation-pressure",
+              "bbttcc:theme:hex-remembrance",
+              "bbttcc:theme:restored-breath"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "U0fJbMKeNSqknBC6",
+            "pack": "occult-associations",
+            "identifier": "occult-association-shaman-t4",
+            "hash": "255f2dfe1ca8"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-tarot-mage",
+      "name": "Occult Association: Tarot Mage",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "folder": "Tarot Mage",
+      "system": {
+        "description": {
+          "value": "<p><em>Occult Association (BBTTCC): Tarot Mage.</em></p><p><strong>“The future is rude. I read it anyway.”</strong></p><p>Tarot Mages do not predict the future. They <em>interrogate</em> it.</p><p>They treat fate like a deck: shuffled by chaos, cut by will, and stacked by anyone reckless enough to pay the price. Where other occult traditions pursue the Great Work through doctrine, continuity, or purification, the Tarot Mage pursues it through <strong>timing</strong>. The right pressure, at the right instant, can do what a thousand sincere speeches cannot.</p><p>To a Tarot Mage, the Great Work is not just about choosing well. It is about choosing at the <em>moment that matters</em>.</p><p><strong>How Tarot Mages pursue the Great Work:</strong></p><ul><li>By reading currents before Scenarios begin</li><li>By turning uncertainty into leverage</li><li>By making coincidence behave like a trained animal</li><li>By treating timing as a resource as real as OP</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal / Probability</strong> — possibility, timing, pattern emergence, and the dangerous urge to edit what has not happened yet.</p><p><strong>Tell-tales:</strong> shuffles anything that can be shuffled — cards, choices, people.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Dexterity OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> fate does not like fingerprints. Expect backlash, strange timing, narrative inversion, and consequences that arrive sideways when you push probability too hard.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-tarot-mage"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {
+            "intrigue": 1
+          },
+          "option": {
+            "category": "occult",
+            "key": "tarot-mage",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:tarot-mage",
+              "bbttcc:base",
+              "bbttcc:domain:probability",
+              "bbttcc:domain:signal",
+              "bbttcc:domain:intrigue",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:effect:op_roll:intrigue:+3",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:opportunistic",
+              "bbttcc:cost:fate-backlash",
+              "bbttcc:cost:timing-instability",
+              "bbttcc:theme:deck-of-futures",
+              "bbttcc:theme:outcome-editing"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "XfL3NGH04IDHiOZ0",
+            "pack": "occult-associations",
+            "identifier": "occult-association-tarot-mage",
+            "hash": "2f24ddc0ec12"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-tarot-mage-t1",
+      "name": "Occult Association: Tarot Mage (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "folder": "Tarot Mage",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Tarot Mage</strong></p><p><strong>“The future is rude. I read it anyway.”</strong></p><p>You are not powerful yet. You are noticeable. The cards do not obey you, but they do answer — and that is already enough to make normal people uncomfortable.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain proficiency in <strong>Insight</strong> or <strong>Arcana</strong> (GM or player choice if one is already covered elsewhere)</li><li>1/long rest, before making an attribute check, you may draw the line of fate early and gain <strong>Advantage</strong> on that check</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a faction Dexterity-forward action, you may <strong>read the spread</strong>: gain <strong>+2 to one relevant Dexterity OP roll</strong></li></ul><p><strong>Cost:</strong> once you start consulting fate, you begin seeing patterns everywhere. Expect second-guessing, omen pressure, or trouble distinguishing signal from appetite.</p><p><strong>Draw the Line (Tactical)</strong> <em>(Recovery: 1/long rest · Action: Free (before check))</em> — Before an attribute check, gain advantage on it.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-tarot-mage-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "tarot-mage",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:tarot-mage",
+              "bbttcc:tier:1",
+              "bbttcc:domain:probability",
+              "bbttcc:domain:foresight",
+              "bbttcc:domain:intrigue",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:long_rest:once",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:effect:proficiency:insight-or-arcana",
+              "bbttcc:effect:advantage:one_ability_check",
+              "bbttcc:effect:op_roll:intrigue:+2",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:opportunistic",
+              "bbttcc:cost:omen-pressure",
+              "bbttcc:cost:pattern-noise",
+              "bbttcc:theme:first-spread",
+              "bbttcc:theme:noticed-by-fate"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "vGJuUCQfIg74DVm1",
+            "pack": "occult-associations",
+            "identifier": "occult-association-tarot-mage-t1",
+            "hash": "403fd0c13d93"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-tarot-mage-t2",
+      "name": "Occult Association: Tarot Mage (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "folder": "Tarot Mage",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 — Tarot Mage</strong></p><p><strong>“Your practice has habits now. So do your consequences.”</strong></p><p>You are no longer just reading possibility. You are nudging it. Not enough to control the whole spread — just enough to make one bad outcome arrive somewhere else first.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Scenario, after a key faction check is rolled but before consequences fully resolve, you may <strong>tilt the draw</strong> and add <strong>+2</strong> to the result</li><li>Alternatively, reduce the severity of one failed narrative consequence by one step, as adjudicated by the GM</li></ul><p><strong>Cost:</strong> fate remembers interference. When you soften one outcome, another edge tends to sharpen. Expect displacement, ironic timing, or a later complication that feels suspiciously connected.</p><p><strong>Tilt the Draw</strong> <em>(Recovery: 1/Scenario · Action: Strategic)</em> — After a key faction check, +2 to result OR reduce severity of one failed consequence by one step.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-tarot-mage-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "tarot-mage",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:tarot-mage",
+              "bbttcc:tier:2",
+              "bbttcc:domain:probability",
+              "bbttcc:domain:outcome-tilt",
+              "bbttcc:domain:scenario",
+              "bbttcc:scope:faction",
+              "bbttcc:when:scenario:once",
+              "bbttcc:when:post_roll:pre_resolution",
+              "bbttcc:effect:roll_result:+2",
+              "bbttcc:effect:consequence_severity:-1-step",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:opportunistic",
+              "bbttcc:cost:displacement",
+              "bbttcc:cost:fate-memory",
+              "bbttcc:theme:tilt-the-draw",
+              "bbttcc:theme:redirected-bad-luck"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "u8JfLm0gsNPUXyZW",
+            "pack": "occult-associations",
+            "identifier": "occult-association-tarot-mage-t2",
+            "hash": "fc128e9f8480"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-tarot-mage-t3",
+      "name": "Occult Association: Tarot Mage (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "folder": "Tarot Mage",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Tarot Mage</strong></p><p><strong>“I’ve already seen the roll.”</strong></p><p>You stop reading the future and start <em>pinning it</em>. Not forever. Just long enough to matter.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>When you finish a long rest, roll a d20 and record the number</li><li><strong>1/long rest</strong>, you may replace any attack roll, saving throw, or attribute check made by you or a creature you can see with this foretelling roll, declared before the roll</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Scenario, you may <strong>call the card</strong> to gain <strong>Advantage</strong> on a single key check</li><li>If you fail anyway, the GM should attach a meaningful narrative cost</li></ul><p><strong>Cost:</strong> pinning a result creates tension elsewhere in the spread. Expect narrative backlash, omen inversion, or the sickening realization that something else just became inevitable instead.</p><p><strong>Foretelling Roll</strong> <em>(Recovery: 1/long rest · Action: Free (declare before))</em> — On long rest, roll a d20 and record. Replace any attack/save/check with this roll.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-tarot-mage-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "tarot-mage",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:tarot-mage",
+              "bbttcc:tier:3",
+              "bbttcc:domain:probability",
+              "bbttcc:domain:foretelling",
+              "bbttcc:domain:scenario",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:long_rest:once",
+              "bbttcc:when:scenario:once",
+              "bbttcc:effect:record:d20_foretelling_roll",
+              "bbttcc:effect:replace:attack_save_check",
+              "bbttcc:effect:scenario_advantage:one_key_check",
+              "bbttcc:effect:complication:on_failure",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:opportunistic",
+              "bbttcc:cost:backlash",
+              "bbttcc:cost:inevitability-shift",
+              "bbttcc:theme:pinned-future",
+              "bbttcc:theme:call-the-card"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "oIhjt5t20hRnNYcr",
+            "pack": "occult-associations",
+            "identifier": "occult-association-tarot-mage-t3",
+            "hash": "6b033fd8ea32"
+          }
+        }
+      }
+    },
+    {
+      "slug": "occult-association-tarot-mage-t4",
+      "name": "Occult Association: Tarot Mage (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "folder": "Tarot Mage",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 — Tarot Mage</strong></p><p><strong>“Fate is a machine. I know where to kick it.”</strong></p><p>At this tier, you can reach across the table and touch another faction’s outcome. Not by overpowering them — by <em>reordering the moment</em>.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>During <strong>Enemy Faction Turns (Phase 3)</strong>, spend <strong>5 Dexterity OP</strong> to manipulate fate</li><li>Force the GM to reroll one NPC faction’s strategic action outcome and take the new result</li></ul><p>Use this sparingly. The world does not like being reminded it can be edited.</p><p><strong>Cost:</strong> direct fate-editing leaves fingerprints all over the campaign. Expect backlash, omen debt, hostile synchronicity, or enemy actors who start looking for who touched the line.</p><p><strong>Force the Reroll</strong> <em>(Recovery: 5 Dexterity OP · Action: Strategic (Phase 3))</em> — Force the GM to reroll one NPC faction's strategic action outcome. Backlash guaranteed — use sparingly.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "occult-association-tarot-mage-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "tarot-mage",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:tarot-mage",
+              "bbttcc:tier:4",
+              "bbttcc:domain:probability",
+              "bbttcc:domain:enemy-turn",
+              "bbttcc:domain:outcome-editing",
+              "bbttcc:scope:faction",
+              "bbttcc:scope:enemy-faction",
+              "bbttcc:when:enemy_faction_turn:phase_3",
+              "bbttcc:effect:op_cost:intrigue:-5",
+              "bbttcc:effect:reroll:npc_strategic_action",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:opportunistic",
+              "bbttcc:cost:fate-backlash",
+              "bbttcc:cost:omen-debt",
+              "bbttcc:theme:kick-the-machine",
+              "bbttcc:theme:edited-future"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "8V6ri5F6BKLrhQX5",
+            "pack": "occult-associations",
+            "identifier": "occult-association-tarot-mage-t4",
+            "hash": "de6db8a9b245"
+          }
+        }
+      }
+    }
+  ]
+}

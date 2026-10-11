@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Storm Wardens",
+  "color": null,
+  "sorting": "a",
+  "_id": "UA0NkRXG1eSXe9EL",
+  "description": "",
+  "sort": 1000000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1774986959303,
+    "modifiedTime": 1774986959410,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!UA0NkRXG1eSXe9EL"
+}

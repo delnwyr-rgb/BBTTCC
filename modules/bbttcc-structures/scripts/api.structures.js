@@ -24,6 +24,8 @@ const FLAG_SCOPE = MOD_ID;
 let _FAMILIES = null;          // { families: {...}, stateThresholds: {...}, rubbleJitter: {...} }
 let _FAMILY_MAP = null;        // { materialKeyToFamily: {...}, _heuristicHints: {...} }
 let _PACK_ID_ITEMS = "bbttcc-master-content.items";
+// bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
 
 // ── Data load ────────────────────────────────────────────────────────────────
 
@@ -83,7 +85,7 @@ export function computeFamily(materialKey, tags = []) {
  */
 export async function lookupMaterial(materialKey) {
   if (!materialKey) return null;
-  const pack = game.packs.get(_PACK_ID_ITEMS);
+  const pack = _pack(_PACK_ID_ITEMS);
   if (!pack) {
     console.warn(TAG, "Items pack not found:", _PACK_ID_ITEMS);
     return null;

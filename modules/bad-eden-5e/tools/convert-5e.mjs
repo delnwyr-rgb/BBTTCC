@@ -790,8 +790,21 @@ function laneCreatures() {
 const loadModulePack = (rel) => walk(join(ROOT, "..", rel)).map(f => { try { return JSON.parse(readFileSync(f, "utf8")); } catch { return null; } }).filter(d => d && d._id && d.type && !String(d._key ?? "").startsWith("!folders"));
 const slugOf = (prefix, name) => prefix + name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const rfiFlag = (d, pack, extra = {}) => ({ id: d._id, pack, identifier: d.system?.identifier ?? d.flags?.["bbttcc-tikkun"]?.identifier ?? "", hash: sha(JSON.stringify({ n: d.name, s: d.system, f: d.flags ?? {}, ...extra })) });
+// The RFI sheet's per-use ability card (<div data-ft-per-use …>: "⟁ Per-Use Ability — Name" / Recovery · Action ·
+// "Use: Click this feature on your sheet to invoke." / effect) is fourththing UI — dnd5e has no such button.
+// Flatten it to prose: name, recovery and action kept (a Strategic Turn is faction cadence on both systems), the click line dropped.
+function flattenPerUseCards(html) {
+  const strip = s => s.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  return html.replace(/<div[^>]*data-ft-per-use=[^>]*>([\s\S]*?<\/div>)\s*<\/div>/g, (_, inner) => {
+    const rows = [...inner.matchAll(/<div[^>]*>([\s\S]*?)<\/div>/g)].map(m => strip(m[1]));
+    const name = (rows[0] ?? "").replace(/^⟁?\s*Per-Use Ability\s*[—–-]\s*/i, "");
+    const meta = (rows[1] ?? "").replace(/\s*·\s*Use:.*$/i, "");
+    const effect = rows[2] ?? "";
+    return `<p><strong>${name || "Per-use ability"}</strong>${meta ? ` <em>(${meta})</em>` : ""}${effect ? ` — ${effect}` : ""}</p>`;
+  });
+}
 const featItem = (d, slug, folder, needs) => {
-  const html = convertText(d.system?.description?.value ?? "");
+  const html = convertText(flattenPerUseCards(d.system?.description?.value ?? ""));
   for (const l of leftovers(html)) needs.push(`leftover term "${l}"`);
   return { slug, name: d.name, type: "feat", img: d.img && !/fourththing/.test(d.img) ? d.img : "icons/svg/book.svg", folder,
     system: { description: { value: html, chat: "" }, type: { value: "", subtype: "" }, requirements: "", properties: [], uses: { max: "", spent: 0, recovery: [] }, identifier: slug },
@@ -856,6 +869,106 @@ function laneSparks() {
   return { src, out, needsAll, kind: "items" };
 }
 
+/* ── character options + doctrines lanes (2026-10-11): the twins a D&D world on Ember needs ──
+ * The six bbttcc-character-options packs are declared `system: fourththing`, so dnd5e never registers them —
+ * but their documents are already plain feats carrying `flags.bbttcc-character-options` (category / bonuses /
+ * option.{category,key,…}), which the sorting engine, the character wizard and the character-options module
+ * read on both systems. So the conversion is near-identity: name, img, prose and the flag carried verbatim.
+ * Source = conversion/sources/character-options/<pack>/ — the live LevelDB (packs/<pack>/<pack>/, the `.db`
+ * manifest path resolves to the NESTED dir) unpacked with `fvtt package unpack`; Ember ≡ repo on 2026-10-11
+ * (132 / 72 / 6 / 60 / 13 / 10 records). Refresh: copy the nested dir aside, drop LOCK, unpack into the lane dir. */
+const OPTION_LANES = {
+  archetypes: { pack: "character-archetypes", prefix: "archetype-", folder: "Character Archetypes" },
+  crew: { pack: "crew-types", prefix: "crew-", folder: "Crew Types" },
+  enlightenment: { pack: "enlightenment-levels", prefix: "enlightenment-", folder: "Enlightenment Levels" },
+  occult: { pack: "occult-associations", prefix: "occult-", folder: "Occult Associations" },
+  political: { pack: "political-affiliations", prefix: "political-", folder: "Political Affiliations" },
+  alignments: { pack: "sephirothic-alignments", prefix: "alignment-", folder: "Sephirothic Alignments" }
+};
+const parseJson = f => { try { return JSON.parse(readFileSync(f, "utf8")); } catch { return null; } };
+const folderNames = docs => new Map(docs.filter(d => String(d._key ?? "").startsWith("!folders!")).map(d => [d._id, d.name]));
+// slugs are unique inside a pack: the RFI identifier when the doc has one, else the name; a collision gets the RFI id tacked on
+const uniqueSlug = (taken, want, d, needs) => {
+  let s = want;
+  if (taken.has(s)) { s = `${want}-${String(d._id).slice(0, 4).toLowerCase()}`; needs.push(`duplicate slug "${want}" → "${s}"`); }
+  taken.add(s); return s;
+};
+
+function laneOptions(key) {
+  const { pack, prefix, folder } = OPTION_LANES[key];
+  const all = walk(join(ROOT, "conversion", "sources", "character-options", pack)).map(parseJson).filter(d => d && d._id);
+  const names = folderNames(all);
+  const src = all.filter(d => d.type === "feat");
+  const out = [], needsAll = [], taken = new Set();
+  for (const d of src.sort((a, b) => a.name.localeCompare(b.name))) {
+    const needs = [];
+    const slug = uniqueSlug(taken, d.system?.identifier ? slugOf("", d.system.identifier) : slugOf(prefix, d.name), d, needs);
+    const e = featItem(d, slug, names.get(d.folder) ?? folder, needs);
+    const co = JSON.parse(JSON.stringify(d.flags?.["bbttcc-character-options"] ?? {}));
+    if (!Object.keys(co).length) needs.push("no bbttcc-character-options flag (the pickers key on option.category/key)");
+    e.flags = { "bbttcc-character-options": co, "bad-eden-5e": { rfi: rfiFlag(d, pack) } };
+    out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
+  }
+  return { src, out, needsAll, kind: "items" };
+}
+
+// Doctrines (bbttcc-master-content.doctrines) → dnd5e feats. The factions module keys the compendium by
+// flags.bbttcc.{kind,key} (name + img for display; embedded faction items stay entitlement wrappers) — carried verbatim.
+function laneDoctrines() {
+  const all = walk(join(SRC, "doctrines")).map(parseJson).filter(d => d && d._id);
+  const names = folderNames(all);
+  const src = all.filter(d => d.type === "feat");
+  const out = [], needsAll = [], taken = new Set();
+  for (const d of src.sort((a, b) => a.name.localeCompare(b.name))) {
+    const needs = [], b = d.flags?.bbttcc ?? {};
+    const slug = uniqueSlug(taken, slugOf("doctrine-", b.key || d.name), d, needs);
+    const e = featItem(d, slug, names.get(d.folder) ?? "Doctrines", needs);
+    if (!b.kind || !b.key) needs.push("no flags.bbttcc kind/key (the factions module can't match it to an entitlement)");
+    e.flags = { bbttcc: JSON.parse(JSON.stringify(b)), "bad-eden-5e": { rfi: rfiFlag(d, "doctrines") } };
+    out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
+  }
+  return { src, out, needsAll, kind: "items" };
+}
+
+// Rigs (bbttcc-master-content.vehicles: the five faction rigs) → dnd5e vehicles carrying the June flag layer
+// `flags.bbttcc-factions.rig` — the shape game.bbttcc.rigs.create() writes on dnd5e (bbttcc-core/scripts/rigs.js):
+// identity / crew / travel / output / tags → the flag, Integrity → hp (dt by bracket), defenses → traits through
+// the rubric damage map. Rig gear keeps `flags.fourththing.rigGear / rigFrame` verbatim (rigs.gearOf reads that
+// scope on either system); weapons and gear go through the gear lane's converters so they're real dnd5e items.
+const DT_BY_BRACKET = { personal: 0, light: 5, medium: 10, heavy: 15, siege: 20 };
+function laneRigs() {
+  const src = loadPack("vehicles").filter(d => d.type === "rig");
+  const out = [], needsAll = [];
+  for (const a of src.sort((x, y) => x.name.localeCompare(y.name))) {
+    const needs = [], s = a.system ?? {}, integ = s.integrity ?? {}, bracket = integ.bracket ?? "medium";
+    if (!(bracket in DT_BY_BRACKET)) needs.push(`unknown bracket "${bracket}"`);
+    const rig = { mobility: s.identity?.mobility ?? "mobile", state: "parked", factionOwnerId: "", archetype: s.identity?.archetype ?? "",
+      binding: { hexId: "", sceneId: "", tokenId: "" }, tier: Number(integ.tier ?? 1), bracket,
+      crew: { slots: [], capacity: s.crew?.capacity ?? {}, crewMin: Number(s.crew?.crewMin ?? 1), crewMax: Number(s.crew?.crewMax ?? 8) },
+      output: { modules: s.output?.modules ?? [], basePerTurn: s.output?.basePerTurn ?? {} }, travel: { ...(s.travel ?? {}) }, order: "none", tags: s.tags ?? [] };
+    const traits = {};
+    for (const [k, kind] of [["resistances", "dr"], ["immunities", "di"], ["vulnerabilities", "dv"]]) {
+      const v = resistanceTypes(s.defenses?.[k] ?? []); if (v.length) traits[kind] = { value: v, custom: "" };
+    }
+    const domains = (s.travel?.domains ?? []).map(String);
+    const vehicleType = domains.length && !domains.includes("land") ? (domains.some(d => /air|sky/.test(d)) ? "air" : "water") : "land";
+    const items = (a.items ?? []).map(it => {
+      const e = it.type === "weapon" ? convertWeapon(it, needs) : convertGear(it, needs, "");
+      e.flags = { ...(e.flags ?? {}), fourththing: JSON.parse(JSON.stringify(it.flags?.fourththing ?? {})) };
+      return e;
+    });
+    const bio = convertText(s.description?.value ?? s.details?.biography?.value ?? "");
+    for (const l of leftovers(bio)) needs.push(`biography: leftover term "${l}"`);
+    const flags = { "bbttcc-factions": { rig, factionId: null }, "bad-eden-5e": { rfi: rfiFlag(a, "vehicles") } };
+    if (a.flags?.fourththing?.rfi) flags.fourththing = { rfi: JSON.parse(JSON.stringify(a.flags.fourththing.rfi)) };
+    const e = { slug: slugOf("rig-", a.name), name: a.name, type: "vehicle", img: a.img, folder: "Rigs", prototypeToken: a.prototypeToken,
+      system: { vehicleType, attributes: { hp: { value: Number(integ.value ?? integ.max ?? 30), max: Number(integ.max ?? 30), dt: DT_BY_BRACKET[bracket] ?? 0, mt: null } }, traits, details: { biography: { value: bio } } },
+      items, effects: [], flags };
+    out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
+  }
+  return { src, out, needsAll, kind: "actors" };
+}
+
 /* ── overrides + output ──────────────────────────────────────────────────── */
 const deepMerge = (a, b) => { for (const [k, v] of Object.entries(b)) a[k] = v && typeof v === "object" && !Array.isArray(v) && a[k] && typeof a[k] === "object" ? deepMerge(a[k], v) : v; return a; };
 
@@ -864,7 +977,8 @@ function writeLane(name, features, needsAll, about, kind = "features") {
   const overrides = existsSync(ovPath) ? JSON.parse(readFileSync(ovPath, "utf8")) : {};
   let applied = 0;
   for (const f of features) if (overrides[f.slug]) { deepMerge(f, overrides[f.slug]); applied++; }
-  const PACK = { secrets: "courtly-secrets", callings: "npc-callings", sparks: "sparks" };   // build-packs routes items by _pack
+  const PACK = { secrets: "courtly-secrets", callings: "npc-callings", sparks: "sparks", doctrines: "doctrines", rigs: "vehicles",
+    ...Object.fromEntries(Object.entries(OPTION_LANES).map(([k, v]) => [k, v.pack])) };   // build-packs routes items/actors by _pack
   const doc = { _about: about, ...(PACK[name] ? { _pack: PACK[name] } : {}), _generated: { by: "tools/convert-5e.mjs", rubric: RUBRIC.version, at: new Date().toISOString().slice(0, 10), overridesApplied: applied }, [kind]: features };
   const outPath = join(ROOT, "content", `${name}.json`);
   writeFileSync(outPath, JSON.stringify(doc, null, 2) + "\n");
@@ -894,12 +1008,16 @@ function parity(name, src, features, kind = "features") {
 }
 
 /* ── main ────────────────────────────────────────────────────────────────── */
-const LANES = { techniques: laneTechniques, gear: laneGear, creatures: laneCreatures, secrets: laneSecrets, callings: laneCallings, sparks: laneSparks };
+const LANES = { techniques: laneTechniques, gear: laneGear, creatures: laneCreatures, secrets: laneSecrets, callings: laneCallings, sparks: laneSparks,
+  doctrines: laneDoctrines, rigs: laneRigs, ...Object.fromEntries(Object.keys(OPTION_LANES).map(k => [k, () => laneOptions(k)])) };
 if (!lane || !LANES[lane]) { console.error(`usage: convert-5e.mjs <${Object.keys(LANES).join("|")}> [--write] [--parity]`); process.exit(2); }
 const { src, out, needsAll, kind = "features" } = LANES[lane]();
 if (flag("--parity")) { parity(lane, src, out, kind); }
 else if (flag("--write")) {
-  const ABOUT = { techniques: "The 75 Bad Eden Core techniques as dnd5e feats.", gear: "Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).", secrets: "The Courtly Intrigue secrets as dnd5e feats (the secret engine block carried verbatim).", callings: "The NPC callings (trade + trick per tier) as dnd5e monster feats.", sparks: "The 30 Tikkun sparks as dnd5e loot; the RFI spark block rides at flags.bbttcc-tikkun.spark.", creatures: "The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis." };
+  const ABOUT = { techniques: "The 75 Bad Eden Core techniques as dnd5e feats.", gear: "Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).", secrets: "The Courtly Intrigue secrets as dnd5e feats (the secret engine block carried verbatim).", callings: "The NPC callings (trade + trick per tier) as dnd5e monster feats.", sparks: "The 30 Tikkun sparks as dnd5e loot; the RFI spark block rides at flags.bbttcc-tikkun.spark.", creatures: "The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
+    doctrines: "The faction doctrines as dnd5e feats (flags.bbttcc kind/key carried verbatim for the factions module).",
+    rigs: "The five faction rigs as dnd5e vehicles carrying flags.bbttcc-factions.rig (the shape game.bbttcc.rigs writes on dnd5e); rig gear keeps flags.fourththing.rigGear/rigFrame.",
+    ...Object.fromEntries(Object.entries(OPTION_LANES).map(([k, v]) => [k, `The ${v.folder} (bbttcc-character-options.${v.pack}) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.`])) };
   const { outPath, applied } = writeLane(lane, out, needsAll, `GENERATED from RFI canon by tools/convert-5e.mjs (rubric v${RUBRIC.version}) — do not hand-edit; put fixes in content/overrides/${lane}.json. ${ABOUT[lane] ?? ""}`, kind);
   console.log(`${lane}: ${out.length} converted → ${outPath} (${applied} override(s) applied); ${needsAll.length} need a human → content/_needs-human/${lane}.md`);
 } else {

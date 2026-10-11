@@ -21,6 +21,8 @@
   const MOD = "bbttcc-territory";
   const NODES_PATH = `flags.${MOD}.resourceNodes`;
   const TAG = "[bbttcc-hex-nodes]";
+  // bbttcc-core resolves RFI pack ids to their bad-eden-5e twins on dnd5e (no-op on fourththing).
+  const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? null;
 
   function findNode(hexDoc, nodeId) {
     const arr = foundry.utils.getProperty(hexDoc, NODES_PATH);
@@ -69,7 +71,7 @@
     if (uuid) { try { const src = await fromUuid(uuid); if (src) { data = src.toObject(); delete data._id; } } catch (_e) {} }
     if (!data && key) {
       try {
-        const pack = game.packs.get("bbttcc-master-content.items");
+        const pack = _pack("bbttcc-master-content.items");
         if (pack) {
           const idx = await pack.getIndex({ fields: ["flags.fourththing.rfi.item.materialKey"] });
           const hit = idx.find(e => foundry.utils.getProperty(e, "flags.fourththing.rfi.item.materialKey") === key);
@@ -321,7 +323,7 @@
 
     // Pull material list from master-content pack.
     const PACK_ID = "bbttcc-master-content.items";
-    const pack = game.packs.get(PACK_ID);
+    const pack = _pack(PACK_ID);
     let materials = [];
     if (pack) {
       try {

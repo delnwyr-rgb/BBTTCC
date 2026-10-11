@@ -1,0 +1,66 @@
+{
+  "name": "Enlightenment: Awakening",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "Questioning reality. +1 Intrigue, +1 Soft Power OPs",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "enlightenment-awakening",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "enlightenment-levels",
+      "bonuses": {
+        "intrigue": 1,
+        "softpower": 1
+      }
+    }
+  },
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+  "effects": [],
+  "folder": null,
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1759971253765,
+    "modifiedTime": 1775063033449,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3
+  },
+  "_id": "Jrpm9oiTdKnyLSZj",
+  "sort": 100000,
+  "_key": "!items!Jrpm9oiTdKnyLSZj"
+}
