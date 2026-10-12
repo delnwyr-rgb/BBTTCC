@@ -2,6 +2,14 @@ import { engine } from "../core/fx-engine.js";
 
 export function createFXAPI() {
   const registry = new Map();
+  // Relay (2026-10-12): playKey / playTurnPresentation draw on the CALLING client only — the Turn
+  // Driver's "Advance Turn" banners and turn cards never reached the player seats. opts.broadcast=true
+  // re-fires the same call on every other client over the moments socket (fx-moments.js receives
+  // {t:"replay"|"turncards"} and calls back in with opts.relayed=true, which skips the Sequencer canvas
+  // effect — Sequencer already broadcasts itself — and the DOM pulses that need the caller's root).
+  const CHANNEL = "module.bbttcc-fx-integration";
+  const safeCtx = (ctx) => { const o = {}; for (const [k, v] of Object.entries(ctx || {})) { if (v == null || ["string", "number", "boolean"].includes(typeof v)) o[k] = v; } return o; };
+  function relay(payload) { try { game.socket?.emit?.(CHANNEL, { from: game.user?.id, ...payload }); } catch (e) { console.warn("[bbttcc-fx] relay failed", e); } }
   let bannerChain = Promise.resolve();
   let lastBannerAt = 0;
 
@@ -444,9 +452,12 @@ export function createFXAPI() {
     const duration = Number(opts.durationMs || spec.durationMs || durationForKey(key, phase));
     const spacing = Number(opts.spacingMs || spec.spacingMs || spacingForKey(key, phase));
     const raidType = opts.raidType || ctx.raidType || spec.raidType || "";
+    if (opts.broadcast === true && !opts.relayed) {
+      relay({ t: "replay", key: String(key), ctx: safeCtx(ctx), opts: { phase, banner: opts.banner, raidType, family: opts.family, durationMs: opts.durationMs, spacingMs: opts.spacingMs } });
+    }
 
     if (phase === "invoke") {
-      strengthenSelection(ctx, family);
+      if (!opts.relayed) strengthenSelection(ctx, family);
       if (opts.banner !== false) {
         const text = ctx.label || spec.label || String(key).replace(/_/g, " ");
         await enqueueBanner(text, toneForFamily(family, "info"), duration, spacing, { raidType });
@@ -472,7 +483,7 @@ export function createFXAPI() {
       const tone = severityForText(text);
       const defenderLead = isDefenderContext(ctx);
 
-      if (defenderLead) {
+      if (defenderLead && !opts.relayed) {
         await maybePlayEffect(spec, key, "resolve", ctx, family);
         await wait(Number(spec.postCinematicGapMs || 220));
       }
@@ -483,7 +494,7 @@ export function createFXAPI() {
       maybeShake(spec, "resolve", tone);
       maybePulseCanvas(spec, ctx);
 
-      if (!defenderLead) {
+      if (!defenderLead && !opts.relayed) {
         await maybePlayEffect(spec, key, "resolve", ctx, family);
       }
     }
@@ -495,6 +506,9 @@ export function createFXAPI() {
     if (!engine.turnEnabled()) return { ok: true, skipped: true };
     const speed = String(opts.speed || "normal");
     const gap = Number(opts.pauseBetween || (speed === "fast" ? 300 : speed === "slow" ? 1100 : 600));
+    if (opts.broadcast === true && !opts.relayed) {
+      relay({ t: "turncards", events: events.map(e => ({ label: String(e?.label || e?.key || ""), tone: String(e?.tone || e?.kind || "info") })), opts: { speed, pauseBetween: gap } });
+    }
     for (const evt of events) {
       engine.playTurnCard(evt);
       await wait(gap);

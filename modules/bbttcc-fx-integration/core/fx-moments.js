@@ -382,8 +382,12 @@ export async function installMoments(api, engine) {
   };
   game.socket?.on?.(CHANNEL, (msg) => {
     try {
-      if (!msg || msg.t !== "moment") return;
+      if (!msg) return;
       if (msg.from === game.user?.id) return;
+      // Legacy banner path relays (fx-api.js opts.broadcast, 2026-10-12): replay the call here.
+      if (msg.t === "replay") { void api.playKey?.(String(msg.key || ""), msg.ctx || {}, { ...(msg.opts || {}), relayed: true }); return; }
+      if (msg.t === "turncards") { void api.playTurnPresentation?.(Array.isArray(msg.events) ? msg.events : [], { ...(msg.opts || {}), relayed: true }); return; }
+      if (msg.t !== "moment") return;
       if (Array.isArray(msg.users) && !msg.users.includes(game.user?.id)) return;
       play(msg.key, msg.ctx || {});
     } catch (e) { console.warn(TAG, "socket receive failed", e); }

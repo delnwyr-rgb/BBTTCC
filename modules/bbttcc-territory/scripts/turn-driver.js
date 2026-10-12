@@ -1795,7 +1795,7 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
   }
   window._bbttccTurnLock = true;
   Hooks.callAll("bbttcc:advanceTurn:begin", { apply });
-  if (apply) { try { await _bbttccTurnFxPlay("turn_start", { label:"Advance Turn" }, { phase:"invoke" }); } catch(_eFxStart) {} }
+  if (apply) { try { await _bbttccTurnFxPlay("turn_start", { label:"Advance Turn" }, { phase:"invoke", broadcast:true }); } catch(_eFxStart) {} }
 
   try {
     const terr = game.bbttcc?.api?.territory ?? {};
@@ -1886,8 +1886,8 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
         if ((logistics.rows||[]).length) events.push({ label: `Logistics Pressure: ${(logistics.rows||[]).length} factions`, tone: "warn" });
         if (normalized.changed) events.push({ label: "Queued Effects Normalized", tone: "info" });
         if (queued.changed) events.push({ label: "Queued Effects Applied", tone: "good" });
-        if (events.length) await _bbttccTurnFxPresentation(events, { speed:"slow", pauseBetween:900 });
-        await _bbttccTurnFxPlay("turn_complete", { outcome: "Advance Turn Complete" }, { phase:"resolve" });
+        if (events.length) await _bbttccTurnFxPresentation(events, { speed:"slow", pauseBetween:900, broadcast:true });
+        await _bbttccTurnFxPlay("turn_complete", { outcome: "Advance Turn Complete" }, { phase:"resolve", broadcast:true });
       } catch(_eFxEnd) {}
     }
 
