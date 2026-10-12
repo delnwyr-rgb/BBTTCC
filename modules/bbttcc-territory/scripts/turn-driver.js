@@ -32,6 +32,20 @@ async function _bbttccTurnFxPresentation(events=[], opts={}){
 
 const MOD_FACTIONS  = "bbttcc-factions";
 const MOD_TERRITORY = "bbttcc-territory";
+// Table announcements (2026-10-12): Apply-time turn cards, track updates and raid round cards used
+// to be hard-whispered to the GM list, so players never saw a Turn go by. World setting
+// bbttcc-territory.tableAnnouncements decides: "public" (default) = whole table, "gm" = whisper.
+const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "tableAnnouncements") === "gm") return (game.users ?? []).filter(u => u.isGM).map(u => u.id); } catch (_e) {} return []; };
+Hooks.once("init", () => {
+  try {
+    game.settings.register(MOD_TERRITORY, "tableAnnouncements", {
+      name: "Turn & raid announcements",
+      hint: "Where the Turn Driver's Apply cards, the track updates (radiation, darkness, loyalty, integration, economy, facilities, garrison) and the raid round / siege / casualty cards post. Dry previews, ledger back-outs and spy dossiers stay whispered regardless.",
+      scope: "world", config: true, type: String, default: "public",
+      choices: { public: "Everyone at the table", gm: "GM whisper only" }
+    });
+  } catch (e) { warn("tableAnnouncements setting register failed", e); }
+});
 /* =====================================================================
  * Strategic Throughput Registry (Tier 1) — BOOTSTRAP
  * Purpose:
@@ -1184,7 +1198,7 @@ async function advanceOPRegen({ apply=false, factionId=null, deferCapClamp=false
 
         await ChatMessage.create({
           content: `<p><b>${foundry.utils.escapeHTML(A.name)}</b> — <i>Advance OP (Apply)</i><br/>Gained: ${fmtOpsRow(opsDelta)}</p>`,
-          whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
+          whisper: tableAudience(),
           speaker: { alias: "Bad Eden Turn Driver" }
         });
 
@@ -1368,7 +1382,7 @@ async function plannedRaidsStep({ apply=false } = {}){
         await ChatMessage.create({
           content: `<p><i class="fas fa-hourglass-half"></i> <b>Turn Ledger:</b> the month ran out of days — ${held.length} planned action(s) HOLD until next turn (the crew waited):</p>
             <ul>${held.map(h => `<li><b>${esc(h.faction)}</b>: ${esc(h.key.replace(/_/g, " "))} (${h.price}d)</li>`).join("")}</ul>`,
-          whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
+          whisper: tableAudience(),
           speaker: { alias: "Bad Eden Turn Driver" }
         });
       } catch (_e) {}

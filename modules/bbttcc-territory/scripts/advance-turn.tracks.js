@@ -28,6 +28,10 @@
 
   const clamp = (v,min,max) => Math.max(min, Math.min(max, Number(v || 0)));
   const gmIds = () => game.users.filter(u => u.isGM).map(u => u.id) ?? [];
+// Table announcements (2026-10-12): Apply-time turn cards, track updates and raid round cards used
+// to be hard-whispered to the GM list, so players never saw a Turn go by. World setting
+// bbttcc-territory.tableAnnouncements decides: "public" (default) = whole table, "gm" = whisper.
+const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "tableAnnouncements") === "gm") return (game.users ?? []).filter(u => u.isGM).map(u => u.id); } catch (_e) {} return []; };
   const facActors = () => (game.actors?.contents ?? []).filter(a => a.getFlag?.(MODF,"isFaction"));
 
   function isSephirothic(tf){
@@ -210,7 +214,7 @@
     if (lines.length) {
       await ChatMessage.create({
         content: `<p><b>Radiation Update</b></p>${lines.join("<br/>")}`,
-        whisper: gmIds(),
+        whisper: tableAudience(),
         speaker: { alias: "Bad Eden Radiation" }
       }).catch(() => {});
     }
@@ -274,7 +278,7 @@
     if (lines.length) {
       await ChatMessage.create({
         content: `<p><b>Cleanup Update</b></p>${lines.join("<br/>")}`,
-        whisper: gm,
+        whisper: tableAudience(),
         speaker: { alias: "Bad Eden Cleanup" }
       }).catch(() => {});
     }
@@ -334,7 +338,7 @@
     if (lines.length) {
       await ChatMessage.create({
         content: `<p><b>Cleanup Aura</b></p>${lines.join("<br/>")}`,
-        whisper: gm,
+        whisper: tableAudience(),
         speaker: { alias: "Bad Eden Cleanup" }
       }).catch(() => {});
     }
@@ -391,7 +395,7 @@
     if (lines.length) {
       await ChatMessage.create({
         content: `<p><b>Radiation Cleansing (Purified Hexes)</b></p>${lines.join("<br/>")}`,
-        whisper: gm,
+        whisper: tableAudience(),
         speaker: { alias: "Bad Eden Radiation" }
       }).catch(() => {});
     }
@@ -447,7 +451,7 @@
     if (lines.length) {
       await ChatMessage.create({
         content: `<p><b>Darkness Update</b></p>${lines.join("<br/>")}`,
-        whisper: gm,
+        whisper: tableAudience(),
         speaker: { alias: "Bad Eden Darkness" }
       }).catch(() => {});
     }
@@ -481,7 +485,7 @@
 
     const mk = async (title, arr) => arr.length && ChatMessage.create({
       content: `<p><b>${title}</b></p>${arr.join("<br/>")}`,
-      whisper: gm,
+      whisper: tableAudience(),
       speaker: { alias: "Bad Eden Darkness" }
     }).catch(()=>{});
 
@@ -523,7 +527,7 @@
     if (lines.length) {
       await ChatMessage.create({
         content: `<p><b>Morale Update (Darkness)</b></p>${lines.join("<br/>")}`,
-        whisper: gm,
+        whisper: tableAudience(),
         speaker: { alias: "Bad Eden Darkness" }
       }).catch(()=>{});
     }
@@ -565,7 +569,7 @@
       lines.push(`• <b>${foundry.utils.escapeHTML(A.name)}</b>: territory pull ${pull > 0 ? "+" : ""}${pull} (mean hex loyalty ${Math.round(mean * 10) / 10} over ${owned.length} hex${owned.length === 1 ? "" : "es"}) — Loyalty ${before}→${after}`);
     }
     if (updates.length) await Promise.allSettled(updates);
-    if (lines.length) await ChatMessage.create({ content: `<p><b>Territory → Loyalty</b></p>${lines.join("<br/>")}`, whisper: gm, speaker: { alias: "Bad Eden Loyalty" } }).catch(() => {});
+    if (lines.length) await ChatMessage.create({ content: `<p><b>Territory → Loyalty</b></p>${lines.join("<br/>")}`, whisper: tableAudience(), speaker: { alias: "Bad Eden Loyalty" } }).catch(() => {});
   }
 
   // ===========================================================================
@@ -589,7 +593,7 @@
       try { const wl = (A.getFlag(MODF, "warLogs") || []).slice(); wl.push({ ts: Date.now(), date: new Date().toLocaleString(), type: "turn", activity: "sharing_pressure", summary: `Client-state pressure: borrowed ${st.borrowStreak} turns running — Loyalty ${before}→${after}.` }); updates.push(A.setFlag(MODF, "warLogs", wl)); } catch (_e) {}
     }
     if (updates.length) await Promise.allSettled(updates);
-    if (lines.length) await ChatMessage.create({ content: `<p><b>Sharing Pressure</b></p>${lines.join("<br/>")}`, whisper: gm, speaker: { alias: "Bad Eden Loyalty" } }).catch(() => {});
+    if (lines.length) await ChatMessage.create({ content: `<p><b>Sharing Pressure</b></p>${lines.join("<br/>")}`, whisper: tableAudience(), speaker: { alias: "Bad Eden Loyalty" } }).catch(() => {});
   }
 
   async function doLoyaltyPhase1() {
@@ -631,7 +635,7 @@
     if (lines.length) {
       await ChatMessage.create({
         content: `<p><b>Loyalty Update</b></p>${lines.join("<br/>")}`,
-        whisper: gm,
+        whisper: tableAudience(),
         speaker: { alias: "Bad Eden Loyalty" }
       }).catch(()=>{});
     }
@@ -747,7 +751,7 @@
     if (lines.length) {
       await ChatMessage.create({
         content: `<p><b>Loyalty Stability Effects</b></p>${lines.join("<br/>")}`,
-        whisper: gm,
+        whisper: tableAudience(),
         speaker: { alias: "Bad Eden Loyalty" }
       }).catch(()=>{});
     }
@@ -837,7 +841,7 @@
     if (lines.length) {
       await ChatMessage.create({
         content: `<p><b>Integration Population Update</b></p>${lines.join("<br/>")}`,
-        whisper: gm,
+        whisper: tableAudience(),
         speaker: { alias: "Bad Eden Integration" }
       }).catch(() => {});
     }
@@ -952,7 +956,7 @@
     if (lines.length && gm.length) {
       await ChatMessage.create({
         content: `<p><b>Build Units Generated</b></p>${lines.join("<br/>")}`,
-        whisper: gm,
+        whisper: tableAudience(),
         speaker: { alias: "Bad Eden Economy" }
       }).catch(()=>{});
     }
@@ -985,7 +989,7 @@
       await A.update({ [`flags.${MODF}.opBank`]: bank, [`flags.${MODF}.warLogs`]: warLogs });
       lines.push(`• <b>${foundry.utils.escapeHTML(A.name)}</b>: Trade Routes ${routeCount} → Logistics ${before}→${after} marks`);
     }
-    if (lines.length && gm.length) await ChatMessage.create({ content: `<p><b>Trade Route Logistics Bonus</b></p>${lines.join("<br/>")}`, whisper: gm, speaker: { alias: "Bad Eden Economy" } }).catch(() => {});
+    if (lines.length && gm.length) await ChatMessage.create({ content: `<p><b>Trade Route Logistics Bonus</b></p>${lines.join("<br/>")}`, whisper: tableAudience(), speaker: { alias: "Bad Eden Economy" } }).catch(() => {});
   }
 
   // ===========================================================================

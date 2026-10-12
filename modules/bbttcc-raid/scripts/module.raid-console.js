@@ -10,6 +10,10 @@
 const RAID_ID = "bbttcc-raid";
 const TERR_ID = "bbttcc-territory";
 const FCT_ID  = "bbttcc-factions";
+// Table announcements (2026-10-12): Apply-time turn cards, track updates and raid round cards used
+// to be hard-whispered to the GM list, so players never saw a Turn go by. World setting
+// bbttcc-territory.tableAnnouncements decides: "public" (default) = whole table, "gm" = whisper.
+const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "tableAnnouncements") === "gm") return (game.users ?? []).filter(u => u.isGM).map(u => u.id); } catch (_e) {} return []; };
 
 // ---------------------------------------------------------------------------
 // GM detection — do NOT rely solely on game.user.isGM (can be false in some runtimes).
@@ -5029,11 +5033,11 @@ async _postRoundCard(idx){
       ${holdingsBlock}
       ${casualtiesBlock}
     </section>`;
-  ChatMessage.create({ speaker:{alias:"Bad Eden Raid"}, flavor:card, whisper: game.users.filter(u=>u.isGM).map(u=>u.id) });
+  ChatMessage.create({ speaker:{alias:"Bad Eden Raid"}, flavor:card, whisper: tableAudience() });
 
   // Echo Roster (2026-05-26) — manifesting echoes posted as a PUBLIC message
-  // (players see their past-life crews show up), separate from the GM-whispered
-  // round card above. First-round only; empty block = no message.
+  // (players see their past-life crews show up), separate from the
+  // round card above (table-audience since 2026-10-12). First-round only; empty block = no message.
   if (echoesBlock) {
     ChatMessage.create({ speaker: { alias: "Bad Eden Raid" }, content: `<section class="bbttcc-raid">${echoesBlock}</section>` });
   }
@@ -6635,7 +6639,7 @@ try {
           const toS   = (newStep===0) ? "intact" : String(hitTrack[newStep-1] || "damaged");
           await ChatMessage.create({
             content: `<p><b>Facility Siege Damage</b></p><b>${foundry.utils.escapeHTML(defender?.name || "Defender")}</b> — <b>${foundry.utils.escapeHTML(r.targetName || "Facility")}</b>: ${fromS} → <b>${toS}</b> (Δ ${newStep-oldStep>=0?"+":""}${newStep-oldStep})`,
-            whisper: gmIds,
+            whisper: tableAudience(),
             speaker: { alias: "Bad Eden Siege" }
           }).catch(()=>{});
         } catch {}
@@ -6691,7 +6695,7 @@ try {
             const toS   = (newStep===0) ? "intact" : String((prof.hitTrack||[])[newStep-1] || "damaged");
             await ChatMessage.create({
               content: `<p><b>Rig Siege Damage</b></p><b>${foundry.utils.escapeHTML(defender.name)}</b> — <b>${foundry.utils.escapeHTML(prof.rigName)}</b>: ${fromS} → <b>${toS}</b> (Δ ${newStep-oldStep>=0?"+":""}${newStep-oldStep})`,
-              whisper: gmIds,
+              whisper: tableAudience(),
               speaker: { alias: "Bad Eden Siege" }
             }).catch(()=>{});
           } catch {}
@@ -9628,7 +9632,7 @@ async function _rcApplyCasualtiesToRoster({ attackerId, defenderId, attCount, de
   if (lines.length) {
     ChatMessage.create({
       speaker: { alias: "Bad Eden Raid" },
-      whisper: game.users.filter(u => u.isGM).map(u => u.id),
+      whisper: tableAudience(),
       content: `<section class="bbttcc-raid"><h3 style="margin:0 0 .25rem 0;">⚔ Casualties Applied to Roster</h3><ul style="margin:.2rem 0 0 .9rem;padding:0;">${lines.join("")}</ul></section>`
     });
   }

@@ -10,6 +10,10 @@
 (() => {
   const TAG  = "[bbttcc-resolution]";
   const MODF = "bbttcc-factions";
+  // Table announcements (2026-10-12): Apply-time turn cards, track updates and raid round cards used
+  // to be hard-whispered to the GM list, so players never saw a Turn go by. World setting
+  // bbttcc-territory.tableAnnouncements decides: "public" (default) = whole table, "gm" = whisper.
+  const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "tableAnnouncements") === "gm") return (game.users ?? []).filter(u => u.isGM).map(u => u.id); } catch (_e) {} return []; };
   const MODT = "bbttcc-territory";
 
   function clamp(v, min, max) {
@@ -263,7 +267,7 @@
         ];
         await ChatMessage.create({
           content: `<p><b>Resolution Applied</b></p>${lines.join("<br/>")}`,
-          whisper: gmIds,
+          whisper: tableAudience(),
           speaker: { alias: "Bad Eden Resolution" }
         });
       } catch (e) {

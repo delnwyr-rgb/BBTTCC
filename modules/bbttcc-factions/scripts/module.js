@@ -497,7 +497,8 @@ const _BBTTCC_STANDARD_START_MANEUVERS = [
 ];
 // Rows added to the standard package after worlds were already seeded — granted by the top-up in
 // _bbttccEnsureBaselineDoctrine at ready. Keep this list to what is safe to hand every standard faction.
-const _BBTTCC_STANDARD_TOPUP_STRATEGICS = ["build_bridge", "cut_bridge", "charter_passage"];   // crossings, 2026-09-25
+const _BBTTCC_STANDARD_TOPUP_STRATEGICS = ["build_bridge", "cut_bridge", "charter_passage",   // crossings, 2026-09-25
+  "infrastructure_expansion"];   // the planner retired develop_infrastructure_std into this row 2026-09-09 but the package never followed (2026-10-12)
 const _BBTTCC_STANDARD_START_STRATEGICS = [
   "harvest_season",
   "sell_surplus",
@@ -515,7 +516,8 @@ const _BBTTCC_STANDARD_START_STRATEGICS = [
   "found_site_port",
   "found_site_research",
   "upgrade_outpost_settlement",
-  "develop_infrastructure_std"
+  "develop_infrastructure_std",   // retired in the planner — kept so already-planned entries resolve
+  "infrastructure_expansion"      // its replacement (Defense +2, Integration +1), 2026-10-12
 ];
 
 // Ensure a faction has baseline doctrine (standard package).

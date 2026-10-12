@@ -18,6 +18,10 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
 (() => {
   const TAG  = "[bbttcc-territory/garrison-upkeep]";
   const MODT = "bbttcc-territory";
+  // Table announcements (2026-10-12): Apply-time turn cards, track updates and raid round cards used
+  // to be hard-whispered to the GM list, so players never saw a Turn go by. World setting
+  // bbttcc-territory.tableAnnouncements decides: "public" (default) = whole table, "gm" = whisper.
+  const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "tableAnnouncements") === "gm") return (game.users ?? []).filter(u => u.isGM).map(u => u.id); } catch (_e) {} return []; };
   const MODF = "bbttcc-factions";
 
   // Holdings Phase D (2026-05-14) — Garrison-Holdings coupling.
@@ -539,7 +543,7 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
         `;
         await ChatMessage.create({
           content,
-          whisper: gm,
+          whisper: tableAudience(),
           speaker: { alias: "Bad Eden Garrison" }
         }).catch(() => {});
       }

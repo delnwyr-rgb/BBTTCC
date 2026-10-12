@@ -23,6 +23,10 @@
 (() => {
   const MOD_TERR = "bbttcc-territory";
   const TAG      = "[bbttcc-facility/turn-effects]";
+  // Table announcements (2026-10-12): Apply-time turn cards, track updates and raid round cards used
+  // to be hard-whispered to the GM list, so players never saw a Turn go by. World setting
+  // bbttcc-territory.tableAnnouncements decides: "public" (default) = whole table, "gm" = whisper.
+  const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "tableAnnouncements") === "gm") return (game.users ?? []).filter(u => u.isGM).map(u => u.id); } catch (_e) {} return []; };
 
   const esc = (s) => {
     try { return foundry.utils.escapeHTML(String(s ?? "")); }
@@ -189,10 +193,10 @@
         }
       }
 
-      if (lines.length && gmIds.length) {
+      if (lines.length) {
         await ChatMessage.create({
           content: `<p><b>Facility Turn Effects</b></p>${lines.join("<br/>")}`,
-          whisper: gmIds,
+          whisper: tableAudience(),
           speaker: { alias: "Bad Eden Facilities" }
         }).catch(() => {});
       }

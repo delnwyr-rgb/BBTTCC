@@ -43,6 +43,10 @@
 (() => {
   const MOD_R = "bbttcc-raid";
   const MODF  = "bbttcc-factions";
+  // Table announcements (2026-10-12): Apply-time turn cards, track updates and raid round cards used
+  // to be hard-whispered to the GM list, so players never saw a Turn go by. World setting
+  // bbttcc-territory.tableAnnouncements decides: "public" (default) = whole table, "gm" = whisper.
+  const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "tableAnnouncements") === "gm") return (game.users ?? []).filter(u => u.isGM).map(u => u.id); } catch (_e) {} return []; };
   const TAG   = "[bbttcc-raid/courtly]";
 
   const clamp = (v,min,max)=>Math.max(min,Math.min(max,Number(v||0)));
@@ -150,7 +154,7 @@
     if (!lines.length) return;
     await ChatMessage.create({
       content: `<p><b>${title}</b></p>${lines.join("<br/>")}`,
-      whisper: gmIds(),
+      whisper: tableAudience(),
       speaker: { alias: "Bad Eden Courtly Intrigue" }
     }).catch(()=>{});
   }
