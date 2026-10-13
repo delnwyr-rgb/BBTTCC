@@ -63,21 +63,23 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
+            "marks": 10,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 1.0,
+            "notes": "TI consumable stamp (untiered pass 2026-10-12)",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 4
           },
           "legacySystem": {
             "description": {
               "value": "<p>Dissolves mundane rust/ooze residue; reroll the lowest die to escape viscous traps or restraints crafted from rusting materials for 1 minute.</p>"
             }
-          }
+          },
+          "tier": "I",
+          "frame": "consumable"
         }
       }
     }

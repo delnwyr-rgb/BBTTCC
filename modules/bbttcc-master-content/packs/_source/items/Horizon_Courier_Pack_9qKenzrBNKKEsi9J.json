@@ -57,21 +57,23 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
+            "marks": 180,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 2.0,
+            "notes": "TII tool stamp × rarity 2.0 (untiered pass 2026-10-12)",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 72
           },
           "legacySystem": {
             "description": {
               "value": "<p>Folding glider + energy assist. Gain 8 squares fly speed for 10 minutes 1 per Soma Break; overland travel time −25% for small party.</p>"
             }
-          }
+          },
+          "tier": "II",
+          "frame": "tool"
         }
       }
     }

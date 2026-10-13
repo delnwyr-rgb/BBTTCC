@@ -57,21 +57,23 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 75,
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 1.0,
+            "notes": "TI vestment stamp (untiered pass 2026-10-12)",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 30
           },
           "legacySystem": {
             "description": {
               "value": "<p>Breather mask; reroll the lowest die on Body checks vs. gases; counts as tools for Athletics (Violence) checks to endure dust storms.</p>"
             }
-          }
+          },
+          "tier": "I",
+          "frame": "vestment"
         }
       }
     }

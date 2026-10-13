@@ -69,16 +69,18 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
+            "marks": 250,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 1.0,
+            "notes": "TI vehicle stamp (untiered pass 2026-10-12)",
             "bound": "free",
-            "saleBack": 12
-          }
+            "saleBack": 100
+          },
+          "tier": "I",
+          "frame": "vehicle"
         }
       }
     }

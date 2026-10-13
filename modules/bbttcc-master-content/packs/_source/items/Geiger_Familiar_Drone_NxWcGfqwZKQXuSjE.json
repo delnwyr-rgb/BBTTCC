@@ -57,21 +57,23 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
+            "marks": 45,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 1.5,
+            "notes": "TI tool stamp × rarity 1.5 (untiered pass 2026-10-12)",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 18
           },
           "legacySystem": {
             "description": {
               "value": "<p>Tiny flying sensor (Guard 15, Integrity 5). As an action, release drone for 10 minutes to map radiation pockets and Spark traces within 60 squares</p>"
             }
-          }
+          },
+          "tier": "I",
+          "frame": "tool"
         }
       }
     },

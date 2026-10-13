@@ -62,11 +62,13 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 1.0,
+            "notes": "TI tool stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 12
-          }
+          },
+          "tier": "I",
+          "frame": "tool"
         }
       }
     }

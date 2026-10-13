@@ -57,21 +57,23 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
+            "marks": 45,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 1.5,
+            "notes": "TI tool stamp × rarity 1.5 (untiered pass 2026-10-12)",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 18
           },
           "legacySystem": {
             "description": {
               "value": "<p>10 squares mono‑filament grapnel; reroll the lowest die on climb/jump checks; can pull Medium target (Violence vs DC 13).</p>"
             }
-          }
+          },
+          "tier": "I",
+          "frame": "tool"
         }
       }
     }

@@ -63,16 +63,18 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 75,
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 1.5,
+            "notes": "TI footwear stamp × rarity 1.5 (untiered pass 2026-10-12)",
             "bound": "free",
-            "saleBack": 12
-          }
+            "saleBack": 30
+          },
+          "tier": "I",
+          "frame": "footwear"
         }
       }
     }

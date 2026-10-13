@@ -57,21 +57,23 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 450,
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 2.0,
+            "notes": "TII vestment stamp × rarity 2.0 (untiered pass 2026-10-12)",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 180
           },
           "legacySystem": {
             "description": {
               "value": "<p>As a reaction to taking radiation damage, gain resistance until end of your next turn (3/day).</p>"
             }
-          }
+          },
+          "tier": "II",
+          "frame": "vestment"
         }
       }
     }
