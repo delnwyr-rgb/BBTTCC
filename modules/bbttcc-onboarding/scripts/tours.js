@@ -89,8 +89,32 @@ function _cardHTML(step, i, total, text) {
   );
 }
 
-function _placeAround(target, hl, card) {
+// 2026-10-12 — the ring follows the VISIBLE part of the target. A target
+// taller than its scrolling pane (the hex sheet's What's Next coach panel,
+// 13/13) used to get a ring the full height of its content box, running off
+// the top and bottom of the screen (owner: "huge window on walkthrough").
+// Intersect the box with every clipping ancestor and the viewport.
+function _visibleRect(target) {
   const r = target.getBoundingClientRect();
+  let l = r.left, t = r.top, rt = r.right, b = r.bottom;
+  try {
+    for (let el = target.parentElement; el; el = el.parentElement) {
+      const cs = getComputedStyle(el);
+      const ov = `${cs.overflow} ${cs.overflowX} ${cs.overflowY}`;
+      if (!/(auto|scroll|hidden|clip)/.test(ov)) continue;
+      const pr = el.getBoundingClientRect();
+      l = Math.max(l, pr.left); t = Math.max(t, pr.top);
+      rt = Math.min(rt, pr.right); b = Math.min(b, pr.bottom);
+    }
+  } catch (_) {}
+  l = Math.max(l, 0); t = Math.max(t, 0);
+  rt = Math.min(rt, window.innerWidth); b = Math.min(b, window.innerHeight);
+  if (rt - l < 8 || b - t < 8) return r;   // nothing visible — fall back to the raw box
+  return { left: l, top: t, right: rt, bottom: b, width: rt - l, height: b - t };
+}
+
+function _placeAround(target, hl, card) {
+  const r = _visibleRect(target);
   const pad = 6;
   Object.assign(hl.style, {
     left: `${r.left - pad}px`, top: `${r.top - pad}px`,
@@ -151,6 +175,9 @@ async function _showStep() {
   a.hl.style.display = a.card.style.display = "block";
   _placeAround(target, a.hl, a.card);
   a.target = target;
+  // 2026-10-12 — one event per step shown, so a gate can measure INACTIVITY
+  // instead of total time (tour-beats' ceiling).
+  Hooks.callAll("bbttcc:tour:step", { id: a.def.id, idx, total });
 
   if (step.speak && !a.spoken.has(idx)) {
     a.spoken.add(idx);

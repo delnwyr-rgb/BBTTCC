@@ -14,7 +14,14 @@
  */
 
 const TAG = "[onboarding/tour-beats]";
-const TOUR_WAIT_CEILING_MS = 10 * 60 * 1000; // safety: never gate a beat forever
+// Safety: never gate a beat forever — but measure INACTIVITY, not total time.
+// 2026-10-12: a careful reader spent >10 min in the faction-sheet tour and the
+// old total-time ceiling released the driving beat underneath them (scene
+// jumped to the Test Track with the tour card still up). The clock now resets
+// on every step shown; when it does fire, the tour is closed cleanly and the
+// Operator says why, instead of leaving a dead card over a new scene.
+const TOUR_IDLE_CEILING_MS = 10 * 60 * 1000;
+const TOUR_IDLE_LINE = "No movement on the tour for ten minutes — I'm shelving it. It stays on the shelf, replayable any time. On with the show.";
 
 // beat id → offer spec. `prompt` is the Operator's pitch; `label` the accept
 // button; `resume` is spoken AFTER a taken tour ends, restating the beat's gate
@@ -177,11 +184,28 @@ async function _offerTour(spec) {
   }
   if (!(await _askForTour(spec))) return false;
   await new Promise((resolve) => {
-    let done = false;
-    const finish = () => { if (done) return; done = true; Hooks.off("bbttcc:tour:ended", onEnd); resolve(); };
+    let done = false, idle = null;
+    const finish = () => {
+      if (done) return; done = true;
+      clearTimeout(idle);
+      Hooks.off("bbttcc:tour:ended", onEnd);
+      Hooks.off("bbttcc:tour:step", onStep);
+      resolve();
+    };
     const onEnd = (payload) => { if (payload?.id === spec.tour) finish(); };
+    // Idle ceiling: re-armed on every step the tour shows.
+    const onIdle = async () => {
+      if (done) return;
+      console.warn(TAG, `tour "${spec.tour}" idle for ${Math.round(TOUR_IDLE_CEILING_MS / 60000)} min — shelving it`);
+      try { await globalThis.game?.bbttcc?.onboarding?.speak?.(TOUR_IDLE_LINE, { audience: "self" }); } catch (_) {}
+      try { tours.stop?.(); } catch (_) {}   // → bbttcc:tour:ended → finish()
+      setTimeout(finish, 1500);              // belt: resolve even if the end hook never fires
+    };
+    const arm = () => { clearTimeout(idle); idle = setTimeout(onIdle, TOUR_IDLE_CEILING_MS); };
+    const onStep = (payload) => { if (payload?.id === spec.tour) arm(); };
     Hooks.on("bbttcc:tour:ended", onEnd);
-    setTimeout(finish, TOUR_WAIT_CEILING_MS);
+    Hooks.on("bbttcc:tour:step", onStep);
+    arm();
     Promise.resolve(tours.start(spec.tour)).catch((e) => { console.warn(TAG, "tour start failed", e); finish(); });
   });
   _markTourTaken(spec.tour);

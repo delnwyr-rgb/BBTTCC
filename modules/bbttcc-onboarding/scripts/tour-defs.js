@@ -202,12 +202,12 @@ const factionSheetTour = {
     },
     {
       id: "ops", title: "Organization Points — rolling power",
-      selector: "section.bbttcc-tab-overview fieldset.bbttcc-card-ops",
+      selector: '[data-tour="faction.ops"]',   // NOT .bbttcc-card-ops: the skin enhancer stamps that on the OP Bank card above too (2026-10-12)
       text: "Each track has a Value plus your Roster's contribution. The ⚀ rolls 2d10 (10s explode) + Value + Roster.\nEvery 10 rolled banks Momentum. The +/− arrows adjust the bank by 1."
     },
     {
       id: "momentum", title: "Momentum — the strategic surge",
-      selector: "button[data-bbttcc-momentum-spend]",
+      selector: '[data-tour="faction.momentum"]',   // the whole row — readout + hint + Spend, not just the button (2026-10-12)
       optional: true,
       text: "Momentum banks +1 for every 10 rolled on OP checks and resets each Turn — spend it or lose it.\nThe menu: 1 arms +1d10 on your next OP roll, 2 forces an opposed reroll, 3 refunds an OP cost, 5 is Reshape Strategy (GM-gated)."
     },
