@@ -2640,7 +2640,12 @@ export async function promoteStampedAptitudeAEs(actor) {
         // key, which no longer exists on the actor; the guard below then
         // dropped them silently and casters never got their armor aptitude.
         const skillKey = LEGACY_SKILL_ALIASES[m[1]] ?? m[1];
-        if (skills[skillKey] === undefined) continue;
+        // Actors created before a template key existed (e.g. `fitting`, added
+        // 2026-08-22) carry no SOURCE entry for it even though the sheet renders
+        // the row from template defaults. Treat "known to the template, absent
+        // from source" as rank 0 rather than skipping the grant (2026-10-12).
+        const knownKey = skills[skillKey] !== undefined || actor.system?.skills?.[skillKey] !== undefined;
+        if (!knownKey) continue;
         const delta = Number(change.value) || 0;
         if (!delta) continue;
         touched = true;                       // this is a promotable stamp change —

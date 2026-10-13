@@ -2,7 +2,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Each of the 9 canonical classes should grant:
 //   • one combat aptitude (melee or brawl) at rank +1
-//   • one armor aptitude (plating, weave, or warding) at rank +1
+//   • one armor aptitude (plating, fitting, or bracing) at rank +1
 // when the player gains their Tier-1 anchor feature at L1.
 //
 // Audit (2026-05-04) showed only Bulwark and Shadow Courier ship a skill AE
@@ -29,21 +29,39 @@ const DRY_RUN = false;
 // Anchor name → grants. Names match the live pack (audited 2026-05-04).
 const PLAN = [
   { anchor: "Bulwark — Tier 1: Founding Stance",                 combat: "melee", armor: "plating" },
-  { anchor: "Aurablade: Core Features",                          combat: "melee", armor: "weave",
+  { anchor: "Aurablade: Core Features",                          combat: "melee", armor: "fitting",
     extraFlag: { path: "flags.fourththing.aurablade.meleeAttrOption", value: "presence" } },
-  { anchor: "Cosmic Linguist: Core Features",                    combat: "brawl", armor: "weave" },
-  { anchor: "Pactkeeper: Core Features",                         combat: "brawl", armor: "warding" },
-  { anchor: "Dreamwalker: Tier 1 — Oneiric Reservoir",           combat: "brawl", armor: "weave" },
-  { anchor: "Harmony Marshal: Tier 1 — Harmony Initiate",        combat: "melee", armor: "warding" },
+  { anchor: "Cosmic Linguist: Core Features",                    combat: "brawl", armor: "fitting" },
+  { anchor: "Pactkeeper: Core Features",                         combat: "brawl", armor: "bracing" },
+  { anchor: "Dreamwalker: Tier 1 — Oneiric Reservoir",           combat: "brawl", armor: "fitting" },
+  { anchor: "Harmony Marshal: Tier 1 — Harmony Initiate",        combat: "melee", armor: "bracing" },
   { anchor: "Soul-Smith: Tier 1 — Sanctified Forge Initiate",    combat: "melee", armor: "plating" },
-  { anchor: "Wyrdlens Adept: Tier 1 — Lens Read",                combat: "brawl", armor: "weave" },
-  { anchor: "Shadow Courier — Tier 1: Liminal Operator",         combat: "brawl", armor: "weave" }
+  { anchor: "Wyrdlens Adept: Tier 1 — Lens Read",                combat: "brawl", armor: "fitting" },
+  { anchor: "Shadow Courier — Tier 1: Liminal Operator",         combat: "brawl", armor: "fitting" }
 ];
 
 const SKILL_LABEL = {
   melee: "Melee", brawl: "Brawl", firearms: "Firearms",
-  plating: "Plating", weave: "Weave", warding: "Warding"
+  plating: "Plating", fitting: "Fitting", bracing: "Bracing"
 };
+// Owner rename 2026-08-22: weave→fitting (light), warding→bracing (medium).
+// Stamps written before the rename carry a key the actor schema no longer has;
+// migrateLegacyStamps() rewrites them in place instead of stacking a duplicate.
+const LEGACY_SKILL_ALIASES = { weave: "fitting", warding: "bracing", weaver: "fitting" };
+function migrateLegacyStamps(effects) {
+  const ops = [];
+  for (const e of effects) {
+    const kind = e?.flags?.fourththing?.aptitudeKind;
+    const to   = LEGACY_SKILL_ALIASES[kind];
+    if (!e?.flags?.fourththing?.aptitudeStamp || !to) continue;
+    const changes = (e.changes ?? []).map(c => ({
+      ...c, key: String(c.key ?? "").replace(`system.skills.${kind}.value`, `system.skills.${to}.value`)
+    }));
+    ops.push({ _id: e._id ?? e.id, name: `Class L1: ${SKILL_LABEL[to]} +1`, changes,
+               "flags.fourththing.aptitudeKind": to, from: kind, to });
+  }
+  return ops;
+}
 
 function buildAE(anchorName, skillKey) {
   return {
@@ -86,12 +104,24 @@ function buildAE(anchorName, skillKey) {
   for (const row of PLAN) {
     const item = docs.find(d => d.name === row.anchor);
     if (!item) {
-      report.push(`✗ MISSING anchor: ${row.anchor}`);
+      const cls = row.anchor.split(/[:—]/)[0].trim().toLowerCase();
+      const near = docs.filter(d => d.name.toLowerCase().startsWith(cls) && /tier 1|core/i.test(d.name)).map(d => `"${d.name}"`);
+      report.push(`✗ MISSING anchor: ${row.anchor}${near.length ? `  (pack has: ${near.join(", ")})` : ""}`);
       missing++;
       continue;
     }
 
-    // Discover already-stamped AEs by sentinel
+    // Rewrite pre-rename stamps (weave/warding) onto the current keys first.
+    const migrate = migrateLegacyStamps((item.effects ?? []).map(e => e.toObject ? e.toObject() : e));
+    if (migrate.length) {
+      if (DRY_RUN) report.push(`~ ${row.anchor.padEnd(58)} would migrate ${migrate.map(o => `${o.from}→${o.to}`).join(", ")}`);
+      else {
+        await item.updateEmbeddedDocuments("ActiveEffect", migrate.map(({ from, to, ...op }) => op));
+        report.push(`~ ${row.anchor.padEnd(58)} migrated ${migrate.map(o => `${o.from}→${o.to}`).join(", ")}`);
+      }
+    }
+
+    // Discover already-stamped AEs by sentinel (post-migration view)
     const existing = (item.effects ?? []).map(e => e.toObject ? e.toObject() : e);
     const has = (skillKey) => existing.some(e =>
       e?.flags?.fourththing?.aptitudeStamp === STAMP_TAG &&
