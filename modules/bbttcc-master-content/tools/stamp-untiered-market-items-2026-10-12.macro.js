@@ -2,8 +2,9 @@
 // "I'll trust you on the 31"). The same values are already in packs/_source/items (canon); this applies them to the
 // LIVE pack + any world copies so the Market stops estimating tiers for these rows.
 // F12 console paste-able, GM only. DRY_RUN=true previews. Idempotent: a doc that already has rfi.item.tier is skipped.
-// Match is by NAME among untiered gear/equipment/consumable docs. Unlocks the pack for the write, relocks after.
-const DRY_RUN = true;
+// v2 (same night): +6 live-only rows — 5 starter-kit manifestation weapons (T1 weapon) + Hovercraft Frame (T2 vehicle),
+// which exist only in the ember pack (canon _source is behind ember — resync owed). Match is by NAME among untiered docs. Unlocks the pack for the write, relocks after.
+const DRY_RUN = false;
 const PACK_ID = "bbttcc-master-content.items";
 const INCLUDE_WORLD_ITEMS = true;
 const PLAN = [
@@ -440,6 +441,90 @@ const PLAN = [
     "bound": "free",
     "saleBack": 300,
     "notes": "TII vehicle stamp · Heavy Combatant chassis (T2 heavy) — war-rig pays Violence (rubric §7) (untiered pass 2026-10-12)"
+  },
+  {
+    "name": "Anvil Stance",
+    "type": "weapon",
+    "tier": "I",
+    "frame": "weapon",
+    "rarity": "",
+    "rarityMult": 1,
+    "marks": 50,
+    "currency": "violence",
+    "gmOverride": false,
+    "bound": "free",
+    "saleBack": 20,
+    "notes": "TI weapon stamp · starter-kit manifestation (untiered pass 2026-10-12)"
+  },
+  {
+    "name": "Borrowed Bastion",
+    "type": "weapon",
+    "tier": "I",
+    "frame": "weapon",
+    "rarity": "",
+    "rarityMult": 1,
+    "marks": 50,
+    "currency": "violence",
+    "gmOverride": false,
+    "bound": "free",
+    "saleBack": 20,
+    "notes": "TI weapon stamp · starter-kit manifestation (untiered pass 2026-10-12)"
+  },
+  {
+    "name": "Mercy's Edge",
+    "type": "weapon",
+    "tier": "I",
+    "frame": "weapon",
+    "rarity": "",
+    "rarityMult": 1,
+    "marks": 50,
+    "currency": "violence",
+    "gmOverride": false,
+    "bound": "free",
+    "saleBack": 20,
+    "notes": "TI weapon stamp · starter-kit manifestation (untiered pass 2026-10-12)"
+  },
+  {
+    "name": "Victory's Down Payment",
+    "type": "weapon",
+    "tier": "I",
+    "frame": "weapon",
+    "rarity": "",
+    "rarityMult": 1,
+    "marks": 50,
+    "currency": "violence",
+    "gmOverride": false,
+    "bound": "free",
+    "saleBack": 20,
+    "notes": "TI weapon stamp · starter-kit manifestation (untiered pass 2026-10-12)"
+  },
+  {
+    "name": "Wrath-Brand",
+    "type": "weapon",
+    "tier": "I",
+    "frame": "weapon",
+    "rarity": "",
+    "rarityMult": 1,
+    "marks": 50,
+    "currency": "violence",
+    "gmOverride": false,
+    "bound": "free",
+    "saleBack": 20,
+    "notes": "TI weapon stamp · starter-kit manifestation (untiered pass 2026-10-12)"
+  },
+  {
+    "name": "Hovercraft Frame",
+    "type": "gear",
+    "tier": "II",
+    "frame": "vehicle",
+    "rarity": "",
+    "rarityMult": 1,
+    "marks": 750,
+    "currency": "economy",
+    "gmOverride": false,
+    "bound": "free",
+    "saleBack": 300,
+    "notes": "TII vehicle stamp · medium-bracket rig frame (the Absolutely Reliable) (untiered pass 2026-10-12)"
   }
 ];
 
