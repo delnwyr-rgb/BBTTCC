@@ -4265,7 +4265,8 @@ const _FT_SURGE_LABELS = {
 function _ftSurgeBoostBanner(shots) {
   if (!shots?.consumed?.length) return "";
   const items = shots.consumed.map(k => _FT_SURGE_LABELS[k] || k);
-  return `<p style="font-size:0.72rem;color:#e8c84a;margin:0.25rem 0 0;font-weight:600">
+  // 2026-10-12 — was 0.72rem dull gold: unreadable on the card (owner: "we can't read this").
+  return `<p style="font-size:0.86rem;color:#ffd86a;margin:0.3rem 0 0;font-weight:700">
     ✦ Surge boosts consumed: ${items.join(" · ")}
   </p>`;
 }
@@ -12141,9 +12142,19 @@ function buildMagicChatHTML({ label, intent, channel, sephirah, attrIntent, attr
   const ic = FT.INTENT_COLORS[intent]   ?? "#888";
   const cc = FT.CHANNEL_COLORS[channel] ?? "#888";
 
-  const diceRow = diceResults.map(d =>
-    `<span class="ft-die${d.result >= 8 ? " ft-die-high" : d.result <= 2 ? " ft-die-low" : ""}">${d.result}</span>`
-  ).join("");
+  const diceRow = diceResults.map(d => {
+    const cls = `ft-die${d.result >= 8 ? " ft-die-high" : d.result <= 2 ? " ft-die-low" : ""}`;
+    // 2026-10-12 — a rerolled die shows BOTH faces: the struck original and the
+    // new one (owner: "Snap Strike doesn't show the extra die, just says so").
+    const rr = d.ftReroll;
+    if (rr && rr.before !== rr.after) {
+      const src = ftEscapeHtml(String(rr.source ?? "reroll"));
+      return `<span class="ft-die ft-die-rerolled" style="opacity:0.45;text-decoration:line-through" title="Rerolled — ${src}">${rr.before}</span>` +
+             `<span style="opacity:0.8;font-size:0.8em;margin:0 2px;align-self:center">${rr.mode === "reroll-highest" ? "↓" : "↑"}</span>` +
+             `<span class="${cls}" title="Rerolled from ${rr.before} — ${src}">${d.result}</span>`;
+    }
+    return `<span class="${cls}">${d.result}</span>`;
+  }).join("");
   // Surge / Act-Again surfacing — same shape as Engage card.
   const explodeTail = explosionDice.length
     ? ` <span style="color:#e8c84a;font-weight:600">!→${explosionDice.join("+")}</span>`
@@ -12450,9 +12461,19 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
                                 radPenalty = 0 }) {
   const ic = FT.INTENT_COLORS[intent] ?? "#888";
   const defData = FT.DEFENSES[defense] ?? { label: defense };
-  const diceRow = diceResults.map(d =>
-    `<span class="ft-die${d.result >= 8 ? " ft-die-high" : d.result <= 2 ? " ft-die-low" : ""}">${d.result}</span>`
-  ).join("");
+  const diceRow = diceResults.map(d => {
+    const cls = `ft-die${d.result >= 8 ? " ft-die-high" : d.result <= 2 ? " ft-die-low" : ""}`;
+    // 2026-10-12 — a rerolled die shows BOTH faces: the struck original and the
+    // new one (owner: "Snap Strike doesn't show the extra die, just says so").
+    const rr = d.ftReroll;
+    if (rr && rr.before !== rr.after) {
+      const src = ftEscapeHtml(String(rr.source ?? "reroll"));
+      return `<span class="ft-die ft-die-rerolled" style="opacity:0.45;text-decoration:line-through" title="Rerolled — ${src}">${rr.before}</span>` +
+             `<span style="opacity:0.8;font-size:0.8em;margin:0 2px;align-self:center">${rr.mode === "reroll-highest" ? "↓" : "↑"}</span>` +
+             `<span class="${cls}" title="Rerolled from ${rr.before} — ${src}">${d.result}</span>`;
+    }
+    return `<span class="${cls}">${d.result}</span>`;
+  }).join("");
   // Surge / Act-Again surfacing — only render if a 10 actually exploded or both
   // base dice came up 10. Mirrors the Aptitude-card breakdown line so players
   // get consistent visual feedback across roll paths.
@@ -15277,7 +15298,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
             aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")
           }</p>`
         : "") + (rerollResult.applied.length
-        ? `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">Reroll: ${
+        ? `<p style="font-size:0.86rem;color:#cfe9ff;margin:0.25rem 0 0;font-weight:600">Reroll: ${
             rerollResult.applied.map(r => `${r.mode === "reroll-lowest" ? "↑" : "↓"} ${r.before}→${r.after} (${r.source})`).join(", ")
           }</p>`
         : "") + _ftSurgeBoostBanner(_castSurge)
@@ -16208,7 +16229,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
             aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")
           }</p>`
         : "") + (rerollResult.applied.length
-        ? `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">Reroll: ${
+        ? `<p style="font-size:0.86rem;color:#cfe9ff;margin:0.25rem 0 0;font-weight:600">Reroll: ${
             rerollResult.applied.map(r => `${r.mode === "reroll-lowest" ? "↑" : "↓"} ${r.before}→${r.after} (${r.source})`).join(", ")
           }</p>`
         : "") + (_rankPoolNote
@@ -25498,6 +25519,30 @@ function _ftSyncBoardSelection({ stewardId, rigId, mode = "board", initiatorUser
   }
 }
 
+// 2026-10-12 — Core's initial token control on canvas draw (player seat with
+// no assigned character, or a character plus other owned actors) controls
+// EVERY owned token on the scene, so a pilot who owns both their steward and
+// the rig loads with BOTH selected and can't shake it without switching
+// layers (owner report 2026-10-12). Trim to one, in fiction order: aboard →
+// the rig they're riding; otherwise → their steward. Runs after core's
+// #initializeTokenControl (canvasReady fires once Canvas#initialize is done).
+function _ftTrimInitialSelection() {
+  try {
+    if (game.user?.isGM || !canvas?.ready || !canvas.tokens) return;
+    const picked = canvas.tokens.controlled;
+    if (picked.length < 2) return;
+    const rigs    = picked.filter(t => t.actor?.type === "rig");
+    const walkers = picked.filter(t => t.actor?.type !== "rig");
+    const charId  = game.user.character?.id ?? null;
+    const steward = walkers.find(t => charId && t.actor?.id === charId) ?? walkers[0] ?? null;
+    const boardedId = steward?.actor?.flags?.fourththing?.boardedRig?.rigId ?? null;
+    let keep = boardedId ? (rigs.find(t => t.actor?.id === boardedId) ?? null) : null;
+    keep ??= steward ?? rigs[0] ?? picked[0];
+    for (const t of picked) if (t !== keep) t.release();
+  } catch (e) { console.warn("[fourththing] initial selection trim failed", e); }
+}
+Hooks.on("canvasReady", () => _ftTrimInitialSelection());
+
 /** Tell every client to re-point its selection. The socket emit does NOT loop
  *  back to the sender, so the local client is synced by hand. */
 function _ftBroadcastBoardSelection(payload) {
@@ -27976,6 +28021,9 @@ Hooks.once("ready", () => _ftRenderCrewHud());
 // the GM has permission to update other clients' tokens. Triggered by
 // any positional update to a rig-actor token.
 const _ftCrewFollowPending = new Map();
+const _ftCrewFollowLog = (msg, extra) => {
+  try { console.info(`[fourththing] crew-follow: ${msg}`, extra ?? ""); } catch (_) {}
+};
 Hooks.on("updateToken", async (tokenDoc, change) => {
   try {
     if (!game.user?.isGM) return;
@@ -27997,53 +28045,159 @@ Hooks.on("updateToken", async (tokenDoc, change) => {
     // snap immediately.
     const pendKey = `${scene.id}:${tokenDoc.id}`;
     const pending = _ftCrewFollowPending.get(pendKey);
-    if (pending) { pending.again = true; return; }
-    const state = { again: true };
+    if (pending) {
+      // 2026-10-12 — watchdog: a pending entry older than 30 s is wedged
+      // (whatever it awaited never came back). Drop it and start fresh rather
+      // than swallowing every further move into a loop that never snaps.
+      if ((Date.now() - pending.since) < 30000) { pending.again = true; return; }
+      _ftCrewFollowLog(`pending entry for "${actor.name}" wedged ${Math.round((Date.now() - pending.since) / 1000)}s — dropping it`);
+      _ftCrewFollowPending.delete(pendKey);
+    }
+    const state = { again: true, since: Date.now() };
     _ftCrewFollowPending.set(pendKey, state);
+    _ftCrewFollowLog(`rig "${actor.name}" → (${tokenDoc.x},${tokenDoc.y}) on "${scene.name}" | tab ${document.visibilityState} | v${game.system?.version}`);
     try {
       while (state.again) {
         state.again = false;
         const anim = tokenDoc.object?.movementAnimationPromise;
-        if (anim) { try { await anim; } catch (_) { /* stopped mid-move — land where it stands */ } }
+        let why = "no-animation";
+        if (anim) { try { why = await _ftAwaitAnimUnlessHidden(anim); } catch (_) { why = "animation-error"; } }
+        _ftCrewFollowLog(`wait=${why} → snapping crew of "${actor.name}"`);
         await _ftSnapCrewToRig(tokenDoc, actor, scene);
       }
     } finally { _ftCrewFollowPending.delete(pendKey); }
   } catch (e) { console.warn("[fourththing] rig-move steward sync failed", e); }
 });
 
-async function _ftSnapCrewToRig(tokenDoc, actor, scene) {
+// 2026-10-12 — The movement animation rides the canvas ticker, which the
+// browser FREEZES in a hidden/minimized tab (no requestAnimationFrame). With
+// the GM window minimized "to save FPS", the await above never resolved: the
+// crew stayed stranded at the boarding spot (weapon VFX fired from there)
+// until the GM tab was made visible again, then everything snapped at once
+// (owner pickup-shoot 2026-10-12). So: wait for the animation ONLY while the
+// tab is visible — the same race core itself uses (game.raceWithWindowHidden)
+// for Region teleports. Hidden now, or hidden mid-wait → stop waiting, yield
+// one macrotask (clear of the rig's own update workflow — the 2026-08-29
+// race), and snap to the document position, which is already post-move. A
+// hard cap keeps a wedged animation from ever holding the crew hostage.
+// Returns why the wait ended: "done" | "hidden" | "timeout".
+async function _ftAwaitAnimUnlessHidden(anim, capMs = 20000) {
+  if (!anim) return "no-animation";
+  const hidden = () => (typeof document !== "undefined") && document.visibilityState === "hidden";
+  let onVis = null, timer = null;
+  const bail = new Promise(res => {
+    if (hidden()) return res("hidden");
+    onVis = () => { if (hidden()) res("hidden"); };
+    document.addEventListener("visibilitychange", onVis);
+    timer = setTimeout(() => res("timeout"), capMs);
+  });
   try {
+    const why = await Promise.race([anim.then(() => "done", () => "done"), bail]);
+    if (why !== "done") await new Promise(r => setTimeout(r, 0));
+    return why;
+  } finally {
+    if (onVis) document.removeEventListener("visibilitychange", onVis);
+    if (timer) clearTimeout(timer);
+  }
+}
 
-    // Crew resolution is DUAL-SOURCE (2026-08-27): the rig's crew.slots AND
-    // each steward's own boardedRig flag. The two are known to drift
-    // (delete-replace slot edits, partial boards), and this sync failing is
-    // SILENT — the boarded player's vision and weapon VFX stay stranded at
-    // the boarding spot ("Invisible Toblerone", owner playtest).
-    const slots = actor.system?.crew?.slots ?? actor.system?.system?.crew?.slots ?? [];
-    const stewardIds = new Set(slots.filter(s => s?.actorId).map(s => s.actorId));
+// 2026-10-12 — Crew tokens on `scene` that should be riding `actor`'s rig
+// token but are NOT at its position. Crew resolution is DUAL-SOURCE
+// (2026-08-27): the rig's crew.slots AND each steward's own boardedRig flag.
+// The two are known to drift (delete-replace slot edits, partial boards).
+function _ftStrandedCrewFor(tokenDoc, actor, scene) {
+  const slots = actor.system?.crew?.slots ?? actor.system?.system?.crew?.slots ?? [];
+  const stewardIds = new Set(slots.filter(s => s?.actorId).map(s => s.actorId));
+  const stranded = [];
+  let crewTokens = 0;
+  for (const t of scene.tokens) {
+    if (t.id === tokenDoc.id) continue;
+    const byBoardFlag = t.actor?.flags?.fourththing?.boardedRig?.rigId === actor.id;
+    if (!stewardIds.has(t.actorId) && !byBoardFlag) continue;
+    crewTokens++;
+    const there = (t.x === tokenDoc.x) && (t.y === tokenDoc.y) &&
+      (tokenDoc.elevation == null || t.elevation === tokenDoc.elevation);
+    if (!there) stranded.push(t);
+  }
+  return { stranded, crewTokens, crewCount: stewardIds.size };
+}
 
-    const updates = [];
-    for (const t of scene.tokens) {
-      if (t.id === tokenDoc.id) continue;
-      const byBoardFlag = t.actor?.flags?.fourththing?.boardedRig?.rigId === actor.id;
-      if (!stewardIds.has(t.actorId) && !byBoardFlag) continue;
-      // Hidden passengers JUMP, they don't walk: action "displace" (teleport,
-      // no walls, no visualization, no cost) keeps the crew token out of the
-      // movement/animation pipeline. Coordinates are the rig's CURRENT
-      // (post-move) position — this runs after the animation settles.
+async function _ftSnapCrewToRig(tokenDoc, actor, scene, { attempt = 1 } = {}) {
+  try {
+    const { stranded, crewTokens, crewCount } = _ftStrandedCrewFor(tokenDoc, actor, scene);
+    if (!stranded.length) {
+      // Crew is aboard but no token exists to follow — somebody's vision is
+      // stranded. Say so instead of shrugging: the breadcrumb for the next debug.
+      if (crewCount && !crewTokens && attempt === 1) {
+        console.warn(`[fourththing] rig-move sync: "${actor.name}" moved with ${crewCount} crew slot(s) filled but no crew token was found to follow on scene "${scene.name}".`);
+      }
+      return;
+    }
+    // Hidden passengers JUMP, they don't walk: action "displace" (teleport,
+    // no walls, no visualization, no cost) keeps the crew token out of the
+    // movement/animation pipeline. Coordinates are the rig's CURRENT
+    // (post-move) position — this runs after the animation settles.
+    const updates = stranded.map(t => {
       const u = { _id: t.id, action: "displace", x: tokenDoc.x, y: tokenDoc.y };
       if (tokenDoc.elevation != null) u.elevation = tokenDoc.elevation;
-      updates.push(u);
+      return u;
+    });
+    _ftCrewFollowLog(`attempt ${attempt}: displacing ${updates.length} crew token(s) [${stranded.map(t => t.name).join(", ")}] → (${tokenDoc.x},${tokenDoc.y})`);
+    const res = await scene.updateEmbeddedDocuments("Token", updates, { animate: false });
+    _ftCrewFollowLog(`attempt ${attempt}: server acknowledged ${res?.length ?? 0} update(s)`);
+
+    // Verify the documents actually landed (the ack mutates them locally).
+    // If any crew token is still stranded, retry once after a beat — the
+    // hidden-tab path on 2026-10-12 lost the snap somewhere we could not see.
+    const after = _ftStrandedCrewFor(tokenDoc, actor, scene).stranded;
+    if (after.length && attempt < 2) {
+      _ftCrewFollowLog(`attempt ${attempt}: ${after.length} crew token(s) STILL stranded — retrying`);
+      await new Promise(r => setTimeout(r, 1200));
+      return _ftSnapCrewToRig(tokenDoc, actor, scene, { attempt: attempt + 1 });
     }
-    if (updates.length) {
-      await scene.updateEmbeddedDocuments("Token", updates, { animate: false });
-    } else if (stewardIds.size) {
-      // Crew is aboard but no token followed — somebody's vision is stranded.
-      // Say so instead of shrugging: this is the breadcrumb for the next debug.
-      console.warn(`[fourththing] rig-move sync: "${actor.name}" moved with ${stewardIds.size} crew slot(s) filled but no crew token was found to follow on scene "${scene.name}".`);
+    if (after.length) console.warn(`[fourththing] crew-follow: gave up — ${after.map(t => t.name).join(", ")} still not aboard "${actor.name}"`);
+  } catch (e) {
+    console.warn(`[fourththing] crew snap failed (attempt ${attempt})`, e);
+    if (attempt < 2) {
+      await new Promise(r => setTimeout(r, 1200));
+      return _ftSnapCrewToRig(tokenDoc, actor, scene, { attempt: attempt + 1 });
     }
-  } catch (e) { console.warn("[fourththing] crew snap failed", e); }
+  }
 }
+
+// 2026-10-12 — Reconcile on wake: whenever the GM tab becomes visible again,
+// sweep every scene for rig tokens whose crew is not aboard and snap them.
+// This is the belt to the hidden-tab braces above: whatever the minimized
+// window did or didn't manage, the crew is aboard the moment the GM looks.
+async function _ftReconcileCrewPositions(reason = "wake") {
+  try {
+    if (!game.user?.isGM) return;
+    let fixed = 0;
+    for (const scene of game.scenes ?? []) {
+      for (const tokenDoc of scene.tokens) {
+        const actor = tokenDoc.actor;
+        if (!actor || actor.type !== "rig") continue;
+        const { stranded } = _ftStrandedCrewFor(tokenDoc, actor, scene);
+        if (!stranded.length) continue;
+        const pendKey = `${scene.id}:${tokenDoc.id}`;
+        if (_ftCrewFollowPending.has(pendKey)) continue; // a follow-on is already in flight
+        _ftCrewFollowLog(`reconcile (${reason}): ${stranded.length} crew token(s) stranded off "${actor.name}" on "${scene.name}"`);
+        await _ftSnapCrewToRig(tokenDoc, actor, scene);
+        fixed += stranded.length;
+      }
+    }
+    if (fixed) _ftCrewFollowLog(`reconcile (${reason}): re-seated ${fixed} crew token(s)`);
+  } catch (e) { console.warn("[fourththing] crew reconcile failed", e); }
+}
+Hooks.once("ready", () => {
+  if (!game.user?.isGM) return;
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState !== "visible") return;
+    setTimeout(() => _ftReconcileCrewPositions("tab visible"), 400);
+  });
+  // Also on the way in: a GM seat that loads after a hidden-tab stretch.
+  setTimeout(() => _ftReconcileCrewPositions("ready"), 3000);
+});
 
 // 2026-05-19 — Per-round combat-flag clear, shared between the steward
 // sheet's New Turn button, the raid-console round-commit hook, and the

@@ -807,7 +807,11 @@ export async function applyRerollGrants(roll, grants, bonusDelta = 0) {
     if (after > before) {
       baseDice[minIdx].result = after;
       const src = grants.find(g => g.mode === "reroll-lowest");
-      applied.push({ mode: "reroll-lowest", before, after, source: src?.sourceItemName ?? "Passive" });
+      const source = src?.sourceItemName ?? "Passive";
+      applied.push({ mode: "reroll-lowest", before, after, source });
+      // 2026-10-12 — stamp the die so chat cards can SHOW the reroll (struck
+      // old face → new face) instead of only saying it happened.
+      baseDice[minIdx].ftReroll = { mode: "reroll-lowest", before, after, source };
     }
   }
   if (hasRerollHigh) {
@@ -818,7 +822,9 @@ export async function applyRerollGrants(roll, grants, bonusDelta = 0) {
     if (after < before) {
       baseDice[maxIdx].result = after;
       const src = grants.find(g => g.mode === "reroll-highest");
-      applied.push({ mode: "reroll-highest", before, after, source: src?.sourceItemName ?? "Passive" });
+      const source = src?.sourceItemName ?? "Passive";
+      applied.push({ mode: "reroll-highest", before, after, source });
+      baseDice[maxIdx].ftReroll = { mode: "reroll-highest", before, after, source };
     }
   }
 
@@ -2593,6 +2599,10 @@ export async function applySkillGrantsFromFeatures(actor) {
 // converts the +N into a source rank write (max 5), and disables the AE on
 // the embedded item copy so it can't double-apply. Idempotent — safe to
 // re-run; converted AEs stay disabled and are skipped on subsequent passes.
+// Old armor-skill names → current keys (mirror of FT.LEGACY_SKILL_ALIASES in
+// module.js; owner rename 2026-08-22).
+const LEGACY_SKILL_ALIASES = { weave: "fitting", warding: "bracing", weaver: "fitting" };
+
 export async function promoteStampedAptitudeAEs(actor) {
   // ⚠ ROOT-CAUSE FIX 2026-07-13 (the recurring "1 dot + ancestry bonus → rank
   // maxes at 5" bug). Two invariants this function must hold:
@@ -2625,7 +2635,11 @@ export async function promoteStampedAptitudeAEs(actor) {
         if (!isAdd) continue;
         const m = String(change.key ?? "").match(/^system\.skills\.([a-zA-Z0-9_]+)\.value$/);
         if (!m) continue;
-        const skillKey = m[1];
+        // 2026-10-12 — resolve the 2026-08-22 armor-skill rename (weave→fitting,
+        // warding→bracing). Stamps written before the rename carried the old
+        // key, which no longer exists on the actor; the guard below then
+        // dropped them silently and casters never got their armor aptitude.
+        const skillKey = LEGACY_SKILL_ALIASES[m[1]] ?? m[1];
         if (skills[skillKey] === undefined) continue;
         const delta = Number(change.value) || 0;
         if (!delta) continue;
