@@ -329,9 +329,13 @@ function injectPanel(app /* html unused — we use app.element */) {
     _bindActions(wrap, actor, app);
 
     // Mirror Plates into the prominent top Integrity tile (display-only) so the
-    // big number reflects structure HP. Only when a BOM is stamped.
+    // big number reflects structure HP. Only when a BOM is stamped AND it
+    // actually yields plates — an empty stamp (hasStructure:true, no
+    // materials, plates 0/0) must never mask the real integrity track, or
+    // the ± buttons look dead (Chopper Four, 2026-10-12).
     const state = game.bbttcc?.api?.structures?.readState?.(actor);
-    if (state?.plates) _mirrorPlatesIntoIntegrity(appEl, actor, state);
+    const platesMax = Math.max(0, Number(state?.plates?.max) || 0);
+    if (state?.plates && platesMax > 0) _mirrorPlatesIntoIntegrity(appEl, actor, state);
   } catch (e) {
     console.warn(TAG, "injectPanel failed", e);
   }
