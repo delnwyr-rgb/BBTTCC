@@ -26924,6 +26924,11 @@ function _ftCollectCrewControlsContext(actor) {
   // inject it for pilots so the control surfaces on the banner + HUD without
   // re-stamping every frame (same rationale as the Ram injection above).
   if (flag.role === "pilot" && !frameActions.includes("vent-heat")) frameActions = [...frameActions, "vent-heat"];
+  // 2026-10-12 — "fire-weapon" is a frame-authored placeholder with no handler:
+  // clicking it fell to `default:` and posted a bare card. The per-weapon chips
+  // (built from `rigWeapons` below) ARE the fire control, so hide the stub on
+  // the banner + HUD instead of re-stamping every frame item that lists it.
+  frameActions = frameActions.filter(a => a !== "fire-weapon");
 
   // Rig weapons (only gunners + crew can fire — pilots/engineers focus elsewhere)
   // 2026-05-13 — Gate on whether the rig has a Gunner role authored, not
