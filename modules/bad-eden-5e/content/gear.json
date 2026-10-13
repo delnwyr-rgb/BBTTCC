@@ -3,7 +3,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-08",
+    "at": "2026-10-13",
     "overridesApplied": 0
   },
   "items": [
@@ -3194,7 +3194,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 75,
           "denomination": "gp"
         },
         "rarity": "common",
@@ -3231,7 +3231,7 @@
             "id": "buIaikuDJgYN0oD7",
             "pack": "items",
             "identifier": "filtermask-mk-ii",
-            "hash": "23324df5b4a4"
+            "hash": "1da7b8052a5f"
           }
         }
       },
@@ -3730,7 +3730,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 45,
           "denomination": "gp"
         },
         "rarity": "uncommon",
@@ -3767,7 +3767,7 @@
             "id": "NxWcGfqwZKQXuSjE",
             "pack": "items",
             "identifier": "geiger-familiar-drone",
-            "hash": "9f2ec84e2c13"
+            "hash": "12f6c4446e8c"
           }
         }
       },
@@ -4186,7 +4186,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 45,
           "denomination": "gp"
         },
         "rarity": "uncommon",
@@ -4223,7 +4223,7 @@
             "id": "EuKlKjYnAfp4CsuW",
             "pack": "items",
             "identifier": "grapnel-spool",
-            "hash": "aefa9cad460a"
+            "hash": "11380afa84d7"
           }
         }
       },
@@ -4569,7 +4569,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 75,
           "denomination": "gp"
         },
         "rarity": "uncommon",
@@ -4606,7 +4606,7 @@
             "id": "ONVocWduo9NObDdL",
             "pack": "items",
             "identifier": "hex-boots",
-            "hash": "d967e6acd135"
+            "hash": "2e241352834d"
           }
         }
       },
@@ -4670,7 +4670,7 @@
             "id": "HLXYjDIMbIk3aqDR",
             "pack": "items",
             "identifier": "hex-compass",
-            "hash": "ea09b88cf039"
+            "hash": "5ad615d83bdf"
           }
         }
       },
@@ -5565,7 +5565,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 180,
           "denomination": "gp"
         },
         "rarity": "rare",
@@ -5602,7 +5602,7 @@
             "id": "9qKenzrBNKKEsi9J",
             "pack": "items",
             "identifier": "horizon-courier-pack",
-            "hash": "cda6490583d7"
+            "hash": "027da3704feb"
           }
         }
       },
@@ -8869,7 +8869,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 180,
           "denomination": "gp"
         },
         "rarity": "rare",
@@ -8906,7 +8906,7 @@
             "id": "KBpHCLKxMMlDte4S",
             "pack": "items",
             "identifier": "proselyte-recon-drone",
-            "hash": "03a253d5569d"
+            "hash": "149e606a9248"
           }
         }
       },
@@ -9181,7 +9181,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 60,
           "denomination": "gp"
         },
         "rarity": "common",
@@ -9218,7 +9218,7 @@
             "id": "5itGKrJaPlLH9cDJ",
             "pack": "items",
             "identifier": "quipu-ledger-strap",
-            "hash": "ba56af0b2cbf"
+            "hash": "ccdb69f06b66"
           }
         }
       },
@@ -9699,7 +9699,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 75,
           "denomination": "gp"
         },
         "rarity": "common",
@@ -9736,7 +9736,7 @@
             "id": "5QBwdykQq1D2ZKaY",
             "pack": "items",
             "identifier": "radcloth-hood",
-            "hash": "8254176602c8"
+            "hash": "dbc89c5a3c91"
           }
         }
       },
@@ -9763,7 +9763,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 450,
           "denomination": "gp"
         },
         "rarity": "rare",
@@ -9800,7 +9800,7 @@
             "id": "3nDzp74afkbXVpMw",
             "pack": "items",
             "identifier": "reactor-shield-cape",
-            "hash": "d2ae2b3bbfe9"
+            "hash": "515fe8360a76"
           }
         }
       },
@@ -9871,7 +9871,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 10,
           "denomination": "gp"
         },
         "rarity": "common",
@@ -9915,7 +9915,7 @@
             "id": "Lz9niNHviI4BS8nr",
             "pack": "items",
             "identifier": "rust-ooze-solvent-vial",
-            "hash": "46c6cb545f3f"
+            "hash": "e9d9646311fc"
           }
         }
       },
@@ -10844,7 +10844,7 @@
             "id": "VN3pcLtXwo7DSSEe",
             "pack": "items",
             "identifier": "scrapwork-toolkit",
-            "hash": "b4c4ca63f786"
+            "hash": "40225f24cadb"
           }
         }
       },
@@ -10915,7 +10915,7 @@
           "units": "lb"
         },
         "price": {
-          "value": 30,
+          "value": 450,
           "denomination": "gp"
         },
         "rarity": "rare",
@@ -10957,7 +10957,7 @@
             "id": "MBfhfAzJY1KBY26D",
             "pack": "items",
             "identifier": "scrubber-harness",
-            "hash": "38a306e5f3d5"
+            "hash": "900f62ff636d"
           }
         }
       },
