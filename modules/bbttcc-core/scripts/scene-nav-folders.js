@@ -12,6 +12,8 @@
 // Loaded via `import "./scene-nav-folders.js"` from bbttcc-ui-cleanup.enhancer.js — no
 // module.json change (= no pm2 restart / cache bust). Client setting `bbttcc-core.sceneNavFolders`
 // turns it off. Expanded-folder memory lives in localStorage (per browser, a convenience only).
+//
+// 2026-10-13: the foldered list is ONE scrolling column (core's column-wrap grid spread folders sideways off-screen).
 
 const MOD = "bbttcc-core";
 const SETTING = "sceneNavFolders";
@@ -33,8 +35,16 @@ function injectStyles() {
   const style = document.createElement("style");
   style.id = "bbttcc-scene-nav-folders-css";
   style.textContent = `
+    /* 2026-10-13 — Core's inactive menu is a COLUMN flex that WRAPS (height:0 + flex:1 = "full-height wrapping"):
+       the flat grid overflows sideways into more columns. A folder tree read that way spread each folder's
+       children across a column of its own (flex-basis 100% = one full column each), with the tail pushed off
+       the right edge of the screen (owner, 2026-10-13). A tree reads top-to-bottom: ONE column that scrolls. */
+    #scene-navigation #scene-navigation-inactive[data-bbttcc-folders="1"] {
+      flex-wrap: nowrap; overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable;
+      pointer-events: all; width: 100%; max-width: 20vw; padding-right: 0.25rem; gap: 0.5rem;
+    }
     #scene-navigation .bbttcc-nav-folder {
-      width: 100%; max-width: 20vw; position: relative; display: flex; align-items: center;
+      flex: none; width: 100%; max-width: none; position: relative; display: flex; align-items: center;
       gap: 0.4rem; padding: 0.5rem; font-size: var(--font-size-12); cursor: var(--cursor-pointer);
     }
     #scene-navigation .bbttcc-nav-folder > i.bbttcc-caret { flex: 0 0 auto; font-size: var(--font-size-10); transition: transform 0.2s; }
@@ -43,12 +53,17 @@ function injectStyles() {
     #scene-navigation .bbttcc-nav-folder > .bbttcc-count { margin-left: auto; opacity: 0.6; font-size: var(--font-size-10); }
     #scene-navigation .bbttcc-nav-folder.has-view { box-shadow: inset 0 0 0 1px var(--color-warm-2, #c9a227); }
     #scene-navigation .bbttcc-nav-children {
-      flex: 1 1 100%; width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem;
+      flex: none; width: 100%; display: flex; flex-direction: column; flex-wrap: nowrap; gap: 0.5rem;
       list-style: none; margin: 0; padding: 0 0 0.25rem 0.75rem;
       border-left: 2px solid var(--color-border-light-2, rgba(255,255,255,0.25));
     }
     #scene-navigation .bbttcc-nav-children:not(.open) { display: none; }
-    #scene-navigation .bbttcc-nav-root-scenes { flex: 1 1 100%; width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; margin: 0; padding: 0; }
+    #scene-navigation .bbttcc-nav-children > .scene,
+    #scene-navigation .bbttcc-nav-root-scenes > .scene { flex: none; width: 100%; max-width: none; }
+    #scene-navigation .bbttcc-nav-root-scenes {
+      flex: none; width: 100%; display: flex; flex-direction: column; flex-wrap: nowrap; gap: 0.5rem;
+      list-style: none; margin: 0; padding: 0;
+    }
   `;
   document.head.appendChild(style);
 }
