@@ -72,37 +72,55 @@
       </section>
 
       <section class="bbttcc-card bbttcc-market-catalog" data-tour="market.catalog">
-        <header class="bbttcc-card-header" data-tooltip="{{bbttccTip 'market' 'catalog'}}">
-          <h2>Catalog</h2>
+        <header class="bbttcc-card-header">
+          <h2>Catalog <a href="#" class="bbttcc-market-howto" data-action="howto" title="How buying works — prices, horizon chips, pools, delivery">ⓘ How buying works</a></h2>
           <p>{{vendorName}}</p>
           {{#if vendorStatusLine}}<p class="bbttcc-muted">{{vendorStatusLine}}</p>{{/if}}
         </header>
 
         <div class="bbttcc-card-body">
+          {{!-- Treasury: the buyer faction's OP banks, in marks (2026-10-12) --}}
+          <div class="bbttcc-market-treasury" data-tooltip="{{bbttccTip 'market' 'treasury'}}" data-tour="market.treasury">
+            {{#if treasury}}
+              <span class="bbttcc-market-treasury__title">{{treasury.name}} <span class="bbttcc-muted">· Horizon {{treasury.horizonLabel}}</span></span>
+              <span class="bbttcc-market-treasury__pools">
+                {{#each treasury.pools}}
+                  <span class="bbttcc-market-treasury__pool{{#if zero}} is-zero{{/if}}" title="{{key}} bank">{{short}} <b>{{marks}}</b></span>
+                {{/each}}
+              </span>
+            {{else}}
+              <span class="bbttcc-muted">Select a <b>Buyer Faction</b> to see its OP banks and what it can afford.</span>
+            {{/if}}
+          </div>
+
           <div class="bbttcc-market-filters">
             <input type="text" data-role="q" value="{{q}}" placeholder="Search…" data-tooltip="{{bbttccTip 'market' 'search'}}" data-tour="market.search"/>
-            <select data-role="category" data-tooltip="{{bbttccTip 'market' 'category'}}" data-tour="market.category">
-              <option value=""                 {{#if (eq category ""               )}}selected{{/if}}>All categories</option>
-              <option value="weapon"           {{#if (eq category "weapon"         )}}selected{{/if}}>Weapons</option>
-              <option value="armor"            {{#if (eq category "armor"          )}}selected{{/if}}>Armor</option>
-              <option value="gear"             {{#if (eq category "gear"           )}}selected{{/if}}>Gear</option>
-              <option value="consumable"       {{#if (eq category "consumable"     )}}selected{{/if}}>Consumables</option>
-              <option value="rig"              {{#if (eq category "rig"            )}}selected{{/if}}>Rig</option>
-              <option value="facility"         {{#if (eq category "facility"       )}}selected{{/if}}>Facility</option>
-              <option value="hex_asset"        {{#if (eq category "hex_asset"      )}}selected{{/if}}>Hex Asset</option>
-              <option value="rig_upgrade"      {{#if (eq category "rig_upgrade"    )}}selected{{/if}}>Rig Upgrade</option>
-              <option value="facility_upgrade" {{#if (eq category "facility_upgrade")}}selected{{/if}}>Facility Upgrade</option>
+            <select data-role="costBand" data-tooltip="{{bbttccTip 'market' 'costBand'}}" data-tour="market.costBand">
+              {{#each costBands}}
+                <option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+              {{/each}}
             </select>
             <select data-role="sort" data-tooltip="{{bbttccTip 'market' 'sort'}}" data-tour="market.sort">
               <option value="name"     {{#if (eq sort "name"    )}}selected{{/if}}>Sort: Name (A→Z)</option>
               <option value="tier_asc" {{#if (eq sort "tier_asc")}}selected{{/if}}>Sort: Tier (low→high)</option>
               <option value="tier_desc"{{#if (eq sort "tier_desc")}}selected{{/if}}>Sort: Tier (high→low)</option>
             </select>
+            <label class="bbttcc-market-afford-toggle{{#unless hasFaction}} is-disabled{{/unless}}" data-tooltip="{{bbttccTip 'market' 'affordOnly'}}" data-tour="market.affordOnly">
+              <input type="checkbox" data-role="affordOnly" {{#if affordOnly}}checked{{/if}} {{#unless hasFaction}}disabled{{/unless}}/>
+              Only what we can afford
+            </label>
           </div>
+
+          {{!-- Always tabbed by gear type (2026-10-12). Keeps the old tour anchor. --}}
+          <nav class="bbttcc-market-tabs" data-tooltip="{{bbttccTip 'market' 'tabs'}}" data-tour="market.category">
+            {{#each tabs}}
+              <button type="button" class="bbttcc-market-tab{{#if active}} active{{/if}}" data-action="tab" data-tab="{{key}}">{{label}} <span class="count">{{count}}</span></button>
+            {{/each}}
+          </nav>
 
           <div class="bbttcc-market-list">
             {{#each entries}}
-              <article class="bbttcc-market-item" data-entry-id="{{id}}">
+              <article class="bbttcc-market-item{{#if affordKnown}}{{#unless canAfford}} is-unaffordable{{/unless}}{{/if}}" data-entry-id="{{id}}">
                 {{#if img}}
                   <img class="bbttcc-market-item__img" src="{{img}}" alt=""/>
                 {{else}}
@@ -115,17 +133,24 @@
                     {{else}}
                       {{name}}
                     {{/if}}
+                    {{#if affordKnown}}
+                      {{#if canAfford}}
+                        <span class="bbttcc-market-afford ok" title="Pays {{paysLabel}}">✓ {{paysLabel}}</span>
+                      {{else}}
+                        <span class="bbttcc-market-afford no" title="Pays {{paysLabel}}">✗ Short {{shortLabel}}</span>
+                      {{/if}}
+                    {{/if}}
                   </div>
-                  <div class="bbttcc-muted" data-tooltip="{{bbttccTip 'market' 'cost'}}" {{#if @first}}data-tour="market.cost"{{/if}}>{{kindLabel}}{{#if tierLabel}} · {{tierLabel}}{{/if}} · Cost: <b>{{costLabel}}</b></div>
+                  <div class="bbttcc-muted" {{#if @first}}data-tour="market.cost"{{/if}}>{{kindLabel}}{{#if tierLabel}} · {{tierLabel}}{{/if}} · Cost: <b>{{costLabel}}</b></div>
                   {{#if blurb}}<div class="bbttcc-muted">{{blurb}}</div>{{/if}}
                 </div>
                 <div class="bbttcc-market-item__btns">
-                  <button type="button" class="bbttcc-button primary" data-action="buy" data-tooltip="{{bbttccTip 'market' 'buy'}}" {{#if @first}}data-tour="market.buy"{{/if}}>Buy</button>
+                  <button type="button" class="bbttcc-button primary" data-action="buy" {{#if @first}}data-tour="market.buy"{{/if}}>Buy</button>
                 </div>
               </article>
             {{/each}}
             {{#unless entries.length}}
-              <p class="bbttcc-muted">No matching entries.</p>
+              <p class="bbttcc-muted">No matching entries{{#if affordOnly}} you can afford{{/if}} in this tab.</p>
             {{/unless}}
           </div>
         </div>

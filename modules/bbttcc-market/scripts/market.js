@@ -480,6 +480,10 @@ const MARKET_TIPS = {
   manage:    "Manage Catalogs — GM-only editor for vendors and their catalog entries. Add or rename markets, toggle player visibility, drag-drop items in, set costs.",
   catalog:   "Catalog — the selected vendor's stock, filtered by search/category and sorted. Each row shows kind, RFI tier, list cost, and an Economic Horizon chip with the final price your faction actually pays.",
   search:    "Search — live filter on entry name, blurb, and kind text within the selected vendor's catalog.",
+  treasury:  "Treasury — the Buyer Faction's current OP banks, in marks, one pill per pool, plus its Economic Horizon. This is what every price on this page is measured against; pools at zero are dimmed.",
+  tabs:      "Gear-type tabs — the catalog is always split by what the entry is: Weapons / Armor / Gear / Consumables (by the underlying item), then Rigs, Hire, Facilities, Hex Assets, and Upgrades. Counts reflect the search, cost and affordability filters.",
+  costBand:  "Cost band — filter by what the Buyer Faction would actually pay (horizon-scaled; list price when no faction is selected): Standard Issue (free), then marks brackets that follow the RFI tier ladder (50 / 150 / 500 / 1500).",
+  affordOnly: "Only what we can afford — hides every entry whose bill exceeds the Buyer Faction's pool balances (split items need every portion covered). Needs a Buyer Faction. Unaffordable rows otherwise stay visible, dimmed, with a 'Short' pill saying how much is missing and in which pool.",
   category:  "Category — filters the list. Weapons / Armor / Gear / Consumables subdivide gear entries by the underlying item's type (consumables are detected via RFI frame, slot, or tag); the remaining options match the entry kind directly (rig, facility, hex asset, upgrades).",
   sort:      "Sort — Name (A→Z), or RFI Tier (I–IV) ascending/descending. Entries with no tier sort after Tier IV; equal-tier rows stay alphabetized.",
   openDoc:   "Open item sheet — inspect the actual item (stats, description, tier) before you spend marks on it.",
@@ -644,7 +648,7 @@ Hooks.once("init", () => {
     scope: "client",
     config: false,
     type: Object,
-    default: { vendorId: DEFAULT_VENDORS[0].id, factionId: "", characterId: "", hexUuid: "", q: "", kind: "", category: "", sort: "name", note: "" }
+    default: { vendorId: DEFAULT_VENDORS[0].id, factionId: "", characterId: "", hexUuid: "", q: "", kind: "", category: "", sort: "name", note: "", tab: "", costBand: "", affordOnly: false }
   });
 
   // Fallback {{bbttccTip}} helper so our templates render even when this
@@ -1249,6 +1253,108 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
 
 /* ===================== UI ===================== */
 
+
+/* ===================== Tabs / cost bands / affordability (2026-10-12) =====================
+   Owner ask: "an Available toggle, a list of available OPs so they know what they can
+   afford, always tabbed by gear type, filterable by cost category — it's a very long list."
+*/
+const MARKET_TABS = [
+  { key: "weapon",           label: "Weapons" },
+  { key: "armor",            label: "Armor" },
+  { key: "gear",             label: "Gear" },
+  { key: "consumable",       label: "Consumables" },
+  { key: "rig",              label: "Rigs" },
+  { key: "actor",            label: "Hire" },
+  { key: "facility",         label: "Facilities" },
+  { key: "hex_asset",        label: "Hex Assets" },
+  { key: "rig_upgrade",      label: "Rig Upgrades" },
+  { key: "facility_upgrade", label: "Facility Upgrades" },
+  { key: "other",            label: "Other" }
+];
+// Marks brackets follow the RFI tier ladder (TIER_BASE_MARKS 50/150/450/1350).
+const COST_BANDS = [
+  { key: "",       label: "Any cost" },
+  { key: "free",   label: "Standard Issue (free)" },
+  { key: "b50",    label: "≤ 50 marks" },
+  { key: "b150",   label: "51–150 marks" },
+  { key: "b500",   label: "151–500 marks" },
+  { key: "b1500",  label: "501–1500 marks" },
+  { key: "b1500p", label: "1500+ marks" },
+  { key: "na",     label: "Priceless / Artifact" }
+];
+function _tabKeyFor({ kind, docType, isConsumable }) {
+  const k = String(kind || "").toLowerCase();
+  if (k === "gear") {
+    if (isConsumable) return "consumable";
+    if (docType === "weapon") return "weapon";
+    if (docType === "armor") return "armor";
+    return "gear";
+  }
+  return MARKET_TABS.some(t => t.key === k && k !== "other") ? k : "other";
+}
+function _costBandFor(charge) {
+  if (!charge || charge.artifact || charge.priceless) return "na";
+  const m = Number(charge.marks) || 0;
+  if (m <= 0) return "free";
+  if (m <= 50) return "b50";
+  if (m <= 150) return "b150";
+  if (m <= 500) return "b500";
+  if (m <= 1500) return "b1500";
+  return "b1500p";
+}
+// Effective bill for `entry` as the buyer faction would pay it. MUST mirror
+// purchase() / openBuyConfirmDialog(): horizon-scaled (Standard Issue gear is
+// free, non-gear kinds pay base within horizon, ×1/×2/×4 over it), split items
+// pay each portion to its native pool, single-currency items pay their native
+// pool. No faction → list price (distance treated as 1).
+function _chargeFor(entry, faction, flagPrice, rarity) {
+  const kind = String(entry?.kind || "").toLowerCase();
+  if (rarity === "artifact") return { artifact: true, priceless: false, marks: 0, pools: {}, rarity };
+  if (flagPrice && Number(flagPrice.marks) < 0) return { artifact: false, priceless: true, marks: 0, pools: {}, rarity };
+  const baseCost = flagPrice ? Number(flagPrice.marks) : (Number(entry?.cost?.economy ?? 0) || 0);
+  const horizon  = faction ? factionEconomicHorizon(faction) : null;
+  const distance = horizon ? rarityDistance(rarity, horizon) : 1;
+  let econ = scaledEconomyCost(baseCost, distance);
+  if (distance <= 0 && kind && kind !== "gear") econ = baseCost;
+  const marks = Math.round(econ);
+  const pools = {};
+  if (flagPrice?.split && Object.keys(flagPrice.split).length) {
+    const sum = Object.values(flagPrice.split).reduce((a, v) => a + (Number(v) || 0), 0);
+    const scale = sum > 0 ? (marks / sum) : 1;
+    for (const [p, v] of Object.entries(flagPrice.split)) {
+      const k = _normPool(p);
+      pools[k] = (pools[k] || 0) + Math.round((Number(v) || 0) * scale);
+    }
+  } else if (flagPrice) {
+    const pricing = game.fourththing?.pricing;
+    const native = _normPool((!flagPrice.currency || flagPrice.currency === "auto")
+      ? (pricing?.defaultCurrencyForFrame?.(flagPrice.docFrame) ?? "economy")
+      : flagPrice.currency);
+    pools[native] = marks;
+  } else {
+    pools.economy = marks;
+  }
+  return { artifact: false, priceless: false, marks, pools, rarity, distance, baseCost,
+           standardIssue: !!faction && distance <= 0 && kind === "gear" };
+}
+function _affordFor(charge, balances) {
+  if (!charge || charge.artifact || charge.priceless) return { ok: false, short: [] };
+  const short = [];
+  for (const [p, need] of Object.entries(charge.pools)) {
+    const have = Number(balances?.[p]) || 0;
+    if (need > have) short.push({ pool: p, by: need - have });
+  }
+  return { ok: !short.length, short };
+}
+function _paysLabel(charge) {
+  if (!charge) return "";
+  if (charge.artifact) return "Artifact — discovery only";
+  if (charge.priceless) return "Priceless";
+  if (charge.standardIssue || charge.marks <= 0) return "Standard Issue — free";
+  const parts = Object.entries(charge.pools).filter(([, v]) => v > 0).map(([p, v]) => `${poolShortLabel(p)} ${v}`);
+  return parts.length ? `${parts.join(" + ")} marks` : "free";
+}
+
 export class BBTTCCMarketApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
     id: "bbttcc-market",
@@ -1279,7 +1385,11 @@ export class BBTTCCMarketApp extends HandlebarsApplicationMixin(ApplicationV2) {
       kind: c.kind || "",
       category: c.category || "",
       sort: c.sort || "name",
-      note: c.note || ""
+      note: c.note || "",
+      // 2026-10-12 (owner ask): gear-type tab, cost-band filter, affordability toggle.
+      tab: c.tab || "",
+      costBand: c.costBand || "",
+      affordOnly: !!c.affordOnly
     };
   }
 
@@ -1331,6 +1441,19 @@ const vendors = visibleVendors.map(v => ({
       .sort((a,b)=>String(a.name).localeCompare(String(b.name)));
 const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected: a.id === ctx.characterId }))
       .sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+
+    // Buyer faction treasury (2026-10-12): every price below is measured against this.
+    const buyerFaction = ctx.factionId ? game.actors.get(ctx.factionId) : null;
+    const buyerBalances = {};
+    {
+      const ob = buyerFaction?.getFlag?.(MOD_FACTIONS, "opBank") || {};
+      for (const p of OP_POOLS) buyerBalances[p] = Number(ob[p]) || 0;
+    }
+    const treasury = buyerFaction ? {
+      name: buyerFaction.name,
+      horizonLabel: rarityLabelFor(factionEconomicHorizon(buyerFaction)),
+      pools: OP_POOLS.map(p => ({ key: p, short: poolShortLabel(p), marks: buyerBalances[p], zero: !(buyerBalances[p] > 0) }))
+    } : null;
 
     let entries = (Array.isArray(catalogRaw) ? catalogRaw : []).filter(e => e?.vendorId === ctx.vendorId);
 
@@ -1407,6 +1530,26 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
       // unstamped entries / non-gear kinds.
       const flagPrice = await resolveItemFlagPrice(e);
 
+      // 2026-10-12: what the buyer faction would actually pay, and whether it can.
+      let rarity = "common", charge = null, afford = null;
+      try { rarity = await resolveEntryRarity(e); } catch (_e) {}
+      try { charge = _chargeFor(e, buyerFaction, flagPrice, rarity); } catch (_e) { charge = null; }
+      if (buyerFaction && charge) afford = _affordFor(charge, buyerBalances);
+      const tabKey = _tabKeyFor({ kind: e.kind, docType, isConsumable });
+
+      // 2026-10-12 — untiered items used to sink below Tier IV on a tier sort
+      // (owner: "items with no tier fall to the bottom"). Estimate a tier from
+      // rarity, else from the list price on the RFI ladder (50/150/450/1350),
+      // and say so in the label. Only a row with nothing to go on stays last.
+      let tierEstimated = false;
+      if (!tier) {
+        const byRarity = { uncommon: "I", rare: "II", very_rare: "III", legendary: "IV", common: "I" }[rarity] || "";
+        const m = Number(flagPrice?.marks);
+        const byPrice = Number.isFinite(m) && m > 0 ? (m < 150 ? "I" : m < 450 ? "II" : m < 1350 ? "III" : "IV") : "";
+        const est = (rarity && rarity !== "common" && byRarity) ? byRarity : (byPrice || byRarity);
+        if (est) { tier = est; tierEstimated = true; }
+      }
+
       return {
         id: e.id,
         name: e.name,
@@ -1420,31 +1563,40 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
         docType,
         isConsumable,
         tier,
-        tierLabel: tier ? `Tier ${tier}` : "",
-        tierRank: TIER_RANK[tier] ?? 99,  // unknown tiers sort after IV
-        canOpen: !!docUuid
+        tierEstimated,
+        tierLabel: tier ? `Tier ${tier}${tierEstimated ? " (est.)" : ""}` : "",
+        tierRank: TIER_RANK[tier] ?? 99,  // only a row with no tier AND no price/rarity sorts after IV
+        canOpen: !!docUuid,
+        tabKey,
+        rarity,
+        costBand: _costBandFor(charge),
+        paysLabel: _paysLabel(charge),
+        affordKnown: !!afford,
+        canAfford: !!afford?.ok,
+        shortLabel: afford && !afford.ok
+          ? (charge?.artifact ? "Artifact" : charge?.priceless ? "Priceless"
+             : afford.short.map(x => `${poolShortLabel(x.pool)} −${x.by}`).join(" · "))
+          : ""
       };
     }));
 
-    // Category filter: subdivides "gear" catalog rows by item.type and the
-    // RFI consumable convention (rfi.frame/system.slot/tags === "consumable").
-    // Non-gear catalog rows match by `kind` directly.
-    if (ctx.category) {
-      const cat = String(ctx.category).toLowerCase();
-      const GEAR_CATS = new Set(["weapon", "armor", "gear", "consumable"]);
-      entries = entries.filter(r => {
-        if (GEAR_CATS.has(cat)) {
-          if (String(r.kind||"").toLowerCase() !== "gear") return false;
-          if (cat === "consumable") return r.isConsumable;
-          if (cat === "weapon")     return r.docType === "weapon";
-          if (cat === "armor")      return r.docType === "armor";
-          // "gear" = the catch-all bucket: gear-doc, not flagged consumable,
-          // and not a weapon/armor.
-          return r.docType === "gear" && !r.isConsumable;
-        }
-        return String(r.kind||"").toLowerCase() === cat;
-      });
-    }
+    // Tabs are computed on the vendor's whole stock so they don't vanish while
+    // filtering; counts reflect the search / cost / affordability filters.
+    const stockCounts = {};
+    for (const r of entries) stockCounts[r.tabKey] = (stockCounts[r.tabKey] || 0) + 1;
+
+    // Cost band (horizon-scaled when a faction is selected, list price otherwise).
+    if (ctx.costBand) entries = entries.filter(r => r.costBand === ctx.costBand);
+    // Only what we can afford — needs a Buyer Faction to mean anything.
+    if (ctx.affordOnly && buyerFaction) entries = entries.filter(r => r.canAfford);
+
+    const filteredCounts = {};
+    for (const r of entries) filteredCounts[r.tabKey] = (filteredCounts[r.tabKey] || 0) + 1;
+    const visibleTabs = MARKET_TABS.filter(t => (stockCounts[t.key] || 0) > 0);
+    let activeTab = String(ctx.tab || ctx.category || "").toLowerCase();
+    if (!visibleTabs.some(t => t.key === activeTab)) activeTab = visibleTabs[0]?.key || "";
+    const tabs = visibleTabs.map(t => ({ key: t.key, label: t.label, count: filteredCounts[t.key] || 0, active: t.key === activeTab }));
+    if (activeTab) entries = entries.filter(r => r.tabKey === activeTab);
 
     // Sort: Name (default) / Tier asc / Tier desc. Tier sort secondaries
     // on name so equal-tier rows stay alphabetized.
@@ -1472,7 +1624,13 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
       q: ctx.q,
       category: ctx.category,
       sort: ctx.sort,
-      note: ctx.note
+      note: ctx.note,
+      tabs,
+      activeTab,
+      treasury,
+      hasFaction: !!buyerFaction,
+      costBands: COST_BANDS.map(b => ({ ...b, selected: b.key === String(ctx.costBand || "") })),
+      affordOnly: !!ctx.affordOnly
     };
   }
 
@@ -1495,6 +1653,8 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
     const categorySel = root.querySelector("[data-role='category']");
     const sortSel = root.querySelector("[data-role='sort']");
     const noteInp = root.querySelector("[data-role='note']");
+    const costBandSel = root.querySelector("[data-role='costBand']");
+    const affordChk = root.querySelector("[data-role='affordOnly']");
 
 // --- Economic Horizon chips (UI) ---
 // Adds chips near Buy buttons without modifying templates.
@@ -1546,9 +1706,10 @@ try {
       chip.textContent = spec.text || "";
       // Central help text + this row's rarity/horizon breakdown as one Foundry
       // tooltip; fall back to a native title when the help registry is absent.
-      const chipHelp = game.bbttcc?.help?.tip?.("market", "chip") || "";
-      if (chipHelp) chip.dataset.tooltip = spec.title ? `${chipHelp}<br><br>${esc(spec.title)}` : chipHelp;
-      else if (spec.title) chip.title = spec.title;
+      // 2026-10-12: row-specific breakdown only — the general Horizon lesson
+      // moved to the catalog header's "How buying works" (owner: tooltips
+      // covered the rows above and below and all said the same thing).
+      if (spec.title) chip.dataset.tooltip = esc(spec.title);
       // Tour anchor — first chip only, so the anchor is unique.
       if (!root.querySelector('[data-tour="market.chip"]')) chip.dataset.tour = "market.chip";
 
@@ -1596,9 +1757,7 @@ try {
         ? "this armor grants no defensive benefit while worn"
         : "this weapon is wielded untrained";
       const detail = `${buyer.name} has ${prof.label} rank 0 — ${why}. Buying is allowed; raise ${prof.label} to rank 1+ to gain its benefit.`;
-      const chipHelp = game.bbttcc?.help?.tip?.("market", "profChip") || "";
-      if (chipHelp) chip.dataset.tooltip = `${chipHelp}<br><br>${esc(detail)}`;
-      else chip.title = detail;
+      chip.dataset.tooltip = esc(detail);   // 2026-10-12: row detail only (see "How buying works")
       chip.style.cssText =
         "display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;line-height:16px;margin-right:8px;" +
         "border:1px solid rgba(251,191,36,.45);background:rgba(120,53,15,.35);color:#fbbf24;white-space:nowrap;";
@@ -1612,20 +1771,25 @@ try {
 
 
     const persist = () => {
-      this._saveCtx({
-        vendorId: vendorSel?.value || "",
-        factionId: factionSel?.value || "",
-        characterId: charSel?.value || "",
-        hexUuid: hexInp?.value || "",
-        q: qInp?.value || "",
-        kind: kindSel?.value || "",
-        category: categorySel?.value || "",
-        sort: sortSel?.value || "name",
-        note: noteInp?.value || ""
-      });
+      // Only controls that exist on this render write their key — the category
+      // dropdown became the tab strip (2026-10-12), and a missing control must
+      // not wipe a stored value.
+      const patch = {};
+      if (vendorSel)  patch.vendorId = vendorSel.value || "";
+      if (factionSel) patch.factionId = factionSel.value || "";
+      if (charSel)    patch.characterId = charSel.value || "";
+      if (hexInp)     patch.hexUuid = hexInp.value || "";
+      if (qInp)       patch.q = qInp.value || "";
+      if (kindSel)    patch.kind = kindSel.value || "";
+      if (categorySel) patch.category = categorySel.value || "";
+      if (sortSel)    patch.sort = sortSel.value || "name";
+      if (noteInp)    patch.note = noteInp.value || "";
+      if (costBandSel) patch.costBand = costBandSel.value || "";
+      if (affordChk)  patch.affordOnly = !!affordChk.checked;
+      this._saveCtx(patch);
     };
 
-    [vendorSel, factionSel, charSel, kindSel, categorySel, sortSel].forEach(el => {
+    [vendorSel, factionSel, charSel, kindSel, categorySel, sortSel, costBandSel, affordChk].forEach(el => {
       el?.addEventListener("change", () => { persist(); this.render(false); }, { signal: sig });
     });
     [hexInp, qInp, noteInp].forEach(el => {
@@ -1639,6 +1803,32 @@ try {
       const act = ctl.dataset.action;
 
       if (act === "manage") { game.bbttcc?.api?.market?.openCatalogEditor?.(); return; }
+
+      if (act === "howto") {
+        ev.preventDefault(); ev.stopPropagation();
+        const tip = (k) => game.bbttcc?.help?.tip?.("market", k) || "";
+        const sections = [
+          ["Buy", tip("buy")], ["Cost", tip("cost")], ["Economic Horizon chip", tip("chip")],
+          ["Untrained chip", tip("profChip")], ["Pay from", tip("payFromPool")], ["Split payment", tip("splitPay")],
+          ["Treasury", tip("treasury")], ["Only what we can afford", tip("affordOnly")], ["Cost band", tip("costBand")]
+        ].filter(([, v]) => v);
+        const html = `<div class="bbttcc-market-howto-body">${sections.map(([h, v]) => `<p><b>${esc(h)}</b> — ${esc(v)}</p>`).join("")}</div>`;
+        const DV2 = foundry.applications.api?.DialogV2;
+        try {
+          if (DV2?.prompt) await DV2.prompt({ window: { title: "How buying works" }, content: html, position: { width: 560 }, rejectClose: false, ok: { label: "Got it" } });
+          else new Dialog({ title: "How buying works", content: html, buttons: { ok: { label: "Got it" } } }, { width: 560 }).render(true);
+        } catch (_e) {}
+        return;
+      }
+
+      if (act === "tab") {
+        ev.preventDefault(); ev.stopPropagation();
+        const tab = String(ctl.dataset.tab || "");
+        // `category` kept in step so callers that pre-set it keep landing on the right tab.
+        this._saveCtx({ tab, category: tab });
+        this.render(false);
+        return;
+      }
 
       if (act === "openDoc") {
         ev.preventDefault(); ev.stopPropagation();
