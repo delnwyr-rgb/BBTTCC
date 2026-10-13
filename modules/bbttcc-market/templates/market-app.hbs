@@ -59,9 +59,24 @@
           </div>
 
           <div class="field" data-tooltip="{{bbttccTip 'market' 'hex'}}" data-tour="market.hex">
-            <label>Delivery Hex UUID (for facilities/hex assets)</label>
-            <input type="text" name="hexUuid" data-role="hexUuid" value="{{hexUuid}}" placeholder="Scene.<id>.Drawing.<id> or Drawing UUID"/>
-            <small>If empty, facility/hex purchases will be blocked (by design).</small>
+            <label>Delivery Hex (facilities / hex assets)</label>
+            <select name="hexUuid" data-role="hexUuid">
+              <option value="" {{#unless hexUuid}}selected{{/unless}}>(Select a known hex)</option>
+              {{#each deliveryOptions}}
+                <option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+              {{#if deliveryUnlisted}}
+                <option value="{{deliveryUnlisted.uuid}}" selected>{{deliveryUnlisted.label}}</option>
+              {{/if}}
+              {{#if deliveryOtherOptions.length}}
+                <optgroup label="Not known to the buyer (GM only)">
+                  {{#each deliveryOtherOptions}}
+                    <option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                  {{/each}}
+                </optgroup>
+              {{/if}}
+            </select>
+            <small class="bbttcc-market-delivery-note">{{deliveryNote}}</small>
           </div>
 
           <div class="field" data-tooltip="{{bbttccTip 'market' 'note'}}" data-tour="market.note">

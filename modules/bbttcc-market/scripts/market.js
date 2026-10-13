@@ -475,7 +475,8 @@ const MARKET_TIPS = {
   vendor:    "Vendor — which market you are browsing. Players only see markets the GM has flagged Active; the GM sees inactive ones suffixed '(inactive)'. Your selection is remembered per client.",
   faction:   "Buyer Faction — the faction whose OP bank pays for every purchase here . Bank and prices are in marks. Players see factions they own; the GM sees all. The purchase receipt is written to this faction's war log.",
   character: "Buyer Character — where purchased GEAR lands: a copy of the item is created in this character's inventory, stamped as vendor-bought. Required before buying gear; ignored for rigs, facilities, and hex assets.",
-  hex:       "Delivery Hex UUID — target hex for facility, facility-upgrade, and hex-asset purchases (a Drawing UUID, e.g. Scene.<id>.Drawing.<id>). Facilities merge onto the hex's primary facility; assets append to its asset list. Those purchases cannot complete without it. Gear and rigs ignore this field.",
+  hex:       "Delivery Hex — where facility, facility-upgrade, and hex-asset purchases land. The list holds the hexes the Buyer Faction KNOWS: ones it holds and ones it has visited. Each shows its distance from the freight origin and the delivery fee. Facilities merge onto the hex's primary facility; assets append to its asset list. Those purchases cannot complete without a hex. Gear and rigs ignore this field.",
+  deliveryFee: "Delivery fee — freight from the origin hex (Furrier's Fixit Farm unless the GM changes it) at a per-hex rate, charged on top of the item in the delivery pool. The origin hex ships free; a hex on another map pays a flat 10-hex rate. GM tunes rate, pool and origin in module settings.",
   note:      "Notes — free text stamped onto the purchase receipt (faction war log entry + GM whisper). Use it to record why, or for whom, the purchase was made.",
   manage:    "Manage Catalogs — GM-only editor for vendors and their catalog entries. Add or rename markets, toggle player visibility, drag-drop items in, set costs.",
   catalog:   "Catalog — the selected vendor's stock, filtered by search/category and sorted. Each row shows kind, RFI tier, list cost, and an Economic Horizon chip with the final price your faction actually pays.",
@@ -642,6 +643,22 @@ Hooks.once("init", () => {
 
   // One-time catalog unit migration flag (OP → marks, owner ruling 2026-09-06).
   game.settings.register(MODULE_ID, "catalogMarksMigrated", { scope: "world", config: false, type: Boolean, default: false });
+
+  // Delivery freight (owner ask 2026-10-12): facility / hex-asset / facility-upgrade
+  // purchases ship from the origin hex; the fee scales with hex distance.
+  game.settings.register(MODULE_ID, "deliveryOriginHexName", {
+    name: "Market: delivery origin hex", hint: "Name of the hex freight ships from (matched case-insensitively against hex names). Default: Furrier's Fixit Farm.",
+    scope: "world", config: true, type: String, default: "Furrier's Fixit Farm"
+  });
+  game.settings.register(MODULE_ID, "deliveryFeePerHex", {
+    name: "Market: delivery fee per hex (marks)", hint: "Marks charged per hex of distance from the origin. The origin hex itself ships free. Off-map / other-scene destinations pay a flat 10-hex rate.",
+    scope: "world", config: true, type: Number, default: 5
+  });
+  game.settings.register(MODULE_ID, "deliveryFeePool", {
+    name: "Market: delivery fee pool", hint: "Which faction OP pool pays the freight.",
+    scope: "world", config: true, type: String, default: "economy",
+    choices: { economy: "Economy", logistics: "Logistics", violence: "Violence", nonlethal: "Non-Lethal", intrigue: "Intrigue", softpower: "Soft Power", diplomacy: "Diplomacy", culture: "Culture", faith: "Faith" }
+  });
 
   game.settings.register(MODULE_ID, "lastContext", {
     name: "Market Context",
@@ -917,9 +934,28 @@ async function deliverHexAsset(hexUuid, asset) {
  *
  * Resolves with `{ ok, payFromPool }` — ok=false means user cancelled.
  */
-async function openBuyConfirmDialog({ entry, factionId, faction }) {
+async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" }) {
   const flagPrice = await resolveItemFlagPrice(entry);
-  if (!flagPrice) return { ok: true, payFromPool: null };   // legacy path
+  // Freight line for hex-delivered kinds (2026-10-12).
+  let deliveryLine = "";
+  if (HEX_KINDS.has(String(entry?.kind || "").toLowerCase()) && hexUuid) {
+    try {
+      const dest = await fromUuid(hexUuid);
+      const f = _deliveryFeeFor(dest);
+      if (dest) deliveryLine = `<p${_tipAttr("deliveryFee")}>🚚 Delivery to <b>${esc(_hexName(dest))}</b>: ${esc(f.note)} — <b>${f.fee ? `${f.fee} marks (${esc(poolShortLabel(f.pool))})` : "free"}</b></p>`;
+    } catch (_e) {}
+  }
+  if (!flagPrice) {
+    if (!deliveryLine) return { ok: true, payFromPool: null };   // legacy path
+    const DialogV2 = foundry.applications.api?.DialogV2;
+    if (!DialogV2) return { ok: true, payFromPool: null };
+    const confirmed = await DialogV2.confirm({
+      window: { title: `Buy — ${entry.name}` },
+      content: `<p><b>${esc(entry.name)}</b> — ${esc(costLabel(entry?.cost))}</p>${deliveryLine}`,
+      defaultYes: true, rejectClose: false
+    }).catch(() => false);
+    return { ok: !!confirmed, payFromPool: null };
+  }
 
   // Horizon-scaled cost — MUST mirror purchase()'s math exactly, or the dialog
   // shows a different number than what actually commits (fixed 2026-07-07):
@@ -950,7 +986,7 @@ async function openBuyConfirmDialog({ entry, factionId, faction }) {
     if (!DialogV2) return { ok: true, payFromPool: null };
     const confirmed = await DialogV2.confirm({
       window: { title: `Buy — ${entry.name}` },   // AppV2 sets the title as textContent — no escape (it would show entities)
-      content: `<p><b>${esc(entry.name)}</b> requires split payment:</p><ul${_tipAttr("splitPay")} data-tour="market.splitPay">${parts}</ul>
+      content: `<p><b>${esc(entry.name)}</b> requires split payment:</p><ul${_tipAttr("splitPay")} data-tour="market.splitPay">${parts}</ul>${deliveryLine}
                 <p style="font-size:0.85rem;opacity:0.7;">Split items always pay each portion to its native pool — no override.</p>`,
       defaultYes: true,
       rejectClose: false
@@ -989,7 +1025,7 @@ async function openBuyConfirmDialog({ entry, factionId, faction }) {
     window: { title: `Buy — ${entry.name}` },   // AppV2 sets the title as textContent — no escape (it would show entities)
     content: `
       <form>
-        <p><b>${esc(entry.name)}</b> — native pool: <strong>${POOL_SHORT_LABEL[nativePool] ?? nativePool}</strong> (${nativeMarks} marks)${scaleNote}</p>
+        <p><b>${esc(entry.name)}</b> — native pool: <strong>${POOL_SHORT_LABEL[nativePool] ?? nativePool}</strong> (${nativeMarks} marks)${scaleNote}</p>${deliveryLine}
         <div style="margin:0.6rem 0;"${_tipAttr("payFromPool")} data-tour="market.payFromPool">
           <label style="font-weight:600;display:block;margin-bottom:0.3rem;">Pay from:</label>
           <select name="payFromPool" style="width:100%;">${opts}</select>
@@ -1147,8 +1183,21 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
     payDeltas = norm;
   }
 
+  // 0.5) Freight (2026-10-12): hex-delivered kinds pay distance from the origin hex.
+  let freightNote = "";
+  if (HEX_KINDS.has(kind) && hexUuid) {
+    try {
+      const dest = await fromUuid(hexUuid);
+      const f = _deliveryFeeFor(dest);
+      if (f.fee > 0) {
+        payDeltas[f.pool] = (payDeltas[f.pool] || 0) - f.fee;
+        freightNote = `delivery to ${_hexName(dest)}: ${f.note} = ${f.fee} marks (${poolShortLabel(f.pool)})`;
+      }
+    } catch (e) { console.warn("[bbttcc-market] freight calc failed (shipping free)", e); }
+  }
+
   // 1) Spend
-  const spendRes = await spendMarksByPools(factionId, payDeltas, { label: entry.name, note });
+  const spendRes = await spendMarksByPools(factionId, payDeltas, { label: entry.name, note: [note, freightNote].filter(Boolean).join(" · ") });
   if (!spendRes.ok) {
     const pools = Object.keys(payDeltas).join("/");
     throw new Error(`Insufficient OP in ${pools} (or OP engine refused commit).`);
@@ -1258,6 +1307,108 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
    Owner ask: "an Available toggle, a list of available OPs so they know what they can
    afford, always tabbed by gear type, filterable by cost category — it's a very long list."
 */
+
+/* ===================== Delivery hexes + freight (2026-10-12) =====================
+   Owner ask: "turn the Delivery Hex UUID field into a drop-down of hexes KNOWN by the
+   buyer, with delivery fees from Furrier's Fixit Farm depending on where it's going."
+   Known = the buyer faction's visited ledger (flags.bbttcc-territory.visited.byFaction)
+   plus any hex it holds (flags.bbttcc-territory.factionId). Distance = hex steps on the
+   same scene (BFS over the six nearest neighbours, same rule as advance-turn.tracks).
+*/
+const HEX_KINDS = new Set(["facility", "hex_asset", "facility_upgrade"]);
+const DELIVERY_OFFMAP_HEXES = 10;
+const _hexFlags = (d) => (d?.flags?.[MOD_TERR]) || {};
+function _isHexDoc(d) { const tf = _hexFlags(d); return !!tf && (tf.isHex === true || tf.kind === "territory-hex"); }
+function _hexName(d) { return String(_hexFlags(d).name || d?.text || d?.id || "hex"); }
+function _hexDocs() {
+  const out = [];
+  for (const sc of (game.scenes ?? [])) for (const d of (sc.drawings?.contents ?? Array.from(sc.drawings ?? []))) if (_isHexDoc(d)) out.push(d);
+  return out;
+}
+function _hexCenter(d) {
+  const w = Number(d?.shape?.width || 0), h = Number(d?.shape?.height || 0);
+  return { x: Number(d?.x || 0) + w / 2, y: Number(d?.y || 0) + h / 2 };
+}
+const _hexAdjCache = new Map();   // sceneId → { n, adj: Map<id, id[]> }
+function _hexAdjacency(scene) {
+  const hexes = (scene?.drawings?.contents ?? Array.from(scene?.drawings ?? [])).filter(_isHexDoc);
+  const cached = _hexAdjCache.get(scene?.id);
+  if (cached && cached.n === hexes.length) return cached.adj;
+  const pts = hexes.map(d => ({ id: d.id, c: _hexCenter(d), size: Math.max(Number(d?.shape?.width || 0), Number(d?.shape?.height || 0)) }));
+  const adj = new Map();
+  for (const a of pts) {
+    const limit = a.size > 0 ? a.size * 1.1 : Infinity;
+    adj.set(a.id, pts.filter(b => b.id !== a.id && Math.hypot(b.c.x - a.c.x, b.c.y - a.c.y) <= limit)
+                      .sort((p, q) => Math.hypot(p.c.x - a.c.x, p.c.y - a.c.y) - Math.hypot(q.c.x - a.c.x, q.c.y - a.c.y))
+                      .slice(0, 6).map(b => b.id));
+  }
+  _hexAdjCache.set(scene?.id, { n: hexes.length, adj });
+  return adj;
+}
+// Hex steps between two hex docs on the same scene (BFS); null when unreachable / different scenes.
+function _hexSteps(a, b) {
+  if (!a || !b) return null;
+  if (a.id === b.id) return 0;
+  if (a.parent?.id !== b.parent?.id) return null;
+  const adj = _hexAdjacency(a.parent);
+  const seen = new Set([a.id]); let frontier = [a.id]; let steps = 0;
+  while (frontier.length && steps < 500) {
+    steps++;
+    const next = [];
+    for (const id of frontier) for (const n of (adj.get(id) || [])) {
+      if (seen.has(n)) continue;
+      if (n === b.id) return steps;
+      seen.add(n); next.push(n);
+    }
+    frontier = next;
+  }
+  return null;
+}
+function _deliveryOrigin(hexDocs = null) {
+  const want = String(game.settings.get(MODULE_ID, "deliveryOriginHexName") || "").trim().toLowerCase();
+  if (!want) return null;
+  const docs = hexDocs || _hexDocs();
+  return docs.find(d => _hexName(d).trim().toLowerCase() === want)
+      || docs.find(d => _hexName(d).toLowerCase().includes(want))
+      || null;
+}
+function _deliveryRate() {
+  return {
+    perHex: Math.max(0, Number(game.settings.get(MODULE_ID, "deliveryFeePerHex")) || 0),
+    pool: _normPool(game.settings.get(MODULE_ID, "deliveryFeePool") || "economy")
+  };
+}
+// Freight for shipping to `dest` → { fee, steps, pool, originName, offMap, note }
+function _deliveryFeeFor(dest, { origin = undefined, hexDocs = null } = {}) {
+  const rate = _deliveryRate();
+  const o = origin === undefined ? _deliveryOrigin(hexDocs) : origin;
+  if (!dest) return { fee: 0, steps: null, pool: rate.pool, originName: o ? _hexName(o) : "", offMap: false, note: "" };
+  if (!o) return { fee: 0, steps: null, pool: rate.pool, originName: "", offMap: false, note: "no origin hex found — freight waived" };
+  const steps = _hexSteps(o, dest);
+  const offMap = steps === null;
+  const billable = offMap ? DELIVERY_OFFMAP_HEXES : steps;
+  const fee = Math.round(billable * rate.perHex);
+  const note = steps === 0 ? "origin hex — ships free" : offMap ? `off-map · flat ${DELIVERY_OFFMAP_HEXES}-hex rate` : `${steps} hex${steps === 1 ? "" : "es"} from ${_hexName(o)}`;
+  return { fee, steps, pool: rate.pool, originName: _hexName(o), offMap, note };
+}
+function _knownHexesFor(factionId, hexDocs = null) {
+  const fid = String(factionId || "").replace(/^Actor\./, "");
+  const docs = hexDocs || _hexDocs();
+  const known = [], other = [];
+  for (const d of docs) {
+    const tf = _hexFlags(d);
+    const isKnown = !!fid && (String(tf.factionId || "") === fid || !!tf.visited?.byFaction?.[fid]);
+    (isKnown ? known : other).push(d);
+  }
+  return { known, other };
+}
+function _deliveryOptionFor(d, selectedUuid, origin, hexDocs) {
+  const f = _deliveryFeeFor(d, { origin, hexDocs });
+  const dist = f.steps === 0 ? "origin" : f.offMap ? "off-map" : `${f.steps} hex${f.steps === 1 ? "" : "es"}`;
+  return { uuid: d.uuid, name: _hexName(d), fee: f.fee, steps: f.steps ?? 9999, selected: d.uuid === selectedUuid,
+           label: `${_hexName(d)} — ${dist} · ${f.fee ? `${f.fee} marks` : "free"}` };
+}
+
 const MARKET_TABS = [
   { key: "weapon",           label: "Weapons" },
   { key: "armor",            label: "Armor" },
@@ -1365,7 +1516,10 @@ export class BBTTCCMarketApp extends HandlebarsApplicationMixin(ApplicationV2) {
   };
 
   static PARTS = {
-    body: { template: `modules/${MODULE_ID}/templates/market-app.hbs` }
+    // scrollable (2026-10-12): every filter change / tab click / buy re-renders the
+    // part; without this Foundry resets the scroll to the top each time (owner:
+    // "stop the interface taking you back up to the top").
+    body: { template: `modules/${MODULE_ID}/templates/market-app.hbs`, scrollable: ["", ".bbttcc-market-list"] }
   };
 
   constructor(options = {}) {
@@ -1455,6 +1609,28 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
       pools: OP_POOLS.map(p => ({ key: p, short: poolShortLabel(p), marks: buyerBalances[p], zero: !(buyerBalances[p] > 0) }))
     } : null;
 
+    // Delivery hexes known to the buyer + freight for the selected one (2026-10-12).
+    const hexDocs = _hexDocs();
+    const deliveryOrigin = _deliveryOrigin(hexDocs);
+    const deliveryRate = _deliveryRate();
+    const { known: knownHexes, other: otherHexes } = _knownHexesFor(ctx.factionId, hexDocs);
+    const byFee = (a, b) => (a.fee - b.fee) || (a.steps - b.steps) || String(a.name).localeCompare(String(b.name));
+    const deliveryOptions = knownHexes.map(d => _deliveryOptionFor(d, ctx.hexUuid, deliveryOrigin, hexDocs)).sort(byFee);
+    const deliveryOtherOptions = isGM ? otherHexes.map(d => _deliveryOptionFor(d, ctx.hexUuid, deliveryOrigin, hexDocs)).sort(byFee) : [];
+    const selectedHexDoc = ctx.hexUuid ? hexDocs.find(d => d.uuid === ctx.hexUuid) : null;
+    const deliveryUnlisted = (ctx.hexUuid && !deliveryOptions.some(o => o.selected) && !deliveryOtherOptions.some(o => o.selected))
+      ? { uuid: ctx.hexUuid, label: selectedHexDoc ? `${_hexName(selectedHexDoc)} (not known to the buyer)` : `${ctx.hexUuid} (unresolved)` }
+      : null;
+    const selectedFreight = selectedHexDoc ? _deliveryFeeFor(selectedHexDoc, { origin: deliveryOrigin, hexDocs }) : null;
+    const deliveryNote = !buyerFaction
+      ? "Pick a Buyer Faction to list the hexes it knows."
+      : !deliveryOrigin
+        ? `No hex named "${game.settings.get(MODULE_ID, "deliveryOriginHexName")}" found — freight waived.`
+        : `Freight ships from ${_hexName(deliveryOrigin)} · ${deliveryRate.perHex} marks per hex (${poolShortLabel(deliveryRate.pool)}).`
+          + (selectedFreight ? ` Selected: ${selectedFreight.note} · ${selectedFreight.fee ? `${selectedFreight.fee} marks` : "free"}.` : "")
+          + (deliveryOptions.length ? "" : " This faction knows no hexes yet — travel somewhere first.");
+    const deliveryFee = selectedFreight?.fee || 0;
+
     let entries = (Array.isArray(catalogRaw) ? catalogRaw : []).filter(e => e?.vendorId === ctx.vendorId);
 
     // Legacy `kind` filter retained for callers that set it directly; the
@@ -1534,6 +1710,12 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
       let rarity = "common", charge = null, afford = null;
       try { rarity = await resolveEntryRarity(e); } catch (_e) {}
       try { charge = _chargeFor(e, buyerFaction, flagPrice, rarity); } catch (_e) { charge = null; }
+      // Hex-delivered kinds carry the freight to the selected hex in their bill.
+      if (charge && HEX_KINDS.has(String(e.kind || "").toLowerCase()) && deliveryFee > 0 && !charge.artifact && !charge.priceless) {
+        charge.pools[deliveryRate.pool] = (charge.pools[deliveryRate.pool] || 0) + deliveryFee;
+        charge.marks += deliveryFee;
+        charge.freight = deliveryFee;
+      }
       if (buyerFaction && charge) afford = _affordFor(charge, buyerBalances);
       const tabKey = _tabKeyFor({ kind: e.kind, docType, isConsumable });
 
@@ -1630,7 +1812,11 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
       treasury,
       hasFaction: !!buyerFaction,
       costBands: COST_BANDS.map(b => ({ ...b, selected: b.key === String(ctx.costBand || "") })),
-      affordOnly: !!ctx.affordOnly
+      affordOnly: !!ctx.affordOnly,
+      deliveryOptions,
+      deliveryOtherOptions,
+      deliveryUnlisted,
+      deliveryNote
     };
   }
 
@@ -1867,7 +2053,7 @@ try {
       let confirmRes = { ok: true, payFromPool: null };
       if (entry && faction) {
         try {
-          confirmRes = await openBuyConfirmDialog({ entry, factionId: ctxNow.factionId, faction });
+          confirmRes = await openBuyConfirmDialog({ entry, factionId: ctxNow.factionId, faction, hexUuid: ctxNow.hexUuid });
         } catch (e) { console.warn("buy-confirm dialog failed (proceeding without)", e); }
       }
       if (!confirmRes?.ok) return;  // user cancelled

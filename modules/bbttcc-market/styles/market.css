@@ -127,3 +127,6 @@
 .bbttcc-market .bbttcc-market-howto{font-size:11px;font-weight:400;margin-left:10px;color:#9ad0ff;text-decoration:none;border-bottom:1px dotted rgba(154,208,255,.6);vertical-align:middle}
 .bbttcc-market .bbttcc-market-howto:hover{color:#cfe9ff;border-bottom-style:solid}
 .bbttcc-market-howto-body p{margin:0 0 .6rem;line-height:1.45;font-size:.9rem}
+
+/* Delivery hex dropdown (2026-10-12) */
+.bbttcc-market .bbttcc-market-delivery-note{display:block;margin-top:4px;line-height:1.35;color:#f3e7b3}
