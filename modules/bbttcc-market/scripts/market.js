@@ -475,8 +475,8 @@ const MARKET_TIPS = {
   vendor:    "Vendor — which market you are browsing. Players only see markets the GM has flagged Active; the GM sees inactive ones suffixed '(inactive)'. Your selection is remembered per client.",
   faction:   "Buyer Faction — the faction whose OP bank pays for every purchase here . Bank and prices are in marks. Players see factions they own; the GM sees all. The purchase receipt is written to this faction's war log.",
   character: "Buyer Character — where purchased GEAR lands: a copy of the item is created in this character's inventory, stamped as vendor-bought. Required before buying gear; ignored for rigs, facilities, and hex assets.",
-  hex:       "Delivery Hex — where facility, facility-upgrade, and hex-asset purchases land. The list holds the hexes the Buyer Faction KNOWS: ones it holds and ones it has visited. Each shows its distance from the freight origin and the delivery fee. Facilities merge onto the hex's primary facility; assets append to its asset list. Those purchases cannot complete without a hex. Gear and rigs ignore this field.",
-  deliveryFee: "Delivery fee — freight from the origin hex (Furrier's Fixit Farm unless the GM changes it) at a per-hex rate, charged on top of the item in the delivery pool. The origin hex ships free; a hex on another map pays a flat 10-hex rate. GM tunes rate, pool and origin in module settings.",
+  hex:       "Delivery Hex — where facility, facility-upgrade, and hex-asset purchases land. The list holds the hexes the Buyer Faction KNOWS: ones it holds and ones it has visited. Each shows its danger score and the delivery fee Furrier's Fixit Farm charges the receiver. Facilities merge onto the hex's primary facility; assets append to its asset list. Those purchases cannot complete without a hex. Gear and rigs ignore this field.",
+  deliveryFee: "Delivery fee — Furrier's Fixit Farm (the Jackalope haulers) deliver; the RECEIVER pays base + per-danger-point, charged on top of the item in the delivery pool. Danger (0–12) counts low development, missing or hostile authority, wasteland/ruins, radiation, darkness, hostile hex modifiers, active conditions, and the holder's stance toward the buyer; your own fortified, well-kept holdings come out cheapest. GM tunes base, per-point rate and pool in module settings.",
   note:      "Notes — free text stamped onto the purchase receipt (faction war log entry + GM whisper). Use it to record why, or for whom, the purchase was made.",
   manage:    "Manage Catalogs — GM-only editor for vendors and their catalog entries. Add or rename markets, toggle player visibility, drag-drop items in, set costs.",
   catalog:   "Catalog — the selected vendor's stock, filtered by search/category and sorted. Each row shows kind, RFI tier, list cost, and an Economic Horizon chip with the final price your faction actually pays.",
@@ -644,14 +644,16 @@ Hooks.once("init", () => {
   // One-time catalog unit migration flag (OP → marks, owner ruling 2026-09-06).
   game.settings.register(MODULE_ID, "catalogMarksMigrated", { scope: "world", config: false, type: Boolean, default: false });
 
-  // Delivery freight (owner ask 2026-10-12): facility / hex-asset / facility-upgrade
-  // purchases ship from the origin hex; the fee scales with hex distance.
-  game.settings.register(MODULE_ID, "deliveryOriginHexName", {
-    name: "Market: delivery origin hex", hint: "Name of the hex freight ships from (matched case-insensitively against hex names). Default: Furrier's Fixit Farm.",
-    scope: "world", config: true, type: String, default: "Furrier's Fixit Farm"
+  // Delivery freight (owner ask 2026-10-12, reframed same night): Furrier's Fixit
+  // Farm — the Jackalope faction, Bad Eden's haulers — delivers facility / hex-asset
+  // / facility-upgrade purchases. The RECEIVER pays, and the price follows the
+  // danger of the delivery hex: how developed it is, and how hostile.
+  game.settings.register(MODULE_ID, "deliveryFeeBase", {
+    name: "Market: delivery fee base (marks)", hint: "Flat freight for a perfectly safe hex. Fee = base + per-danger × the hex's danger score (0–12).",
+    scope: "world", config: true, type: Number, default: 10
   });
-  game.settings.register(MODULE_ID, "deliveryFeePerHex", {
-    name: "Market: delivery fee per hex (marks)", hint: "Marks charged per hex of distance from the origin. The origin hex itself ships free. Off-map / other-scene destinations pay a flat 10-hex rate.",
+  game.settings.register(MODULE_ID, "deliveryFeePerDanger", {
+    name: "Market: delivery fee per danger point (marks)", hint: "Added per danger point. Danger counts low development, no/hostile authority, wasteland/ruins, radiation, darkness, hostile modifiers, conditions, and the holder's stance toward the buyer.",
     scope: "world", config: true, type: Number, default: 5
   });
   game.settings.register(MODULE_ID, "deliveryFeePool", {
@@ -941,8 +943,8 @@ async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" })
   if (HEX_KINDS.has(String(entry?.kind || "").toLowerCase()) && hexUuid) {
     try {
       const dest = await fromUuid(hexUuid);
-      const f = _deliveryFeeFor(dest);
-      if (dest) deliveryLine = `<p${_tipAttr("deliveryFee")}>🚚 Delivery to <b>${esc(_hexName(dest))}</b>: ${esc(f.note)} — <b>${f.fee ? `${f.fee} marks (${esc(poolShortLabel(f.pool))})` : "free"}</b></p>`;
+      const f = _deliveryFeeFor(dest, { factionId });
+      if (dest) deliveryLine = `<p${_tipAttr("deliveryFee")}>🚚 ${esc(DELIVERY_HAULER)} delivers to <b>${esc(_hexName(dest))}</b> — danger ${f.score}${f.breakdown ? ` <span style="opacity:.75">(${esc(f.breakdown)})</span>` : ""}: <b>${f.fee ? `${f.fee} marks (${esc(poolShortLabel(f.pool))})` : "free"}</b></p>`;
     } catch (_e) {}
   }
   if (!flagPrice) {
@@ -1188,10 +1190,10 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
   if (HEX_KINDS.has(kind) && hexUuid) {
     try {
       const dest = await fromUuid(hexUuid);
-      const f = _deliveryFeeFor(dest);
+      const f = _deliveryFeeFor(dest, { factionId });
       if (f.fee > 0) {
         payDeltas[f.pool] = (payDeltas[f.pool] || 0) - f.fee;
-        freightNote = `delivery to ${_hexName(dest)}: ${f.note} = ${f.fee} marks (${poolShortLabel(f.pool)})`;
+        freightNote = `${DELIVERY_HAULER} delivery to ${_hexName(dest)}: danger ${f.score}${f.breakdown ? ` (${f.breakdown})` : ""} = ${f.fee} marks (${poolShortLabel(f.pool)})`;
       }
     } catch (e) { console.warn("[bbttcc-market] freight calc failed (shipping free)", e); }
   }
@@ -1309,14 +1311,14 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
 */
 
 /* ===================== Delivery hexes + freight (2026-10-12) =====================
-   Owner ask: "turn the Delivery Hex UUID field into a drop-down of hexes KNOWN by the
-   buyer, with delivery fees from Furrier's Fixit Farm depending on where it's going."
+   Owner ask: "a drop-down of hexes KNOWN by the buyer, with delivery fees — Furrier's
+   Fixit Farm (the Jackalope haulers) deliver; charge the RECEIVER by the danger of the
+   delivery hex: level of development and hostile factors."
    Known = the buyer faction's visited ledger (flags.bbttcc-territory.visited.byFaction)
-   plus any hex it holds (flags.bbttcc-territory.factionId). Distance = hex steps on the
-   same scene (BFS over the six nearest neighbours, same rule as advance-turn.tracks).
+   plus any hex it holds (flags.bbttcc-territory.factionId).
 */
 const HEX_KINDS = new Set(["facility", "hex_asset", "facility_upgrade"]);
-const DELIVERY_OFFMAP_HEXES = 10;
+const DELIVERY_HAULER = "Furrier's Fixit Farm";
 const _hexFlags = (d) => (d?.flags?.[MOD_TERR]) || {};
 function _isHexDoc(d) { const tf = _hexFlags(d); return !!tf && (tf.isHex === true || tf.kind === "territory-hex"); }
 function _hexName(d) { return String(_hexFlags(d).name || d?.text || d?.id || "hex"); }
@@ -1325,71 +1327,79 @@ function _hexDocs() {
   for (const sc of (game.scenes ?? [])) for (const d of (sc.drawings?.contents ?? Array.from(sc.drawings ?? []))) if (_isHexDoc(d)) out.push(d);
   return out;
 }
-function _hexCenter(d) {
-  const w = Number(d?.shape?.width || 0), h = Number(d?.shape?.height || 0);
-  return { x: Number(d?.x || 0) + w / 2, y: Number(d?.y || 0) + h / 2 };
-}
-const _hexAdjCache = new Map();   // sceneId → { n, adj: Map<id, id[]> }
-function _hexAdjacency(scene) {
-  const hexes = (scene?.drawings?.contents ?? Array.from(scene?.drawings ?? [])).filter(_isHexDoc);
-  const cached = _hexAdjCache.get(scene?.id);
-  if (cached && cached.n === hexes.length) return cached.adj;
-  const pts = hexes.map(d => ({ id: d.id, c: _hexCenter(d), size: Math.max(Number(d?.shape?.width || 0), Number(d?.shape?.height || 0)) }));
-  const adj = new Map();
-  for (const a of pts) {
-    const limit = a.size > 0 ? a.size * 1.1 : Infinity;
-    adj.set(a.id, pts.filter(b => b.id !== a.id && Math.hypot(b.c.x - a.c.x, b.c.y - a.c.y) <= limit)
-                      .sort((p, q) => Math.hypot(p.c.x - a.c.x, p.c.y - a.c.y) - Math.hypot(q.c.x - a.c.x, q.c.y - a.c.y))
-                      .slice(0, 6).map(b => b.id));
-  }
-  _hexAdjCache.set(scene?.id, { n: hexes.length, adj });
-  return adj;
-}
-// Hex steps between two hex docs on the same scene (BFS); null when unreachable / different scenes.
-function _hexSteps(a, b) {
-  if (!a || !b) return null;
-  if (a.id === b.id) return 0;
-  if (a.parent?.id !== b.parent?.id) return null;
-  const adj = _hexAdjacency(a.parent);
-  const seen = new Set([a.id]); let frontier = [a.id]; let steps = 0;
-  while (frontier.length && steps < 500) {
-    steps++;
-    const next = [];
-    for (const id of frontier) for (const n of (adj.get(id) || [])) {
-      if (seen.has(n)) continue;
-      if (n === b.id) return steps;
-      seen.add(n); next.push(n);
+// Danger score 0–12 for delivering to `d`, with the itemised parts.
+// Reads the same canonical stores the hex sheet reads (integration.progress,
+// mods.radiation / mods.darkness with legacy fallbacks, status, type, modifiers,
+// conditions) plus the holder's stance toward the buyer (relations API).
+const _DANGER_MODS = {
+  "hostile population": 2, "contaminated": 1, "radiation zone": 2, "supply line vulnerable": 2,
+  "damaged infrastructure": 1, "difficult terrain": 1,
+  "fortified": -1, "well-maintained": -1, "well maintained": -1, "strategic position": -1, "loyal population": -1
+};
+const _DANGER_STANCE = { at_war: 4, hostile: 3, unfriendly: 1, neutral: 0, friendly: -1, allied: -1 };
+function _hexDanger(d, buyerFactionId = "") {
+  const tf = _hexFlags(d);
+  const parts = [];
+  const add = (label, pts) => { if (pts) parts.push({ label, pts }); };
+  const integ = Math.max(0, Math.min(6, Number(tf.integration?.progress ?? tf.development?.stage ?? 0) || 0));
+  if (integ >= 6) add("integrated heartland", 0);
+  else if (integ === 5) add("settled province", 1);
+  else if (integ >= 3) add("developing territory", 2);
+  else if (integ >= 1) add("outpost foothold", 3);
+  else add("untouched wilderness", 4);
+  const status = String(tf.status || "unclaimed").toLowerCase();
+  if (status === "unclaimed") add("no authority (unclaimed)", 1);
+  else if (status === "occupied") add("under occupation", 3);
+  else if (status === "scorched") add("scorched ground", 4);
+  const type = String(tf.type || "").toLowerCase();
+  if (type === "wasteland") add("wasteland", 2);
+  else if (type === "ruins") add("ruins", 1);
+  else if (type === "wilderness") add("wild country", 1);
+  const rad = Math.max(0, Number(tf.mods?.radiation ?? tf.radiation?.value ?? tf.radiation ?? 0) || 0);
+  if (rad) add(`radiation ${rad}`, Math.min(4, Math.round(rad)));
+  const dark = Math.max(0, Number(tf.mods?.darkness ?? tf.darkness?.local ?? tf.localDarkness ?? tf.darkness ?? 0) || 0);
+  if (dark) add(`darkness ${dark}`, Math.min(3, Math.round(dark)));
+  const mods = (Array.isArray(tf.modifiers) ? tf.modifiers : [])
+    .map(m => String((m && typeof m === "object") ? (m.name ?? m.key ?? "") : m).toLowerCase().replace(/_/g, " ").trim());
+  for (const m of mods) if (_DANGER_MODS[m]) add(m, _DANGER_MODS[m]);
+  const conds = Array.isArray(tf.conditions) ? tf.conditions.filter(Boolean) : [];
+  if (conds.length) add(`${conds.length} condition${conds.length === 1 ? "" : "s"}`, Math.min(3, conds.length));
+  const fid = String(buyerFactionId || "").replace(/^Actor\./, "");
+  const owner = String(tf.factionId || tf.ownerId || "").replace(/^Actor\./, "");
+  if (fid && owner) {
+    if (owner === fid) add("your own holding", -2);
+    else {
+      try {
+        const rel = game.bbttcc?.api?.factions?.relations;
+        const buyer = game.actors.get(fid), holder = game.actors.get(owner);
+        if (rel?.get && buyer && holder) {
+          // Worst of the two directions — a holder who hates you, or one you are at war with.
+          const t1 = String(rel.get(holder, buyer) || "neutral"), t2 = String(rel.get(buyer, holder) || "neutral");
+          const worst = (_DANGER_STANCE[t1] ?? 0) >= (_DANGER_STANCE[t2] ?? 0) ? t1 : t2;
+          if (_DANGER_STANCE[worst]) add(`holder ${worst.replace(/_/g, " ")}`, _DANGER_STANCE[worst]);
+        }
+      } catch (_e) {}
     }
-    frontier = next;
   }
-  return null;
-}
-function _deliveryOrigin(hexDocs = null) {
-  const want = String(game.settings.get(MODULE_ID, "deliveryOriginHexName") || "").trim().toLowerCase();
-  if (!want) return null;
-  const docs = hexDocs || _hexDocs();
-  return docs.find(d => _hexName(d).trim().toLowerCase() === want)
-      || docs.find(d => _hexName(d).toLowerCase().includes(want))
-      || null;
+  const score = Math.max(0, Math.min(12, parts.reduce((t, p) => t + p.pts, 0)));
+  return { score, parts };
 }
 function _deliveryRate() {
   return {
-    perHex: Math.max(0, Number(game.settings.get(MODULE_ID, "deliveryFeePerHex")) || 0),
+    base: Math.max(0, Number(game.settings.get(MODULE_ID, "deliveryFeeBase")) || 0),
+    perDanger: Math.max(0, Number(game.settings.get(MODULE_ID, "deliveryFeePerDanger")) || 0),
     pool: _normPool(game.settings.get(MODULE_ID, "deliveryFeePool") || "economy")
   };
 }
-// Freight for shipping to `dest` → { fee, steps, pool, originName, offMap, note }
-function _deliveryFeeFor(dest, { origin = undefined, hexDocs = null } = {}) {
+const _round5 = (n) => (n <= 0 ? 0 : Math.max(0, Math.round(n / 5) * 5));
+// Freight for shipping to `dest` → { fee, score, parts, pool, note, breakdown }
+function _deliveryFeeFor(dest, { factionId = "" } = {}) {
   const rate = _deliveryRate();
-  const o = origin === undefined ? _deliveryOrigin(hexDocs) : origin;
-  if (!dest) return { fee: 0, steps: null, pool: rate.pool, originName: o ? _hexName(o) : "", offMap: false, note: "" };
-  if (!o) return { fee: 0, steps: null, pool: rate.pool, originName: "", offMap: false, note: "no origin hex found — freight waived" };
-  const steps = _hexSteps(o, dest);
-  const offMap = steps === null;
-  const billable = offMap ? DELIVERY_OFFMAP_HEXES : steps;
-  const fee = Math.round(billable * rate.perHex);
-  const note = steps === 0 ? "origin hex — ships free" : offMap ? `off-map · flat ${DELIVERY_OFFMAP_HEXES}-hex rate` : `${steps} hex${steps === 1 ? "" : "es"} from ${_hexName(o)}`;
-  return { fee, steps, pool: rate.pool, originName: _hexName(o), offMap, note };
+  if (!dest) return { fee: 0, score: 0, parts: [], pool: rate.pool, note: "", breakdown: "" };
+  const { score, parts } = _hexDanger(dest, factionId);
+  const fee = _round5(rate.base + score * rate.perDanger);
+  const breakdown = parts.map(p => `${p.label} ${p.pts > 0 ? "+" : ""}${p.pts}`).join(", ");
+  return { fee, score, parts, pool: rate.pool, note: `danger ${score}`, breakdown };
 }
 function _knownHexesFor(factionId, hexDocs = null) {
   const fid = String(factionId || "").replace(/^Actor\./, "");
@@ -1402,11 +1412,10 @@ function _knownHexesFor(factionId, hexDocs = null) {
   }
   return { known, other };
 }
-function _deliveryOptionFor(d, selectedUuid, origin, hexDocs) {
-  const f = _deliveryFeeFor(d, { origin, hexDocs });
-  const dist = f.steps === 0 ? "origin" : f.offMap ? "off-map" : `${f.steps} hex${f.steps === 1 ? "" : "es"}`;
-  return { uuid: d.uuid, name: _hexName(d), fee: f.fee, steps: f.steps ?? 9999, selected: d.uuid === selectedUuid,
-           label: `${_hexName(d)} — ${dist} · ${f.fee ? `${f.fee} marks` : "free"}` };
+function _deliveryOptionFor(d, selectedUuid, factionId) {
+  const f = _deliveryFeeFor(d, { factionId });
+  return { uuid: d.uuid, name: _hexName(d), fee: f.fee, score: f.score, selected: d.uuid === selectedUuid,
+           label: `${_hexName(d)} — danger ${f.score} · ${f.fee ? `${f.fee} marks` : "free"}` };
 }
 
 const MARKET_TABS = [
@@ -1611,24 +1620,21 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
 
     // Delivery hexes known to the buyer + freight for the selected one (2026-10-12).
     const hexDocs = _hexDocs();
-    const deliveryOrigin = _deliveryOrigin(hexDocs);
     const deliveryRate = _deliveryRate();
     const { known: knownHexes, other: otherHexes } = _knownHexesFor(ctx.factionId, hexDocs);
-    const byFee = (a, b) => (a.fee - b.fee) || (a.steps - b.steps) || String(a.name).localeCompare(String(b.name));
-    const deliveryOptions = knownHexes.map(d => _deliveryOptionFor(d, ctx.hexUuid, deliveryOrigin, hexDocs)).sort(byFee);
-    const deliveryOtherOptions = isGM ? otherHexes.map(d => _deliveryOptionFor(d, ctx.hexUuid, deliveryOrigin, hexDocs)).sort(byFee) : [];
+    const byFee = (a, b) => (a.fee - b.fee) || String(a.name).localeCompare(String(b.name));
+    const deliveryOptions = knownHexes.map(d => _deliveryOptionFor(d, ctx.hexUuid, ctx.factionId)).sort(byFee);
+    const deliveryOtherOptions = isGM ? otherHexes.map(d => _deliveryOptionFor(d, ctx.hexUuid, ctx.factionId)).sort(byFee) : [];
     const selectedHexDoc = ctx.hexUuid ? hexDocs.find(d => d.uuid === ctx.hexUuid) : null;
     const deliveryUnlisted = (ctx.hexUuid && !deliveryOptions.some(o => o.selected) && !deliveryOtherOptions.some(o => o.selected))
       ? { uuid: ctx.hexUuid, label: selectedHexDoc ? `${_hexName(selectedHexDoc)} (not known to the buyer)` : `${ctx.hexUuid} (unresolved)` }
       : null;
-    const selectedFreight = selectedHexDoc ? _deliveryFeeFor(selectedHexDoc, { origin: deliveryOrigin, hexDocs }) : null;
+    const selectedFreight = selectedHexDoc ? _deliveryFeeFor(selectedHexDoc, { factionId: ctx.factionId }) : null;
     const deliveryNote = !buyerFaction
       ? "Pick a Buyer Faction to list the hexes it knows."
-      : !deliveryOrigin
-        ? `No hex named "${game.settings.get(MODULE_ID, "deliveryOriginHexName")}" found — freight waived.`
-        : `Freight ships from ${_hexName(deliveryOrigin)} · ${deliveryRate.perHex} marks per hex (${poolShortLabel(deliveryRate.pool)}).`
-          + (selectedFreight ? ` Selected: ${selectedFreight.note} · ${selectedFreight.fee ? `${selectedFreight.fee} marks` : "free"}.` : "")
-          + (deliveryOptions.length ? "" : " This faction knows no hexes yet — travel somewhere first.");
+      : `${DELIVERY_HAULER} hauls it; the receiver pays ${deliveryRate.base} marks + ${deliveryRate.perDanger} per danger point (${poolShortLabel(deliveryRate.pool)}).`
+        + (selectedFreight ? ` Selected: danger ${selectedFreight.score}${selectedFreight.breakdown ? ` (${selectedFreight.breakdown})` : ""} → ${selectedFreight.fee ? `${selectedFreight.fee} marks` : "free"}.` : "")
+        + (deliveryOptions.length ? "" : " This faction knows no hexes yet — travel somewhere first.");
     const deliveryFee = selectedFreight?.fee || 0;
 
     let entries = (Array.isArray(catalogRaw) ? catalogRaw : []).filter(e => e?.vendorId === ctx.vendorId);
