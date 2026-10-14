@@ -734,7 +734,7 @@ for (const b of beats) {
 }
 
 // ── effects: E02–E14 ────────────────────────────────────────────────────────
-const arrayKeys = ["factionEffects", "relationshipEffects", "worldModifiers", "turnRequests", "purifyHexes", "recipeGrants"];
+const arrayKeys = ["factionEffects", "relationshipEffects", "worldModifiers", "turnRequests", "purifyHexes", "recipeGrants", "partyEffects", "sparkGrants"];
 const ladder = [];
 for (const b of beats) {
   const we = b.worldEffects;
@@ -768,6 +768,18 @@ for (const b of beats) {
     if (!s(m?.key)) F("E11", "WARN", b.id, `worldModifiers[${i}] has no key`);
   for (const [i, r] of (Array.isArray(we.turnRequests) ? we.turnRequests : []).entries())
     if (!s(r?.key)) F("E14", "WARN", b.id, `turnRequests[${i}] has no key — skipped by WME`);
+  // ── E16/E17: THE RECALCITRANT CAFE (2026-10-13) — partyEffects / sparkGrants row shapes (WME §2n/§2o) ──
+  const FACULTIES = ["violence", "intrigue", "presence", "body", "mind", "soul"];
+  for (const [i, r] of (Array.isArray(we.partyEffects) ? we.partyEffects : []).entries()) {
+    if (!r || typeof r !== "object" || !s(r.name)) { F("E16", "WARN", b.id, `partyEffects[${i}] needs a name — WME skips the row`); continue; }
+    const cb = Array.isArray(r.checkBonus) ? r.checkBonus : [];
+    const live = cb.some(g => g && isNum(g.bonus) && Number(g.bonus) !== 0) || (r.ranks && typeof r.ranks === "object" && Object.keys(r.ranks).length) || (isNum(r.strainRelief) && Number(r.strainRelief) > 0) || String(r.duration || "").toLowerCase() === "permanent";
+    if (!live) F("E16", "WARN", b.id, `partyEffects[${i}] "${r.name}" grants nothing (no checkBonus / ranks / strainRelief) — a bare item`);
+    for (const [j, g] of cb.entries()) { if (!isNum(g?.bonus)) F("E16", "WARN", b.id, `partyEffects[${i}].checkBonus[${j}].bonus not numeric`); if (s(g?.attribute) && !FACULTIES.includes(s(g.attribute).toLowerCase())) F("E16", "WARN", b.id, `partyEffects[${i}].checkBonus[${j}].attribute '${g.attribute}' is not a faculty (${FACULTIES.join("/")})`); }
+    if (r.duration != null && !["turn", "permanent"].includes(String(r.duration).toLowerCase())) F("E16", "WARN", b.id, `partyEffects[${i}].duration '${r.duration}' — WME knows "turn" | "permanent"`);
+  }
+  for (const [i, r] of (Array.isArray(we.sparkGrants) ? we.sparkGrants : []).entries())
+    if (!r || typeof r !== "object" || !s(r.key)) F("E17", "WARN", b.id, `sparkGrants[${i}] needs a key — WME skips the row`);
   if (we.levelEffects != null) {
     const le = we.levelEffects;
     for (const [k, lo, hi] of [["stewardLevelFloor", 1, 20], ["factionTierFloor", 0, 6]]) {

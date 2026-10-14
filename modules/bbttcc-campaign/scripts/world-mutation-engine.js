@@ -1791,6 +1791,77 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (eRG) { console.warn(TAG, "recipeGrants apply failed", eRG); }
 
+    // 2n) PARTY EFFECTS (THE RECALCITRANT CAFE, 2026-10-13 — owner: "make the town walk's choices have impact"):
+    // worldEffects.partyEffects = [{ name, img?, note?, checkBonus?: [{context?,skill?,attribute?,bonus,note?}], ranks?: {<skill>:N},
+    //   strainRelief?: N, duration?: "turn" (default) | "permanent", turns?: 1 }] — every coalition Steward gets a `feature` Item
+    // carrying flags.fourththing.passives (the system's roll path itemises it on the card). "turn" rows expire when the world turn
+    // advances past grantTurn + turns − 1 (hook below); "permanent" rows stay. Idempotent per (beatId, name) while the buff is live.
+    try {
+      const rows = Array.isArray(we.partyEffects) ? we.partyEffects.filter(r => r && typeof r === "object" && String(r.name || "").trim()) : [];
+      if (rows.length) {
+        const stewards = await _coalitionStewards();
+        if (!stewards.length) console.warn(TAG, "partyEffects: no coalition Stewards found", { beatId: beatCtx.beatId });
+        const turnNow = _worldTurn();
+        const esc = (t) => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+        const lines = [];
+        for (const row of rows) {
+          const name = String(row.name).trim();
+          const permanent = String(row.duration || "turn").toLowerCase() === "permanent";
+          const turns = Math.max(1, Math.floor(Number(row.turns) || 1));
+          const expiresTurn = permanent ? null : (turnNow + turns - 1);
+          const checkBonus = Array.isArray(row.checkBonus) ? row.checkBonus.filter(g => g && Number(g.bonus)).map(g => ({ context: g.context || "check", skill: g.skill || null, attribute: g.attribute || null, bonus: Number(g.bonus), note: g.note || name })) : [];
+          const ranks = (row.ranks && typeof row.ranks === "object") ? row.ranks : null;
+          const relief = Math.max(0, Math.floor(Number(row.strainRelief) || 0));
+          const who = [];
+          for (const a of stewards) {
+            try {
+              const dup = (a.items || []).find(it => { const f = it.flags && it.flags["bbttcc-campaign"] && it.flags["bbttcc-campaign"].partyEffect; return f && f.name === name && String(f.beatId || "") === String(beatCtx.beatId || "") && (f.expiresTurn == null || Number(f.expiresTurn) >= turnNow); });
+              if (dup) continue;
+              const passives = {}; if (checkBonus.length) passives.checkBonus = checkBonus; if (ranks) passives.ranks = ranks;
+              const desc = `<p>${esc(row.note || "")}</p><p><i>${permanent ? "Permanent." : `Until the end of turn ${expiresTurn}.`}</i></p>`;
+              await Item.create({ name, type: "feature", img: row.img || "icons/consumables/food/bowl-stew-brown.webp",
+                system: { category: "principle", source: String(beat?.label || "The Recalcitrant Cafe"), tags: ["recalcitrant-cafe"], description: { value: desc, chat: "" } },
+                flags: { fourththing: Object.keys(passives).length ? { passives } : {}, "bbttcc-campaign": { partyEffect: { beatId: String(beatCtx.beatId || ""), name, grantTurn: turnNow, expiresTurn, permanent } } } }, { parent: a });
+              if (relief && get(game, "fourththing.strain.set", null)) { const cur = Number(game.fourththing.strain.get(a)) || 0; if (cur > 0) await game.fourththing.strain.set(a, Math.max(0, cur - relief), name); }
+              who.push(a.name); changed = true;
+            } catch (eA) { console.warn(TAG, "partyEffects: grant failed", a?.name, eA); }
+          }
+          if (who.length) { notes.push("partyEffect:" + name); lines.push(`🍲 ${name} → ${who.join(", ")}${permanent ? " (permanent)" : ` (until the end of turn ${expiresTurn})`}`); }
+          else lines.push(`· ${name} — everyone already has it`);
+        }
+        if (lines.length) { try { await ChatMessage.create({ content: `<div class="bbttcc-party-effects"><b>The table is fed</b> — <i>${esc(beat?.label || beat?.id || "beat")}</i><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></div>` }); } catch (_eC) {} }
+      }
+    } catch (ePE) { console.warn(TAG, "partyEffects apply failed", ePE); }
+
+    // 2o) SPARK GRANTS (THE RECALCITRANT CAFE, 2026-10-13 — the permanent boon rides the Enlightenment ladder, which never lowers):
+    // worldEffects.sparkGrants = [{ key, name?, note? }] — every coalition Steward gets the spark created + marked integrated
+    // (api.tikkun.markSparkPhase → emits bbttcc:spark:integrated → the ladder steps). Skips a Steward who already integrated that key.
+    try {
+      const rows = Array.isArray(we.sparkGrants) ? we.sparkGrants.filter(r => r && typeof r === "object" && String(r.key || "").trim()) : [];
+      const TK = get(game, "bbttcc.api.tikkun", null);
+      if (rows.length && !(TK && typeof TK.markSparkPhase === "function")) console.warn(TAG, "sparkGrants: api.tikkun.markSparkPhase not available — nothing granted", { beatId: beatCtx.beatId });
+      if (rows.length && TK && typeof TK.markSparkPhase === "function") {
+        const stewards = await _coalitionStewards();
+        const esc = (t) => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+        const lines = [];
+        for (const row of rows) {
+          const key = String(row.key).trim(); const who = [];
+          for (const a of stewards) {
+            try {
+              const map = (a.getFlag && a.getFlag("bbttcc-tikkun", "sparks")) || {};
+              const have = map[key] || Object.values(map).find(sp => sp && sp.key === key);
+              if (have && have.integrated) continue;
+              await TK.markSparkPhase({ actorId: a.id, sparkKey: key, phase: "integrated", create: true, note: String(row.note || row.name || key) });
+              who.push(a.name); changed = true;
+            } catch (eS) { console.warn(TAG, "sparkGrants: grant failed", a?.name, eS); }
+          }
+          if (who.length) { notes.push("spark:" + key); lines.push(`✦ ${String(row.name || key)} → ${who.join(", ")}`); }
+          else lines.push(`· ${String(row.name || key)} — already integrated by everyone`);
+        }
+        if (lines.length) { try { await ChatMessage.create({ content: `<div class="bbttcc-spark-grants"><b>A Spark integrated</b> — <i>${esc(beat?.label || beat?.id || "beat")}</i><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></div>` }); } catch (_eC) {} }
+      }
+    } catch (eSG) { console.warn(TAG, "sparkGrants apply failed", eSG); }
+
     // 2h) RECEIPTS (STORY FLOW D-4, 2026-09-17 — owner ruling: "courtly secrets" are RECEIPTS: something you were told
     // that you can produce later). worldEffects.receipts = [{ label, effectKey, truth?, acquisition?: "earned"|"stolen",
     // source?: { name?, npcActorId? }, factionId?, ingredientKey? (the Forge spends it as that material — emotional
@@ -2138,12 +2209,58 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
       installOpScheduleAPI();
       installOpScheduleTickHook();
+      installPartyEffectExpiryHook();
       _installOpenTravelSocket();
       try { game.bbttcc.api.opSchedules?.repairAll?.().catch(()=>{}); } catch(_e) {}
       console.log(TAG, "World Mutation API ready:", Object.keys(game.bbttcc.api.worldMutation));
     } catch (e) {
       console.warn(TAG, "installWorldMutationAPI failed:", e);
     }
+  }
+
+  // ── THE RECALCITRANT CAFE helpers (2026-10-13) ─────────────────────────────
+  /** The authoritative world turn (bbttcc-world worldState.turn), 0 when unknown. */
+  function _worldTurn() {
+    try { const w = get(game, "bbttcc.api.world", null); const t = Number(w && w.getState ? w.getState()?.turn : NaN); if (Number.isFinite(t)) return t; } catch (_e) {}
+    return 0;
+  }
+  /** Every Steward on the active campaign's coalition roster (dedup, canonical actorKind "steward"; type check fallback). */
+  async function _coalitionStewards() {
+    const out = []; const seen = new Set();
+    try {
+      const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
+      const camp = cid && capi.getCampaign ? capi.getCampaign(cid) : null;
+      const fids = Array.from(new Set([].concat((camp && camp.factionIds) || [], (camp && camp.factionId) ? [camp.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean)));
+      const kindOf = get(game, "bbttcc.api.actorKind", null);
+      const isSteward = (a) => { try { return typeof kindOf === "function" ? kindOf(a) === "steward" : a?.type === "character"; } catch (_e) { return a?.type === "character"; } };
+      for (const fid of fids) {
+        const F = game.actors.get(fid); if (!F) continue;
+        const raw = (F.getFlag && F.getFlag(MOD_FACTIONS, "roster")) || [];
+        for (const entry of raw) {
+          const sId = (typeof entry === "string") ? entry : (entry && (entry.uuid || entry.id)) ? String(entry.uuid || entry.id) : "";
+          const id = String(sId || "").replace(/^Actor\./, "").trim(); if (!id || seen.has(id)) continue;
+          const a = game.actors.get(id); if (!a || !isSteward(a)) continue;
+          seen.add(id); out.push(a);
+        }
+      }
+    } catch (e) { console.warn(TAG, "_coalitionStewards failed", e); }
+    return out;
+  }
+  /** Turn-scoped party effects fall off when the world turn advances past their expiresTurn (primary GM only). */
+  function installPartyEffectExpiryHook() {
+    if (globalThis.__bbttccPartyEffectExpiryInstalled) return; globalThis.__bbttccPartyEffectExpiryInstalled = true;
+    Hooks.on("bbttcc:advanceTurn:end", async () => {
+      try {
+        if (!game.user?.isGM) return;
+        const gms = game.users.filter(u => u.isGM && u.active).sort((a, b) => a.id.localeCompare(b.id)); if (gms.length && gms[0].id !== game.user.id) return;
+        const turn = _worldTurn();
+        for (const a of game.actors.contents) {
+          if (!a || a.type !== "character") continue;
+          const gone = (a.items || []).filter(it => { const f = it.flags && it.flags["bbttcc-campaign"] && it.flags["bbttcc-campaign"].partyEffect; return f && f.expiresTurn != null && Number(f.expiresTurn) < turn; }).map(it => it.id);
+          if (gone.length) { try { await a.deleteEmbeddedDocuments("Item", gone); } catch (eD) { console.warn(TAG, "partyEffects expiry: delete failed", a.name, eD); } }
+        }
+      } catch (e) { console.warn(TAG, "partyEffects expiry failed", e); }
+    });
   }
 
   Hooks.once("ready", installWorldMutationAPI);
