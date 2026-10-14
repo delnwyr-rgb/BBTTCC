@@ -44,6 +44,13 @@
 // other npc = GAME; hexes — HEX_DEF_KEYS stay live, every other territory key
 // comes from the save; live-only hexes are never deleted, saved hexes missing
 // live are not re-created, geometry/text/travel links stay live.
+// QUEST REGISTRY SPLIT (2026-10-14): `bbttcc-campaign.quests` is GAME (quest
+// definitions — 56 records identical across 8 turns of play in the 10-13
+// saves; the play state lives on the factions' coalition track and the hexes).
+// A story load merges only its per-record status/completedTs/completedTurn
+// from the save (STATE_OVERLAYS); live-only records (new quests) stay as
+// authored. The hex-side link map `flags.bbttcc-territory.quests` is likewise
+// definition, with hinted/hintTs merged from the save.
 //
 // API: game.bbttcc.api.world.saves.{list, save, load, plan, setGolden, remove,
 //      exportSlot, importFile, golden, open, layers}
@@ -68,7 +75,7 @@
   // GAME-layer settings: left alone by a story load. Namespace-wide entries end in ".*".
   const GAME_SETTINGS = [
     "fourththing.*", "surge-powers.*", "bbttcc-mal-voice.*",
-    "bbttcc-campaign.campaigns", "bbttcc-campaign.encounterTables",
+    "bbttcc-campaign.campaigns", "bbttcc-campaign.encounterTables", "bbttcc-campaign.quests",
     "bbttcc-campaign.facilitation.policy", "bbttcc-campaign.facilitation.mode",
     "bbttcc-campaign.director.enabled", "bbttcc-campaign.director.autoInvite", "bbttcc-campaign.director.pressureThreshold",
     "bbttcc-campaign.director.sealDoneActs", "bbttcc-campaign.director.sealCompletedQuests", "bbttcc-campaign.director.turnTickOnlyChains",
@@ -90,6 +97,22 @@
     "bbttcc-onboarding.offerOnReady", "bbttcc-onboarding.operatorAudience",
     "bbttcc-epic.protagonistFactions", "bbttcc-epic.daathSceneId"
   ];
+  // GAME settings that carry a little play state inside: a story load keeps the live value and merges only these keys.
+  // Values are sometimes JSON strings (🪤 2026-09-09) — decode, merge, re-encode in the live value's shape.
+  const asObj = (v) => { if (typeof v === "string") { try { return { obj: JSON.parse(v), str: true }; } catch (_e) { return { obj: null, str: true }; } } return { obj: (v && typeof v === "object") ? v : null, str: false }; };
+  const QUEST_STATE_KEYS = ["status", "completedTs", "completedTurn"];
+  const STATE_OVERLAYS = {
+    "bbttcc-campaign.quests": (liveVal, savedVal) => {
+      const L = asObj(liveVal), S = asObj(savedVal);
+      if (!L.obj || !S.obj) return liveVal;
+      const out = clone(L.obj);
+      for (const [id, sq] of Object.entries(S.obj)) {
+        const lq = out[id]; if (!lq || typeof lq !== "object" || !sq || typeof sq !== "object") continue;   // live-only = new definition, stays; saved-only = deleted since, stays gone
+        for (const k of QUEST_STATE_KEYS) { if (k in sq) lq[k] = clone(sq[k]); else delete lq[k]; }
+      }
+      return L.str ? JSON.stringify(out) : out;
+    }
+  };
   const GAME_NS = new Set(GAME_SETTINGS.filter(k => k.endsWith(".*")).map(k => k.slice(0, -2)));
   const GAME_KEYS = new Set(GAME_SETTINGS.filter(k => !k.endsWith(".*")));
   function settingLayer(ns, key) {
@@ -113,7 +136,7 @@
   }
   // Hex drawings: these territory keys DEFINE the hex (stay live); everything else is play state (from the save).
   const HEX_DEF_KEYS = ["isHex", "kind", "name", "type", "terrain", "terrainType", "terrainKey", "notes", "hexImage", "createdAt",
-    "resourceNodes", "resources", "size", "capital", "population", "campaign"];
+    "resourceNodes", "resources", "size", "capital", "population", "campaign", "quests"];
   const HEX_LEYLINE_STATE = ["flowState", "purity", "memoryCharge"];   // placement/resonance stay live; charge + gate state are play
   const isHexFlags = (f) => !!(f && typeof f["bbttcc-territory"] === "object" && f["bbttcc-territory"]);
   function storyFlagsForDrawing(liveFlags, savedFlags) {
@@ -129,13 +152,20 @@
         if (sl.gate && typeof sl.gate === "object") ll.gate = Object.assign({}, ll.gate || {}, { enabled: sl.gate.enabled, locked: sl.gate.locked });
         t.leylines = ll;
       }
+      // quest links: which quests point at this hex is authored (live); whether a link was hinted in play is state (save)
+      if (lT?.quests && typeof lT.quests === "object") {
+        const q = clone(lT.quests); const sq = (sT.quests && typeof sT.quests === "object") ? sT.quests : {};
+        for (const [qid, e] of Object.entries(q)) { if (!e || typeof e !== "object") continue; const se = sq[qid]; e.hinted = !!se?.hinted; e.hintTs = se?.hintTs ?? null; }
+        t.quests = q;
+      }
       out["bbttcc-territory"] = t;
     }
     const sR = savedFlags?.["bbttcc-raid"];
     if (sR && typeof sR === "object" && "currentSceneIdx" in sR) out["bbttcc-raid"] = Object.assign({}, out["bbttcc-raid"] || {}, { currentSceneIdx: sR.currentSceneIdx });
     return out;
   }
-  const layers = { setting: settingLayer, actor: actorLayer, drawingFlags: storyFlagsForDrawing, GAME_SETTINGS, EXCLUDE_SETTINGS: [...EXCLUDE_SETTINGS], HEX_DEF_KEYS, HEX_LEYLINE_STATE };
+  const layers = { setting: settingLayer, actor: actorLayer, drawingFlags: storyFlagsForDrawing, overlay: (ns, key, live, saved) => (STATE_OVERLAYS[`${ns}.${key}`] ? STATE_OVERLAYS[`${ns}.${key}`](live, saved) : undefined),
+    GAME_SETTINGS, EXCLUDE_SETTINGS: [...EXCLUDE_SETTINGS], STATE_OVERLAY_KEYS: Object.keys(STATE_OVERLAYS), HEX_DEF_KEYS, HEX_LEYLINE_STATE, QUEST_STATE_KEYS };
 
   // ── index ────────────────────────────────────────────────────────────────
   function readIndex() {
@@ -271,16 +301,19 @@
   function plan(snap, opts = {}) {
     const mode = modeOf(opts); const story = mode === "story";
     // settings — per layer
-    const settingsChangeList = [], settingsKeepList = [];
+    const settingsChangeList = [], settingsKeepList = [], settingsMergeList = [];
     let settingsUnknown = 0;
     for (const s of snap.settings) {
       const full = `${s.ns}.${s.key}`;
       if (!game.settings.settings.has(full)) { settingsUnknown++; continue; }
       const layer = settingLayer(s.ns, s.key);
       if (layer === "exclude") continue;
-      let differs = false; try { differs = !sameJson(game.settings.get(s.ns, s.key), s.value); } catch (_e) {}
-      if (!differs) continue;
-      if (story && layer === "game") settingsKeepList.push(full); else settingsChangeList.push(full);
+      let live; try { live = game.settings.get(s.ns, s.key); } catch (_e) {}
+      if (sameJson(live, s.value)) continue;
+      if (story && layer === "game") {
+        const ov = STATE_OVERLAYS[full];
+        if (ov && !sameJson(live, ov(live, s.value))) settingsMergeList.push(full); else settingsKeepList.push(full);
+      } else settingsChangeList.push(full);
     }
     // actors — per layer
     const savedActorIds = new Set(snap.actors.map(a => a._id));
@@ -305,7 +338,7 @@
     }
     const others = game.users.filter(u => u.active && u.id !== game.user.id).map(u => u.name);
     return { mode, actorsUpdate, actorsCreate, actorsKept, actorsDelete, actorsDeleteGame, scenesKnown, scenesMissing, scenesExtra,
-      settingsChange: settingsChangeList.length, settingsKeep: settingsKeepList.length, settingsChangeList, settingsKeepList, settingsUnknown,
+      settingsChange: settingsChangeList.length, settingsKeep: settingsKeepList.length, settingsMerge: settingsMergeList.length, settingsChangeList, settingsKeepList, settingsMergeList, settingsUnknown,
       hexesMerged, hexesLiveOnly, hexesSavedMissing, journal: snap.journal.length, others };
   }
 
@@ -319,7 +352,7 @@
     const deleteExtras = opts.deleteExtras !== false;            // story-layer actors made since the save
     const deleteGameExtras = story ? opts.deleteGameExtras === true : deleteExtras;   // library npcs made since the save: opt-IN on a story load
     const progress = typeof opts.progress === "function" ? opts.progress : (() => {});
-    const report = { mode, settings: 0, settingsKept: 0, actorsUpdated: 0, actorsCreated: 0, actorsKept: 0, actorsDeleted: 0, itemsReplaced: 0, scenes: 0, drawings: 0, hexesMerged: 0, tokens: 0, journal: 0, errors: [] };
+    const report = { mode, settings: 0, settingsKept: 0, settingsMerged: 0, actorsUpdated: 0, actorsCreated: 0, actorsKept: 0, actorsDeleted: 0, itemsReplaced: 0, scenes: 0, drawings: 0, hexesMerged: 0, tokens: 0, journal: 0, errors: [] };
     game.bbttcc = game.bbttcc || {};
     game.bbttcc.saveRestoreActive = true;
     // RESTORE MODE (fix-the-boat item 4, 2026-09-12): a restore recreates every document; hooks that
@@ -334,8 +367,14 @@
           if (!game.settings.settings.has(`${s.ns}.${s.key}`)) continue;
           const layer = settingLayer(s.ns, s.key);
           if (layer === "exclude") continue;
-          if (sameJson(game.settings.get(s.ns, s.key), s.value)) continue;
-          if (story && layer === "game") { report.settingsKept++; continue; }
+          const live = game.settings.get(s.ns, s.key);
+          if (sameJson(live, s.value)) continue;
+          if (story && layer === "game") {
+            const ov = STATE_OVERLAYS[`${s.ns}.${s.key}`];
+            const merged = ov ? ov(live, s.value) : undefined;
+            if (merged === undefined || sameJson(live, merged)) { report.settingsKept++; continue; }
+            await game.settings.set(s.ns, s.key, merged); report.settingsMerged++; continue;   // game setting, play-state keys only
+          }
           await game.settings.set(s.ns, s.key, s.value);
           report.settings++;
         } catch (e) { report.errors.push(`setting ${s.ns}.${s.key}: ${e?.message || e}`); }
@@ -438,7 +477,7 @@
       await ChatMessage.create({
         whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
         content: `<div class="bbttcc-card"><b>${story ? "⟲ Story reset to" : "💾 Save loaded"}: ${foundry.utils.escapeHTML(row.label)}</b><br/>` +
-          `${report.settings} settings${story ? ` (${report.settingsKept} game-layer kept)` : ""} · actors ${report.actorsUpdated} updated / ${report.actorsCreated} created / ${report.actorsDeleted} deleted${story ? ` / ${report.actorsKept} library kept` : ""} · ${report.scenes} scenes (${story ? `${report.hexesMerged} hexes merged` : `${report.drawings} drawings`}, ${report.tokens} tokens) · ${report.journal} journal` +
+          `${report.settings} settings${story ? ` (${report.settingsKept} game-layer kept${report.settingsMerged ? `, ${report.settingsMerged} merged` : ""})` : ""} · actors ${report.actorsUpdated} updated / ${report.actorsCreated} created / ${report.actorsDeleted} deleted${story ? ` / ${report.actorsKept} library kept` : ""} · ${report.scenes} scenes (${story ? `${report.hexesMerged} hexes merged` : `${report.drawings} drawings`}, ${report.tokens} tokens) · ${report.journal} journal` +
           (report.staleCards ? ` · ${report.staleCards} newer invitation card(s) sealed` : "") +
           (report.errors.length ? `<br/><span style="color:#f87171">${report.errors.length} error(s) — see console</span>` : "") +
           `<br/><i>All clients reload now.</i></div>`
