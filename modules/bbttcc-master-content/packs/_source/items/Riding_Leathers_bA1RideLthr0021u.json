@@ -1,0 +1,144 @@
+{
+  "name": "Riding Leathers",
+  "type": "armor",
+  "img": "icons/equipment/chest/jacket-motorcycle-leather-brown.webp",
+  "system": {
+    "guardBonus": 1,
+    "evasionBonus": 1,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "light",
+      "leather",
+      "road"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A heavy leather riding jacket with doubled elbows and shoulders, cut for a rig saddle or a hovercraft rail. Outriders, couriers and anyone who spends more time on the road than off it. Turns a slide on gravel into a story and a knife into a scuff.</p><p><strong>Standard Issue.</strong> No signature. Smells of fuel and weather.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Light</li>\n  <li><strong>Defense:</strong> Guard +1, Evasion +1</li>\n  <li><strong>Requires:</strong> Fitting (trained)</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Road-rash insurance with a collar.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A heavy leather riding jacket with doubled elbows and shoulders, cut for a rig saddle or a hovercraft rail. Outriders, couriers and anyone who spends more time on the road than off it. Turns a slide on gravel into a story and a knife into a scuff.</p><p><strong>Standard Issue.</strong> No signature. Smells of fuel and weather.</p>",
+          "materialOf": [
+            "work-leather",
+            "rivet-strap"
+          ],
+          "price": {
+            "marks": 75,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI armor stamp",
+            "bound": "free",
+            "saleBack": 30
+          }
+        }
+      }
+    }
+  },
+  "folder": "2yW6O57xUFtROfpB",
+  "_id": "bA1RideLthr0021u",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.evasion",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "bA1RideLthr0Eff1",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_key": "!items.effects!bA1RideLthr0021u.bA1RideLthr0Eff1",
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1792009438689,
+        "modifiedTime": 1792009438689,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.16",
+    "createdTime": 1792009438689,
+    "modifiedTime": 1792009438689,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!bA1RideLthr0021u"
+}

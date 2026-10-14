@@ -1,0 +1,145 @@
+{
+  "name": "Riot Armor",
+  "type": "armor",
+  "img": "icons/equipment/chest/riot-black.webp",
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": -1,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "plating",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "heavy",
+      "plate",
+      "riot"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Segmented black steel plate over a padded coat — chest, shoulders, forearms, shins — the pattern a pre-Fall riot line wore and a hex constabulary still does. Heavy, loud, and very hard to argue with. The wearer gives up quickness for the certainty that the first swing lands on steel.</p><p><strong>Standard Issue.</strong> No signature, no harmonization. Clatters on stairs.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Heavy</li>\n  <li><strong>Defense:</strong> Guard +3, Evasion −1</li>\n  <li><strong>Requires:</strong> Plating (trained)</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Built for a crowd that has stopped listening.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Segmented black steel plate over a padded coat — chest, shoulders, forearms, shins — the pattern a pre-Fall riot line wore and a hex constabulary still does. Heavy, loud, and very hard to argue with. The wearer gives up quickness for the certainty that the first swing lands on steel.</p><p><strong>Standard Issue.</strong> No signature, no harmonization. Clatters on stairs.</p>",
+          "materialOf": [
+            "sheet-steel",
+            "padded-coat",
+            "leather-strap"
+          ],
+          "price": {
+            "marks": 75,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI armor stamp",
+            "bound": "free",
+            "saleBack": 30
+          }
+        }
+      }
+    }
+  },
+  "folder": "2yW6O57xUFtROfpB",
+  "_id": "bA1RiotArmr0024x",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 3,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.evasion",
+            "value": -1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "bA1RiotArmr0Eff1",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_key": "!items.effects!bA1RiotArmr0024x.bA1RiotArmr0Eff1",
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1792009438689,
+        "modifiedTime": 1792009438689,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.16",
+    "createdTime": 1792009438689,
+    "modifiedTime": 1792009438689,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!bA1RiotArmr0024x"
+}

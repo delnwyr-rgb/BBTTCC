@@ -850,6 +850,190 @@
       "folder": "Wondrous Items"
     },
     {
+      "slug": "gear-auto-pistol",
+      "name": "Auto Pistol",
+      "type": "weapon",
+      "img": "icons/weapons/guns/pistol-automatic.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Fourteen rounds and a slide that never asked permission.</em></p><p>Semi-automatic sidearm with a box magazine — reloads in a breath. No signature ability.</p><p>A magazine-fed semi-automatic handgun — the pre-Fall service pattern, still turned out by faction armouries from stamped sheet and salvaged barrels. Where the Slug Pistol is the glove-box gun, this is the holster gun: more rounds, faster reload, same honest kick.</p><p><b>Standard Issue.</b> No electronics, no hum. Point, pull, repeat.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 5,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "fir"
+        ],
+        "range": {
+          "value": 100,
+          "long": 400,
+          "units": "ft",
+          "reach": null
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 8,
+            "types": [
+              "piercing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleR",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "4acd5490bf330000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "ranged",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1AutoPstl0011k",
+            "pack": "items",
+            "identifier": "",
+            "hash": "646e646ae005"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
       "slug": "gear-balance-bind",
       "name": "Balance Bind",
       "type": "loot",
@@ -892,6 +1076,76 @@
         }
       },
       "folder": "Crafting Materials"
+    },
+    {
+      "slug": "gear-ballistic-vest",
+      "name": "Ballistic Vest",
+      "type": "equipment",
+      "img": "icons/equipment/chest/bullet-proof-vest-kevlar.webp",
+      "system": {
+        "description": {
+          "value": "<p>A sleeveless vest of layered pre-Fall ballistic fibre with foam trauma pads front and back, pulled from an evidence locker or a cop's closet two centuries ago and re-stitched a dozen times since. Light enough to wear under a coat all day; stiff enough to stop a slug. The sidearm's answer.</p><p><strong>Standard Issue.</strong> No signature, no harmonization. Zips up the front.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 10,
+          "units": "lb"
+        },
+        "price": {
+          "value": 75,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "armor": {
+          "value": 12,
+          "magicalBonus": null,
+          "dex": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "light",
+          "baseItem": ""
+        },
+        "speed": {
+          "value": null,
+          "conditions": ""
+        },
+        "strength": null,
+        "proficient": null,
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1BalstVst0020t",
+            "pack": "items",
+            "identifier": "",
+            "hash": "3b02f83cb950"
+          }
+        }
+      },
+      "folder": "Armor"
     },
     {
       "slug": "gear-blessed-blockbuster-membership-card",
@@ -1758,6 +2012,191 @@
         }
       },
       "folder": "Consumables"
+    },
+    {
+      "slug": "gear-carbine",
+      "name": "Carbine",
+      "type": "weapon",
+      "img": "icons/weapons/guns/rifle-assault-carbine.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>A rifle that learned to live indoors.</em></p><p>Two-handed short rifle. Handles in a rig cab or a stairwell. No signature ability.</p><p>A short-barrelled magazine rifle, the pattern faction outriders and rig gunners prefer: light enough to swing through a hatch, accurate enough to answer a Hunting Rifle at road range. Stamped receivers, salvaged optics when the crew can get them.</p><p><b>Standard Issue.</b> Two-handed ballistic. The outrider's compromise.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 5,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "two",
+          "fir"
+        ],
+        "range": {
+          "value": 200,
+          "long": 750,
+          "units": "ft",
+          "reach": null
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 10,
+            "types": [
+              "piercing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "martialR",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "61e27e1cbafc0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "ranged",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1Carbine00016p",
+            "pack": "items",
+            "identifier": "",
+            "hash": "f4ff3063110c"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
     },
     {
       "slug": "gear-cassette-of-the-long-drive",
@@ -3105,6 +3544,191 @@
       "folder": "Crafting Materials"
     },
     {
+      "slug": "gear-felling-axe",
+      "name": "Felling Axe",
+      "type": "weapon",
+      "img": "icons/weapons/axes/axe-double-chopping-black.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Built for trees. Trees don't fight back.</em></p><p>Two-handed, heavy. Splits timber, doors and arguments. No signature ability.</p><p>A heavy double-bit axe on a long hickory haft, straight off the timber crews that keep the hex roads open. Nobody designed it as a weapon; nobody needed to. When the raid alarm sounds in a logging camp, this is what comes out of the shed.</p><p><b>Standard Issue.</b> Heavy two-handed chop. Honest work, either way.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "two",
+          "hvy"
+        ],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 10,
+            "types": [
+              "slashing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "martialM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "8c83b13d0b140000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1FellAxe00009i",
+            "pack": "items",
+            "identifier": "",
+            "hash": "4c6b1ded80d8"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
       "slug": "gear-field-patch",
       "name": "Field Patch",
       "type": "consumable",
@@ -3280,6 +3904,76 @@
         }
       },
       "folder": "Crafting Materials"
+    },
+    {
+      "slug": "gear-flak-jacket",
+      "name": "Flak Jacket",
+      "type": "equipment",
+      "img": "icons/equipment/chest/jacket-modern-military.webp",
+      "system": {
+        "description": {
+          "value": "<p>A canvas field jacket with steel plates sewn into the chest and back panels over a quilted liner — the faction line-infantry pattern, issued by the crate alongside the Service Rifle. Heavier than it looks and warmer than anyone wants in a Bad Eden summer, but it stops what a militia expects to be shot with.</p><p><strong>Standard Issue.</strong> No signature, no harmonization. Name on the tape.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 20,
+          "units": "lb"
+        },
+        "price": {
+          "value": 75,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "armor": {
+          "value": 14,
+          "magicalBonus": null,
+          "dex": 2
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "medium",
+          "baseItem": ""
+        },
+        "speed": {
+          "value": null,
+          "conditions": ""
+        },
+        "strength": null,
+        "proficient": null,
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1FlakJckt0022v",
+            "pack": "items",
+            "identifier": "",
+            "hash": "3204f07f12ca"
+          }
+        }
+      },
+      "folder": "Armor"
     },
     {
       "slug": "gear-foam-finger-structural",
@@ -4228,6 +4922,191 @@
         }
       },
       "folder": "Gear"
+    },
+    {
+      "slug": "gear-greatsword",
+      "name": "Greatsword",
+      "type": "weapon",
+      "img": "icons/weapons/swords/greatsword-crossguard-steel.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Not a sword. A decision.</em></p><p>Two-handed, heavy. Pairs well with Bulwark Frame. No signature ability.</p><p>A two-handed blade as tall as its wielder, hammered from a pre-Fall highway sign-post or a faction forge's best sheet. Slow to bring around, impossible to ignore. Favoured by gate-wardens and anyone whose job is to make the first person through a door regret it.</p><p><b>Standard Issue.</b> Heavy two-handed kinetic. No signature — the weight is the statement.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "two",
+          "hvy"
+        ],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 12,
+            "types": [
+              "slashing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "martialM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "3d7833afa43a0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1GrtSword0003c",
+            "pack": "items",
+            "identifier": "",
+            "hash": "d2e88077c9df"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
     },
     {
       "slug": "gear-hand-axe",
@@ -5545,6 +6424,190 @@
       "folder": "Gear"
     },
     {
+      "slug": "gear-holdout-pistol",
+      "name": "Holdout Pistol",
+      "type": "weapon",
+      "img": "icons/weapons/guns/pistol-handgun-small.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Nobody checks the boot.</em></p><p>Concealable. Fits a boot, a sleeve or a sept-cloth hem. Short range. No signature ability.</p><p>A snub-barrelled pocket pistol, two to five rounds, built to vanish. Carried by couriers, card players, Pactkeepers and anyone who walks into rooms where weapons are collected at the door. Useless past a card table. Decisive at one.</p><p><b>Standard Issue.</b> Concealable sidearm. The whole point is that nobody knows.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 5,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "fir"
+        ],
+        "range": {
+          "value": 50,
+          "long": 200,
+          "units": "ft",
+          "reach": null
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "piercing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleR",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "0c12736bc8e40000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "ranged",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1HoldPstl0012l",
+            "pack": "items",
+            "identifier": "",
+            "hash": "ad112a7b8410"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
       "slug": "gear-horizon-courier-pack",
       "name": "Horizon Courier Pack",
       "type": "equipment",
@@ -5607,6 +6670,191 @@
         }
       },
       "folder": "Gear"
+    },
+    {
+      "slug": "gear-hunting-bow",
+      "name": "Hunting Bow",
+      "type": "weapon",
+      "img": "icons/weapons/bows/longbow-recurve-leather-brown.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Quiet enough to keep the deer, and the neighbours, from noticing.</em></p><p>Two-handed, silent. Arrows can be recovered and re-fletched. No signature ability.</p><p>A recurve hunting bow of laminated ash with a hex-rope string, the kind every hex still makes because arrows are free and brass is not. Hunters, scouts and anyone who would rather not announce themselves carry one. It will never out-shoot a Hunting Rifle; it will out-last one, and the ammunition grows on trees.</p><p><b>Standard Issue.</b> Silent two-handed ranged. No signature — it predates the idea.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 5,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "two",
+          "amm"
+        ],
+        "range": {
+          "value": 150,
+          "long": 600,
+          "units": "ft",
+          "reach": null
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 8,
+            "types": [
+              "piercing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleR",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "d2a953ec91620000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "ranged",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1HuntBow00019s",
+            "pack": "items",
+            "identifier": "",
+            "hash": "39b77b9fe886"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
     },
     {
       "slug": "gear-hunting-rifle",
@@ -6532,6 +7780,742 @@
         }
       },
       "folder": "Wondrous Items"
+    },
+    {
+      "slug": "gear-longsword",
+      "name": "Longsword",
+      "type": "weapon",
+      "img": "icons/weapons/swords/sword-guard-worn.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>The shape every other sword is apologizing for not being.</em></p><p>Versatile: one hand beside a shield, two hands when you mean it. No signature ability.</p><p>A straight double-edged blade with a plain cross-guard and a grip long enough for a second hand. Ground from pre-Fall leaf-spring or faction sheet-steel, depending on who made it and what they had. The weapon most hex militias train on first, because it forgives bad footwork and rewards good.</p><p><b>Standard Issue.</b> No signature, no hum, no history worth mentioning. It cuts.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "ver"
+        ],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 8,
+            "types": [
+              "slashing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": 1,
+            "denomination": 10,
+            "types": [
+              "slashing"
+            ],
+            "bonus": "",
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "f9e65046de4d0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1LongSwrd0001a",
+            "pack": "items",
+            "identifier": "",
+            "hash": "12fffcc2b22b"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
+      "slug": "gear-mace",
+      "name": "Mace",
+      "type": "weapon",
+      "img": "icons/weapons/maces/mace-flanged-steel-grey.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Doesn't need an edge. Needs a reason.</em></p><p>One-handed blunt. Good against plate — the armor stays put and the person inside it doesn't. No signature ability.</p><p>A flanged iron head on a short steel haft. Where the longsword is the militia's first lesson, the mace is the constable's — it dents, it stuns, and it doesn't stick in anything. Carried by hex constables, sept wardens and anyone whose job involves bringing people back in one piece, mostly.</p><p><b>Standard Issue.</b> Blunt, one-handed, dependable.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 8,
+            "types": [
+              "bludgeoning"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "2bd3e619ffc90000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1Mace00000007g",
+            "pack": "items",
+            "identifier": "",
+            "hash": "5b28f365e2ba"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
+      "slug": "gear-machete",
+      "name": "Machete",
+      "type": "weapon",
+      "img": "icons/weapons/swords/machete.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Half the time it's a tool. The other half, nobody asks.</em></p><p>Light. Doubles as a trail tool — clears brush, opens crates, settles disputes. No signature ability.</p><p>A broad single-edged chopping blade with a wrapped grip. Every travelling crew in Bad Eden owns one and most own three — for the overgrowth on the old roads, the lids on the salvage crates, and the moment the parley goes wrong. Factories stamp them by the gross.</p><p><b>Standard Issue.</b> Light, cheap, always within reach.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "lgt"
+        ],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "slashing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "df153b469eb30000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1Machete00004d",
+            "pack": "items",
+            "identifier": "",
+            "hash": "12152c8c66d4"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
+      "slug": "gear-machine-pistol",
+      "name": "Machine Pistol",
+      "type": "weapon",
+      "img": "icons/weapons/guns/machine-gun-sub-pistol.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Empties a magazine faster than a bad apology.</em></p><p>Automatic sidearm. Loud, fast and over quickly. No signature ability.</p><p>A full-auto handgun with an extended magazine and a folding foregrip — a bandit's gun, a bodyguard's gun, a get-out-of-the-alley gun. It climbs, it chews ammunition and it turns every room it is fired in into a conversation nobody can hear. Faction armouries make them; few issue them.</p><p><b>Standard Issue.</b> Automatic, close-range, inaccurate past a doorway.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 5,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "fir"
+        ],
+        "range": {
+          "value": 75,
+          "long": 300,
+          "units": "ft",
+          "reach": null
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 8,
+            "types": [
+              "piercing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleR",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "329b8532593e0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "ranged",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1MachPstl0013m",
+            "pack": "items",
+            "identifier": "",
+            "hash": "61572fc07a62"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
     },
     {
       "slug": "gear-mantle-of-the-unbroken-circle",
@@ -8977,6 +10961,191 @@
       "folder": "Wondrous Items"
     },
     {
+      "slug": "gear-pump-shotgun",
+      "name": "Pump Shotgun",
+      "type": "weapon",
+      "img": "icons/weapons/guns/shotgun-pump.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>The pump is the warning. The rest is paperwork.</em></p><p>Two-handed scattergun. Brutal up close, useless at distance. No signature ability.</p><p>A pump-action smoothbore with a tube magazine and a walnut stock, loaded with whatever lead-shot the trade post had. The homestead gun of Bad Eden — behind every bar, under every bunk, in the rack of every hovercraft. Hits like a wall at ten paces and like a rumour at forty.</p><p><b>Standard Issue.</b> Short-range two-handed ballistic. Nobody has ever called it elegant.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 5,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "two",
+          "fir"
+        ],
+        "range": {
+          "value": 50,
+          "long": 200,
+          "units": "ft",
+          "reach": null
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 10,
+            "types": [
+              "piercing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "martialR",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "0ec4e8e9d9990000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "ranged",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1PumpShot0014n",
+            "pack": "items",
+            "identifier": "",
+            "hash": "aacf97520d40"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
       "slug": "gear-quantum-staff",
       "name": "Quantum Staff",
       "type": "weapon",
@@ -9159,6 +11328,193 @@
         }
       },
       "folder": "Wondrous Items"
+    },
+    {
+      "slug": "gear-quarterstaff",
+      "name": "Quarterstaff",
+      "type": "weapon",
+      "img": "icons/weapons/staves/staff-simple-wrapped.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Leans on you as much as you lean on it.</em></p><p>Two-handed, versatile. A walking stick first; a weapon when the walk goes wrong. No signature ability.</p><p>Six feet of seasoned ash with leather wraps at the grips and iron ferrules at the ends. The traveller's weapon — a pilgrim's stick, a boatman's pole, a teacher's pointer, and the one weapon every Initiate's order lets its novices carry through the gate. Cheap, legal everywhere, and faster than it looks.</p><p><b>Standard Issue.</b> Two-handed blunt. Nothing to confiscate.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "two",
+          "ver"
+        ],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "bludgeoning"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": 1,
+            "denomination": 8,
+            "types": [
+              "bludgeoning"
+            ],
+            "bonus": "",
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "martialM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "c6b4d00044f10000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1QrtrStaf0008h",
+            "pack": "items",
+            "identifier": "",
+            "hash": "7d26f0e86d5a"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
     },
     {
       "slug": "gear-quipu-ledger-strap",
@@ -9805,6 +12161,284 @@
         }
       },
       "folder": "Gear"
+    },
+    {
+      "slug": "gear-riding-leathers",
+      "name": "Riding Leathers",
+      "type": "equipment",
+      "img": "icons/equipment/chest/jacket-motorcycle-leather-brown.webp",
+      "system": {
+        "description": {
+          "value": "<p>A heavy leather riding jacket with doubled elbows and shoulders, cut for a rig saddle or a hovercraft rail. Outriders, couriers and anyone who spends more time on the road than off it. Turns a slide on gravel into a story and a knife into a scuff.</p><p><strong>Standard Issue.</strong> No signature. Smells of fuel and weather.</p>\n<p><strong>Worn:</strong> +1 to Dexterity saving throws.</p>",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 10,
+          "units": "lb"
+        },
+        "price": {
+          "value": 75,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "armor": {
+          "value": 11,
+          "magicalBonus": null,
+          "dex": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "light",
+          "baseItem": ""
+        },
+        "speed": {
+          "value": null,
+          "conditions": ""
+        },
+        "strength": null,
+        "proficient": null,
+        "activities": {}
+      },
+      "effects": [
+        {
+          "_id": "be5eef36e1cb178f",
+          "name": "Riding Leathers",
+          "img": "icons/equipment/chest/jacket-motorcycle-leather-brown.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.abilities.dex.bonuses.save",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1RideLthr0021u",
+            "pack": "items",
+            "identifier": "",
+            "hash": "1a1185880c73"
+          }
+        }
+      },
+      "folder": "Armor"
+    },
+    {
+      "slug": "gear-riot-armor",
+      "name": "Riot Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/riot-black.webp",
+      "system": {
+        "description": {
+          "value": "<p>Segmented black steel plate over a padded coat — chest, shoulders, forearms, shins — the pattern a pre-Fall riot line wore and a hex constabulary still does. Heavy, loud, and very hard to argue with. The wearer gives up quickness for the certainty that the first swing lands on steel.</p><p><strong>Standard Issue.</strong> No signature, no harmonization. Clatters on stairs.</p>\n<p><strong>Worn:</strong> -1 to Dexterity saving throws.</p>",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 40,
+          "units": "lb"
+        },
+        "price": {
+          "value": 75,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "stealthDisadvantage"
+        ],
+        "armor": {
+          "value": 17,
+          "magicalBonus": null,
+          "dex": 0
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "heavy",
+          "baseItem": ""
+        },
+        "speed": {
+          "value": null,
+          "conditions": ""
+        },
+        "strength": 15,
+        "proficient": null,
+        "activities": {}
+      },
+      "effects": [
+        {
+          "_id": "be5eafd65a688c50",
+          "name": "Riot Armor",
+          "img": "icons/equipment/chest/riot-black.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.abilities.dex.bonuses.save",
+              "mode": 2,
+              "value": "-1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1RiotArmr0024x",
+            "pack": "items",
+            "identifier": "",
+            "hash": "234ce9d642eb"
+          }
+        }
+      },
+      "folder": "Armor"
+    },
+    {
+      "slug": "gear-riot-shield",
+      "name": "Riot Shield",
+      "type": "equipment",
+      "img": "icons/equipment/shield/heater-steel-grey.webp",
+      "system": {
+        "description": {
+          "value": "<p>A tall rectangular shield of sheet-steel on a brace-iron frame with a forearm cuff and a grip, the constabulary pattern. It covers from chin to knee and makes a line of four people into a wall. Heavy enough that nobody carrying one is dodging anything; that was never the plan.</p><p><strong>Standard Issue.</strong> Pairs with any one-handed weapon. No signature, no attunement, no view.</p>\n<p><strong>Worn:</strong> -1 to Dexterity saving throws.</p>",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 6,
+          "units": "lb"
+        },
+        "price": {
+          "value": 35,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "armor": {
+          "value": 2,
+          "magicalBonus": null,
+          "dex": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "shield",
+          "baseItem": ""
+        },
+        "speed": {
+          "value": null,
+          "conditions": ""
+        },
+        "strength": null,
+        "proficient": null,
+        "activities": {}
+      },
+      "effects": [
+        {
+          "_id": "be5e395d6d8f3033",
+          "name": "Riot Shield",
+          "img": "icons/equipment/shield/heater-steel-grey.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.abilities.dex.bonuses.save",
+              "mode": 2,
+              "value": "-1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1RiotShld0027A",
+            "pack": "items",
+            "identifier": "",
+            "hash": "d421ba785d16"
+          }
+        }
+      },
+      "folder": "Armor"
     },
     {
       "slug": "gear-root-leather",
@@ -10507,6 +13141,190 @@
       "folder": "BBTTCC Weapons"
     },
     {
+      "slug": "gear-sawed-off-shotgun",
+      "name": "Sawed-Off Shotgun",
+      "type": "weapon",
+      "img": "icons/weapons/guns/shotgun-short-steel.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Two barrels. One conversation.</em></p><p>One-handed scattergun, hides under a coat. Point-blank only. No signature ability.</p><p>A double-barrelled shotgun with the barrels and stock cut back to something that fits under a duster. Favoured by rig crews, river smugglers and anyone whose fights happen across a table. Past twenty feet it is a loud way to miss; inside five, nothing standard-issue hits harder.</p><p><b>Standard Issue.</b> Concealable, two shots, no third chance.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 5,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "fir"
+        ],
+        "range": {
+          "value": 25,
+          "long": 100,
+          "units": "ft",
+          "reach": null
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 10,
+            "types": [
+              "piercing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "martialR",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "3fbde6fa6a2c0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "ranged",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1SawdShot0015o",
+            "pack": "items",
+            "identifier": "",
+            "hash": "8df3ae218cd1"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
       "slug": "gear-scarf-that-was-a-cat-probably",
       "name": "Scarf That Was a Cat (Probably)",
       "type": "equipment",
@@ -10785,6 +13603,170 @@
         }
       },
       "folder": "Wondrous Items"
+    },
+    {
+      "slug": "gear-scrap-helm",
+      "name": "Scrap Helm",
+      "type": "equipment",
+      "img": "icons/equipment/head/cap-steel.webp",
+      "system": {
+        "description": {
+          "value": "<p>A steel skull-cap hammered from sheet, lined with quilted cloth and chin-strapped with whatever was handy. Worn over a hood, under a hat, or on its own by people who have been hit in the head once already and formed an opinion. Pairs with any armor; stacks with none of the arguments.</p><p><strong>Standard Issue.</strong> No signature. One size fits most.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 10,
+          "units": "lb"
+        },
+        "price": {
+          "value": 75,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "armor": {
+          "value": 11,
+          "magicalBonus": null,
+          "dex": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "light",
+          "baseItem": ""
+        },
+        "speed": {
+          "value": null,
+          "conditions": ""
+        },
+        "strength": null,
+        "proficient": null,
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1ScrpHelm0026z",
+            "pack": "items",
+            "identifier": "",
+            "hash": "6124571bc2cd"
+          }
+        }
+      },
+      "folder": "Armor"
+    },
+    {
+      "slug": "gear-scrap-plate",
+      "name": "Scrap Plate",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-banded-steel-studded.webp",
+      "system": {
+        "description": {
+          "value": "<p>Riveted plates of salvaged sheet — car doors, signage, a pre-Fall refrigerator — strapped over a gambeson by whoever had the rivets and the afternoon. No two suits match and none of them fit, but the weight on your shoulders is the weight of knowing you'll walk out. The Bulwark's second suit; the bandit's first.</p><p><strong>Standard Issue.</strong> No signature. Every dent is a previous owner.</p>\n<p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 40,
+          "units": "lb"
+        },
+        "price": {
+          "value": 75,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "stealthDisadvantage"
+        ],
+        "armor": {
+          "value": 16,
+          "magicalBonus": null,
+          "dex": 0
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "heavy",
+          "baseItem": ""
+        },
+        "speed": {
+          "value": null,
+          "conditions": ""
+        },
+        "strength": 13,
+        "proficient": null,
+        "activities": {}
+      },
+      "effects": [
+        {
+          "_id": "be5e14cbc69ecca9",
+          "name": "Scrap Plate",
+          "img": "icons/equipment/chest/breastplate-banded-steel-studded.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1ScrpPlat0025y",
+            "pack": "items",
+            "identifier": "",
+            "hash": "bc38f6ff38a5"
+          }
+        }
+      },
+      "folder": "Armor"
     },
     {
       "slug": "gear-scrapwork-toolkit",
@@ -11643,6 +14625,376 @@
       "folder": "Gear"
     },
     {
+      "slug": "gear-service-rifle",
+      "name": "Service Rifle",
+      "type": "weapon",
+      "img": "icons/weapons/guns/rifle-assault-wood-grip.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Issued by the crate. Returned by the handful.</em></p><p>Two-handed select-fire rifle — the faction line-infantry pattern. No signature ability.</p><p>The select-fire rifle every faction armoury turns out for its line troops — a wooden-gripped pattern copied from a pre-Fall design nobody remembers the name of. Thirty-round magazines, iron sights, a bayonet lug that mostly holds a bottle opener. When a Garrison Fort empties out, this is what it empties out carrying.</p><p><b>Standard Issue.</b> Two-handed ballistic, automatic. The sound of a faction meaning it.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 5,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "two",
+          "fir"
+        ],
+        "range": {
+          "value": 200,
+          "long": 800,
+          "units": "ft",
+          "reach": null
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 10,
+            "types": [
+              "piercing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "martialR",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "25c4b5e6ebe30000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "ranged",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1ServRifl0017q",
+            "pack": "items",
+            "identifier": "",
+            "hash": "9c27e8931f43"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
+      "slug": "gear-shortsword",
+      "name": "Shortsword",
+      "type": "weapon",
+      "img": "icons/weapons/swords/shortsword-guard-steel-worn.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Short enough to draw in a doorway. Long enough to matter.</em></p><p>Light, finesse-friendly. Pairs with a second weapon or a buckler. No signature ability.</p><p>Two feet of blade and a grip for one hand. The sidearm of people who do their fighting in corridors, stairwells and crowded markets — courier guards, dock crews, anyone who has ever had to turn around fast. Cheap to make and cheaper to replace.</p><p><b>Standard Issue.</b> Quick, close, honest.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "lgt",
+          "fin"
+        ],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "slashing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "6efbf0a8810b0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1ShrtSwrd0002b",
+            "pack": "items",
+            "identifier": "",
+            "hash": "0133f444aff5"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
       "slug": "gear-sigil-of-quiet-crossings",
       "name": "Sigil of Quiet Crossings",
       "type": "equipment",
@@ -12125,6 +15477,191 @@
       "folder": "BBTTCC Weapons"
     },
     {
+      "slug": "gear-slugger-bat",
+      "name": "Slugger Bat",
+      "type": "weapon",
+      "img": "icons/weapons/clubs/bat-nail.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Pre-Fall sporting goods, post-Fall diplomacy.</em></p><p>Light. Improvised — nobody looks twice at it until it's too late. No signature ability.</p><p>A hickory baseball bat, usually with a few bronze nails driven through the barrel for emphasis. Found in the back of every bunker, the trunk of every rig and the hands of every bouncer at every drinking hole from Chuckle Creek to the Drowned South. Nobody has to be taught how to use one.</p><p><b>Standard Issue.</b> Light, blunt, cheerful.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "lgt",
+          "fir"
+        ],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "bludgeoning"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "6f4e403dc2980000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1SlugrBat0006f",
+            "pack": "items",
+            "identifier": "",
+            "hash": "db121b55aba6"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
       "slug": "gear-snack-machine-familiar",
       "name": "Snack Machine Familiar",
       "type": "equipment",
@@ -12571,6 +16108,379 @@
         }
       },
       "folder": "Wondrous Items"
+    },
+    {
+      "slug": "gear-spear",
+      "name": "Spear",
+      "type": "weapon",
+      "img": "icons/weapons/polearms/spear-flared-worn.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Reach is a kind of armor.</em></p><p>Versatile. May be thrown at short range as an improvised ranged attack. No signature ability.</p><p>A forged leaf-shaped head on six feet of ash. The weapon of hex pickets, boat crews and anyone who would rather the fight happened a little further away. Easy to make, easy to teach, and the long haft keeps a ring of them steady where a line of knives would break.</p><p><b>Standard Issue.</b> Reach and a throw. Nothing else needed.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "thr",
+          "ver"
+        ],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 8,
+            "types": [
+              "piercing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": 1,
+            "denomination": 10,
+            "types": [
+              "piercing"
+            ],
+            "bonus": "",
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "708043a2afa10000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1Spear0000005e",
+            "pack": "items",
+            "identifier": "",
+            "hash": "ac85c8deede8"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
+    },
+    {
+      "slug": "gear-squad-machine-gun",
+      "name": "Squad Machine Gun",
+      "type": "weapon",
+      "img": "icons/weapons/guns/machine-gun-drum.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>One per squad. One is plenty.</em></p><p>Heavy, two-handed, belt- or drum-fed. Suppresses a street on its own. Best fired braced or from a rig mount. No signature ability.</p><p>A drum-fed light machine gun on a bipod — the heaviest thing a faction hands to one person. Proven kit, not starter kit: the quartermaster signs it out by name, and the crew that carries it carries nothing else. On a rig pintle it is the difference between a convoy and a target.</p><p><b>Proven Issue.</b> Tier II heavy automatic ballistic. No signature — it has never needed one.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 5,
+          "units": "lb"
+        },
+        "price": {
+          "value": 150,
+          "denomination": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "two",
+          "hvy",
+          "fir"
+        ],
+        "range": {
+          "value": 200,
+          "long": 800,
+          "units": "ft",
+          "reach": null
+        },
+        "damage": {
+          "base": {
+            "number": 2,
+            "denomination": 6,
+            "types": [
+              "piercing"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "martialR",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "54a609154dee0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "ranged",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA2SquadMG00018r",
+            "pack": "items",
+            "identifier": "",
+            "hash": "fd98d0e8cbcc"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
     },
     {
       "slug": "gear-stabilizer-patch",
@@ -13028,6 +16938,98 @@
         }
       },
       "folder": "Consumables"
+    },
+    {
+      "slug": "gear-tactical-harness",
+      "name": "Tactical Harness",
+      "type": "equipment",
+      "img": "icons/equipment/chest/harness-tactical-heavy.webp",
+      "system": {
+        "description": {
+          "value": "<p>A webbing harness and chest rig over a padded canvas shell — pouches for magazines, a loop for the machete, a ring for the lantern. Scouts and rig crews wear it because it keeps everything where the hands already know to find it; the padding is almost incidental, and still better than nothing.</p><p><strong>Standard Issue.</strong> No signature. Rattles if you run.</p>\n<p><strong>Worn:</strong> +1 to Dexterity saving throws.</p>",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 20,
+          "units": "lb"
+        },
+        "price": {
+          "value": 75,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "armor": {
+          "value": 13,
+          "magicalBonus": null,
+          "dex": 2
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "medium",
+          "baseItem": ""
+        },
+        "speed": {
+          "value": null,
+          "conditions": ""
+        },
+        "strength": null,
+        "proficient": null,
+        "activities": {}
+      },
+      "effects": [
+        {
+          "_id": "be5ee3167069ca26",
+          "name": "Tactical Harness",
+          "img": "icons/equipment/chest/harness-tactical-heavy.webp",
+          "transfer": true,
+          "disabled": false,
+          "changes": [
+            {
+              "key": "system.abilities.dex.bonuses.save",
+              "mode": 2,
+              "value": "1",
+              "priority": 20
+            }
+          ],
+          "duration": {},
+          "flags": {},
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "description": ""
+        }
+      ],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1TactHrns0023w",
+            "pack": "items",
+            "identifier": "",
+            "hash": "ff536ae69947"
+          }
+        }
+      },
+      "folder": "Armor"
     },
     {
       "slug": "gear-terraformer-ampule",
@@ -14347,6 +18349,192 @@
         }
       },
       "folder": "Wondrous Items"
+    },
+    {
+      "slug": "gear-warhammer",
+      "name": "Warhammer",
+      "type": "weapon",
+      "img": "icons/weapons/hammers/hammer-war-rounding.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Forge tool. Field tool. Same tool.</em></p><p>Versatile. A hammer face for plate, a spike for everything else. No signature ability.</p><p>A squared iron head with a hammer face on one side and a short spike on the other, mounted on an ash haft long enough for two hands. It comes off the same forge as the rivet-plate it's meant to beat in — the smiths of Bad Eden have never seen the point of making two tools where one will do.</p><p><b>Standard Issue.</b> Blunt, versatile, no questions at the forge door.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [
+          "ver"
+        ],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 8,
+            "types": [
+              "bludgeoning"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": 1,
+            "denomination": 10,
+            "types": [
+              "bludgeoning"
+            ],
+            "bonus": "",
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "8a2eb0658bba0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "bA1WarHamr0010j0",
+            "pack": "items",
+            "identifier": "",
+            "hash": "77fa954cf180"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
     },
     {
       "slug": "gear-whataburger-coupon-unredeemed-vintage",
