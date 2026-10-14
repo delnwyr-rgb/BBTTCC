@@ -209,7 +209,7 @@
       "_id": "iQ2v9za0IszW6xpN",
       "name": "Fractured Will (3/scene)",
       "type": "feature",
-      "img": "icons/svg/mage-shield.svg",
+      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
       "system": {
         "category": "principle",
         "description": {
@@ -253,7 +253,7 @@
       "_id": "ywWwRrvDepjrp4lD",
       "name": "Multiattack",
       "type": "feature",
-      "img": "icons/svg/combat.svg",
+      "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
       "system": {
         "category": "principle",
         "description": {
@@ -483,7 +483,7 @@
       "_id": "lknRzxNy4SD2W9WE",
       "name": "Wing Buffet",
       "type": "feat",
-      "img": "icons/svg/wing.svg",
+      "img": "icons/creatures/abilities/wing-batlike-purple-blue.webp",
       "system": {
         "category": "technique",
         "description": {

@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Ashbound Survivors (Tier 1)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+  "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
   "system": {
     "category": "technique",
     "source": {

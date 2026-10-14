@@ -1,7 +1,7 @@
 {
   "name": "Marrow-Lash",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_whip.png",
+  "img": "icons/commodities/bones/bones-broken-marrow-white-red.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

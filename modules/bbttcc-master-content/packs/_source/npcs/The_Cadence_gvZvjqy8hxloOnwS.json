@@ -273,7 +273,7 @@
         }
       },
       "_id": "arMLY4lvUbA6zmg5",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/magic/fire/flame-burning-earth-yellow.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -313,7 +313,7 @@
         }
       },
       "_id": "cPYFwZoG77LfHZuQ",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/magic/fire/barrier-wall-explosion-orange.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -353,7 +353,7 @@
         }
       },
       "_id": "kDOanDzmzvtcucK3",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/magic/fire/projectile-fireball-smoke-large-blue.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -393,7 +393,7 @@
         }
       },
       "_id": "jqEBo0N4i4h9vmiW",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -433,7 +433,7 @@
         }
       },
       "_id": "3Mz28OeZ8OYxfbnJ",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/containers/boxes/crate-wooden-beige-red.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -473,7 +473,7 @@
         }
       },
       "_id": "1we7fjPMENKYMcMs",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/books/book-eye-red.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -513,7 +513,7 @@
         }
       },
       "_id": "wM8mIga5v7cYyQpt",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/skills/trades/music-notes-sound-blue.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -553,7 +553,7 @@
         }
       },
       "_id": "cc8GXqoIzf9VzvIQ",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_farm.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -593,7 +593,7 @@
         }
       },
       "_id": "rcp1zPJQmUo9kz9n",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/tools/navigation/map-marked-gold.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -633,7 +633,7 @@
         }
       },
       "_id": "Rscmd7euPSekihcU",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/environment/traps/spiked-wall.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -673,7 +673,7 @@
         }
       },
       "_id": "bv77yMZvbmgl5Zk1",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/flags/banner-flag-pirate-swords.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -713,7 +713,7 @@
         }
       },
       "_id": "cs1qixnq14LLbt0V",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/containers/barrels/barrel-oak-banded-tan.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -753,7 +753,7 @@
         }
       },
       "_id": "5dkfNGBaNfrrmwcr",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/commodities/currency/coin-oval-rune-copper.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -793,7 +793,7 @@
         }
       },
       "_id": "8piAqBzrPyWGci8w",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_farm.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -833,7 +833,7 @@
         }
       },
       "_id": "xmhsP56u0oLF1GGp",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_fortress.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -873,7 +873,7 @@
         }
       },
       "_id": "Wd5y3zvy8mkiVUzS",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_mine.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -913,7 +913,7 @@
         }
       },
       "_id": "eHa50TUNE3qnh2g1",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_port.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -953,7 +953,7 @@
         }
       },
       "_id": "n2M5NX27JDeT3QzT",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_research_facility.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -993,7 +993,7 @@
         }
       },
       "_id": "ajkidKA9g1p87DiZ",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_settlement.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -1033,7 +1033,7 @@
         }
       },
       "_id": "2CU71vpjoZMHab3i",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/environment/wilderness/wall-ruins.webp",
       "effects": [],
       "folder": null,
       "sort": 0,

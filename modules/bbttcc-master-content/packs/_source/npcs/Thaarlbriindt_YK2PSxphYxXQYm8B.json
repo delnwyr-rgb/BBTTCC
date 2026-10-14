@@ -449,7 +449,7 @@
     {
       "name": "Circuitborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_1.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_synapse_2.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -603,7 +603,7 @@
     {
       "name": "Circuitborn: Firmware of Identity",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_14.png",
+      "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -746,7 +746,7 @@
     {
       "name": "Circuitborn Heritage: Exo-Knight",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/CircuitBorn_Exo_Knight.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_salvage_2.webp",
       "system": {
         "category": "heritage",
         "source": "Bad Eden (2024 rules)",
@@ -833,7 +833,7 @@
     {
       "name": "Circuitborn (Exo-Knight Line): Shield Projector",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_1.png",
+      "img": "icons/magic/unholy/barrier-shield-glowing-pink.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -1008,7 +1008,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.XVCamqENQpSFYQOS"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Warlord2.png",
+      "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
       "effects": [],
       "folder": "UMEcF0hVGEJ9UeD2",
       "ownership": {
@@ -1033,7 +1033,7 @@
     {
       "name": "Bulwark \u2014 Tier 1: Founding Stance",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_10.png",
+      "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1167,7 +1167,7 @@
     {
       "name": "Path of the Avalanche (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_avalanche.png",
+      "img": "icons/skills/targeting/target-strike-triple-blue.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "bulwark",
@@ -1216,7 +1216,7 @@
     {
       "name": "Archetype: The Fool (Catalyst)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "img": "icons/equipment/head/mask-clown.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1329,7 +1329,7 @@
     {
       "name": "Crew Type: Ironbound Ascendants",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1466,7 +1466,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heart_1.png",
+      "img": "icons/magic/life/heart-glowing-red.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -1572,7 +1572,7 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "effects": [],
       "folder": "3oMsaUpGcyqokYqu",
       "_stats": {
@@ -1604,7 +1604,7 @@
     {
       "name": "Archetype: The Fool (Catalyst) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "img": "icons/equipment/head/mask-clown.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1751,7 +1751,7 @@
     {
       "name": "Crew Type: Ironbound Ascendants (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1982,7 +1982,7 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "effects": [],
       "folder": "3oMsaUpGcyqokYqu",
       "_stats": {
@@ -2014,7 +2014,7 @@
     {
       "name": "Pressed Buckler",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pressed_buckler.png",
+      "img": "icons/equipment/shield/buckler-wooden-boss-lightning.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 0,
@@ -2152,7 +2152,7 @@
       "name": "Frikkin' Laser Blade Saber",
       "type": "weapon",
       "_id": "vXbPYSYTEZUCORxi",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_2.png",
+      "img": "icons/weapons/swords/sword-flanged-lightning.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -2839,7 +2839,7 @@
     {
       "name": "Falsedoubt",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_3.png",
+      "img": "icons/weapons/swords/sword-broad-red.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -3199,7 +3199,7 @@
     {
       "name": "Invisible Clowns",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "img": "icons/magic/nature/stealth-hide-eyes-green.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -3399,7 +3399,7 @@
     {
       "name": "Anvil Stance",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+      "img": "icons/skills/melee/sword-shield-stylized-white.webp",
       "system": {
         "category": "unarmed",
         "intent": "violence",
@@ -3771,7 +3771,7 @@
     {
       "name": "Avalanche L1: Kinetic Inversion",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_breaker_wall_1.png",
+      "img": "icons/magic/nature/root-vine-barrier-wall-brown.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3854,7 +3854,7 @@
     {
       "name": "Breach Specialist",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_breach_specialist.png",
+      "img": "icons/magic/water/barrier-ice-wall-explosion.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3920,7 +3920,7 @@
     {
       "name": "Avalanche L5: Shockwave Arrival",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shockwave.png",
+      "img": "icons/skills/targeting/target-strike-triple-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4180,7 +4180,7 @@
     {
       "name": "Deliberate Tempo",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_deliberate_tempo.png",
+      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats (Batch 3) (2026 rules)",
@@ -4243,7 +4243,7 @@
     {
       "name": "Bulwark \u2014 Tier 2: Anchor or Advance",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+      "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -4314,7 +4314,7 @@
     {
       "name": "Adaptive Defense",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_defense.png",
+      "img": "icons/magic/defensive/shield-barrier-flaming-diamond-red.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats v1 (2024 rules)",
@@ -4376,7 +4376,7 @@
     {
       "name": "Avalanche L9: No Terminal Velocity",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_1.png",
+      "img": "icons/commodities/tech/console-steel.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4448,7 +4448,7 @@
     {
       "name": "Bulwark \u2014 Tier 3: Polarity Mastery",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_scales.png",
+      "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -4532,7 +4532,7 @@
     {
       "name": "Battlefield Presence",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_battlefied_presence.png",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4598,7 +4598,7 @@
     {
       "name": "Avalanche L13: The Breach",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_breaker_wall_3.png",
+      "img": "icons/magic/fire/barrier-wall-explosion-orange.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -4847,7 +4847,7 @@
     {
       "name": "Backline Commander",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_backline_commander.png",
+      "img": "icons/skills/melee/strikes-sword-scimitar.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Feats Expansion v1 (2024 rules)",
@@ -5086,7 +5086,7 @@
     {
       "name": "Bulwark \u2014 Tier 4: Architect of Certainty",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_4.png",
+      "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -5151,7 +5151,7 @@
     {
       "name": "Avalanche L17: Running Theology (Capstone)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_anchor.png",
+      "img": "icons/skills/movement/figure-running-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -5233,7 +5233,7 @@
     {
       "name": "Fluid Footwork",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_fluid_footwork.png",
+      "img": "icons/skills/melee/strikes-sword-scimitar.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats v1 (2024 rules)",
@@ -5342,7 +5342,7 @@
     {
       "name": "Bladed Tempo",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_bladed_tempo.png",
+      "img": "icons/skills/movement/feet-bladed-boots-fire.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -5408,7 +5408,7 @@
     {
       "name": "Yesodic Edge",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_1.png",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -5752,7 +5752,7 @@
     {
       "name": "Hex-Script Pistol",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hex_1.png",
+      "img": "icons/weapons/guns/pistol-revolver-long.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -6060,7 +6060,7 @@
     {
       "name": "Hex-Carved Plate",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/DiplomatBodyguard2.png",
+      "img": "icons/equipment/chest/breastplate-layered-leather-studded-black.webp",
       "system": {
         "guardBonus": 4,
         "evasionBonus": -1,
@@ -6241,7 +6241,7 @@
     {
       "name": "BOULDER!!!",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cracked_stone.png",
+      "img": "icons/magic/earth/projectile-stone-boulder-purple.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -6609,7 +6609,7 @@
     {
       "name": "Enlightenment: Enlightened",
       "type": "feat",
-      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "img": "icons/magic/nature/lotus-glow-pink.webp",
       "flags": {
         "bbttcc-character-options": {
           "category": "enlightenment-levels",

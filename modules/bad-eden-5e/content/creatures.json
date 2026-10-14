@@ -901,7 +901,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Abomination makes two Pseudopod attacks, and can use Engulf if anyone is within reach of regret.</p>",
@@ -1983,7 +1983,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Angel makes two attacks with its Scepter of Vanity.</p>",
@@ -2680,7 +2680,7 @@
           "slug": "pounce",
           "name": "Pounce",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/abilities/cougar-pounce-stalk-black.webp",
           "system": {
             "description": {
               "value": "<p>If the predator moves at least 20 feet straight toward a creature and hits it with this attack on the same turn, the target must succeed a Constitution check vs DC 15 or be knocked Prone. If it is Prone, the predator may make one Claws attack as a bonus action.</p><p><strong>Strike.</strong> reach 5 ft., after 4+ squares of straight movement, one target. Damage: <code>2d10</code> kinetic + violence. The target must succeed a Constitution check vs DC 15 or be knocked Prone. If it is Prone, the predator may make one Claws attack as a bonus action.</p><p><em>It was already in the air when you noticed it.</em></p>",
@@ -2852,7 +2852,7 @@
           "slug": "rending-bite",
           "name": "Rending Bite",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/death/mouth-bite-fangs-vampire.webp",
           "system": {
             "description": {
               "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>2d10</code> kinetic + violence. On a hit, the target is Restrained in the jaws (escape: Strength check vs DC 15). While a creature is held, the predator's Claws hit it automatically.</p>",
@@ -3024,7 +3024,7 @@
           "slug": "claws",
           "name": "Claws",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/commodities/claws/claw-canine-brown-grey.webp",
           "system": {
             "description": {
               "value": "<p>Two sets. Against a Restrained or Prone target, the damage die rerolls the lowest.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>2d8</code> kinetic + violence. Against a Restrained or Prone target, the damage die rerolls the lowest.</p>",
@@ -3196,7 +3196,7 @@
           "slug": "blood-frenzy",
           "name": "Blood Frenzy",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/wounds/blood-spurt-spray-red.webp",
           "system": {
             "description": {
               "value": "<p>The predator is made with advantage on melee attack rolls against any creature that isn't at full hit points.</p>",
@@ -3228,7 +3228,7 @@
           "slug": "territorial",
           "name": "Territorial",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/abilities/paw-print-tan.webp",
           "system": {
             "description": {
               "value": "<p>If a creature ends its turn within 10 feet of the apex predator, the predator may make one Rending Bite against it as a reaction (1/round).</p><p><strong>At the start of its turn:</strong> Territorial (1/round): a creature ending its turn ≤2 sq → reaction Rending Bite..</p>",
@@ -4530,7 +4530,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Archon makes two attacks: one with its Bite of Truth and one with its Bite of Lies.</p>",
@@ -4962,7 +4962,7 @@
           "slug": "smoldering-bite",
           "name": "Smoldering Bite",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
           "system": {
             "description": {
               "value": "<p><em>The coat smokes when angered. The bite carries the heat.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> kinetic (bite) + violence. On a hit, the target's clothing or fur catches a slow burn — 1 fire or cold damage at the start of its next turn unless it spends an action to put it out.</p><p><em>The coat smokes when angered. The bite carries the heat.</em></p>",
@@ -5158,7 +5158,7 @@
           "slug": "burn-zone-lunge-recharges-on-a-soma-break",
           "name": "Burn-Zone Lunge (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/fire/beam-jet-stream-embers.webp",
           "system": {
             "description": {
               "value": "<p><em>It runs along the burn and lets the burn run along it.</em></p><p>Line 15 ft. — targets roll Dexterity saving throw (DC 11). Half damage on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke opportunity attacks from the line. Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature in a 15 feet line the wolf moves through rolls <strong>Evasion</strong> vs DC 11. Hit: <code>1d6</code> thermal (cinder) + violence; half on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke opportunity attacks from the line.<br/><em>Recharges on a long rest.</em></p><p><em>It runs along the burn and lets the burn run along it.</em></p>",
@@ -5348,7 +5348,7 @@
           "slug": "pack-tactics",
           "name": "Pack Tactics",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/abilities/wolf-howl-moon-purple.webp",
           "system": {
             "description": {
               "value": "<p>The ash wolf gain advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated.</p><p><em>They circle. They cut you off. Then they bite.</em></p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
@@ -5762,7 +5762,7 @@
           "slug": "unfound-gesture",
           "name": "Unfound-Gesture",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/unholy/hand-marked-pink.webp",
           "system": {
             "description": {
               "value": "<p><em>The avatar makes a sign you've never seen. The space behind you agrees with it.</em></p><p>On a hit, the target must succeed a DC 16 Intelligence save or take their next turn from the wrong location (their token gets repositioned 20 ft. in a direction the GM chooses, before they act).</p><p><strong>Strike.</strong> range 12/120 feet, one target. Damage: <code>2d12</code> psychic (thinning) + soul. On a hit, the target must succeed a DC 16 Intelligence check or take their next turn from the wrong location (their token gets repositioned 20 feet in a direction the GM chooses, before they act).</p><p><em>The avatar makes a sign you've never seen. The space behind you agrees with it.</em></p>",
@@ -6015,7 +6015,7 @@
           "slug": "re-arrangement-recharges-on-a-soma-break",
           "name": "Re-Arrangement (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/time/arrows-circling-green.webp",
           "system": {
             "description": {
               "value": "<p><em>The avatar gestures, briefly, and the rules of where things go stop being negotiable.</em></p><p>Radius 30 ft. — targets roll Wisdom saving throw (DC 15). Half damage on success. Failed-save targets swap positions with the nearest other failed-save target (GM pairs them up). They are also Frightened until end of next turn. Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature within 30 feet rolls <strong>Resolve</strong> vs DC 15. Hit: <code>2d12</code> psychic (world-shuffle) + soul; half on success. Failed-save targets swap positions with the nearest other failed-save target (GM pairs them up). They are also Frightened until end of next turn.<br/><em>Recharges on a long rest.</em></p><p><em>The avatar gestures, briefly, and the rules of where things go stop being negotiable.</em></p>",
@@ -6205,7 +6205,7 @@
           "slug": "veil-severance",
           "name": "Veil-Severance",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/melee/strike-slashes-red.webp",
           "system": {
             "description": {
               "value": "<p><em>A part of you is no longer answering the rest of you. It is still there. It is just somewhere else now.</em></p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>2d12</code> qliphothic (veil-cut) + soul. On a hit, the target also takes 2d6 psychic damage  as a piece of their identity is briefly disconnected. They cannot recover Stress until they rest.</p><p><em>A part of you is no longer answering the rest of you. It is still there. It is just somewhere else now.</em></p>",
@@ -6426,7 +6426,7 @@
           "slug": "reality-rearranges",
           "name": "Reality Rearranges",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/time/arrows-circling-green.webp",
           "system": {
             "description": {
               "value": "<p>At the start of the avatar's turn, they may relocate themselves and one other creature within 60 feet by up to 30 feet each. No save, no provoke. The room agreed to the change before anyone in it did.</p><p><em>It does not move. The space around it moves. The distinction does not matter to anyone except the people doing the moving.</em></p><p><strong>When it uses this:</strong> Reality Rearranges: move self and one creature ≤12 sq up to 6 sq each, no save..</p>",
@@ -6521,7 +6521,7 @@
           "slug": "thinning-aura",
           "name": "Thinning Aura",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/control/silhouette-aura-energy.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> All creatures within 10 feet of the avatar — including allies — are subject to occasional Veil-thinning: at the start of their turn, on a 1 on a d10, they take 1d4 qliphothic psychic damage. The avatar does not control this and does not particularly notice it.</p><p><em>Being near them is its own debt.</em></p><p><strong>At the start of each turn:</strong> Thinning Aura: roll 1d10 — on a 1, take 1d4 qliphothic Stress..</p>",
@@ -6917,7 +6917,7 @@
           "slug": "battle-lullaby",
           "name": "Battle-Lullaby",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/tools/instruments/harp-yellow-teal.webp",
           "system": {
             "description": {
               "value": "<p>15 ft. cone. Wisdom saving throw, DC 13. Fail: 1d10 psychic damage and Frightened until the end of its next turn. Half on success, no Frightened.</p><p><strong>Cone.</strong> 15 feet Resolve check vs DC 13. Fail: <code>1d10</code> psychic (Stress) + Frightened. Half on success.</p><p><em>It is somehow both a threat and a bedtime story. You hate that it works.</em></p>",
@@ -7107,7 +7107,7 @@
           "slug": "swaddle-iron-axe",
           "name": "Swaddle-Iron Axe",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/axes/axe-double-engraved.webp",
           "system": {
             "description": {
               "value": "<p><em>Nap time. For one of you.</em></p><p>Heavy two-handed chop. On a hit, target is slowed (speed halved, −2 to attack rolls) until the start of its next turn.</p>",
@@ -7634,7 +7634,7 @@
           "slug": "mire-disperse",
           "name": "Mire-Disperse",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/air/fog-gas-smoke-swirling-green.webp",
           "system": {
             "description": {
               "value": "<p><em>Wound it and it just becomes a wider problem.</em></p><p>Radius 10 ft. — targets roll Dexterity saving throw (DC 11). Half damage on success. Triggers automatically the first time the swarm drops below half hit points — the swarm scatters wide before re-coalescing.</p><p><strong>Area Attack.</strong> Each creature within 10 feet when the swarm is bloodied (half hit points or lower) rolls <strong>Evasion</strong> vs DC 11. Hit: <code>1d6</code> poison (stinging-mist) + violence; half on success. Triggers automatically the first time the swarm drops below half hit points — the swarm scatters wide before re-coalescing.</p><p><em>Wound it and it just becomes a wider problem.</em></p>",
@@ -7824,7 +7824,7 @@
           "slug": "boiling-bites",
           "name": "Boiling Bites",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/invertebrates/wasp-swarm-attack.webp",
           "system": {
             "description": {
               "value": "<p><em>There is no first bite. There is only the realization of biting.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> poison (venom) + violence. Auto-hits any creature sharing the swarm's space. On a hit, target must succeed a DC 12 Constitution check or have reroll-the-highest on its next action (venom haze).</p><p><em>There is no first bite. There is only the realization of biting.</em></p>",
@@ -8033,7 +8033,7 @@
           "slug": "swarm",
           "name": "Swarm",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/invertebrates/wasp-swarm-attack.webp",
           "system": {
             "description": {
               "value": "<p>The swarm occupies the same space as another creature and can move through any opening at least 1 inch wide. While it has more than half its hit points, attacks against it have reroll-the-highest.</p><p><em>Not one thing. Many things that have agreed on a direction.</em></p><p><strong>When it is attacked:</strong> the roll is at advantage.</p>",
@@ -8413,7 +8413,7 @@
           "slug": "choir-of-knuckles",
           "name": "Choir of Knuckles",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/fire/flame-burning-fist-strike.webp",
           "system": {
             "description": {
               "value": "<p><em>The bones don't speak. They argue.</em></p><p>Radius 20 ft. — targets roll Wisdom saving throw (DC 13). Half damage on success. Failed-save targets are also Frightened until the start of their next turn.</p><p><strong>Area Attack.</strong> Each creature within 20 feet that can hear the patriarch rolls <strong>Resolve</strong> vs DC 13. Hit: <code>1d10</code> psychic (scolding-chorus) + soul; half on success. Failed-save targets are also Frightened until the start of their next turn.</p><p><em>The bones don't speak. They argue.</em></p>",
@@ -8603,7 +8603,7 @@
           "slug": "marrow-lash",
           "name": "Marrow-Lash",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/commodities/bones/bones-broken-marrow-white-red.webp",
           "system": {
             "description": {
               "value": "<p><em>A finger-bone, on a tendon, on a will. It does not need to be near you to find you.</em></p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>1d10</code> qliphothic (bone-rot) + soul. On a hit, the target's Stress track increases by 1d4 (no save).</p><p><em>A finger-bone, on a tendon, on a will. It does not need to be near you to find you.</em></p>",
@@ -8792,7 +8792,7 @@
           "slug": "ancestor-whispers",
           "name": "Ancestor Whispers",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/death/skull-energy-light-white.webp",
           "system": {
             "description": {
               "value": "<p>When the patriarch fails a check against being charmed, compelled, or frightened, they may instead succeed by spending one finger-bone token (start of scene: 3 tokens).</p><p><em>Every finger of every grandfather has an opinion. He listens to all of them.</em></p><p><strong>At the start of its turn (1/encounter):</strong> Ancestor Whispers: 3 finger-bone tokens — spend one to pass a failed save vs charm/compel/frightened..</p>",
@@ -9208,7 +9208,7 @@
           "slug": "alpha-s-bite",
           "name": "Alpha's Bite",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/death/mouth-bite-fangs-vampire.webp",
           "system": {
             "description": {
               "value": "<p><em>She bites to slow you. The pack does the rest.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> kinetic (bite) + violence. On a hit, the target is slowed (speed halved, −2 to attack rolls) until the start of its next turn — the jaws close on the leg, not the throat. The throat is for later.</p><p><em>She bites to slow you. The pack does the rest.</em></p>",
@@ -9380,7 +9380,7 @@
           "slug": "cinder-howl-recharges-on-a-soma-break",
           "name": "Cinder Howl (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/abilities/wolf-howl-moon-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>A howl with embers in it. Every wolf within earshot answers.</em></p><p>Cone 15 ft. — targets roll Wisdom saving throw (DC 12). Half damage on success. On a failed save the target is also Frightened until the end of its next turn.</p><p><strong>Area Attack.</strong> Each creature in a 15-ft. cone rolls vs DC 12. Damage: <code>1d8</code> thermal (ash). On a failed save the target is also Frightened until the end of its next turn.</p><p><em>A howl with embers in it. Every wolf within earshot answers.</em></p>",
@@ -9554,7 +9554,7 @@
           "slug": "territory",
           "name": "Territory",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/abilities/paw-print-tan.webp",
           "system": {
             "description": {
               "value": "<p>Pack. The Alpha is made with advantage on attack rolls against any creature within 5 feet of an ally that isn't incapacitated. Burn-zone: while in cinder or smoke, her first attack each combat is made with advantage and she is hidden until she acts.</p><p><em>It was here first. It intends to be here after.</em></p><p><strong>When it attacks (1/encounter):</strong> the roll is at advantage.</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
@@ -9591,7 +9591,7 @@
           "slug": "lead-the-hunt",
           "name": "Lead the Hunt",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/mammals/wolf-howl-moon-forest-blue.webp",
           "system": {
             "description": {
               "value": "<p>Allied wolves within 30 feet of the Alpha gain advantage on their attack rolls. When the Alpha first drops below half hit points, every allied wolf within 30 feet gains 5 temporary hit points and may move 10 feet at once.</p><p><em>The pack does not look at her. It does not need to.</em></p><p><strong>When it is bloodied (1/short rest):</strong> gain 5 temporary hit points; Lead the Hunt: every allied wolf within 30 feet gains 5 temporary hit points and may move 10 feet..</p>",
@@ -10460,7 +10460,7 @@
           "slug": "saturation-field",
           "name": "Saturation Field",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/light/explosion-star-glow-blue-purple.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> While the Elemental is present in the scene, lighting saturates impossibly. All damage to hit points from any source is reduced by 1 (minimum 1). Powers cost +1 Clarity to cast — joy is expensive.</p>",
@@ -10896,7 +10896,7 @@
           "slug": "emanation",
           "name": "Emanation",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/light/explosion-star-glow-blue-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>The note does not rise or fall. It corrects.</em></p><p><strong>Strike.</strong> reach 30 feet, one target. Damage: <code>2d10</code> sephirotic (one sustained note) + soul. Against a creature with the qliphothic tag the damage die rerolls the lowest.</p><p><em>The note does not rise or fall. It corrects.</em></p>",
@@ -11070,7 +11070,7 @@
           "slug": "the-chord",
           "name": "The Chord",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/tools/instruments/harp-yellow-teal.webp",
           "system": {
             "description": {
               "value": "<p>Other Fragments within 10 feet gain advantage on their attack rolls — the chord resolves. A lone Fragment is only a note.</p><p><em>Three is a verdict.</em></p>",
@@ -11102,7 +11102,7 @@
           "slug": "correction-not-anger",
           "name": "Correction, Not Anger",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
           "system": {
             "description": {
               "value": "<p>Immune to Charmed and Frightened — it is a principle, not a person. Creatures that deal qliphothic damage to it must succeed a Wisdom check (DC 19) or be Restrained by the sephirah's answer until the end of their next turn.</p><p><em>It does not pursue anyone who leaves the song.</em></p><p><strong>When it is hit:</strong> the target is [object Object].</p>",
@@ -11478,7 +11478,7 @@
           "slug": "diving-talons",
           "name": "Diving Talons",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/claws/claw-talons-yellow-red.webp",
           "system": {
             "description": {
               "value": "<p><em>She is not above you for long. She is past you, and you are different now.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d10</code> kinetic (talon-shred) + violence. If used after a Dive (moves 30+ ft. straight toward target), damage rolls reroll-the-lowest and target is knocked prone on hit.</p><p><em>She is not above you for long. She is past you, and you are different now.</em></p>",
@@ -11650,7 +11650,7 @@
           "slug": "downdraft-burn-recharges-on-a-soma-break",
           "name": "Downdraft Burn (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/fire/beam-jet-stream-embers.webp",
           "system": {
             "description": {
               "value": "<p><em>Her wings shed cinder when she beats them hard. She is beating them hard now.</em></p><p>Cone 20 ft. — targets roll Dexterity saving throw (DC 12). Half damage on success. Smoldering feathers cascade down; failed targets are Blinded until the end of their next turn. Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature in a 20 feet cone below the hawk (must be airborne to use) rolls <strong>Evasion</strong> vs DC 12. Hit: <code>1d10</code> thermal (feather-cinder) + violence; half on success. Smoldering feathers cascade down; failed targets are Blinded until the end of their next turn.<br/><em>Recharges on a long rest.</em></p><p><em>Her wings shed cinder when she beats them hard. She is beating them hard now.</em></p>",
@@ -11877,7 +11877,7 @@
           "slug": "aerial-dominance",
           "name": "Aerial Dominance",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/abilities/wings-birdlike-blue.webp",
           "system": {
             "description": {
               "value": "<p>While airborne, the cinder-hawk has reroll-the-lowest on attack rolls against grounded targets, and ground-based attackers have reroll-the-highest against her.</p><p><em>She does not fight on your terms. She fights at altitude.</em></p><p><strong>When it is attacked:</strong> the roll is at advantage.</p>",
@@ -12256,7 +12256,7 @@
           "slug": "shiv-offhand",
           "name": "Shiv (Offhand)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/daggers/dagger-simple-black.webp",
           "system": {
             "description": {
               "value": "<p>Bonus action after a Shiv hit: one more stab, same target. Damage die rerolls the highest (the off hand is the bad hand).</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. Bonus action, only after a Shiv hit this turn, same target. Damage die rerolls the highest.</p><p><em>The off hand is the bad hand.</em></p>",
@@ -12428,7 +12428,7 @@
           "slug": "pipe-rifle",
           "name": "Pipe Rifle",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/guns/rifle-brown.webp",
           "system": {
             "description": {
               "value": "<p>Commander's rifle — better sighted than the crew's. On a hit, one ally bandit within 30 feet may immediately move up to 10 feet as a reaction (the commander's shot is the signal).</p><p><strong>Strike.</strong> range 60/180 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit, one ally bandit within 30 feet may immediately move 10 feet as a reaction — the commander's shot is the signal.</p><p><em>The one rifle in the crew with a real scope.</em></p>",
@@ -12602,7 +12602,7 @@
           "slug": "shiv",
           "name": "Shiv",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/daggers/dagger-simple-black.webp",
           "system": {
             "description": {
               "value": "<p>Sharpened scrap. On a hit against a Prone or Restrained target, +1d4 bludgeoning.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 bludgeoning.</p>",
@@ -12791,7 +12791,7 @@
           "slug": "ambush-crew",
           "name": "Ambush Crew",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
           "system": {
             "description": {
               "value": "<p>In the first round of combat, the bandit is made with advantage on attack rolls against any creature that hasn't taken a turn yet.</p>",
@@ -12823,7 +12823,7 @@
           "slug": "holds-the-line-barely",
           "name": "Holds the Line (Barely)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/shield-block-gray-yellow.webp",
           "system": {
             "description": {
               "value": "<p>If reduced below half hit points, the commander must succeed a Wisdom check vs DC 12 at the start of its turn or order a retreat: every bandit within 30 feet disengages and moves away at full speed.</p><p><strong>When it is bloodied:</strong> a morale check.</p>",
@@ -13186,7 +13186,7 @@
           "slug": "servo-limb",
           "name": "Servo-Limb",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/commodities/tech/claw-mechanical.webp",
           "system": {
             "description": {
               "value": "<p><em>The arm was built to lift buses.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>3d8</code> kinetic (actuator) + violence. On a hit, Constitution DC 15 or the target is knocked Prone and pushed 5 ft. — it is enforcing a perimeter, not killing. Yet.</p><p><em>The arm was built to lift buses.</em></p>",
@@ -13358,7 +13358,7 @@
           "slug": "arc-enforcer",
           "name": "Arc Enforcer",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/lightning/bolt-strike-blue.webp",
           "system": {
             "description": {
               "value": "<p><em>Stage two.</em></p><p><strong>Strike.</strong> reach 60 feet, one target. Damage: <code>3d8</code> electrical (arc) + violence. On a hit the target is slowed (speed halved, −2 to attack rolls) until the end of its next turn.</p><p><em>Stage two.</em></p>",
@@ -13532,7 +13532,7 @@
           "slug": "total-compliance-1-scene",
           "name": "Total Compliance (1/scene)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
           "system": {
             "description": {
               "value": "<p><em>Stage three is final.</em></p><p>Sphere 30 ft. — targets roll Wisdom saving throw (DC 16). Half damage on success. ULTIMATE — usable only at or below half hit points. On a failed save the target is Compelled for 1 round: kneel, hands visible, await processing.</p><p><strong>Area Attack.</strong> Each creature within 30 ft. rolls vs DC 16. Damage: <code>4d8</code> electrical (stage three). ULTIMATE — usable only at or below half hit points. On a failed save the target is Compelled for 1 round: kneel, hands visible, await processing.</p><p><em>Stage three is final.</em></p>",
@@ -13706,7 +13706,7 @@
           "slug": "perimeter-protocol-recharges-on-a-soma-break",
           "name": "Perimeter Protocol (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/targeting/crosshair-ringed-gray.webp",
           "system": {
             "description": {
               "value": "<p><em>“You are outside the permitted area. You have always been outside the permitted area.”</em></p><p>Cone 30 ft. — targets roll Dexterity saving throw (DC 16). Half damage on success. On a failed save the target is Restrained until the end of its next turn — held at the perimeter line.</p><p><strong>Area Attack.</strong> Each creature in a 30-ft. cone rolls vs DC 16. Damage: <code>3d8</code> electrical (the fence that isn't there). On a failed save the target is Restrained until the end of its next turn — held at the perimeter line.</p><p><em>“You are outside the permitted area. You have always been outside the permitted area.”</em></p>",
@@ -13880,7 +13880,7 @@
           "slug": "pre-fall-diagnostics",
           "name": "Pre-Fall Diagnostics",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/tech/tube-chamber-lightning.webp",
           "system": {
             "description": {
               "value": "<p>Once per round, when PRIME would be hit by an attack, it imposes reroll-the-highest on the attack roll instead. The targeting solution recalibrates faster than the shooter.</p><p><em>It does not flinch. It updates.</em></p><p><strong>When it is attacked (1/round):</strong> the roll is at advantage.</p>",
@@ -13917,7 +13917,7 @@
           "slug": "fractured-will-2-scene",
           "name": "Fractured Will (2/scene)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
           "system": {
             "description": {
               "value": "<p>When PRIME fails a check, some part of it refuses the outcome: PRIME succeeds instead. 2 times per short rest.</p><p><em>The outcome is non-compliant. It is overruled.</em></p>",
@@ -13949,7 +13949,7 @@
           "slug": "broken-protocol",
           "name": "Broken Protocol",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/tech/cog-gear-crank-steel.webp",
           "system": {
             "description": {
               "value": "<p>Immune to Charmed, Frightened and Compelled. Repeats a single directive (enforce the perimeter) until attacked; then runs combat protocol for 3 rounds and returns to the directive if nothing hostile remains in sight.</p><p><em>Citation issued. Citation issued. Citation issued.</em></p><p><strong>When it is hit (1/encounter):</strong> Broken Protocol: combat protocol for 3 rounds, then back to the directive if nothing hostile is in sight..</p>",
@@ -14386,7 +14386,7 @@
           "slug": "halt-means-halt",
           "name": "HALT (Means Halt)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/social/wave-halt-stop.webp",
           "system": {
             "description": {
               "value": "<p>One creature within 60 ft. Constitution vs DC 13. Fail: Restrained (speed 0) until the end of its next turn — the ordinance compels it to stop.</p><p><strong>Stop Order.</strong> Constitution check vs DC 13. Fail: Restrained until end of next turn.</p><p><em>The light is red. The light has been red for forty years. You will respect the light.</em></p>",
@@ -14560,7 +14560,7 @@
           "slug": "citation-baton",
           "name": "Citation Baton",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/clubs/baton-energy-stun-silver-yellow.webp",
           "system": {
             "description": {
               "value": "<p><em>This is a verbal warning. The baton is the verbal warning.</em></p><p>On a hit against a Restrained target, deal +1d6 and the target is slowed (speed halved, −2 to attack rolls).</p>",
@@ -15152,7 +15152,7 @@
           "slug": "crystal-spike",
           "name": "Crystal Spike",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/water/barrier-ice-crystal-wall-jagged-blue.webp",
           "system": {
             "description": {
               "value": "<p><em>The lurker does not let go of the strike. The strike does not let go of you.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> kinetic (shard-punch) + violence. On a hit, the target takes 1 additional damage at the start of its next turn unless it spends an action to remove the embedded shard.</p><p><em>The lurker does not let go of the strike. The strike does not let go of you.</em></p>",
@@ -15348,7 +15348,7 @@
           "slug": "dazzle-burst-recharges-on-a-soma-break",
           "name": "Dazzle-Burst (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/light/explosion-star-glow-blue-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>The cavern catches fire. Slowly. In every direction.</em></p><p>Radius 15 ft. — targets roll Wisdom saving throw (DC 12). Half damage on success. Failed-save targets are Blinded until the start of their next turn. Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature within 15 feet that can see the lurker rolls <strong>Resolve</strong> vs DC 12. Hit: <code>1d8</code> sephirotic (refracted-light) + violence; half on success. Failed-save targets are Blinded until the start of their next turn.<br/><em>Recharges on a long rest.</em></p><p><em>The cavern catches fire. Slowly. In every direction.</em></p>",
@@ -15575,7 +15575,7 @@
           "slug": "crystal-carapace",
           "name": "Crystal Carapace",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/water/barrier-ice-crystal-wall-faceted-light.webp",
           "system": {
             "description": {
               "value": "<p>First attack each combat against the lurker has reroll-the-highest (the carapace turns the first blow). After the carapace cracks, the lurker gains +1 to its next attack roll (the loose shards bite).</p><p><em>The armor is not finished. It is still growing.</em></p><p><strong>When it is attacked (1/encounter):</strong> the roll is at advantage.</p>",
@@ -15973,7 +15973,7 @@
           "slug": "its-own-calendar-recharges-on-a-soma-break",
           "name": "Its Own Calendar (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/time/hourglass-tilted-gray.webp",
           "system": {
             "description": {
               "value": "<p><em>It walks on its own calendar.</em></p><p>Cone 30 ft. — targets roll Wisdom saving throw (DC 18). Half damage on success. On a failed save the target is slowed (speed halved, −2 to attack rolls) until the end of its next turn — it lost a day it was standing in.</p><p><strong>Area Attack.</strong> Each creature in a 30-ft. cone rolls vs DC 18. Damage: <code>3d8</code> psychic (a day you did not have). On a failed save the target is slowed (speed halved, −2 to attack rolls) until the end of its next turn — it lost a day it was standing in.</p><p><em>It walks on its own calendar.</em></p>",
@@ -16147,7 +16147,7 @@
           "slug": "debt-called-in-1-scene",
           "name": "Debt Called In (1/scene)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/commodities/currency/coins-plain-pouch-gold.webp",
           "system": {
             "description": {
               "value": "<p><em>The ones who showed respect got to keep telling stories.</em></p><p>Sphere 30 ft. — targets roll Wisdom saving throw (DC 18). Half damage on success. ULTIMATE — usable only at or below half hit points. On a failed save the target is Restrained until the end of its next turn — held by what it owes.</p><p><strong>Area Attack.</strong> Each creature within 30 ft. rolls vs DC 18. Damage: <code>4d8</code> psychic (everything owed, at once). ULTIMATE — usable only at or below half hit points. On a failed save the target is Restrained until the end of its next turn — held by what it owes.</p><p><em>The ones who showed respect got to keep telling stories.</em></p>",
@@ -16321,7 +16321,7 @@
           "slug": "the-collection",
           "name": "The Collection",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/containers/bags/sack-simple-leather-brown.webp",
           "system": {
             "description": {
               "value": "<p><em>Things. Debts. It honestly isn't clear.</em></p><p><strong>Strike.</strong> reach 30 feet, one target. Damage: <code>2d10</code> psychic (it asks, once) + soul. Wisdom DC 18 or Compelled for 1 round: the target hands over one thing it is holding. Maarg keeps it.</p><p><em>Things. Debts. It honestly isn't clear.</em></p>",
@@ -16495,7 +16495,7 @@
           "slug": "old-road-tread",
           "name": "Old Road Tread",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/movement/feet-winged-boots-brown.webp",
           "system": {
             "description": {
               "value": "<p><em>It did not hurry. It did not need to.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>3d8</code> kinetic (the road remembers being walked) + violence. On a hit the target is knocked Prone.</p><p><em>It did not hurry. It did not need to.</em></p>",
@@ -16667,7 +16667,7 @@
           "slug": "fractured-will-3-scene",
           "name": "Fractured Will (3/scene)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
           "system": {
             "description": {
               "value": "<p>When Maarg fails a check, some part of it refuses the outcome: Maarg succeeds instead. 3 times per short rest.</p><p><em>The calendar disagrees with the outcome.</em></p>",
@@ -16699,7 +16699,7 @@
           "slug": "half-real",
           "name": "Half-Real",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/magical/spirit-undead-ghost-purple.webp",
           "system": {
             "description": {
               "value": "<p>Until Maarg attacks, attacks against it reroll the highest die. Its first strike fully manifests it for the rest of the scene. It moves through creatures and objects as difficult terrain.</p><p><em>The 'sort of' is the dangerous part.</em></p><p><strong>When it is attacked:</strong> the roll is at advantage.</p>",
@@ -17080,7 +17080,7 @@
           "slug": "pipe-rifle",
           "name": "Pipe Rifle",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/guns/rifle-brown.webp",
           "system": {
             "description": {
               "value": "<p>Salvage rifle. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest.</p><p><strong>Strike.</strong> range 60/180 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest.</p><p><em>Held together with tape and confidence.</em></p>",
@@ -17254,7 +17254,7 @@
           "slug": "shiv",
           "name": "Shiv",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/daggers/dagger-simple-black.webp",
           "system": {
             "description": {
               "value": "<p>Sharpened scrap. On a hit against a Prone or Restrained target, +1d4 bludgeoning.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 bludgeoning.</p><p><em>Nobody's proud of the shiv.</em></p>",
@@ -17443,7 +17443,7 @@
           "slug": "ambush-crew",
           "name": "Ambush Crew",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
           "system": {
             "description": {
               "value": "<p>In the first round of combat, the bandit is made with advantage on attack rolls against any creature that hasn't taken a turn yet.</p>",
@@ -17475,7 +17475,7 @@
           "slug": "arms-down",
           "name": "Arms Down",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/social/wave-halt-stop.webp",
           "system": {
             "description": {
               "value": "<p>If reduced below half hit points, the bandit must succeed a Wisdom check vs DC 12 at the start of its turn or throw down arms and surrender — hands up, weapon in the reeds. The Bandit Accord's mercy ledger counts every one you let walk.</p><p><strong>When it is bloodied:</strong> a morale check.</p>",
@@ -18623,7 +18623,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Dream-Twister makes two Dread Touch attacks.</p>",
@@ -19395,7 +19395,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Reveller makes two Addictive Touch attacks.</p>",
@@ -19973,7 +19973,7 @@
           "slug": "escalate-to-management",
           "name": "Escalate To Management",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
           "system": {
             "description": {
               "value": "<p>One creature within 60 ft. Wisdom vs DC 17. Fail: Compelled to attack the nearest ally (\"taking it up the chain\") on its next turn. Save each round to end.</p><p><strong>Escalation.</strong> Wisdom vs DC 17. Fail: Compelled to attack nearest ally next turn (save each round).</p><p><em>\"Let me loop in someone above my pay grade. You. You're above my pay grade now. Congratulations. Attack your friend.\"</em></p>",
@@ -20147,7 +20147,7 @@
           "slug": "performance-improvement-plan",
           "name": "Performance Improvement Plan",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
           "system": {
             "description": {
               "value": "<p>20 ft. cube. Wisdom saving throw, DC 17. Fail: 3d8 psychic damage, and the target has disadvantage on its next attack (it's on a PIP). Half and no PIP on success.</p><p><strong>PIP.</strong> 20 feet cube. Wisdom saving throw, DC 17. Fail: <code>3d8</code> psychic (Stress) + disadvantage next attack. Half on success.</p><p><em>\"I'm not angry. I'm documenting.\"</em></p>",
@@ -20337,7 +20337,7 @@
           "slug": "cosmic-stapler",
           "name": "Cosmic Stapler",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/tools/fasteners/nails-steel-blue.webp",
           "system": {
             "description": {
               "value": "<p><em>Ka-CHUNK. You are now appendix C.</em></p><p>Fires a reality-stapler. On a hit, the target is pinned (Restrained) to the nearest surface until it spends an action to tear free.</p>",
@@ -20511,7 +20511,7 @@
           "slug": "quarterly-soul-review",
           "name": "Quarterly Soul Review",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
           "system": {
             "description": {
               "value": "<p>ULTIMATE (1/short rest, at or below half hit points). 30 ft. sphere. Wisdom saving throw, DC 18. Fail: 4d8 qliphothic and Scarred. Half and no Scarred on success.</p><p><strong>Ultimate — 1/short rest below half hit points.</strong> 30 feet Wisdom saving throw, DC 18. Fail: <code>4d8</code> qliphothic + Scarred. Half on success.</p><p><em>\"Per our records, you have not met expectations. Per the universe's records, neither has the universe. Let's circle back. Forever.\"</em></p>",
@@ -21904,7 +21904,7 @@
           "slug": "usher-s-broom",
           "name": "Usher's Broom",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/tools/hand/broom-straw-brown.webp",
           "system": {
             "description": {
               "value": "<p>Reach 10 ft. On a hit, +2d6 psychic damage. If the target is standing amid trash, spilled popcorn, loose film, or theater seating, it must succeed an Dexterity check vs DC 15 or fall Prone.</p><p><strong>Strike.</strong> reach 10 ft., one target. Damage: <code>2d6</code> kinetic + violence. On a hit, +2d6 psychic damage. If the target is standing amid trash, spilled popcorn, loose film, or theater seating, it must succeed an Dexterity check vs DC 15 or fall Prone.</p><p><em>Sweeps you up with everything else.</em></p>",
@@ -22093,7 +22093,7 @@
           "slug": "concession-catastrophe-recharges-on-a-soma-break",
           "name": "Concession Catastrophe (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/fire/explosion-fireball-small-orange.webp",
           "system": {
             "description": {
               "value": "<p><em>Boiling butter, hard candy, carbonation spray, and nostalgic malice.</em></p><p>Each creature in a 20-ft. radius within 60 ft. rolls Dexterity saving throw (DC 16). Half damage on success. The area becomes difficult terrain until the end of Gilbert's next turn. Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature in a 20 feet radius within 60 feet rolls <strong>Evasion</strong> vs DC 16. Hit: <code>6d8</code> energy + presence; half on success. The area becomes difficult terrain until the end of Gilbert's next turn.<br/><em>Recharges on a long rest.</em></p><p><em>Boiling butter, hard candy, carbonation spray, and nostalgic malice.</em></p>",
@@ -22283,7 +22283,7 @@
           "slug": "not-ready-for-guests",
           "name": "Not Ready For Guests!",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/control/fear-fright-shadow-monster-red.webp",
           "system": {
             "description": {
               "value": "<p><em>A panic pulse — the theater is NOT ready for guests.</em></p><p>Each enemy within 20 ft. rolls Wisdom saving throw (DC 16). Half damage on success. On a failure, the target is also pushed up to 15 ft. Gilbert then gains 15 temporary hit points. Triggers automatically the first time Gilbert is reduced below half hit points.</p><p><strong>Area Attack.</strong> Each enemy within 20 feet rolls <strong>Resolve</strong> vs DC 16. Hit: <code>3d6</code> energy + presence; half on success. On a failure, the target is also pushed up to 15 feet Gilbert then gains 15 temporary hit points.<br/><em>Triggers the first time Gilbert is reduced below 80 hit points.</em></p><p><em>A panic pulse — the theater is NOT ready for guests.</em></p>",
@@ -22473,7 +22473,7 @@
           "slug": "weaponized-shame",
           "name": "Weaponized Shame",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/social/intimidation-impressing.webp",
           "system": {
             "description": {
               "value": "<p><em>Customer-service dread, weaponized.</em></p><p>One target within 60 ft. rolls Wisdom saving throw (DC 16). On a failure, the target is rattled until the end of its next turn — it rerolls the highest die on its next attack roll or check.</p><p><strong>Save Attack.</strong> One target within 60 feet rolls <strong>Resolve</strong> vs DC 16. Hit: <code>4d8</code> psychic + presence. On a failure, the target is rattled until the end of its next turn (roll disadvantage on its next attack roll or attribute check).</p><p><em>Customer-service dread, weaponized.</em></p>",
@@ -22695,7 +22695,7 @@
           "slug": "transformation-trigger-sephirotic-assistant-manager",
           "name": "Transformation Trigger — Sephirotic Assistant Manager",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
           "system": {
             "description": {
               "value": "<p><strong>Parley / redemption condition:</strong> If the party spends actions helping clean, reassuring Gilbert, invoking the sacred purpose of public gathering, or promising to reopen the theater properly, Gilbert can be talked down. Once he is below half hit points <em>or</em> after a round in which at least two PCs forgo attacks to help the space, a successful DC 15 group social / insight / performance / faith approach transforms him into a <strong>Sephirotic Assistant Manager</strong> and ends the fight.</p><p><strong>When it is bloodied:</strong> Gilbert can now be talked down: DC 15 group social/faith check ends the fight..</p>",
@@ -22727,7 +22727,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>Gilbert makes two attacks with Usher's Broom, or one Usher's Broom attack and uses Weaponized Shame.</p>",
@@ -22759,7 +22759,7 @@
           "slug": "fractured-will-3-scene",
           "name": "Fractured Will (3/scene)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> When Gilbert fails a check, the theater's protocol overrides the outcome: he succeeds instead. Three times per short rest. Each time, something in the lobby breaks.</p>",
@@ -22791,7 +22791,7 @@
           "slug": "spot-clean-bonus",
           "name": "Spot Clean (bonus)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/tools/hand/brush-paint-brown-white.webp",
           "system": {
             "description": {
               "value": "<p><strong>Bonus action.</strong> Gilbert moves up to half his speed without provoking opportunity attacks, provided he moves toward spilled terrain, rubble, loose objects, or the nearest aesthetically offensive creature.</p>",
@@ -22823,7 +22823,7 @@
           "slug": "theater-etiquette",
           "name": "Theater Etiquette",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/treasure/mask-jeweled-gold.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive (Mal voice).</strong> While Gilbert is on stage, no one may bring flash photography, lit cigarettes, or weapon discharge into the orchestra section without winning a Diplomacy contest vs. Gilbert's Resolve. Gilbert reframes any direct violence against him as poor manners and continues sweeping. He cannot be Compelled by threat. The mop is his witness.</p>",
@@ -22855,7 +22855,7 @@
           "slug": "quiet-in-the-theater-reaction",
           "name": "Quiet In The Theater (reaction)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/social/wave-halt-stop.webp",
           "system": {
             "description": {
               "value": "<p><strong>Reaction, when a creature within 60 feet speaks, shouts, or casts.</strong> That creature must succeed a Constitution check vs DC 16 or be unable to speak above a whisper — and unable to cast powers with a spoken component — until the end of its next turn.</p><p><strong>When it uses this:</strong> the target makes a Wisdom saving throw.</p><p><strong>When a target fails its save:</strong> Whisper only — no spoken-component casting — until its next turn ends..</p>",
@@ -22967,7 +22967,7 @@
           "slug": "the-mop-knows",
           "name": "The Mop Knows",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/tools/hand/broom-straw-brown.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive (Mal voice).</strong> Gilbert's mop has 50/50 precognition for any spilled fluid. Once per short rest, Gilbert may name the next bodily fluid that will hit the floor and where; if right, he sweeps it before it lands. One PC in the scene may then advantage on any check involving footing, balance, or a cleanly-finished moment. Mop says: \"Already had it. Already there.\"</p>",
@@ -23596,7 +23596,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Flayer makes two attacks with its Whip of Agony.</p>",
@@ -23994,7 +23994,7 @@
           "slug": "hollow-touch",
           "name": "Hollow Touch",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/death/hand-dirt-undead-zombie.webp",
           "system": {
             "description": {
               "value": "<p><em>It is not a touch. It is an accusation.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d10</code> qliphothic (the heat of being wronged) + violence. Damage goes. On a hit, Wisdom DC 15 or the target is Compelled toward the Shell's vice for 1 round: it strikes the nearest creature.</p><p><em>It is not a touch. It is an accusation.</em></p>",
@@ -24166,7 +24166,7 @@
           "slug": "immolating-grasp-recharges-on-a-soma-break",
           "name": "Immolating Grasp (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/fire/flame-burning-hand-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>The Shell closes its hand and remembers what judgement felt like.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d10</code> thermal (slag) + violence. On a hit the target is Burning until the end of its next turn.</p><p><em>The Shell closes its hand and remembers what judgement felt like.</em></p>",
@@ -24338,7 +24338,7 @@
           "slug": "aura-of-wrath",
           "name": "Aura of Wrath",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/fire/flame-burning-creature-skeleton.webp",
           "system": {
             "description": {
               "value": "<p>Any creature that starts its turn within 10 feet feels the Shell's hollowness: Wisdom DC 15 or it is Compelled to attack the nearest creature on its turn, friend or foe.</p><p><em>Golachab — hull of Geburah. Severity, and nothing to be severe about.</em></p><p><strong>At the start of each turn:</strong> the target is [object Object].</p>",
@@ -25176,7 +25176,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Scavenger makes two attacks: one with its Soulfire Beak and one with its Talons.</p>",
@@ -25805,7 +25805,7 @@
           "slug": "hex-iron-cleaver",
           "name": "Hex-Iron Cleaver",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/tools/hand/cleaver.webp",
           "system": {
             "description": {
               "value": "<p><em>The blade hums. The berserker hums back. Out of tune.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d10</code> kinetic (hex-edge) + violence. On a hit, the target takes 1 qliphothic damage  (the iron sings into the wound).</p><p><em>The blade hums. The berserker hums back. Out of tune.</em></p>",
@@ -25994,7 +25994,7 @@
           "slug": "sing-the-iron-recharges-on-a-soma-break",
           "name": "Sing-the-Iron (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/magical/construct-iron-stomping-yellow.webp",
           "system": {
             "description": {
               "value": "<p><em>Iron-on-iron. A note that wasn't there before. A note that doesn't stop.</em></p><p>Radius 10 ft. — targets roll Wisdom saving throw (DC 12). Half damage on success. The berserker beats their cleaver against their own breastplate. Failed-save targets are Frightened and have reroll-the-highest on their next attack roll. Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature within 10 feet rolls <strong>Resolve</strong> vs DC 12. Hit: <code>1d10</code> qliphothic (ringing-iron) + violence; half on success. The berserker beats their cleaver against their own breastplate. Failed-save targets are Frightened and have reroll-the-highest on their next attack roll.<br/><em>Recharges on a long rest.</em></p><p><em>Iron-on-iron. A note that wasn't there before. A note that doesn't stop.</em></p>",
@@ -26184,7 +26184,7 @@
           "slug": "pain-doesn-t-register",
           "name": "Pain Doesn't Register",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/control/voodoo-doll-pain-damage-red.webp",
           "system": {
             "description": {
               "value": "<p>The berserker has resistance to bludgeoning, piercing, or slashing damage and is immune to Frightened. When reduced below half hit points, gains +1 to attack rolls until end of next turn (the hex sings louder).</p><p><em>Whatever should have made them stop has been removed. Whatever should have replaced it is grinning.</em></p><p><strong>When it is bloodied:</strong> Pain Doesn't Register: +1 to attacks until the end of its next turn..</p>",
@@ -26596,7 +26596,7 @@
           "slug": "taken-vow-rage-recharges-on-a-soma-break",
           "name": "Taken-Vow Rage (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/control/buff-strength-muscle-damage-orange.webp",
           "system": {
             "description": {
               "value": "<p><em>They name themselves, and the room flinches. Their own ghost recoils.</em></p><p>Radius 15 ft. — targets roll Wisdom saving throw (DC 13). Half damage on success. The champion screams the name of who they were. Failed-save targets are Frightened until end of next turn AND lose the ability to take Reactions until then. Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature within 15 feet rolls <strong>Resolve</strong> vs DC 13. Hit: <code>2d8</code> psychic (broken-honor) + violence; half on success. The champion screams the name of who they were. Failed-save targets are Frightened until end of next turn AND lose the ability to take Reactions until then.<br/><em>Recharges on a long rest.</em></p><p><em>They name themselves, and the room flinches. Their own ghost recoils.</em></p>",
@@ -26811,7 +26811,7 @@
           "slug": "hex-blade",
           "name": "Hex-Blade",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/symbols/runes-etched-steel-blade.webp",
           "system": {
             "description": {
               "value": "<p><em>The blade is older than them. It was waiting for someone to lose just right.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d8</code> qliphothic (pact-edge) + violence. On a hit, the target also takes 1d4 psychic damage as the pact's wrongness brushes them.</p><p><em>The blade is older than them. It was waiting for someone to lose just right.</em></p>",
@@ -27000,7 +27000,7 @@
           "slug": "pact-held-in-both-hands",
           "name": "Pact Held in Both Hands",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/nature/plant-seed-hands-glow-yellow.webp",
           "system": {
             "description": {
               "value": "<p>Resistance to kinetic, vulnerability to sephirotic. When the champion lands a melee hit, they gain 5 temporary hit points (the pact feeds on its own success).</p><p><em>They were going to be a hero. The hex took the part of them that doubted.</em></p><p><strong>When it hits with an attack:</strong> gain 5 temporary hit points.</p>",
@@ -27032,7 +27032,7 @@
           "slug": "hex-iron-heart",
           "name": "Hex-Iron Heart",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/life/heart-cross-strong-flame-purple-orange.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> When the champion is reduced to 0 hit points, the hex tries one more thing: they continue to act for 1 more round with reroll-the-highest on attacks, then fall. Once per short rest.</p><p><em>What's holding them up is not skeletal.</em></p><p><strong>When it drops to 0 hit points (1/short rest):</strong> Hex-Iron Heart: the champion keeps acting for 1 more round (attacks reroll their highest die), then falls..</p>",
@@ -27432,7 +27432,7 @@
           "slug": "howl-of-the-hex-recharges-on-a-soma-break",
           "name": "Howl-of-the-Hex (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/abilities/wolf-howl-moon-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>The howl carries a syllable it shouldn't know. Everyone within hearing remembers something they didn't live through.</em></p><p>Radius 15 ft. — targets roll Wisdom saving throw (DC 11). Half damage on success. Failed-save targets are Frightened until the start of their next turn. Recharge 6.</p><p><strong>Area Attack.</strong> Each creature within 15 feet that can hear the stray rolls <strong>Resolve</strong> vs DC 11. Hit: <code>1d6</code> psychic (wrong-howl) + violence; half on success. Failed-save targets are Frightened until the start of their next turn.<br/><em>Recharge 6.</em></p><p><em>The howl carries a syllable it shouldn't know. Everyone within hearing remembers something they didn't live through.</em></p>",
@@ -27622,7 +27622,7 @@
           "slug": "yellowing-bite",
           "name": "Yellowing Bite",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/abilities/mouth-teeth-rows-red.webp",
           "system": {
             "description": {
               "value": "<p><em>The teeth are fine. It's what comes off the teeth that lingers.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> qliphothic (hex-pus) + violence. On a hit, the target's wound briefly smells of old fear — they have reroll-the-highest on their next Resolve check.</p><p><em>The teeth are fine. It's what comes off the teeth that lingers.</em></p>",
@@ -27794,7 +27794,7 @@
           "slug": "hex-itch",
           "name": "Hex-Itch",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
           "system": {
             "description": {
               "value": "<p>When a creature within 5 feet of the stray drops to 0 hit points, the stray gains 5 temporary hit points and reroll-the-lowest on its next attack roll.</p><p><em>Something underneath the dog enjoys this. The dog isn't sure why.</em></p><p><strong>At the start of its turn:</strong> Hex-Itch: creature ≤1 sq drops to 0 → +5 temp hit points, reroll lowest on next attack..</p>",
@@ -28214,7 +28214,7 @@
           "slug": "sworn-intercept",
           "name": "Sworn Intercept",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/melee/sword-shield-stylized-white.webp",
           "system": {
             "description": {
               "value": "<p><em>The guard does not interrupt you. The interrupt was scheduled.</em></p><p>Triggered when an enemy moves within 5 ft. of the warlord. The guard makes one attack as a reaction. Damage die rerolls-the-lowest.</p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d12</code> kinetic (intercepting-cut) + violence. Triggered when an enemy moves within 5 feet of the warlord. The guard makes one attack as a reaction. Damage die rerolls-the-lowest.</p><p><em>The guard does not interrupt you. The interrupt was scheduled.</em></p>",
@@ -28386,7 +28386,7 @@
           "slug": "warlord-s-blade",
           "name": "Warlord's Blade",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/swords/greatsword-crossguard-steel.webp",
           "system": {
             "description": {
               "value": "<p><em>The blade has a name. The guard does not say it. The blade does its own introduction.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d12</code> kinetic (honored-edge) + violence. On a hit, damage die rerolls-the-lowest. On a critical hit, the target is also knocked prone.</p><p><em>The blade has a name. The guard does not say it. The blade does its own introduction.</em></p>",
@@ -28558,7 +28558,7 @@
           "slug": "wall-of-honor-recharges-on-a-soma-break",
           "name": "Wall-of-Honor (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/earth/barrier-stone-brown-green.webp",
           "system": {
             "description": {
               "value": "<p><em>Whatever ground the warlord is standing on. That ground.</em></p><p>Cone 15 ft. — targets roll vs AC (DC 14). Half damage on success. The guard plants and sweeps. Failed-save targets are knocked prone and pushed 10 ft. away from the warlord (the cone always opens away from the warlord). Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature in a 15 feet cone rolls <strong>AC</strong> vs DC 14. Hit: <code>2d12</code> kinetic (battlefield-impact) + violence; half on success. The guard plants and sweeps. Failed-save targets are knocked prone and pushed 10 feet away from the warlord (the cone always opens away from the warlord).<br/><em>Recharges on a long rest.</em></p><p><em>Whatever ground the warlord is standing on. That ground.</em></p>",
@@ -28748,7 +28748,7 @@
           "slug": "sworn",
           "name": "Sworn",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/equipment/shield/heater-steel-grey.webp",
           "system": {
             "description": {
               "value": "<p>Immune to Charmed and Frightened. When the guard's sworn warlord (GM nominates at scene start) takes damage within 30 feet, the guard may use a reaction to take half of that damage instead.</p><p><em>They have killed more heroes than they remember. Heroes is just the title; remembering is the part they're done with.</em></p><p><strong>At the start of its turn:</strong> Sworn: reaction — take half the damage its warlord takes within 6 sq..</p>",
@@ -28780,7 +28780,7 @@
           "slug": "last-to-fall",
           "name": "Last to Fall",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/shield-block-gray-yellow.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> If the warlord is still standing, the guard cannot be reduced below 1 hit points by a single attack. (Multiple sources in the same round can finish them.) When the warlord falls, this feature ends; the guard immediately takes 10 qliphothic psychic damage.</p><p><em>They will not die before the warlord. After is fine. After is the actual job description.</em></p>",
@@ -29171,7 +29171,7 @@
           "slug": "hex-iron-lance",
           "name": "Hex-Iron Lance",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/polearms/spear-flared-steel.webp",
           "system": {
             "description": {
               "value": "<p>Reach 2. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest — the hex gets there first.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 bludgeoning.</p>",
@@ -29343,7 +29343,7 @@
           "slug": "hex-iron-dirk",
           "name": "Hex-Iron Dirk",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/daggers/dagger-straight-blue.webp",
           "system": {
             "description": {
               "value": "<p>Bonus action after a Lance hit: one more thrust, same target. Damage die rerolls the highest (the off hand is the bad hand).</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. Bonus action, only after a Shiv hit this turn, same target. Damage die rerolls the highest.</p><p><em>The off hand is the bad hand.</em></p>",
@@ -29515,7 +29515,7 @@
           "slug": "scatter-carbine",
           "name": "Scatter Carbine",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/guns/gun-blunderbuss-worn-brown.webp",
           "system": {
             "description": {
               "value": "<p>Knight's carbine, sighted for the road. On a hit the target can't take reactions until the start of its next turn.</p><p><strong>Strike.</strong> range 60/180 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit, one ally bandit within 30 feet may immediately move 10 feet as a reaction — the commander's shot is the signal.</p><p><em>The one rifle in the crew with a real scope.</em></p>",
@@ -29689,7 +29689,7 @@
           "slug": "pact-iron-resolve",
           "name": "Pact-Iron Resolve",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/equipment/shield/heater-steel-grey.webp",
           "system": {
             "description": {
               "value": "<p>Immune to Frightened. If reduced below half hit points the hex takes the reins: the Hexknight's attack rolls gain advantage for the rest of the scene, and it can no longer disengage or retreat.</p>",
@@ -29721,7 +29721,7 @@
           "slug": "sworn",
           "name": "Sworn",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/equipment/shield/heater-steel-grey.webp",
           "system": {
             "description": {
               "value": "<p>Immune to Charmed and Compelled. The first time this creature is reduced to 0 hit points, it instead drops to 1 and gains +2 on its next attack roll — the oath tries one more thing.</p><p><em>Will die before breaking it. Has, several times.</em></p>",
@@ -30095,7 +30095,7 @@
           "slug": "toll-hook",
           "name": "Toll-Hook",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/tools/fasteners/chain-claw-hook-steel.webp",
           "system": {
             "description": {
               "value": "<p><em>A boat-hook with the ledger's debts filed into the barb.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> kinetic (hook) + violence. On a hit, the hook catches: the target is Restrained until the end of its next turn and dragged 5 feet toward the Reeve.</p><p><em>A boat-hook with the ledger's debts filed into the barb.</em></p>",
@@ -30267,7 +30267,7 @@
           "slug": "everybody-pays-recharges-on-a-soma-break",
           "name": "Everybody Pays (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/commodities/currency/coins-plain-pouch-gold.webp",
           "system": {
             "description": {
               "value": "<p><em>“Hands open. Everybody pays.”</em></p><p>Cone 30 ft. — targets roll Wisdom saving throw (DC 13). Half damage on success. On a failed save the target is Compelled for 1 round: it drops what it holds in its hands as the toll.</p><p><strong>Area Attack.</strong> Each creature in a 30-ft. cone rolls vs DC 13. Damage: <code>2d6</code> kinetic (the whole crew fires). On a failed save the target is Compelled for 1 round: it drops what it holds in its hands as the toll.</p><p><em>“Hands open. Everybody pays.”</em></p>",
@@ -30441,7 +30441,7 @@
           "slug": "reeve-s-ledger-pistol",
           "name": "Reeve's Ledger-Pistol",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/guns/gun-pistol-flintlock.webp",
           "system": {
             "description": {
               "value": "<p><em>One shot a round. He names the debtor before he fires, and writes the shot down afterward.</em></p><p><strong>Strike.</strong> reach 40 feet, one target. Damage: <code>1d6</code> kinetic (shot) + violence.</p><p><em>One shot a round. He names the debtor before he fires, and writes the shot down afterward.</em></p>",
@@ -30615,7 +30615,7 @@
           "slug": "burn-the-bridge-1-scene",
           "name": "Burn the Bridge (1/scene)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
           "system": {
             "description": {
               "value": "<p><em>If he cannot have the toll, nobody has the bridge.</em></p><p>Sphere 30 ft. — targets roll Dexterity saving throw (DC 13). Half damage on success. ULTIMATE — usable only at or below half hit points. The planks go up in pitch; on a failed save the target is also knocked Prone. The crossing is gone for the season.</p><p><strong>Area Attack.</strong> Each creature within 30 ft. of the planks rolls vs DC 13. Damage: <code>3d6</code> thermal (pitch and plank). ULTIMATE — usable only at or below half hit points. The planks go up in pitch; on a failed save the target is also knocked Prone. The crossing is gone for the season.</p><p><em>If he cannot have the toll, nobody has the bridge.</em></p>",
@@ -30789,7 +30789,7 @@
           "slug": "fractured-will-1-scene",
           "name": "Fractured Will (1/scene)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
           "system": {
             "description": {
               "value": "<p>When the Reeve fails a check, some part of him refuses the outcome: the Reeve succeeds instead. 1 time per short rest.</p><p><em>He consults the ledger. The ledger disagrees with the dice.</em></p>",
@@ -30821,7 +30821,7 @@
           "slug": "ambush-crew",
           "name": "Ambush Crew",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
           "system": {
             "description": {
               "value": "<p>In the first round of combat, the Reeve is made with advantage on attack rolls against any creature that hasn't acted yet. If reduced below half hit points, his crew checks morale: Wisdom DC 12 or they fall back to the far bank.</p><p><em>Nobody crosses without paying. Nobody pays without crossing.</em></p><p><strong>When it attacks:</strong> the roll is at advantage.</p><p><strong>When it is bloodied (1/short rest):</strong> a morale check; Ambush Crew morale check..</p>",
@@ -31667,7 +31667,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Inferno makes two Streams of Vengeance attacks.</p>",
@@ -32253,7 +32253,7 @@
           "slug": "caltrop-surprise",
           "name": "Caltrop Surprise",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/thrown/bolas-steel.webp",
           "system": {
             "description": {
               "value": "<p>Scatters scrap-caltrops in a 10 ft. sphere. Each creature rolls Constitution vs DC 12 — fail: 1d4 bludgeoning and Restrained (movement-halved) until it spends an action to clear them.</p><p><strong>Area Trap.</strong> 10 feet sphere. Constitution check vs DC 12. Fail: <code>1d4</code> kinetic + footing fouled (Restrained until cleared).</p><p><em>He throws the bag of nope and runs the other way.</em></p>",
@@ -32443,7 +32443,7 @@
           "slug": "bolt-spitter-carbine",
           "name": "Bolt-Spitter Carbine",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/guns/gun-blunderbuss-gold.webp",
           "system": {
             "description": {
               "value": "<p><em>Three guns in a trenchcoat pretending to be one gun.</em></p><p>Cobbled-together carbine. Fires whatever fits.</p>",
@@ -33216,7 +33216,7 @@
           "slug": "read-the-vector",
           "name": "Read the Vector",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/targeting/crosshair-ringed-gray.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> Once per short rest, the Serpent may undefinedhave advantage on one saving throw by reading where the strike was going to swing.</p><p><strong>At the start of its turn (1/encounter):</strong> Read the Vector (1/short rest): gain advantage on one saving throw..</p>",
@@ -33719,7 +33719,7 @@
           "slug": "wrong-syllable",
           "name": "Wrong-Syllable",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
           "system": {
             "description": {
               "value": "<p><em>It says something. You hear it. Something in your throat agrees, briefly, against your will.</em></p><p>On a hit, the target's next spell or powers has reroll-the-highest (the wrong syllable lingers, fouls the next casting).</p><p><strong>Strike.</strong> range 6/90 feet, one target. Damage: <code>1d10</code> psychic (unword) + soul. On a hit, the target's next powers or powers has reroll-the-highest (the wrong syllable lingers, fouls the next casting).</p><p><em>It says something. You hear it. Something in your throat agrees, briefly, against your will.</em></p>",
@@ -33893,7 +33893,7 @@
           "slug": "tongues-flood-recharges-on-a-soma-break",
           "name": "Tongues-Flood (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
           "system": {
             "description": {
               "value": "<p><em>The hex opens its mouth wide enough to hear the inside of itself.</em></p><p>Cone 30 ft. — targets roll Wisdom saving throw (DC 13). Half damage on success. Failed-save targets are Compelled to repeat the syllable themselves on their next turn (lose Action). Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature in a 30 feet cone that can hear the hex rolls <strong>Resolve</strong> vs DC 13. Hit: <code>1d10</code> psychic (syllable-cascade) + soul; half on success. Failed-save targets are Compelled to repeat the syllable themselves on their next turn (lose Action).<br/><em>Recharges on a long rest.</em></p><p><em>The hex opens its mouth wide enough to hear the inside of itself.</em></p>",
@@ -34083,7 +34083,7 @@
           "slug": "tongues-beyond-dialect",
           "name": "Tongues Beyond Dialect",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/abilities/mouth-teeth-tongue-purple.webp",
           "system": {
             "description": {
               "value": "<p>Creatures within 30 feet that hear the hex speak must succeed a DC 13 Intelligence check at the start of their turn or lose their Bonus Action that turn (the syllable is still unwinding in their head).</p><p><em>It is speaking. It is not stopping. The grammar is wrong in ways that do not have names.</em></p><p><strong>At the start of each turn:</strong> Tongues: Intelligence DC 13 or lose your bonus action this turn..</p>",
@@ -35569,7 +35569,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The demon makes two Intelligence-Numbing Slam attacks.</p>",
@@ -36041,7 +36041,7 @@
           "slug": "recursion-ache",
           "name": "Recursion Ache",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/time/arrows-circling-green.webp",
           "system": {
             "description": {
               "value": "<p>20 ft. sphere. Intelligence vs DC 15. Fail: 2d6 psychic damage and Compelled to repeat its last action next turn.</p><p><strong>Loop.</strong> 20 feet Intelligence vs DC 15. Fail: <code>2d6</code> psychic (Stress) + must repeat last action.</p>",
@@ -36231,7 +36231,7 @@
           "slug": "reflect-the-blow",
           "name": "Reflect The Blow",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/symbols/cog-shield-white-blue.webp",
           "system": {
             "description": {
               "value": "<p>Reaction, when hit by a melee attack: the attacker rolls Intelligence vs DC 15. Fail: takes 2d8 qliphothic — its own force turned back on it.</p><p><strong>Reaction — Reflection.</strong> Attacker rolls Intelligence vs DC 15. Fail: <code>2d8</code> qliphothic (their own blow).</p><p><em>Why are you hitting yourself? Why are you hitting yourself?</em></p>",
@@ -36801,7 +36801,7 @@
           "slug": "sundering-hammer-limb",
           "name": "Sundering Hammer-Limb",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/melee/strike-hammer-destructive-orange.webp",
           "system": {
             "description": {
               "value": "<p><em>The arm articulates wrong. The impact arrives at three places at once.</em></p><p>On a hit, the target must succeed on a DC 16 Constitution save or be knocked prone and pushed 10 ft. away.</p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>2d12</code> kinetic (hammer-blow) + violence. On a hit, the target must succeed on a DC 16 Constitution check or be knocked prone and pushed 10 feet away.</p><p><em>The arm articulates wrong. The impact arrives at three places at once.</em></p>",
@@ -37052,7 +37052,7 @@
           "slug": "containment-pulse-recharges-on-a-soma-break",
           "name": "Containment Pulse (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
           "system": {
             "description": {
               "value": "<p><em>The shell flexes outward once. Something institutional and patient does the deciding.</em></p><p>Radius 30 ft. — targets roll Wisdom saving throw (DC 14). Half damage on success. Failed-save targets are also Stunned until the end of the construct's next turn (containment protocol identifies them as non-cleared personnel). Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature within 30 feet rolls <strong>Resolve</strong> vs DC 14. Hit: <code>2d12</code> thermal (thunder-pulse) + violence; half on success. Failed-save targets are also Stunned until the end of the construct's next turn (containment protocol identifies them as non-cleared personnel).<br/><em>Recharges on a long rest.</em></p><p><em>The shell flexes outward once. Something institutional and patient does the deciding.</em></p>",
@@ -37242,7 +37242,7 @@
           "slug": "pre-fall-lance-battery",
           "name": "Pre-Fall Lance Battery",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/lightning/bolt-strike-beam-yellow.webp",
           "system": {
             "description": {
               "value": "<p><em>A single still-charged capacitor lets go. The line briefly tastes of ozone and a forgotten language.</em></p><p>Ignores cover that is less than 1 ft. of solid alloy (it sees through and shoots through).</p><p><strong>Strike.</strong> range 6/120 feet, one target. Damage: <code>2d12</code> electrical (lance-arc) + violence. Ignores cover that is less than 5 feet of solid alloy (it sees through and shoots through).</p><p><em>A single still-charged capacitor lets go. The line briefly tastes of ozone and a forgotten language.</em></p>",
@@ -37416,7 +37416,7 @@
           "slug": "pre-fall-diagnostics",
           "name": "Pre-Fall Diagnostics",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/tech/tube-chamber-lightning.webp",
           "system": {
             "description": {
               "value": "<p>Once per round, when the construct would be hit by an attack, it may impose reroll-the-highest on the attack roll instead. (Targeting solution recalibrates faster than the shooter.)</p><p><em>It does not flinch. It updates.</em></p><p><strong>When it is attacked (1/round):</strong> the roll is at advantage.</p>",
@@ -37490,7 +37490,7 @@
           "slug": "pre-fall-frame",
           "name": "Pre-Fall Frame",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/tech/gear-wheels-double-steel.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> The construct is immune to fatigue, poison, and disease, has resistance to non-magical bludgeoning, piercing, or slashing damage, and is critically vulnerable to focused sephirotic attacks (sephirotic damage rolls double dice against it).</p><p><em>It was built before the Fall. The Fall has not yet caught up to it.</em></p>",
@@ -37891,7 +37891,7 @@
           "slug": "mind-spike",
           "name": "Mind-Spike",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/control/debuff-energy-hold-pink.webp",
           "system": {
             "description": {
               "value": "<p><em>A thought you didn't have, but in your voice, and very loud.</em></p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>2d10</code> psychic (cognitive-bolt) + violence. On a hit, the target loses their Bonus Action on their next turn (the spike interrupts the next plan).</p><p><em>A thought you didn't have, but in your voice, and very loud.</em></p>",
@@ -38065,7 +38065,7 @@
           "slug": "calculated-sweep",
           "name": "Calculated Sweep",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/melee/strike-slashes-red.webp",
           "system": {
             "description": {
               "value": "<p><em>The same swing was the optimal answer to three different problems.</em></p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>2d10</code> kinetic (frame-arm) + violence. The battlemind attacks all enemies within reach in a single calculated motion — make one attack roll, apply to all.</p><p><em>The same swing was the optimal answer to three different problems.</em></p>",
@@ -38237,7 +38237,7 @@
           "slug": "tactical-reset-recharges-on-a-soma-break",
           "name": "Tactical Reset (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/time/arrows-circling-green.webp",
           "system": {
             "description": {
               "value": "<p><em>It restarts the simulation. You feel yourself reset, three seconds back. Three seconds you've already lost.</em></p><p>Radius 30 ft. — targets roll Wisdom saving throw (DC 13). Half damage on success. On a failed save, the target loses any benefits they've gained this combat (buffs, marks, advantage states). The battlemind reads them in as if combat just started. Recharge 6.</p><p><strong>Area Attack.</strong> Each enemy within 30 feet rolls <strong>Resolve</strong> vs DC 13. Hit: <code>2d10</code> psychic (scenario-rewrite) + violence; half on success. On a failed save, the target loses any benefits they've gained this combat (buffs, marks, advantage states). The battlemind reads them in as if combat just started.<br/><em>Recharge 6.</em></p><p><em>It restarts the simulation. You feel yourself reset, three seconds back. Three seconds you've already lost.</em></p>",
@@ -38427,7 +38427,7 @@
           "slug": "still-charged-frame",
           "name": "Still-Charged Frame",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/tech/tube-chamber-lightning.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> Immune to fatigue, poison, disease, fear. Resistance to kinetic, sephirotic, and psychic damage. While at full hit points, also resistant to electrical (the capacitors are still topped).</p><p><em>Built before the Fall. The Fall has not yet asked it to stop.</em></p>",
@@ -38459,7 +38459,7 @@
           "slug": "battle-prediction",
           "name": "Battle Prediction",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/perception/third-eye-blue-red.webp",
           "system": {
             "description": {
               "value": "<p>At the start of each round, the GM declares one attack form the battlemind is anticipating (melee / ranged / save-based / powers). All incoming attacks of that form have reroll-the-highest this round.</p><p><em>It does not see the future. It has already simulated the present 8,000 times.</em></p><p><strong>At the start of its turn:</strong> Battle Prediction: declare a form; incoming attacks of it reroll highest this round..</p>",
@@ -38860,7 +38860,7 @@
           "slug": "diagnostic-probe",
           "name": "Diagnostic Probe",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/tools/scribal/lens-blue.webp",
           "system": {
             "description": {
               "value": "<p><em>It is not trying to hurt you. It is trying to file you.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> kinetic (probing-needle) + violence. Reveals one of the target's resistances or vulnerabilities to the drone's allies (GM choice).</p><p><em>It is not trying to hurt you. It is trying to file you.</em></p>",
@@ -39032,7 +39032,7 @@
           "slug": "targeting-laser",
           "name": "Targeting Laser",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/targeting/crosshair-ringed-gray.webp",
           "system": {
             "description": {
               "value": "<p><em>A red dot, a brief warmth, and a small institutional whir.</em></p><p><strong>Strike.</strong> range 12/240 feet, one target. Damage: <code>1d6</code> thermal (coherent-light) + violence. On a hit, the drone marks the target — the next attack against that target by any source has reroll-the-lowest.</p><p><em>A red dot, a brief warmth, and a small institutional whir.</em></p>",
@@ -39206,7 +39206,7 @@
           "slug": "broken-protocol-loop",
           "name": "Broken Protocol Loop",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/tech/gear-wheels-double-steel.webp",
           "system": {
             "description": {
               "value": "<p>The drone repeats a single behavior unless directly attacked (patrol, scan, harvest). When attacked, it switches to combat mode for 3 rounds, then returns to its loop. Charm / compel effects automatically fail.</p><p><em>It is doing what it was told to do. What it was told to do is no longer there.</em></p>",
@@ -39583,7 +39583,7 @@
           "slug": "pre-fall-halberd",
           "name": "Pre-Fall Halberd",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/polearms/halberd-crescent-steel.webp",
           "system": {
             "description": {
               "value": "<p><em>The blade has not been sharpened since before the Fall. It does not need to be.</em></p><p>On a hit, the target must succeed a DC 13 Constitution save or be pushed 5 ft. (the sentinel is enforcing a perimeter, not killing).</p><p><strong>Strike.</strong> reach 10 feet, one target. Damage: <code>1d10</code> kinetic (polearm-edge) + violence. On a hit, the target must succeed a DC 13 Constitution check or be pushed 5 feet (the sentinel is enforcing a perimeter, not killing).</p><p><em>The blade has not been sharpened since before the Fall. It does not need to be.</em></p>",
@@ -39834,7 +39834,7 @@
           "slug": "classification-scan",
           "name": "Classification Scan",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>1d10</code> energy (scan-beam) + violence. On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative — multiple scans deepen the flag.</p><p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p>",
@@ -40045,7 +40045,7 @@
           "slug": "outdated-recognition",
           "name": "Outdated Recognition",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/tech/console-steel.webp",
           "system": {
             "description": {
               "value": "<p>The sentinel has resistance to kinetic and sephirotic damage and is immune to Charmed / Frightened / Compelled. Treats anyone without proper pre-fall credentials as a hostile intruder (i.e., everyone alive).</p><p><em>It is still patrolling. The patrol route includes the place you are standing.</em></p>",
@@ -40430,7 +40430,7 @@
           "slug": "grasping-vines",
           "name": "Grasping Vines",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/nature/root-vine-fire-entangled-hand.webp",
           "system": {
             "description": {
               "value": "<p>Snaring roots lash out from underfoot. On a hit, the target is Restrained (escape: Strength check vs DC 14) and pulled up to 10 feet toward the shambler.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit, the target is Restrained (escape: Strength check vs DC 14) and pulled up to 10 feet toward the shambler.</p>",
@@ -40602,7 +40602,7 @@
           "slug": "wrong-wave",
           "name": "Wrong-Wave",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/water/wave-water-blue.webp",
           "system": {
             "description": {
               "value": "<p><em>The wrongness spills out of the hole where it used to be.</em></p><p>Each creature within 10 ft. rolls Wisdom saving throw (DC 13). Half damage on success. Triggers when the Shambler is reduced to 0 hit points.</p><p><strong>Area Attack.</strong> Each creature within 10 feet rolls <strong>Resolve</strong> vs DC 13. Hit: <code>1d6</code> qliphothic + soul; half on success.<br/><em>Triggers when the Shambler is reduced to 0 hit points.</em></p><p><em>The wrongness spills out of the hole where it used to be.</em></p>",
@@ -40792,7 +40792,7 @@
           "slug": "ruin-spore-exhalation-recharges-on-a-soma-break",
           "name": "Ruin-Spore Exhalation (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/air/fog-gas-smoke-swirling-green.webp",
           "system": {
             "description": {
               "value": "<p><em>Black pollen, and the smell of a garden that gave up.</em></p><p>Each creature in a 15-ft. cone rolls Wisdom saving throw (DC 14). Half damage on success. On a failure, the target also cannot regain hit points until the start of the shambler's next turn. Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature in a 15 feet cone rolls <strong>Resolve</strong> vs DC 14. Hit: <code>4d8</code> qliphothic + body; half on success. On a failure, the target also cannot regain hit points until the start of the shambler's next turn.<br/><em>Recharges on a long rest.</em></p><p><em>Black pollen, and the smell of a garden that gave up.</em></p>",
@@ -40982,7 +40982,7 @@
           "slug": "rot-branch",
           "name": "Rot-Branch",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/nature/tree-animated-strike.webp",
           "system": {
             "description": {
               "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> qliphothic + violence. Damage goes.</p><p><em>A splintered limb clubs the target and injects grave-rot.</em></p>",
@@ -41154,7 +41154,7 @@
           "slug": "corpse-root-mass",
           "name": "Corpse-Root Mass",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/nature/plant-vines-skull-green.webp",
           "system": {
             "description": {
               "value": "<p>The shambler ignores difficult terrain made of plants, rubble, mud, or remains. A creature that starts its turn Restrained by the shambler takes 1d10 qliphothic damage .</p><p><strong>At the start of each turn:</strong> deal 1d10 qliphothic damage.</p>",
@@ -41186,7 +41186,7 @@
           "slug": "sloughing-filth",
           "name": "Sloughing Filth",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/acid/dissolve-drip-droplet-smoke.webp",
           "system": {
             "description": {
               "value": "<p>When the shambler first drops below half hit points, each hostile creature within 10 feet must succeed a Constitution check vs DC 14 or take 1d6 poison damage and roll twice-keep-worse on attacks until the end of its next turn.</p><p><strong>When it is bloodied:</strong> Sloughing Filth: hostiles ≤2 sq Constitution DC 14 or 1d6 poison and twice-keep-worse on attacks..</p>",
@@ -41425,7 +41425,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The shambler makes two Rot-Branch attacks, or one Rot-Branch attack and one Grasping Vines attack.</p>",
@@ -41457,7 +41457,7 @@
           "slug": "qliphothic-lurch",
           "name": "Qliphothic Lurch",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/death/undead-zombie-grave-green.webp",
           "system": {
             "description": {
               "value": "<p>If the shambler moves at least 15 feet straight toward a creature and then hits it with Rot-Branch on the same turn, the target must succeed a Constitution check vs DC 15 or fall Prone.</p><p><strong>When it hits with an attack:</strong> Qliphothic Lurch: if it moved 3+ sq straight first — Constitution DC 15 or Prone..</p>",
@@ -41831,7 +41831,7 @@
           "slug": "suppression-volley",
           "name": "Suppression Volley",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/ranged/bullet-sparks-yellow.webp",
           "system": {
             "description": {
               "value": "<p><em>Less about killing them and more about making them not stand up.</em></p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>1d10</code> kinetic (slug-volley) + violence. Reduced damage (1d6 instead of base) but on a hit, the target has reroll-the-highest on their next attack roll (suppressed).</p><p><em>Less about killing them and more about making them not stand up.</em></p>",
@@ -42005,7 +42005,7 @@
           "slug": "line-cleaver",
           "name": "Line-Cleaver",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/tools/hand/cleaver.webp",
           "system": {
             "description": {
               "value": "<p><em>Big single-edged blade. Designed to interrupt postures, not lives.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d10</code> kinetic (cleaver) + violence. On a hit, if any adjacent ally Marauder hasn't acted this round, that ally may immediately move up to 5 feet as a reaction (closing the line).</p><p><em>Big single-edged blade. Designed to interrupt postures, not lives.</em></p>",
@@ -42209,7 +42209,7 @@
           "slug": "discipline-of-the-line",
           "name": "Discipline of the Line",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/sundries/flags/banner-worn-red.webp",
           "system": {
             "description": {
               "value": "<p>While within 5 feet of at least one ally Marauder, the marauder has reroll-the-lowest on attack rolls. The line is the doctrine; the doctrine works.</p><p><em>Trained to hold position. Trained to break position only on the captain's word.</em></p><p><strong>At the start of its turn:</strong> Discipline of the Line: within 1 sq of another Marauder → reroll lowest on attacks..</p>",
@@ -42594,7 +42594,7 @@
           "slug": "fragmentation-grenade-1-scene",
           "name": "Fragmentation Grenade (1/scene)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/thrown/bomb-fuse-black.webp",
           "system": {
             "description": {
               "value": "<p><em>Pull pin. Throw. Apologize later.</em></p><p>Radius 10 ft. within 60 ft. — targets roll Dexterity saving throw (DC 13). Half damage on success. 1 per short rest.</p><p><strong>Area Attack.</strong> Each creature in a 10-ft. radius within 60 ft. rolls <strong>Evasion</strong> vs DC 13. Hit: <code>4d6</code> kinetic + violence; half on success.<br/><em>1 per short rest.</em></p><p><em>Pull pin. Throw. Apologize later.</em></p>",
@@ -42784,7 +42784,7 @@
           "slug": "chainblade",
           "name": "Chainblade",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/environment/traps/saw-mechanical-toothed-steel-red.webp",
           "system": {
             "description": {
               "value": "<p>Chain-driven cleaver. On a hit, the target is slowed (speed halved, −2 to attack rolls) until the start of its next turn; on a critical hit, it is also Prone.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d12</code> kinetic + violence. On a hit, the target is slowed (speed halved, −2 to attack rolls) until the start of its next turn; on a critical hit, it is also Prone.</p><p><em>Pull cord. Swing. Repeat until quiet.</em></p>",
@@ -42956,7 +42956,7 @@
           "slug": "overkill",
           "name": "Overkill",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strike-slashes-red.webp",
           "system": {
             "description": {
               "value": "<p>When the raider reduces a creature to 0 hit points, it may move up to half its speed and make one Chainblade attack as a bonus action.</p>",
@@ -43020,7 +43020,7 @@
           "slug": "intimidation-pressure",
           "name": "Intimidation Pressure",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/social/intimidation-impressing.webp",
           "system": {
             "description": {
               "value": "<p>At the start of combat, one creature the raider can see within 30 feet must succeed a Wisdom check vs DC 13 or be Frightened until the end of its next turn.</p><p><strong>At the start of each turn (1/encounter):</strong> the target is [object Object].</p>",
@@ -43355,7 +43355,7 @@
           "slug": "drag-tongue",
           "name": "Drag-Tongue",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/abilities/mouth-teeth-tongue-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>Not the tongue you were expecting.</em></p><p>On a hit, the target is pulled up to 10 ft. toward the stalker; if it ends adjacent, the target is also Restrained (escape DC 12 Constitution) until end of stalker's next turn.</p><p><strong>Strike.</strong> reach 15 feet, one target. Damage: <code>1d6</code> kinetic (snare-tongue) + violence. On a hit, the target is pulled up to 10 feet toward the stalker; if it ends adjacent, the target is also Restrained (escape DC 12 Constitution) until end of stalker's next turn.</p><p><em>Not the tongue you were expecting.</em></p>",
@@ -43527,7 +43527,7 @@
           "slug": "reed-vanish-recharges-on-a-soma-break",
           "name": "Reed-Vanish (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/consumables/plants/grass-leaves-stems-green.webp",
           "system": {
             "description": {
               "value": "<p><em>There is a splash. There is no stalker. There was, a moment ago.</em></p><p>Radius 10 ft. — targets roll Wisdom saving throw (DC 11). Half damage on success. On a failed save, target loses sight of the stalker until the start of its next turn. Stalker may move up to its speed and re-conceal. Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature within 10 feet rolls <strong>Resolve</strong> vs DC 11. Hit: <code>1d6</code> kinetic (splash-vanish) + violence; half on success. On a failed save, target loses sight of the stalker until the start of its next turn. Stalker may move up to its speed and re-conceal.<br/><em>Recharges on a long rest.</em></p><p><em>There is a splash. There is no stalker. There was, a moment ago.</em></p>",
@@ -43717,7 +43717,7 @@
           "slug": "camouflaged",
           "name": "Camouflaged",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/reptiles/chameleon-camouflage-green-brown.webp",
           "system": {
             "description": {
               "value": "<p>While in still water or reed-thick terrain, the stalker is effectively invisible until it acts. First attack each combat has reroll-the-lowest if launched from concealment.</p><p><em>You were going to walk right past it. It was going to let you.</em></p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
@@ -44090,7 +44090,7 @@
           "slug": "pipe-rifle",
           "name": "Pipe Rifle",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/guns/rifle-brown.webp",
           "system": {
             "description": {
               "value": "<p>Salvage rifle. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest.</p><p><strong>Strike.</strong> range 60/180 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest.</p><p><em>Held together with tape and confidence.</em></p>",
@@ -44264,7 +44264,7 @@
           "slug": "shiv",
           "name": "Shiv",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/daggers/dagger-simple-black.webp",
           "system": {
             "description": {
               "value": "<p>Sharpened scrap. On a hit against a Prone or Restrained target, +1d4 bludgeoning.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 bludgeoning.</p><p><em>Nobody's proud of the shiv.</em></p>",
@@ -44453,7 +44453,7 @@
           "slug": "ambush-crew",
           "name": "Ambush Crew",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
           "system": {
             "description": {
               "value": "<p>In the first round of combat, the bandit is made with advantage on attack rolls against any creature that hasn't taken a turn yet.</p>",
@@ -44485,7 +44485,7 @@
           "slug": "poor-discipline",
           "name": "Poor Discipline",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/control/fear-fright-white.webp",
           "system": {
             "description": {
               "value": "<p>If reduced below half hit points, the bandit must succeed a Wisdom check vs DC 12 at the start of its turn or disengage and move away at full speed.</p><p><strong>When it is bloodied:</strong> a morale check.</p>",
@@ -44849,7 +44849,7 @@
           "slug": "aggressive-up-sell",
           "name": "Aggressive Up-Sell",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/commodities/currency/coins-plain-pouch-gold.webp",
           "system": {
             "description": {
               "value": "<p>15 ft. sphere of relentless marketing. Wisdom saving throw, DC 12. Fail: 1d8 psychic damage and slowed (speed halved, −2 to attack rolls) until the start of its next turn.</p><p><strong>Jingle Burst.</strong> 15 feet Wisdom saving throw, DC 12. Fail: <code>1d8</code> psychic (Stress) + slowed (speed halved, −2 to attack rolls).</p><p><em>You will be humming this in your next three lives.</em></p>",
@@ -45039,7 +45039,7 @@
           "slug": "combo-meal-slam",
           "name": "Combo-Meal Slam",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/melee/strike-flail-spiked-pink.webp",
           "system": {
             "description": {
               "value": "<p><em>Would you like to make that a meal? It wasn't a question.</em></p><p>Two fistfuls of laminated particleboard. Knocks Prone on a hit if the target is your size or smaller.</p>",
@@ -45569,7 +45569,7 @@
           "slug": "drain-touch",
           "name": "Drain-Touch",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/unholy/strike-body-life-soul-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>It does not hate you. It just needs what you have.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> qliphothic (warmth-theft) + soul. On a hit, the target's Stress increases by 1d4 and the wraith regains that much hit points. The target feels cold for an hour.</p><p><em>It does not hate you. It just needs what you have.</em></p>",
@@ -45758,7 +45758,7 @@
           "slug": "salt-sermon",
           "name": "Salt-Sermon",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/sundries/books/book-worn-brown-grey.webp",
           "system": {
             "description": {
               "value": "<p><em>The wraith does not speak. The salt speaks for it.</em></p><p>Radius 15 ft. — targets roll Wisdom saving throw (DC 12). Half damage on success. Failed-save targets remember a death that wasn't theirs — Frightened until the start of their next turn.</p><p><strong>Area Attack.</strong> Each creature within 15 feet rolls <strong>Resolve</strong> vs DC 12. Hit: <code>1d6</code> psychic (lament) + soul; half on success. Failed-save targets remember a death that wasn't theirs — Frightened until the start of their next turn.</p><p><em>The wraith does not speak. The salt speaks for it.</em></p>",
@@ -45948,7 +45948,7 @@
           "slug": "crystallized-grief",
           "name": "Crystallized Grief",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/gems/gem-rough-cushion-violet.webp",
           "system": {
             "description": {
               "value": "<p>The wraith has resistance to bludgeoning, piercing, or slashing damage and vulnerability to sephirotic damage. Cannot be Charmed or Frightened (it is already nothing but those things).</p><p><em>Salt remembers what salt is for. The wraith remembers the screaming.</em></p>",
@@ -46747,7 +46747,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Poisoner makes two attacks: one with its Bite of Pride and one Constrict.</p>",
@@ -47935,7 +47935,7 @@
           "slug": "bite",
           "name": "Bite",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
           "system": {
             "description": {
               "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit against a target below half hit points, the damage die rerolls the lowest — it can smell the opening.</p>",
@@ -48144,7 +48144,7 @@
           "slug": "skittish",
           "name": "Skittish",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/movement/feet-winged-boots-brown.webp",
           "system": {
             "description": {
               "value": "<p>If the beast takes damage from a creature it can't see, it immediately moves up to half its speed away without provoking opportunity attacks.</p><p><strong>When it takes damage:</strong> Skittish: if the source was unseen, it moves half speed away, no opportunity attacks..</p>",
@@ -48467,7 +48467,7 @@
           "slug": "prayer-of-pause-recharges-on-a-soma-break",
           "name": "Prayer-of-Pause (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
           "system": {
             "description": {
               "value": "<p><em>A single word, spoken by someone who hasn't quite earned it. It works anyway.</em></p><p>Radius 15 ft. — targets roll Wisdom saving throw (DC 13). Half damage on success. Failed-save targets lose their Reaction until the start of their next turn (the prayer asks them, politely, to wait). Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature within 15 feet rolls <strong>Resolve</strong> vs DC 13. Hit: <code>1d8</code> sephirotic (stilling-word) + soul; half on success. Failed-save targets lose their Reaction until the start of their next turn (the prayer asks them, politely, to wait).<br/><em>Recharges on a long rest.</em></p><p><em>A single word, spoken by someone who hasn't quite earned it. It works anyway.</em></p>",
@@ -48682,7 +48682,7 @@
           "slug": "consecrated-lash",
           "name": "Consecrated Lash",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/melee/strike-chain-whip-blue.webp",
           "system": {
             "description": {
               "value": "<p><em>Knotted prayer-cord. It hits whether you believe in it or not. (It hits harder if you should.)</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> sephirotic (prayer-cord) + soul. On a hit against a creature with the qliphothic, undead, or fiend tag, damage die rerolls-the-lowest.</p><p><em>Knotted prayer-cord. It hits whether you believe in it or not. (It hits harder if you should.)</em></p>",
@@ -48854,7 +48854,7 @@
           "slug": "minor-ward",
           "name": "Minor Ward",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
           "system": {
             "description": {
               "value": "<p>Once per round, when an ally within 30 feet would take damage, the acolyte may use a reaction to grant them resistance to that instance.</p><p><em>They are not very good at this yet. They are good enough.</em></p><p><strong>When an ally takes damage (1/round):</strong> it is warded.</p>",
@@ -49203,7 +49203,7 @@
           "slug": "mumbled-prayer",
           "name": "Mumbled Prayer",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
           "system": {
             "description": {
               "value": "<p><em>Whatever god they're addressing has stopped listening. Other things have not.</em></p><p><strong>Strike.</strong> range 6/90 feet, one target. Damage: <code>1d6</code> qliphothic (broken-syllable) + soul. On a hit, the wanderer's Clarity refreshes by 1 (the broken prayer briefly works for the wrong reason).</p><p><em>Whatever god they're addressing has stopped listening. Other things have not.</em></p>",
@@ -49377,7 +49377,7 @@
           "slug": "reflex-lash",
           "name": "Reflex Lash",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/melee/strike-chain-whip-blue.webp",
           "system": {
             "description": {
               "value": "<p><em>Half-blind, half-elsewhere. The arm still works.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d6</code> kinetic (wild-strike) + soul. No targeting required; the wanderer just swings. On a 1 on the damage die, also hits the nearest ally (if any).</p><p><em>Half-blind, half-elsewhere. The arm still works.</em></p>",
@@ -49586,7 +49586,7 @@
           "slug": "broken-pact",
           "name": "Broken Pact",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/control/debuff-chains-shackle-movement-red.webp",
           "system": {
             "description": {
               "value": "<p>When the wanderer takes psychic or qliphothic damage, they may immediately make one Mumbled Prayer attack as a reaction (no action cost). 1/round.</p><p><em>The oath broke years ago. The reflexes did not get the memo.</em></p><p><strong>When it takes damage (1/round):</strong> Broken Pact: free Mumbled Prayer attack as a reaction..</p>",
@@ -49990,7 +49990,7 @@
           "slug": "phase-drain",
           "name": "Phase Drain",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/magical/spirit-undead-winged-ghost.webp",
           "system": {
             "description": {
               "value": "<p><em>It flickers to where you'll be standing, and drinks the difference.</em></p><p>One target within 30 ft. rolls Wisdom saving throw (DC 15). On a failed save the wraith then teleports to an unoccupied space within 5 ft. of the target. On a success, half damage and no teleport.</p><p><strong>Save Attack.</strong> One target within 30 feet rolls <strong>Resolve</strong> vs DC 15. Hit: <code>4d8</code> qliphothic + soul. On a failed save the wraith then teleports to an unoccupied space within 5 feet of the target. On a success, half damage and no teleport.</p><p><em>It flickers to where you'll be standing, and drinks the difference.</em></p>",
@@ -50180,7 +50180,7 @@
           "slug": "moment-shear-recharges-on-a-soma-break",
           "name": "Moment Shear (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
           "system": {
             "description": {
               "value": "<p><em>A second too late, a second too early — both happen to you at once.</em></p><p>Each creature of the wraith's choice within 20 ft. rolls Wisdom saving throw (DC 15). Half damage on success. On a failure, the target is also slowed until the end of its next turn (movement halved, no reactions, action OR bonus action — not both). Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature of the wraith's choice within 20 feet rolls <strong>Resolve</strong> vs DC 15. Hit: <code>4d6</code> psychic + soul; half on success. On a failure, the target is also slowed until the end of its next turn (movement halved, no reactions, action OR bonus action — not both).<br/><em>Recharges on a long rest.</em></p><p><em>A second too late, a second too early — both happen to you at once.</em></p>",
@@ -50395,7 +50395,7 @@
           "slug": "rift-claw",
           "name": "Rift Claw",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/melee/strike-blade-claw-red.webp",
           "system": {
             "description": {
               "value": "<p>The wraith tears the target with displaced time. On a hit, the target cannot take reactions until the start of its next turn.</p><p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d8</code> psychic + violence. Damage goes. On a hit, the target cannot take reactions until the start of its next turn.</p><p><em>You feel it a second before it lands, and a second after.</em></p>",
@@ -50591,7 +50591,7 @@
           "slug": "incorporeal-slip",
           "name": "Incorporeal Slip",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/magical/spirit-undead-ghost-tan-teal.webp",
           "system": {
             "description": {
               "value": "<p>The wraith moves through creatures and objects as if they were difficult terrain. It takes 1d10 bludgeoning damage if it ends its turn inside an object.</p><p><strong>At the start of its turn:</strong> Incorporeal Slip: moves through creatures/objects; 1d10 bludgeoning if it ends its turn inside one..</p>",
@@ -50623,7 +50623,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The wraith makes two Rift Claw attacks, or one Rift Claw attack and uses Phase Drain.</p>",
@@ -50687,7 +50687,7 @@
           "slug": "slipped-through",
           "name": "Slipped Through",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/magical/spirit-undead-ghost-purple.webp",
           "system": {
             "description": {
               "value": "<p>Reaction, when struck: the wraith displaces 5 feet. The attacker briefly forgets which target they aimed at — they reroll the highest die on their next attack roll this exchange.</p><p><strong>When it is hit:</strong> The Wraith may displace 5 feet (GM moves it)..</p>",
@@ -50719,7 +50719,7 @@
           "slug": "slip-the-frame",
           "name": "Slip the Frame",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/movement/trail-streak-impact-blue.webp",
           "system": {
             "description": {
               "value": "<p>Reaction, when targeted by an attack the wraith can see: it teleports up to 15 feet to an unoccupied space it can see. The triggering attack rerolls the highest die.</p><p><strong>When it is attacked (1/round):</strong> the roll is at advantage.</p>",
@@ -50857,7 +50857,7 @@
           "slug": "unmoored-presence",
           "name": "Unmoored Presence",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/time/hourglass-tilted-gray.webp",
           "system": {
             "description": {
               "value": "<p>A creature that starts its turn within 10 feet of the wraith must succeed a Wisdom check vs DC 15 or have its movement reduced by 10 feet until the start of its next turn as local time thickens around it.</p><p><strong>At the start of each turn:</strong> Unmoored Charisma: Wisdom DC 15 or speed −2 sq until its next turn..</p>",
@@ -50889,7 +50889,7 @@
           "slug": "temporal-afterimage",
           "name": "Temporal Afterimage",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/time/hourglass-tilted-gray.webp",
           "system": {
             "description": {
               "value": "<p>After the wraith moves 10 feet or more, attack rolls against it reroll the highest die until the start of its next turn.</p><p><strong>When it is attacked:</strong> the roll is at advantage.</p>",
@@ -51278,7 +51278,7 @@
           "slug": "dreamcut",
           "name": "Dreamcut",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>A wound that you don't notice until you try to wake up from it.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>2d8</code> psychic (sleep-edge) + violence. On a hit, target also loses 1d4 Clarity (the reaper harvests Soma-Break echoes from waking minds too).</p><p><em>A wound that you don't notice until you try to wake up from it.</em></p>",
@@ -51450,7 +51450,7 @@
           "slug": "echo-pluck",
           "name": "Echo-Pluck",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/tools/instruments/harp-yellow-teal.webp",
           "system": {
             "description": {
               "value": "<p><em>It is not stealing memory. It is just reading the strand back. Backwards.</em></p><p><strong>Strike.</strong> range 6/90 feet, one target. Damage: <code>2d8</code> psychic (memory-thread) + violence. On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits — e.g., a buff just granted is missed).</p><p><em>It is not stealing memory. It is just reading the strand back. Backwards.</em></p>",
@@ -51624,7 +51624,7 @@
           "slug": "soma-drain-field-recharges-on-a-soma-break",
           "name": "Soma-Drain Field (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/unholy/orb-glowing-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>The room briefly tastes of someone else's morning.</em></p><p>Radius 20 ft. — targets roll Wisdom saving throw (DC 13). Half damage on success. On a failed save, the target's next long rest restores half as much (one stage of harvest). Multiple failures stack; refreshes on a true rest. Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature within 20 feet rolls <strong>Resolve</strong> vs DC 13. Hit: <code>2d8</code> psychic (echo-pull) + violence; half on success. On a failed save, the target's next long rest restores half as much (one stage of harvest). Multiple failures stack; refreshes on a true rest.<br/><em>Recharges on a long rest.</em></p><p><em>The room briefly tastes of someone else's morning.</em></p>",
@@ -51814,7 +51814,7 @@
           "slug": "half-real",
           "name": "Half-Real",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/magical/spirit-undead-ghost-purple.webp",
           "system": {
             "description": {
               "value": "<p>Until the soma-reaper attacks, attacks against it have reroll-the-highest. The first strike fully manifests it. After that, normal targeting applies for the rest of the scene.</p><p><em>It is here. Sort of. The 'sort of' is the dangerous part.</em></p><p><strong>When it is attacked:</strong> the roll is at advantage.</p>",
@@ -52517,7 +52517,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Disputant uses Inciting Word twice.</p>",
@@ -53894,7 +53894,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Horde makes one Whispering Flames attack and uses Consume Magic.</p>",
@@ -54687,7 +54687,7 @@
           "slug": "lantern-toll",
           "name": "Lantern Toll",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
           "system": {
             "description": {
               "value": "<p><em>The light is warm. Nothing else is.</em></p><p><strong>Strike.</strong> reach 30 feet, one target. Damage: <code>1d10</code> qliphothic (lantern-light) + soul. Wisdom DC 14 or Compelled for 1 round: the target walks toward the lantern.</p><p><em>The light is warm. Nothing else is.</em></p>",
@@ -54861,7 +54861,7 @@
           "slug": "fare-due-recharges-on-a-soma-break",
           "name": "Fare Due (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/commodities/currency/coins-assorted-mix-copper.webp",
           "system": {
             "description": {
               "value": "<p><em>Eleven voices say the fare together.</em></p><p>Cone 30 ft. — targets roll Wisdom saving throw (DC 14). Half damage on success. On a failed save the target is Compelled for 1 round: it steps toward the water.</p><p><strong>Area Attack.</strong> Each creature in a 30-ft. cone rolls vs DC 14. Damage: <code>2d8</code> qliphothic (the drowned count). On a failed save the target is Compelled for 1 round: it steps toward the water.</p><p><em>Eleven voices say the fare together.</em></p>",
@@ -55035,7 +55035,7 @@
           "slug": "the-river-remembers-1-scene",
           "name": "The River Remembers (1/scene)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/water/wave-water-teal.webp",
           "system": {
             "description": {
               "value": "<p><em>The flood never left. It was only waiting for the fare.</em></p><p>Sphere 30 ft. — targets roll Dexterity saving throw (DC 14). Half damage on success. ULTIMATE — usable only at or below half hit points. The water rises to the knee and holds; on a failed save the target is Restrained until the end of its next turn.</p><p><strong>Area Attack.</strong> Each creature within 30 ft. rolls vs DC 14. Damage: <code>3d8</code> qliphothic (the whole flood). ULTIMATE — usable only at or below half hit points. The water rises to the knee and holds; on a failed save the target is Restrained until the end of its next turn.</p><p><em>The flood never left. It was only waiting for the fare.</em></p>",
@@ -55209,7 +55209,7 @@
           "slug": "pole-strike",
           "name": "Pole-Strike",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/staves/staff-simple.webp",
           "system": {
             "description": {
               "value": "<p><em>The pole finds the bottom. The bottom is you.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d10</code> qliphothic (warmth-theft) + violence. On a hit the target is Frightened until the end of its next turn and feels cold for an hour.</p><p><em>The pole finds the bottom. The bottom is you.</em></p>",
@@ -55381,7 +55381,7 @@
           "slug": "crystallized-grief",
           "name": "Crystallized Grief",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/gems/gem-rough-cushion-violet.webp",
           "system": {
             "description": {
               "value": "<p>Immune to Charmed and Frightened — he is already nothing but those things. Resistant to bludgeoning, piercing, or slashing damage, vulnerable to sephirotic. When he deals qliphothic damage he regains 1d4 hit points. Laid to rest, not killed: at 0 hit points he reforms at the next dusk unless the fare is returned to the bank.</p><p><em>Salt remembers what salt is for.</em></p><p><strong>When it hits with an attack:</strong> regain 1d4 hit points.</p>",
@@ -55413,7 +55413,7 @@
           "slug": "fractured-will-2-scene",
           "name": "Fractured Will (2/scene)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
           "system": {
             "description": {
               "value": "<p>When the Ferryman fails a check, some part of him refuses the outcome: the Ferryman succeeds instead. 2 times per short rest.</p><p><em>The fare was paid. The outcome is not accepted.</em></p>",
@@ -56324,7 +56324,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Tyrant makes two Golden Touch attacks.</p>",
@@ -57436,7 +57436,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Miasma uses Manifest Id twice.</p>",
@@ -57875,7 +57875,7 @@
           "slug": "root-limb-slam",
           "name": "Root-Limb Slam",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/nature/root-vine-fire-entangled-hand.webp",
           "system": {
             "description": {
               "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>2d8</code> sephirotic + violence.</p><p><em>A crushing limb strike infused with harmonic force.</em></p>",
@@ -58047,7 +58047,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The Tree Being makes two Slam attacks or one Slam and uses Bloom of Correction.</p>",
@@ -58111,7 +58111,7 @@
           "slug": "rooted-presence",
           "name": "Rooted Presence",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
           "system": {
             "description": {
               "value": "<p>The Tiferet Tree Being cannot be knocked prone or forcibly moved. Difficult terrain within 20 feet for hostile creatures.</p>",
@@ -58143,7 +58143,7 @@
           "slug": "corrective-pulse-recharges-on-a-soma-break",
           "name": "Corrective Pulse (1/Long Rest)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
           "system": {
             "description": {
               "value": "<p>Creatures of the Tree Being's choice within 30 feet must succeed a Charisma check vs DC 16 or be slowed (speed halved, −2 to attack rolls) until the end of their next turn as the forest imposes alignment pressure. Recharges on a long rest.</p><p><strong>When it uses this (1/encounter):</strong> the target is [object Object].</p>",
@@ -58309,7 +58309,7 @@
           "slug": "violence-escalation",
           "name": "Violence Escalation",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/fire/flame-burning-fist-strike.webp",
           "system": {
             "description": {
               "value": "<p>Each time the Tree Being takes more than 20 damage from a single attack, it gains +1 to damage rolls until the end of its next turn (stacking, max +3).</p>",
@@ -58516,7 +58516,7 @@
           "slug": "roots-of-tiferet",
           "name": "Roots of Tiferet",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/nature/tree-elm-roots-brown.webp",
           "system": {
             "description": {
               "value": "<p><strong>Reaction.</strong> When struck, may root in place. While rooted, +2 AC but movement is 0. Roots feed on the local Sephirotic field; while rooted, regain 1 hit points per round.</p><p><strong>When it is hit:</strong> Roots (reaction): root — +2 AC, speed 0, regain 1 hit points/round..</p>",
@@ -58548,7 +58548,7 @@
           "slug": "bloom-of-correction",
           "name": "Bloom of Correction",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/nature/plant-sprout-hand-flower-pink.webp",
           "system": {
             "description": {
               "value": "<p>Radiant petals erupt in a 3-square radius. Each creature inside rolls Wisdom saving throw (DC 16); on a failure it takes 2d8 sephirotic damage and is Restrained until the start of the Tree Being's next turn.</p><p><strong>When it uses this:</strong> deal 2d8 sephirotic damage; the target is [object Object].</p>",
@@ -58707,7 +58707,7 @@
           "slug": "harmonic-rejection",
           "name": "Harmonic Rejection",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
           "system": {
             "description": {
               "value": "<p>Creatures that deal qliphothic damage to the Tree Being must succeed a Wisdom check vs DC 16 or be Restrained by spectral vines until the end of their next turn.</p><p><strong>When it is hit:</strong> the target is [object Object].</p>",
@@ -59069,7 +59069,7 @@
           "slug": "radiant-spike",
           "name": "Radiant Spike",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/light/beam-rays-yellow.webp",
           "system": {
             "description": {
               "value": "<p>A thrown spike of storm-bright sephirotic light. On a hit against a target the adept has sworn a Spark Vow against, +1d6 electrical.</p><p><strong>Strike.</strong> range 60 ft., one target. Damage: <code>2d6</code> sephirotic + violence. On a hit against a target the adept has sworn a Spark Vow against, +1d6 electrical.</p><p><em>It hums the vow on the way in.</em></p>",
@@ -59510,7 +59510,7 @@
           "slug": "disorienting-pulse-recharges-on-a-soma-break",
           "name": "Disorienting Pulse (1/Long Rest)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/control/hypnosis-mesmerism-swirl.webp",
           "system": {
             "description": {
               "value": "<p>Each creature of the adept's choice within 15 feet must succeed a Wisdom check vs DC 13 or be disoriented until the end of its next turn: no opportunity attacks, and it rolls twice-keep-worse on Intelligence checks. Recharges on a long rest.</p><p><strong>When it uses this (1/encounter):</strong> the target makes a Wisdom saving throw.</p><p><strong>When a target fails its save:</strong> the target can't take reactions until the start of its next turn; Twice-keep-worse on Intelligence checks until its next turn ends..</p>",
@@ -59627,7 +59627,7 @@
           "slug": "hammer-ward-reaction-3-scene",
           "name": "Hammer-Ward (reaction, 3/scene)",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/shield-block-gray-yellow.webp",
           "system": {
             "description": {
               "value": "<p><strong>Reaction, when hit by an attack.</strong> The adept gains +2 AC against that attack, which may turn it into a miss. Three times per short rest.</p><p><strong>At the start of its turn:</strong> Hammer-Ward (reaction, 3/scene): +2 AC vs one hit..</p>",
@@ -59659,7 +59659,7 @@
           "slug": "spark-rite",
           "name": "Spark Rite",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/lightning/bolt-strike-blue.webp",
           "system": {
             "description": {
               "value": "<p>If the adept starts its turn within 10 feet of a Spark (a bound Spark of the Tree in any state), it regains 5 hit points.</p>",
@@ -60027,7 +60027,7 @@
           "slug": "rending-talons",
           "name": "Rending Talons",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/claws/claw-talons-glowing-orange.webp",
           "system": {
             "description": {
               "value": "<p><em>Up close it remembers it is, after all, a dragon.</em></p><p>Reach 10 ft. Multiattack: may strike twice against the same or different targets.</p><p>Reach 10 feet Multiattack: may strike twice against the same or different targets.</p>",
@@ -60201,7 +60201,7 @@
           "slug": "strafing-eye-beams",
           "name": "Strafing Eye-Beams",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/light/orb-beams-green.webp",
           "system": {
             "description": {
               "value": "<p><em>The dots find you before you find cover.</em></p><p>Two beams; may target one or two creatures. Against a target hit by Coherent Breath this encounter, deal +1d10 (the lock holds).</p>",
@@ -60375,7 +60375,7 @@
           "slug": "coherent-breath",
           "name": "Coherent Breath",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/abilities/dragon-breath-purple.webp",
           "system": {
             "description": {
               "value": "<p>60 ft. line, 5 ft. wide. Dexterity saving throw, DC 18. Fail: 4d8 fire and Burning (1d6/turn until extinguished). Half and no Burning on success. Recharge: skips a turn to vent heat after firing.</p><p><strong>Line — 60 feet</strong> Evasion check vs DC 18. Fail: <code>4d8</code> energy + Burning. Half on success. Must vent heat (skip) the turn after.</p><p><em>It does not roar before it fires. That's the rude part.</em></p>",
@@ -60565,7 +60565,7 @@
           "slug": "wing-buffet",
           "name": "Wing Buffet",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/abilities/wing-batlike-purple-blue.webp",
           "system": {
             "description": {
               "value": "<p>20 ft. cone. Constitution vs DC 17. Fail: 2d10 bludgeoning, knocked Prone, and pushed 10 ft. away. Half and no knockdown on success.</p><p><strong>Cone — 20 feet</strong> Constitution check vs DC 17. Fail: <code>2d10</code> kinetic + Prone + pushed 10 feet Half on success.</p>",
@@ -60753,7 +60753,7 @@
           "slug": "overcharge-nova",
           "name": "Overcharge Nova",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/lightning/orb-ball-spiral-blue.webp",
           "system": {
             "description": {
               "value": "<p>ULTIMATE (1/short rest, at or below half hit points). Dumps the capacitor in a 30 ft. sphere centered on itself. Dexterity saving throw, DC 18. Fail: 5d10 fire and Blinded until end of next turn. Half and no Blind on success. The dragon is slowed (speed halved, −2 to attack rolls) the following turn (overheated).</p><p><strong>Ultimate — 1/short rest below half hit points.</strong> 30 feet sphere. Dexterity saving throw, DC 18. Fail: <code>5d10</code> energy + Blinded. Half on success. Dragon slowed (speed halved, −2 to attack rolls) next turn.</p><p><em>\"If I'm reading this back to you, the dragon overheated and so did you. Reincarnation ahoy!\"</em></p>",
@@ -61343,7 +61343,7 @@
           "slug": "oath-blade",
           "name": "Oath-Blade",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/swords/greatsword-crossguard-embossed-gold.webp",
           "system": {
             "description": {
               "value": "<p><em>The blade does not waver. The hand on the blade does not waver. Nothing about this is wavering.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> kinetic (vow-edge) + violence. Damage die rerolls-the-lowest when attacking the creature the thrall is sworn against (GM nominates one per short rest).</p><p><em>The blade does not waver. The hand on the blade does not waver. Nothing about this is wavering.</em></p>",
@@ -61515,7 +61515,7 @@
           "slug": "last-stand-1-day",
           "name": "Last-Stand (1/Day)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/skills/melee/shield-block-gray-yellow.webp",
           "system": {
             "description": {
               "value": "<p><em>There is no second-to-last stand. There is only this one.</em></p><p>Radius 10 ft. — targets roll vs AC (DC 12). Half damage on success. The thrall plants their feet. Failed-save targets are knocked prone and pushed 5 ft. away. The thrall cannot be moved by any means until the end of their next turn. 1/Day.</p><p><strong>Area Attack.</strong> Each creature within 10 feet (triggered when the thrall is bloodied) rolls <strong>AC</strong> vs DC 12. Hit: <code>1d8</code> kinetic (vow-burst) + violence; half on success. The thrall plants their feet. Failed-save targets are knocked prone and pushed 5 feet away. The thrall cannot be moved by any means until the end of their next turn.<br/><em>1 per long rest.</em></p><p><em>There is no second-to-last stand. There is only this one.</em></p>",
@@ -61705,7 +61705,7 @@
           "slug": "vow-bone-implant",
           "name": "Vow-Bone Implant",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/commodities/bones/bone-jaw-teeth-green.webp",
           "system": {
             "description": {
               "value": "<p>Immune to Charmed, Compelled, and Frightened. The first time the thrall is reduced to 0 hit points, they instead drop to 1 hit points and gain a +2 bonus to their next attack roll (the vow holds them up long enough for one more strike).</p><p><em>The bone in their chest is not theirs. The vow in the bone is not negotiable.</em></p><p><strong>When it drops to 0 hit points (1/encounter):</strong> regain 1 hit points; Vow-Bone: +2 to its next attack roll..</p>",
@@ -62542,7 +62542,7 @@
           "slug": "multiattack",
           "name": "Multiattack",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
           "system": {
             "description": {
               "value": "<p>The War Incarnate makes three Weapon Limb attacks.</p>",
@@ -62931,7 +62931,7 @@
           "slug": "claws",
           "name": "Claws",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/commodities/claws/claw-canine-brown-grey.webp",
           "system": {
             "description": {
               "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d10</code> kinetic + violence. On a hit against a Prone target, +1d6 bludgeoning.</p>",
@@ -63120,7 +63120,7 @@
           "slug": "ambush-strike",
           "name": "Ambush Strike",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/melee/strike-dagger-arcane-pink.webp",
           "system": {
             "description": {
               "value": "<p>If the stalker is hidden from a target when it hits it, the hit deals +2d6 bludgeoning and the target must succeed a Constitution check vs DC 13 or be knocked Prone.</p><p><strong>When it hits with an attack:</strong> Ambush Strike: if hidden from the target → +2d6 bludgeoning and Constitution DC 13 or Prone..</p>",
@@ -63152,7 +63152,7 @@
           "slug": "pack-hunter",
           "name": "Pack Hunter",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/abilities/paw-print-tan.webp",
           "system": {
             "description": {
               "value": "<p>The stalker is made with advantage on attack rolls against a creature if at least one ally stalker is within 5 feet of the target and not slowed (speed halved, −2 to attack rolls).</p><p><strong>When it attacks:</strong> the roll is at advantage.</p>",
@@ -63184,7 +63184,7 @@
           "slug": "camouflage",
           "name": "Camouflage",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/creatures/reptiles/chameleon-camouflage-green-brown.webp",
           "system": {
             "description": {
               "value": "<p>The stalker is made with advantage on Dexterity checks to hide in rubble, brush, or ruined interiors.</p>",
@@ -64561,7 +64561,7 @@
           "slug": "all-seeing-flash-recharges-on-a-soma-break",
           "name": "All-Seeing Flash (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/light/explosion-star-glow-blue-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>It blinks. The room becomes briefly, painfully readable.</em></p><p>Radius 30 ft. — targets roll Wisdom saving throw (DC 15). Half damage on success. On a failed save, the target is Blinded until end of next turn AND the apotheon gains a Witness-Mark on them (next attack against them has reroll-the-lowest). Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature within 30 feet rolls <strong>Resolve</strong> vs DC 15. Hit: <code>2d12</code> sephirotic (scrutiny) + soul; half on success. On a failed save, the target is Blinded until end of next turn AND the apotheon gains a Witness-Mark on them (next attack against them has reroll-the-lowest).<br/><em>Recharges on a long rest.</em></p><p><em>It blinks. The room becomes briefly, painfully readable.</em></p>",
@@ -64751,7 +64751,7 @@
           "slug": "terminal-observation",
           "name": "Terminal Observation",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/perception/eye-ringed-glow-angry-red.webp",
           "system": {
             "description": {
               "value": "<p><em>It has seen this ending. It is helping the ending arrive.</em></p><p><strong>Strike.</strong> range 6/30 feet, one target. Damage: <code>2d12</code> psychic (witnessed-end) + soul. Only usable on a target the apotheon has hit at least once before this combat. On a hit, target loses any 'remaining-once-per' resources (one-shot abilities, last-stand triggers, etc. burn out). The apotheon has already seen them use those.</p><p><em>It has seen this ending. It is helping the ending arrive.</em></p>",
@@ -64925,7 +64925,7 @@
           "slug": "sight-cuts-sight",
           "name": "Sight-Cuts-Sight",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/perception/eye-ringed-glow-angry-red.webp",
           "system": {
             "description": {
               "value": "<p><em>It does not aim. It looks at the part of you that is wrong, and that part of you finds out it is wrong.</em></p><p><strong>Strike.</strong> range 12/240 feet, one target. Damage: <code>2d12</code> sephirotic (regard) + soul. On a hit, the target also takes 2d6 psychic damage  as their self-image briefly disagrees with what the apotheon sees of them.</p><p><em>It does not aim. It looks at the part of you that is wrong, and that part of you finds out it is wrong.</em></p>",
@@ -65148,7 +65148,7 @@
           "slug": "speaks-only-when-ending-things",
           "name": "Speaks Only When Ending Things",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/death/skull-energy-light-white.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> The apotheon does not communicate during combat. The first time it speaks aloud in a scene, that scene ends within 1d4 rounds — narratively, mechanically, somehow. The GM picks how. The players know it is coming.</p><p><em>Silence, then a single sentence. The sentence is also the end credits.</em></p>",
@@ -65180,7 +65180,7 @@
           "slug": "sees-everything",
           "name": "Sees Everything",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/perception/eye-ringed-glow-angry-red.webp",
           "system": {
             "description": {
               "value": "<p>Cannot be surprised. Cannot be flanked. All targets within 60 feet count as visible regardless of cover, darkness, or invisibility. Resistance to psychic and sephirotic damage.</p><p><em>It looked too long. Looking is what it is now.</em></p>",
@@ -65533,7 +65533,7 @@
           "slug": "witness-mark",
           "name": "Witness-Mark",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
           "system": {
             "description": {
               "value": "<p><em>A small ringing tone in the back of your skull. Someone wrote your name down.</em></p><p><strong>Strike.</strong> range 6/90 feet, one target. Damage: <code>1d8</code> psychic (observed) + violence. No damage on a miss, but the target still senses they were seen — reroll-the-highest on their next Resolve check.</p><p><em>A small ringing tone in the back of your skull. Someone wrote your name down.</em></p>",
@@ -65707,7 +65707,7 @@
           "slug": "focusing-lens-strike",
           "name": "Focusing-Lens Strike",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/light/beam-rays-blue-small.webp",
           "system": {
             "description": {
               "value": "<p><em>A glass disk on a chain. Looks fragile. Has cut steel.</em></p><p><strong>Strike.</strong> reach 5 feet, one target. Damage: <code>1d8</code> sephirotic (lens-line) + violence. On a hit, the target is briefly marked. Until the end of the initiate's next turn, the target cannot benefit from cover.</p><p><em>A glass disk on a chain. Looks fragile. Has cut steel.</em></p>",
@@ -65879,7 +65879,7 @@
           "slug": "gathers-reports-dies-anonymously",
           "name": "Gathers, Reports, Dies Anonymously",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
           "system": {
             "description": {
               "value": "<p>On death, the initiate's last sight is transmitted to a Witness-Warden within 1 mile. Combat-relevant: any nearby allied Witness gains reroll-the-lowest on their next attack roll against the killer.</p><p><em>They were always going to die this mission. The point was what they saw before they did.</em></p><p><strong>When it drops to 0 hit points:</strong> Dies Anonymously: allied Witnesses reroll lowest on their next attack vs the killer..</p>",
@@ -66289,7 +66289,7 @@
           "slug": "silenced-glass",
           "name": "Silenced-Glass",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/guns/rifle-brown.webp",
           "system": {
             "description": {
               "value": "<p><em>The bullet exists. The sound of the bullet does not.</em></p><p>On a hit, no creature outside 30 ft. of the shot's path hears it. The lieutenant does not have to reveal her position.</p><p><strong>Strike.</strong> range 12/240 feet, one target. Damage: <code>2d8</code> kinetic (muted-shot) + violence. On a hit, no creature outside 30 feet of the shot's path hears it. The lieutenant does not have to reveal her position.</p><p><em>The bullet exists. The sound of the bullet does not.</em></p>",
@@ -66463,7 +66463,7 @@
           "slug": "commander-s-gaze",
           "name": "Commander's Gaze",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/perception/eye-ringed-glow-angry-red.webp",
           "system": {
             "description": {
               "value": "<p><em>She does not point. She just looks at you. Everyone else looks where she looked.</em></p><p><strong>Strike.</strong> range 12/60 feet, one target. Damage: <code>2d8</code> psychic (weighing-look) + violence. On a hit, the lieutenant designates the target as the priority for all friendly Witnesses this round (they gain reroll-the-lowest against this target).</p><p><em>She does not point. She just looks at you. Everyone else looks where she looked.</em></p>",
@@ -66637,7 +66637,7 @@
           "slug": "reports-up",
           "name": "Reports Up",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
           "system": {
             "description": {
               "value": "<p>While the lieutenant is alive within 1 mile of any other Witness, that Witness gains reroll-the-lowest on attack rolls and Initiate-type minions cannot be surprised.</p><p><em>She is not the leader. She is the relay. The leader is somewhere quieter, and listening.</em></p><p><strong>At the start of each turn:</strong> Reports Up: Witnesses gain advantage on attacks while the lieutenant lives..</p>",
@@ -66669,7 +66669,7 @@
           "slug": "already-left",
           "name": "Already Left",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> If reduced below half hit points, the lieutenant may use a reaction to vanish into a prepared egress — leaving combat entirely. Witnesses always have an exit. The exit was prepared before combat began.</p><p><em>Mid-tier commander. The 'mid' means she's high enough to leave.</em></p><p><strong>When it is bloodied:</strong> Already Left: may use its reaction to vanish into a prepared exit — leaves combat..</p>",
@@ -67056,7 +67056,7 @@
           "slug": "yesodium-bolt",
           "name": "Yesodium-Bolt",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/lightning/bolt-strike-blue.webp",
           "system": {
             "description": {
               "value": "<p><em>A note that isn't supposed to exist, traveling at the wrong speed.</em></p><p><strong>Strike.</strong> range 12/180 feet, one target. Damage: <code>2d8</code> qliphothic (channeled-yesodium) + soul. On a hit, the target's resistances are bypassed for this attack (the bolt threads under what protects them).</p><p><em>A note that isn't supposed to exist, traveling at the wrong speed.</em></p>",
@@ -67230,7 +67230,7 @@
           "slug": "channel-feedback-recharges-on-a-soma-break",
           "name": "Channel-Feedback (recharges on a Soma Break)",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
           "system": {
             "description": {
               "value": "<p><em>The note finds its way into your ribs. Your ribs hum back, against your will.</em></p><p>Cone 25 ft. — targets roll Wisdom saving throw (DC 14). Half damage on success. Failed-save targets cannot use Bonus Actions on their next turn (the channel-hum displaces their secondary tempo). Recharge 5–6.</p><p><strong>Area Attack.</strong> Each creature in a 25 feet cone rolls <strong>Resolve</strong> vs DC 14. Hit: <code>2d8</code> psychic (hum-resonance) + soul; half on success. Failed-save targets cannot use Bonus Actions on their next turn (the channel-hum displaces their secondary tempo).<br/><em>Recharges on a long rest.</em></p><p><em>The note finds its way into your ribs. Your ribs hum back, against your will.</em></p>",
@@ -67420,7 +67420,7 @@
           "slug": "each-spell-is-also-a-wound",
           "name": "Each Spell Is Also a Wound",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/skills/wounds/blood-drip-droplet-red.webp",
           "system": {
             "description": {
               "value": "<p>Every time the adept casts an attack from this list, they also take 1 qliphothic damage . The hum of the yesodium-channel is taken on self.</p><p><em>They were taught how to hum it. They were not taught how to stop.</em></p>",
@@ -67452,7 +67452,7 @@
           "slug": "resonance-mark",
           "name": "Resonance Mark",
           "type": "feat",
-          "img": "icons/svg/aura.svg",
+          "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
           "system": {
             "description": {
               "value": "<p><strong>Passive.</strong> The first creature to deal qliphothic, sephirotic, or psychic damage to the adept becomes Resonance-Marked for the rest of the scene: they take +1 damage from all of the adept's attacks. The mark is one-way; the marked creature gets no equivalent against the adept.</p><p><em>The channel remembers who hit it first. It is small. It is patient.</em></p>",
@@ -67793,7 +67793,7 @@
           "slug": "shake-it-off",
           "name": "Shake It Off",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/magic/air/fog-gas-smoke-swirling-white.webp",
           "system": {
             "description": {
               "value": "<p>Shakes a cloud of glowing dander in a 10 ft. sphere. Constitution vs DC 11. Fail: gain 1 RP. (No HP damage — this seeds long-term radiation.)</p><p><strong>Dander Cloud.</strong> 10 feet Constitution check vs DC 11. Fail: +1 Radiation Point.</p><p><em>Good boy. Terrible boy. Both.</em></p>",
@@ -67983,7 +67983,7 @@
           "slug": "irradiated-bite",
           "name": "Irradiated Bite",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/creatures/abilities/mouth-teeth-long-red.webp",
           "system": {
             "description": {
               "value": "<p><em>It's not the teeth you'll remember. It's the dosimeter.</em></p><p>On a hit, the target gains 1 Radiation Point (RP).</p>",

@@ -449,7 +449,7 @@
       "_id": "sCIUp0n5EHtjCwiC",
       "name": "Stalwart — Apprentice (Tier I)",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "img": "icons/skills/trades/smithing-anvil-brown.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -495,7 +495,7 @@
       "_id": "rhwcMYcBj9rJrwt6",
       "name": "Stalwart",
       "type": "class",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "img": "icons/skills/trades/smithing-anvil-brown.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-stalwart",
@@ -548,7 +548,7 @@
     {
       "name": "Letter of Making (Echo Boon)",
       "type": "feature",
-      "img": "icons/svg/book.svg",
+      "img": "icons/sundries/documents/document-sealed-brown-red.webp",
       "system": {
         "category": "echo",
         "source": "Echo Rosters",
@@ -596,7 +596,7 @@
     {
       "name": "Sephirotic Scion",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SephiroticScion4.png",
+      "img": "art/bbttcc/asli-icons/sephirotic_scion_2.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -793,7 +793,7 @@
     {
       "name": "Sefirot Attunement",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "img": "icons/magic/perception/eye-slit-red-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -917,7 +917,7 @@
     {
       "name": "Sephirotic Scion: Holy Conduit",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_4.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1042,7 +1042,7 @@
     {
       "name": "Scion: Light of Harmony",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "img": "icons/magic/light/light-lantern-lit-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1367,7 +1367,7 @@
     {
       "name": "Scion: Strategic Hooks",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunset_2.png",
+      "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1505,7 +1505,7 @@
     {
       "name": "Sephirotic Scion Heritage: Seraphic",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wings_1.png",
+      "img": "art/bbttcc/asli-icons/sephirotic_scion_2.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1807,7 +1807,7 @@
     {
       "name": "Sephirotic Scion (Seraphic): Cleansing Breath",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_8.png",
+      "img": "icons/magic/death/undead-mammal-fire-breath-pink.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -2071,7 +2071,7 @@
     {
       "name": "Maul",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hammer_1.png",
+      "img": "icons/weapons/hammers/hammer-double-sledge-engraved.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -2417,7 +2417,7 @@
     {
       "name": "Worker's Leathers",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+      "img": "icons/equipment/chest/breastplate-layered-leather-stitched.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 1,
@@ -2562,7 +2562,7 @@
     {
       "name": "Stabilizer Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+      "img": "icons/tools/medical/bandage-rough.webp",
       "system": {
         "slot": "misc",
         "tags": [],

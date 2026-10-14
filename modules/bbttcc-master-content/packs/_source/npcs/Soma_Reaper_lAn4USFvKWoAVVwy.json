@@ -301,7 +301,7 @@
     {
       "name": "Half-Real",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_1.png",
+      "img": "icons/creatures/magical/spirit-undead-ghost-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -372,7 +372,7 @@
     {
       "name": "Dreamcut",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_attack.png",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -654,7 +654,7 @@
     {
       "name": "Echo-Pluck",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_attack.png",
+      "img": "icons/tools/instruments/harp-yellow-teal.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -936,7 +936,7 @@
     {
       "name": "Soma-Drain Field (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_psychic_2.png",
+      "img": "icons/magic/unholy/orb-glowing-purple.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

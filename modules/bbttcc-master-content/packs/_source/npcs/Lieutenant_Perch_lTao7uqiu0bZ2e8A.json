@@ -427,7 +427,7 @@
       "_id": "JzFeqgV5WSsVqAbk",
       "name": "Broker",
       "type": "class",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-broker",
@@ -481,7 +481,7 @@
       "_id": "0ToRdpvRftguwIyS",
       "name": "Broker \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -526,7 +526,7 @@
     {
       "name": "Cryptidkin",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_4.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -653,7 +653,7 @@
     {
       "name": "Cryptidkin: Folklore & Frame",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/magic/control/fear-fright-mask-orange.webp",
       "system": {
         "category": "feature",
         "source": "Bad Eden (2024 rules)",
@@ -910,7 +910,7 @@
     {
       "name": "Cryptidkin (Furrykin): Wildframe & Instinct",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_furrykin.png",
+      "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
       "system": {
         "category": "feature",
         "source": {
@@ -1058,7 +1058,7 @@
     {
       "name": "Cryptidkin Heritage: Furrykin",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RayCat.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_1.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -1155,7 +1155,7 @@
     {
       "name": "Grave Calm",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_grave_calm.jpeg",
+      "img": "icons/magic/death/grave-tombstone-glow-tan.webp",
       "system": {
         "category": "technique",
         "source": {

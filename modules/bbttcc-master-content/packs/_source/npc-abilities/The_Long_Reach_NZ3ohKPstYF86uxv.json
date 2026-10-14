@@ -1,7 +1,7 @@
 {
   "name": "The Long Reach",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_claw_1.png",
+  "img": "icons/magic/earth/construct-stone-long-arms.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

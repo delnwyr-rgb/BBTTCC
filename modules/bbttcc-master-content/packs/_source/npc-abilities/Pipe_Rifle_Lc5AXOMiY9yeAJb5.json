@@ -1,7 +1,7 @@
 {
   "name": "Pipe Rifle",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+  "img": "icons/weapons/guns/rifle-brown.webp",
   "system": {
     "category": "ranged",
     "intent": "violence",

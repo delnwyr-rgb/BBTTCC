@@ -438,7 +438,7 @@
     {
       "name": "Cryptidkin: Folklore & Frame",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/magic/control/fear-fright-mask-orange.webp",
       "system": {
         "category": "feature",
         "source": "Bad Eden (2024 rules)",
@@ -698,7 +698,7 @@
     {
       "name": "Cryptidkin Heritage: Jackalope",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Verity_Furlong_screenshot%20Background%20Removed.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_3.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -810,7 +810,7 @@
     {
       "name": "Cryptidkin (Jackalope): Startle Reflex",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dodge.png",
+      "img": "icons/creatures/mammals/rabbit-movement-glowing-green.webp",
       "folder": "sU5wM5ZUL33lrQxV",
       "system": {
         "category": "feature",
@@ -1246,7 +1246,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.5Ncfbe1ReQhbLLUP"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Shadowjack.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "effects": [],
       "folder": "apQBjTCtfZVreQpj",
       "ownership": {
@@ -1271,7 +1271,7 @@
     {
       "name": "Shadow Courier \u2014 Tier 1: Liminal Operator",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
+      "img": "icons/sundries/documents/envelope-letter-post.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1482,7 +1482,7 @@
     {
       "name": "Cryptidkin",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_4.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -1612,7 +1612,7 @@
     {
       "name": "Crew Type: Covert Ops Cell",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1714,7 +1714,7 @@
     {
       "name": "Archetype: The Magician (Scholar)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1889,7 +1889,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "img": "icons/sundries/gaming/card-astronomy-pink.webp",
       "folder": "eHExqpWy9wPntvU8",
       "_stats": {
         "compendiumSource": "Item.29kPhQrzLJjW98fZ",
@@ -1953,7 +1953,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dwarf.png",
+      "img": "icons/magic/nature/plant-seed-hands-glow-yellow.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -1994,7 +1994,7 @@
     {
       "name": "Archetype: The Magician (Scholar) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2140,7 +2140,7 @@
     {
       "name": "Crew Type: Covert Ops Cell (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2556,7 +2556,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "img": "icons/sundries/gaming/card-astronomy-pink.webp",
       "folder": "eHExqpWy9wPntvU8",
       "_stats": {
         "compendiumSource": "Item.pqlfAGb9y9daRPj7",
@@ -2586,7 +2586,7 @@
     {
       "name": "Bladed Tempo",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_bladed_tempo.png",
+      "img": "icons/skills/movement/feet-bladed-boots-fire.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2651,7 +2651,7 @@
     {
       "name": "Disciplined Fire",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_disciplined_fire.png",
+      "img": "icons/magic/fire/flame-burning-tree-log.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2716,7 +2716,7 @@
     {
       "name": "Shadow Courier \u2014 Tier 2: The Crossing",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_river_1.png",
+      "img": "icons/magic/water/barrier-ice-crystal-wall-jagged-blue.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -2963,7 +2963,7 @@
     {
       "name": "Focused Shot",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_focused_shot.png",
+      "img": "icons/skills/ranged/target-bullseye-arrow-yellow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3028,7 +3028,7 @@
     {
       "name": "Shadow Courier \u2014 Tier 3: Package Mastery",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hypercube_1.png",
+      "img": "icons/sundries/documents/envelope-letter-post.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -3103,7 +3103,7 @@
     {
       "name": "Combat Instinct",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_combat_instinct.png",
+      "img": "icons/magic/fire/dagger-rune-enchant-flame-teal-purple.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats v1 (2024 rules)",
@@ -3164,7 +3164,7 @@
     {
       "name": "Decisive Momentum",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_decisive_momentum.png",
+      "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats v1 (2024 rules)",
@@ -3225,7 +3225,7 @@
     {
       "name": "Shadow Courier \u2014 Tier 4: Unfound Route",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_road_1.png",
+      "img": "icons/magic/life/ankh-shadow-green.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -3472,7 +3472,7 @@
     {
       "name": "Pressure Tested",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_pressure_tested.png",
+      "img": "icons/commodities/tech/valve-pressure-pipe-copper.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3537,7 +3537,7 @@
     {
       "name": "Threat Assessment",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_threat_assessment.png",
+      "img": "icons/sundries/documents/document-symbol-eye.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3602,7 +3602,7 @@
     {
       "name": "Mantle of Witnessed Silence",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/AncientBlood3.png",
+      "img": "icons/equipment/back/mantle-collared-black.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 1,
@@ -3796,7 +3796,7 @@
       "name": "Laser Rifle, Rad",
       "type": "weapon",
       "_id": "v4e1QS6vmu8Grs9x",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+      "img": "icons/weapons/guns/rifle-energy-blaster.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -4447,7 +4447,7 @@
       "name": "Laser Pistol, Rad",
       "type": "weapon",
       "_id": "YrghUpdj8BJb4MT3",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lazer_pistol_2.png",
+      "img": "icons/weapons/guns/pistol-revolver-energy-heavy.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -5083,7 +5083,7 @@
     {
       "name": "Brass Knife of the Quiet Word",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_knife.png",
+      "img": "icons/weapons/swords/shortsword-guard-brass.webp",
       "system": {
         "category": "melee",
         "intent": "intrigue",
@@ -5416,7 +5416,7 @@
     {
       "name": "Mercy Driver",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_boffo_sword.jpeg",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -6096,7 +6096,7 @@
     {
       "name": "Surgeon's Pact",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_syringe.jpeg",
+      "img": "icons/tools/laboratory/injector-needle-syringe-plunger.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -6190,7 +6190,7 @@
     {
       "name": "Noise Suppressant",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_2.png",
+      "img": "icons/tools/hand/wrench-mechanical-heal-blue.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -6278,7 +6278,7 @@
     {
       "name": "Adrenal Burn",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/combat_stim_)2.jpeg",
+      "img": "icons/sundries/books/book-symbol-fire-gold-orange.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -6366,7 +6366,7 @@
     {
       "name": "Calmpact Vial",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_4.png",
+      "img": "icons/consumables/potions/potion-vial-corked-labeled-purple.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -6454,7 +6454,7 @@
     {
       "name": "Atonement Lozenge",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_capsule_6.png",
+      "img": "icons/sundries/books/book-symbol-link-brown.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -6548,7 +6548,7 @@
     {
       "name": "Memory Restorative",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_6.png",
+      "img": "icons/commodities/biological/organ-brain-red.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -6640,7 +6640,7 @@
     {
       "name": "Stim Spike",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/techno_capsule_1.png",
+      "img": "icons/equipment/finger/ring-bone-horned-spike.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -6728,7 +6728,7 @@
     {
       "name": "Gene-Cleanse Serum",
       "type": "gear",
-      "img": "icons/svg/mystery-man.svg",
+      "img": "icons/commodities/bones/bones-broken-marrow-white-red.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -6815,7 +6815,7 @@
     {
       "name": "Field Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/combat_stim_1.png",
+      "img": "icons/commodities/leather/leather-patch-grey.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -6903,7 +6903,7 @@
     {
       "name": "Decay Inhibitor",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_crystal_2.png",
+      "img": "icons/equipment/neck/pendant-gold-crystal-blue.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -6992,7 +6992,7 @@
     {
       "name": "Neon Spirit Armor",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_neon_spirit_armor.jpeg",
+      "img": "icons/commodities/metal/armor-plate-reticulated.webp",
       "system": {
         "guardBonus": 0,
         "evasionBonus": 0,
@@ -7079,7 +7079,7 @@
     {
       "name": "Reactor Shield Cape",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_reactor_shield_cape.jpeg",
+      "img": "icons/equipment/back/cape-layered-orange.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -7185,7 +7185,7 @@
     {
       "name": "Yesodium Tongue-Stud",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/yesodium_tongue_stud.png",
+      "img": "icons/commodities/biological/tongue-violet.webp",
       "system": {
         "slot": "implant",
         "tags": [
@@ -7273,7 +7273,7 @@
     {
       "name": "Veilbreaker Mantle",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_veilbreaker_mantle.jpeg",
+      "img": "icons/equipment/back/mantle-collared-black.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -7457,7 +7457,7 @@
     {
       "name": "Yesodium Six-Shooter",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lazer_pistol_3.png",
+      "img": "icons/weapons/guns/pistol-revolver-energy-heavy.webp",
       "_id": "kvgmhRUEiy09GvOt",
       "effects": [],
       "folder": "TNrB6kEiHS0KwwJT",
@@ -7760,7 +7760,7 @@
     {
       "name": "Ego\u2011Dragon Scale Aegis",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_%20ego_dragon_scale_aegis.png",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -7887,7 +7887,7 @@
     {
       "name": "Cloak of Null Profile",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_cloak_of_null_profile.jpeg",
+      "img": "icons/equipment/back/cloak-collared-pink-gold.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -8014,7 +8014,7 @@
     {
       "name": "Route of the Black Stair (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_7.png",
+      "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "shadow_courier",

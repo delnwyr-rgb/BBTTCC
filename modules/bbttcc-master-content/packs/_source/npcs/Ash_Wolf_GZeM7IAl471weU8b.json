@@ -294,7 +294,7 @@
     {
       "name": "Pack Tactics",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wolf_1.png",
+      "img": "icons/creatures/abilities/wolf-howl-moon-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -365,7 +365,7 @@
     {
       "name": "Smoldering Bite",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_1.png",
+      "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -647,7 +647,7 @@
     {
       "name": "Burn-Zone Lunge (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wolf_1.png",
+      "img": "icons/magic/fire/beam-jet-stream-embers.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

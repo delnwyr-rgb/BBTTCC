@@ -403,7 +403,7 @@
     {
       "name": "Menhirkin",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tharlabrindt_pov.png",
+      "img": "art/bbttcc/asli-icons/menhirkin_1.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -763,7 +763,7 @@
     {
       "name": "Menhirkin (Sedimentary): Read the Strata",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunset_2.png",
+      "img": "icons/magic/earth/lava-stone-fire-eye.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -849,7 +849,7 @@
     {
       "name": "Wyrdlens Adept",
       "type": "class",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/WyrdlensAdept2.png",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-large-teal.webp",
       "system": {
         "category": "path",
         "identifier": "wyrdlens-adept",
@@ -1557,7 +1557,7 @@
     {
       "name": "Lens-Tuned Recall",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_13.png",
+      "img": "icons/skills/social/symbol-pyramid-eye.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1691,7 +1691,7 @@
     {
       "name": "Menhirkin Heritage: Sedimentary",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cracked_stone_2.png",
+      "img": "art/bbttcc/asli-icons/menhirkin_1.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1855,7 +1855,7 @@
     {
       "name": "Wyrdlens Adept: Tier 1 \u2014 Lens Read",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_16.png",
+      "img": "icons/sundries/books/book-eye-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1999,7 +1999,7 @@
     {
       "name": "Refraction of Truth (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lightning_2.png",
+      "img": "icons/magic/symbols/symbol-lightning-bolt.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "wyrdlens-adept",
@@ -2049,7 +2049,7 @@
     {
       "name": "Archetype: The Hermit (Mystic-Isolator)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2189,7 +2189,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_throne_1.png",
+      "img": "icons/environment/settlement/city-hall.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -2297,7 +2297,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "img": "icons/skills/social/symbol-pyramid-eye.webp",
       "folder": "cAJvL0bsu1HkZCWz",
       "_stats": {
         "compendiumSource": "Item.SJqoAnjAtEVP09At",
@@ -2327,7 +2327,7 @@
     {
       "name": "Crew Type: Verdant Stalkers",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2423,7 +2423,7 @@
     {
       "name": "Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2566,7 +2566,7 @@
     {
       "name": "Crew Type: Verdant Stalkers (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2844,7 +2844,7 @@
           "_key": "!actors.items.effects!OTDmvF9yUQOFh5PC.TFYTBTqCms4ehtuR.3MI7aYnvakMu0F2o"
         }
       ],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "img": "icons/skills/social/symbol-pyramid-eye.webp",
       "folder": "cAJvL0bsu1HkZCWz",
       "_stats": {
         "compendiumSource": "Item.qOiOQ3sJVEH5psUH",
@@ -2874,7 +2874,7 @@
     {
       "name": "Initiate's Robe",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/initiates_robes.png",
+      "img": "icons/equipment/chest/robe-layered-red.webp",
       "system": {
         "guardBonus": 0,
         "evasionBonus": 1,
@@ -3018,7 +3018,7 @@
     {
       "name": "Angle of Witness",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_17.png",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -3337,7 +3337,7 @@
     {
       "name": "Atlas Prism",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_24.png",
+      "img": "icons/skills/melee/sword-shield-stylized-white.webp",
       "system": {
         "category": "unarmed",
         "intent": "intrigue",
@@ -3648,7 +3648,7 @@
     {
       "name": "Correspondence Strike",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_invisible_1.png",
+      "img": "icons/magic/water/strike-ice-blade-axe.webp",
       "system": {
         "intent": "violence",
         "channel": "mind",
@@ -3964,7 +3964,7 @@
     {
       "name": "Lensing",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_6.png",
+      "img": "icons/magic/perception/hand-eye-pink.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -4283,7 +4283,7 @@
     {
       "name": "Sigil of Seeing",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_13.png",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-gray.webp",
       "system": {
         "category": "unarmed",
         "intent": "intrigue",
@@ -4577,7 +4577,7 @@
     {
       "name": "Wide Angle",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_7.png",
+      "img": "icons/magic/lightning/bolt-strike-wide-white.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -4879,7 +4879,7 @@
     {
       "name": "Witness Flame",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flame_1.png",
+      "img": "icons/skills/melee/strike-scythe-fire-green.webp",
       "system": {
         "category": "unarmed",
         "intent": "intrigue",
@@ -5190,7 +5190,7 @@
     {
       "name": "Witness Flame",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flame_1.png",
+      "img": "icons/skills/melee/strike-scythe-fire-green.webp",
       "system": {
         "category": "unarmed",
         "intent": "intrigue",

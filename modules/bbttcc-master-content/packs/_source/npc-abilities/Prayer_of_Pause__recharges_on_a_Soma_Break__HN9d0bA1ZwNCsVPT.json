@@ -1,7 +1,7 @@
 {
   "name": "Prayer-of-Pause (recharges on a Soma Break)",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_1.png",
+  "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
   "system": {
     "category": "ranged",
     "intent": "presence",

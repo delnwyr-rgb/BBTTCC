@@ -297,7 +297,7 @@
     {
       "name": "Combo-Meal Slam",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mace.png",
+      "img": "icons/skills/melee/strike-flail-spiked-pink.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -588,7 +588,7 @@
     {
       "name": "Aggressive Up-Sell",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_5.png",
+      "img": "icons/commodities/currency/coins-plain-pouch-gold.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

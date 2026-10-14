@@ -575,7 +575,7 @@
     const crossingOf = (tf) => (tf?.crossing && typeof tf.crossing === "object") ? tf.crossing : null;
 
     EFFECTS.build_bridge = Object.assign({}, EFFECTS.build_bridge, {
-      kind: "strategic", band: "standard", label: "Build Bridge",
+      kind: "strategic", band: "standard", label: "Build Bridge", img: "icons/environment/settlement/bridge-stone.webp",
       cost: EFFECTS.build_bridge?.cost || { economy: 20, logistics: 14 },
       storyOnly: false,
       async canPlan({ actor, targetDoc, targetFlags }){
@@ -604,7 +604,7 @@
     });
 
     EFFECTS.cut_bridge = Object.assign({}, EFFECTS.cut_bridge, {
-      kind: "strategic", band: "standard", label: "Cut the Bridge",
+      kind: "strategic", band: "standard", label: "Cut the Bridge", img: "icons/weapons/axes/axe-broad-brown.webp",
       cost: EFFECTS.cut_bridge?.cost || { violence: 10, intrigue: 10 },
       storyOnly: false,
       async canPlan({ targetDoc, targetFlags }){
@@ -634,7 +634,7 @@
     // Charter Passage targets a RIG (the planner's rig chooser lists another faction's travel rigs
     // with a non-land domain): entry = { targetType:"rig", defenderId: carrier faction, rigId: rig ACTOR id }.
     EFFECTS.charter_passage = Object.assign({}, EFFECTS.charter_passage, {
-      kind: "strategic", band: "standard", label: "Charter Passage",
+      kind: "strategic", band: "standard", label: "Charter Passage", img: "icons/sundries/documents/document-sealed-signatures-red.webp",
       cost: EFFECTS.charter_passage?.cost || { diplomacy: 20, economy: 10 },
       storyOnly: false, targetType: "rig",
       async canPlan({ actor, defender, rigActor }){

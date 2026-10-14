@@ -1,7 +1,7 @@
 {
   "name": "Mire-Disperse",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_gas_mask_1.png",
+  "img": "icons/magic/air/fog-gas-smoke-swirling-green.webp",
   "system": {
     "category": "ranged",
     "intent": "presence",

@@ -442,7 +442,7 @@
       "_id": "9UkCCDPKcdUUx3Io",
       "name": "Bravo",
       "type": "class",
-      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-bravo",
@@ -496,7 +496,7 @@
       "_id": "SYMMr5ZKq2vE4OCK",
       "name": "Bravo — Apprentice (Tier I)",
       "type": "feature",
-      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -541,7 +541,7 @@
     {
       "name": "Never Here (Echo Boon)",
       "type": "feature",
-      "img": "icons/svg/invisible.svg",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "system": {
         "category": "echo",
         "source": "Echo Rosters",
@@ -589,7 +589,7 @@
     {
       "name": "Human",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/avuncular_joans_scene_1_us.png",
+      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -753,7 +753,7 @@
     {
       "name": "Human: Stubborn Spark",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_2.png",
+      "img": "icons/magic/fire/orb-lightning-sun.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1006,7 +1006,7 @@
     {
       "name": "Human Heritage: Neanderthal",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/young_gearbox_pov.png",
+      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
       "system": {
         "category": "heritage",
         "source": "Bad Eden (2024 rules)",
@@ -1093,7 +1093,7 @@
     {
       "name": "Human (Neanderthal): Thick-Boned",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_brawl_4.png",
+      "img": "icons/magic/water/snowflake-ice-snow-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1235,7 +1235,7 @@
     {
       "name": "Hand Axe",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_axe.png",
+      "img": "icons/weapons/axes/axe-battle-broad-stone.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -1581,7 +1581,7 @@
     {
       "name": "Bulwark Hauberk",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/bulwark_hauberk.png",
+      "img": "icons/equipment/chest/breastplate-layered-leather-black.webp",
       "system": {
         "guardBonus": 2,
         "evasionBonus": 0,
@@ -1726,7 +1726,7 @@
     {
       "name": "Pressed Buckler",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pressed_buckler.png",
+      "img": "icons/equipment/shield/buckler-wooden-boss-lightning.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 0,
@@ -1862,7 +1862,7 @@
     {
       "name": "Stabilizer Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+      "img": "icons/tools/medical/bandage-rough.webp",
       "system": {
         "slot": "misc",
         "tags": [],

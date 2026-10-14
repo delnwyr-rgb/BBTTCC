@@ -1,7 +1,7 @@
 {
   "name": "Pre-Fall Halberd",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_spear.png",
+  "img": "icons/weapons/polearms/halberd-crescent-steel.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

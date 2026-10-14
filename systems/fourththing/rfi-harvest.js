@@ -24,6 +24,21 @@
 
 import RfiItems from "./rfi-items.js";
 
+// Icon swap (2026-10-14): harvested materials get a core webp by material family instead of Foundry's mystery-man svg.
+function _ftMaterialImg(key, name) {
+  const s = `${key ?? ""} ${name ?? ""}`.toLowerCase();
+  if (/grain|wheat|crop|harvest|seed|flour/.test(s)) return "icons/consumables/grains/wheat-yellow.webp";
+  if (/crystal|gem|shard|quartz|glass/.test(s))       return "icons/commodities/gems/gem-rough-cushion-violet.webp";
+  if (/leather|hide|pelt|herd|fur/.test(s))           return "icons/commodities/leather/leather-bolt-brown.webp";
+  if (/ore|iron|metal|vein|steel|copper|scrap/.test(s)) return "icons/commodities/stone/ore-chunk-iron-black.webp";
+  if (/wood|timber|log|lumber/.test(s))               return "icons/commodities/wood/lumber-stack.webp";
+  if (/salt|spice/.test(s))                           return "icons/consumables/food/salt-seasoning-spice-pink.webp";
+  if (/water|draught|spring/.test(s))                 return "icons/consumables/potions/bottle-corked-blue.webp";
+  if (/bone|marrow/.test(s))                          return "icons/commodities/bones/bones-stack-tan.webp";
+  if (/cloth|fiber|thread|flax/.test(s))              return "icons/commodities/cloth/cloth-bolt-grey.webp";
+  return "icons/containers/bags/sack-simple-leather-brown.webp";
+}
+
 const HARVEST_PATH = "flags.fourththing.harvest";
 
 // A node lives on a Drawing / Tile / Token, which a PLAYER seat cannot update.
@@ -281,7 +296,7 @@ export const RfiHarvest = {
         materialItemData = {
           name: h.materialName || h.materialKey,
           type: "gear",
-          img:  "icons/svg/mystery-man.svg",
+          img:  _ftMaterialImg(h.materialKey, h.materialName),
           system: { slot: "material", tags: ["material", h.materialKey] },
           flags: { fourththing: { rfi: { item: {
             ...RfiItems.defaults({ type: "gear", system: {}, getFlag: () => null }),
@@ -331,7 +346,7 @@ export const RfiHarvest = {
           const qr = new Roll(String(d.qty ?? "1")); await qr.evaluate(); const units = Math.max(1, Number(qr.total) || 1);
           let data = null;
           if (d.uuid) { const src = await fromUuid(d.uuid); if (src) { data = src.toObject(); delete data._id; foundry.utils.setProperty(data, "flags.fourththing.rfi.item.charges", units); } }
-          if (!data) data = { name: d.name || d.key, type: "gear", img: "icons/svg/mystery-man.svg", system: { slot: "material", tags: ["material", d.key] },
+          if (!data) data = { name: d.name || d.key, type: "gear", img: _ftMaterialImg(d.key, d.name), system: { slot: "material", tags: ["material", d.key] },
             flags: { fourththing: { rfi: { item: { ...RfiItems.defaults({ type: "gear", system: {}, getFlag: () => null }), tier: d.tier || "I", frame: "material", origin: "found", bound: "free", materialKey: d.key, charges: units, upkeep: { mode: "passive", per: "none" } } } } } };
           await RfiHarvest._deliver(actor, data, units, d.uuid || null); dropped.push({ key: d.key, units, name: d.name || d.key });
         } catch (eD) { console.warn("Roll for Initiation | harvest drop failed", d, eD); }

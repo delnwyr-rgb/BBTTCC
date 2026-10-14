@@ -166,7 +166,7 @@
     {
       "name": "Chromatic Slam",
       "type": "weapon",
-      "img": "systems/dnd5e/icons/svg/items/weapon.svg",
+      "img": "icons/magic/control/buff-luck-fortune-rainbow.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -423,7 +423,7 @@
     {
       "name": "Weaponized Whimsy",
       "type": "feature",
-      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "img": "icons/magic/control/buff-luck-fortune-rainbow.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -460,7 +460,7 @@
     {
       "name": "Feed on Attention",
       "type": "feature",
-      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-red.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -497,7 +497,7 @@
     {
       "name": "Aura of Aggressive Positivity",
       "type": "feature",
-      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -534,7 +534,7 @@
     {
       "name": "Weakness: Boredom",
       "type": "feature",
-      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -571,7 +571,7 @@
     {
       "name": "Glitter Aftermath",
       "type": "feature",
-      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "img": "icons/magic/light/explosion-star-small-orange-purple.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -608,7 +608,7 @@
     {
       "name": "Rainbow Cascade",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+      "img": "icons/magic/control/buff-luck-fortune-rainbow.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -891,7 +891,7 @@
     {
       "name": "Saturation Field",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+      "img": "icons/magic/light/explosion-star-glow-blue-purple.webp",
       "system": {
         "category": "principle",
         "source": "",

@@ -1,7 +1,7 @@
 {
   "name": "Wall-of-Honor (recharges on a Soma Break)",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rampart_1.png",
+  "img": "icons/magic/earth/barrier-stone-brown-green.webp",
   "system": {
     "category": "ranged",
     "intent": "presence",

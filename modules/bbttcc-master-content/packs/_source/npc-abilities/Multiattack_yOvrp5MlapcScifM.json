@@ -1,7 +1,7 @@
 {
   "name": "Multiattack",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_portal_2.png",
+  "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
   "system": {
     "category": "principle",
     "source": "",

@@ -1,7 +1,7 @@
 {
   "name": "Swaddle-Iron Axe",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_greataxe.png",
+  "img": "icons/weapons/axes/axe-double-engraved.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

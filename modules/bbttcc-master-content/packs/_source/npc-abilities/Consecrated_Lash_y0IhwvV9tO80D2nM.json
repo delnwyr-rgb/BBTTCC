@@ -1,7 +1,7 @@
 {
   "name": "Consecrated Lash",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_whip.png",
+  "img": "icons/skills/melee/strike-chain-whip-blue.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

@@ -294,7 +294,7 @@
     {
       "name": "Broken Pact",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hex_2.png",
+      "img": "icons/magic/control/debuff-chains-shackle-movement-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -365,7 +365,7 @@
     {
       "name": "Mumbled Prayer",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sigil_1.png",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -647,7 +647,7 @@
     {
       "name": "Reflex Lash",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blade_1.png",
+      "img": "icons/skills/melee/strike-chain-whip-blue.webp",
       "system": {
         "category": "melee",
         "intent": "violence",

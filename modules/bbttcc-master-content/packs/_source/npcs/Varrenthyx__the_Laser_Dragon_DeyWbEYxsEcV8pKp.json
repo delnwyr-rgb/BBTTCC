@@ -313,7 +313,7 @@
     {
       "name": "Coherent Breath",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_energy_blast_1.png",
+      "img": "icons/creatures/abilities/dragon-breath-purple.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -611,7 +611,7 @@
     {
       "name": "Strafing Eye-Beams",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lazer_pistol_4.png",
+      "img": "icons/magic/light/orb-beams-green.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -903,7 +903,7 @@
     {
       "name": "Wing Buffet",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wings_1.png",
+      "img": "icons/creatures/abilities/wing-batlike-purple-blue.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -1200,7 +1200,7 @@
     {
       "name": "Rending Talons",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_claw_1.png",
+      "img": "icons/creatures/claws/claw-talons-glowing-orange.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -1492,7 +1492,7 @@
     {
       "name": "Overcharge Nova",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_explosion_3.png",
+      "img": "icons/magic/lightning/orb-ball-spiral-blue.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",

@@ -224,7 +224,7 @@
       "_id": "t3nhTU10T4W9z4WM",
       "name": "Multiattack",
       "type": "feature",
-      "img": "icons/svg/combat.svg",
+      "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
       "system": {
         "category": "principle",
         "description": {

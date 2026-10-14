@@ -428,7 +428,7 @@
       "_id": "PHE9sHFDCMNZuASe",
       "name": "Broker",
       "type": "class",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-broker",
@@ -482,7 +482,7 @@
       "_id": "ugD7MikYlmfi7J3c",
       "name": "Broker \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -527,7 +527,7 @@
     {
       "name": "Oldenborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_2.png",
+      "img": "art/bbttcc/asli-icons/oldborne_sky.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -685,7 +685,7 @@
     {
       "name": "Oldenborn Heritage: Lumenwrought",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Ember_Lumenwrought_3.png",
+      "img": "art/bbttcc/asli-icons/oldenborn_earthbound.webp",
       "system": {
         "category": "heritage",
         "source": "Bad Eden (2024 rules)",
@@ -772,7 +772,7 @@
     {
       "name": "Oldenborn (Lumenwrought): Glamourfield",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+      "img": "icons/magic/control/buff-luck-fortune-rainbow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -911,7 +911,7 @@
     {
       "name": "Adaptive Defense",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_defense.png",
+      "img": "icons/magic/defensive/shield-barrier-flaming-diamond-red.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats v1 (2024 rules)",

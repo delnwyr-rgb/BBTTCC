@@ -1,7 +1,7 @@
 {
   "name": "Hex-Blade",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_void_edge_1.png",
+  "img": "icons/magic/symbols/runes-etched-steel-blade.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

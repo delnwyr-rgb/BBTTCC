@@ -429,6 +429,20 @@ function _bbttccBuildDoctrineDescription(kind, key, spec) {
   return `<div class="bbttcc-doctrine-desc"><h3>${_bbttccEscapeHtml(label)}</h3>${bodyHtml}${costsHtml}${tierHtml}${rarityHtml}${raidTypesHtml}${defenderHtml}</div>`;
 }
 
+
+// Icon swap (2026-10-14): granted doctrine / activity items used to ship with no img and fell back to Foundry's
+// item-bag.svg. Order: the registry spec's own img → the doctrines compendium doc of the same name (pass 1 icons)
+// → a core webp by kind.
+function _bbttccDoctrineImg(name, kind, spec) {
+  if (spec?.img) return spec.img;
+  try {
+    const pack = game.bbttcc?.packs?.get?.("bbttcc-master-content.doctrines") ?? game.packs.get("bbttcc-master-content.doctrines");
+    const hit = pack?.index?.find?.(e => e.name === name && e.img && !/^icons\/svg\//.test(e.img));
+    if (hit?.img) return hit.img;
+  } catch (_e) { /* fall through */ }
+  return kind === "maneuver" ? "icons/skills/melee/weapons-crossed-swords-yellow.webp" : "icons/sundries/documents/document-sealed-signatures-red.webp";
+}
+
 async function _bbttccGrantDoctrineEmbeddedItem(actor, { kind, key, silent=false } = {}) {
   const a = resolveFactionActor(actor) || actor;
   if (!a) throw new Error("Doctrine grant: invalid faction actor");
@@ -449,9 +463,11 @@ async function _bbttccGrantDoctrineEmbeddedItem(actor, { kind, key, silent=false
     warn(`Doctrine grant: EFFECTS missing key '${kk}'. Creating item anyway (alpha-safe).`);
   }
 
+  const itemName = spec?.label || _bbttccDoctrineLabelForKey(k, kk);
   const itemData = {
-    name: spec?.label || _bbttccDoctrineLabelForKey(k, kk),
+    name: itemName,
     type: "feat",
+    img: _bbttccDoctrineImg(itemName, k, spec),
     flags: { bbttcc: { kind: k, key: kk } },
     system: {
       category: k === "maneuver" ? "maneuver" : "strategic",

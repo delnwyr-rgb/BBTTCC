@@ -1,7 +1,7 @@
 {
   "name": "Channel-Feedback (recharges on a Soma Break)",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_energy_cone.png",
+  "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
   "system": {
     "category": "ranged",
     "intent": "presence",

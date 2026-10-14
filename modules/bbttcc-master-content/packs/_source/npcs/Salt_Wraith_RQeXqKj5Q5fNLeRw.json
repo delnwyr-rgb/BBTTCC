@@ -300,7 +300,7 @@
     {
       "name": "Crystallized Grief",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spirit.png",
+      "img": "icons/commodities/gems/gem-rough-cushion-violet.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -371,7 +371,7 @@
     {
       "name": "Drain-Touch",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_2.png",
+      "img": "icons/magic/unholy/strike-body-life-soul-purple.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -653,7 +653,7 @@
     {
       "name": "Salt-Sermon",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music.png",
+      "img": "icons/sundries/books/book-worn-brown-grey.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

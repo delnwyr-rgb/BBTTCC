@@ -165,7 +165,7 @@
     {
       "name": "Intimidation Pressure",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fear_1.png",
+      "img": "icons/skills/social/intimidation-impressing.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -202,7 +202,7 @@
     {
       "name": "Overkill",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rage_1.png",
+      "img": "icons/skills/melee/strike-slashes-red.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -239,7 +239,7 @@
     {
       "name": "Chainblade",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blade_1.png",
+      "img": "icons/environment/traps/saw-mechanical-toothed-steel-red.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -496,7 +496,7 @@
     {
       "name": "Fragmentation Grenade (1/Day)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bomb_1.png",
+      "img": "icons/weapons/thrown/bomb-fuse-black.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",

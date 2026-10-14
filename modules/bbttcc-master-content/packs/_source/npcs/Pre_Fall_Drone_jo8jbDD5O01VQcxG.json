@@ -301,7 +301,7 @@
     {
       "name": "Targeting Laser",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lazer_pistol_3.png",
+      "img": "icons/skills/targeting/crosshair-ringed-gray.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -583,7 +583,7 @@
     {
       "name": "Diagnostic Probe",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_1.png",
+      "img": "icons/tools/scribal/lens-blue.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -865,7 +865,7 @@
     {
       "name": "Broken Protocol Loop",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_robot.png",
+      "img": "icons/commodities/tech/gear-wheels-double-steel.webp",
       "system": {
         "category": "technique",
         "source": {

@@ -183,7 +183,7 @@
     {
       "name": "Hex-Iron Lance",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_1.png",
+      "img": "icons/weapons/polearms/spear-flared-steel.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -465,7 +465,7 @@
     {
       "name": "Scatter Carbine",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+      "img": "icons/weapons/guns/gun-blunderbuss-worn-brown.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -740,7 +740,7 @@
     {
       "name": "Hex-Iron Dirk",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_2.png",
+      "img": "icons/weapons/daggers/dagger-straight-blue.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -1015,7 +1015,7 @@
     {
       "name": "Sworn",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+      "img": "icons/equipment/shield/heater-steel-grey.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -1051,7 +1051,7 @@
     {
       "name": "Pact-Iron Resolve",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fear_1.png",
+      "img": "icons/equipment/shield/heater-steel-grey.webp",
       "system": {
         "category": "principle",
         "source": "",

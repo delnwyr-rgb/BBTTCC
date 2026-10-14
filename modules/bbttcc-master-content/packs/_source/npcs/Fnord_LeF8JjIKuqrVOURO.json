@@ -410,7 +410,7 @@
     {
       "name": "Oldenborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_2.png",
+      "img": "art/bbttcc/asli-icons/oldborne_sky.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -571,7 +571,7 @@
     {
       "name": "Oldenborn Heritage: Rustland Scavenger",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RustlandScavenger2.png",
+      "img": "art/bbttcc/asli-icons/oldenborn_lumenwrought_2.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1125,7 +1125,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.5Ncfbe1ReQhbLLUP"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Shadowjack.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "effects": [],
       "folder": "apQBjTCtfZVreQpj",
       "ownership": {
@@ -1150,7 +1150,7 @@
     {
       "name": "Black Stair L1: The Crossing, Weaponized",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_knife_2.png",
+      "img": "icons/skills/melee/strike-blade-knife-green-purple.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1236,7 +1236,7 @@
     {
       "name": "Last Mile L1: The Weight You Carry",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_run.png",
+      "img": "icons/skills/movement/feet-winged-sandals-tan.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1495,7 +1495,7 @@
     {
       "name": "Oldenborn (Rustland Scavenger): Ruin-Sense",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_oldenborn_1.png",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-teal.webp",
       "system": {
         "category": "feature",
         "source": {
@@ -1598,7 +1598,7 @@
     {
       "name": "Shadow Courier — Tier 1: Liminal Operator",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
+      "img": "icons/sundries/documents/envelope-letter-post.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1810,7 +1810,7 @@
     {
       "name": "Archetype: The Magician (Scholar)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1922,7 +1922,7 @@
     {
       "name": "Crew Type: Ashbound Survivors",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2084,7 +2084,7 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "effects": [],
       "folder": "3oMsaUpGcyqokYqu",
       "_stats": {
@@ -2150,7 +2150,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heart_1.png",
+      "img": "icons/magic/life/heart-glowing-red.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -2192,7 +2192,7 @@
     {
       "name": "Archetype: The Magician (Scholar) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2339,7 +2339,7 @@
     {
       "name": "Crew Type: Ashbound Survivors (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2736,7 +2736,7 @@
           "version": 5
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "effects": [],
       "folder": "3oMsaUpGcyqokYqu",
       "_stats": {

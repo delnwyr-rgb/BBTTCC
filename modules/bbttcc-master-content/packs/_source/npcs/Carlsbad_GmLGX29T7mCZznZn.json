@@ -520,7 +520,7 @@
     {
       "name": "Twin Autocannons",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+      "img": "icons/weapons/guns/gun-chain-gatling-belt.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -825,7 +825,7 @@
     {
       "name": "Plasma Lance",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ray_1.png",
+      "img": "icons/weapons/guns/pistol-energy-plasma.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",

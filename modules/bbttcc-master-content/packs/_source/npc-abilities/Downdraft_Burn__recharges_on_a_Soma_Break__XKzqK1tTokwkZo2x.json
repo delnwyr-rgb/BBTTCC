@@ -1,7 +1,7 @@
 {
   "name": "Downdraft Burn (recharges on a Soma Break)",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fire_cone_1.png",
+  "img": "icons/magic/fire/beam-jet-stream-embers.webp",
   "system": {
     "category": "ranged",
     "intent": "presence",

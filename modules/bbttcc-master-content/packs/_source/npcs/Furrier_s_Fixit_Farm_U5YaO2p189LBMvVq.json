@@ -281,7 +281,7 @@
         }
       },
       "_id": "O2j7lMSBkFRiZUH6",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/magic/fire/flame-burning-earth-yellow.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -321,7 +321,7 @@
         }
       },
       "_id": "Sq3IbAvlnVwueJLn",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/magic/fire/barrier-wall-explosion-orange.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -361,7 +361,7 @@
         }
       },
       "_id": "HHox2XQdC3dQctNo",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/magic/fire/projectile-fireball-smoke-large-blue.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -401,7 +401,7 @@
         }
       },
       "_id": "1a4sQsiVYA15fORI",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -441,7 +441,7 @@
         }
       },
       "_id": "K8NbjmYocuPDTg4N",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/containers/boxes/crate-wooden-beige-red.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -481,7 +481,7 @@
         }
       },
       "_id": "CMqlXjxPC9NCTmxp",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/books/book-eye-red.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -521,7 +521,7 @@
         }
       },
       "_id": "317Ti4ctqDFubBPY",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/skills/trades/music-notes-sound-blue.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -561,7 +561,7 @@
         }
       },
       "_id": "u3lrl1zzSJo8vrhw",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_farm.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -601,7 +601,7 @@
         }
       },
       "_id": "puoPj0ntoVWRfNkm",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/tools/navigation/map-marked-gold.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -641,7 +641,7 @@
         }
       },
       "_id": "g9uSz1zVi6wnonlm",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/environment/traps/spiked-wall.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -681,7 +681,7 @@
         }
       },
       "_id": "69PExX4Xq0KUocyZ",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/flags/banner-flag-pirate-swords.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -721,7 +721,7 @@
         }
       },
       "_id": "cOzNOP8fpn1Lejnq",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/containers/barrels/barrel-oak-banded-tan.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -761,7 +761,7 @@
         }
       },
       "_id": "YZxLNwFXYQmIqME0",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/commodities/currency/coin-oval-rune-copper.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -801,7 +801,7 @@
         }
       },
       "_id": "CFeNRzq9pfzGchx7",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_farm.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -841,7 +841,7 @@
         }
       },
       "_id": "TZO1Di7dCOSQxhQf",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_fortress.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -881,7 +881,7 @@
         }
       },
       "_id": "8WDJDcHskobEvPeH",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_mine.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -921,7 +921,7 @@
         }
       },
       "_id": "NJayGEoVBSwLvZoP",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_port.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -961,7 +961,7 @@
         }
       },
       "_id": "QsKgKELaK3TOX27i",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_research_facility.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -1001,7 +1001,7 @@
         }
       },
       "_id": "JHNBFdGnbdNK5HS7",
-      "img": "icons/svg/item-bag.svg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_settlement.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -1041,7 +1041,7 @@
         }
       },
       "_id": "wbXXc4DSIQBSzdYk",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/environment/wilderness/wall-ruins.webp",
       "effects": [],
       "folder": null,
       "sort": 0,
@@ -1066,7 +1066,7 @@
       "_id": "dKCOmjS7RzjPhRKY",
       "name": "Bravo",
       "type": "class",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-bravo",
@@ -1120,7 +1120,7 @@
       "_id": "jQXnTC0RRO0e7pWo",
       "name": "Bravo — Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

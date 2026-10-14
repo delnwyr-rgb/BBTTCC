@@ -1,7 +1,7 @@
 {
   "name": "Re-Arrangement (recharges on a Soma Break)",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+  "img": "icons/magic/time/arrows-circling-green.webp",
   "system": {
     "category": "ranged",
     "intent": "presence",

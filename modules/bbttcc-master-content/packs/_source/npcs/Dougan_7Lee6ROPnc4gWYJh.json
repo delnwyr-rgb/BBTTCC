@@ -529,7 +529,7 @@
     {
       "name": "Cryptidkin",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_4.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -656,7 +656,7 @@
     {
       "name": "Cryptidkin: Folklore & Frame",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/magic/control/fear-fright-mask-orange.webp",
       "system": {
         "category": "feature",
         "source": "Bad Eden (2024 rules)",
@@ -913,7 +913,7 @@
     {
       "name": "Cryptidkin Heritage: Chupacabra",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Local%20Factions/Chupacabra.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_5.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -1002,7 +1002,7 @@
     {
       "name": "Cryptidkin (Chupacabra): Blood-Drinker",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_blood_drop.png",
+      "img": "icons/magic/unholy/strike-beam-blood-large-red-teal.webp",
       "folder": "xXEvcJVnatNacYOY",
       "system": {
         "category": "feature",
@@ -1250,7 +1250,7 @@
     {
       "name": "Archetype: The Empress (Caretaker)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1363,7 +1363,7 @@
     {
       "name": "Archetype: The Empress (Caretaker) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1544,7 +1544,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+      "img": "icons/equipment/neck/necklace-astrology-sun-gold.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -1586,7 +1586,7 @@
     {
       "name": "Crew Type: Covert Ops Cell (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2003,7 +2003,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "img": "icons/sundries/gaming/card-astronomy-pink.webp",
       "folder": "eHExqpWy9wPntvU8",
       "_stats": {
         "compendiumSource": "Item.pqlfAGb9y9daRPj7",
@@ -2034,7 +2034,7 @@
     {
       "name": "Deliberate Tempo",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_deliberate_tempo.png",
+      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats (Batch 3) (2026 rules)",
@@ -2097,7 +2097,7 @@
     {
       "name": "Gentle Pivot",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_4.png",
+      "img": "icons/skills/melee/hand-grip-sword-strike-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2170,7 +2170,7 @@
     {
       "name": "Mercy Refraction (Bad Eden)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_8.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2239,7 +2239,7 @@
       "_id": "dBXwVe5xJdn9YZhO",
       "name": "Operator",
       "type": "class",
-      "img": "icons/svg/cowled.svg",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-operator",
@@ -2293,7 +2293,7 @@
       "_id": "NUPoGoGKEki60e7W",
       "name": "Operator \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/cowled.svg",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

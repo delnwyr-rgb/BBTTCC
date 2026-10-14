@@ -299,7 +299,7 @@
     {
       "name": "Each Spell Is Also a Wound",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_blood_drop.png",
+      "img": "icons/skills/wounds/blood-drip-droplet-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -370,7 +370,7 @@
     {
       "name": "Yesodium-Bolt",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_3.png",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -652,7 +652,7 @@
     {
       "name": "Channel-Feedback (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_energy_cone.png",
+      "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -940,7 +940,7 @@
     {
       "name": "Resonance Mark",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sigil_1.png",
+      "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
       "system": {
         "category": "principle",
         "source": "",

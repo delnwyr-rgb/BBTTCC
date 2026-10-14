@@ -1,7 +1,7 @@
 {
   "name": "Weaponized Shame",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+  "img": "icons/skills/social/intimidation-impressing.webp",
   "system": {
     "category": "ranged",
     "intent": "presence",

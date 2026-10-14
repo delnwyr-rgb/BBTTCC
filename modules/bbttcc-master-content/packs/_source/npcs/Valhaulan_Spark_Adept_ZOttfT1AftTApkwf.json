@@ -166,7 +166,7 @@
     {
       "name": "Yesodic Ward",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_1.png",
+      "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -203,7 +203,7 @@
     {
       "name": "Spark Rite",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_1.png",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -240,7 +240,7 @@
     {
       "name": "Radiant Spike",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "img": "icons/magic/light/beam-rays-yellow.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -497,7 +497,7 @@
     {
       "name": "Disorienting Pulse (recharges on a Soma Break)",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mental.png",
+      "img": "icons/magic/control/hypnosis-mesmerism-swirl.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -534,7 +534,7 @@
     {
       "name": "Spark Vow",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_1.png",
+      "img": "icons/magic/symbols/symbol-lightning-bolt.webp",
       "system": {
         "intent": "violence",
         "channel": "presence",
@@ -817,7 +817,7 @@
     {
       "name": "Hammer-Bright Ward",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_smith_hammer_holy_1.png",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
       "system": {
         "intent": "violence",
         "channel": "body",

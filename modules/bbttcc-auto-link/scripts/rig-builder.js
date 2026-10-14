@@ -1746,7 +1746,7 @@ function _buildSyntheticFrame(spec) {
   return {
     name: spec.synthName ?? "Custom Frame",
     type: game.bbttcc?.types?.item?.("gear") ?? "gear",
-    img: "icons/svg/oak.svg",
+    img: ({ personal: "icons/commodities/tech/wheel.webp", medium: "icons/environment/settlement/wagon.webp", heavy: "icons/containers/boxes/crate-metal-heavy-grey.webp", mecha: "icons/equipment/chest/breastplate-metal-scaled-grey.webp" })[spec.bracket] ?? "icons/commodities/tech/gear-wheels-double-steel.webp", // icon swap 2026-10-14: core webp, never icons/svg
     system: {
       description: {
         value: `<p>Synthetic frame authored by the Rig Builder. Bracket: ${spec.bracket ?? "—"}. ${spec.pilotMount ? "Pilot Mount enabled — one pilot-fired weapon." : ""}</p>`,

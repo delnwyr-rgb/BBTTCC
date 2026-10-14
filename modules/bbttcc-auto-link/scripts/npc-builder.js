@@ -392,98 +392,98 @@ const _echoSlug = (s) => String(s ?? "").toLowerCase()
 const ECHO_FAMILIES = {
   /* ---- crews ---- */
   "mercenary-band": { kind: "crew", calling: "bravo", boon: {
-    name: "One Last Contract", img: "icons/svg/sword.svg",
+    name: "One Last Contract", img: "icons/sundries/documents/document-sealed-signatures-red.webp",
     flavor: "They took this contract lifetimes ago. It never closed.",
     effect: "Once per scene, when the echo strikes in direct defense of their Steward or a crewmate, the blow lands as if one tier higher and adds +{tier} damage." } },
   "storm-wardens": { kind: "crew", calling: "stalwart", boon: {
-    name: "Weathered the Worst", img: "icons/svg/lightning.svg",
+    name: "Weathered the Worst", img: "icons/magic/lightning/bolt-cloud-sky-white.webp",
     flavor: "There is no storm they haven't already stood through once.",
     effect: "Once per scene, ignore one environmental or weather complication outright; allies within reach reduce its effect by {tier}." } },
   "ironbound-ascendants": { kind: "crew", calling: "bravo", boon: {
-    name: "Iron Doctrine", img: "icons/svg/upgrade.svg",
+    name: "Iron Doctrine", img: "icons/skills/trades/smithing-anvil-brown.webp",
     flavor: "The discipline outlived the order that taught it.",
     effect: "Once per scene, convert one failed Body defense into a success. While adjacent to their Steward, the echo adds +1 Guard." } },
   "ashbound-survivors": { kind: "crew", calling: "stalwart", boon: {
-    name: "Rose From Ash", img: "icons/svg/fire.svg",
+    name: "Rose From Ash", img: "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
     flavor: "They have already died once, in the fire everyone talks about.",
     effect: "Once per scene, when reduced to 0 Integrity, hold at {tier} Integrity instead and act normally this round." } },
   "cultural-ambassadors": { kind: "crew", calling: "broker", boon: {
-    name: "Every Tongue", img: "icons/svg/sound.svg",
+    name: "Every Tongue", img: "icons/magic/sonic/scream-wail-shout-teal.webp",
     flavor: "A hundred tables, a hundred customs, none of them foreign anymore.",
     effect: "The echo speaks and reads every living language. Once per scene, shift a stranger's disposition one step toward friendly." } },
   "diplomatic-envoys": { kind: "crew", calling: "broker", boon: {
-    name: "Under Flag", img: "icons/svg/holy-shield.svg",
+    name: "Under Flag", img: "icons/sundries/flags/banner-worn-red.webp",
     flavor: "The flag of parley is stitched into how they carry themselves.",
     effect: "Once per scene, declare parley: the echo cannot be attacked until they act aggressively this scene." } },
   "peacekeeper-corps": { kind: "crew", calling: "bravo", boon: {
-    name: "De-escalate", img: "icons/svg/mage-shield.svg",
+    name: "De-escalate", img: "icons/skills/social/diplomacy-peace-alliance.webp",
     flavor: "A thousand checkpoint standoffs live in the set of their shoulders.",
     effect: "Once per scene, freeze one act of violence before it lands — both parties hold for one beat while the echo speaks." } },
   "gridbreakers": { kind: "crew", calling: "operator", boon: {
-    name: "Dead Channel", img: "icons/svg/silenced.svg",
+    name: "Dead Channel", img: "icons/commodities/tech/console-steel.webp",
     flavor: "Every grid has a weak span. They've slept inside most of them.",
     effect: "Once per scene, kill one device, camera, ward-node, or comm-line within near range until the scene ends." } },
   "verdant-stalkers": { kind: "crew", calling: "operator", boon: {
-    name: "Green Silence", img: "icons/svg/oak.svg",
+    name: "Green Silence", img: "icons/environment/wilderness/tree-spruce-green.webp",
     flavor: "The green remembers them kindly and closes behind their steps.",
     effect: "Once per scene, the echo and one ally leave no trail and make no sound until either next acts openly." } },
   "covert-ops-cell": { kind: "crew", calling: "operator", boon: {
-    name: "Never Here", img: "icons/svg/invisible.svg",
+    name: "Never Here", img: "icons/magic/perception/silhouette-stealth-shadow.webp",
     flavor: "Officially, this person does not exist. Officially never changed.",
     effect: "Once per scene, retroactively establish the echo was somewhere else; one witness's account of them unravels." } },
   "survivors-militia": { kind: "crew", calling: "bravo", match: ["survivors", "militia"], boon: {
-    name: "Hold the Door", img: "icons/svg/door-closed.svg",
+    name: "Hold the Door", img: "icons/equipment/shield/wardoor-wooden-plank-boss-steel.webp",
     flavor: "Someone held the door once so they could live. They pay it forward.",
     effect: "Once per scene, utterly bar one entrance or chokepoint — nothing passes it for {tier} rounds." } },
   "abyssal-cartographers": { kind: "crew", calling: "savant", match: ["abyssal-cartographer"], boon: {
-    name: "I Mapped This Dark", img: "icons/svg/cave.svg",
+    name: "I Mapped This Dark", img: "icons/tools/navigation/map-marked-black.webp",
     flavor: "They have been deeper than this, with worse light.",
     effect: "Once per scene, the GM truthfully sketches the current site — exits, hazards, and one hidden thing." } },
   /* ---- occult associations ---- */
   "kabbalist": { kind: "occult", calling: "savant", boon: {
-    name: "Letter of Making", img: "icons/svg/book.svg",
+    name: "Letter of Making", img: "icons/sundries/documents/document-sealed-brown-red.webp",
     flavor: "Some letters were taught to them before the world got its name back.",
     effect: "Once per scene, inscribe one Letter upon a door or object: it counts sealed and warded, −{tier} to any attempt to breach it, until the scene ends." } },
   "shaman": { kind: "occult", calling: "keeper", boon: {
-    name: "Spirit Ledger", img: "icons/svg/pawprint.svg",
+    name: "Spirit Ledger", img: "icons/sundries/books/book-worn-brown-grey.webp",
     flavor: "The local spirits keep accounts, and this one is owed.",
     effect: "Once per scene, ask the spirits of the place one yes/no question; they answer truthfully (GM voice)." } },
   "rosicrucian": { kind: "occult", calling: "savant", boon: {
-    name: "Rose Cipher", img: "icons/svg/eye.svg",
+    name: "Rose Cipher", img: "icons/magic/symbols/cross-circle-blue.webp",
     flavor: "Every symbol is a door, and they were given the hinge-oil.",
     effect: "Once per scene, read the concealed meaning of a document, symbol, or rite; codes and forgeries open to them." } },
   "biomancer": { kind: "occult", calling: "savant", match: ["biomancer-fleshcrafter", "fleshcrafter"], boon: {
-    name: "Knit the Flesh", img: "icons/svg/regen.svg",
+    name: "Knit the Flesh", img: "icons/magic/life/heart-cross-strong-flame-purple-orange.webp",
     flavor: "Flesh is a language; theirs is fluent, if oddly accented.",
     effect: "Once per scene, a touch restores {2tier} Integrity to a living creature, or purges one poison or disease." } },
   "goetic-summoner": { kind: "occult", calling: "keeper", boon: {
-    name: "Name the Lesser", img: "icons/svg/cowled.svg",
+    name: "Name the Lesser", img: "icons/magic/symbols/runes-star-pentagon-orange.webp",
     flavor: "A short list of small names, each one still under contract.",
     effect: "Once per scene, call a minor bound spirit for one errand — scout, fetch, carry, distract — lasting until the scene ends." } },
   "prophet-oracle": { kind: "occult", calling: "keeper", match: ["prophet", "oracle"], boon: {
-    name: "It Was Foretold", img: "icons/svg/sun.svg",
+    name: "It Was Foretold", img: "icons/sundries/gaming/card-astronomy-pink.webp",
     flavor: "They flinch a half-second before the dice do.",
     effect: "Once per scene, force a reroll of any one roll made within sight — the echo already saw it fall the other way." } },
   "tarot-mage": { kind: "occult", calling: "keeper", boon: {
-    name: "Card Already Drawn", img: "icons/svg/daze.svg",
+    name: "Card Already Drawn", img: "icons/sundries/gaming/playing-cards.webp",
     flavor: "The deck was cut years ago; they're just turning the cards over.",
     effect: "Once per scene, name the Sun or the Tower: an ally gains +2 (Sun) or a foe suffers −2 (Tower) on their next check made within sight." } },
   "exorcist": { kind: "occult", calling: "keeper", match: ["exorcist-purifier", "purifier"], boon: {
-    name: "Cast Out", img: "icons/svg/angel.svg",
+    name: "Cast Out", img: "icons/magic/holy/barrier-shield-winged-cross.webp",
     flavor: "What they drove out once still remembers their voice, and goes.",
     effect: "Once per scene, end one possession, haunting, or qliphothic effect of tier {tier} or lower on a touched subject." } },
   "gnostic": { kind: "occult", calling: "keeper", boon: {
-    name: "Behind the Veil", img: "icons/svg/light.svg",
+    name: "Behind the Veil", img: "icons/magic/perception/third-eye-blue-red.webp",
     flavor: "They woke up once inside the lie, and never quite fell back asleep.",
     effect: "Once per scene, for the rest of the scene the echo sees through illusions, glamours, and false faces within near range." } },
   "alchemist": { kind: "occult", calling: "savant", boon: {
-    name: "One Vial Left", img: "icons/svg/poison.svg",
+    name: "One Vial Left", img: "icons/consumables/potions/bottle-conical-bubbling-blue.webp",
     flavor: "There is always exactly one vial left. Nobody asks where from.",
     effect: "Once per scene, produce one draught: restore {2tier} Integrity, or an acid, smoke, or antidote of tier {tier} or lower." } },
 };
 
 const ECHO_FALLBACK_BOON = {
-  name: "Echo of a Past Life", img: "icons/svg/aura.svg",
+  name: "Echo of a Past Life", img: "icons/creatures/magical/spirit-undead-ghost-tan-teal.webp",
   flavor: "The Steward remembers them for one thing above all. It still works.",
   effect: "Once per scene, do the thing the Steward remembers them for — automatically succeed at one tier-appropriate check within this crew's trade."
 };

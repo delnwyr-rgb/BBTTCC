@@ -400,7 +400,7 @@
     {
       "name": "Human",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/avuncular_joans_scene_1_us.png",
+      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -567,7 +567,7 @@
     {
       "name": "Human: Stubborn Spark",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_2.png",
+      "img": "icons/magic/fire/orb-lightning-sun.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -646,7 +646,7 @@
     {
       "name": "Human Heritage: Florensis",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/A_top_down_view%2C_taken%2C_202604291557%20Background%20Removed.png",
+      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
       "system": {
         "category": "heritage",
         "source": "Bad Eden (2024 rules)",
@@ -733,7 +733,7 @@
     {
       "name": "Human (Florensis): Little But Mighty",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_brawl.png",
+      "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1000,7 +1000,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.5Ncfbe1ReQhbLLUP"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Shadowjack.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "effects": [],
       "folder": "apQBjTCtfZVreQpj",
       "ownership": {
@@ -1025,7 +1025,7 @@
     {
       "name": "Last Mile L1: The Weight You Carry",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_run.png",
+      "img": "icons/skills/movement/feet-winged-sandals-tan.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1106,7 +1106,7 @@
     {
       "name": "Shadow Courier \u2014 Tier 1: Liminal Operator",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
+      "img": "icons/sundries/documents/envelope-letter-post.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1317,7 +1317,7 @@
     {
       "name": "Route of the Last Mile (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_1.png",
+      "img": "icons/magic/time/day-night-sunset-sunrise.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "shadow_courier",
@@ -1366,7 +1366,7 @@
     {
       "name": "Archetype: The Empress (Caretaker)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1478,7 +1478,7 @@
     {
       "name": "Crew Type: Ashbound Survivors",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1619,7 +1619,7 @@
           "option": {}
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_staff.png",
+      "img": "icons/weapons/staves/staff-blue-jewel.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "_stats": {
@@ -1714,7 +1714,7 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "effects": [],
       "folder": "3oMsaUpGcyqokYqu",
       "_stats": {
@@ -1745,7 +1745,7 @@
     {
       "name": "Archetype: The Empress (Caretaker) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1891,7 +1891,7 @@
     {
       "name": "Crew Type: Ashbound Survivors (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2110,7 +2110,7 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "effects": [],
       "folder": "3oMsaUpGcyqokYqu",
       "_stats": {
@@ -2141,7 +2141,7 @@
     {
       "name": "Worker's Leathers",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+      "img": "icons/equipment/chest/breastplate-layered-leather-stitched.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 1,
@@ -2286,7 +2286,7 @@
     {
       "name": "Bolt-Driver",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_heavy_crossbow.png",
+      "img": "icons/weapons/crossbows/crossbow-golden-bolt.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -2607,7 +2607,7 @@
     {
       "name": "Combat Knife",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_2.png",
+      "img": "icons/weapons/daggers/knife-green.webp",
       "system": {
         "category": "melee",
         "intent": "violence",

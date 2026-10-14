@@ -179,7 +179,7 @@
     {
       "name": "Pipe Rifle",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+      "img": "icons/weapons/guns/rifle-brown.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -444,7 +444,7 @@
     {
       "name": "Ambush Crew",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+      "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -481,7 +481,7 @@
     {
       "name": "Shiv",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_1.png",
+      "img": "icons/weapons/daggers/dagger-simple-black.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -752,7 +752,7 @@
     {
       "name": "Poor Discipline",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fear_1.png",
+      "img": "icons/magic/control/fear-fright-white.webp",
       "system": {
         "category": "principle",
         "source": "",

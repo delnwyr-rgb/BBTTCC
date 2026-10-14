@@ -299,7 +299,7 @@
     {
       "name": "Ancestor Whispers",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_1.png",
+      "img": "icons/magic/death/skull-energy-light-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -370,7 +370,7 @@
     {
       "name": "Marrow-Lash",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_whip.png",
+      "img": "icons/commodities/bones/bones-broken-marrow-white-red.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -652,7 +652,7 @@
     {
       "name": "Choir of Knuckles",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+      "img": "icons/magic/fire/flame-burning-fist-strike.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

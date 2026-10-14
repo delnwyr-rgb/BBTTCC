@@ -294,7 +294,7 @@
     {
       "name": "Minor Ward",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_1.png",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -365,7 +365,7 @@
     {
       "name": "Consecrated Lash",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_whip.png",
+      "img": "icons/skills/melee/strike-chain-whip-blue.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -647,7 +647,7 @@
     {
       "name": "Prayer-of-Pause (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_1.png",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

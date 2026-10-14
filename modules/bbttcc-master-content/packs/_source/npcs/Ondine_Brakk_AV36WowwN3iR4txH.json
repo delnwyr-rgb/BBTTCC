@@ -556,7 +556,7 @@
     {
       "name": "Oldenborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_2.png",
+      "img": "art/bbttcc/asli-icons/oldborne_sky.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -714,7 +714,7 @@
     {
       "name": "Oldenborn Heritage: Rustland Scavenger",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RustlandScavenger2.png",
+      "img": "art/bbttcc/asli-icons/oldenborn_lumenwrought_2.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1079,7 +1079,7 @@
     {
       "name": "Oldenborn (Rustland Scavenger): Ruin-Sense",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_oldenborn_1.png",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-teal.webp",
       "system": {
         "category": "feature",
         "source": {
@@ -1180,7 +1180,7 @@
     {
       "name": "Archetype: The Star (Hopebringer)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_star.png",
+      "img": "icons/magic/symbols/star-rising-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1293,7 +1293,7 @@
     {
       "name": "Archetype: The Star (Hopebringer) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_star.png",
+      "img": "icons/magic/symbols/star-rising-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1481,7 +1481,7 @@
           "option": {}
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-1.png",
+      "img": "icons/commodities/treasure/crown-gold-laurel-wreath.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "_stats": {
@@ -1513,7 +1513,7 @@
     {
       "name": "Cataclyst L1: The Exchange",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_gauntlet_2.png",
+      "img": "icons/magic/time/hourglass-tilted-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1579,7 +1579,7 @@
     {
       "name": "Combat Logistics",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_combat_logistic.jpeg",
+      "img": "icons/environment/settlement/wagon.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1647,7 +1647,7 @@
       "_id": "mLIpAa5jzoR2wtef",
       "name": "Bravo",
       "type": "class",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-bravo",
@@ -1701,7 +1701,7 @@
       "_id": "hk0JBzQe3iK2e6QN",
       "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

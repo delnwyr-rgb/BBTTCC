@@ -298,7 +298,7 @@
     {
       "name": "Pain Doesn't Register",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_1.png",
+      "img": "icons/magic/control/voodoo-doll-pain-damage-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -369,7 +369,7 @@
     {
       "name": "Hex-Iron Cleaver",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hex_1.png",
+      "img": "icons/tools/hand/cleaver.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -651,7 +651,7 @@
     {
       "name": "Sing-the-Iron (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music.png",
+      "img": "icons/creatures/magical/construct-iron-stomping-yellow.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

@@ -549,7 +549,7 @@
     {
       "name": "Eidolon (Outsider)",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_5.png",
+      "img": "icons/skills/movement/portal-silhouette-pink.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -719,7 +719,7 @@
     {
       "name": "Eidolon: Outsider Cast",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_alien.png",
+      "img": "icons/creatures/magical/humanoid-silhoette-alien-gray.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -796,7 +796,7 @@
     {
       "name": "Eidolon: Whisper Walk",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ghostly_runner_invisible.png",
+      "img": "icons/magic/water/barrier-ice-wall-snow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1050,7 +1050,7 @@
     {
       "name": "Eidolon: Concept-Voice",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mental.png",
+      "img": "icons/commodities/bones/horn-curved-grey.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1304,7 +1304,7 @@
     {
       "name": "Eidolon: Sovereign of Things",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_psychic_2.png",
+      "img": "icons/magic/death/skull-humanoid-crown-white-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1381,7 +1381,7 @@
     {
       "name": "Archetype: Temperance",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+      "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1460,7 +1460,7 @@
     {
       "name": "Archetype: Temperance (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+      "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1581,7 +1581,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_1.png",
+      "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -1623,7 +1623,7 @@
     {
       "name": "Forge Blessing",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_3.png",
+      "img": "icons/skills/melee/shield-block-fire-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1691,7 +1691,7 @@
     {
       "name": "Hearthfield",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hearth_1.png",
+      "img": "icons/magic/symbols/rune-sigil-green-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1759,7 +1759,7 @@
     {
       "name": "Sanctuary Engine",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_human_protection_2.png",
+      "img": "icons/commodities/tech/engine-tech-thrust-jet-teal.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2004,7 +2004,7 @@
     {
       "name": "Gentle Edges",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_smith_hammer_holy_2.png",
+      "img": "icons/tools/hand/hammer-maul-wood.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2072,7 +2072,7 @@
     {
       "name": "Pattern of Mercy",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_1.png",
+      "img": "icons/magic/light/orb-hand-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2140,7 +2140,7 @@
     {
       "name": "Luminous Intercession",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_energy_blast_1.png",
+      "img": "icons/skills/ranged/blast-energy-plating-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2208,7 +2208,7 @@
     {
       "name": "Bound Light (Bad Eden)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-red-yellow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2276,7 +2276,7 @@
     {
       "name": "Enduring Focus",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_enduring_focus.png",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2343,7 +2343,7 @@
       "_id": "lmophgrpDTTE94DH",
       "name": "Keeper",
       "type": "class",
-      "img": "icons/svg/temple.svg",
+      "img": "icons/environment/settlement/temple-night.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-keeper",
@@ -2397,7 +2397,7 @@
       "_id": "D21X71sDhyTIXyHv",
       "name": "Keeper \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/temple.svg",
+      "img": "icons/environment/settlement/temple-night.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

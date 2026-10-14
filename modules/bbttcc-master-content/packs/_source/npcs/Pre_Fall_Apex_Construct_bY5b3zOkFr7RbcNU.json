@@ -314,7 +314,7 @@
     {
       "name": "Pre-Fall Diagnostics",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_1.png",
+      "img": "icons/commodities/tech/tube-chamber-lightning.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -385,7 +385,7 @@
     {
       "name": "Sundering Hammer-Limb",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hammer_1.png",
+      "img": "icons/skills/melee/strike-hammer-destructive-orange.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -667,7 +667,7 @@
     {
       "name": "Pre-Fall Lance Battery",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_engine.png",
+      "img": "icons/magic/lightning/bolt-strike-beam-yellow.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -949,7 +949,7 @@
     {
       "name": "Containment Pulse (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shockwave.png",
+      "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -1237,7 +1237,7 @@
     {
       "name": "Pre-Fall Frame",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_robot.png",
+      "img": "icons/commodities/tech/gear-wheels-double-steel.webp",
       "system": {
         "category": "principle",
         "source": "",

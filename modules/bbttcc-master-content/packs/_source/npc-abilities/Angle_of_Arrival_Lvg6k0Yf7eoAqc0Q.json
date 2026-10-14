@@ -1,7 +1,7 @@
 {
   "name": "Angle of Arrival",
   "type": "power",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_2.png",
+  "img": "icons/magic/movement/trail-streak-impact-blue.webp",
   "system": {
     "intent": "intrigue",
     "channel": "mind",

@@ -1,7 +1,7 @@
 {
   "name": "Citation Baton",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mace.png",
+  "img": "icons/weapons/clubs/baton-energy-stun-silver-yellow.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

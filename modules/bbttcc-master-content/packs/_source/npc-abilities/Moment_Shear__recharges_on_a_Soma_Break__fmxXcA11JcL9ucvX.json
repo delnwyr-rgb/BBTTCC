@@ -1,7 +1,7 @@
 {
   "name": "Moment Shear (recharges on a Soma Break)",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hourglass_broken_1.png",
+  "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
   "system": {
     "category": "ranged",
     "intent": "intrigue",

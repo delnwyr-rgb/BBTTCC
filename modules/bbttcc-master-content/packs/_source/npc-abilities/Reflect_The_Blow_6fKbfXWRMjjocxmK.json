@@ -1,7 +1,7 @@
 {
   "name": "Reflect The Blow",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_3.png",
+  "img": "icons/magic/symbols/cog-shield-white-blue.webp",
   "system": {
     "category": "ranged",
     "intent": "mind",

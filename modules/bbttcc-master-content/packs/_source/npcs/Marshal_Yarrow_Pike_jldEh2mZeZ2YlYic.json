@@ -565,7 +565,7 @@
     {
       "name": "Oldenborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_2.png",
+      "img": "art/bbttcc/asli-icons/oldborne_sky.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -723,7 +723,7 @@
     {
       "name": "Oldenborn Heritage: Earthbound",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_3.png",
+      "img": "art/bbttcc/asli-icons/oldenborn_tideborn_2.webp",
       "system": {
         "category": "heritage",
         "source": "Bad Eden (2024 rules)",
@@ -810,7 +810,7 @@
     {
       "name": "Oldenborn (Earthbound): Stonecall",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_earth_3.png",
+      "img": "icons/creatures/magical/construct-stone-earth-gray.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -949,7 +949,7 @@
     {
       "name": "Archetype: Justice (Arbiter)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_justice.png",
+      "img": "icons/skills/social/trading-justice-scale-gold.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1061,7 +1061,7 @@
     {
       "name": "Archetype: Justice (Arbiter) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_justice.png",
+      "img": "icons/skills/social/trading-justice-scale-gold.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1238,7 +1238,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heart_1.png",
+      "img": "icons/magic/life/heart-glowing-red.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -1280,7 +1280,7 @@
     {
       "name": "Crew Type: Peacekeeper Corps (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "img": "icons/sundries/misc/badge-law-sheriff.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1447,7 +1447,7 @@
     {
       "name": "Rallying Words",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_8.png",
+      "img": "icons/sundries/scrolls/scroll-symbol-eye-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1563,7 +1563,7 @@
     {
       "name": "Read the Room",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_chalice_4.png",
+      "img": "icons/sundries/books/book-tooled-eye-gold-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1696,7 +1696,7 @@
     {
       "name": "Backline Commander",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_backline_commander.png",
+      "img": "icons/skills/melee/strikes-sword-scimitar.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Feats Expansion v1 (2024 rules)",
@@ -1935,7 +1935,7 @@
     {
       "name": "Conductor's Beat",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music.png",
+      "img": "icons/skills/trades/music-notes-sound-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2057,7 +2057,7 @@
     {
       "name": "Accord Engine (Bad Eden)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_engine.png",
+      "img": "icons/commodities/tech/engine-tech-thrust-jet-teal.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2126,7 +2126,7 @@
       "_id": "M7UlFSSZj2JWOXNp",
       "name": "Broker \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -2172,7 +2172,7 @@
       "_id": "zyG3tETl9xd5ZDNs",
       "name": "Broker",
       "type": "class",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-broker",

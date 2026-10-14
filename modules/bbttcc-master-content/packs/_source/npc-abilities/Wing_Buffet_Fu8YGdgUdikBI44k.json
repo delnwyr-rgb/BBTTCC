@@ -1,7 +1,7 @@
 {
   "name": "Wing Buffet",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wings_1.png",
+  "img": "icons/creatures/abilities/wing-batlike-purple-blue.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

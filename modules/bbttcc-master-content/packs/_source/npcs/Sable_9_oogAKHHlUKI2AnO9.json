@@ -437,7 +437,7 @@
       "_id": "WeakpNW8kA1F9tun",
       "name": "Bravo",
       "type": "class",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-bravo",
@@ -491,7 +491,7 @@
       "_id": "0R2QdfbCk54AbtQV",
       "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

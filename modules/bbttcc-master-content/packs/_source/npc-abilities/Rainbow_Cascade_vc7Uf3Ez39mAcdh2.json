@@ -1,7 +1,7 @@
 {
   "name": "Rainbow Cascade",
   "type": "power",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+  "img": "icons/magic/control/buff-luck-fortune-rainbow.webp",
   "system": {
     "intent": "presence",
     "channel": "soul",

@@ -294,7 +294,7 @@
     {
       "name": "Camouflaged",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_invisible_1.png",
+      "img": "icons/creatures/reptiles/chameleon-camouflage-green-brown.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -365,7 +365,7 @@
     {
       "name": "Drag-Tongue",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_net_1.png",
+      "img": "icons/creatures/abilities/mouth-teeth-tongue-purple.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -647,7 +647,7 @@
     {
       "name": "Reed-Vanish (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+      "img": "icons/consumables/plants/grass-leaves-stems-green.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

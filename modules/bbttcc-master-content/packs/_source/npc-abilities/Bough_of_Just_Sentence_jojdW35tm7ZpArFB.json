@@ -1,7 +1,7 @@
 {
   "name": "Bough of Just Sentence",
   "type": "power",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn_tree.png",
+  "img": "icons/magic/nature/tree-animated-strike.webp",
   "system": {
     "intent": "presence",
     "channel": "soul",

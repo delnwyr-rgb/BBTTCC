@@ -1,7 +1,7 @@
 {
   "name": "Sephirotic Scion (Seraphic): Cleansing Breath",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_8.png",
+  "img": "icons/magic/death/undead-mammal-fire-breath-pink.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",

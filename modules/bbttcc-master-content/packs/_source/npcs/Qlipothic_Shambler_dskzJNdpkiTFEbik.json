@@ -172,7 +172,7 @@
     {
       "name": "Corpse-Root Mass",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/magic/nature/plant-vines-skull-green.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -209,7 +209,7 @@
     {
       "name": "Sloughing Filth",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_gas_mask_1.png",
+      "img": "icons/magic/acid/dissolve-drip-droplet-smoke.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -246,7 +246,7 @@
     {
       "name": "Multiattack",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fist_1.png",
+      "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -283,7 +283,7 @@
     {
       "name": "Rot-Branch",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_greatclub.png",
+      "img": "icons/magic/nature/tree-animated-strike.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -540,7 +540,7 @@
     {
       "name": "Grasping Vines",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_web_1.png",
+      "img": "icons/magic/nature/root-vine-fire-entangled-hand.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -797,7 +797,7 @@
     {
       "name": "Ruin-Spore Exhalation (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_gas_mask_1.png",
+      "img": "icons/magic/air/fog-gas-smoke-swirling-green.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -1069,7 +1069,7 @@
     {
       "name": "Qlipothic Lurch",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_push_1.png",
+      "img": "icons/magic/death/undead-zombie-grave-green.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -1106,7 +1106,7 @@
     {
       "name": "Hollow Hunger",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_1.png",
+      "img": "icons/commodities/bones/skull-hollow-brown-red.webp",
       "system": {
         "intent": "violence",
         "channel": "soul",
@@ -1388,7 +1388,7 @@
     {
       "name": "Wrong-Wave",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shockwave.png",
+      "img": "icons/magic/water/wave-water-blue.webp",
       "system": {
         "category": "ranged",
         "intent": "soul",

@@ -442,7 +442,7 @@
       "_id": "JSVMdrwwMKupCR0L",
       "name": "Savant",
       "type": "class",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-savant",
@@ -496,7 +496,7 @@
       "_id": "BkOHPZ2itrZMwINq",
       "name": "Savant — Apprentice (Tier I)",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -541,7 +541,7 @@
     {
       "name": "Letter of Making (Echo Boon)",
       "type": "feature",
-      "img": "icons/svg/book.svg",
+      "img": "icons/sundries/documents/document-sealed-brown-red.webp",
       "system": {
         "category": "echo",
         "source": "Echo Rosters",
@@ -589,7 +589,7 @@
     {
       "name": "Human",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/avuncular_joans_scene_1_us.png",
+      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -753,7 +753,7 @@
     {
       "name": "Human: Stubborn Spark",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_2.png",
+      "img": "icons/magic/fire/orb-lightning-sun.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1006,7 +1006,7 @@
     {
       "name": "Human Heritage: Neanderthal",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/young_gearbox_pov.png",
+      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
       "system": {
         "category": "heritage",
         "source": "Bad Eden (2024 rules)",
@@ -1093,7 +1093,7 @@
     {
       "name": "Human (Neanderthal): Thick-Boned",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_brawl_4.png",
+      "img": "icons/magic/water/snowflake-ice-snow-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1235,7 +1235,7 @@
     {
       "name": "Bolt-Driver",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_heavy_crossbow.png",
+      "img": "icons/weapons/crossbows/crossbow-golden-bolt.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -1559,7 +1559,7 @@
     {
       "name": "Initiate's Robe",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/initiates_robes.png",
+      "img": "icons/equipment/chest/robe-layered-red.webp",
       "system": {
         "guardBonus": 0,
         "evasionBonus": 1,
@@ -1703,7 +1703,7 @@
     {
       "name": "Stabilizer Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+      "img": "icons/tools/medical/bandage-rough.webp",
       "system": {
         "slot": "misc",
         "tags": [],

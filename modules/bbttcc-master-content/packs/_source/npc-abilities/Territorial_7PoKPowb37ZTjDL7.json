@@ -1,7 +1,7 @@
 {
   "name": "Territorial",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_raptor.png",
+  "img": "icons/creatures/abilities/paw-print-tan.webp",
   "system": {
     "category": "principle",
     "source": "",

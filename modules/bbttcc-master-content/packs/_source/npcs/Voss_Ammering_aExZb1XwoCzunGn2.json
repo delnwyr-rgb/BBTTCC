@@ -454,7 +454,7 @@
       "_id": "L3eAN1gnHLr0hULP",
       "name": "Savant",
       "type": "class",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-savant",
@@ -508,7 +508,7 @@
       "_id": "V8POynqFIX25du6t",
       "name": "Savant — Apprentice (Tier I)",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -553,7 +553,7 @@
     {
       "name": "I Mapped This Dark (Echo Boon)",
       "type": "feature",
-      "img": "icons/svg/cave.svg",
+      "img": "icons/tools/navigation/map-marked-black.webp",
       "system": {
         "category": "echo",
         "source": "Echo Rosters",
@@ -601,7 +601,7 @@
     {
       "name": "Echo-Diver",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/EchoDiver4.png",
+      "img": "icons/skills/melee/sword-echo-stylized-tan.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -856,7 +856,7 @@
     {
       "name": "Echo-Diver Heritage: Empyrean",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_weather_2.png",
+      "img": "icons/magic/air/weather-wind-gust.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1049,7 +1049,7 @@
     {
       "name": "Echo-Diver (Empyrean): Stormread",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "img": "icons/magic/lightning/bolt-strike-cloud-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1322,7 +1322,7 @@
     {
       "name": "Bolt-Driver",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_heavy_crossbow.png",
+      "img": "icons/weapons/crossbows/crossbow-golden-bolt.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -1646,7 +1646,7 @@
     {
       "name": "Initiate's Robe",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/initiates_robes.png",
+      "img": "icons/equipment/chest/robe-layered-red.webp",
       "system": {
         "guardBonus": 0,
         "evasionBonus": 1,
@@ -1790,7 +1790,7 @@
     {
       "name": "Stabilizer Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+      "img": "icons/tools/medical/bandage-rough.webp",
       "system": {
         "slot": "misc",
         "tags": [],

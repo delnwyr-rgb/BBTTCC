@@ -441,7 +441,7 @@
     {
       "name": "Cryptidkin",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_4.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -571,7 +571,7 @@
     {
       "name": "Cryptidkin Heritage: Jackalope",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Verity_Furlong_screenshot%20Background%20Removed.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_3.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -683,7 +683,7 @@
     {
       "name": "Cryptidkin (Jackalope): Startle Reflex",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dodge.png",
+      "img": "icons/creatures/mammals/rabbit-movement-glowing-green.webp",
       "folder": "sU5wM5ZUL33lrQxV",
       "system": {
         "category": "feature",
@@ -933,7 +933,7 @@
     {
       "name": "Cosmic Linguist: Core Features",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_1.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1005,7 +1005,7 @@
     {
       "name": "Cosmic Linguist: Resonance & Strain",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_earthquake_2.png",
+      "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Originals (2026 rules)",
@@ -1073,7 +1073,7 @@
     {
       "name": "Cosmic Linguist: Resonance Channel",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_6.png",
+      "img": "icons/skills/melee/strike-blade-scimitar-green-purple.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Originals (2026 rules)",
@@ -1221,7 +1221,7 @@
     {
       "name": "Cosmic Linguist: Semantic Editor",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scissors.png",
+      "img": "icons/sundries/scrolls/scroll-rolled-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1293,7 +1293,7 @@
     {
       "name": "Cosmic Linguist: Strain",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cracked_stone.png",
+      "img": "icons/skills/wounds/injury-pain-body-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1370,7 +1370,7 @@
     {
       "name": "Cosmic Linguist: Initiation 1 \u2014 True-Name Touch",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cast_1.png",
+      "img": "icons/sundries/scrolls/scroll-symbol-eye-blue.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -1442,7 +1442,7 @@
     {
       "name": "Metaphor Apostle (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_energy_connection.png",
+      "img": "icons/magic/symbols/mask-metal-silver-white.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "cosmic_linguist",
@@ -1676,7 +1676,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.ZA4n59tvBCFj8G9N"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Cosmic%20Linguist.png",
+      "img": "icons/sundries/books/book-eye-purple.webp",
       "effects": [],
       "folder": "IyB4V2rPqsdbGukM",
       "ownership": {
@@ -1701,7 +1701,7 @@
     {
       "name": "Cryptidkin: Folklore & Frame",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/magic/control/fear-fright-mask-orange.webp",
       "system": {
         "category": "feature",
         "source": "Bad Eden (2024 rules)",
@@ -1961,7 +1961,7 @@
     {
       "name": "Cosmic Linguist: Resonance Pool",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_1.png",
+      "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2039,7 +2039,7 @@
     {
       "name": "Archetype: The Magician (Scholar)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2151,7 +2151,7 @@
     {
       "name": "Crew Type: Covert Ops Cell",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2288,7 +2288,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_1.png",
+      "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -2394,7 +2394,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "folder": "KAgSLTue8mMAy0rF",
       "_stats": {
         "compendiumSource": "Item.ZRWplEBWUyjtEkXE",
@@ -2425,7 +2425,7 @@
     {
       "name": "Archetype: The Magician (Scholar) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2572,7 +2572,7 @@
     {
       "name": "Crew Type: Covert Ops Cell (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3039,7 +3039,7 @@
           "_key": "!actors.items.effects!kJMVlYmzQCd6K3aE.SZZzGSDtcd2ZvXMO.pqFrb0jwW98dsObV"
         }
       ],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "folder": "KAgSLTue8mMAy0rF",
       "_stats": {
         "compendiumSource": "Item.ZNVvuWpGMNqg60S9",
@@ -3070,7 +3070,7 @@
     {
       "name": "Metaphor Apostle: Living Allegory",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_3.png",
+      "img": "icons/magic/symbols/mask-yellow-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3313,7 +3313,7 @@
     {
       "name": "Spark Sense",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_spark_sense.png",
+      "img": "icons/magic/perception/eye-slit-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3379,7 +3379,7 @@
     {
       "name": "Metaphor Apostle: Myth Hook",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_faery.png",
+      "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3445,7 +3445,7 @@
     {
       "name": "Metaphor Apostle: Symbolic Substitution",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_3.png",
+      "img": "icons/sundries/books/book-symbol-fire-gold-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3511,7 +3511,7 @@
     {
       "name": "Battlefield Presence",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_battlefied_presence.png",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3577,7 +3577,7 @@
     {
       "name": "Cosmic Linguist: Initiation 6 \u2014 Translation",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_3.png",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-brown.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -3640,7 +3640,7 @@
     {
       "name": "Metaphor Apostle: Archetype Binding",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_computer_5.png",
+      "img": "icons/magic/symbols/mask-yellow-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3706,7 +3706,7 @@
     {
       "name": "Calm the Mob",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_cal%2C_the_mob.png",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Feats Expansion v1 (2024 rules)",
@@ -3768,7 +3768,7 @@
     {
       "name": "Metaphor Apostle: Shared Dream",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_attack.png",
+      "img": "icons/sundries/books/book-turquoise-moon.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4011,7 +4011,7 @@
     {
       "name": "Cosmic Linguist: Initiation 11 \u2014 The Sentence (Signature Mode)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_10.png",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-leather-red-tan.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -4081,7 +4081,7 @@
     {
       "name": "Leyline Attunement",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_leyline_attunement.png",
+      "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4147,7 +4147,7 @@
     {
       "name": "Medic of the Wastes",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_medic_of_the_wastes.png",
+      "img": "icons/magic/unholy/strike-body-life-soul-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4213,7 +4213,7 @@
     {
       "name": "Cosmic Linguist: Initiation 16 \u2014 Word That Was",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_9.png",
+      "img": "icons/sundries/scrolls/scroll-rolled-wrap.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -4276,7 +4276,7 @@
     {
       "name": "Refuse the Narrative",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_refuse_the_narative.png",
+      "img": "icons/environment/settlement/rubble-scrap-refuse-wood-metal.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4343,7 +4343,7 @@
     {
       "name": "Metaphor Apostle: Make It True",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_computer_1.png",
+      "img": "icons/skills/trades/tech-energy-charged-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4586,7 +4586,7 @@
     {
       "name": "Enduring Focus",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_enduring_focus.png",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4652,7 +4652,7 @@
     {
       "name": "Antidote Cartridge",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_1.png",
+      "img": "icons/consumables/potions/potion-vial-corked-labeled-purple.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -4740,7 +4740,7 @@
     {
       "name": "Atonement Lozenge",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_capsule_6.png",
+      "img": "icons/sundries/books/book-symbol-link-brown.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -4835,7 +4835,7 @@
     {
       "name": "Surgeon's Pact",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_syringe.jpeg",
+      "img": "icons/tools/laboratory/injector-needle-syringe-plunger.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -4930,7 +4930,7 @@
     {
       "name": "Decay Inhibitor",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_crystal_2.png",
+      "img": "icons/equipment/neck/pendant-gold-crystal-blue.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -5020,7 +5020,7 @@
     {
       "name": "Communion Tea",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_rad_bloom_injector.jpeg",
+      "img": "icons/consumables/drinks/tea-jug-glowing-brown-pink.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -5115,7 +5115,7 @@
     {
       "name": "Calmpact Vial",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_4.png",
+      "img": "icons/consumables/potions/potion-vial-corked-labeled-purple.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -5204,7 +5204,7 @@
     {
       "name": "Field Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/combat_stim_1.png",
+      "img": "icons/commodities/leather/leather-patch-grey.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -5293,7 +5293,7 @@
     {
       "name": "Stim Spike",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/techno_capsule_1.png",
+      "img": "icons/equipment/finger/ring-bone-horned-spike.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -5382,7 +5382,7 @@
     {
       "name": "Self-Wrapping Sandwich",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/self_wrapping_sandwich.png",
+      "img": "icons/commodities/bones/skull-weird.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -5466,7 +5466,7 @@
     {
       "name": "Yesodic Sigil of the Hearthward",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/yesodic_sigil_ward.png",
+      "img": "icons/magic/symbols/rune-sigil-white-pink.webp",
       "system": {
         "slot": "pin",
         "tags": [
@@ -5564,7 +5564,7 @@
     {
       "name": "Whataburger Coupon, Unredeemed (Vintage)",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/whataburger_coupon2.png",
+      "img": "icons/commodities/currency/coins-shield-sword-stack-silver.webp",
       "system": {
         "slot": "trinket",
         "tags": [
@@ -5647,7 +5647,7 @@
     {
       "name": "Witness Receipt",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_receipt.png",
+      "img": "icons/sundries/documents/document-sealed-red-white.webp",
       "system": {
         "slot": "trinket",
         "tags": [
@@ -5732,7 +5732,7 @@
       "_id": "ylIRHAxlFJbergwP",
       "name": "Horns of Bad Luck",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_antlers_2.png",
+      "img": "icons/weapons/staves/staff-animal-skull-horn-brown.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -6509,7 +6509,7 @@
     {
       "name": "Did anyone else just ... ?",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_punctuation_2.png",
+      "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -6879,7 +6879,7 @@
     {
       "name": "Strikethrough",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_punctuation_13.png",
+      "img": "icons/magic/control/debuff-energy-hold-teal-blue.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -6999,7 +6999,7 @@
     {
       "name": "Disco Ball Of Hod",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+      "img": "icons/magic/earth/projectile-stone-ball-purple.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -7323,7 +7323,7 @@
     {
       "name": "Hex Rope",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/hex_rope.png",
+      "img": "icons/sundries/survival/rope-braided-yellow.webp",
       "system": {
         "slot": "material",
         "tags": [
@@ -7408,7 +7408,7 @@
     {
       "name": "Swaddle-Iron Axe",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_greataxe.png",
+      "img": "icons/weapons/axes/axe-double-engraved.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -7701,7 +7701,7 @@
     {
       "name": "Battle-Lullaby",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music.png",
+      "img": "icons/tools/instruments/harp-yellow-teal.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -7999,7 +7999,7 @@
     {
       "name": "Battle-Lullaby",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music.png",
+      "img": "icons/tools/instruments/harp-yellow-teal.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -8297,7 +8297,7 @@
     {
       "name": "Swaddle-Iron Axe",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_greataxe.png",
+      "img": "icons/weapons/axes/axe-double-engraved.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -8590,7 +8590,7 @@
     {
       "name": "Battle-Lullaby",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music.png",
+      "img": "icons/tools/instruments/harp-yellow-teal.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

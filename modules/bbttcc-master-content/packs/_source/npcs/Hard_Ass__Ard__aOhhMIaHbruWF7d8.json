@@ -409,7 +409,7 @@
     {
       "name": "Sephirotic Scion",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SephiroticScion4.png",
+      "img": "art/bbttcc/asli-icons/sephirotic_scion_2.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -609,7 +609,7 @@
     {
       "name": "Sefirot Attunement",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "img": "icons/magic/perception/eye-slit-red-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -743,7 +743,7 @@
     {
       "name": "Sephirotic Scion: Holy Conduit",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_4.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -871,7 +871,7 @@
     {
       "name": "Scion: Light of Harmony",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "img": "icons/magic/light/light-lantern-lit-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1022,7 +1022,7 @@
     {
       "name": "Scion: Strategic Hooks",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunset_2.png",
+      "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1163,7 +1163,7 @@
     {
       "name": "Sephirotic Scion Heritage: Ophanic",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
+      "img": "art/bbttcc/asli-icons/sephirotic_scion_3.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1327,7 +1327,7 @@
     {
       "name": "Sephirotic Scion (Ophanic): The Wheel Never Stops",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_wheel.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1610,7 +1610,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.wI951EJPQIOamlDS"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Pactkeeper1.png",
+      "img": "icons/sundries/books/book-eye-pink.webp",
       "effects": [],
       "folder": "kaIqMuIOHeaj1T71",
       "_stats": {
@@ -1635,7 +1635,7 @@
     {
       "name": "Jurisdiction: Records & Precedent",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_1.png",
+      "img": "icons/sundries/books/book-symbol-triangle-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1711,7 +1711,7 @@
     {
       "name": "Pactkeeper: Administrative Pressure",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_web.png",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1786,7 +1786,7 @@
     {
       "name": "Pactkeeper: Civic Charge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_city_1.png",
+      "img": "icons/environment/settlement/city-hall.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1862,7 +1862,7 @@
     {
       "name": "Pactkeeper: Contract of Binding Precedent",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scroll_2.png",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-brown-grey.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1930,7 +1930,7 @@
     {
       "name": "Pactkeeper: Core Features",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_10.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1998,7 +1998,7 @@
     {
       "name": "Pactkeeper: Invoke Precedent",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_punctuation_2.png",
+      "img": "icons/sundries/books/book-symbol-triangle-silver-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2074,7 +2074,7 @@
     {
       "name": "Pactkeeper: Spend Civic Charge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_city.png",
+      "img": "icons/magic/lightning/orb-ball-spiral-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2219,7 +2219,7 @@
     {
       "name": "Pactkeeper: Initiation 1 \u2014 The Bargain",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_2.png",
+      "img": "icons/magic/perception/hand-eye-black.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2293,7 +2293,7 @@
     {
       "name": "Archivist of Precedent (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_4.png",
+      "img": "icons/sundries/scrolls/scroll-symbol-eye-brown.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "pactkeeper",
@@ -2347,7 +2347,7 @@
     {
       "name": "Archetype: The World (Integrator)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2493,7 +2493,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+      "img": "icons/equipment/neck/necklace-astrology-sun-gold.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -2593,7 +2593,7 @@
           }
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "effects": [],
       "folder": "eZrB95VvJnQ4Pb77",
       "_stats": {
@@ -2624,7 +2624,7 @@
     {
       "name": "Crew Type: Ironbound Ascendants",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2726,7 +2726,7 @@
     {
       "name": "Archetype: The World (Integrator) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2869,7 +2869,7 @@
     {
       "name": "Crew Type: Ironbound Ascendants (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3100,7 +3100,7 @@
           "category": "occult"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "effects": [],
       "folder": "eZrB95VvJnQ4Pb77",
       "_stats": {
@@ -3131,7 +3131,7 @@
     {
       "name": "Patrolman's Plate",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/patrolpersons_plate.png",
+      "img": "icons/equipment/chest/breastplate-layered-leather-black.webp",
       "system": {
         "guardBonus": 2,
         "evasionBonus": 0,
@@ -3268,7 +3268,7 @@
     {
       "name": "Pressed Buckler",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pressed_buckler.png",
+      "img": "icons/equipment/shield/buckler-wooden-boss-lightning.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 0,
@@ -3404,7 +3404,7 @@
     {
       "name": "Bind Witness",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/enamel_pin_1.png",
+      "img": "icons/magic/fire/flame-burning-chain.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -3515,7 +3515,7 @@
     {
       "name": "Cite Precedent",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_2.png",
+      "img": "icons/sundries/books/book-embossed-roots-green.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -3626,7 +3626,7 @@
     {
       "name": "Clause Lantern",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunset_2.png",
+      "img": "icons/magic/light/light-lantern-lit-white.webp",
       "system": {
         "intent": "presence",
         "channel": "mind",
@@ -3737,7 +3737,7 @@
     {
       "name": "Hearing-Field",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hammer_2.png",
+      "img": "icons/skills/melee/sword-shield-stylized-white.webp",
       "system": {
         "category": "unarmed",
         "intent": "presence",
@@ -3840,7 +3840,7 @@
     {
       "name": "Long Ledger",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_9.png",
+      "img": "icons/skills/melee/strike-hammer-destructive-blue.webp",
       "system": {
         "category": "unarmed",
         "intent": "intrigue",
@@ -3943,7 +3943,7 @@
     {
       "name": "Penalty Clause",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_5.png",
+      "img": "icons/magic/defensive/shield-barrier-flaming-pentagon-teal.webp",
       "system": {
         "intent": "violence",
         "channel": "soul",
@@ -4060,7 +4060,7 @@
     {
       "name": "Standing Oath",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "img": "icons/skills/melee/hand-grip-sword-strike-orange.webp",
       "system": {
         "category": "unarmed",
         "intent": "presence",
@@ -4163,7 +4163,7 @@
     {
       "name": "Maul",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hammer_1.png",
+      "img": "icons/weapons/hammers/hammer-double-sledge-engraved.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -4506,7 +4506,7 @@
     {
       "name": "Absolutely Not",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_1.png",
+      "img": "icons/skills/social/wave-halt-stop.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -4649,7 +4649,7 @@
     {
       "name": "You thought they looked weak?",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_broken_wall_2.png",
+      "img": "icons/magic/control/buff-strength-muscle-damage-orange.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",

@@ -311,7 +311,7 @@
     {
       "name": "Reality Rearranges",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_3.png",
+      "img": "icons/magic/time/arrows-circling-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -382,7 +382,7 @@
     {
       "name": "Veil-Severance",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_void_edge_1.png",
+      "img": "icons/skills/melee/strike-slashes-red.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -664,7 +664,7 @@
     {
       "name": "Unfound-Gesture",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
+      "img": "icons/magic/unholy/hand-marked-pink.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -946,7 +946,7 @@
     {
       "name": "Re-Arrangement (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/magic/time/arrows-circling-green.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -1234,7 +1234,7 @@
     {
       "name": "Thinning Aura",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "system": {
         "category": "principle",
         "source": "",

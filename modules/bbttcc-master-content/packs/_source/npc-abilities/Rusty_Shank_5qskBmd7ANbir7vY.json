@@ -1,7 +1,7 @@
 {
   "name": "Rusty Shank",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_knife.png",
+  "img": "icons/weapons/daggers/dagger-straight-cracked.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

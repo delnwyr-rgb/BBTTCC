@@ -600,7 +600,7 @@
     {
       "name": "Echo-Diver",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/EchoDiver4.png",
+      "img": "icons/skills/melee/sword-echo-stylized-tan.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -855,7 +855,7 @@
     {
       "name": "Echo-Diver Heritage: Empyrean",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_weather_2.png",
+      "img": "icons/magic/air/weather-wind-gust.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1049,7 +1049,7 @@
     {
       "name": "Echo-Diver (Empyrean): Stormread",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "img": "icons/magic/lightning/bolt-strike-cloud-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1323,7 +1323,7 @@
     {
       "name": "Archetype: The World (Integrator)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1436,7 +1436,7 @@
     {
       "name": "Archetype: The World (Integrator) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1614,7 +1614,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_throne_1.png",
+      "img": "icons/environment/settlement/city-hall.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -1656,7 +1656,7 @@
     {
       "name": "Crew Type: Gridbreakers (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2131,7 +2131,7 @@
           "_key": "!actors.items.effects!CuT00m7owCxnKMjG.yfcYJRNB251JaxWk.oracleTier1Profs"
         }
       ],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "folder": "lDdY5NMGIgNj06vQ",
       "_stats": {
         "compendiumSource": "Item.jZVffPmMYjFFTfB9",
@@ -2225,7 +2225,7 @@
     {
       "name": "Lens Ledger",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_17.png",
+      "img": "icons/sundries/books/book-eye-pink.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2293,7 +2293,7 @@
     {
       "name": "Foresight Refraction (Bad Eden)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_6.png",
+      "img": "icons/sundries/flags/banner-symbol-eye-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2362,7 +2362,7 @@
       "_id": "CUQOQms5gk0OCxp6",
       "name": "Savant",
       "type": "class",
-      "img": "icons/svg/book.svg",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-savant",
@@ -2416,7 +2416,7 @@
       "_id": "v6Zticfjn0qAN2L8",
       "name": "Savant \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/book.svg",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

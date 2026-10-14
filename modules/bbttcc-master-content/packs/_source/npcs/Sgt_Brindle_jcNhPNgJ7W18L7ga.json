@@ -433,7 +433,7 @@
       "_id": "kQR1qoCyGT1chB6W",
       "name": "Stalwart",
       "type": "class",
-      "img": "icons/svg/anchor.svg",
+      "img": "icons/skills/trades/smithing-anvil-brown.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-stalwart",
@@ -487,7 +487,7 @@
       "_id": "YibIq6EuhMCUJiQT",
       "name": "Stalwart \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/anchor.svg",
+      "img": "icons/skills/trades/smithing-anvil-brown.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -532,7 +532,7 @@
     {
       "name": "Echo-Diver",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/EchoDiver4.png",
+      "img": "icons/skills/melee/sword-echo-stylized-tan.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -787,7 +787,7 @@
     {
       "name": "Echo-Diver Heritage: Empyrean",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_weather_2.png",
+      "img": "icons/magic/air/weather-wind-gust.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -981,7 +981,7 @@
     {
       "name": "Echo-Diver (Empyrean): Stormread",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "img": "icons/magic/lightning/bolt-strike-cloud-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1255,7 +1255,7 @@
     {
       "name": "Anchor Point",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_anchor_point.png",
+      "img": "icons/sundries/documents/blueprint-anchor.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats (Batch 3) (2026 rules)",

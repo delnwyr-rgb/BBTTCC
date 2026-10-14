@@ -572,7 +572,7 @@
     {
       "name": "Cryptidkin",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_4.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -699,7 +699,7 @@
     {
       "name": "Cryptidkin: Folklore & Frame",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/magic/control/fear-fright-mask-orange.webp",
       "system": {
         "category": "feature",
         "source": "Bad Eden (2024 rules)",
@@ -956,7 +956,7 @@
     {
       "name": "Cryptidkin Heritage: Jackalope",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Verity_Furlong_screenshot%20Background%20Removed.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_3.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -1068,7 +1068,7 @@
     {
       "name": "Cryptidkin (Jackalope): Startle Reflex",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dodge.png",
+      "img": "icons/creatures/mammals/rabbit-movement-glowing-green.webp",
       "folder": "sU5wM5ZUL33lrQxV",
       "system": {
         "category": "feature",
@@ -1316,7 +1316,7 @@
     {
       "name": "Archetype: The Emperor (Administrator)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "img": "icons/commodities/treasure/sceptre-jeweled-gold.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1425,7 +1425,7 @@
     {
       "name": "Archetype: The Emperor (Administrator) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "img": "icons/commodities/treasure/sceptre-jeweled-gold.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1601,7 +1601,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "img": "icons/magic/earth/barrier-stone-pillar-purple.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -1643,7 +1643,7 @@
     {
       "name": "Crew Type: Ashbound Survivors (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2058,7 +2058,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "img": "icons/consumables/potions/bottle-conical-bubbling-blue.webp",
       "folder": "zganGfpVDhLbTMgv",
       "_stats": {
         "compendiumSource": "Item.mQMir5AHapvMbEBc",
@@ -2089,7 +2089,7 @@
     {
       "name": "Enlightenment: Seeking",
       "type": "feat",
-      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "img": "icons/tools/scribal/magnifying-glass.webp",
       "flags": {
         "bbttcc-character-options": {
           "category": "enlightenment-levels",
@@ -2132,7 +2132,7 @@
     {
       "name": "Rallying Words",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_8.png",
+      "img": "icons/sundries/scrolls/scroll-symbol-eye-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2248,7 +2248,7 @@
     {
       "name": "Read the Room",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_chalice_4.png",
+      "img": "icons/sundries/books/book-tooled-eye-gold-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2381,7 +2381,7 @@
     {
       "name": "Backline Commander",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_backline_commander.png",
+      "img": "icons/skills/melee/strikes-sword-scimitar.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Feats Expansion v1 (2024 rules)",
@@ -2620,7 +2620,7 @@
     {
       "name": "Conductor's Beat",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music.png",
+      "img": "icons/skills/trades/music-notes-sound-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2742,7 +2742,7 @@
     {
       "name": "Accord Engine (Bad Eden)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_engine.png",
+      "img": "icons/commodities/tech/engine-tech-thrust-jet-teal.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2811,7 +2811,7 @@
       "_id": "yBZ0TZZa0hBCdXlH",
       "name": "Broker",
       "type": "class",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-broker",
@@ -2865,7 +2865,7 @@
       "_id": "wNCfEfao3UN3C4fs",
       "name": "Broker \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

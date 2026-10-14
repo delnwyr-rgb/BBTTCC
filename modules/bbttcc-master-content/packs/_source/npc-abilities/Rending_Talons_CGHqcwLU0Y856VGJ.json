@@ -1,7 +1,7 @@
 {
   "name": "Rending Talons",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_claw_1.png",
+  "img": "icons/creatures/claws/claw-talons-glowing-orange.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

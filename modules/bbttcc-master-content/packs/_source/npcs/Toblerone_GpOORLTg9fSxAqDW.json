@@ -440,7 +440,7 @@
     {
       "name": "Aurablade",
       "type": "class",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+      "img": "icons/sundries/scrolls/scroll-bound-skull-brown.webp",
       "system": {
         "category": "path",
         "identifier": "aurablade",
@@ -793,7 +793,7 @@
     {
       "name": "Aurablade Action",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_1.png",
+      "img": "icons/magic/fire/barrier-wall-flame-ring-yellow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -935,7 +935,7 @@
     {
       "name": "Blood Hymn (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn.png",
+      "img": "icons/skills/trades/music-notes-sound-blue.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "aurablade",
@@ -987,7 +987,7 @@
     {
       "name": "Crew Type: Gridbreakers",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1155,7 +1155,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
       "folder": "8EpFv8GVkHaIuTnR",
       "_stats": {
         "compendiumSource": "Item.yZj20DjRfIOrMajZ",
@@ -1184,7 +1184,7 @@
     {
       "name": "Crew Type: Gridbreakers (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1485,7 +1485,7 @@
           "_key": "!actors.items.effects!GpOORLTg9fSxAqDW.ORgrK4HheIAvpjDZ.n2WDIGozDB5hZr0q"
         }
       ],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
       "folder": "8EpFv8GVkHaIuTnR",
       "_stats": {
         "compendiumSource": "Item.RqCQJVlh9BuZ0SsL",
@@ -1514,7 +1514,7 @@
     {
       "name": "Worker's Leathers",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+      "img": "icons/equipment/chest/breastplate-layered-leather-stitched.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 1,
@@ -1660,7 +1660,7 @@
       "name": "Frikkin' Laser Blade Saber",
       "type": "weapon",
       "_id": "SJjer9CpT287Yvj9",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_2.png",
+      "img": "icons/weapons/swords/sword-flanged-lightning.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -2335,7 +2335,7 @@
     {
       "name": "Dread Crown",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-1.png",
+      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
       "system": {
         "category": "unarmed",
         "intent": "presence",
@@ -2648,7 +2648,7 @@
     {
       "name": "Mercy Arc",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_4.png",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "system": {
         "category": "melee",
         "intent": "presence",
@@ -2974,7 +2974,7 @@
     {
       "name": "Wrath-Brand",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn.png",
+      "img": "icons/weapons/swords/sword-flanged-lightning.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -3299,7 +3299,7 @@
     {
       "name": "Sephirotic Scion",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SephiroticScion4.png",
+      "img": "art/bbttcc/asli-icons/sephirotic_scion_2.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -3497,7 +3497,7 @@
     {
       "name": "Sefirot Attunement",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "img": "icons/magic/perception/eye-slit-red-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3629,7 +3629,7 @@
     {
       "name": "Sephirotic Scion: Holy Conduit",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_4.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3755,7 +3755,7 @@
     {
       "name": "Scion: Light of Harmony",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "img": "icons/magic/light/light-lantern-lit-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4081,7 +4081,7 @@
     {
       "name": "Scion: Strategic Hooks",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunset_2.png",
+      "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4220,7 +4220,7 @@
     {
       "name": "Sephirotic Scion (Ophanic): The Wheel Never Stops",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_wheel.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -4490,7 +4490,7 @@
     {
       "name": "Sephirotic Scion Heritage: Ophanic",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
+      "img": "art/bbttcc/asli-icons/sephirotic_scion_3.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -4830,7 +4830,7 @@
     {
       "name": "Sephirotic Scion (Ophanic): The Wheel Never Stops",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_wheel.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -5101,7 +5101,7 @@
     {
       "name": "Mercy's Edge",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_1.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "system": {
         "category": "melee",
         "intent": "presence",

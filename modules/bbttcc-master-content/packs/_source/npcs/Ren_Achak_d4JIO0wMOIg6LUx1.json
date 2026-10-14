@@ -449,7 +449,7 @@
       "_id": "9yJ93xdBpPRh1kwW",
       "name": "Keeper",
       "type": "class",
-      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "img": "icons/environment/settlement/temple-night.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-keeper",
@@ -503,7 +503,7 @@
       "_id": "hiu0c17fH9XSYrZy",
       "name": "Keeper — Apprentice (Tier I)",
       "type": "feature",
-      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "img": "icons/environment/settlement/temple-night.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -548,7 +548,7 @@
     {
       "name": "Spirit Ledger (Echo Boon)",
       "type": "feature",
-      "img": "icons/svg/pawprint.svg",
+      "img": "icons/sundries/books/book-worn-brown-grey.webp",
       "system": {
         "category": "echo",
         "source": "Echo Rosters",
@@ -596,7 +596,7 @@
     {
       "name": "Human",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/avuncular_joans_scene_1_us.png",
+      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -760,7 +760,7 @@
     {
       "name": "Human: Stubborn Spark",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_2.png",
+      "img": "icons/magic/fire/orb-lightning-sun.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1013,7 +1013,7 @@
     {
       "name": "Human Heritage: Cro-Magnon",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/ezeren_shadow_courier.png",
+      "img": "art/bbttcc/asli-icons/human_erectus_1.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -1126,7 +1126,7 @@
     {
       "name": "Sap",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_quarterstaff%20Background%20Removed.png",
+      "img": "icons/weapons/clubs/club-baton-studded.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -1453,7 +1453,7 @@
     {
       "name": "Initiate's Robe",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/initiates_robes.png",
+      "img": "icons/equipment/chest/robe-layered-red.webp",
       "system": {
         "guardBonus": 0,
         "evasionBonus": 1,
@@ -1597,7 +1597,7 @@
     {
       "name": "Stabilizer Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+      "img": "icons/tools/medical/bandage-rough.webp",
       "system": {
         "slot": "misc",
         "tags": [],

@@ -1,7 +1,7 @@
 {
   "name": "Suppression Volley",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crossbow.png",
+  "img": "icons/skills/ranged/bullet-sparks-yellow.webp",
   "system": {
     "category": "ranged",
     "intent": "violence",

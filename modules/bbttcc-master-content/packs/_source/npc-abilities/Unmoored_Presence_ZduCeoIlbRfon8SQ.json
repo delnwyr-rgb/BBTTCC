@@ -1,7 +1,7 @@
 {
   "name": "Unmoored Presence",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hourglass_broken_1.png",
+  "img": "icons/magic/time/hourglass-tilted-gray.webp",
   "system": {
     "category": "principle",
     "source": "",

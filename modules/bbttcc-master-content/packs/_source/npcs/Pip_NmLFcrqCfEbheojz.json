@@ -535,7 +535,7 @@
     {
       "name": "Cryptidkin",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_4.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -662,7 +662,7 @@
     {
       "name": "Cryptidkin: Folklore & Frame",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/magic/control/fear-fright-mask-orange.webp",
       "system": {
         "category": "feature",
         "source": "Bad Eden (2024 rules)",
@@ -919,7 +919,7 @@
     {
       "name": "Cryptidkin Heritage: Jackalope",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Verity_Furlong_screenshot%20Background%20Removed.png",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_3.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -1031,7 +1031,7 @@
     {
       "name": "Cryptidkin (Jackalope): Startle Reflex",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dodge.png",
+      "img": "icons/creatures/mammals/rabbit-movement-glowing-green.webp",
       "folder": "sU5wM5ZUL33lrQxV",
       "system": {
         "category": "feature",
@@ -1279,7 +1279,7 @@
     {
       "name": "Archetype: The Fool (Catalyst)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "img": "icons/equipment/head/mask-clown.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1392,7 +1392,7 @@
     {
       "name": "Archetype: The Fool (Catalyst) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "img": "icons/equipment/head/mask-clown.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1573,7 +1573,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+      "img": "icons/equipment/neck/necklace-astrology-sun-gold.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -1616,7 +1616,7 @@
       "_id": "zzKsBqWzROHeu10Y",
       "name": "Operator",
       "type": "class",
-      "img": "icons/svg/cowled.svg",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-operator",
@@ -1670,7 +1670,7 @@
       "_id": "KZCgpfxTuztwlJt7",
       "name": "Operator \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/cowled.svg",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

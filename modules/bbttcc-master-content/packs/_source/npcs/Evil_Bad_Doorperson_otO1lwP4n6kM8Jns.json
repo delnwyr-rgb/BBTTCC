@@ -424,7 +424,7 @@
       "_id": "XmRsWiCj4KDwzBgo",
       "name": "Bravo",
       "type": "class",
-      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-bravo",
@@ -478,7 +478,7 @@
       "_id": "5Sd9V8tsz6eWh5E2",
       "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -523,7 +523,7 @@
     {
       "name": "Devil: Lesser Brand",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sigil_1.png",
+      "img": "icons/magic/symbols/rune-sigil-horned-white-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -601,7 +601,7 @@
     {
       "name": "Devil: Pactbinder",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_sigil.png",
+      "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -678,7 +678,7 @@
     {
       "name": "Devil (Infernal)",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_1.png",
+      "img": "icons/creatures/unholy/demon-winged-horned-orange.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -848,7 +848,7 @@
     {
       "name": "Devil: Archduke's Tongue",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mask.png",
+      "img": "icons/creatures/abilities/mouth-teeth-tongue-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -926,7 +926,7 @@
     {
       "name": "Devil: Sovereign of Hells",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_eyes_1.png",
+      "img": "icons/creatures/unholy/demon-fire-horned-winged-roar.webp",
       "system": {
         "category": "technique",
         "source": {

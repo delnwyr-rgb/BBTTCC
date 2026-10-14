@@ -296,7 +296,7 @@
     {
       "name": "Swarm",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_web_1.png",
+      "img": "icons/creatures/invertebrates/wasp-swarm-attack.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -367,7 +367,7 @@
     {
       "name": "Boiling Bites",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_2.png",
+      "img": "icons/creatures/invertebrates/wasp-swarm-attack.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -649,7 +649,7 @@
     {
       "name": "Mire-Disperse",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_gas_mask_1.png",
+      "img": "icons/magic/air/fog-gas-smoke-swirling-green.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

@@ -1,7 +1,7 @@
 {
   "name": "Swarm",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_web_1.png",
+  "img": "icons/creatures/invertebrates/wasp-swarm-attack.webp",
   "system": {
     "category": "technique",
     "source": {

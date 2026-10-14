@@ -1,7 +1,7 @@
 {
   "name": "Each Spell Is Also a Wound",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_blood_drop.png",
+  "img": "icons/skills/wounds/blood-drip-droplet-red.webp",
   "system": {
     "category": "technique",
     "source": {

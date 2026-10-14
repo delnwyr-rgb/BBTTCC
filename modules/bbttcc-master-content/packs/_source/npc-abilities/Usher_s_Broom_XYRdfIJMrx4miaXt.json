@@ -1,7 +1,7 @@
 {
   "name": "Usher's Broom",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_quarterstaff%20Background%20Removed.png",
+  "img": "icons/tools/hand/broom-straw-brown.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

@@ -1,7 +1,7 @@
 {
   "name": "Scrap-Throw",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bomb_1.png",
+  "img": "icons/weapons/thrown/throwing-rock.webp",
   "system": {
     "category": "ranged",
     "intent": "violence",

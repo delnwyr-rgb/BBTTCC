@@ -1,7 +1,7 @@
 {
   "name": "Blood Frenzy",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_blood_drop.png",
+  "img": "icons/skills/wounds/blood-spurt-spray-red.webp",
   "system": {
     "category": "principle",
     "source": "",

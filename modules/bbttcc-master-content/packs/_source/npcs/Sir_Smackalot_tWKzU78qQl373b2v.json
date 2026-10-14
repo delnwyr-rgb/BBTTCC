@@ -410,7 +410,7 @@
     {
       "name": "Circuitborn: Firmware of Identity",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_14.png",
+      "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -730,7 +730,7 @@
     {
       "name": "Circuitborn Heritage: Exo-Knight",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/CircuitBorn_Exo_Knight.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_salvage_2.webp",
       "system": {
         "category": "heritage",
         "source": {
@@ -1000,7 +1000,7 @@
     {
       "name": "Circuitborn (Exo-Knight Line): Shield Projector",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_1.png",
+      "img": "icons/magic/unholy/barrier-shield-glowing-pink.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1356,7 +1356,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.XVCamqENQpSFYQOS"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Warlord2.png",
+      "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
       "effects": [],
       "folder": "UMEcF0hVGEJ9UeD2",
       "ownership": {
@@ -1381,7 +1381,7 @@
     {
       "name": "Circuitborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_1.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_synapse_2.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -1535,7 +1535,7 @@
     {
       "name": "Bulwark — Tier 1: Founding Stance",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_10.png",
+      "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1669,7 +1669,7 @@
     {
       "name": "Path of the Avalanche (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_avalanche.png",
+      "img": "icons/skills/targeting/target-strike-triple-blue.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "bulwark",
@@ -1718,7 +1718,7 @@
     {
       "name": "Archetype: Strength (Warlord)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_strength.png",
+      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1830,7 +1830,7 @@
     {
       "name": "Crew Type: Diplomatic Envoys",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1977,7 +1977,7 @@
           "option": {}
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_staff.png",
+      "img": "icons/weapons/staves/staff-blue-jewel.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "_stats": {
@@ -2068,7 +2068,7 @@
           }
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "effects": [],
       "folder": "eZrB95VvJnQ4Pb77",
       "_stats": {
@@ -2100,7 +2100,7 @@
     {
       "name": "Archetype: Strength (Warlord) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_strength.png",
+      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2245,7 +2245,7 @@
     {
       "name": "Crew Type: Diplomatic Envoys (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2473,7 +2473,7 @@
           "category": "occult"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "effects": [],
       "folder": "eZrB95VvJnQ4Pb77",
       "_stats": {
@@ -2505,7 +2505,7 @@
     {
       "name": "Avalanche L1: Kinetic Inversion",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_breaker_wall_1.png",
+      "img": "icons/magic/nature/root-vine-barrier-wall-brown.webp",
       "system": {
         "category": "technique",
         "source": {

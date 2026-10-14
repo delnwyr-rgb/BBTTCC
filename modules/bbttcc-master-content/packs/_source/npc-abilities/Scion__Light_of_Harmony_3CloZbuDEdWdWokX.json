@@ -1,7 +1,7 @@
 {
   "name": "Scion: Light of Harmony",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+  "img": "icons/magic/light/light-lantern-lit-white.webp",
   "system": {
     "category": "technique",
     "source": {

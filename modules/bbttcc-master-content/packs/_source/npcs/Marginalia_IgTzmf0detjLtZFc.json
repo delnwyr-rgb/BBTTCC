@@ -450,7 +450,7 @@
     {
       "name": "Circuitborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_1.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_synapse_2.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -604,7 +604,7 @@
     {
       "name": "Circuitborn: Firmware of Identity",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_14.png",
+      "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -923,7 +923,7 @@
     {
       "name": "Circuitborn Heritage: Synapse",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_Synapse_1.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_synapse_1.webp",
       "system": {
         "category": "heritage",
         "source": {
@@ -1040,7 +1040,7 @@
     {
       "name": "Circuitborn (Synapse Line): Yesod-Diver",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_moon_gate.png",
+      "img": "icons/magic/time/day-night-sun-moon.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1485,7 +1485,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.ZA4n59tvBCFj8G9N"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Cosmic%20Linguist.png",
+      "img": "icons/sundries/books/book-eye-purple.webp",
       "effects": [],
       "folder": "IyB4V2rPqsdbGukM",
       "ownership": {
@@ -1510,7 +1510,7 @@
     {
       "name": "Cosmic Linguist: Core Features",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_1.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1580,7 +1580,7 @@
     {
       "name": "Cosmic Linguist: Resonance Channel",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_6.png",
+      "img": "icons/skills/melee/strike-blade-scimitar-green-purple.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Originals (2026 rules)",
@@ -1726,7 +1726,7 @@
     {
       "name": "Cosmic Linguist: Semantic Editor",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scissors.png",
+      "img": "icons/sundries/scrolls/scroll-rolled-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1796,7 +1796,7 @@
     {
       "name": "Cosmic Linguist: Initiation 1 — True-Name Touch",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cast_1.png",
+      "img": "icons/sundries/scrolls/scroll-symbol-eye-blue.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -1867,7 +1867,7 @@
     {
       "name": "Annotator (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_design.png",
+      "img": "icons/skills/trades/academics-scribe-quill-gray.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "cosmic_linguist",
@@ -1916,7 +1916,7 @@
     {
       "name": "Archetype: The High Priestess (Seer)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_high_priestess.png",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2027,7 +2027,7 @@
     {
       "name": "Crew Type: Abyssal Cartographers",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/tools/navigation/map-marked-black.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2163,7 +2163,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "img": "icons/magic/earth/barrier-stone-pillar-purple.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -2268,7 +2268,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "folder": "KAgSLTue8mMAy0rF",
       "_stats": {
         "compendiumSource": "Item.ZRWplEBWUyjtEkXE",
@@ -2298,7 +2298,7 @@
     {
       "name": "Archetype: The High Priestess (Seer) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_high_priestess.png",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2440,7 +2440,7 @@
     {
       "name": "Crew Type: Abyssal Cartographers (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/tools/navigation/map-marked-black.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2928,7 +2928,7 @@
           "_key": "!actors.items.effects!IgTzmf0detjLtZFc.njNo8LR4Y4yNiP1b.pqFrb0jwW98dsObV"
         }
       ],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "folder": "KAgSLTue8mMAy0rF",
       "_stats": {
         "compendiumSource": "Item.ZNVvuWpGMNqg60S9",
@@ -2958,7 +2958,7 @@
     {
       "name": "Annotator: Ritual Upgrade",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_computer_2.png",
+      "img": "icons/skills/social/diplomacy-offering-ritual.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3022,7 +3022,7 @@
     {
       "name": "Annotator: Correspondence Mastery",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_10.png",
+      "img": "icons/magic/light/explosion-glow-spiral-teal.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3086,7 +3086,7 @@
     {
       "name": "Footnote",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_decomm_book_1.png",
+      "img": "icons/sundries/documents/document-symbol-circle-gold-red.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -3396,7 +3396,7 @@
     {
       "name": "Italic Emphasis",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "img": "icons/magic/symbols/symbol-lightning-bolt.webp",
       "system": {
         "intent": "presence",
         "channel": "mind",
@@ -3709,7 +3709,7 @@
     {
       "name": "Living Glossary",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_decomm_book_10.png",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-gold.webp",
       "system": {
         "category": "unarmed",
         "intent": "intrigue",
@@ -4030,7 +4030,7 @@
     {
       "name": "Margin Note: Not Yet",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_10.png",
+      "img": "icons/magic/fire/explosion-flame-lightning-strike.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -4335,7 +4335,7 @@
     {
       "name": "Marginalia Drift",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scroll_1.png",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-gold.webp",
       "system": {
         "category": "unarmed",
         "intent": "intrigue",
@@ -4653,7 +4653,7 @@
     {
       "name": "Strikethrough",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_punctuation_13.png",
+      "img": "icons/magic/control/debuff-energy-hold-teal-blue.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -4964,7 +4964,7 @@
     {
       "name": "Sudden Memory Of A Bee",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_nightmare.png",
+      "img": "icons/magic/control/debuff-energy-snare-brown.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -5300,7 +5300,7 @@
     {
       "name": "The Floor's Just A Suggestion",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_3.png",
+      "img": "icons/magic/control/energy-stream-link-large-orange.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -5621,7 +5621,7 @@
     {
       "name": "Squirrel Of Cosmic Importance",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_furrykin.png",
+      "img": "icons/magic/light/explosion-star-small-teal-purple.webp",
       "system": {
         "intent": "intrigue",
         "channel": "mind",
@@ -5948,7 +5948,7 @@
     {
       "name": "Unsolicited Jingle",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music_2.png",
+      "img": "icons/magic/control/energy-stream-link-orange.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -6284,7 +6284,7 @@
     {
       "name": "Public Speaking, Forever",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_5.png",
+      "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -6622,7 +6622,7 @@
     {
       "name": "Misplaced Keys (Theirs)",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_key_2.png",
+      "img": "icons/magic/control/debuff-energy-hold-green.webp",
       "system": {
         "intent": "intrigue",
         "channel": "body",
@@ -6943,7 +6943,7 @@
     {
       "name": "Apology Knife, Mass-Produced",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/apology_knife.png",
+      "img": "icons/weapons/daggers/knife-butterfly.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -7271,7 +7271,7 @@
     {
       "name": "Drifter's Weave",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/drifter_weave.png",
+      "img": "icons/equipment/chest/vest-cloth-tattered-tan.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 1,
@@ -7415,7 +7415,7 @@
     {
       "name": "Archivist's Spectacles",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_archivist_spectacles.jpeg",
+      "img": "icons/tools/scribal/spectacles-glasses.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -7506,7 +7506,7 @@
     {
       "name": "Field Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/combat_stim_1.png",
+      "img": "icons/commodities/leather/leather-patch-grey.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -7594,7 +7594,7 @@
     {
       "name": "Clarity Wafer",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_wafer_1.png",
+      "img": "icons/commodities/biological/tongue-brown.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -7682,7 +7682,7 @@
     {
       "name": "Field Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/combat_stim_1.png",
+      "img": "icons/commodities/leather/leather-patch-grey.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -7770,7 +7770,7 @@
     {
       "name": "Clarity Wafer",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_wafer_1.png",
+      "img": "icons/commodities/biological/tongue-brown.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -7858,7 +7858,7 @@
     {
       "name": "Clarity Wafer",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_wafer_1.png",
+      "img": "icons/commodities/biological/tongue-brown.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -7946,7 +7946,7 @@
     {
       "name": "Field Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/combat_stim_1.png",
+      "img": "icons/commodities/leather/leather-patch-grey.webp",
       "system": {
         "slot": "consumable",
         "tags": [
@@ -8034,7 +8034,7 @@
     {
       "name": "Sic",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_decomm_book_2.png",
+      "img": "icons/magic/death/mouth-bite-fangs-vampire.webp",
       "system": {
         "intent": "presence",
         "channel": "mind",

@@ -1,7 +1,7 @@
 {
   "name": "Hollow Hunger",
   "type": "power",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_1.png",
+  "img": "icons/commodities/bones/skull-hollow-brown-red.webp",
   "system": {
     "intent": "violence",
     "channel": "soul",

@@ -1,7 +1,7 @@
 {
   "name": "Poor Discipline",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fear_1.png",
+  "img": "icons/magic/control/fear-fright-white.webp",
   "system": {
     "category": "principle",
     "source": "",

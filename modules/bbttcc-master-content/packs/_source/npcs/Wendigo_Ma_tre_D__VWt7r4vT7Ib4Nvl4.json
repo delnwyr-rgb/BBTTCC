@@ -299,7 +299,7 @@
     {
       "name": "Seat You Now",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_eyes_1.png",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -595,7 +595,7 @@
     {
       "name": "The Long Reach",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_claw_1.png",
+      "img": "icons/magic/earth/construct-stone-long-arms.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -886,7 +886,7 @@
     {
       "name": "Something A Bit OFF",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_single_eye.png",
+      "img": "icons/magic/death/skeleton-eye-skull-glow-orange.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",

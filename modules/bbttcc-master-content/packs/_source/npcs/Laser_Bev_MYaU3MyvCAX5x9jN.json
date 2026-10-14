@@ -426,7 +426,7 @@
       "_id": "4CzjcW2zMnpZ5RXd",
       "name": "Bravo",
       "type": "class",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-bravo",
@@ -480,7 +480,7 @@
       "_id": "ex2mDb3gc2C39fpT",
       "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -526,7 +526,7 @@
       "_id": "8vdxr1NHP6PtageZ",
       "name": "Bravo \u2014 Initiate (Tier II)",
       "type": "feature",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

@@ -434,7 +434,7 @@
       "_id": "CN6TB42YKO2exyje",
       "name": "Keeper",
       "type": "class",
-      "img": "icons/svg/temple.svg",
+      "img": "icons/environment/settlement/temple-night.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-keeper",
@@ -488,7 +488,7 @@
       "_id": "YxYsJ8aeJwbKhX0g",
       "name": "Keeper \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/temple.svg",
+      "img": "icons/environment/settlement/temple-night.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -533,7 +533,7 @@
     {
       "name": "Human",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/avuncular_joans_scene_1_us.png",
+      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -697,7 +697,7 @@
     {
       "name": "Human: Stubborn Spark",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_2.png",
+      "img": "icons/magic/fire/orb-lightning-sun.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -951,7 +951,7 @@
     {
       "name": "Human Heritage: Cro-Magnon",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/ezeren_shadow_courier.png",
+      "img": "art/bbttcc/asli-icons/human_erectus_1.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",

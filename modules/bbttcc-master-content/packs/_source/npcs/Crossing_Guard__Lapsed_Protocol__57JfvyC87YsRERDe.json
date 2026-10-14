@@ -298,7 +298,7 @@
     {
       "name": "HALT (Means Halt)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_fist_wall.png",
+      "img": "icons/skills/social/wave-halt-stop.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -594,7 +594,7 @@
     {
       "name": "Citation Baton",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mace.png",
+      "img": "icons/weapons/clubs/baton-energy-stun-silver-yellow.webp",
       "system": {
         "category": "melee",
         "intent": "violence",

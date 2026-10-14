@@ -427,7 +427,7 @@
       "_id": "whejmhpjPB9iTyix",
       "name": "Bravo",
       "type": "class",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-bravo",
@@ -481,7 +481,7 @@
       "_id": "VUloPZ2sFLFmmYID",
       "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -526,7 +526,7 @@
     {
       "name": "Circuitborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_1.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_synapse_2.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -677,7 +677,7 @@
     {
       "name": "Circuitborn: Firmware of Identity",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_14.png",
+      "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -994,7 +994,7 @@
     {
       "name": "Circuitborn Heritage: Parallax",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_Parallax_1.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_synapse_1.webp",
       "system": {
         "category": "heritage",
         "source": {
@@ -1087,7 +1087,7 @@
     {
       "name": "Circuitborn (Parallax Line): Light-Bend Cloak",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cloak_hooded_1.png",
+      "img": "icons/magic/light/light-lantern-lit-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1346,7 +1346,7 @@
     {
       "name": "Battlefield Presence",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_battlefied_presence.png",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "system": {
         "category": "technique",
         "source": {

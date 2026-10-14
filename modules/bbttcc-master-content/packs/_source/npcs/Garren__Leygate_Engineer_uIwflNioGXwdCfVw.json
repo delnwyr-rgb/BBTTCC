@@ -549,7 +549,7 @@
     {
       "name": "Circuitborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_1.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_synapse_2.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -700,7 +700,7 @@
     {
       "name": "Circuitborn: Firmware of Identity",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_14.png",
+      "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1017,7 +1017,7 @@
     {
       "name": "Circuitborn (Salvage Line): Built-In Tools",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_btools_2.png",
+      "img": "icons/magic/nature/leaf-armor-scale-worn-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1100,7 +1100,7 @@
     {
       "name": "Circuitborn Heritage: Salvage",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_Salvage_1.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_synapse_2.webp",
       "system": {
         "category": "heritage",
         "source": {
@@ -1370,7 +1370,7 @@
     {
       "name": "Archetype: The Hanged Man",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hanged_man.png",
+      "img": "icons/magic/death/gallows-hanged-humanoid.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1481,7 +1481,7 @@
     {
       "name": "Archetype: The Hanged Man (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hanged_man.png",
+      "img": "icons/magic/death/gallows-hanged-humanoid.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1661,7 +1661,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dwarf.png",
+      "img": "icons/magic/nature/plant-seed-hands-glow-yellow.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -1703,7 +1703,7 @@
     {
       "name": "Clean Extraction",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_peace_1.png",
+      "img": "icons/skills/social/peace-luck-insult.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1776,7 +1776,7 @@
     {
       "name": "Spark Resurrection",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_7.png",
+      "img": "icons/commodities/tech/tube-chamber-lightning.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2026,7 +2026,7 @@
     {
       "name": "Reverse-Anvil",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_explosion_1.png",
+      "img": "icons/skills/trades/smithing-anvil-silver-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2094,7 +2094,7 @@
     {
       "name": "Spark Reclaimer (Bad Eden)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_1.png",
+      "img": "icons/sundries/books/book-teal-lightning.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2162,7 +2162,7 @@
     {
       "name": "Residual Charge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
+      "img": "icons/environment/people/charge.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2230,7 +2230,7 @@
     {
       "name": "Overcharge Cycle",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lightning_2.png",
+      "img": "icons/magic/lightning/bolt-strike-forked-sparks-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2298,7 +2298,7 @@
     {
       "name": "Echo Temper",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_2.png",
+      "img": "icons/magic/defensive/illusion-evasion-echo-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2366,7 +2366,7 @@
     {
       "name": "Grim Persistence",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_grim_persistence.png",
+      "img": "icons/magic/fire/flame-burning-fence.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats v1 (2024 rules)",
@@ -2476,7 +2476,7 @@
       "_id": "3X0NKFdd504JEYZa",
       "name": "Keeper",
       "type": "class",
-      "img": "icons/svg/temple.svg",
+      "img": "icons/environment/settlement/temple-night.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-keeper",
@@ -2530,7 +2530,7 @@
       "_id": "vbUyR4OMTVIQI4jx",
       "name": "Keeper \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/temple.svg",
+      "img": "icons/environment/settlement/temple-night.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

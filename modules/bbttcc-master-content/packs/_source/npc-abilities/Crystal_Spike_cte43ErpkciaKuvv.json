@@ -1,7 +1,7 @@
 {
   "name": "Crystal Spike",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_asteroid.png",
+  "img": "icons/magic/water/barrier-ice-crystal-wall-jagged-blue.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

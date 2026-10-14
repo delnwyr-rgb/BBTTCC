@@ -309,7 +309,7 @@
       "_id": "VxA5t8HkGnqUOnUB",
       "name": "Fractured Will (3/scene)",
       "type": "feature",
-      "img": "icons/svg/mage-shield.svg",
+      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -377,7 +377,7 @@
       "_id": "ysCVfDe32Hl2bXwS",
       "name": "Multiattack",
       "type": "feature",
-      "img": "icons/svg/combat.svg",
+      "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",

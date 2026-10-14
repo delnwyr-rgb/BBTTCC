@@ -1,7 +1,7 @@
 {
   "name": "Reed-Vanish (recharges on a Soma Break)",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+  "img": "icons/consumables/plants/grass-leaves-stems-green.webp",
   "system": {
     "category": "ranged",
     "intent": "presence",

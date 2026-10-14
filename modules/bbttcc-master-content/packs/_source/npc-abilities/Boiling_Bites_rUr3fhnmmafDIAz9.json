@@ -1,7 +1,7 @@
 {
   "name": "Boiling Bites",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_2.png",
+  "img": "icons/creatures/invertebrates/wasp-swarm-attack.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

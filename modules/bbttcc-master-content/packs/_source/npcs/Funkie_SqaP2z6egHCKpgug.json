@@ -400,7 +400,7 @@
     {
       "name": "Oldenborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_2.png",
+      "img": "art/bbttcc/asli-icons/oldborne_sky.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -561,7 +561,7 @@
     {
       "name": "Oldenborn Heritage: Lumenwrought",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Ember_Lumenwrought_3.png",
+      "img": "art/bbttcc/asli-icons/oldenborn_earthbound.webp",
       "system": {
         "category": "heritage",
         "source": "Bad Eden (2024 rules)",
@@ -835,7 +835,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.5Ncfbe1ReQhbLLUP"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Shadowjack.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "effects": [],
       "folder": "apQBjTCtfZVreQpj",
       "ownership": {
@@ -860,7 +860,7 @@
     {
       "name": "Shadow Courier \u2014 Tier 1: Liminal Operator",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
+      "img": "icons/sundries/documents/envelope-letter-post.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1071,7 +1071,7 @@
     {
       "name": "Route of the Wayfarer Tongue (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music.png",
+      "img": "icons/skills/trades/music-notes-sound-blue.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "shadow_courier",
@@ -1120,7 +1120,7 @@
     {
       "name": "Oldenborn (Lumenwrought): Glamourfield",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+      "img": "icons/magic/control/buff-luck-fortune-rainbow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1260,7 +1260,7 @@
     {
       "name": "Archetype: The Empress (Caretaker)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1372,7 +1372,7 @@
     {
       "name": "Crew Type: Ashbound Survivors",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1503,7 +1503,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dwarf.png",
+      "img": "icons/magic/nature/plant-seed-hands-glow-yellow.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -1608,7 +1608,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
       "folder": "uflkacBlUmYFCAbz",
       "_stats": {
         "compendiumSource": "Item.J2ZdE3vlyEO8rd4l",
@@ -1638,7 +1638,7 @@
     {
       "name": "Archetype: The Empress (Caretaker) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1784,7 +1784,7 @@
     {
       "name": "Crew Type: Ashbound Survivors (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2077,7 +2077,7 @@
           "_key": "!actors.items.effects!SqaP2z6egHCKpgug.4zmhFp1QF0O95e1A.shamanTier1Profs"
         }
       ],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
       "folder": "uflkacBlUmYFCAbz",
       "_stats": {
         "compendiumSource": "Item.9xPomIywcV4tmO86",
@@ -2107,7 +2107,7 @@
     {
       "name": "Wayfarer Tongue L1: The Tongue That Does Not Lie",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music_3.png",
+      "img": "icons/creatures/abilities/mouth-teeth-tongue-purple.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -2197,7 +2197,7 @@
     {
       "name": "Worker's Leathers",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+      "img": "icons/equipment/chest/breastplate-layered-leather-stitched.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 1,
@@ -2342,7 +2342,7 @@
     {
       "name": "Carry-the-Unsayable",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_box_2.png",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-gray.webp",
       "system": {
         "category": "unarmed",
         "intent": "intrigue",
@@ -2653,7 +2653,7 @@
     {
       "name": "Threshold Cloak",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cloak_hooded_2.png",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-gold.webp",
       "system": {
         "category": "unarmed",
         "intent": "intrigue",
@@ -2964,7 +2964,7 @@
     {
       "name": "Threshold Receipt",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_decomm_book_10.png",
+      "img": "icons/magic/unholy/energy-smoke-pink.webp",
       "system": {
         "intent": "intrigue",
         "channel": "soul",
@@ -3261,7 +3261,7 @@
     {
       "name": "Wayhound Companion",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_3.png",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-gold.webp",
       "system": {
         "category": "unarmed",
         "intent": "intrigue",
@@ -3572,7 +3572,7 @@
     {
       "name": "Bolt-Driver",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_heavy_crossbow.png",
+      "img": "icons/weapons/crossbows/crossbow-golden-bolt.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -3893,7 +3893,7 @@
     {
       "name": "Combat Knife",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_2.png",
+      "img": "icons/weapons/daggers/knife-green.webp",
       "system": {
         "category": "melee",
         "intent": "violence",

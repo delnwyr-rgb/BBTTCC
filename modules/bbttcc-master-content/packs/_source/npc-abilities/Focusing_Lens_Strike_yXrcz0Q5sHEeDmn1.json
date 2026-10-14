@@ -1,7 +1,7 @@
 {
   "name": "Focusing-Lens Strike",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_12.png",
+  "img": "icons/magic/light/beam-rays-blue-small.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

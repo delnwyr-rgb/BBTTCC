@@ -434,7 +434,7 @@
       "_id": "I6lho1IX0UheiBCu",
       "name": "Savant",
       "type": "class",
-      "img": "icons/svg/book.svg",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-savant",
@@ -488,7 +488,7 @@
       "_id": "rFZWjjfCpRayTYfY",
       "name": "Savant \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/book.svg",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -533,7 +533,7 @@
     {
       "name": "Oldenborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_2.png",
+      "img": "art/bbttcc/asli-icons/oldborne_sky.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -691,7 +691,7 @@
     {
       "name": "Oldenborn Heritage: Rustland Scavenger",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RustlandScavenger2.png",
+      "img": "art/bbttcc/asli-icons/oldenborn_lumenwrought_2.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1056,7 +1056,7 @@
     {
       "name": "Oldenborn (Rustland Scavenger): Ruin-Sense",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_oldenborn_1.png",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-teal.webp",
       "system": {
         "category": "feature",
         "source": {
@@ -1157,7 +1157,7 @@
     {
       "name": "Last Exit",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_last_exit.png",
+      "img": "icons/sundries/gaming/card-game-pink.webp",
       "system": {
         "category": "technique",
         "source": {

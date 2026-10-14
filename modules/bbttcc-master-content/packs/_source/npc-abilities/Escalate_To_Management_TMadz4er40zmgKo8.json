@@ -1,7 +1,7 @@
 {
   "name": "Escalate To Management",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hex_1.png",
+  "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
   "system": {
     "category": "ranged",
     "intent": "soul",

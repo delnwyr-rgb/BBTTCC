@@ -294,7 +294,7 @@
     {
       "name": "Hex-Itch",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hex_1.png",
+      "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -365,7 +365,7 @@
     {
       "name": "Howl-of-the-Hex (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+      "img": "icons/creatures/abilities/wolf-howl-moon-purple.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -653,7 +653,7 @@
     {
       "name": "Yellowing Bite",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_1.png",
+      "img": "icons/creatures/abilities/mouth-teeth-rows-red.webp",
       "system": {
         "category": "melee",
         "intent": "violence",

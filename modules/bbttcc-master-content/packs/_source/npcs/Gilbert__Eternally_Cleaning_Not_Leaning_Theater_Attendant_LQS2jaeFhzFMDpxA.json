@@ -180,7 +180,7 @@
     {
       "name": "Multiattack",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_portal_2.png",
+      "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -217,7 +217,7 @@
     {
       "name": "Usher's Broom",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_quarterstaff%20Background%20Removed.png",
+      "img": "icons/tools/hand/broom-straw-brown.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -474,7 +474,7 @@
     {
       "name": "Weaponized Shame",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/skills/social/intimidation-impressing.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -746,7 +746,7 @@
     {
       "name": "Concession Catastrophe (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fire_cone_1.png",
+      "img": "icons/magic/fire/explosion-fireball-small-orange.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -1018,7 +1018,7 @@
     {
       "name": "Not Ready For Guests!",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fear_1.png",
+      "img": "icons/magic/control/fear-fright-shadow-monster-red.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -1290,7 +1290,7 @@
     {
       "name": "Legendary Action \u2014 Spot Clean",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_8.png",
+      "img": "icons/tools/hand/brush-paint-brown-white.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -1327,7 +1327,7 @@
     {
       "name": "Legendary Action \u2014 Quiet In The Theater",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_5.png",
+      "img": "icons/skills/social/wave-halt-stop.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -1364,7 +1364,7 @@
     {
       "name": "Legendary Resistance (3/Day)",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_4.png",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -1401,7 +1401,7 @@
     {
       "name": "Transformation Trigger \u2014 Sephirotic Assistant Manager",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -1438,7 +1438,7 @@
     {
       "name": "The Mop Knows",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_1.png",
+      "img": "icons/tools/hand/broom-straw-brown.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -1478,7 +1478,7 @@
     {
       "name": "Theater Etiquette",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music.png",
+      "img": "icons/commodities/treasure/mask-jeweled-gold.webp",
       "system": {
         "category": "principle",
         "source": "",

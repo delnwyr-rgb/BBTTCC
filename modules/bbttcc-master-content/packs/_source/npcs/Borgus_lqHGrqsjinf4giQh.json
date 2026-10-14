@@ -400,7 +400,7 @@
     {
       "name": "Qliph-Scarred",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Qliph-Scarred4.png",
+      "img": "art/bbttcc/asli-icons/qliph_scarred_3.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -600,7 +600,7 @@
     {
       "name": "Qliph-Scarred: Shadow Resilience",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -741,7 +741,7 @@
     {
       "name": "Qliph-Scarred: Qliphothic Saturation",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_6.png",
+      "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -878,7 +878,7 @@
     {
       "name": "Qliph-Scarred: Hunger Mask",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_helmet_7.png",
+      "img": "icons/magic/control/fear-fright-mask-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1013,7 +1013,7 @@
     {
       "name": "Qliph-Scarred: Shadow-Wake",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_8.png",
+      "img": "icons/magic/light/orb-shadow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1147,7 +1147,7 @@
     {
       "name": "Qliph-Scarred: Strategic Hooks (Qliph-Scarred)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+      "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1294,7 +1294,7 @@
     {
       "name": "Qliph-Scarred Heritage: Chthonic",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_monster_1.png",
+      "img": "art/bbttcc/asli-icons/qliph_scarred_4.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1432,7 +1432,7 @@
     {
       "name": "Qliph-Scarred (Chthonic): What the Deep Dark Taught You",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_monster.png",
+      "img": "icons/magic/control/fear-fright-shadow-monster-green.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1619,7 +1619,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.XVCamqENQpSFYQOS"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Warlord2.png",
+      "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
       "effects": [],
       "folder": "UMEcF0hVGEJ9UeD2",
       "ownership": {
@@ -1644,7 +1644,7 @@
     {
       "name": "Bulwark \u2014 Tier 1: Founding Stance",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_10.png",
+      "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1777,7 +1777,7 @@
     {
       "name": "Path of the Cataclyst (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_atom_1.png",
+      "img": "icons/magic/fire/barrier-wall-flame-ring-blue.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "bulwark",
@@ -1826,7 +1826,7 @@
     {
       "name": "Archetype: The Emperor (Administrator)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "img": "icons/commodities/treasure/sceptre-jeweled-gold.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1934,7 +1934,7 @@
     {
       "name": "Crew Type: Ironbound Ascendants",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2095,7 +2095,7 @@
           }
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "effects": [],
       "folder": "eZrB95VvJnQ4Pb77",
       "_stats": {
@@ -2160,7 +2160,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_1.png",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -2201,7 +2201,7 @@
     {
       "name": "Archetype: The Emperor (Administrator) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "img": "icons/commodities/treasure/sceptre-jeweled-gold.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2342,7 +2342,7 @@
     {
       "name": "Crew Type: Ironbound Ascendants (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2573,7 +2573,7 @@
           "category": "occult"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "effects": [],
       "folder": "eZrB95VvJnQ4Pb77",
       "_stats": {
@@ -2604,7 +2604,7 @@
     {
       "name": "Cataclyst L1: The Exchange",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_gauntlet_2.png",
+      "img": "icons/magic/time/hourglass-tilted-gray.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -2669,7 +2669,7 @@
     {
       "name": "Bulwark Hauberk",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/bulwark_hauberk.png",
+      "img": "icons/equipment/chest/breastplate-layered-leather-black.webp",
       "system": {
         "guardBonus": 2,
         "evasionBonus": 0,
@@ -2814,7 +2814,7 @@
     {
       "name": "Pressed Buckler",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pressed_buckler.png",
+      "img": "icons/equipment/shield/buckler-wooden-boss-lightning.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 0,
@@ -2950,7 +2950,7 @@
     {
       "name": "Anvil Stance",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+      "img": "icons/skills/melee/sword-shield-stylized-white.webp",
       "system": {
         "category": "unarmed",
         "intent": "violence",
@@ -3261,7 +3261,7 @@
     {
       "name": "Borrowed Bastion",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_breaker_wall_1.png",
+      "img": "icons/weapons/swords/sword-katana.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -3575,7 +3575,7 @@
     {
       "name": "Pressure Front",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fire_cone_1.png",
+      "img": "icons/weapons/sickles/scythe-bone-green-fire.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -3889,7 +3889,7 @@
     {
       "name": "Wall of My People",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wall_hex_1.png",
+      "img": "icons/weapons/bows/longbow-recurve-skull-brown.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -4183,7 +4183,7 @@
     {
       "name": "Slug Pistol",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lazer_pistol_2.png",
+      "img": "icons/weapons/guns/pistol-revolver-energy-heavy.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -4504,7 +4504,7 @@
     {
       "name": "Hand Axe",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_axe.png",
+      "img": "icons/weapons/axes/axe-battle-broad-stone.webp",
       "system": {
         "category": "melee",
         "intent": "violence",

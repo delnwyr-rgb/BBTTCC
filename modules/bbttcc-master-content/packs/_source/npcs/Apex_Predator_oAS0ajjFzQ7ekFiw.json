@@ -164,7 +164,7 @@
     {
       "name": "Territorial",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_raptor.png",
+      "img": "icons/creatures/abilities/paw-print-tan.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -201,7 +201,7 @@
     {
       "name": "Blood Frenzy",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_blood_drop.png",
+      "img": "icons/skills/wounds/blood-spurt-spray-red.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -238,7 +238,7 @@
     {
       "name": "Rending Bite",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_1.png",
+      "img": "icons/magic/death/mouth-bite-fangs-vampire.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -495,7 +495,7 @@
     {
       "name": "Pounce",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_paw_1.png",
+      "img": "icons/creatures/abilities/cougar-pounce-stalk-black.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -752,7 +752,7 @@
     {
       "name": "Claws",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_claw_1.png",
+      "img": "icons/commodities/claws/claw-canine-brown-grey.webp",
       "system": {
         "category": "melee",
         "intent": "violence",

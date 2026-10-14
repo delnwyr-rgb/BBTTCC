@@ -1,7 +1,7 @@
 {
   "name": "Oath-Blade",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_sigil.png",
+  "img": "icons/weapons/swords/greatsword-crossguard-embossed-gold.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

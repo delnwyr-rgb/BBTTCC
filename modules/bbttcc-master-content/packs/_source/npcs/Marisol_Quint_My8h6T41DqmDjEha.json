@@ -442,7 +442,7 @@
       "_id": "2BoVh3lxlpHI7arS",
       "name": "Operator",
       "type": "class",
-      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-operator",
@@ -496,7 +496,7 @@
       "_id": "Ph19JzqQHF0Yf2Uw",
       "name": "Operator — Apprentice (Tier I)",
       "type": "feature",
-      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -541,7 +541,7 @@
     {
       "name": "Never Here (Echo Boon)",
       "type": "feature",
-      "img": "icons/svg/invisible.svg",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "system": {
         "category": "echo",
         "source": "Echo Rosters",
@@ -589,7 +589,7 @@
     {
       "name": "Circuitborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_1.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_synapse_2.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -740,7 +740,7 @@
     {
       "name": "Circuitborn: Firmware of Identity",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_14.png",
+      "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1056,7 +1056,7 @@
     {
       "name": "Circuitborn Heritage: Synapse",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_Synapse_1.png",
+      "img": "art/bbttcc/asli-icons/circuitborn_synapse_1.webp",
       "system": {
         "category": "heritage",
         "source": {
@@ -1171,7 +1171,7 @@
     {
       "name": "Circuitborn (Synapse Line): Yesod-Diver",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_moon_gate.png",
+      "img": "icons/magic/time/day-night-sun-moon.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1429,7 +1429,7 @@
     {
       "name": "Combat Knife",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_2.png",
+      "img": "icons/weapons/daggers/knife-green.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -1775,7 +1775,7 @@
     {
       "name": "Sap",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_quarterstaff%20Background%20Removed.png",
+      "img": "icons/weapons/clubs/club-baton-studded.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -2102,7 +2102,7 @@
     {
       "name": "Drifter's Weave",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/drifter_weave.png",
+      "img": "icons/equipment/chest/vest-cloth-tattered-tan.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 1,
@@ -2245,7 +2245,7 @@
     {
       "name": "Stabilizer Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+      "img": "icons/tools/medical/bandage-rough.webp",
       "system": {
         "slot": "misc",
         "tags": [],

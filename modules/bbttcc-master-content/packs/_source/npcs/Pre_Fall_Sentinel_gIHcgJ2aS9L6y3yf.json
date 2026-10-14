@@ -306,7 +306,7 @@
     {
       "name": "Outdated Recognition",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_robot.png",
+      "img": "icons/commodities/tech/console-steel.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -377,7 +377,7 @@
     {
       "name": "Pre-Fall Halberd",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_spear.png",
+      "img": "icons/weapons/polearms/halberd-crescent-steel.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -659,7 +659,7 @@
     {
       "name": "Classification Scan",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_surveillance.png",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",

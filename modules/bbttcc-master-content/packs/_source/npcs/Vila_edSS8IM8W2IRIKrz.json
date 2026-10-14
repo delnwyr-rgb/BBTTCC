@@ -441,7 +441,7 @@
     {
       "name": "Sephirotic Scion",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SephiroticScion4.png",
+      "img": "art/bbttcc/asli-icons/sephirotic_scion_2.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -641,7 +641,7 @@
     {
       "name": "Sefirot Attunement",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "img": "icons/magic/perception/eye-slit-red-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -775,7 +775,7 @@
     {
       "name": "Sephirotic Scion: Holy Conduit",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_4.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -903,7 +903,7 @@
     {
       "name": "Scion: Light of Harmony",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "img": "icons/magic/light/light-lantern-lit-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1231,7 +1231,7 @@
     {
       "name": "Scion: Strategic Hooks",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunset_2.png",
+      "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1372,7 +1372,7 @@
     {
       "name": "Sephirotic Scion Heritage: Ophanic",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
+      "img": "art/bbttcc/asli-icons/sephirotic_scion_3.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1713,7 +1713,7 @@
     {
       "name": "Sephirotic Scion (Ophanic): The Wheel Never Stops",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_wheel.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1985,7 +1985,7 @@
     {
       "name": "Dreamwalker",
       "type": "class",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Dreamwalker1.png",
+      "img": "icons/magic/nature/root-vine-beanstalk-moon.webp",
       "system": {
         "category": "path",
         "identifier": "dreamwalker",
@@ -2712,7 +2712,7 @@
     {
       "name": "Dream-Sense",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_single_eye.png",
+      "img": "icons/magic/perception/eye-slit-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2840,7 +2840,7 @@
     {
       "name": "Lucid Step",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_step_1.png",
+      "img": "icons/magic/fire/dagger-rune-enchant-teal-purple.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3018,7 +3018,7 @@
     {
       "name": "Initiate of the Great Work",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+      "img": "icons/magic/time/day-night-sun-moon.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3144,7 +3144,7 @@
     {
       "name": "Oneiric Pulse",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_head_2.png",
+      "img": "icons/magic/control/debuff-energy-hold-levitate-teal-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3271,7 +3271,7 @@
     {
       "name": "Dreamwalker: Tier 1 \u2014 Oneiric Reservoir",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_1.png",
+      "img": "icons/sundries/flags/banner-standard-moon.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3346,7 +3346,7 @@
     {
       "name": "Trance of the Sapphire Gate (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_sapphire_gate.png",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "dreamwalker",
@@ -3399,7 +3399,7 @@
     {
       "name": "Archetype: The Moon (Ancient Blood)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+      "img": "icons/magic/nature/moon-crescent.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -3544,7 +3544,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dwarf.png",
+      "img": "icons/magic/nature/plant-seed-hands-glow-yellow.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -3649,7 +3649,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "folder": "lDdY5NMGIgNj06vQ",
       "_stats": {
         "compendiumSource": "Item.nZy87kN2gDBe9xLG",
@@ -3679,7 +3679,7 @@
     {
       "name": "Archetype: The Moon (Ancient Blood) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+      "img": "icons/magic/nature/moon-crescent.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -4073,7 +4073,7 @@
           "_key": "!actors.items.effects!edSS8IM8W2IRIKrz.a7USbOGvcdLKRtF9.oracleTier1Profs"
         }
       ],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "folder": "lDdY5NMGIgNj06vQ",
       "_stats": {
         "compendiumSource": "Item.jZVffPmMYjFFTfB9",
@@ -4103,7 +4103,7 @@
     {
       "name": "Daydream",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bellows_2.png",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -4875,7 +4875,7 @@
     {
       "name": "Refracted Intent",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_21.png",
+      "img": "icons/magic/control/debuff-energy-hold-yellow.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -5690,7 +5690,7 @@
     {
       "name": "Mirrorstep",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_3.png",
+      "img": "icons/magic/control/debuff-energy-snare-green.webp",
       "system": {
         "intent": "intrigue",
         "channel": "soul",
@@ -5960,7 +5960,7 @@
     {
       "name": "Hex Compass",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_hex_compass.jpeg",
+      "img": "icons/magic/symbols/rune-sigil-green-purple.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -6066,7 +6066,7 @@
     {
       "name": "Hex Rope",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/hex_rope.png",
+      "img": "icons/sundries/survival/rope-braided-yellow.webp",
       "system": {
         "slot": "material",
         "tags": [
@@ -6145,7 +6145,7 @@
     {
       "name": "Hex Boots",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_hex_boots.jpeg",
+      "img": "icons/equipment/feet/boots-leather-teal.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -6257,7 +6257,7 @@
     {
       "name": "Reactor Shield Cape",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_reactor_shield_cape.jpeg",
+      "img": "icons/equipment/back/cape-layered-orange.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -6363,7 +6363,7 @@
     {
       "name": "Sigil of Quiet Crossings",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/enamel_pin_4.png",
+      "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
       "system": {
         "slot": "pin",
         "tags": [
@@ -6448,7 +6448,7 @@
     {
       "name": "Yesodic Memory Lens",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/tesod_memory_lens.png",
+      "img": "icons/tools/scribal/lens-grey-red.webp",
       "system": {
         "slot": "lens",
         "tags": [
@@ -6675,7 +6675,7 @@
     {
       "name": "Glowstick of the Ancients",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_glowstick_of_the_ancients.jpeg",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -6985,7 +6985,7 @@
     {
       "name": "Stabilizer Patch",
       "type": "gear",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+      "img": "icons/tools/medical/bandage-rough.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -7118,7 +7118,7 @@
     {
       "name": "Apology Knife, Mass-Produced",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/apology_knife.png",
+      "img": "icons/weapons/daggers/knife-butterfly.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -7443,7 +7443,7 @@
     {
       "name": "Edge of Control",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_edge_of_control.png",
+      "img": "icons/magic/control/control-influence-crown-gold.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -7508,7 +7508,7 @@
     {
       "name": "Lucid Step (Bad Eden)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_step_2.png",
+      "img": "icons/sundries/flags/banner-flag-red-white.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -7574,7 +7574,7 @@
     {
       "name": "Gate Anchor",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_moon_gate.png",
+      "img": "icons/sundries/books/book-symbol-anchor-brown.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -7645,7 +7645,7 @@
     {
       "name": "Adaptive Defense",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_defense.png",
+      "img": "icons/magic/defensive/shield-barrier-flaming-diamond-red.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats v1 (2024 rules)",
@@ -7706,7 +7706,7 @@
     {
       "name": "Dream Relay",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_energy_connection.png",
+      "img": "icons/magic/time/day-night-sun-moon.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -7772,7 +7772,7 @@
     {
       "name": "Iron Will",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_iron_will.png",
+      "img": "icons/tools/hand/wrench-iron-grey.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -7837,7 +7837,7 @@
     {
       "name": "Bright Hypnopomp",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "img": "icons/magic/fire/dagger-rune-enchant-purple-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -7903,7 +7903,7 @@
     {
       "name": "Threatening Silence",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_threatening_silence.png",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-gray.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -8146,7 +8146,7 @@
     {
       "name": "Sapphire Conduction",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_earth_3.png",
+      "img": "icons/skills/melee/drill-heavy-earth.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -8217,7 +8217,7 @@
     {
       "name": "Grave Calm",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_grave_calm.jpeg",
+      "img": "icons/magic/death/grave-tombstone-glow-tan.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -8283,7 +8283,7 @@
     {
       "name": "Scavenged Insight (Soul) (Soul)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_scavenged_insight.png",
+      "img": "icons/magic/perception/orb-eye-scrying.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -8349,7 +8349,7 @@
     {
       "name": "Blue Meridian",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wave_2.png",
+      "img": "icons/magic/water/wave-water-rolling-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -8597,7 +8597,7 @@
     {
       "name": "Calm the Mob",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_cal%2C_the_mob.png",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Feats Expansion v1 (2024 rules)",
@@ -8658,7 +8658,7 @@
     {
       "name": "soulstaff",
       "type": "power",
-      "img": "icons/svg/aura.svg",
+      "img": "icons/weapons/staves/staff-ornate-purple.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",

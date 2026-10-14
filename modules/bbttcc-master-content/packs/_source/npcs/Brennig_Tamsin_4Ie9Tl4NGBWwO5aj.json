@@ -588,7 +588,7 @@
     {
       "name": "Human",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/avuncular_joans_scene_1_us.png",
+      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -752,7 +752,7 @@
     {
       "name": "Human: Stubborn Spark",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_2.png",
+      "img": "icons/magic/fire/orb-lightning-sun.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1006,7 +1006,7 @@
     {
       "name": "Human Heritage: Denisovan",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/OL%20Gearbox%20Background%20Removed.png",
+      "img": "art/bbttcc/asli-icons/human_erectus_1.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden (2024 rules)",
@@ -1121,7 +1121,7 @@
     {
       "name": "Archetype: The Hermit (Mystic-Isolator)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1228,7 +1228,7 @@
     {
       "name": "Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1416,7 +1416,7 @@
           "option": {}
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_staff.png",
+      "img": "icons/weapons/staves/staff-blue-jewel.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "_stats": {
@@ -1448,7 +1448,7 @@
     {
       "name": "Crew Type: Ironbound Ascendants (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1680,7 +1680,7 @@
           "category": "occult"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "effects": [],
       "folder": "eZrB95VvJnQ4Pb77",
       "_stats": {
@@ -1712,7 +1712,7 @@
     {
       "name": "Rallying Words",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_8.png",
+      "img": "icons/sundries/scrolls/scroll-symbol-eye-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1828,7 +1828,7 @@
     {
       "name": "Read the Room",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_chalice_4.png",
+      "img": "icons/sundries/books/book-tooled-eye-gold-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1961,7 +1961,7 @@
     {
       "name": "Disciplined Fire",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_disciplined_fire.png",
+      "img": "icons/magic/fire/flame-burning-tree-log.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2027,7 +2027,7 @@
     {
       "name": "Overwatch (Bad Eden)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_satellite_2.png",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-gold.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2149,7 +2149,7 @@
     {
       "name": "Signal Boost",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ray_1.png",
+      "img": "icons/magic/light/beam-rays-red-large.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2266,7 +2266,7 @@
       "_id": "Fx4EriCTAXf5Ey34",
       "name": "Broker",
       "type": "class",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-broker",
@@ -2320,7 +2320,7 @@
       "_id": "gC8LLAVK1euoyNbe",
       "name": "Broker \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "source": "Callings",

@@ -234,7 +234,7 @@
     {
       "name": "Rooted Presence",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_1.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -271,7 +271,7 @@
     {
       "name": "Violence Escalation",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rage_1.png",
+      "img": "icons/magic/fire/flame-burning-fist-strike.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -308,7 +308,7 @@
     {
       "name": "Harmonic Rejection",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_web_2.png",
+      "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -345,7 +345,7 @@
     {
       "name": "Multiattack",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fist_1.png",
+      "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -382,7 +382,7 @@
     {
       "name": "Slam",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_greatclub.png",
+      "img": "icons/magic/earth/strike-fist-stone.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -639,7 +639,7 @@
     {
       "name": "Bloom of Correction",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_1.png",
+      "img": "icons/magic/nature/plant-sprout-hand-flower-pink.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -676,7 +676,7 @@
     {
       "name": "Corrective Pulse (recharges on a Soma Break)",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -713,7 +713,7 @@
     {
       "name": "Bough of Just Sentence",
       "type": "power",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn_tree.png",
+      "img": "icons/magic/nature/tree-animated-strike.webp",
       "system": {
         "intent": "presence",
         "channel": "soul",
@@ -996,7 +996,7 @@
     {
       "name": "Roots of Tiferet",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_1.png",
+      "img": "icons/magic/nature/tree-elm-roots-brown.webp",
       "system": {
         "category": "principle",
         "source": "",

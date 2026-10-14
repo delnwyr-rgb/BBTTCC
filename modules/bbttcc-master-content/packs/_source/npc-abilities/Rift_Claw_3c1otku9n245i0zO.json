@@ -1,7 +1,7 @@
 {
   "name": "Rift Claw",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+  "img": "icons/skills/melee/strike-blade-claw-red.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

@@ -306,7 +306,7 @@
     {
       "name": "Performance Improvement Plan",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_1.png",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
       "system": {
         "category": "ranged",
         "intent": "intrigue",
@@ -603,7 +603,7 @@
     {
       "name": "Escalate To Management",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hex_1.png",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
       "system": {
         "category": "ranged",
         "intent": "soul",
@@ -900,7 +900,7 @@
     {
       "name": "Cosmic Stapler",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_energy_blast_1.png",
+      "img": "icons/tools/fasteners/nails-steel-blue.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -1191,7 +1191,7 @@
     {
       "name": "Quarterly Soul Review",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_explosion_4.png",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
       "system": {
         "category": "ranged",
         "intent": "soul",

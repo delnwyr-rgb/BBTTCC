@@ -444,7 +444,7 @@
       "_id": "PHE9sHFDCMNZuASe",
       "name": "Broker",
       "type": "class",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "identifier": "calling-broker",
@@ -498,7 +498,7 @@
       "_id": "ugD7MikYlmfi7J3c",
       "name": "Broker \u2014 Apprentice (Tier I)",
       "type": "feature",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "category": "calling",
         "source": "Callings",
@@ -543,7 +543,7 @@
     {
       "name": "Oldenborn",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_2.png",
+      "img": "art/bbttcc/asli-icons/oldborne_sky.webp",
       "system": {
         "category": "ancestry",
         "source": {
@@ -701,7 +701,7 @@
     {
       "name": "Adaptive Defense",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_defense.png",
+      "img": "icons/magic/defensive/shield-barrier-flaming-diamond-red.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Core Feats v1 (2024 rules)",
@@ -763,7 +763,7 @@
     {
       "name": "Oldenborn Heritage: Rustland Scavenger",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RustlandScavenger2.png",
+      "img": "art/bbttcc/asli-icons/oldenborn_lumenwrought_2.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1128,7 +1128,7 @@
     {
       "name": "Oldenborn (Rustland Scavenger): Ruin-Sense",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_oldenborn_1.png",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-teal.webp",
       "system": {
         "category": "feature",
         "source": {

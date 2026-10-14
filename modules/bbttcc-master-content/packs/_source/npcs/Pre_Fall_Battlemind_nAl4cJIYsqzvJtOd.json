@@ -308,7 +308,7 @@
     {
       "name": "Battle Prediction",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_plans_1.png",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -379,7 +379,7 @@
     {
       "name": "Mind-Spike",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mental.png",
+      "img": "icons/magic/control/debuff-energy-hold-pink.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -661,7 +661,7 @@
     {
       "name": "Calculated Sweep",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_engine.png",
+      "img": "icons/skills/melee/strike-slashes-red.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -943,7 +943,7 @@
     {
       "name": "Tactical Reset (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_eraser.png",
+      "img": "icons/magic/time/arrows-circling-green.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -1231,7 +1231,7 @@
     {
       "name": "Still-Charged Frame",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_1.png",
+      "img": "icons/commodities/tech/tube-chamber-lightning.webp",
       "system": {
         "category": "principle",
         "source": "",

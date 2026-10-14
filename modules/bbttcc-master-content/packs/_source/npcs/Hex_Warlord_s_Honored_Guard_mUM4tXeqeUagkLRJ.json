@@ -307,7 +307,7 @@
     {
       "name": "Sworn",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_1.png",
+      "img": "icons/equipment/shield/heater-steel-grey.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -378,7 +378,7 @@
     {
       "name": "Warlord's Blade",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_1.png",
+      "img": "icons/weapons/swords/greatsword-crossguard-steel.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -660,7 +660,7 @@
     {
       "name": "Wall-of-Honor (recharges on a Soma Break)",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rampart_1.png",
+      "img": "icons/magic/earth/barrier-stone-brown-green.webp",
       "system": {
         "category": "ranged",
         "intent": "presence",
@@ -948,7 +948,7 @@
     {
       "name": "Last to Fall",
       "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rampart_1.png",
+      "img": "icons/skills/melee/shield-block-gray-yellow.webp",
       "system": {
         "category": "principle",
         "source": "",
@@ -996,7 +996,7 @@
     {
       "name": "Sworn Intercept",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_3.png",
+      "img": "icons/skills/melee/sword-shield-stylized-white.webp",
       "system": {
         "category": "melee",
         "intent": "violence",

@@ -403,7 +403,7 @@
     {
       "name": "Qliph-Scarred",
       "type": "species",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Qliph-Scarred4.png",
+      "img": "art/bbttcc/asli-icons/qliph_scarred_3.webp",
       "system": {
         "category": "ancestry",
         "source": "Bad Eden (2024 rules)",
@@ -603,7 +603,7 @@
     {
       "name": "Qliph-Scarred: Shadow Resilience",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -744,7 +744,7 @@
     {
       "name": "Qliph-Scarred: Qliphothic Saturation",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_6.png",
+      "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -881,7 +881,7 @@
     {
       "name": "Qliph-Scarred: Hunger Mask",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_helmet_7.png",
+      "img": "icons/magic/control/fear-fright-mask-orange.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1016,7 +1016,7 @@
     {
       "name": "Qliph-Scarred: Shadow-Wake",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_8.png",
+      "img": "icons/magic/light/orb-shadow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1150,7 +1150,7 @@
     {
       "name": "Qliph-Scarred: Strategic Hooks (Qliph-Scarred)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+      "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1297,7 +1297,7 @@
     {
       "name": "Qliph-Scarred Heritage: Husk",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_invisible_1.png",
+      "img": "art/bbttcc/asli-icons/qliph_scarred_1.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1440,7 +1440,7 @@
     {
       "name": "Qliph-Scarred (Husk): The Quiet Inside",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "img": "icons/magic/nature/tree-animated-smile.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
@@ -1712,7 +1712,7 @@
           "sourceId": "Compendium.bbttcc-master-content.classes.Item.5Ncfbe1ReQhbLLUP"
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Shadowjack.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "effects": [],
       "folder": "apQBjTCtfZVreQpj",
       "ownership": {
@@ -1737,7 +1737,7 @@
     {
       "name": "Last Mile L1: The Weight You Carry",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_run.png",
+      "img": "icons/skills/movement/feet-winged-sandals-tan.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -1818,7 +1818,7 @@
     {
       "name": "Shadow Courier \u2014 Tier 1: Liminal Operator",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
+      "img": "icons/sundries/documents/envelope-letter-post.webp",
       "system": {
         "category": "technique",
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
@@ -2029,7 +2029,7 @@
     {
       "name": "Route of the Last Mile (Bad Eden)",
       "type": "subclass",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_1.png",
+      "img": "icons/magic/time/day-night-sunset-sunrise.webp",
       "system": {
         "category": "doctrine",
         "classIdentifier": "shadow_courier",
@@ -2078,7 +2078,7 @@
     {
       "name": "Archetype: Death (Transformer)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_death.png",
+      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2190,7 +2190,7 @@
     {
       "name": "Crew Type: Ashbound Survivors",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2321,7 +2321,7 @@
           "subtype": ""
         }
       },
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_1.png",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
       "flags": {
@@ -2426,7 +2426,7 @@
         }
       },
       "effects": [],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
       "folder": "uflkacBlUmYFCAbz",
       "_stats": {
         "compendiumSource": "Item.J2ZdE3vlyEO8rd4l",
@@ -2456,7 +2456,7 @@
     {
       "name": "Archetype: Death (Transformer) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_death.png",
+      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2602,7 +2602,7 @@
     {
       "name": "Crew Type: Ashbound Survivors (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2895,7 +2895,7 @@
           "_key": "!actors.items.effects!ccP7DdsNGAeKi4ie.oLhTQdoPo8m0R7lh.shamanTier1Profs"
         }
       ],
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
       "folder": "uflkacBlUmYFCAbz",
       "_stats": {
         "compendiumSource": "Item.9xPomIywcV4tmO86",
@@ -2925,7 +2925,7 @@
     {
       "name": "Worker's Leathers",
       "type": "armor",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+      "img": "icons/equipment/chest/breastplate-layered-leather-stitched.webp",
       "system": {
         "guardBonus": 1,
         "evasionBonus": 1,
@@ -3070,7 +3070,7 @@
     {
       "name": "Bolt-Driver",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_heavy_crossbow.png",
+      "img": "icons/weapons/crossbows/crossbow-golden-bolt.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -3391,7 +3391,7 @@
     {
       "name": "Combat Knife",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_2.png",
+      "img": "icons/weapons/daggers/knife-green.webp",
       "system": {
         "category": "melee",
         "intent": "violence",

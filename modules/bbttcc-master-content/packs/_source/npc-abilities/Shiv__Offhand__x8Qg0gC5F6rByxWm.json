@@ -1,7 +1,7 @@
 {
   "name": "Shiv (Offhand)",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_2.png",
+  "img": "icons/weapons/daggers/dagger-simple-black.webp",
   "system": {
     "category": "melee",
     "intent": "violence",
