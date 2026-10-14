@@ -2,7 +2,7 @@
   "_id": "becallingopr0cls",
   "name": "Operator",
   "type": "class",
-  "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+  "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
   "system": {
     "category": "calling",
     "identifier": "calling-operator",

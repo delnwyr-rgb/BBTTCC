@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Verdant Stalkers",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+  "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
   "system": {
     "description": {
       "value": "<p><em>Crew Type (BBTTCC): Verdant Stalkers.</em></p><p><strong>“If the forest sees you, you’re already late.”</strong></p><p>Verdant Stalkers move through living terrain like they were invited. They conceal routes, read pressure from broken twigs and bent moss, and make hostile wilderness feel personal.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Stealth and Survival.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",

@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Peacekeeper Corps (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+  "img": "icons/sundries/misc/badge-law-sheriff.webp",
   "system": {
     "category": "technique",
     "source": {

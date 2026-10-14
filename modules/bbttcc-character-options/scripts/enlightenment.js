@@ -35,7 +35,7 @@ const ALIASES = {
 const EFFECTS = {
   unawakened: {
     label: "Bad Eden: Unawakened",
-    icon: "systems/dnd5e/icons/svg/items/feature.svg",
+    icon: "icons/magic/control/sleep-bubble-purple.webp",
     changes: [],
     flags: { "bbttcc.enlightenment.unawakened": true }
   },
@@ -46,7 +46,7 @@ const EFFECTS = {
   // advantage → +1 to the aptitudes the rung is about. OWNER-TUNABLE.
   awakening: {
     label: "Bad Eden: Awakening",
-    icon: "icons/magic/perception/eye-ringed-glow-angry-red.webp",
+    icon: "icons/magic/light/beam-rays-yellow.webp",
     changes: [
       { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
     ],
@@ -54,7 +54,7 @@ const EFFECTS = {
   },
   seeking: {
     label: "Bad Eden: Seeking",
-    icon: "icons/magic/perception/third-eye-blue.webp",
+    icon: "icons/tools/scribal/magnifying-glass.webp",
     changes: [
       { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
       { key: "system.skills.occult.value",     mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
@@ -64,7 +64,7 @@ const EFFECTS = {
   },
   wisdom: {
     label: "Bad Eden: Wisdom",
-    icon: "icons/magic/holy/meditation-chi-focus-blue.webp",
+    icon: "icons/commodities/treasure/figurine-owl.webp",
     changes: [
       { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
       { key: "system.skills.occult.value",     mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
@@ -79,7 +79,7 @@ const EFFECTS = {
   },
   understanding: {
     label: "Bad Eden: Understanding",
-    icon: "icons/magic/holy/prayer-hands-glowing-yellow.webp",
+    icon: "icons/skills/trades/academics-study-reading-book.webp",
     changes: [
       { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "2", priority: 20 },
       { key: "system.derived.guard.aeBonus",   mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
@@ -96,7 +96,7 @@ const EFFECTS = {
   },
   enlightened: {
     label: "Bad Eden: Enlightened",
-    icon: "icons/magic/holy/barrier-shield-winged-gold.webp",
+    icon: "icons/magic/nature/lotus-glow-pink.webp",
     changes: [
       { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "2", priority: 20 },
       { key: "system.derived.guard.aeBonus",   mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },

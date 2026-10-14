@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Survivors / Militia (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+  "img": "icons/environment/people/group.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 4 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>When everyone else calls it over, you call it relocation.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> If your faction loses its last controlled Hex, it does not dissolve immediately. Instead, it may reform as a Nomad faction and retain 25% of its OP reserve.</li></ul>",

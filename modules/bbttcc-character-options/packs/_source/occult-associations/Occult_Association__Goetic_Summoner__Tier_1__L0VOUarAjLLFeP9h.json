@@ -82,7 +82,7 @@
       "name": "Occult Tier1 Proficiencies",
       "disabled": false,
       "transfer": true,
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bellows_2.png",
+      "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
       "_id": "n2WDIGozDB5hZr0q",
       "type": "base",
       "system": {
@@ -132,7 +132,7 @@
       "_key": "!items.effects!L0VOUarAjLLFeP9h.n2WDIGozDB5hZr0q"
     }
   ],
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+  "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
   "folder": "8EpFv8GVkHaIuTnR",
   "_stats": {
     "compendiumSource": "Item.RqCQJVlh9BuZ0SsL",

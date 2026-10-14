@@ -2,7 +2,7 @@
   "_id": "becallingbrv0t02",
   "name": "Bravo — Initiate (Tier II)",
   "type": "feature",
-  "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+  "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
   "system": {
     "category": "calling",
     "source": "Callings",

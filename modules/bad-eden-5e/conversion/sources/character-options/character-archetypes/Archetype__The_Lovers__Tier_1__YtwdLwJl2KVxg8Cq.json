@@ -1,7 +1,7 @@
 {
   "name": "Archetype: The Lovers (Tier 1)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+  "img": "icons/equipment/neck/amulet-heart.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 1 — The Lovers</strong></p><ul><li><strong>Tactical:</strong> Insight + Persuasion proficiency. Learn Friends.</li><li><strong>Strategic:</strong> +2 Diplomacy OP cap.</li></ul>",

@@ -1,7 +1,7 @@
 {
   "name": "Archetype: The Moon (Ancient Blood) (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+  "img": "icons/magic/nature/moon-crescent.webp",
   "system": {
     "category": "technique",
     "source": {

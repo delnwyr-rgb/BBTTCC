@@ -79,7 +79,7 @@
       "name": "Occult Tier1 Proficiencies",
       "disabled": false,
       "transfer": true,
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_2.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "_id": "pqFrb0jwW98dsObV",
       "type": "base",
       "system": {
@@ -122,7 +122,7 @@
       "_key": "!items.effects!k8reKRIa2p6Huct3.pqFrb0jwW98dsObV"
     }
   ],
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+  "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
   "folder": "KAgSLTue8mMAy0rF",
   "_stats": {
     "compendiumSource": "Item.ZNVvuWpGMNqg60S9",

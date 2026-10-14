@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Mercenary Band (Tier 1)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+  "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 1 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency with Medium Armor and one Martial Weapon of your choice.</li><li><strong>Strategic:</strong> Your faction starts with +1 Violence OPs.</li></ul>",

@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Ashbound Survivors (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+  "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 2 — Ashbound Survivors</strong></p><p><em>You’ve stopped fearing hardship and started budgeting it.</em></p><ul><li><strong>Strategic:</strong> When your faction survives or resolves hazard encounters in Desert, Ash Wastes, or Wasteland terrain, it can convert that hardship into useful recovery, salvage, or logistical gain.</li></ul>",

@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Mercenary Band (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+  "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 2 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During Siege and Battlefield scenarios, your faction gains a +1 bonus on Violence rolls.</li></ul>",

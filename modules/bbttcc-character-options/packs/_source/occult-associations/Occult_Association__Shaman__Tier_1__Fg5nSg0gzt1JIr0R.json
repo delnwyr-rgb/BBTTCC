@@ -258,7 +258,7 @@
       "name": "Occult Tier1 Proficiencies",
       "disabled": false,
       "transfer": true,
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bellows_1.png",
+      "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
       "_id": "shamanTier1Profs",
       "type": "base",
       "system": {
@@ -308,7 +308,7 @@
       "_key": "!items.effects!Fg5nSg0gzt1JIr0R.shamanTier1Profs"
     }
   ],
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+  "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
   "folder": "uflkacBlUmYFCAbz",
   "_stats": {
     "compendiumSource": "Item.9xPomIywcV4tmO86",

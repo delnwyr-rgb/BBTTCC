@@ -1,7 +1,7 @@
 {
   "name": "Archetype: The High Priestess (Seer) (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_high_priestess.png",
+  "img": "icons/magic/perception/third-eye-blue-red.webp",
   "system": {
     "category": "technique",
     "source": {

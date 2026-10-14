@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Gridbreakers (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+  "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 4 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You no longer survive the dead city. You administer it.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled Ruins and Urban Wreckage hexes become significantly more productive. Dormant infrastructure is easier to exploit, and ruined zones contribute meaningful economic and logistical value to your faction over time.</li></ul>",

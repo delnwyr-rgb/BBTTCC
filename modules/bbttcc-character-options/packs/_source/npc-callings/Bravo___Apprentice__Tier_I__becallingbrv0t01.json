@@ -2,7 +2,7 @@
   "_id": "becallingbrv0t01",
   "name": "Bravo — Apprentice (Tier I)",
   "type": "feature",
-  "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+  "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
   "system": {
     "category": "calling",
     "source": "Callings",

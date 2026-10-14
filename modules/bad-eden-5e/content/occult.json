@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-11",
+    "at": "2026-10-14",
     "overridesApplied": 0
   },
   "items": [
@@ -12,7 +12,7 @@
       "slug": "occult-association-alchemist",
       "name": "Occult Association: Alchemist",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "img": "icons/consumables/potions/bottle-conical-bubbling-blue.webp",
       "folder": "Alchemist",
       "system": {
         "description": {
@@ -75,7 +75,7 @@
       "slug": "occult-association-alchemist-t1",
       "name": "Occult Association: Alchemist (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "img": "icons/consumables/potions/bottle-conical-bubbling-blue.webp",
       "folder": "Alchemist",
       "system": {
         "description": {
@@ -144,7 +144,7 @@
       "slug": "occult-association-alchemist-t2",
       "name": "Occult Association: Alchemist (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "img": "icons/consumables/potions/bottle-conical-bubbling-blue.webp",
       "folder": "Alchemist",
       "system": {
         "description": {
@@ -213,7 +213,7 @@
       "slug": "occult-association-alchemist-t3",
       "name": "Occult Association: Alchemist (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "img": "icons/consumables/potions/bottle-conical-bubbling-blue.webp",
       "folder": "Alchemist",
       "system": {
         "description": {
@@ -285,7 +285,7 @@
       "slug": "occult-association-alchemist-t4",
       "name": "Occult Association: Alchemist (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "img": "icons/consumables/potions/bottle-conical-bubbling-blue.webp",
       "folder": "Alchemist",
       "system": {
         "description": {
@@ -359,7 +359,7 @@
       "slug": "occult-association-biomancer",
       "name": "Occult Association: Biomancer / Fleshcrafter",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "folder": "Biomancer",
       "system": {
         "description": {
@@ -421,7 +421,7 @@
       "slug": "occult-association-biomancer-t1",
       "name": "Occult Association: Biomancer / Fleshcrafter (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "folder": "Biomancer",
       "system": {
         "description": {
@@ -474,7 +474,7 @@
       "slug": "occult-association-biomancer-t2",
       "name": "Occult Association: Biomancer / Fleshcrafter (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "folder": "Biomancer",
       "system": {
         "description": {
@@ -527,7 +527,7 @@
       "slug": "occult-association-biomancer-t3",
       "name": "Occult Association: Biomancer / Fleshcrafter (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "folder": "Biomancer",
       "system": {
         "description": {
@@ -580,7 +580,7 @@
       "slug": "occult-association-biomancer-t4",
       "name": "Occult Association: Biomancer / Fleshcrafter (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/skills/trades/helix-green.webp",
       "folder": "Biomancer",
       "system": {
         "description": {
@@ -633,7 +633,7 @@
       "slug": "occult-association-exorcist",
       "name": "Occult Association: Exorcist / Purifier",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "folder": "Exorcist/Purifier",
       "system": {
         "description": {
@@ -693,7 +693,7 @@
       "slug": "occult-association-exorcist-t1",
       "name": "Occult Association: Exorcist / Purifier (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "folder": "Exorcist/Purifier",
       "system": {
         "description": {
@@ -746,7 +746,7 @@
       "slug": "occult-association-exorcist-t2",
       "name": "Occult Association: Exorcist / Purifier (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "folder": "Exorcist/Purifier",
       "system": {
         "description": {
@@ -799,7 +799,7 @@
       "slug": "occult-association-exorcist-t3",
       "name": "Occult Association: Exorcist / Purifier (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "folder": "Exorcist/Purifier",
       "system": {
         "description": {
@@ -852,7 +852,7 @@
       "slug": "occult-association-exorcist-t4",
       "name": "Occult Association: Exorcist / Purifier (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "folder": "Exorcist/Purifier",
       "system": {
         "description": {
@@ -906,7 +906,7 @@
       "slug": "occult-association-gnostic",
       "name": "Occult Association: Gnostic",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "img": "icons/skills/social/symbol-pyramid-eye.webp",
       "folder": "Gnostic",
       "system": {
         "description": {
@@ -970,7 +970,7 @@
       "slug": "occult-association-gnostic-t1",
       "name": "Occult Association: Gnostic (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "img": "icons/skills/social/symbol-pyramid-eye.webp",
       "folder": "Gnostic",
       "system": {
         "description": {
@@ -1040,7 +1040,7 @@
       "slug": "occult-association-gnostic-t2",
       "name": "Occult Association: Gnostic (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "img": "icons/skills/social/symbol-pyramid-eye.webp",
       "folder": "Gnostic",
       "system": {
         "description": {
@@ -1106,7 +1106,7 @@
       "slug": "occult-association-gnostic-t3",
       "name": "Occult Association: Gnostic (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "img": "icons/skills/social/symbol-pyramid-eye.webp",
       "folder": "Gnostic",
       "system": {
         "description": {
@@ -1174,7 +1174,7 @@
       "slug": "occult-association-gnostic-t4",
       "name": "Occult Association: Gnostic (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "img": "icons/skills/social/symbol-pyramid-eye.webp",
       "folder": "Gnostic",
       "system": {
         "description": {
@@ -1242,7 +1242,7 @@
       "slug": "occult-association-goetic-summoner",
       "name": "Occult Association: Goetic Summoner",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
       "folder": "Goetic Summoner",
       "system": {
         "description": {
@@ -1309,7 +1309,7 @@
       "slug": "occult-association-goetic-summoner-t1",
       "name": "Occult Association: Goetic Summoner (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
       "folder": "Goetic Summoner",
       "system": {
         "description": {
@@ -1382,7 +1382,7 @@
       "slug": "occult-association-goetic-summoner-t2",
       "name": "Occult Association: Goetic Summoner (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
       "folder": "Goetic Summoner",
       "system": {
         "description": {
@@ -1450,7 +1450,7 @@
       "slug": "occult-association-goetic-summoner-t3",
       "name": "Occult Association: Goetic Summoner (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
       "folder": "Goetic Summoner",
       "system": {
         "description": {
@@ -1520,7 +1520,7 @@
       "slug": "occult-association-goetic-summoner-t4",
       "name": "Occult Association: Goetic Summoner (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
       "folder": "Goetic Summoner",
       "system": {
         "description": {
@@ -1592,7 +1592,7 @@
       "slug": "occult-association-kabbalist",
       "name": "Occult Association: Kabbalist",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "folder": "Kabbalist",
       "system": {
         "description": {
@@ -1656,7 +1656,7 @@
       "slug": "occult-association-kabbalist-t1",
       "name": "Occult Association: Kabbalist (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "folder": "Kabbalist",
       "system": {
         "description": {
@@ -1728,7 +1728,7 @@
       "slug": "occult-association-kabbalist-t2",
       "name": "Occult Association: Kabbalist (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "folder": "Kabbalist",
       "system": {
         "description": {
@@ -1796,7 +1796,7 @@
       "slug": "occult-association-kabbalist-t3",
       "name": "Occult Association: Kabbalist (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "folder": "Kabbalist",
       "system": {
         "description": {
@@ -1865,7 +1865,7 @@
       "slug": "occult-association-kabbalist-t4",
       "name": "Occult Association: Kabbalist (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
       "folder": "Kabbalist",
       "system": {
         "description": {
@@ -1934,7 +1934,7 @@
       "slug": "occult-association-prophet-oracle",
       "name": "Occult Association: Prophet / Oracle",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "folder": "Prophet/Oracle",
       "system": {
         "description": {
@@ -1998,7 +1998,7 @@
       "slug": "occult-association-prophet-oracle-t1",
       "name": "Occult Association: Prophet / Oracle (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "folder": "Prophet/Oracle",
       "system": {
         "description": {
@@ -2068,7 +2068,7 @@
       "slug": "occult-association-prophet-oracle-t2",
       "name": "Occult Association: Prophet / Oracle (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "folder": "Prophet/Oracle",
       "system": {
         "description": {
@@ -2136,7 +2136,7 @@
       "slug": "occult-association-prophet-oracle-t3",
       "name": "Occult Association: Prophet / Oracle (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "folder": "Prophet/Oracle",
       "system": {
         "description": {
@@ -2206,7 +2206,7 @@
       "slug": "occult-association-prophet-oracle-t4",
       "name": "Occult Association: Prophet / Oracle (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "folder": "Prophet/Oracle",
       "system": {
         "description": {
@@ -2275,7 +2275,7 @@
       "slug": "occult-association-rosicrucian",
       "name": "Occult Association: Rosicrucian",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "img": "icons/magic/symbols/cross-circle-blue.webp",
       "folder": "Rosicrucian",
       "system": {
         "description": {
@@ -2339,7 +2339,7 @@
       "slug": "occult-association-rosicrucian-t1",
       "name": "Occult Association: Rosicrucian (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "img": "icons/magic/symbols/cross-circle-blue.webp",
       "folder": "Rosicrucian",
       "system": {
         "description": {
@@ -2411,7 +2411,7 @@
       "slug": "occult-association-rosicrucian-t2",
       "name": "Occult Association: Rosicrucian (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "img": "icons/magic/symbols/cross-circle-blue.webp",
       "folder": "Rosicrucian",
       "system": {
         "description": {
@@ -2478,7 +2478,7 @@
       "slug": "occult-association-rosicrucian-t3",
       "name": "Occult Association: Rosicrucian (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "img": "icons/magic/symbols/cross-circle-blue.webp",
       "folder": "Rosicrucian",
       "system": {
         "description": {
@@ -2551,7 +2551,7 @@
       "slug": "occult-association-rosicrucian-t4",
       "name": "Occult Association: Rosicrucian (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+      "img": "icons/magic/symbols/cross-circle-blue.webp",
       "folder": "Rosicrucian",
       "system": {
         "description": {
@@ -2617,7 +2617,7 @@
       "slug": "occult-association-shaman",
       "name": "Occult Association: Shaman",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
       "folder": "Shaman",
       "system": {
         "description": {
@@ -2681,7 +2681,7 @@
       "slug": "occult-association-shaman-t1",
       "name": "Occult Association: Shaman (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
       "folder": "Shaman",
       "system": {
         "description": {
@@ -2752,7 +2752,7 @@
       "slug": "occult-association-shaman-t2",
       "name": "Occult Association: Shaman (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
       "folder": "Shaman",
       "system": {
         "description": {
@@ -2821,7 +2821,7 @@
       "slug": "occult-association-shaman-t3",
       "name": "Occult Association: Shaman (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
       "folder": "Shaman",
       "system": {
         "description": {
@@ -2891,7 +2891,7 @@
       "slug": "occult-association-shaman-t4",
       "name": "Occult Association: Shaman (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
       "folder": "Shaman",
       "system": {
         "description": {
@@ -2960,7 +2960,7 @@
       "slug": "occult-association-tarot-mage",
       "name": "Occult Association: Tarot Mage",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "img": "icons/sundries/gaming/card-astronomy-pink.webp",
       "folder": "Tarot Mage",
       "system": {
         "description": {
@@ -3024,7 +3024,7 @@
       "slug": "occult-association-tarot-mage-t1",
       "name": "Occult Association: Tarot Mage (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "img": "icons/sundries/gaming/card-astronomy-pink.webp",
       "folder": "Tarot Mage",
       "system": {
         "description": {
@@ -3093,7 +3093,7 @@
       "slug": "occult-association-tarot-mage-t2",
       "name": "Occult Association: Tarot Mage (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "img": "icons/sundries/gaming/card-astronomy-pink.webp",
       "folder": "Tarot Mage",
       "system": {
         "description": {
@@ -3160,7 +3160,7 @@
       "slug": "occult-association-tarot-mage-t3",
       "name": "Occult Association: Tarot Mage (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "img": "icons/sundries/gaming/card-astronomy-pink.webp",
       "folder": "Tarot Mage",
       "system": {
         "description": {
@@ -3230,7 +3230,7 @@
       "slug": "occult-association-tarot-mage-t4",
       "name": "Occult Association: Tarot Mage (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+      "img": "icons/sundries/gaming/card-astronomy-pink.webp",
       "folder": "Tarot Mage",
       "system": {
         "description": {

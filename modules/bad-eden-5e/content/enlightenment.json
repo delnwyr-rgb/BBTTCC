@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-11",
+    "at": "2026-10-14",
     "overridesApplied": 0
   },
   "items": [
@@ -12,7 +12,7 @@
       "slug": "enlightenment-awakening",
       "name": "Enlightenment: Awakening",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "img": "icons/magic/light/beam-rays-yellow.webp",
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
@@ -55,7 +55,7 @@
       "slug": "enlightenment-enlightened",
       "name": "Enlightenment: Enlightened",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mountain_1.png",
+      "img": "icons/magic/nature/lotus-glow-pink.webp",
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
@@ -98,7 +98,7 @@
       "slug": "enlightenment-seeking",
       "name": "Enlightenment: Seeking",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_10.png",
+      "img": "icons/tools/scribal/magnifying-glass.webp",
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
@@ -141,7 +141,7 @@
       "slug": "enlightenment-unawakened",
       "name": "Enlightenment: Unawakened",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sleep.png",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
@@ -183,7 +183,7 @@
       "slug": "enlightenment-understanding",
       "name": "Enlightenment: Understanding",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_1.png",
+      "img": "icons/skills/trades/academics-study-reading-book.webp",
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
@@ -226,7 +226,7 @@
       "slug": "enlightenment-wisdom",
       "name": "Enlightenment: Wisdom",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_lightning.png",
+      "img": "icons/commodities/treasure/figurine-owl.webp",
       "folder": "Enlightenment Levels",
       "system": {
         "description": {

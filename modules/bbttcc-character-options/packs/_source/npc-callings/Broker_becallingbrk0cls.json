@@ -2,7 +2,7 @@
   "_id": "becallingbrk0cls",
   "name": "Broker",
   "type": "class",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+  "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
   "system": {
     "category": "calling",
     "identifier": "calling-broker",

@@ -1,7 +1,7 @@
 {
   "name": "Archetype: The Chariot (Squad Leader) (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_chariot.png",
+  "img": "icons/environment/people/cavalry-heavy.webp",
   "system": {
     "category": "technique",
     "source": {

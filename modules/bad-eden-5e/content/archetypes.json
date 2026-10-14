@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-11",
+    "at": "2026-10-14",
     "overridesApplied": 0
   },
   "items": [
@@ -12,7 +12,7 @@
       "slug": "archetype-death",
       "name": "Archetype: Death (Transformer)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_death.png",
+      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
       "folder": "Death",
       "system": {
         "description": {
@@ -66,7 +66,7 @@
       "slug": "archetype-death-t1",
       "name": "Archetype: Death (Transformer) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_death.png",
+      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
       "folder": "Death",
       "system": {
         "description": {
@@ -122,7 +122,7 @@
       "slug": "archetype-death-t2",
       "name": "Archetype: Death (Transformer) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_death.png",
+      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
       "folder": "Death",
       "system": {
         "description": {
@@ -177,7 +177,7 @@
       "slug": "archetype-death-t3",
       "name": "Archetype: Death (Transformer) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_death.png",
+      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
       "folder": "Death",
       "system": {
         "description": {
@@ -233,7 +233,7 @@
       "slug": "archetype-death-t4",
       "name": "Archetype: Death (Transformer) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_death.png",
+      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
       "folder": "Death",
       "system": {
         "description": {
@@ -289,7 +289,7 @@
       "slug": "archetype-hierophant",
       "name": "Archetype: Hierophant",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hierophant.png",
+      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
       "folder": "The Hierophant",
       "system": {
         "description": {
@@ -342,7 +342,7 @@
       "slug": "archetype-hierophant-t1",
       "name": "Archetype: Hierophant (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hierophant.png",
+      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
       "folder": "The Hierophant",
       "system": {
         "description": {
@@ -396,7 +396,7 @@
       "slug": "archetype-hierophant-t2",
       "name": "Archetype: Hierophant (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hierophant.png",
+      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
       "folder": "The Hierophant",
       "system": {
         "description": {
@@ -453,7 +453,7 @@
       "slug": "archetype-hierophant-t3",
       "name": "Archetype: Hierophant (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hierophant.png",
+      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
       "folder": "The Hierophant",
       "system": {
         "description": {
@@ -508,7 +508,7 @@
       "slug": "archetype-hierophant-t4",
       "name": "Archetype: Hierophant (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hierophant.png",
+      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
       "folder": "The Hierophant",
       "system": {
         "description": {
@@ -562,7 +562,7 @@
       "slug": "archetype-judgment",
       "name": "Archetype: Judgment (Reckoner)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_judgement.png",
+      "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
       "folder": "Judgement",
       "system": {
         "description": {
@@ -616,7 +616,7 @@
       "slug": "archetype-judgment-t1",
       "name": "Archetype: Judgment (Reckoner) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_judgement.png",
+      "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
       "folder": "Judgement",
       "system": {
         "description": {
@@ -672,7 +672,7 @@
       "slug": "archetype-judgment-t2",
       "name": "Archetype: Judgment (Reckoner) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_judgement.png",
+      "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
       "folder": "Judgement",
       "system": {
         "description": {
@@ -727,7 +727,7 @@
       "slug": "archetype-judgment-t3",
       "name": "Archetype: Judgment (Reckoner) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_judgement.png",
+      "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
       "folder": "Judgement",
       "system": {
         "description": {
@@ -783,7 +783,7 @@
       "slug": "archetype-judgment-t4",
       "name": "Archetype: Judgment (Reckoner) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_judgement.png",
+      "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
       "folder": "Judgement",
       "system": {
         "description": {
@@ -839,7 +839,7 @@
       "slug": "archetype-justice",
       "name": "Archetype: Justice (Arbiter)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_justice.png",
+      "img": "icons/skills/social/trading-justice-scale-gold.webp",
       "folder": "Justice",
       "system": {
         "description": {
@@ -892,7 +892,7 @@
       "slug": "archetype-justice-t1",
       "name": "Archetype: Justice (Arbiter) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_justice.png",
+      "img": "icons/skills/social/trading-justice-scale-gold.webp",
       "folder": "Justice",
       "system": {
         "description": {
@@ -947,7 +947,7 @@
       "slug": "archetype-justice-t2",
       "name": "Archetype: Justice (Arbiter) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_justice.png",
+      "img": "icons/skills/social/trading-justice-scale-gold.webp",
       "folder": "Justice",
       "system": {
         "description": {
@@ -1002,7 +1002,7 @@
       "slug": "archetype-justice-t3",
       "name": "Archetype: Justice (Arbiter) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_justice.png",
+      "img": "icons/skills/social/trading-justice-scale-gold.webp",
       "folder": "Justice",
       "system": {
         "description": {
@@ -1058,7 +1058,7 @@
       "slug": "archetype-justice-t4",
       "name": "Archetype: Justice (Arbiter) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_justice.png",
+      "img": "icons/skills/social/trading-justice-scale-gold.webp",
       "folder": "Justice",
       "system": {
         "description": {
@@ -1114,7 +1114,7 @@
       "slug": "archetype-strength",
       "name": "Archetype: Strength (Warlord)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_strength.png",
+      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
       "folder": "Strength",
       "system": {
         "description": {
@@ -1167,7 +1167,7 @@
       "slug": "archetype-strength-t1",
       "name": "Archetype: Strength (Warlord) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_strength.png",
+      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
       "folder": "Strength",
       "system": {
         "description": {
@@ -1224,7 +1224,7 @@
       "slug": "archetype-strength-t2",
       "name": "Archetype: Strength (Warlord) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_strength.png",
+      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
       "folder": "Strength",
       "system": {
         "description": {
@@ -1281,7 +1281,7 @@
       "slug": "archetype-strength-t3",
       "name": "Archetype: Strength (Warlord) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_strength.png",
+      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
       "folder": "Strength",
       "system": {
         "description": {
@@ -1336,7 +1336,7 @@
       "slug": "archetype-strength-t4",
       "name": "Archetype: Strength (Warlord) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_strength.png",
+      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
       "folder": "Strength",
       "system": {
         "description": {
@@ -1393,7 +1393,7 @@
       "slug": "archetype-temperance",
       "name": "Archetype: Temperance",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+      "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
       "folder": "Temperance",
       "system": {
         "description": {
@@ -1441,7 +1441,7 @@
       "slug": "archetype-temperance-t1",
       "name": "Archetype: Temperance (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+      "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
       "folder": "Temperance",
       "system": {
         "description": {
@@ -1493,7 +1493,7 @@
       "slug": "archetype-temperance-t2",
       "name": "Archetype: Temperance (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+      "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
       "folder": "Temperance",
       "system": {
         "description": {
@@ -1544,7 +1544,7 @@
       "slug": "archetype-temperance-t3",
       "name": "Archetype: Temperance (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+      "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
       "folder": "Temperance",
       "system": {
         "description": {
@@ -1595,7 +1595,7 @@
       "slug": "archetype-temperance-t4",
       "name": "Archetype: Temperance (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+      "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
       "folder": "Temperance",
       "system": {
         "description": {
@@ -1647,7 +1647,7 @@
       "slug": "archetype-chariot",
       "name": "Archetype: The Chariot (Squad Leader)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_chariot.png",
+      "img": "icons/environment/people/cavalry-heavy.webp",
       "folder": "The Chariot",
       "system": {
         "description": {
@@ -1701,7 +1701,7 @@
       "slug": "archetype-chariot-t1",
       "name": "Archetype: The Chariot (Squad Leader) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_chariot.png",
+      "img": "icons/environment/people/cavalry-heavy.webp",
       "folder": "The Chariot",
       "system": {
         "description": {
@@ -1757,7 +1757,7 @@
       "slug": "archetype-chariot-t2",
       "name": "Archetype: The Chariot (Squad Leader) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_chariot.png",
+      "img": "icons/environment/people/cavalry-heavy.webp",
       "folder": "The Chariot",
       "system": {
         "description": {
@@ -1813,7 +1813,7 @@
       "slug": "archetype-chariot-t3",
       "name": "Archetype: The Chariot (Squad Leader) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_chariot.png",
+      "img": "icons/environment/people/cavalry-heavy.webp",
       "folder": "The Chariot",
       "system": {
         "description": {
@@ -1871,7 +1871,7 @@
       "slug": "archetype-chariot-t4",
       "name": "Archetype: The Chariot (Squad Leader) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_chariot.png",
+      "img": "icons/environment/people/cavalry-heavy.webp",
       "folder": "The Chariot",
       "system": {
         "description": {
@@ -1927,7 +1927,7 @@
       "slug": "archetype-devil",
       "name": "Archetype: The Devil (Exploiter)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_devil.png",
+      "img": "icons/magic/death/skull-horned-goat-pentagram-red.webp",
       "folder": "The Devil",
       "system": {
         "description": {
@@ -1980,7 +1980,7 @@
       "slug": "archetype-devil-t1",
       "name": "Archetype: The Devil (Exploiter) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_devil.png",
+      "img": "icons/magic/death/skull-horned-goat-pentagram-red.webp",
       "folder": "The Devil",
       "system": {
         "description": {
@@ -2035,7 +2035,7 @@
       "slug": "archetype-devil-t2",
       "name": "Archetype: The Devil (Exploiter) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_devil.png",
+      "img": "icons/magic/death/skull-horned-goat-pentagram-red.webp",
       "folder": "The Devil",
       "system": {
         "description": {
@@ -2090,7 +2090,7 @@
       "slug": "archetype-devil-t3",
       "name": "Archetype: The Devil (Exploiter) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_devil.png",
+      "img": "icons/magic/death/skull-horned-goat-pentagram-red.webp",
       "folder": "The Devil",
       "system": {
         "description": {
@@ -2145,7 +2145,7 @@
       "slug": "archetype-devil-t4",
       "name": "Archetype: The Devil (Exploiter) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_devil.png",
+      "img": "icons/magic/death/skull-horned-goat-pentagram-red.webp",
       "folder": "The Devil",
       "system": {
         "description": {
@@ -2201,7 +2201,7 @@
       "slug": "archetype-emperor",
       "name": "Archetype: The Emperor (Administrator)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "img": "icons/commodities/treasure/sceptre-jeweled-gold.webp",
       "folder": "The Emperor",
       "system": {
         "description": {
@@ -2254,7 +2254,7 @@
       "slug": "archetype-emperor-t1",
       "name": "Archetype: The Emperor (Administrator) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "img": "icons/commodities/treasure/sceptre-jeweled-gold.webp",
       "folder": "The Emperor",
       "system": {
         "description": {
@@ -2311,7 +2311,7 @@
       "slug": "archetype-emperor-t2",
       "name": "Archetype: The Emperor (Administrator) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "img": "icons/commodities/treasure/sceptre-jeweled-gold.webp",
       "folder": "The Emperor",
       "system": {
         "description": {
@@ -2367,7 +2367,7 @@
       "slug": "archetype-emperor-t3",
       "name": "Archetype: The Emperor (Administrator) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "img": "icons/commodities/treasure/sceptre-jeweled-gold.webp",
       "folder": "The Emperor",
       "system": {
         "description": {
@@ -2423,7 +2423,7 @@
       "slug": "archetype-emperor-t4",
       "name": "Archetype: The Emperor (Administrator) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "img": "icons/commodities/treasure/sceptre-jeweled-gold.webp",
       "folder": "The Emperor",
       "system": {
         "description": {
@@ -2479,7 +2479,7 @@
       "slug": "archetype-empress",
       "name": "Archetype: The Empress (Caretaker)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "folder": "The Empress",
       "system": {
         "description": {
@@ -2533,7 +2533,7 @@
       "slug": "archetype-empress-t1",
       "name": "Archetype: The Empress (Caretaker) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "folder": "The Empress",
       "system": {
         "description": {
@@ -2589,7 +2589,7 @@
       "slug": "archetype-empress-t2",
       "name": "Archetype: The Empress (Caretaker) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "folder": "The Empress",
       "system": {
         "description": {
@@ -2644,7 +2644,7 @@
       "slug": "archetype-empress-t3",
       "name": "Archetype: The Empress (Caretaker) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "folder": "The Empress",
       "system": {
         "description": {
@@ -2699,7 +2699,7 @@
       "slug": "archetype-empress-t4",
       "name": "Archetype: The Empress (Caretaker) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "folder": "The Empress",
       "system": {
         "description": {
@@ -2755,7 +2755,7 @@
       "slug": "archetype-fool",
       "name": "Archetype: The Fool (Catalyst)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "img": "icons/equipment/head/mask-clown.webp",
       "folder": "The Fool",
       "system": {
         "description": {
@@ -2809,7 +2809,7 @@
       "slug": "archetype-fool-t1",
       "name": "Archetype: The Fool (Catalyst) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "img": "icons/equipment/head/mask-clown.webp",
       "folder": "The Fool",
       "system": {
         "description": {
@@ -2865,7 +2865,7 @@
       "slug": "archetype-fool-t2",
       "name": "Archetype: The Fool (Catalyst) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "img": "icons/equipment/head/mask-clown.webp",
       "folder": "The Fool",
       "system": {
         "description": {
@@ -2920,7 +2920,7 @@
       "slug": "archetype-fool-t3",
       "name": "Archetype: The Fool (Catalyst) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "img": "icons/equipment/head/mask-clown.webp",
       "folder": "The Fool",
       "system": {
         "description": {
@@ -2975,7 +2975,7 @@
       "slug": "archetype-fool-t4",
       "name": "Archetype: The Fool (Catalyst) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "img": "icons/equipment/head/mask-clown.webp",
       "folder": "The Fool",
       "system": {
         "description": {
@@ -3031,7 +3031,7 @@
       "slug": "archetype-hanged-man",
       "name": "Archetype: The Hanged Man",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hanged_man.png",
+      "img": "icons/magic/death/gallows-hanged-humanoid.webp",
       "folder": "The Hanged Man",
       "system": {
         "description": {
@@ -3084,7 +3084,7 @@
       "slug": "archetype-hanged-man-t1",
       "name": "Archetype: The Hanged Man (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hanged_man.png",
+      "img": "icons/magic/death/gallows-hanged-humanoid.webp",
       "folder": "The Hanged Man",
       "system": {
         "description": {
@@ -3139,7 +3139,7 @@
       "slug": "archetype-hanged-man-t2",
       "name": "Archetype: The Hanged Man (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hanged_man.png",
+      "img": "icons/magic/death/gallows-hanged-humanoid.webp",
       "folder": "The Hanged Man",
       "system": {
         "description": {
@@ -3195,7 +3195,7 @@
       "slug": "archetype-hanged-man-t3",
       "name": "Archetype: The Hanged Man (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hanged_man.png",
+      "img": "icons/magic/death/gallows-hanged-humanoid.webp",
       "folder": "The Hanged Man",
       "system": {
         "description": {
@@ -3250,7 +3250,7 @@
       "slug": "archetype-hanged-man-t4",
       "name": "Archetype: The Hanged Man (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hanged_man.png",
+      "img": "icons/magic/death/gallows-hanged-humanoid.webp",
       "folder": "The Hanged Man",
       "system": {
         "description": {
@@ -3306,7 +3306,7 @@
       "slug": "archetype-hermit",
       "name": "Archetype: The Hermit (Mystic-Isolator)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
       "folder": "The Hermit",
       "system": {
         "description": {
@@ -3360,7 +3360,7 @@
       "slug": "archetype-hermit-t1",
       "name": "Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
       "folder": "The Hermit",
       "system": {
         "description": {
@@ -3419,7 +3419,7 @@
       "slug": "archetype-hermit-t2",
       "name": "Archetype: The Hermit (Mystic-Isolator) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
       "folder": "The Hermit",
       "system": {
         "description": {
@@ -3474,7 +3474,7 @@
       "slug": "archetype-hermit-t3",
       "name": "Archetype: The Hermit (Mystic-Isolator) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
       "folder": "The Hermit",
       "system": {
         "description": {
@@ -3529,7 +3529,7 @@
       "slug": "archetype-hermit-t4",
       "name": "Archetype: The Hermit (Mystic-Isolator) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
       "folder": "The Hermit",
       "system": {
         "description": {
@@ -3585,7 +3585,7 @@
       "slug": "archetype-high-priestess",
       "name": "Archetype: The High Priestess (Seer)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_high_priestess.png",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
       "folder": "The High Priestess",
       "system": {
         "description": {
@@ -3638,7 +3638,7 @@
       "slug": "archetype-high-priestess-t1",
       "name": "Archetype: The High Priestess (Seer) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_high_priestess.png",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
       "folder": "The High Priestess",
       "system": {
         "description": {
@@ -3693,7 +3693,7 @@
       "slug": "archetype-high-priestess-t2",
       "name": "Archetype: The High Priestess (Seer) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_high_priestess.png",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
       "folder": "The High Priestess",
       "system": {
         "description": {
@@ -3749,7 +3749,7 @@
       "slug": "archetype-high-priestess-t3",
       "name": "Archetype: The High Priestess (Seer) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_high_priestess.png",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
       "folder": "The High Priestess",
       "system": {
         "description": {
@@ -3804,7 +3804,7 @@
       "slug": "archetype-high-priestess-t4",
       "name": "Archetype: The High Priestess (Seer) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_high_priestess.png",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
       "folder": "The High Priestess",
       "system": {
         "description": {
@@ -3860,7 +3860,7 @@
       "slug": "archetype-lovers",
       "name": "Archetype: The Lovers",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+      "img": "icons/equipment/neck/amulet-heart.webp",
       "folder": "The Lovers",
       "system": {
         "description": {
@@ -3912,7 +3912,7 @@
       "slug": "archetype-lovers-t1",
       "name": "Archetype: The Lovers (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+      "img": "icons/equipment/neck/amulet-heart.webp",
       "folder": "The Lovers",
       "system": {
         "description": {
@@ -3965,7 +3965,7 @@
       "slug": "archetype-lovers-t2",
       "name": "Archetype: The Lovers (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+      "img": "icons/equipment/neck/amulet-heart.webp",
       "folder": "The Lovers",
       "system": {
         "description": {
@@ -4016,7 +4016,7 @@
       "slug": "archetype-lovers-t3",
       "name": "Archetype: The Lovers (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+      "img": "icons/equipment/neck/amulet-heart.webp",
       "folder": "The Lovers",
       "system": {
         "description": {
@@ -4068,7 +4068,7 @@
       "slug": "archetype-lovers-t4",
       "name": "Archetype: The Lovers (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+      "img": "icons/equipment/neck/amulet-heart.webp",
       "folder": "The Lovers",
       "system": {
         "description": {
@@ -4120,7 +4120,7 @@
       "slug": "archetype-magician",
       "name": "Archetype: The Magician (Scholar)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "folder": "The Magician",
       "system": {
         "description": {
@@ -4173,7 +4173,7 @@
       "slug": "archetype-magician-t1",
       "name": "Archetype: The Magician (Scholar) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "folder": "The Magician",
       "system": {
         "description": {
@@ -4229,7 +4229,7 @@
       "slug": "archetype-magician-t2",
       "name": "Archetype: The Magician (Scholar) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "folder": "The Magician",
       "system": {
         "description": {
@@ -4284,7 +4284,7 @@
       "slug": "archetype-magician-t3",
       "name": "Archetype: The Magician (Scholar) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "folder": "The Magician",
       "system": {
         "description": {
@@ -4339,7 +4339,7 @@
       "slug": "archetype-magician-t4",
       "name": "Archetype: The Magician (Scholar) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "folder": "The Magician",
       "system": {
         "description": {
@@ -4395,7 +4395,7 @@
       "slug": "archetype-moon",
       "name": "Archetype: The Moon (Ancient Blood)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+      "img": "icons/magic/nature/moon-crescent.webp",
       "folder": "The Moon",
       "system": {
         "description": {
@@ -4448,7 +4448,7 @@
       "slug": "archetype-moon-t1",
       "name": "Archetype: The Moon (Ancient Blood) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+      "img": "icons/magic/nature/moon-crescent.webp",
       "folder": "The Moon",
       "system": {
         "description": {
@@ -4503,7 +4503,7 @@
       "slug": "archetype-moon-t2",
       "name": "Archetype: The Moon (Ancient Blood) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+      "img": "icons/magic/nature/moon-crescent.webp",
       "folder": "The Moon",
       "system": {
         "description": {
@@ -4559,7 +4559,7 @@
       "slug": "archetype-moon-t3",
       "name": "Archetype: The Moon (Ancient Blood) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+      "img": "icons/magic/nature/moon-crescent.webp",
       "folder": "The Moon",
       "system": {
         "description": {
@@ -4615,7 +4615,7 @@
       "slug": "archetype-moon-t4",
       "name": "Archetype: The Moon (Ancient Blood) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+      "img": "icons/magic/nature/moon-crescent.webp",
       "folder": "The Moon",
       "system": {
         "description": {
@@ -4671,7 +4671,7 @@
       "slug": "archetype-star",
       "name": "Archetype: The Star (Hopebringer)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_star.png",
+      "img": "icons/magic/symbols/star-rising-purple.webp",
       "folder": "The Star",
       "system": {
         "description": {
@@ -4725,7 +4725,7 @@
       "slug": "archetype-star-t1",
       "name": "Archetype: The Star (Hopebringer) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_star.png",
+      "img": "icons/magic/symbols/star-rising-purple.webp",
       "folder": "The Star",
       "system": {
         "description": {
@@ -4781,7 +4781,7 @@
       "slug": "archetype-star-t2",
       "name": "Archetype: The Star (Hopebringer) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_star.png",
+      "img": "icons/magic/symbols/star-rising-purple.webp",
       "folder": "The Star",
       "system": {
         "description": {
@@ -4836,7 +4836,7 @@
       "slug": "archetype-star-t3",
       "name": "Archetype: The Star (Hopebringer) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_star.png",
+      "img": "icons/magic/symbols/star-rising-purple.webp",
       "folder": "The Star",
       "system": {
         "description": {
@@ -4891,7 +4891,7 @@
       "slug": "archetype-star-t4",
       "name": "Archetype: The Star (Hopebringer) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_star.png",
+      "img": "icons/magic/symbols/star-rising-purple.webp",
       "folder": "The Star",
       "system": {
         "description": {
@@ -4947,7 +4947,7 @@
       "slug": "archetype-sun",
       "name": "Archetype: The Sun (Beacon)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_sun.png",
+      "img": "icons/magic/nature/symbol-sun-yellow.webp",
       "folder": "The Sun",
       "system": {
         "description": {
@@ -5000,7 +5000,7 @@
       "slug": "archetype-sun-t1",
       "name": "Archetype: The Sun (Beacon) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_sun.png",
+      "img": "icons/magic/nature/symbol-sun-yellow.webp",
       "folder": "The Sun",
       "system": {
         "description": {
@@ -5055,7 +5055,7 @@
       "slug": "archetype-sun-t2",
       "name": "Archetype: The Sun (Beacon) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_sun.png",
+      "img": "icons/magic/nature/symbol-sun-yellow.webp",
       "folder": "The Sun",
       "system": {
         "description": {
@@ -5110,7 +5110,7 @@
       "slug": "archetype-sun-t3",
       "name": "Archetype: The Sun (Beacon) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_sun.png",
+      "img": "icons/magic/nature/symbol-sun-yellow.webp",
       "folder": "The Sun",
       "system": {
         "description": {
@@ -5166,7 +5166,7 @@
       "slug": "archetype-sun-t4",
       "name": "Archetype: The Sun (Beacon) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_sun.png",
+      "img": "icons/magic/nature/symbol-sun-yellow.webp",
       "folder": "The Sun",
       "system": {
         "description": {
@@ -5222,7 +5222,7 @@
       "slug": "archetype-tower",
       "name": "Archetype: The Tower (Breaker)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_tower.png",
+      "img": "icons/environment/settlement/tower-stone-blue.webp",
       "folder": "The Tower",
       "system": {
         "description": {
@@ -5275,7 +5275,7 @@
       "slug": "archetype-tower-t1",
       "name": "Archetype: The Tower (Breaker) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_tower.png",
+      "img": "icons/environment/settlement/tower-stone-blue.webp",
       "folder": "The Tower",
       "system": {
         "description": {
@@ -5330,7 +5330,7 @@
       "slug": "archetype-tower-t2",
       "name": "Archetype: The Tower (Breaker) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_tower.png",
+      "img": "icons/environment/settlement/tower-stone-blue.webp",
       "folder": "The Tower",
       "system": {
         "description": {
@@ -5385,7 +5385,7 @@
       "slug": "archetype-tower-t3",
       "name": "Archetype: The Tower (Breaker) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_tower.png",
+      "img": "icons/environment/settlement/tower-stone-blue.webp",
       "folder": "The Tower",
       "system": {
         "description": {
@@ -5440,7 +5440,7 @@
       "slug": "archetype-tower-t4",
       "name": "Archetype: The Tower (Breaker) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_tower.png",
+      "img": "icons/environment/settlement/tower-stone-blue.webp",
       "folder": "The Tower",
       "system": {
         "description": {
@@ -5496,7 +5496,7 @@
       "slug": "archetype-world",
       "name": "Archetype: The World (Integrator)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
       "folder": "The World",
       "system": {
         "description": {
@@ -5550,7 +5550,7 @@
       "slug": "archetype-world-t1",
       "name": "Archetype: The World (Integrator) (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
       "folder": "The World",
       "system": {
         "description": {
@@ -5606,7 +5606,7 @@
       "slug": "archetype-world-t2",
       "name": "Archetype: The World (Integrator) (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
       "folder": "The World",
       "system": {
         "description": {
@@ -5661,7 +5661,7 @@
       "slug": "archetype-world-t3",
       "name": "Archetype: The World (Integrator) (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
       "folder": "The World",
       "system": {
         "description": {
@@ -5716,7 +5716,7 @@
       "slug": "archetype-world-t4",
       "name": "Archetype: The World (Integrator) (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
       "folder": "The World",
       "system": {
         "description": {
@@ -5772,7 +5772,7 @@
       "slug": "archetype-wheel-of-fortune",
       "name": "Archetype: Wheel of Fortune",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_wheel_of_fortune.png",
+      "img": "icons/tools/nautical/steering-wheel.webp",
       "folder": "The Wheel of Fortune",
       "system": {
         "description": {
@@ -5826,7 +5826,7 @@
       "slug": "archetype-wheel-of-fortune-t1",
       "name": "Archetype: Wheel of Fortune (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_wheel_of_fortune.png",
+      "img": "icons/tools/nautical/steering-wheel.webp",
       "folder": "The Wheel of Fortune",
       "system": {
         "description": {
@@ -5882,7 +5882,7 @@
       "slug": "archetype-wheel-of-fortune-t2",
       "name": "Archetype: Wheel of Fortune (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_wheel_of_fortune.png",
+      "img": "icons/tools/nautical/steering-wheel.webp",
       "folder": "The Wheel of Fortune",
       "system": {
         "description": {
@@ -5938,7 +5938,7 @@
       "slug": "archetype-wheel-of-fortune-t3",
       "name": "Archetype: Wheel of Fortune (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_wheel_of_fortune.png",
+      "img": "icons/tools/nautical/steering-wheel.webp",
       "folder": "The Wheel of Fortune",
       "system": {
         "description": {
@@ -5993,7 +5993,7 @@
       "slug": "archetype-wheel-of-fortune-t4",
       "name": "Archetype: Wheel of Fortune (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_wheel_of_fortune.png",
+      "img": "icons/tools/nautical/steering-wheel.webp",
       "folder": "The Wheel of Fortune",
       "system": {
         "description": {

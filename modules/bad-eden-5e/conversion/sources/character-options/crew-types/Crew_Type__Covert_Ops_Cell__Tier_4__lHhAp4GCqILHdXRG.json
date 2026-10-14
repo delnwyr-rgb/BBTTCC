@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Covert Ops Cell (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+  "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 4 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The Adaptive Adversary Engine has difficulty tracking you. In Bunker Busters scenarios, there is a 50% chance its resource shifts to counter your Intrigue-focused actions fail.</li></ul>",

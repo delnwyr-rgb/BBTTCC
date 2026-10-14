@@ -1,7 +1,7 @@
 {
   "name": "Archetype: The Magician (Scholar) (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+  "img": "icons/magic/symbols/circle-ouroboros.webp",
   "system": {
     "activities": {},
     "uses": {

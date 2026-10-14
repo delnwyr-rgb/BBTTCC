@@ -2,7 +2,7 @@
   "_id": "becallingkpr0cls",
   "name": "Keeper",
   "type": "class",
-  "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+  "img": "icons/environment/settlement/temple-night.webp",
   "system": {
     "category": "calling",
     "identifier": "calling-keeper",

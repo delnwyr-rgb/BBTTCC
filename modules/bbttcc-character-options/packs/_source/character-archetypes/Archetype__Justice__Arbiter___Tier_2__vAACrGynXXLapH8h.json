@@ -1,7 +1,7 @@
 {
   "name": "Archetype: Justice (Arbiter) (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_justice.png",
+  "img": "icons/skills/social/trading-justice-scale-gold.webp",
   "system": {
     "category": "technique",
     "source": {

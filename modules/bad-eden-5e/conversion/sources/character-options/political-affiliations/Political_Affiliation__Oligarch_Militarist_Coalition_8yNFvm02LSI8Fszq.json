@@ -1,7 +1,7 @@
 {
   "name": "Political Affiliation: Oligarch/Militarist Coalition",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+  "img": "icons/magic/death/skull-humanoid-crown-white-blue.webp",
   "system": {
     "description": {
       "value": "A league of warlords ruled by reputation, power, and council. High capability but prone to internal conflicts.",

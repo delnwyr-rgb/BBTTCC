@@ -2,7 +2,7 @@
   "_id": "becallingstw0t03",
   "name": "Stalwart — Master (Tier III)",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+  "img": "icons/skills/trades/smithing-anvil-brown.webp",
   "system": {
     "category": "calling",
     "source": "Callings",

@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Ashbound Survivors (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+  "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 4 — Ashbound Survivors</strong></p><p><em>The wasteland is no longer a penalty. It is infrastructure with bad manners.</em></p><ul><li><strong>Strategic:</strong> Controlled Desert, Ash Wastes, and Wasteland hexes become far more livable and productive for your faction. Harsh terrain drains less, supports movement more reliably, and can produce meaningful recovery or economic value over time.</li></ul>",

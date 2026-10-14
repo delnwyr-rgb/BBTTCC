@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Mercenary Band (Tier 1)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+  "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
   "system": {
     "category": "technique",
     "source": {

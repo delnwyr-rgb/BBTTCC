@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Verdant Stalkers (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+  "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 4 — Verdant Stalkers</strong></p><p><em>The wild now participates. Operationally.</em></p><ul><li><strong>Strategic:</strong> Controlled Forest/Jungle regions become hostile to invaders. Enemy movement, scouting, and first contact are degraded; ambush pressure increases.</li></ul>",

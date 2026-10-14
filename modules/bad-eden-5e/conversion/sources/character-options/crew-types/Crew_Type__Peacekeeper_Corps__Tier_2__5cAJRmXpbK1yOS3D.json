@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Peacekeeper Corps (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+  "img": "icons/sundries/misc/badge-law-sheriff.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 2 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> In Tower Trashers (Tactical Defense) scenarios, your faction's defensive structures have 25% more durability, and Demolition units are less effective.</li></ul>",

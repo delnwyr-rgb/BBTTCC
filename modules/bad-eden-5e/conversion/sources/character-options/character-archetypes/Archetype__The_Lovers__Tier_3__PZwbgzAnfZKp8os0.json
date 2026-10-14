@@ -1,7 +1,7 @@
 {
   "name": "Archetype: The Lovers (Tier 3)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+  "img": "icons/equipment/neck/amulet-heart.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 3 — The Lovers</strong></p><ul><li><strong>Tactical:</strong> Advantage vs charm/fear near allies.</li></ul>",

@@ -1,7 +1,7 @@
 {
   "name": "Archetype: The Lovers (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+  "img": "icons/equipment/neck/amulet-heart.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 4 — The Lovers</strong></p><ul><li><strong>Strategic:</strong> −1 coordination penalty, coalition rolls gain Advantage.</li></ul>",

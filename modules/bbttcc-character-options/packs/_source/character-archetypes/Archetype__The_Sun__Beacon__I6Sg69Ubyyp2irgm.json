@@ -1,7 +1,7 @@
 {
   "name": "Archetype: The Sun (Beacon)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_sun.png",
+  "img": "icons/magic/nature/symbol-sun-yellow.webp",
   "system": {
     "category": "technique",
     "source": {

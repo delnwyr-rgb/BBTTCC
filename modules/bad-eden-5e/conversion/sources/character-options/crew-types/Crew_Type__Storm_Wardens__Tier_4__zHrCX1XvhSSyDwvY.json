@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Storm Wardens (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+  "img": "icons/magic/lightning/bolt-cloud-sky-white.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 4 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You no longer survive hostile weather. You set policy for it.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled hazardous regions become significantly safer and more reliable for your faction. Environmental penalties, weather disruptions, and corruption-weather pressure are reduced across the region, while enemy operations remain exposed.</li></ul>",

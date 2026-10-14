@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Cultural Ambassadors",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+  "img": "icons/skills/social/diplomacy-offering-ritual.webp",
   "system": {
     "category": "technique",
     "source": {

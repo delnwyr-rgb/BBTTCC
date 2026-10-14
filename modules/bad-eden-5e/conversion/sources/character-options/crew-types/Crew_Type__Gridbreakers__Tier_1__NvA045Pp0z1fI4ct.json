@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Gridbreakers (Tier 1)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+  "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
   "system": {
     "category": "technique",
     "source": {
@@ -41,7 +41,7 @@
     {
       "_id": "6f3218fef0844a51",
       "name": "Gridbreakers T1 Skills",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_book.png",
+      "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
       "type": "base",
       "system": {
         "changes": [

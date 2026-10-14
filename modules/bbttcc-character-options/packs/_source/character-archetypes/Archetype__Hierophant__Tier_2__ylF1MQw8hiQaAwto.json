@@ -1,7 +1,7 @@
 {
   "name": "Archetype: Hierophant (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hierophant.png",
+  "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
   "system": {
     "category": "technique",
     "source": {

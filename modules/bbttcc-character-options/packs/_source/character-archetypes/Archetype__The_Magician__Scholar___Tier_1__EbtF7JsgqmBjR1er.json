@@ -1,7 +1,7 @@
 {
   "name": "Archetype: The Magician (Scholar) (Tier 1)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+  "img": "icons/magic/symbols/circle-ouroboros.webp",
   "system": {
     "category": "technique",
     "source": {
@@ -48,7 +48,7 @@
       },
       "flags": {},
       "name": "Archetype Tier 1 Proficiencies",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_11.png",
+      "img": "icons/magic/symbols/circle-ouroboros.webp",
       "_id": "6quonLso3rM6Zmev",
       "type": "base",
       "system": {

@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Verdant Stalkers (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+  "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 2 — Verdant Stalkers</strong></p><p><em>You no longer travel through the wild. You edit it.</em></p><ul><li><strong>Strategic:</strong> Raids initiated from Forest/Jungle hexes gain +1 margin. Hidden routes and safe approaches can be established.</li></ul>",

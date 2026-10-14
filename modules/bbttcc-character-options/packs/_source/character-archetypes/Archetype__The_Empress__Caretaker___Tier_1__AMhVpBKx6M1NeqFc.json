@@ -1,7 +1,7 @@
 {
   "name": "Archetype: The Empress (Caretaker) (Tier 1)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+  "img": "icons/magic/nature/cornucopia-orange.webp",
   "system": {
     "category": "technique",
     "source": {
@@ -48,7 +48,7 @@
       },
       "flags": {},
       "name": "Archetype Tier 1 Proficiencies",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_10.png",
+      "img": "icons/magic/nature/cornucopia-orange.webp",
       "_id": "EmpressTier1FX01",
       "type": "base",
       "system": {

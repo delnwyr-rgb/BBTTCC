@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-09",
+    "at": "2026-10-14",
     "overridesApplied": 0
   },
   "items": [
@@ -12,7 +12,7 @@
       "slug": "calling-bravo",
       "name": "Bravo",
       "type": "feat",
-      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -67,7 +67,7 @@
       "slug": "calling-bravo-apprentice-tier-i",
       "name": "Bravo — Apprentice (Tier I)",
       "type": "feat",
-      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -118,7 +118,7 @@
       "slug": "calling-bravo-archon-tier-iv",
       "name": "Bravo — Archon (Tier IV)",
       "type": "feat",
-      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -169,7 +169,7 @@
       "slug": "calling-bravo-initiate-tier-ii",
       "name": "Bravo — Initiate (Tier II)",
       "type": "feat",
-      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -220,7 +220,7 @@
       "slug": "calling-bravo-master-tier-iii",
       "name": "Bravo — Master (Tier III)",
       "type": "feat",
-      "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -271,7 +271,7 @@
       "slug": "calling-broker",
       "name": "Broker",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -326,7 +326,7 @@
       "slug": "calling-broker-apprentice-tier-i",
       "name": "Broker — Apprentice (Tier I)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -377,7 +377,7 @@
       "slug": "calling-broker-archon-tier-iv",
       "name": "Broker — Archon (Tier IV)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -428,7 +428,7 @@
       "slug": "calling-broker-initiate-tier-ii",
       "name": "Broker — Initiate (Tier II)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -479,7 +479,7 @@
       "slug": "calling-broker-master-tier-iii",
       "name": "Broker — Master (Tier III)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -530,7 +530,7 @@
       "slug": "calling-keeper",
       "name": "Keeper",
       "type": "feat",
-      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "img": "icons/environment/settlement/temple-night.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -585,7 +585,7 @@
       "slug": "calling-keeper-apprentice-tier-i",
       "name": "Keeper — Apprentice (Tier I)",
       "type": "feat",
-      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "img": "icons/environment/settlement/temple-night.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -636,7 +636,7 @@
       "slug": "calling-keeper-archon-tier-iv",
       "name": "Keeper — Archon (Tier IV)",
       "type": "feat",
-      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "img": "icons/environment/settlement/temple-night.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -687,7 +687,7 @@
       "slug": "calling-keeper-initiate-tier-ii",
       "name": "Keeper — Initiate (Tier II)",
       "type": "feat",
-      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "img": "icons/environment/settlement/temple-night.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -738,7 +738,7 @@
       "slug": "calling-keeper-master-tier-iii",
       "name": "Keeper — Master (Tier III)",
       "type": "feat",
-      "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+      "img": "icons/environment/settlement/temple-night.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -789,7 +789,7 @@
       "slug": "calling-operator",
       "name": "Operator",
       "type": "feat",
-      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -844,7 +844,7 @@
       "slug": "calling-operator-apprentice-tier-i",
       "name": "Operator — Apprentice (Tier I)",
       "type": "feat",
-      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -895,7 +895,7 @@
       "slug": "calling-operator-archon-tier-iv",
       "name": "Operator — Archon (Tier IV)",
       "type": "feat",
-      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -946,7 +946,7 @@
       "slug": "calling-operator-initiate-tier-ii",
       "name": "Operator — Initiate (Tier II)",
       "type": "feat",
-      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -997,7 +997,7 @@
       "slug": "calling-operator-master-tier-iii",
       "name": "Operator — Master (Tier III)",
       "type": "feat",
-      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -1048,7 +1048,7 @@
       "slug": "calling-savant",
       "name": "Savant",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -1103,7 +1103,7 @@
       "slug": "calling-savant-apprentice-tier-i",
       "name": "Savant — Apprentice (Tier I)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -1154,7 +1154,7 @@
       "slug": "calling-savant-archon-tier-iv",
       "name": "Savant — Archon (Tier IV)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -1205,7 +1205,7 @@
       "slug": "calling-savant-initiate-tier-ii",
       "name": "Savant — Initiate (Tier II)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -1256,7 +1256,7 @@
       "slug": "calling-savant-master-tier-iii",
       "name": "Savant — Master (Tier III)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -1307,7 +1307,7 @@
       "slug": "calling-stalwart",
       "name": "Stalwart",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "img": "icons/skills/trades/smithing-anvil-brown.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -1362,7 +1362,7 @@
       "slug": "calling-stalwart-apprentice-tier-i",
       "name": "Stalwart — Apprentice (Tier I)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "img": "icons/skills/trades/smithing-anvil-brown.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -1413,7 +1413,7 @@
       "slug": "calling-stalwart-archon-tier-iv",
       "name": "Stalwart — Archon (Tier IV)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "img": "icons/skills/trades/smithing-anvil-brown.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -1464,7 +1464,7 @@
       "slug": "calling-stalwart-initiate-tier-ii",
       "name": "Stalwart — Initiate (Tier II)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "img": "icons/skills/trades/smithing-anvil-brown.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {
@@ -1515,7 +1515,7 @@
       "slug": "calling-stalwart-master-tier-iii",
       "name": "Stalwart — Master (Tier III)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "img": "icons/skills/trades/smithing-anvil-brown.webp",
       "folder": "NPC Callings",
       "system": {
         "description": {

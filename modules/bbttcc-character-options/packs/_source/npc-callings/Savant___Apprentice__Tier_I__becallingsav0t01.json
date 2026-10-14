@@ -2,7 +2,7 @@
   "_id": "becallingsav0t01",
   "name": "Savant — Apprentice (Tier I)",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+  "img": "icons/skills/trades/academics-book-study-runes.webp",
   "system": {
     "category": "calling",
     "source": "Callings",

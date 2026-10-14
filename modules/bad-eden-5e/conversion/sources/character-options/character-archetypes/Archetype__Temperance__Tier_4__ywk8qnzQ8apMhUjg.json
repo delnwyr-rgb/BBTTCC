@@ -1,7 +1,7 @@
 {
   "name": "Archetype: Temperance (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+  "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 4 — Temperance</strong></p><ul><li><strong>Strategic:</strong> −1 OP cost when hitting extremes (empty/full).</li></ul>",

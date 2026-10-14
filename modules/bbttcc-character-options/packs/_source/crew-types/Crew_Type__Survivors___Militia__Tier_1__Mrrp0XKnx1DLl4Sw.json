@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Survivors / Militia (Tier 1)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+  "img": "icons/environment/people/group.webp",
   "system": {
     "category": "technique",
     "source": {
@@ -41,7 +41,7 @@
     {
       "_id": "c0c3df7e7b8a41c1",
       "name": "Survivors / Militia T1 Skills",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_3.png",
+      "img": "icons/environment/people/group.webp",
       "type": "base",
       "system": {
         "changes": [

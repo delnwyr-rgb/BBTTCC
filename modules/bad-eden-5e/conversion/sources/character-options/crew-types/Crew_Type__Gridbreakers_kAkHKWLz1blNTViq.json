@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Gridbreakers",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+  "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
   "system": {
     "activities": {},
     "uses": {

@@ -1,7 +1,7 @@
 {
   "name": "Archetype: Strength (Warlord) (Tier 3)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_strength.png",
+  "img": "icons/creatures/abilities/lion-roar-yellow.webp",
   "system": {
     "category": "technique",
     "source": {

@@ -1,7 +1,7 @@
 {
   "name": "Archetype: Temperance",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+  "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
   "system": {
     "description": {
       "value": "<p><em>“Too much breaks. Too little fails. You are the line between.”</em></p><p><strong>Temperance</strong> stabilizes extremes and converts volatility into control.</p>",

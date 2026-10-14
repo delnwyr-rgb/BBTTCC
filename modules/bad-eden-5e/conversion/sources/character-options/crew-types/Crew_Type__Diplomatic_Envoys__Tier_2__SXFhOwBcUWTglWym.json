@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Diplomatic Envoys (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+  "img": "icons/skills/social/diplomacy-peace-alliance.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 2 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During Courtly Intrigue (Social Combat) scenarios, your faction deals 20% more influence damage when spending Diplomacy or Soft Power OPs.</li></ul>",

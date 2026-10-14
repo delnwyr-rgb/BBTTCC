@@ -2,7 +2,7 @@
   "_id": "becallingopr0t04",
   "name": "Operator — Archon (Tier IV)",
   "type": "feature",
-  "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+  "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
   "system": {
     "category": "calling",
     "source": "Callings",

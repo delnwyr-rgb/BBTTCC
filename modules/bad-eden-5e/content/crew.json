@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-11",
+    "at": "2026-10-14",
     "overridesApplied": 0
   },
   "items": [
@@ -12,7 +12,7 @@
       "slug": "crew-abyssal-cartographers",
       "name": "Crew Type: Abyssal Cartographers",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/tools/navigation/map-marked-black.webp",
       "folder": "Abyssal Cartographer",
       "system": {
         "description": {
@@ -79,7 +79,7 @@
       "slug": "crew-abyssal-cartographers-t1",
       "name": "Crew Type: Abyssal Cartographers (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/tools/navigation/map-marked-black.webp",
       "folder": "Abyssal Cartographer",
       "system": {
         "description": {
@@ -164,7 +164,7 @@
       "slug": "crew-abyssal-cartographers-t2",
       "name": "Crew Type: Abyssal Cartographers (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/tools/navigation/map-marked-black.webp",
       "folder": "Abyssal Cartographer",
       "system": {
         "description": {
@@ -252,7 +252,7 @@
       "slug": "crew-abyssal-cartographers-t3",
       "name": "Crew Type: Abyssal Cartographers (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/tools/navigation/map-marked-black.webp",
       "folder": "Abyssal Cartographer",
       "system": {
         "description": {
@@ -342,7 +342,7 @@
       "slug": "crew-abyssal-cartographers-t4",
       "name": "Crew Type: Abyssal Cartographers (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "img": "icons/tools/navigation/map-marked-black.webp",
       "folder": "Abyssal Cartographer",
       "system": {
         "description": {
@@ -427,7 +427,7 @@
       "slug": "crew-ashbound-survivors",
       "name": "Crew Type: Ashbound Survivors",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "folder": "Ashbound Survivors",
       "system": {
         "description": {
@@ -490,7 +490,7 @@
       "slug": "crew-ashbound-survivors-t1",
       "name": "Crew Type: Ashbound Survivors (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "folder": "Ashbound Survivors",
       "system": {
         "description": {
@@ -565,7 +565,7 @@
       "slug": "crew-ashbound-survivors-t2",
       "name": "Crew Type: Ashbound Survivors (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "folder": "Ashbound Survivors",
       "system": {
         "description": {
@@ -645,7 +645,7 @@
       "slug": "crew-ashbound-survivors-t3",
       "name": "Crew Type: Ashbound Survivors (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "folder": "Ashbound Survivors",
       "system": {
         "description": {
@@ -725,7 +725,7 @@
       "slug": "crew-ashbound-survivors-t4",
       "name": "Crew Type: Ashbound Survivors (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+      "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
       "folder": "Ashbound Survivors",
       "system": {
         "description": {
@@ -803,7 +803,7 @@
       "slug": "crew-covert-ops-cell",
       "name": "Crew Type: Covert Ops Cell",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "folder": "Covert Ops Cell",
       "system": {
         "description": {
@@ -870,7 +870,7 @@
       "slug": "crew-covert-ops-cell-t1",
       "name": "Crew Type: Covert Ops Cell (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "folder": "Covert Ops Cell",
       "system": {
         "description": {
@@ -940,7 +940,7 @@
       "slug": "crew-covert-ops-cell-t2",
       "name": "Crew Type: Covert Ops Cell (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "folder": "Covert Ops Cell",
       "system": {
         "description": {
@@ -1006,7 +1006,7 @@
       "slug": "crew-covert-ops-cell-t3",
       "name": "Crew Type: Covert Ops Cell (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "folder": "Covert Ops Cell",
       "system": {
         "description": {
@@ -1078,7 +1078,7 @@
       "slug": "crew-covert-ops-cell-t4",
       "name": "Crew Type: Covert Ops Cell (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "folder": "Covert Ops Cell",
       "system": {
         "description": {
@@ -1150,7 +1150,7 @@
       "slug": "crew-cultural-ambassadors",
       "name": "Crew Type: Cultural Ambassadors",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "img": "icons/skills/social/diplomacy-offering-ritual.webp",
       "folder": "Cultural Ambassadors",
       "system": {
         "description": {
@@ -1217,7 +1217,7 @@
       "slug": "crew-cultural-ambassadors-t1",
       "name": "Crew Type: Cultural Ambassadors (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "img": "icons/skills/social/diplomacy-offering-ritual.webp",
       "folder": "Cultural Ambassadors",
       "system": {
         "description": {
@@ -1286,7 +1286,7 @@
       "slug": "crew-cultural-ambassadors-t2",
       "name": "Crew Type: Cultural Ambassadors (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "img": "icons/skills/social/diplomacy-offering-ritual.webp",
       "folder": "Cultural Ambassadors",
       "system": {
         "description": {
@@ -1357,7 +1357,7 @@
       "slug": "crew-cultural-ambassadors-t3",
       "name": "Crew Type: Cultural Ambassadors (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "img": "icons/skills/social/diplomacy-offering-ritual.webp",
       "folder": "Cultural Ambassadors",
       "system": {
         "description": {
@@ -1433,7 +1433,7 @@
       "slug": "crew-cultural-ambassadors-t4",
       "name": "Crew Type: Cultural Ambassadors (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+      "img": "icons/skills/social/diplomacy-offering-ritual.webp",
       "folder": "Cultural Ambassadors",
       "system": {
         "description": {
@@ -1505,7 +1505,7 @@
       "slug": "crew-diplomatic-envoys",
       "name": "Crew Type: Diplomatic Envoys",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "folder": "Diplomatic Envoys",
       "system": {
         "description": {
@@ -1572,7 +1572,7 @@
       "slug": "crew-diplomatic-envoys-t1",
       "name": "Crew Type: Diplomatic Envoys (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "folder": "Diplomatic Envoys",
       "system": {
         "description": {
@@ -1644,7 +1644,7 @@
       "slug": "crew-diplomatic-envoys-t2",
       "name": "Crew Type: Diplomatic Envoys (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "folder": "Diplomatic Envoys",
       "system": {
         "description": {
@@ -1714,7 +1714,7 @@
       "slug": "crew-diplomatic-envoys-t3",
       "name": "Crew Type: Diplomatic Envoys (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "folder": "Diplomatic Envoys",
       "system": {
         "description": {
@@ -1786,7 +1786,7 @@
       "slug": "crew-diplomatic-envoys-t4",
       "name": "Crew Type: Diplomatic Envoys (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "folder": "Diplomatic Envoys",
       "system": {
         "description": {
@@ -1855,7 +1855,7 @@
       "slug": "crew-gridbreakers",
       "name": "Crew Type: Gridbreakers",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
       "folder": "Gridbreaker",
       "system": {
         "description": {
@@ -1922,7 +1922,7 @@
       "slug": "crew-gridbreakers-t1",
       "name": "Crew Type: Gridbreakers (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
       "folder": "Gridbreaker",
       "system": {
         "description": {
@@ -1998,7 +1998,7 @@
       "slug": "crew-gridbreakers-t2",
       "name": "Crew Type: Gridbreakers (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
       "folder": "Gridbreaker",
       "system": {
         "description": {
@@ -2076,7 +2076,7 @@
       "slug": "crew-gridbreakers-t3",
       "name": "Crew Type: Gridbreakers (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
       "folder": "Gridbreaker",
       "system": {
         "description": {
@@ -2157,7 +2157,7 @@
       "slug": "crew-gridbreakers-t4",
       "name": "Crew Type: Gridbreakers (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+      "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
       "folder": "Gridbreaker",
       "system": {
         "description": {
@@ -2236,7 +2236,7 @@
       "slug": "crew-ironbound-ascendants",
       "name": "Crew Type: Ironbound Ascendants",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "folder": "Ironbound Ascendants",
       "system": {
         "description": {
@@ -2303,7 +2303,7 @@
       "slug": "crew-ironbound-ascendants-t1",
       "name": "Crew Type: Ironbound Ascendants (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "folder": "Ironbound Ascendants",
       "system": {
         "description": {
@@ -2379,7 +2379,7 @@
       "slug": "crew-ironbound-ascendants-t2",
       "name": "Crew Type: Ironbound Ascendants (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "folder": "Ironbound Ascendants",
       "system": {
         "description": {
@@ -2456,7 +2456,7 @@
       "slug": "crew-ironbound-ascendants-t3",
       "name": "Crew Type: Ironbound Ascendants (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "folder": "Ironbound Ascendants",
       "system": {
         "description": {
@@ -2537,7 +2537,7 @@
       "slug": "crew-ironbound-ascendants-t4",
       "name": "Crew Type: Ironbound Ascendants (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
       "folder": "Ironbound Ascendants",
       "system": {
         "description": {
@@ -2617,7 +2617,7 @@
       "slug": "crew-mercenary-band",
       "name": "Crew Type: Mercenary Band",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
       "folder": "Mercenary Band",
       "system": {
         "description": {
@@ -2683,7 +2683,7 @@
       "slug": "crew-mercenary-band-t1",
       "name": "Crew Type: Mercenary Band (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
       "folder": "Mercenary Band",
       "system": {
         "description": {
@@ -2752,7 +2752,7 @@
       "slug": "crew-mercenary-band-t2",
       "name": "Crew Type: Mercenary Band (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
       "folder": "Mercenary Band",
       "system": {
         "description": {
@@ -2821,7 +2821,7 @@
       "slug": "crew-mercenary-band-t3",
       "name": "Crew Type: Mercenary Band (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
       "folder": "Mercenary Band",
       "system": {
         "description": {
@@ -2887,7 +2887,7 @@
       "slug": "crew-mercenary-band-t4",
       "name": "Crew Type: Mercenary Band (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
       "folder": "Mercenary Band",
       "system": {
         "description": {
@@ -2956,7 +2956,7 @@
       "slug": "crew-peacekeeper-corps",
       "name": "Crew Type: Peacekeeper Corps",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "img": "icons/sundries/misc/badge-law-sheriff.webp",
       "folder": "Peacekeeper Corps",
       "system": {
         "description": {
@@ -3019,7 +3019,7 @@
       "slug": "crew-peacekeeper-corps-t1",
       "name": "Crew Type: Peacekeeper Corps (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "img": "icons/sundries/misc/badge-law-sheriff.webp",
       "folder": "Peacekeeper Corps",
       "system": {
         "description": {
@@ -3086,7 +3086,7 @@
       "slug": "crew-peacekeeper-corps-t2",
       "name": "Crew Type: Peacekeeper Corps (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "img": "icons/sundries/misc/badge-law-sheriff.webp",
       "folder": "Peacekeeper Corps",
       "system": {
         "description": {
@@ -3154,7 +3154,7 @@
       "slug": "crew-peacekeeper-corps-t3",
       "name": "Crew Type: Peacekeeper Corps (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "img": "icons/sundries/misc/badge-law-sheriff.webp",
       "folder": "Peacekeeper Corps",
       "system": {
         "description": {
@@ -3229,7 +3229,7 @@
       "slug": "crew-peacekeeper-corps-t4",
       "name": "Crew Type: Peacekeeper Corps (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "img": "icons/sundries/misc/badge-law-sheriff.webp",
       "folder": "Peacekeeper Corps",
       "system": {
         "description": {
@@ -3301,7 +3301,7 @@
       "slug": "crew-storm-wardens",
       "name": "Crew Type: Storm Wardens",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "img": "icons/magic/lightning/bolt-cloud-sky-white.webp",
       "folder": "Storm Wardens",
       "system": {
         "description": {
@@ -3368,7 +3368,7 @@
       "slug": "crew-storm-wardens-t1",
       "name": "Crew Type: Storm Wardens (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "img": "icons/magic/lightning/bolt-cloud-sky-white.webp",
       "folder": "Storm Wardens",
       "system": {
         "description": {
@@ -3452,7 +3452,7 @@
       "slug": "crew-storm-wardens-t2",
       "name": "Crew Type: Storm Wardens (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "img": "icons/magic/lightning/bolt-cloud-sky-white.webp",
       "folder": "Storm Wardens",
       "system": {
         "description": {
@@ -3523,7 +3523,7 @@
       "slug": "crew-storm-wardens-t3",
       "name": "Crew Type: Storm Wardens (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "img": "icons/magic/lightning/bolt-cloud-sky-white.webp",
       "folder": "Storm Wardens",
       "system": {
         "description": {
@@ -3600,7 +3600,7 @@
       "slug": "crew-storm-wardens-t4",
       "name": "Crew Type: Storm Wardens (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "img": "icons/magic/lightning/bolt-cloud-sky-white.webp",
       "folder": "Storm Wardens",
       "system": {
         "description": {
@@ -3676,7 +3676,7 @@
       "slug": "crew-survivors-militia",
       "name": "Crew Type: Survivors / Militia",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "img": "icons/environment/people/group.webp",
       "folder": "Survivors/Militia",
       "system": {
         "description": {
@@ -3747,7 +3747,7 @@
       "slug": "crew-survivors-militia-t1",
       "name": "Crew Type: Survivors / Militia (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "img": "icons/environment/people/group.webp",
       "folder": "Survivors/Militia",
       "system": {
         "description": {
@@ -3819,7 +3819,7 @@
       "slug": "crew-survivors-militia-t2",
       "name": "Crew Type: Survivors / Militia (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "img": "icons/environment/people/group.webp",
       "folder": "Survivors/Militia",
       "system": {
         "description": {
@@ -3885,7 +3885,7 @@
       "slug": "crew-survivors-militia-t3",
       "name": "Crew Type: Survivors / Militia (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "img": "icons/environment/people/group.webp",
       "folder": "Survivors/Militia",
       "system": {
         "description": {
@@ -3956,7 +3956,7 @@
       "slug": "crew-survivors-militia-t4",
       "name": "Crew Type: Survivors / Militia (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "img": "icons/environment/people/group.webp",
       "folder": "Survivors/Militia",
       "system": {
         "description": {
@@ -4026,7 +4026,7 @@
       "slug": "crew-verdant-stalkers",
       "name": "Crew Type: Verdant Stalkers",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
       "folder": "Verdant Stalkers",
       "system": {
         "description": {
@@ -4088,7 +4088,7 @@
       "slug": "crew-verdant-stalkers-t1",
       "name": "Crew Type: Verdant Stalkers (Tier 1)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
       "folder": "Verdant Stalkers",
       "system": {
         "description": {
@@ -4160,7 +4160,7 @@
       "slug": "crew-verdant-stalkers-t2",
       "name": "Crew Type: Verdant Stalkers (Tier 2)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
       "folder": "Verdant Stalkers",
       "system": {
         "description": {
@@ -4234,7 +4234,7 @@
       "slug": "crew-verdant-stalkers-t3",
       "name": "Crew Type: Verdant Stalkers (Tier 3)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
       "folder": "Verdant Stalkers",
       "system": {
         "description": {
@@ -4303,7 +4303,7 @@
       "slug": "crew-verdant-stalkers-t4",
       "name": "Crew Type: Verdant Stalkers (Tier 4)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
       "folder": "Verdant Stalkers",
       "system": {
         "description": {

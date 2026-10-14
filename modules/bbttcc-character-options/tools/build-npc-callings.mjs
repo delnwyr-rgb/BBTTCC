@@ -24,7 +24,7 @@ const ROMAN      = { 1: "I", 2: "II", 3: "III", 4: "IV" };
 const CALLINGS = [
   {
     key: "bravo", code: "brv", name: "Bravo", faculty: "violence",
-    img: "icons/svg/sword.svg", pool: "Violence",
+    img: "icons/skills/melee/strike-sword-steel-yellow.webp", pool: "Violence",
     signature: "melee", secondary: "brawl",
     flavor: "Somebody has to stand where the trouble is.",
     umbrella: "guard, soldier, bandit, bouncer, duelist, caravan outrider",
@@ -45,7 +45,7 @@ const CALLINGS = [
   },
   {
     key: "operator", code: "opr", name: "Operator", faculty: "intrigue",
-    img: "icons/svg/cowled.svg", pool: "Intrigue",
+    img: "icons/skills/trades/security-lockpicking-chest-blue.webp", pool: "Intrigue",
     signature: "stealth", secondary: "streetwise",
     flavor: "Everything's a door if you hold it right.",
     umbrella: "thief, smuggler, spy, courier, fence, hacker, fixer",
@@ -66,7 +66,7 @@ const CALLINGS = [
   },
   {
     key: "broker", code: "brk", name: "Broker", faculty: "presence",
-    img: "icons/svg/sound.svg", pool: "Diplomacy or Soft Power (GM picks by job)",
+    img: "icons/tools/hand/scale-balances-merchant-brown.webp", pool: "Diplomacy or Soft Power (GM picks by job)",
     signature: "diplomacy", secondary: "empathy",
     flavor: "There is no problem two reasonable parties can't monetize.",
     umbrella: "merchant, envoy, entertainer, cult recruiter, gang face",
@@ -87,7 +87,7 @@ const CALLINGS = [
   },
   {
     key: "stalwart", code: "stw", name: "Stalwart", faculty: "body",
-    img: "icons/svg/anchor.svg", pool: "Economy",
+    img: "icons/skills/trades/smithing-anvil-brown.webp", pool: "Economy",
     signature: "athletics", secondary: "plating",
     flavor: "The Shattering didn't end the work. Nothing ends the work.",
     umbrella: "laborer, teamster, forager, wall-crew, rig-hand, survivor",
@@ -108,7 +108,7 @@ const CALLINGS = [
   },
   {
     key: "savant", code: "sav", name: "Savant", faculty: "mind",
-    img: "icons/svg/book.svg", pool: "Economy or Soft Power (GM picks by job)",
+    img: "icons/skills/trades/academics-book-study-runes.webp", pool: "Economy or Soft Power (GM picks by job)",
     signature: "lore", secondary: "investigation",
     flavor: "It's not obscure. You just haven't read it.",
     umbrella: "scholar, engineer, medic, archivist, detective, translator",
@@ -129,7 +129,7 @@ const CALLINGS = [
   },
   {
     key: "keeper", code: "kpr", name: "Keeper", faculty: "soul",
-    img: "icons/svg/temple.svg", pool: "Soft Power",
+    img: "icons/environment/settlement/temple-night.webp", pool: "Soft Power",
     signature: "faith", secondary: "insight",
     flavor: "The dead are fine. It's the living who need tending.",
     umbrella: "priest, ritualist, medium, hedge-warden, funeral speaker",

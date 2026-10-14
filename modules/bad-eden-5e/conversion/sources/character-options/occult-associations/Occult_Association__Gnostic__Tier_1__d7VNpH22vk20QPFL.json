@@ -76,7 +76,7 @@
       "name": "Occult Tier1 Proficiencies",
       "disabled": false,
       "transfer": true,
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "img": "icons/skills/social/symbol-pyramid-eye.webp",
       "_id": "3MI7aYnvakMu0F2o",
       "type": "base",
       "system": {
@@ -119,7 +119,7 @@
       "_key": "!items.effects!d7VNpH22vk20QPFL.3MI7aYnvakMu0F2o"
     }
   ],
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+  "img": "icons/skills/social/symbol-pyramid-eye.webp",
   "folder": "cAJvL0bsu1HkZCWz",
   "_stats": {
     "compendiumSource": "Item.qOiOQ3sJVEH5psUH",

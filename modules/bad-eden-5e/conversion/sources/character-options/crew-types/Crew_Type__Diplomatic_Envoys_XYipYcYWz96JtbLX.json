@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Diplomatic Envoys",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+  "img": "icons/skills/social/diplomacy-peace-alliance.webp",
   "system": {
     "activities": {},
     "uses": {

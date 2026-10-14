@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Abyssal Cartographers (Tier 4)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+  "img": "icons/tools/navigation/map-marked-black.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 4 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You no longer discover secret routes. You administer a second geography.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Your faction gains strong regional control over hidden route logic in water- and cavern-linked terrain. Travel becomes more flexible for allies, less predictable for enemies, and deep-route discoveries yield greater long-term value.</li></ul>",

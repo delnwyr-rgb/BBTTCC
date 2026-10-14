@@ -2,7 +2,7 @@
   "_id": "becallingbrv0cls",
   "name": "Bravo",
   "type": "class",
-  "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+  "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
   "system": {
     "category": "calling",
     "identifier": "calling-bravo",

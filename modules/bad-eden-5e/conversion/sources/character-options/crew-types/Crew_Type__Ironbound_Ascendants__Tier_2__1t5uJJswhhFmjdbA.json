@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Ironbound Ascendants (Tier 2)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+  "img": "icons/environment/settlement/watchtower-cliff.webp",
   "system": {
     "description": {
       "value": "<p><strong>Tier 2 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve stopped crossing high ground and started governing it.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When defending from Mountains or Highlands, your faction gains a meaningful positional edge. Raids and hostile actions launched uphill against you are harder to execute cleanly.</li></ul>",

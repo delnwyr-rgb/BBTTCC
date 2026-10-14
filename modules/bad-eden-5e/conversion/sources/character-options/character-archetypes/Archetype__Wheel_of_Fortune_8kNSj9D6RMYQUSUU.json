@@ -1,7 +1,7 @@
 {
   "name": "Archetype: Wheel of Fortune",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_wheel_of_fortune.png",
+  "img": "icons/tools/nautical/steering-wheel.webp",
   "system": {
     "activities": {},
     "uses": {

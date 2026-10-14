@@ -2,7 +2,7 @@
   "_id": "becallingstw0cls",
   "name": "Stalwart",
   "type": "class",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+  "img": "icons/skills/trades/smithing-anvil-brown.webp",
   "system": {
     "category": "calling",
     "identifier": "calling-stalwart",

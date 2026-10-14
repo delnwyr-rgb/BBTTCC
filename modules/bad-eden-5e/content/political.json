@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-11",
+    "at": "2026-10-14",
     "overridesApplied": 0
   },
   "items": [
@@ -12,7 +12,7 @@
       "slug": "political-affiliation-anarchist",
       "name": "Political Affiliation: Anarchist",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/skills/melee/unarmed-punch-fist-yellow-red.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -55,7 +55,7 @@
       "slug": "political-affiliation-corporate-loyalist",
       "name": "Political Affiliation: Corporate Loyalist",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/commodities/currency/money-cash-green.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -98,7 +98,7 @@
       "slug": "political-affiliation-democratic-socialist",
       "name": "Political Affiliation: Democratic Socialist",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/skills/social/diplomacy-unity-alliance.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -141,7 +141,7 @@
       "slug": "political-affiliation-environmentalist",
       "name": "Political Affiliation: Environmentalist",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/magic/nature/leaf-oak-glow-green.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -184,7 +184,7 @@
       "slug": "political-affiliation-fascist",
       "name": "Political Affiliation: Fascist",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/sundries/flags/banner-symbol-axe-red.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -227,7 +227,7 @@
       "slug": "political-affiliation-liberal",
       "name": "Political Affiliation: Liberal",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/skills/social/diplomacy-handshake-blue.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -270,7 +270,7 @@
       "slug": "political-affiliation-libertarian",
       "name": "Political Affiliation: Libertarian",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/sundries/misc/lock-open-yellow.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -313,7 +313,7 @@
       "slug": "political-affiliation-monarchist",
       "name": "Political Affiliation: Monarchist",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/equipment/head/crown-gold-blue.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -356,7 +356,7 @@
       "slug": "political-affiliation-nationalist",
       "name": "Political Affiliation: Nationalist",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/sundries/flags/banner-flag-red-white.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -399,7 +399,7 @@
       "slug": "political-affiliation-oligarch-militarist-coalition",
       "name": "Political Affiliation: Oligarch/Militarist Coalition",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/magic/death/skull-humanoid-crown-white-blue.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -436,7 +436,7 @@
       "slug": "political-affiliation-progressive",
       "name": "Political Affiliation: Progressive",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/magic/time/arrows-circling-green.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -479,7 +479,7 @@
       "slug": "political-affiliation-reactionary",
       "name": "Political Affiliation: Reactionary",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/magic/time/hourglass-brown-orange.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {
@@ -522,7 +522,7 @@
       "slug": "political-affiliation-technocrat",
       "name": "Political Affiliation: Technocrat",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_3.png",
+      "img": "icons/commodities/tech/cog-gear-steel-glass.webp",
       "folder": "Political Affiliations",
       "system": {
         "description": {

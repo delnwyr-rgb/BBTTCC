@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Abyssal Cartographers",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+  "img": "icons/tools/navigation/map-marked-black.webp",
   "system": {
     "activities": {},
     "uses": {

@@ -2,7 +2,7 @@
   "_id": "becallingbrk0t02",
   "name": "Broker — Initiate (Tier II)",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+  "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
   "system": {
     "category": "calling",
     "source": "Callings",

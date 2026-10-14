@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Storm Wardens",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+  "img": "icons/magic/lightning/bolt-cloud-sky-white.webp",
   "system": {
     "activities": {},
     "uses": {

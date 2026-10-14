@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-11",
+    "at": "2026-10-14",
     "overridesApplied": 0
   },
   "items": [
@@ -12,7 +12,7 @@
       "slug": "alignment-binah",
       "name": "Alignment: Binah",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "img": "icons/magic/earth/barrier-stone-pillar-purple.webp",
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
@@ -56,7 +56,7 @@
       "slug": "alignment-chesed",
       "name": "Alignment: Chesed",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dwarf.png",
+      "img": "icons/magic/nature/plant-seed-hands-glow-yellow.webp",
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
@@ -100,7 +100,7 @@
       "slug": "alignment-chokmah",
       "name": "Alignment: Chokmah",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_staff.png",
+      "img": "icons/weapons/staves/staff-blue-jewel.webp",
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
@@ -144,7 +144,7 @@
       "slug": "alignment-geburah",
       "name": "Alignment: Geburah",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_1.png",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
@@ -188,7 +188,7 @@
       "slug": "alignment-hod",
       "name": "Alignment: Hod",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_1.png",
+      "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
@@ -232,7 +232,7 @@
       "slug": "alignment-kether",
       "name": "Alignment: Kether",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-1.png",
+      "img": "icons/commodities/treasure/crown-gold-laurel-wreath.webp",
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
@@ -276,7 +276,7 @@
       "slug": "alignment-malkuth",
       "name": "Alignment: Malkuth",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_throne_1.png",
+      "img": "icons/environment/settlement/city-hall.webp",
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
@@ -320,7 +320,7 @@
       "slug": "alignment-netzach",
       "name": "Alignment: Netzach",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heart_1.png",
+      "img": "icons/magic/life/heart-glowing-red.webp",
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
@@ -364,7 +364,7 @@
       "slug": "alignment-tiphareth",
       "name": "Alignment: Tiphareth",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+      "img": "icons/equipment/neck/necklace-astrology-sun-gold.webp",
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {

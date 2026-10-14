@@ -1,7 +1,7 @@
 {
   "name": "Crew Type: Peacekeeper Corps (Tier 1)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+  "img": "icons/sundries/misc/badge-law-sheriff.webp",
   "system": {
     "category": "technique",
     "source": {
@@ -74,7 +74,7 @@
     {
       "_id": "264f8f132eec45dd",
       "name": "Crew Type Tier 1 Proficiencies",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_asteroid.png",
+      "img": "icons/sundries/misc/badge-law-sheriff.webp",
       "type": "base",
       "system": {
         "changes": [
