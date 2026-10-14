@@ -1,7 +1,7 @@
 {
   "name": "Abacus Gauntlet",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_abacus_gauntlet.jpeg",
+  "img": "icons/equipment/hand/gauntlet-clawed-steel-blue.webp",
   "system": {
     "description": {
       "value": "<p>Adds +1 bonus on Economy/Logistics checks; once per a Soma Break, negate a single 'shortfall' penalty during a raid prep.</p>",

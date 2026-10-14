@@ -1,7 +1,7 @@
 {
   "name": "Develop Outpost (Stability)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_develop_outpost.jpeg",
+  "img": "icons/environment/traps/spiked-wall.webp",
   "system": {
     "description": {
       "value": "<p><b>Develop Outpost (Stability)</b></p><p>Stabilize a young outpost: clear hazards, patrol, and build trust.</p><p><b>Cost:</b> Nonlethal 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>develop_outpost_stability</code></p>",

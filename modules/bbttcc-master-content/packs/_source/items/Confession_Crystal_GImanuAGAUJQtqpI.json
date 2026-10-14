@@ -1,7 +1,7 @@
 {
   "name": "Confession Crystal",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_crystal_4.png",
+  "img": "icons/equipment/finger/ring-crown-crystal.webp",
   "system": {
     "slot": "wondrous",
     "tags": [

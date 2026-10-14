@@ -1,7 +1,7 @@
 {
   "name": "Witness-Decoy Pin",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/enamel_pin_3.png",
+  "img": "icons/tools/fasteners/pin-spiked.webp",
   "system": {
     "slot": "misc",
     "tags": [

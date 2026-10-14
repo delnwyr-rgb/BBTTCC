@@ -1,7 +1,7 @@
 {
   "name": "Upgrade Outpost → Settlement",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_upgrade_outpost.jpeg",
+  "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_settlement.webp",
   "system": {
     "description": {
       "value": "<p><b>Upgrade Outpost → Settlement</b></p><p>Invest heavily to turn an outpost into a village-scale settlement.</p><p><b>Cost:</b> Economy 3 • Logistics 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>upgrade_outpost_settlement</code></p>",

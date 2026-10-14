@@ -1,7 +1,7 @@
 {
   "name": "The Last Working Vending Machine in Bad Eden (Portable Kit)",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/tech_vending_machine.png",
+  "img": "icons/commodities/tech/cog-gear-steel-glass.webp",
   "system": {
     "slot": "tool",
     "tags": [

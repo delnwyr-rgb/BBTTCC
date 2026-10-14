@@ -2,7 +2,7 @@
   "_id": "ftsurge000000002",
   "name": "Snap Strike",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_blade_1.png",
+  "img": "icons/skills/melee/strike-blade-hooked-blue-red.webp",
   "system": {
     "category": "principle",
     "source": "Surge",

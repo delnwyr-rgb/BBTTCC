@@ -1,7 +1,7 @@
 {
   "name": "Alloy of Trust",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_5.png",
+  "img": "icons/tools/hand/wrench-mechanical-heal-blue.webp",
   "system": {
     "category": "technique",
     "source": {

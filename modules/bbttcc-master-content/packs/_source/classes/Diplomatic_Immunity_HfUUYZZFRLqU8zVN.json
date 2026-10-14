@@ -1,7 +1,7 @@
 {
   "name": "Diplomatic Immunity",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bunker_3.png",
+  "img": "icons/sundries/documents/document-symbol-eye.webp",
   "system": {
     "category": "technique",
     "source": {

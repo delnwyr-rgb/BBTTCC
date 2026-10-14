@@ -1,7 +1,7 @@
 {
   "name": "Menhirkin (Igneous): Magma Memory",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_volcano.png",
+  "img": "icons/magic/earth/projectiles-magma-stone-orange.webp",
   "system": {
     "category": "technique",
     "source": {

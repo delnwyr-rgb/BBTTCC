@@ -1,7 +1,7 @@
 {
   "name": "Propaganda Campaign",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_propaganda_campaign.jpeg",
+  "img": "icons/magic/defensive/armor-green-hex.webp",
   "system": {
     "description": {
       "value": "<p><b>Propaganda Campaign</b></p><p><b>Cost:</b> Diplomacy 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>propaganda_campaign</code></p>",

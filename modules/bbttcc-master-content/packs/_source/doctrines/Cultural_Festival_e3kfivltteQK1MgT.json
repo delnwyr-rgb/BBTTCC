@@ -1,7 +1,7 @@
 {
   "name": "Cultural Festival",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_cultural_festival.jpeg",
+  "img": "icons/skills/ranged/target-bullseye-arrow-blue.webp",
   "system": {
     "description": {
       "value": "<p><b>Cultural Festival</b></p><p><b>Cost:</b> Culture 2 • Faith 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>cultural_festival_std</code></p>",

@@ -2,13 +2,13 @@
   "_id": "iIcYhYyA4LhD1Ei2",
   "name": "Cosmic Linguist: Resonance Channel",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shockwave.png",
+  "img": "icons/skills/melee/strike-blade-scimitar-green-purple.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Originals (2026 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>The Edit \u2014 Surge spends, allocated in the cast dialog.</strong></p><ul><li><strong>Emphasis (1)</strong> \u2014 your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li><li><strong>Stabilize (2)</strong> \u2014 you gain DR equal to Tier; your next cast resists counter/dispel (the sentence holds).</li><li><strong>Impose a Reading (3)</strong> \u2014 a foe's next attack and its saves are at disadvantage: in the dialog this raises your working's save DC and forces the target to roll 3d10 keep-lowest-2. Only one correct interpretation: yours.</li><li><strong>Rewrite the Sentence (5)</strong> \u2014 a foe loses its reactions and rolls saves at disadvantage; allies near you bank a reroll.</li></ul><p>These are the old Resonance channels spoken in the one currency: <strong>Surge</strong>. <strong>The Sentence</strong> (Initiation 11) endures as your signature stance on top of them.</p>",
+      "value": "<p><strong>The Edit — Surge spends, allocated in the cast dialog.</strong></p><ul><li><strong>Emphasis (1)</strong> — your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li><li><strong>Stabilize (2)</strong> — you gain DR equal to Tier; your next cast resists counter/dispel (the sentence holds).</li><li><strong>Impose a Reading (3)</strong> — a foe's next attack and its saves are at disadvantage: in the dialog this raises your working's save DC and forces the target to roll 3d10 keep-lowest-2. Only one correct interpretation: yours.</li><li><strong>Rewrite the Sentence (5)</strong> — a foe loses its reactions and rolls saves at disadvantage; allies near you bank a reroll.</li></ul><p>These are the old Resonance channels spoken in the one currency: <strong>Surge</strong>. <strong>The Sentence</strong> (Initiation 11) endures as your signature stance on top of them.</p>",
       "chat": ""
     },
     "identifier": "cosmic_linguist_resonance_channel",

@@ -1,7 +1,7 @@
 {
   "name": "Inquisition Mandate",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_inquisition_mandate.jpeg",
+  "img": "icons/magic/holy/prayer-hands-glowing-yellow-green.webp",
   "system": {
     "description": {
       "value": "<p><b>Inquisition Mandate</b></p><p>Expose Qliphothic assets; Darkness −1.</p><p><b>Cost:</b> Intrigue 2 • Faith 4</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>inquisition_mandate</code></p>",

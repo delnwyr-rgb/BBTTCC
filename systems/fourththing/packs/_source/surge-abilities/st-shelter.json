@@ -2,7 +2,7 @@
   "_id": "ftsurge000000108",
   "name": "Shield the Vulnerable",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_shield_1.png",
+  "img": "icons/magic/defensive/shield-barrier-glowing-triangle-magenta.webp",
   "system": {
     "category": "principle",
     "source": "Surge",

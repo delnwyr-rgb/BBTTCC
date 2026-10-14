@@ -1,7 +1,7 @@
 {
   "name": "Human (Florensis): Burrow Memory",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tunnel_2.png",
+  "img": "icons/creatures/eyes/human-single-blue.webp",
   "system": {
     "category": "technique",
     "source": {

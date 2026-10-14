@@ -1,7 +1,7 @@
 {
   "name": "Decay Inhibitor",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_crystal_2.png",
+  "img": "icons/equipment/neck/pendant-gold-crystal-blue.webp",
   "system": {
     "slot": "consumable",
     "tags": [

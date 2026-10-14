@@ -1,7 +1,7 @@
 {
   "name": "Empathic Surge",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_empathic_surge.jpeg",
+  "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
   "system": {
     "category": "technique",
     "source": {

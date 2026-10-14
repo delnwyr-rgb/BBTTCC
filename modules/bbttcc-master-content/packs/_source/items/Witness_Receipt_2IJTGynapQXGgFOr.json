@@ -1,7 +1,7 @@
 {
   "name": "Witness Receipt",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_receipt.png",
+  "img": "icons/sundries/documents/document-sealed-red-white.webp",
   "system": {
     "slot": "trinket",
     "tags": [

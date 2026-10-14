@@ -1,7 +1,7 @@
 {
   "name": "Defensive Entrenchment",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_defensive_entrenchment.png",
+  "img": "icons/magic/defensive/shield-barrier-glowing-triangle-orange.webp",
   "system": {
     "category": "technique",
     "source": {

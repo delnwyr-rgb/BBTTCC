@@ -1,7 +1,7 @@
 {
   "name": "Proselyte Recon Drone",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_proselyte_recon_drone.jpeg",
+  "img": "icons/equipment/head/tech-steel-mask.webp",
   "system": {
     "description": {
       "value": "<p>Orb drone with omnidirectional eyes. reroll the lowest die on Stealth (Intrigue) (Intrigue) while surveilling; can project Minor Illusion (at will) [TODO(adv-call)].</p>",
@@ -62,7 +62,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 2.0,
+            "rarityMult": 2,
             "notes": "TII tool stamp × rarity 2.0 (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 72

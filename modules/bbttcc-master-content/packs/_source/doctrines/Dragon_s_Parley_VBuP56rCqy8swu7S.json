@@ -1,7 +1,7 @@
 {
   "name": "Dragon’s Parley",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_dragons_parley.png",
+  "img": "icons/magic/holy/prayer-hands-glowing-yellow-white.webp",
   "system": {
     "description": {
       "value": "<p><b>Dragon’s Parley</b></p><p>Negotiate with Ego-Dragon fragment; if successful, Darkness −3.</p><p><b>Cost:</b> Diplomacy 8 • Faith 5</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>dragon_s_parley</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Archivist's Spectacles",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_archivist_spectacles.jpeg",
+  "img": "icons/tools/scribal/spectacles-glasses.webp",
   "system": {
     "description": {
       "value": "<p>Advantage to investigate ruins; once/day auto‑succeed to find a hidden cache in Urban Wreckage.</p>",

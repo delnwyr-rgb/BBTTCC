@@ -1,7 +1,7 @@
 {
   "name": "Whataburger Coupon, Unredeemed (Vintage)",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/whataburger_coupon2.png",
+  "img": "icons/commodities/currency/coins-shield-sword-stack-silver.webp",
   "system": {
     "slot": "trinket",
     "tags": [

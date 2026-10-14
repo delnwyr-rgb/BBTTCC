@@ -1,7 +1,7 @@
 {
   "name": "Resource Expropriation",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_resource_expropriation.jpeg",
+  "img": "icons/skills/trades/security-locksmith-key-gray.webp",
   "system": {
     "description": {
       "value": "<p><b>Resource Expropriation</b></p><p>Steal +2 Economy from enemy; Darkness +1.</p><p><b>Cost:</b> Violence 2 • Economy 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>resource_expropriation</code></p>",

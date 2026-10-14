@@ -1,7 +1,7 @@
 {
   "name": "Mass Mobilization",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_mass_mobilization.jpeg",
+  "img": "icons/magic/control/debuff-energy-snare-purple-blue.webp",
   "system": {
     "description": {
       "value": "<p><b>Mass Mobilization</b></p><p>+25% OP generation next turn, then −25%.</p><p><b>Cost:</b> Violence 6 • Economy 6</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>mass_mobilization</code></p>",

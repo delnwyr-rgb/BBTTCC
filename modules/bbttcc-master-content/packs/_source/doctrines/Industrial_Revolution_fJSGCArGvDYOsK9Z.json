@@ -1,7 +1,7 @@
 {
   "name": "Industrial Revolution",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_industrial_revolution.jpeg",
+  "img": "icons/magic/symbols/runes-carved-stone-green.webp",
   "system": {
     "description": {
       "value": "<p><b>Industrial Revolution</b></p><p>Double Economy output for 2 turns.</p><p><b>Cost:</b> Economy 4</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>industrial_revolution</code></p>",

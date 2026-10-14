@@ -1,7 +1,7 @@
 {
   "name": "Memory Resin",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_amber.png",
+  "img": "icons/commodities/gems/gem-amber-insect-orange.webp",
   "system": {
     "slot": "material",
     "tags": [

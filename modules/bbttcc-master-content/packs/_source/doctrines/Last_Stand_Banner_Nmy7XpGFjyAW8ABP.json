@@ -1,7 +1,7 @@
 {
   "name": "Last-Stand Banner",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_last_stand_banner.png",
+  "img": "icons/sundries/flags/banner-flag-pirate.webp",
   "system": {
     "category": "technique",
     "source": {

@@ -1,7 +1,7 @@
 {
   "name": "Oblivion Protocol",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_oblivion_protocol.jpeg",
+  "img": "icons/magic/symbols/mask-metal-silver-white.webp",
   "system": {
     "description": {
       "value": "<p><b>Oblivion Protocol</b></p><p>Collapse Qliphothic gate; resets Darkness Track to 0.</p><p><b>Cost:</b> Intrigue 8 • Faith 8</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>oblivion_protocol</code></p>",

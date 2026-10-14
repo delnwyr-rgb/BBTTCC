@@ -1,7 +1,7 @@
 {
   "name": "Demand Surrender",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_human_surrender_1.png",
+  "img": "icons/skills/ranged/target-bullseye-arrow-glowing.webp",
   "system": {
     "category": "strategic",
     "source": "Bad Eden Doctrine",

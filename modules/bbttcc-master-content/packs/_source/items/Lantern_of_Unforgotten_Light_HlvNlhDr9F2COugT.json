@@ -1,7 +1,7 @@
 {
   "name": "Lantern of Unforgotten Light",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_lantern_of_forgotten_light.jpeg",
+  "img": "icons/sundries/lights/lantern-steel.webp",
   "system": {
     "description": {
       "value": "<p><i>“Some memories refuse to stay buried.”</i></p><p><b>Glow.</b> While lit, allies within 20 ft have reroll the lowest die on checks to resist fear/despair effects sourced from Darkness (GM adjudication) [TODO(adv-call)].</p><p><b>Purge Pulse.</b> 1/a Soma Break. As an action, suppress 1 level of personal Darkness/Corruption effects on allies in 20 ft for 10 minutes.</p><p><b>Note:</b> Does not change faction Darkness.</p>",

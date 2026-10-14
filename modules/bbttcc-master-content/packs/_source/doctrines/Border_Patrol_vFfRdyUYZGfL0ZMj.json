@@ -1,7 +1,7 @@
 {
   "name": "Border Patrol",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_border_patrol.png",
+  "img": "icons/environment/people/group.webp",
   "system": {
     "description": {
       "value": "<p><b>Border Patrol</b></p><p>Prevent Infiltration attempts next turn.</p><p><b>Cost:</b> Violence 1 • Nonlethal 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>border_patrol</code></p>",

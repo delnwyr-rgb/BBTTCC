@@ -1,7 +1,7 @@
 {
   "name": "Human (Neanderthal): Hearth-Reader",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_1.png",
+  "img": "icons/skills/social/symbol-pyramid-eye.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden (2024 rules)",

@@ -1,7 +1,7 @@
 {
   "name": "Bulwark — Tier 1: Founding Stance",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_10.png",
+  "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",

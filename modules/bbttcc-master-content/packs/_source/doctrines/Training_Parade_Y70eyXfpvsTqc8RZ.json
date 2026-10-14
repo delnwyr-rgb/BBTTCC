@@ -1,7 +1,7 @@
 {
   "name": "Training Parade",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_training_parade.jpeg",
+  "img": "icons/sundries/flags/banner-sword-blue.webp",
   "system": {
     "description": {
       "value": "<p><b>Training Parade</b></p><p>+1 Morale for next Raid.</p><p><b>Cost:</b> Violence 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>training_parade</code></p>",

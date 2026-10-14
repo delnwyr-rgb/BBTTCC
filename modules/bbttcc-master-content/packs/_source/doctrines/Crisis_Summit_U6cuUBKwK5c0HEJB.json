@@ -1,7 +1,7 @@
 {
   "name": "Crisis Summit",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_crisis_summit.jpeg",
+  "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
   "system": {
     "description": {
       "value": "<p><b>Crisis Summit</b></p><p>Prevent Morale loss globally for 1 turn.</p><p><b>Cost:</b> Diplomacy 3 • Faith 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>crisis_summit</code></p>",

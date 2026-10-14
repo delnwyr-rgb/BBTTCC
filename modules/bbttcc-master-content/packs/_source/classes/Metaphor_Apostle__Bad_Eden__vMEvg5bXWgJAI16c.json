@@ -1,7 +1,7 @@
 {
   "name": "Metaphor Apostle (Bad Eden)",
   "type": "subclass",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_energy_connection.png",
+  "img": "icons/magic/symbols/mask-metal-silver-white.webp",
   "system": {
     "category": "doctrine",
     "classIdentifier": "cosmic_linguist",

@@ -1,7 +1,7 @@
 {
   "name": "Memory Restorative",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_6.png",
+  "img": "icons/commodities/biological/organ-brain-red.webp",
   "system": {
     "slot": "consumable",
     "tags": [

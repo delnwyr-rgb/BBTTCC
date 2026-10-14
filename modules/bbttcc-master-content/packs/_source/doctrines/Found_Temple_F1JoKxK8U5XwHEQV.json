@@ -1,7 +1,7 @@
 {
   "name": "Found Temple",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_found_temple.jpeg",
+  "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_temple.webp",
   "system": {
     "description": {
       "value": "<p><b>Found Temple</b></p><p>Found a new temple site at a developed settlement.</p><p><b>Cost:</b> Culture 1 • Faith 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>found_site_temple</code></p>",

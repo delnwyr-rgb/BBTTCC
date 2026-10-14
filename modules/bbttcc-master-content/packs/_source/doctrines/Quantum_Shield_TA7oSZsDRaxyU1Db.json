@@ -1,7 +1,7 @@
 {
   "name": "Quantum Shield",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_quantum_shield.png",
+  "img": "icons/magic/fire/barrier-shield-explosion-yellow.webp",
   "system": {
     "category": "technique",
     "source": {

@@ -1,7 +1,7 @@
 {
   "name": "Sephirotic Scion (Ophanic): The Wheel Never Stops",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_wheel.png",
+  "img": "icons/skills/melee/sword-winged-holy-orange.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",

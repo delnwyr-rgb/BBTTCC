@@ -1,7 +1,7 @@
 {
   "name": "Wardstone of Gevurah",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_wardstone_of_gevurah.jpeg",
+  "img": "icons/equipment/neck/necklace-simple-carved-stone.webp",
   "system": {
     "description": {
       "value": "<p>Socketed stone. Allies within 30 ft gain +1 to Guard while defending a hex; counts as 'fortified' for one encounter.</p>",

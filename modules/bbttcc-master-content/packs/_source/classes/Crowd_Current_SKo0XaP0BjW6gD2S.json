@@ -1,7 +1,7 @@
 {
   "name": "Crowd Current",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_crowd_control_1.png",
+  "img": "icons/environment/people/group.webp",
   "system": {
     "category": "technique",
     "source": {

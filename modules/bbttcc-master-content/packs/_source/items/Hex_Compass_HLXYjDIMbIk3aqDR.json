@@ -1,7 +1,7 @@
 {
   "name": "Hex Compass",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_hex_compass.jpeg",
+  "img": "icons/magic/symbols/rune-sigil-green-purple.webp",
   "system": {
     "description": {
       "value": "<p>When traveling overland, you can always determine the nearest aligned Hex of your faction.</p>",
@@ -62,7 +62,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI tool stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 12

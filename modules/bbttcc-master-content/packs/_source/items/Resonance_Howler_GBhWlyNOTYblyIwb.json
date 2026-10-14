@@ -1,7 +1,7 @@
 {
   "name": "Resonance Howler",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+  "img": "icons/weapons/artillery/cannon-energy-sonic.webp",
   "system": {
     "category": "ranged",
     "intent": "violence",

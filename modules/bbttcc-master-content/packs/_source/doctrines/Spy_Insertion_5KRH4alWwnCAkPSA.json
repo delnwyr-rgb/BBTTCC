@@ -1,7 +1,7 @@
 {
   "name": "Spy Insertion",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_spy_insertion.jpeg",
+  "img": "icons/sundries/documents/envelope-sealed-red-brown.webp",
   "system": {
     "description": {
       "value": "<p><b>Spy Insertion</b></p><p>Reveal enemy OP pools next turn.</p><p><b>Cost:</b> Intrigue 2 • Diplomacy 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>spy_insertion</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Finger-Bone",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_bone_2.png",
+  "img": "icons/commodities/bones/bone-spine-white.webp",
   "system": {
     "slot": "material",
     "tags": [

@@ -1,7 +1,7 @@
 {
   "name": "Cataclyst L17: Both Things At Once (Capstone)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wall_cut.png",
+  "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
   "system": {
     "category": "technique",
     "source": {

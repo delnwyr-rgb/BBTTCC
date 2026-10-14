@@ -1,7 +1,7 @@
 {
   "name": "Grapnel Spool",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_grapnel_spool.jpeg",
+  "img": "icons/sundries/survival/rope-coil-white.webp",
   "system": {
     "description": {
       "value": "<p>50‑ft mono‑filament grapnel; reroll the lowest die on climb/jump checks [TODO(adv-call)]; can pull Medium target (Str vs DC 13).</p>",

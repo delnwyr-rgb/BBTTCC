@@ -1,7 +1,7 @@
 {
   "name": "Mass Mobilization",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_people_2.png",
+  "img": "icons/magic/control/debuff-energy-snare-purple-blue.webp",
   "system": {
     "category": "strategic",
     "source": "Bad Eden Doctrine",

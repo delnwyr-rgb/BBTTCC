@@ -1,7 +1,7 @@
 {
   "name": "Circuitborn (Salvage Line): Scrap Alchemy",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_5.png",
+  "img": "icons/magic/symbols/mask-metal-silver-white.webp",
   "system": {
     "category": "technique",
     "source": {

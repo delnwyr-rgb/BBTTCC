@@ -1,7 +1,7 @@
 {
   "name": "Adrenal Burn",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/combat_stim_)2.jpeg",
+  "img": "icons/sundries/books/book-symbol-fire-gold-orange.webp",
   "system": {
     "slot": "consumable",
     "tags": [

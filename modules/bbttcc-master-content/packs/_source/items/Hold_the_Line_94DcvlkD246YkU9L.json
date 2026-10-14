@@ -1,7 +1,7 @@
 {
   "name": "Hold the Line",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_hold_the_line.png",
+  "img": "icons/magic/control/silhouette-hold-beam-blue.webp",
   "system": {
     "category": "technique",
     "source": {

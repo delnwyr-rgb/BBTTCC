@@ -1,7 +1,7 @@
 {
   "name": "Bolt-Driver",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_heavy_crossbow.png",
+  "img": "icons/weapons/crossbows/crossbow-golden-bolt.webp",
   "system": {
     "category": "ranged",
     "intent": "violence",

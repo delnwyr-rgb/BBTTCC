@@ -1,7 +1,7 @@
 {
   "name": "Fortify Hex",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_hex_reinforcement.png",
+  "img": "icons/magic/defensive/shield-hex-red.webp",
   "system": {
     "description": {
       "value": "<p><b>Fortify Hex</b></p><p><b>Cost:</b> Violence 1 • Economy 2 • Logistics 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>fortify_hex</code></p>",

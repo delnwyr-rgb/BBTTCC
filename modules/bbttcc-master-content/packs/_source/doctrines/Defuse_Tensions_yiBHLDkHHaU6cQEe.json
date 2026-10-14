@@ -1,7 +1,7 @@
 {
   "name": "Defuse Tensions",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_defuse_tensions.png",
+  "img": "icons/magic/defensive/armor-green-hex.webp",
   "system": {
     "description": {
       "value": "<p><b>Defuse Tensions</b></p><p><b>Cost:</b> Diplomacy 2 • Culture 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>defuse_tensions</code></p>",

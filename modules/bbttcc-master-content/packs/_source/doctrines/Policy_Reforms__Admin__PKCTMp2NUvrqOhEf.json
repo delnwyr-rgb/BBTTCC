@@ -1,7 +1,7 @@
 {
   "name": "Policy Reforms (Admin)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_policy_reforms_admin.jpeg",
+  "img": "icons/sundries/flags/banner-flag-pink.webp",
   "system": {
     "description": {
       "value": "<p><b>Policy Reforms (Admin)</b></p><p><b>Cost:</b> Economy 2 • Diplomacy 1 • Logistics 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>policy_reforms</code></p>",

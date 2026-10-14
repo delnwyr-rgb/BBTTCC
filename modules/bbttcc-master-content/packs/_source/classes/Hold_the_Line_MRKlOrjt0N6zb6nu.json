@@ -1,7 +1,7 @@
 {
   "name": "Hold the Line",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_siege_3.png",
+  "img": "icons/magic/control/silhouette-hold-beam-blue.webp",
   "system": {
     "category": "technique",
     "source": {

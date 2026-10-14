@@ -1,7 +1,7 @@
 {
   "name": "S'narchy Burger Mascot's Final Smile",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/snarky_burger_pin2.png",
+  "img": "icons/commodities/currency/coin-engraved-sun-smile-copper.webp",
   "system": {
     "slot": "trinket",
     "tags": [

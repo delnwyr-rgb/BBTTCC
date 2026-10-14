@@ -1,7 +1,7 @@
 {
   "name": "Circuitborn (Exo-Knight Line): Siegebreaker Frame",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_breaker_wall_3.png",
+  "img": "icons/magic/water/barrier-ice-crystal-wall-jagged.webp",
   "system": {
     "category": "technique",
     "source": {

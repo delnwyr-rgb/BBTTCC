@@ -1,7 +1,7 @@
 {
   "name": "Sephirotic Lens",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/sephirotic_hex.png",
+  "img": "icons/tools/scribal/lens-grey-brown.webp",
   "system": {
     "slot": "lens",
     "tags": [

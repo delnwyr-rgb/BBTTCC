@@ -1,7 +1,7 @@
 {
   "name": "Quipu Ledger Strap",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_quipu_ledger_strap.jpeg",
+  "img": "icons/sundries/survival/leather-strap-brown.webp",
   "system": {
     "description": {
       "value": "<p>Knotted cord mnemonic. You always recall last 10 War Log entries precisely; +1 to Economy checks to audit supplies.</p>",
@@ -62,7 +62,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI talisman stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 24

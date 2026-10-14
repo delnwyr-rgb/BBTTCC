@@ -1,7 +1,7 @@
 {
   "name": "Crowd-Calmer Beacon",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_crowd_calming_beacon.jpeg",
+  "img": "icons/sundries/lights/lantern-bullseye-signal-copper.webp",
   "system": {
     "description": {
       "value": "<p>Action: emit soothing tone (Calm Emotions, DC 14) in 60‑ft radius; 3 charges/day.</p>",

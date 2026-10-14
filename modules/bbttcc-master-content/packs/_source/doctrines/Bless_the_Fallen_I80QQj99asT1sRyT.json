@@ -1,7 +1,7 @@
 {
   "name": "Bless the Fallen",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_bless_the_fallen.jpeg",
+  "img": "icons/skills/melee/sword-winged-holy-orange.webp",
   "system": {
     "category": "technique",
     "source": {

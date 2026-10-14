@@ -2,7 +2,7 @@
   "_id": "ftsurge000000027",
   "name": "Mythic Stand",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/bbttcc_icons_titanbound_1.png",
+  "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
   "system": {
     "category": "principle",
     "source": "Surge",

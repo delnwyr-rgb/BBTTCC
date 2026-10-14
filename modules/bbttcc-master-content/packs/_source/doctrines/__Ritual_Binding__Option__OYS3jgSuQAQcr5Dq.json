@@ -1,7 +1,7 @@
 {
   "name": "⭐ Ritual Binding [Option]",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+  "img": "icons/magic/fire/dagger-rune-enchant-flame-strong-purple-pink.webp",
   "system": {
     "description": {
       "value": "<p><b>⭐ Ritual Binding [Option]</b></p><p><b>Cost:</b> Intrigue 2 • Faith 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>optact_ritual_binding</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Defender’s Reversal",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_defenders_reversal.png",
+  "img": "icons/environment/wilderness/terrain-rocky-ground.webp",
   "system": {
     "category": "technique",
     "source": {

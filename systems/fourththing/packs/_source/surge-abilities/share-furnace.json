@@ -2,7 +2,7 @@
   "_id": "ftsurge000000031",
   "name": "Furnace of Renewal",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_furnace_2.png",
+  "img": "icons/commodities/tech/furnace-modern.webp",
   "system": {
     "category": "principle",
     "source": "Surge",

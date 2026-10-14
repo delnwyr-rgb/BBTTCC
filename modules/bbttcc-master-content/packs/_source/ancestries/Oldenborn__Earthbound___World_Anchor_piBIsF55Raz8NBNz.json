@@ -1,7 +1,7 @@
 {
   "name": "Oldenborn (Earthbound): World-Anchor",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_globe_2.png",
+  "img": "icons/skills/social/handshake.webp",
   "system": {
     "category": "technique",
     "source": {

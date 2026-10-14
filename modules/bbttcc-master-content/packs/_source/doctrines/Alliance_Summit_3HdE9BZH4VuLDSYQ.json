@@ -1,7 +1,7 @@
 {
   "name": "Alliance Summit",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_alliance_summit.png",
+  "img": "icons/skills/social/diplomacy-unity-alliance.webp",
   "system": {
     "description": {
       "value": "<p><b>Alliance Summit</b></p><p>Merge resources for 1 Strategic Turn.</p><p><b>Cost:</b> Diplomacy 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>alliance_summit</code></p>",

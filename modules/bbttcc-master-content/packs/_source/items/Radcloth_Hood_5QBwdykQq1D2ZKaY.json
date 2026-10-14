@@ -1,7 +1,7 @@
 {
   "name": "Radcloth Hood",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_rad_cloth_hood.jpeg",
+  "img": "icons/equipment/head/hood-cowl-mask-purple.webp",
   "system": {
     "description": {
       "value": "<p>Provides reroll the lowest die on saves vs [TODO(adv-call)]. mild radiation &amp; spores; reduces Swamp/Mire and Wasteland exposure checks.</p>",
@@ -68,7 +68,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI vestment stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 30

@@ -1,7 +1,7 @@
 {
   "name": "Lens of Tikkun",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_lens_of_tikkun.jpeg",
+  "img": "icons/tools/scribal/lens-grey-red.webp",
   "system": {
     "description": {
       "value": "<p>Attuned only by Illuminated/Transcendent. Once/week, purify one Corrupted Spark or reduce global Darkness by 1.</p>",

@@ -1,7 +1,7 @@
 {
   "name": "Scarf That Was a Cat (Probably)",
   "type": "armor",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/cat_scarf2.png",
+  "img": "icons/equipment/leg/pants-cloth-flowing-purple.webp",
   "system": {
     "guardBonus": 0,
     "evasionBonus": 0,
@@ -74,7 +74,7 @@
   "_id": "yXVPdB3w9hyL9h6Z",
   "effects": [
     {
-      "name": "\u2699\ufe0f Defense Grant",
+      "name": "⚙️ Defense Grant",
       "transfer": false,
       "disabled": false,
       "flags": {

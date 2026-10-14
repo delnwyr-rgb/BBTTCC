@@ -1,7 +1,7 @@
 {
   "name": "Patrolman's Plate",
   "type": "armor",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/patrolpersons_plate.png",
+  "img": "icons/equipment/chest/breastplate-layered-leather-black.webp",
   "system": {
     "guardBonus": 2,
     "evasionBonus": 0,

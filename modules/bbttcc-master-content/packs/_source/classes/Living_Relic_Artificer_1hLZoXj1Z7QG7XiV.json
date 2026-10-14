@@ -1,7 +1,7 @@
 {
   "name": "Living Relic Artificer",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_smith_hammer_holy_2.png",
+  "img": "icons/tools/hand/hammer-mallet-brown.webp",
   "system": {
     "category": "technique",
     "source": {

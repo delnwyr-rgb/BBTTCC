@@ -1,7 +1,7 @@
 {
   "name": "Rust-Ooze Solvent Vial",
   "type": "consumable",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_rust_ooze_solvent_vial.jpeg",
+  "img": "icons/consumables/potions/potion-vial-corked-purple.webp",
   "system": {
     "description": {
       "value": "<p>Dissolves mundane rust/ooze residue; grants advantage to escape viscous traps or restraints crafted from rusting materials for 1 minute.</p>",
@@ -68,7 +68,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI consumable stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 4

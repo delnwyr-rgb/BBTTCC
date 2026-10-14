@@ -1,7 +1,7 @@
 {
   "name": "Vow-Bound Forge Core",
   "type": "gear",
-  "img": "icons/sundries/lights/candle-pillar-white.webp",
+  "img": "icons/sundries/scrolls/scroll-bound-gold-white.webp",
   "system": {
     "slot": "misc",
     "tags": [

@@ -1,7 +1,7 @@
 {
   "name": "Establish Outpost",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_found_outpost.png",
+  "img": "icons/sundries/flags/banner-flag-pirate-swords.webp",
   "system": {
     "description": {
       "value": "<p><b>Establish Outpost</b></p><p>Plant a flag and found a new outpost in an unclaimed hex.</p><p><b>Cost:</b> Economy 2 • Logistics 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>establish_outpost</code></p>",

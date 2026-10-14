@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-11",
+    "at": "2026-10-14",
     "overridesApplied": 0
   },
   "items": [
@@ -12,7 +12,7 @@
       "slug": "doctrine-optact-administrative-optimization",
       "name": "⭐ Administrative Optimization [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_btools_2.png",
+      "img": "icons/sundries/flags/banner-flag-pirate-swords.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -52,7 +52,7 @@
       "slug": "doctrine-optact-arcane-attribution",
       "name": "⭐ Arcane Attribution [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sigil_4.png",
+      "img": "icons/skills/melee/strike-dagger-arcane-pink.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -92,7 +92,7 @@
       "slug": "doctrine-opt-bureaucratic-override",
       "name": "⭐ Bureaucratic Override [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scroll_2.png",
+      "img": "icons/sundries/scrolls/scroll-bound-blue-tan.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -132,7 +132,7 @@
       "slug": "doctrine-optact-cultural-diffusion",
       "name": "⭐ Cultural Diffusion [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_cultural_diffusion.jpeg",
+      "img": "icons/skills/ranged/target-bullseye-arrow-glowing.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -180,7 +180,7 @@
       "slug": "doctrine-optact-deep-cover-network",
       "name": "⭐ Deep Cover Network [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_web_1.png",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -220,7 +220,7 @@
       "slug": "doctrine-optact-doctrine-force-projection",
       "name": "⭐ Doctrine Force Projection [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -260,7 +260,7 @@
       "slug": "doctrine-optact-doctrine-of-clarity",
       "name": "⭐ Doctrine Of Clarity [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_2.png",
+      "img": "icons/magic/fire/explosion-flame-lightning-strike.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -300,7 +300,7 @@
       "slug": "doctrine-optact-dynastic-resonance",
       "name": "⭐ Dynastic Resonance [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-2.png",
+      "img": "icons/commodities/currency/coin-embossed-crown-gold.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -340,7 +340,7 @@
       "slug": "doctrine-opt-formal-parley",
       "name": "⭐ Formal Parley [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_connected_2.png",
+      "img": "icons/sundries/documents/document-letter-formal-tan.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -380,7 +380,7 @@
       "slug": "doctrine-optact-guided-ascent",
       "name": "⭐ Guided Ascent [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_2.png",
+      "img": "icons/sundries/flags/banner-flag-pirate-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -420,7 +420,7 @@
       "slug": "doctrine-opt-inherited-deference",
       "name": "⭐ Inherited Deference [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_throne_1.png",
+      "img": "icons/commodities/currency/coins-crown-stack-gold.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -460,7 +460,7 @@
       "slug": "doctrine-optact-integration-framework",
       "name": "⭐ Integration Framework [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_2.png",
+      "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -500,7 +500,7 @@
       "slug": "doctrine-opt-make-do-and-hold",
       "name": "⭐ Make Do And Hold [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bunker_3.png",
+      "img": "icons/magic/control/debuff-energy-hold-levitate-teal-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -540,7 +540,7 @@
       "slug": "doctrine-optact-never-scattered",
       "name": "⭐ Never Scattered [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_crowd_control_1.png",
+      "img": "icons/magic/fire/dagger-rune-enchant-flame-strong-orange.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -580,7 +580,7 @@
       "slug": "doctrine-optact-operational-cohesion",
       "name": "⭐ Operational Cohesion [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_operational_cohesion.png",
+      "img": "icons/sundries/flags/banner-flag-blue.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -628,7 +628,7 @@
       "slug": "doctrine-optact-philosophic-exchange",
       "name": "⭐ Philosophic Exchange [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_2.png",
+      "img": "icons/sundries/books/book-symbol-cross-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -668,7 +668,7 @@
       "slug": "doctrine-opt-pierce-the-veil",
       "name": "⭐ Pierce The Veil [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+      "img": "icons/magic/light/orb-shadow-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -708,7 +708,7 @@
       "slug": "doctrine-opt-prepared-insight",
       "name": "⭐ Prepared Insight [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_4.png",
+      "img": "icons/sundries/books/book-symbol-yellow-grey.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -748,7 +748,7 @@
       "slug": "doctrine-opt-rapid-transmutation",
       "name": "⭐ Rapid Transmutation [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_atom_1.png",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow-white.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -788,7 +788,7 @@
       "slug": "doctrine-optact-ritual-binding",
       "name": "⭐ Ritual Binding [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "img": "icons/magic/fire/dagger-rune-enchant-flame-strong-purple-pink.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -836,7 +836,7 @@
       "slug": "doctrine-opt-shock-command",
       "name": "⭐ Shock Command [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lightning_2.png",
+      "img": "icons/sundries/flags/banner-flag-white.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -876,7 +876,7 @@
       "slug": "doctrine-opt-sight-of-the-tree",
       "name": "⭐ Sight Of The Tree [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_5.png",
+      "img": "icons/magic/nature/tree-elm-roots-brown.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -916,7 +916,7 @@
       "slug": "doctrine-optact-silent-brotherhood",
       "name": "⭐ Silent Brotherhood [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cloak_hooded_2.png",
+      "img": "icons/magic/fire/dagger-rune-enchant-flame-strong-purple.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -956,7 +956,7 @@
       "slug": "doctrine-opt-silent-entry",
       "name": "⭐ Silent Entry [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_6.png",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -996,7 +996,7 @@
       "slug": "doctrine-optact-thread-the-spread",
       "name": "⭐ Thread The Spread [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_web_2.png",
+      "img": "icons/magic/control/orb-web-hold.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1036,7 +1036,7 @@
       "slug": "doctrine-opt-turn-the-card",
       "name": "⭐ Turn The Card [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_1.png",
+      "img": "icons/sundries/gaming/rune-card.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1076,7 +1076,7 @@
       "slug": "doctrine-opt-veiled-access",
       "name": "⭐ Veiled Access [Option]",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cloak_2.png",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-gray.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1116,7 +1116,7 @@
       "slug": "doctrine-alignment-shift",
       "name": "Alignment Shift (Sephirot)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_sephirotic_shift.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -1164,7 +1164,7 @@
       "slug": "doctrine-alliance-summit",
       "name": "Alliance Summit",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_alliance_summit.png",
+      "img": "icons/skills/social/diplomacy-unity-alliance.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -1212,7 +1212,7 @@
       "slug": "doctrine-apocalyptic-weapon-test",
       "name": "Apocalyptic Weapon Test",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_apocalyptic_weapons_test.png",
+      "img": "icons/weapons/artillery/mount-weapon-sprayer-chem-green-purple.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -1260,7 +1260,7 @@
       "slug": "doctrine-artillery-salvo",
       "name": "Artillery Salvo",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_explosion_1.png",
+      "img": "icons/magic/light/projectile-beams-salvo-white.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -1323,7 +1323,7 @@
       "slug": "doctrine-auto-recon-sweep",
       "name": "Auto-Recon Sweep",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_recon_sweep.jpeg",
+      "img": "icons/weapons/artillery/mount-weapon-auto-steel.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -1371,7 +1371,7 @@
       "slug": "doctrine-battlefield-harmony",
       "name": "Battlefield Harmony",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_battlefield_harmony.jpeg",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-red-tan.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -1424,7 +1424,7 @@
       "slug": "doctrine-begin-siege",
       "name": "Begin Siege",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_siege_2.png",
+      "img": "icons/weapons/artillery/catapult-simple.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1464,7 +1464,7 @@
       "slug": "doctrine-bless-the-fallen",
       "name": "Bless the Fallen",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_bless_the_fallen.jpeg",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -1516,7 +1516,7 @@
       "slug": "doctrine-boiling-oil",
       "name": "Boiling Oil",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cauldron_2.png",
+      "img": "icons/containers/barrels/barrel-drum-steel-oil.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1556,7 +1556,7 @@
       "slug": "doctrine-bombard",
       "name": "Bombard",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bomb_1.png",
+      "img": "icons/skills/ranged/bomb-grenade-thrown-purple.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1596,7 +1596,7 @@
       "slug": "doctrine-border-patrol",
       "name": "Border Patrol",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_border_patrol.png",
+      "img": "icons/environment/people/group.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -1644,7 +1644,7 @@
       "slug": "doctrine-cls-bulwark",
       "name": "Brace the Breach",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_4.png",
+      "img": "icons/magic/fire/barrier-wall-explosion-orange.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1684,7 +1684,7 @@
       "slug": "doctrine-bypass-obstacle",
       "name": "Bypass Obstacle",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_key_2.png",
+      "img": "icons/skills/trades/security-locksmith-key-gray.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -1746,7 +1746,7 @@
       "slug": "doctrine-call-relief",
       "name": "Call Relief",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flag_4.png",
+      "img": "icons/sundries/flags/banner-flag-white.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1786,7 +1786,7 @@
       "slug": "doctrine-cls-pact",
       "name": "Call the Debt",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sigil_3.png",
+      "img": "icons/sundries/documents/document-symbol-rune-tan.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1826,7 +1826,7 @@
       "slug": "doctrine-courtly-call-question",
       "name": "Call the Question",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scissors.png",
+      "img": "icons/commodities/treasure/token-engraved-question-green.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1888,7 +1888,7 @@
       "slug": "doctrine-champion-defends-wall",
       "name": "Champion Defends Wall",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_fist_wall.png",
+      "img": "icons/magic/defensive/barrier-shield-dome-deflect-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1928,7 +1928,7 @@
       "slug": "doctrine-siege-champion-duel",
       "name": "Champion Duel",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_3.png",
+      "img": "icons/sundries/flags/banner-sword-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -1968,7 +1968,7 @@
       "slug": "doctrine-champion-returns",
       "name": "Champion Returns",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_helmet_1.png",
+      "img": "icons/sundries/documents/blueprint-helmet.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -2008,7 +2008,7 @@
       "slug": "doctrine-champion-withdraws",
       "name": "Champion Withdraws",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_run.png",
+      "img": "icons/magic/control/debuff-chains-shackle-movement-red.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -2048,7 +2048,7 @@
       "slug": "doctrine-charity-drive",
       "name": "Charity Drive",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_charity_drive.png",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -2096,7 +2096,7 @@
       "slug": "doctrine-chrono-loop-command",
       "name": "Chrono-Loop Command",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_chrono_loop_command.jpeg",
+      "img": "icons/sundries/flags/banner-flag-skull-red.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -2148,7 +2148,7 @@
       "slug": "doctrine-cls-linguist",
       "name": "Cite the Clause",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_3.png",
+      "img": "icons/sundries/scrolls/scroll-runed-worn-brown.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -2188,7 +2188,7 @@
       "slug": "doctrine-civic-audit",
       "name": "Civic Audit",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_civic_audit.png",
+      "img": "icons/sundries/documents/document-symbol-eye.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -2236,7 +2236,7 @@
       "slug": "doctrine-command-overdrive",
       "name": "Command Overdrive",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_command-overdrive.jpeg",
+      "img": "icons/sundries/flags/banner-flag-pink.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -2288,7 +2288,7 @@
       "slug": "doctrine-conceal-body",
       "name": "Conceal Body",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cloak_1.png",
+      "img": "icons/magic/unholy/strike-body-explode-disintegrate.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -2350,7 +2350,7 @@
       "slug": "doctrine-opt-coordinated-advance",
       "name": "Coordinated Advance",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_coordinated_advance.jpeg",
+      "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -2412,7 +2412,7 @@
       "slug": "doctrine-coordinated-strike",
       "name": "Coordinated Strike",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+      "img": "icons/skills/melee/strike-blade-claw-red.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -2475,7 +2475,7 @@
       "slug": "doctrine-counter-interdict",
       "name": "Counter-Interdict",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_net_1.png",
+      "img": "icons/magic/control/debuff-chains-ropes-net-red-orange.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -2515,7 +2515,7 @@
       "slug": "doctrine-counter-propaganda-wave",
       "name": "Counter-Propaganda Wave",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_counter_propaganda_wave.jpeg",
+      "img": "icons/magic/sonic/explosion-shock-wave-teal.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -2567,7 +2567,7 @@
       "slug": "doctrine-courtly-intrigue-council",
       "name": "Courtly Intrigue Council",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_social_intrigue_council.png",
+      "img": "icons/skills/melee/strike-dagger-arcane-pink.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -2615,7 +2615,7 @@
       "slug": "doctrine-crack-the-keep",
       "name": "Crack the Keep",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_smash_wall_1.png",
+      "img": "icons/magic/fire/barrier-wall-explosion-orange.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -2679,7 +2679,7 @@
       "slug": "doctrine-crisis-summit",
       "name": "Crisis Summit",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_crisis_summit.jpeg",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -2727,7 +2727,7 @@
       "slug": "doctrine-crown-of-mercy",
       "name": "Crown of Mercy",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_crown_of_mercy.jpeg",
+      "img": "icons/magic/control/control-influence-crown-yellow.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -2779,7 +2779,7 @@
       "slug": "doctrine-cultural-exchange",
       "name": "Cultural Exchange",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_cultural_exchange.jpeg",
+      "img": "icons/magic/symbols/rune-sigil-white-pink.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -2827,7 +2827,7 @@
       "slug": "doctrine-cultural-festival-std",
       "name": "Cultural Festival",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_cultural_festival.jpeg",
+      "img": "icons/skills/ranged/target-bullseye-arrow-blue.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -2875,7 +2875,7 @@
       "slug": "doctrine-cultural-offensive",
       "name": "Cultural Offensive",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music.png",
+      "img": "icons/skills/trades/music-notes-sound-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -2938,7 +2938,7 @@
       "slug": "doctrine-dark-harvest",
       "name": "Dark Harvest",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_dark_harvest.jpeg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_farm.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -2986,7 +2986,7 @@
       "slug": "doctrine-defender-s-reversal",
       "name": "Defender’s Reversal",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_defenders_reversal.png",
+      "img": "icons/environment/wilderness/terrain-rocky-ground.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3038,7 +3038,7 @@
       "slug": "doctrine-defensive-entrenchment",
       "name": "Defensive Entrenchment",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_defensive_entrenchment.png",
+      "img": "icons/magic/defensive/shield-barrier-glowing-triangle-orange.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3090,7 +3090,7 @@
       "slug": "doctrine-defuse-tensions",
       "name": "Defuse Tensions",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_defuse_tensions.png",
+      "img": "icons/magic/defensive/armor-green-hex.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -3138,7 +3138,7 @@
       "slug": "doctrine-demand-surrender",
       "name": "Demand Surrender",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_human_surrender_1.png",
+      "img": "icons/skills/ranged/target-bullseye-arrow-glowing.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -3178,7 +3178,7 @@
       "slug": "doctrine-develop-infrastructure-std",
       "name": "Develop Infrastructure",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_develop_infrastructure.png",
+      "img": "icons/environment/wilderness/wall-ruins.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -3226,7 +3226,7 @@
       "slug": "doctrine-develop-outpost-stability",
       "name": "Develop Outpost (Stability)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_develop_outpost.jpeg",
+      "img": "icons/environment/traps/spiked-wall.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -3274,7 +3274,7 @@
       "slug": "doctrine-diplomatic-channel",
       "name": "Diplomatic Channel",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scroll_1.png",
+      "img": "icons/sundries/scrolls/scroll-bound-tan-grey.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3336,7 +3336,7 @@
       "slug": "doctrine-diplomatic-mission-std",
       "name": "Diplomatic Mission",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_diplomatic_mission.jpeg",
+      "img": "icons/sundries/documents/document-symbol-rune-tan.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -3384,7 +3384,7 @@
       "slug": "doctrine-disable-alarm",
       "name": "Disable Alarm",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_1.png",
+      "img": "icons/magic/sonic/bell-alarm-red-purple.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3446,7 +3446,7 @@
       "slug": "doctrine-distract",
       "name": "Distract",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_single_eye.png",
+      "img": "icons/commodities/treasure/brooch-gold-eye-green.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3508,7 +3508,7 @@
       "slug": "doctrine-divine-favor",
       "name": "Divine Favor",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_divine_favor.jpeg",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3560,7 +3560,7 @@
       "slug": "doctrine-dragon-s-parley",
       "name": "Dragon’s Parley",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_dragons_parley.png",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow-white.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -3608,7 +3608,7 @@
       "slug": "doctrine-courtly-eavesdrop",
       "name": "Eavesdrop",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_magnifying_glass_1.png",
+      "img": "icons/commodities/treasure/glass-crystal-green.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -3670,7 +3670,7 @@
       "slug": "doctrine-echo-strike-protocol",
       "name": "Echo Strike Protocol",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_echo_strike_protocol.jpeg",
+      "img": "icons/skills/melee/strike-blade-hooked-green-purple.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3722,7 +3722,7 @@
       "slug": "doctrine-ego-breaker",
       "name": "Ego Breaker",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_ego_breaker.jpeg",
+      "img": "icons/sundries/flags/banner-worn-blue.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3774,7 +3774,7 @@
       "slug": "doctrine-ego-dragon-echo",
       "name": "Ego-Dragon Echo",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_ego_dragon_echo.jpeg",
+      "img": "icons/skills/melee/sword-echo-stylized-tan.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3826,7 +3826,7 @@
       "slug": "doctrine-empathic-surge",
       "name": "Empathic Surge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_empathic_surge.jpeg",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3878,7 +3878,7 @@
       "slug": "doctrine-engine-of-absolution",
       "name": "Engine of Absolution",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_engine_of_absolution.png",
+      "img": "icons/containers/boxes/crate-tech-red.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -3930,7 +3930,7 @@
       "slug": "doctrine-enlightenment-congress",
       "name": "Enlightenment Congress",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_enlightenment_congress.png",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow-green.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -3978,7 +3978,7 @@
       "slug": "doctrine-escalade",
       "name": "Escalade",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_climb.png",
+      "img": "icons/magic/fire/barrier-wall-flame-ring-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -4018,7 +4018,7 @@
       "slug": "doctrine-escort-supply-line",
       "name": "Escort Supply Line",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_vehicle_1.png",
+      "img": "icons/containers/boxes/crate-worn-brown.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -4058,7 +4058,7 @@
       "slug": "doctrine-establish-outpost",
       "name": "Establish Outpost",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_found_outpost.png",
+      "img": "icons/sundries/flags/banner-flag-pirate-swords.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -4106,7 +4106,7 @@
       "slug": "doctrine-establish-siege-camp",
       "name": "Establish Siege Camp",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_camp.png",
+      "img": "icons/environment/wilderness/camp-improvised.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -4146,7 +4146,7 @@
       "slug": "doctrine-establish-supply-line",
       "name": "Establish Supply Line",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_establish_supply_line.jpeg",
+      "img": "icons/containers/barrels/barrel-oak-banded-tan.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -4194,7 +4194,7 @@
       "slug": "doctrine-establish-trade-route",
       "name": "Establish Trade Route",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_10.png",
+      "img": "icons/commodities/currency/coin-oval-rune-copper.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -4242,7 +4242,7 @@
       "slug": "doctrine-faction-wide-rally",
       "name": "Faction-wide Rally",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+      "img": "icons/sundries/flags/banner-flag-pirate.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -4304,7 +4304,7 @@
       "slug": "doctrine-faithful-intervention",
       "name": "Faithful Intervention",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_faithful_intervention.jpeg",
+      "img": "icons/commodities/treasure/token-engraved-symbols-grey.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -4356,7 +4356,7 @@
       "slug": "doctrine-faultline-tuning",
       "name": "Faultline Tuning",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_faultline_tuning.jpeg",
+      "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -4404,7 +4404,7 @@
       "slug": "doctrine-field-chaplaincy",
       "name": "Field Chaplaincy",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_2.png",
+      "img": "icons/magic/defensive/shield-barrier-flaming-pentagon-teal-purple.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -4467,7 +4467,7 @@
       "slug": "doctrine-cls-soulsmith",
       "name": "Field Refit",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_forge.png",
+      "img": "icons/magic/defensive/shield-barrier-blades-teal.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -4507,7 +4507,7 @@
       "slug": "doctrine-flaming-pitch",
       "name": "Flaming Pitch",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flame_1.png",
+      "img": "icons/magic/defensive/shield-barrier-flaming-pentagon-green.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -4547,7 +4547,7 @@
       "slug": "doctrine-flank-attack",
       "name": "Flank Attack",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_flank_attack.png",
+      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -4599,7 +4599,7 @@
       "slug": "doctrine-flash-bargain",
       "name": "Flash Bargain",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_flash_bargain.png",
+      "img": "icons/magic/light/circle-window-clock-blue.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -4652,7 +4652,7 @@
       "slug": "doctrine-flash-interdict",
       "name": "Flash Interdict",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_flash_interdict2.png",
+      "img": "icons/sundries/flags/banner-flag-blue.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -4705,7 +4705,7 @@
       "slug": "doctrine-courtly-forged-letter",
       "name": "Forged Letter",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_design.png",
+      "img": "icons/sundries/documents/document-letter-brown.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -4767,7 +4767,7 @@
       "slug": "doctrine-fortify-hex",
       "name": "Fortify Hex",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_hex_reinforcement.png",
+      "img": "icons/magic/defensive/shield-hex-red.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -4815,7 +4815,7 @@
       "slug": "doctrine-forward-resupply",
       "name": "Forward Resupply",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_box_1.png",
+      "img": "icons/containers/boxes/box-gift-pink.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -4877,7 +4877,7 @@
       "slug": "doctrine-found-site-farm",
       "name": "Found Farm",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_found_farm.jpeg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_farm.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -4925,7 +4925,7 @@
       "slug": "doctrine-found-site-fortress",
       "name": "Found Fortress",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_found_fortress.jpeg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_fortress.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -4973,7 +4973,7 @@
       "slug": "doctrine-found-site-mine",
       "name": "Found Mine",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_found_mine.jpeg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_mine.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5021,7 +5021,7 @@
       "slug": "doctrine-found-site-port",
       "name": "Found Port",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_found_port.jpeg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_port.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5069,7 +5069,7 @@
       "slug": "doctrine-found-site-research",
       "name": "Found Research Site",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_found_research_site.jpeg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_research_facility.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5117,7 +5117,7 @@
       "slug": "doctrine-found-site-temple",
       "name": "Found Temple",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_found_temple.jpeg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_temple.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5165,7 +5165,7 @@
       "slug": "doctrine-gather-intel",
       "name": "Gather Intel",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_get_info.jpeg",
+      "img": "icons/magic/defensive/shield-hex-blue.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5213,7 +5213,7 @@
       "slug": "doctrine-ghost-slip-infiltration",
       "name": "Ghost-Slip Infiltration",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_ghost_slip_protocol.jpeg",
+      "img": "icons/magic/death/undead-ghost-strike-white.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -5265,7 +5265,7 @@
       "slug": "doctrine-gradient-surge",
       "name": "Gradient Surge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_gradient_surge.jpeg",
+      "img": "icons/skills/trades/tech-energy-charged-green.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -5318,7 +5318,7 @@
       "slug": "doctrine-great-work-ritual",
       "name": "Great Work Ritual",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_great_work_ritual.jpeg",
+      "img": "icons/skills/social/diplomacy-offering-ritual.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5366,7 +5366,7 @@
       "slug": "doctrine-harmonic-chant",
       "name": "Harmonic Chant",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_harmonic_chant.jpeg",
+      "img": "icons/skills/trades/music-notes-sound-blue.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -5418,7 +5418,7 @@
       "slug": "doctrine-harvest-season",
       "name": "Harvest Season",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_harvest_season.jpeg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_farm.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5466,7 +5466,7 @@
       "slug": "doctrine-hide-in-shadow",
       "name": "Hide in Shadow",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+      "img": "icons/magic/nature/stealth-hide-eyes-pink.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -5528,7 +5528,7 @@
       "slug": "doctrine-impersonate",
       "name": "Impersonate",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "img": "icons/environment/wilderness/cave-entrance.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -5591,7 +5591,7 @@
       "slug": "doctrine-industrial-revolution",
       "name": "Industrial Revolution",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_industrial_revolution.jpeg",
+      "img": "icons/magic/symbols/runes-carved-stone-green.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5639,7 +5639,7 @@
       "slug": "doctrine-industrial-sabotage",
       "name": "Industrial Sabotage",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_industrial_sabotage.png",
+      "img": "icons/magic/death/skull-sand-white-yellow.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -5691,7 +5691,7 @@
       "slug": "doctrine-opt-infernal-bargain",
       "name": "Infernal Bargain",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_infernal_bargain.jpeg",
+      "img": "icons/sundries/books/book-eye-red.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -5754,7 +5754,7 @@
       "slug": "doctrine-infrastructure-expansion",
       "name": "Infrastructure Expansion",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_infrastructure_expansion.jpeg",
+      "img": "icons/magic/fire/barrier-wall-flame-ring-yellow.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5802,7 +5802,7 @@
       "slug": "doctrine-inquisition-mandate",
       "name": "Inquisition Mandate",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_inquisition_mandate.jpeg",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow-green.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5850,7 +5850,7 @@
       "slug": "doctrine-interdict-supply-line",
       "name": "Interdict Supply Line",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_net_1.png",
+      "img": "icons/containers/boxes/crate-modern-open.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -5890,7 +5890,7 @@
       "slug": "doctrine-judgment-of-light",
       "name": "Judgment of Light",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_judgement_of_light.png",
+      "img": "icons/magic/light/light-lantern-lit-white.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5938,7 +5938,7 @@
       "slug": "doctrine-justice-tribunal",
       "name": "Justice Tribunal",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_justic_tribunal.jpeg",
+      "img": "icons/skills/social/trading-justice-scale-yellow.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -5986,7 +5986,7 @@
       "slug": "doctrine-last-stand-banner",
       "name": "Last-Stand Banner",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_last_stand_banner.png",
+      "img": "icons/sundries/flags/banner-flag-pirate.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -6038,7 +6038,7 @@
       "slug": "doctrine-local-festival",
       "name": "Local Festival",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_local_festival.jpeg",
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -6086,7 +6086,7 @@
       "slug": "doctrine-logistical-surge",
       "name": "Logistical Surge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_logistical_surge.jpeg",
+      "img": "icons/tools/navigation/compass-chain-blue.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -6138,7 +6138,7 @@
       "slug": "doctrine-logistics-surge-s2",
       "name": "Logistics Surge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_box_1.png",
+      "img": "icons/containers/boxes/crate-wooden-beige-red.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -6201,7 +6201,7 @@
       "slug": "doctrine-loyalty-program",
       "name": "Loyalty Program",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_loyalty_program.jpeg",
+      "img": "icons/environment/settlement/target.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -6249,7 +6249,7 @@
       "slug": "doctrine-courtly-mask-off",
       "name": "Mask Off",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_mask_1.png",
+      "img": "icons/commodities/treasure/mask-bone-white.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -6311,7 +6311,7 @@
       "slug": "doctrine-mass-mobilization",
       "name": "Mass Mobilization",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_mass_mobilization.jpeg",
+      "img": "icons/magic/control/debuff-energy-snare-purple-blue.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -6359,7 +6359,7 @@
       "slug": "doctrine-mass-mobilization-std",
       "name": "Mass Mobilization",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_people_2.png",
+      "img": "icons/magic/control/debuff-energy-snare-purple-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -6399,7 +6399,7 @@
       "slug": "doctrine-cls-aurablade",
       "name": "Mercy's Edge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_1.png",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -6439,7 +6439,7 @@
       "slug": "doctrine-minor-repair",
       "name": "Minor Repair",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_minor_repair.jpeg",
+      "img": "icons/tools/navigation/map-marked-gold.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -6487,7 +6487,7 @@
       "slug": "doctrine-moral-high-ground",
       "name": "Moral High Ground",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_moral_high_ground.jpeg",
+      "img": "icons/environment/wilderness/terrain-rocky-ground.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -6539,7 +6539,7 @@
       "slug": "doctrine-oblivion-protocol",
       "name": "Oblivion Protocol",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_oblivion_protocol.jpeg",
+      "img": "icons/magic/symbols/mask-metal-silver-white.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -6587,7 +6587,7 @@
       "slug": "doctrine-cls-courier",
       "name": "Open the Postern",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "img": "icons/sundries/books/book-open-turquoise.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -6627,7 +6627,7 @@
       "slug": "doctrine-overclock-the-golems",
       "name": "Overclock the Golems",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/RobotHex1.jpeg",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-gray.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -6679,7 +6679,7 @@
       "slug": "doctrine-patch-the-breach",
       "name": "Patch the Breach",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_patch_the_breach.jpeg",
+      "img": "icons/magic/fire/barrier-wall-explosion-orange.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -6731,7 +6731,7 @@
       "slug": "doctrine-patrol-routes",
       "name": "Patrol Routes",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_patrol_routes.jpeg",
+      "img": "icons/tools/navigation/map-marked-blue.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -6779,7 +6779,7 @@
       "slug": "doctrine-courtly-patrons-word",
       "name": "Patron's Word",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-1.png",
+      "img": "icons/sundries/scrolls/scroll-bound-black-tan.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -6841,7 +6841,7 @@
       "slug": "doctrine-peace-accords",
       "name": "Peace Accords",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_peace_accords.jpeg",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -6889,7 +6889,7 @@
       "slug": "doctrine-cls-dreamwalker",
       "name": "Phantom Host",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_monster.png",
+      "img": "icons/magic/control/encase-creature-monster-hold.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -6929,7 +6929,7 @@
       "slug": "doctrine-pick-lock",
       "name": "Pick Lock",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_key_2.png",
+      "img": "icons/skills/trades/security-locksmith-key-gray.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -6991,7 +6991,7 @@
       "slug": "doctrine-pilgrimage-route",
       "name": "Pilgrimage Route",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_pilgrimage_route.jpeg",
+      "img": "icons/tools/navigation/map-chart-tan.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -7039,7 +7039,7 @@
       "slug": "doctrine-courtly-plant-a-doubt",
       "name": "Plant a Doubt",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_compulsion_1.png",
+      "img": "icons/magic/nature/plant-bamboo-green.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -7101,7 +7101,7 @@
       "slug": "doctrine-policy-reforms",
       "name": "Policy Reforms (Admin)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_policy_reforms_admin.jpeg",
+      "img": "icons/sundries/flags/banner-flag-pink.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -7149,7 +7149,7 @@
       "slug": "doctrine-pray-for-omen",
       "name": "Pray for Omen",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_3.png",
+      "img": "icons/sundries/documents/document-symbol-rune-brown.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -7189,7 +7189,7 @@
       "slug": "doctrine-prayer-in-the-smoke",
       "name": "Prayer in the Smoke",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_prayer_in_the_smoke.jpeg",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow-green.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -7241,7 +7241,7 @@
       "slug": "doctrine-prayer-pulse",
       "name": "Prayer Pulse",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_1.png",
+      "img": "icons/weapons/artillery/cannon-energy-sonic.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -7304,7 +7304,7 @@
       "slug": "doctrine-project-eden",
       "name": "Project Eden",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_project_eden.jpeg",
+      "img": "icons/magic/defensive/shield-hex-blue.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -7352,7 +7352,7 @@
       "slug": "doctrine-propaganda-campaign",
       "name": "Propaganda Campaign",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_propaganda_campaign.jpeg",
+      "img": "icons/magic/defensive/armor-green-hex.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -7400,7 +7400,7 @@
       "slug": "doctrine-propaganda-tour",
       "name": "Propaganda Tour",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_propaganda_tour.png",
+      "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -7448,7 +7448,7 @@
       "slug": "doctrine-psych-ops-broadcast",
       "name": "Psych-Ops Broadcast",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_psy_ops_broadcast.jpeg",
+      "img": "icons/magic/fire/dagger-rune-enchant-orange.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -7496,7 +7496,7 @@
       "slug": "doctrine-psychic-disruption",
       "name": "Psychic Disruption",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_psychic_disruption.jpeg",
+      "img": "icons/tools/navigation/watch-simple-blue.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -7548,7 +7548,7 @@
       "slug": "doctrine-opt-psychological-pressure",
       "name": "Psychological Pressure",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_psychological_pressure.jpeg",
+      "img": "icons/environment/traps/pressure-plate.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -7597,7 +7597,7 @@
       "slug": "doctrine-courtly-public-toast",
       "name": "Public Toast",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_chalice_2.png",
+      "img": "icons/magic/holy/chalice-glowing-gold.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -7659,7 +7659,7 @@
       "slug": "doctrine-purification-rite",
       "name": "Purification Rite",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_purification_ritual.jpeg",
+      "img": "icons/skills/social/diplomacy-offering-ritual.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -7707,7 +7707,7 @@
       "slug": "doctrine-qliphothic-gambit",
       "name": "Qliphothic Gambit",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_qliopthic_gambit.jpeg",
+      "img": "icons/commodities/treasure/token-engraved-symbols-grey.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -7759,7 +7759,7 @@
       "slug": "doctrine-quantum-shield",
       "name": "Quantum Shield",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_quantum_shield.png",
+      "img": "icons/magic/fire/barrier-shield-explosion-yellow.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -7811,7 +7811,7 @@
       "slug": "doctrine-courtly-quote-old-law",
       "name": "Quote the Old Law",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_2.png",
+      "img": "icons/sundries/scrolls/scroll-old-bound-brown-gray.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -7873,7 +7873,7 @@
       "slug": "doctrine-radiant-rally",
       "name": "Radiant Rally",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_radiant_rally.jpeg",
+      "img": "icons/sundries/flags/banner-flag-pirate-blue.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -7925,7 +7925,7 @@
       "slug": "doctrine-radiant-retaliation",
       "name": "Radiant Retaliation",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_city_hex.png",
+      "img": "icons/magic/nature/symbol-sun-yellow.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -7977,7 +7977,7 @@
       "slug": "doctrine-rally-the-line",
       "name": "Rally the Line",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_rally_the_line.jpeg",
+      "img": "icons/sundries/flags/banner-flag-skull-red.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -8029,7 +8029,7 @@
       "slug": "doctrine-cls-marshal",
       "name": "Rally the Standard",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_marshall_1.png",
+      "img": "icons/sundries/flags/banner-standard-moon.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -8069,7 +8069,7 @@
       "slug": "doctrine-ram-gate",
       "name": "Ram the Gate",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_engine.png",
+      "img": "icons/environment/settlement/city-gate.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -8109,7 +8109,7 @@
       "slug": "doctrine-ration-distribution",
       "name": "Ration Distribution",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_ration_distribiution.jpeg",
+      "img": "icons/skills/trades/baking-bread-rolls-green.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -8157,7 +8157,7 @@
       "slug": "doctrine-courtly-read-the-room",
       "name": "Read the Room",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_eyes_1.png",
+      "img": "icons/sundries/books/book-tooled-eye-gold-red.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -8219,7 +8219,7 @@
       "slug": "doctrine-cls-wyrdlens",
       "name": "Read the Weak Point",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_3.png",
+      "img": "icons/sundries/books/book-eye-purple.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -8259,7 +8259,7 @@
       "slug": "doctrine-reality-hack",
       "name": "Reality Hack",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_supply_depot.jpeg",
+      "img": "icons/environment/settlement/warehouse-crates.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -8311,7 +8311,7 @@
       "slug": "doctrine-recon-sweep",
       "name": "Recon Sweep",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_recon_sweep_2.jpeg",
+      "img": "icons/magic/perception/eye-ringed-green.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -8359,7 +8359,7 @@
       "slug": "doctrine-reconstruction-drive-std",
       "name": "Reconstruction Drive",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hammer_1.png",
+      "img": "icons/skills/melee/hand-grip-hammer-spiked-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -8399,7 +8399,7 @@
       "slug": "doctrine-reconstruction-drive",
       "name": "Reconstruction Drive",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_reconstruction_drive.jpeg",
+      "img": "icons/skills/melee/hand-grip-hammer-spiked-blue.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -8447,7 +8447,7 @@
       "slug": "doctrine-reinforce-garrison",
       "name": "Reinforce Garrison",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rampart_2.png",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_fortress.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -8487,7 +8487,7 @@
       "slug": "doctrine-repair-fortifications",
       "name": "Repair Fortifications",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_repair_fortifications.jpeg",
+      "img": "icons/tools/navigation/compass-worn-copper.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -8535,7 +8535,7 @@
       "slug": "doctrine-repair-rig",
       "name": "Repair Rig",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_repair_rig.jpeg",
+      "img": "icons/environment/settlement/wagon-black.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -8583,7 +8583,7 @@
       "slug": "doctrine-resource-expropriation",
       "name": "Resource Expropriation",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_resource_expropriation.jpeg",
+      "img": "icons/skills/trades/security-locksmith-key-gray.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -8631,7 +8631,7 @@
       "slug": "doctrine-saboteur-s-edge",
       "name": "Saboteur’s Edge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_saboteurs_edge.png",
+      "img": "icons/magic/unholy/projectile-bolts-salvo-pink.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -8683,7 +8683,7 @@
       "slug": "doctrine-sanctum-expansion",
       "name": "Sanctum Expansion",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_sanctum_expansion.jpeg",
+      "img": "icons/tools/navigation/map-plain-green.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -8731,7 +8731,7 @@
       "slug": "doctrine-sap-the-walls",
       "name": "Sap the Walls",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cracked_stone.png",
+      "img": "icons/magic/fire/barrier-wall-flame-ring-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -8794,7 +8794,7 @@
       "slug": "doctrine-sapper-undermine",
       "name": "Sapper's Undermine",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tunnel_1.png",
+      "img": "icons/magic/fire/barrier-wall-flame-ring-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -8834,7 +8834,7 @@
       "slug": "doctrine-secure-perimeter",
       "name": "Secure Perimeter",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_secure_perimeter.jpeg",
+      "img": "icons/magic/defensive/shield-hex-gold.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -8882,7 +8882,7 @@
       "slug": "doctrine-sephirotic-intervention",
       "name": "Sephirotic Intervention",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_sephirotic_intervention.jpeg",
+      "img": "icons/commodities/treasure/token-engraved-symbols-grey.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -8934,7 +8934,7 @@
       "slug": "doctrine-shore-the-gate",
       "name": "Shore the Gate",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rampart_1.png",
+      "img": "icons/environment/settlement/city-gate.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -8997,7 +8997,7 @@
       "slug": "doctrine-courtly-sidle-closer",
       "name": "Sidle Closer",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_step_2.png",
+      "img": "icons/sundries/documents/document-sealed-brown-red.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -9059,7 +9059,7 @@
       "slug": "doctrine-siege-breaker-volley",
       "name": "Siege Breaker Volley",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_siege_breaker_volley.jpeg",
+      "img": "icons/magic/nature/root-vine-barrier-wall-brown.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -9111,7 +9111,7 @@
       "slug": "doctrine-siege-logistics-overhaul",
       "name": "Siege Logistics Overhaul",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_siege_logistics_overhaul.jpeg",
+      "img": "icons/weapons/artillery/catapult-white.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -9159,7 +9159,7 @@
       "slug": "doctrine-signal-hijack",
       "name": "Signal Hijack",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_signal_hijack.jpeg",
+      "img": "icons/containers/boxes/crate-tech-silver.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -9211,7 +9211,7 @@
       "slug": "doctrine-smoke-and-mirrors",
       "name": "Smoke and Mirrors",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_smoke_and_mirrors.jpeg",
+      "img": "icons/magic/fire/projectile-fireball-smoke-large-blue.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -9264,7 +9264,7 @@
       "slug": "doctrine-smuggling-network",
       "name": "Smuggling Network",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_smuggling_network.jpeg",
+      "img": "icons/commodities/currency/coin-embossed-star-gold.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -9312,7 +9312,7 @@
       "slug": "doctrine-sortie",
       "name": "Sortie",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_castle_1.png",
+      "img": "icons/skills/melee/strike-blade-knife-orange-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -9352,7 +9352,7 @@
       "slug": "doctrine-sortie-en-masse",
       "name": "Sortie en Masse",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_castle_1.png",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -9416,7 +9416,7 @@
       "slug": "doctrine-spy-insertion",
       "name": "Spy Insertion",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_spy_insertion.jpeg",
+      "img": "icons/sundries/documents/envelope-sealed-red-brown.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -9464,7 +9464,7 @@
       "slug": "doctrine-courtly-stage-distraction",
       "name": "Stage a Distraction",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_5.png",
+      "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -9526,7 +9526,7 @@
       "slug": "doctrine-storm-final-assault",
       "name": "Storm Final Assault",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_tower_1.png",
+      "img": "icons/skills/melee/maneuver-sword-katana-yellow.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -9566,7 +9566,7 @@
       "slug": "doctrine-subdue-nonlethal",
       "name": "Subdue (Non-Lethal)",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sleep.png",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -9629,7 +9629,7 @@
       "slug": "doctrine-sue-for-terms",
       "name": "Sue for Terms",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_peace_1.png",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -9669,7 +9669,7 @@
       "slug": "doctrine-supply-cache",
       "name": "Supply Cache",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_supply_cache.jpeg",
+      "img": "icons/containers/boxes/crate-wooden-grey.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -9717,7 +9717,7 @@
       "slug": "doctrine-supply-depot",
       "name": "Supply Depot",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_supply_depot.jpeg",
+      "img": "icons/containers/boxes/crate-reinforced-brown.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -9765,7 +9765,7 @@
       "slug": "doctrine-supply-overrun",
       "name": "Supply Overrun",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_supply_overrun.jpeg",
+      "img": "icons/skills/ranged/cannon-barrel-firing-white-yellow.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -9817,7 +9817,7 @@
       "slug": "doctrine-supply-surge",
       "name": "Supply Surge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_supply_surge.jpeg",
+      "img": "icons/containers/boxes/crate-modern-open.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -9869,7 +9869,7 @@
       "slug": "doctrine-suppressive-fire",
       "name": "Suppressive Fire",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+      "img": "icons/magic/fire/flame-burning-earth-yellow.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -9917,7 +9917,7 @@
       "slug": "doctrine-suppressive-volley",
       "name": "Suppressive Volley",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_energy_cone.png",
+      "img": "icons/magic/control/energy-stream-link-spiral-teal.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -9979,7 +9979,7 @@
       "slug": "doctrine-sympathetic-stabilization",
       "name": "Sympathetic Stabilization",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_sympathetic_stabilization.jpeg",
+      "img": "icons/weapons/artillery/catapult-white.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -10031,7 +10031,7 @@
       "slug": "doctrine-tactical-overwatch",
       "name": "Tactical Overwatch",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_tactical_overwatch.jpeg",
+      "img": "icons/skills/ranged/target-bullseye-arrow-yellow.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -10083,7 +10083,7 @@
       "slug": "doctrine-tailgate",
       "name": "Tailgate",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ghostly_runner_1.png",
+      "img": "icons/skills/trades/security-locksmith-key-gray.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -10145,7 +10145,7 @@
       "slug": "doctrine-take-cover",
       "name": "Take Cover",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bunker_2.png",
+      "img": "icons/magic/fire/barrier-wall-flame-ring-blue.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -10207,7 +10207,7 @@
       "slug": "doctrine-temporal-armistice",
       "name": "Temporal Armistice",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_temporal_atmistice.jpeg",
+      "img": "icons/sundries/flags/banner-sword-blue.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -10259,7 +10259,7 @@
       "slug": "doctrine-terraforming-project",
       "name": "Terraforming Project",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_terraforming_project.png",
+      "img": "icons/magic/defensive/shield-hex-red.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -10307,7 +10307,7 @@
       "slug": "doctrine-terrain-calibration",
       "name": "Terrain Calibration",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_terrain_calibration.jpeg",
+      "img": "icons/environment/wilderness/terrain-rocks-brown.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -10355,7 +10355,7 @@
       "slug": "doctrine-the-final-weave",
       "name": "The Final Weave",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_final_weave.jpeg",
+      "img": "icons/skills/ranged/bullet-sparks-yellow.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -10403,7 +10403,7 @@
       "slug": "doctrine-total-mobilization",
       "name": "Total Mobilization",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flag_1.png",
+      "img": "icons/sundries/flags/banner-flag-skull-red.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -10466,7 +10466,7 @@
       "slug": "doctrine-training-drills",
       "name": "Training Drills",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_training_drill.jpeg",
+      "img": "icons/skills/melee/drill-heavy-earth.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -10514,7 +10514,7 @@
       "slug": "doctrine-training-parade",
       "name": "Training Parade",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_training_parade.jpeg",
+      "img": "icons/sundries/flags/banner-sword-blue.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -10562,7 +10562,7 @@
       "slug": "doctrine-trojan-horse",
       "name": "Trojan Horse",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_mystic_thief_2.png",
+      "img": "icons/magic/fire/elemental-creature-horse.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -10602,7 +10602,7 @@
       "slug": "doctrine-unity-surge",
       "name": "Unity Surge",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_unity_surge.jpeg",
+      "img": "icons/skills/social/diplomacy-unity-alliance.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -10654,7 +10654,7 @@
       "slug": "doctrine-upgrade-outpost-settlement",
       "name": "Upgrade Outpost → Settlement",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_upgrade_outpost.jpeg",
+      "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_settlement.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {
@@ -10702,7 +10702,7 @@
       "slug": "doctrine-void-signal-collapse",
       "name": "Void-Signal Collapse",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_void_signal_collapse.jpeg",
+      "img": "icons/commodities/currency/coins-engraved-hole-gold.webp",
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
@@ -10755,7 +10755,7 @@
       "slug": "doctrine-war-chest",
       "name": "War Chest",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_safe.png",
+      "img": "icons/sundries/flags/banner-sword-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -10817,7 +10817,7 @@
       "slug": "doctrine-courtly-whispered-aside",
       "name": "Whispered Aside",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_speech_2.png",
+      "img": "icons/skills/trades/music-notes-sound-blue.webp",
       "folder": "Doctrines",
       "system": {
         "description": {
@@ -10879,7 +10879,7 @@
       "slug": "doctrine-world-reformation-council",
       "name": "World Reformation Council",
       "type": "feat",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_world_reformation_council.jpeg",
+      "img": "icons/environment/wilderness/terrain-rocky-ground.webp",
       "folder": "Strategic Activities",
       "system": {
         "description": {

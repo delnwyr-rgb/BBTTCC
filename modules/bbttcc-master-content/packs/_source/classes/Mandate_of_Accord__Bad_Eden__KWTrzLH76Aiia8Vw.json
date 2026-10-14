@@ -1,7 +1,7 @@
 {
   "name": "Mandate of Accord (Bad Eden)",
   "type": "subclass",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_2.png",
+  "img": "icons/magic/perception/hand-eye-fire-blue.webp",
   "system": {
     "category": "doctrine",
     "classIdentifier": "harmonymarshal",

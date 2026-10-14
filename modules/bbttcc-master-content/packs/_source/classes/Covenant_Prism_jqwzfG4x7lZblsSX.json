@@ -1,7 +1,7 @@
 {
   "name": "Covenant Prism",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_3.png",
+  "img": "icons/commodities/tech/battery-arcane-crystal-cube.webp",
   "system": {
     "category": "technique",
     "source": {

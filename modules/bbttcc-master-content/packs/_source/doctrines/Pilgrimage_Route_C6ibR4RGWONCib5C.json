@@ -1,7 +1,7 @@
 {
   "name": "Pilgrimage Route",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_pilgrimage_route.jpeg",
+  "img": "icons/tools/navigation/map-chart-tan.webp",
   "system": {
     "description": {
       "value": "<p><b>Pilgrimage Route</b></p><p>+1 Faith regen; Loyalty +1 to Hex.</p><p><b>Cost:</b> Diplomacy 1 • Faith 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>pilgrimage_route</code></p>",

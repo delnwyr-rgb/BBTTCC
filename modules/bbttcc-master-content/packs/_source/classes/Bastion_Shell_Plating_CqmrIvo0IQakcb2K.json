@@ -1,7 +1,7 @@
 {
   "name": "Bastion-Shell Plating",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_armor_2.png",
+  "img": "icons/commodities/tech/plating-metal-armor-piston.webp",
   "system": {
     "category": "technique",
     "source": {

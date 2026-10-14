@@ -1,7 +1,7 @@
 {
   "name": "Prayer Pulse",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_1.png",
+  "img": "icons/weapons/artillery/cannon-energy-sonic.webp",
   "system": {
     "category": "technique",
     "source": "",

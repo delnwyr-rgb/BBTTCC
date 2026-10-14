@@ -1,7 +1,7 @@
 {
   "name": "Route of the Last Mile (Bad Eden)",
   "type": "subclass",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_1.png",
+  "img": "icons/magic/time/day-night-sunset-sunrise.webp",
   "system": {
     "category": "doctrine",
     "classIdentifier": "shadow_courier",

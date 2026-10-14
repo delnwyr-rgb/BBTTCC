@@ -1,7 +1,7 @@
 {
   "name": "Rad-Iron",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_glyph_plate.png",
+  "img": "icons/commodities/metal/ingot-worn-iron.webp",
   "system": {
     "slot": "material",
     "tags": [

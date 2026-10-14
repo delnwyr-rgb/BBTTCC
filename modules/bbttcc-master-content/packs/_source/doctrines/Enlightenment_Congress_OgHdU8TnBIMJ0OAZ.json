@@ -1,7 +1,7 @@
 {
   "name": "Enlightenment Congress",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_enlightenment_congress.png",
+  "img": "icons/magic/holy/prayer-hands-glowing-yellow-green.webp",
   "system": {
     "description": {
       "value": "<p><b>Enlightenment Congress</b></p><p>Raise Enlightenment for all PCs by 1.</p><p><b>Cost:</b> Diplomacy 5 • Faith 5</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>enlightenment_congress</code></p>",

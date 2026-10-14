@@ -1,7 +1,7 @@
 {
   "name": "Repair Fortifications",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_repair_fortifications.jpeg",
+  "img": "icons/tools/navigation/compass-worn-copper.webp",
   "system": {
     "description": {
       "value": "<p><b>Repair Fortifications</b></p><p><b>Cost:</b> Economy 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>repair_fortifications</code></p>",

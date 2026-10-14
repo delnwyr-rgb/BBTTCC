@@ -1,7 +1,7 @@
 {
   "name": "Noise Suppressant",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_2.png",
+  "img": "icons/tools/hand/wrench-mechanical-heal-blue.webp",
   "system": {
     "slot": "consumable",
     "tags": [

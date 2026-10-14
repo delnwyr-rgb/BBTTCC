@@ -1,7 +1,7 @@
 {
   "name": "Prayer Binding",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_binding_3.png",
+  "img": "icons/commodities/materials/material-feathers-blue.webp",
   "system": {
     "slot": "material",
     "tags": [

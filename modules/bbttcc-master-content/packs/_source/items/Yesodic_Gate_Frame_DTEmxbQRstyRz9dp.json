@@ -1,7 +1,7 @@
 {
   "name": "Yesodic Gate Frame",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/yesodic_gate_frame.jpeg",
+  "img": "icons/commodities/wood/frame-fastened-mount-steel.webp",
   "system": {
     "slot": "structure",
     "tags": [

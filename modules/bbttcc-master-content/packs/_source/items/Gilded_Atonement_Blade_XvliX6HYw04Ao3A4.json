@@ -1,7 +1,7 @@
 {
   "name": "Gilded Atonement Blade",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_guilded_atonement_blade.jpeg",
+  "img": "icons/weapons/swords/sword-gold-holy.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

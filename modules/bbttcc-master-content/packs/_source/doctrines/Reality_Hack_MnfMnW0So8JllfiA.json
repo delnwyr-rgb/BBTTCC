@@ -1,7 +1,7 @@
 {
   "name": "Reality Hack",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_supply_depot.jpeg",
+  "img": "icons/environment/settlement/warehouse-crates.webp",
   "system": {
     "category": "technique",
     "source": {

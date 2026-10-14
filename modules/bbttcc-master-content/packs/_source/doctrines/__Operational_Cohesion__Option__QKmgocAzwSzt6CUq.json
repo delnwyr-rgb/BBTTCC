@@ -1,7 +1,7 @@
 {
   "name": "⭐ Operational Cohesion [Option]",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_operational_cohesion.png",
+  "img": "icons/sundries/flags/banner-flag-blue.webp",
   "system": {
     "description": {
       "value": "<p><b>⭐ Operational Cohesion [Option]</b></p><p><b>Cost:</b> Violence 1 • Logistics 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>optact_operational_cohesion</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Route of the Black Stair (Bad Eden)",
   "type": "subclass",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_7.png",
+  "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
   "system": {
     "category": "doctrine",
     "classIdentifier": "shadow_courier",

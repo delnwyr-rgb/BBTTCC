@@ -2,7 +2,7 @@
   "_id": "ftsurge000000063",
   "name": "Gate-Touched",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_dream_sapphire_boots.png",
+  "img": "icons/environment/settlement/city-gate.webp",
   "system": {
     "category": "principle",
     "source": "Surge",

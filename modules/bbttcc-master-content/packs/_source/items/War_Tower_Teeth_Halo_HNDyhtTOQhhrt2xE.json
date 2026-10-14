@@ -1,7 +1,7 @@
 {
   "name": "War Tower Teeth Halo",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_war_tower_teeth_halo.jpeg",
+  "img": "icons/sundries/flags/banner-sword-blue.webp",
   "system": {
     "description": {
       "value": "<p>Vehicle upgrade: reactive radiant bite (2d8) vs attackers; stacks with sanctum shields.</p>",

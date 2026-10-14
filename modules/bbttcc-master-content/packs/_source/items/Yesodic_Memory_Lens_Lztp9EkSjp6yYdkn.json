@@ -1,7 +1,7 @@
 {
   "name": "Yesodic Memory Lens",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/tesod_memory_lens.png",
+  "img": "icons/tools/scribal/lens-grey-red.webp",
   "system": {
     "slot": "lens",
     "tags": [

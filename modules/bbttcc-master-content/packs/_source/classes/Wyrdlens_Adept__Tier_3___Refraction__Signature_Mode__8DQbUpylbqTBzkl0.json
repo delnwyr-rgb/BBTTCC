@@ -1,7 +1,7 @@
 {
   "name": "Wyrdlens Adept: Tier 3 — Refraction (Signature Mode)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_alien.png",
+  "img": "icons/magic/air/air-pressure-shield-blue.webp",
   "system": {
     "category": "technique",
     "source": {

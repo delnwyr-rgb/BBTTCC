@@ -1,7 +1,7 @@
 {
   "name": "Scrapwork Toolkit",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_scrapwork_toolkit.jpeg",
+  "img": "icons/tools/medical/toolkit-surgical-pink.webp",
   "system": {
     "description": {
       "value": "<p>Counts as tinker's tools; when repairing constructs/vehicles, reduce time by 25%.</p>",
@@ -62,7 +62,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI tool stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 12

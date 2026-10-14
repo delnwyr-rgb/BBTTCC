@@ -1,7 +1,7 @@
 {
   "name": "Hexstrider Cleats",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_penultimate_rites.png",
+  "img": "icons/equipment/finger/ring-bone-spiked-skull.webp",
   "system": {
     "slot": "boots",
     "tags": [

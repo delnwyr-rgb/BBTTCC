@@ -1,7 +1,7 @@
 {
   "name": "Geiger Familiar Drone",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_geiger_familiar_zone.jpeg",
+  "img": "icons/commodities/tech/electronics-tech-sensor-orange.webp",
   "system": {
     "description": {
       "value": "<p>Tiny flying sensor (Guard 15, Integrity 5). As an action, release drone for 10 minutes to map radiation pockets and Spark traces within 300 ft.</p>",

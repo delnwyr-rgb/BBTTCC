@@ -1,7 +1,7 @@
 {
   "name": "Alignment Shift (Sephirot)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_sephirotic_shift.png",
+  "img": "icons/skills/melee/sword-winged-holy-orange.webp",
   "system": {
     "description": {
       "value": "<p><b>Alignment Shift (Sephirot)</b></p><p><b>Cost:</b> Culture 2 • Faith 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>alignment_shift</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Split Beam",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_7.png",
+  "img": "icons/magic/light/beam-explosion-orange.webp",
   "system": {
     "category": "technique",
     "source": {

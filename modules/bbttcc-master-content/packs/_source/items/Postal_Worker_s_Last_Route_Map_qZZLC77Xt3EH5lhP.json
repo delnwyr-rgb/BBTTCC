@@ -1,7 +1,7 @@
 {
   "name": "Postal Worker's Last Route Map",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/tech_hex_map.png",
+  "img": "icons/tools/navigation/map-marked-black.webp",
   "system": {
     "slot": "tool",
     "tags": [

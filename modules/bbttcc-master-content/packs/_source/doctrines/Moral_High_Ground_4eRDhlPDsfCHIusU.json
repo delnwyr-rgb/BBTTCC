@@ -1,7 +1,7 @@
 {
   "name": "Moral High Ground",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_moral_high_ground.jpeg",
+  "img": "icons/environment/wilderness/terrain-rocky-ground.webp",
   "system": {
     "category": "technique",
     "source": {

@@ -1,7 +1,7 @@
 {
   "name": "Hex-Tuner Cassette Player",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/cassette_player.png",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
   "system": {
     "slot": "tool",
     "tags": [

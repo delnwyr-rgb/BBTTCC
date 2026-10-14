@@ -2,7 +2,7 @@
   "_id": "Rdl0kPNXBLoCAkFJ",
   "name": "Blood Hymn: Terror Charge",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn_skull.png",
+  "img": "icons/environment/people/charge.webp",
   "system": {
     "category": "technique",
     "source": {

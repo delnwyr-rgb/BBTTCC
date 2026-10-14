@@ -1,7 +1,7 @@
 {
   "name": "Hex-Wound Coffee Thermos",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/coffee_thermos_2.png",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
   "system": {
     "slot": "tool",
     "tags": [

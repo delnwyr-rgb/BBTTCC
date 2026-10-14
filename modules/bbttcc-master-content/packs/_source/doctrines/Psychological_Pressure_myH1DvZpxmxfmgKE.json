@@ -1,7 +1,7 @@
 {
   "name": "Psychological Pressure",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_psychological_pressure.jpeg",
+  "img": "icons/environment/traps/pressure-plate.webp",
   "system": {
     "category": "technique",
     "source": {

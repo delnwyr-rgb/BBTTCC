@@ -1,7 +1,7 @@
 {
   "name": "Pulse of the Forge",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flame_1.png",
+  "img": "icons/skills/ranged/energy-weapon-fire-blue.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden (2024 rules)",

@@ -1,7 +1,7 @@
 {
   "name": "Filtermask Mk II",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_filter_mask_mark_2.jpeg",
+  "img": "icons/equipment/head/hood-leather-orange-mask.webp",
   "system": {
     "description": {
       "value": "<p>Breather mask; grants reroll the lowest die on Con saves vs [TODO(adv-call)]. gases; counts as tools for Athletics (Violence) (Body) checks to endure dust storms.</p>",
@@ -62,7 +62,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI vestment stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 30

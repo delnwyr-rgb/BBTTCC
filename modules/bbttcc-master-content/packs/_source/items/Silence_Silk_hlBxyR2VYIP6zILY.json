@@ -1,7 +1,7 @@
 {
   "name": "Silence-Silk",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_silk.png",
+  "img": "icons/commodities/materials/material-cotton-white.webp",
   "system": {
     "slot": "material",
     "tags": [

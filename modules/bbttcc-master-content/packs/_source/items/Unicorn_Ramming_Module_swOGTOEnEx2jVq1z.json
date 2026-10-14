@@ -1,7 +1,7 @@
 {
   "name": "Unicorn Ramming Module",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_unicorn_ramming_module.jpeg",
+  "img": "icons/commodities/tech/plating-metal-armor-tech-energy-white.webp",
   "system": {
     "description": {
       "value": "<p>Vehicle upgrade: grants Energy Ramming Horn action (6d10 force; push 30 ft; recharge 5‑6).</p>",

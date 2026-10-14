@@ -1,7 +1,7 @@
 {
   "name": "Judgment of Light",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_judgement_of_light.png",
+  "img": "icons/magic/light/light-lantern-lit-white.webp",
   "system": {
     "description": {
       "value": "<p><b>Judgment of Light</b></p><p>Purify enemy Hex without destruction.</p><p><b>Cost:</b> Violence 6 • Faith 6</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>judgment_of_light</code></p>",

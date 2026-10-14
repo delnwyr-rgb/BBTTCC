@@ -1,7 +1,7 @@
 {
   "name": "Buc-ee's Beaver Talisman (Tarnished Gold)",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bucees_talisman.png",
+  "img": "icons/commodities/treasure/talisman-embossed-rune-red.webp",
   "system": {
     "slot": "trinket",
     "tags": [

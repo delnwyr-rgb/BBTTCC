@@ -1,7 +1,7 @@
 {
   "name": "Glowstick of the Ancients",
   "type": "consumable",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_glowstick_of_the_ancients.jpeg",
+  "img": "icons/sundries/lights/torch-brown-lit.webp",
   "system": {
     "description": {
       "value": "<p>Crack to emit bright light 60 ft for 8 hours; reveals invisible Qliphothic residue (faint outlines).</p>",

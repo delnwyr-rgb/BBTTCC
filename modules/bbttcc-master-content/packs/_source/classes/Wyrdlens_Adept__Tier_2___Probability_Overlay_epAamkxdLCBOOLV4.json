@@ -1,7 +1,7 @@
 {
   "name": "Wyrdlens Adept: Tier 2 — Probability Overlay",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hourglass_2.png",
+  "img": "icons/magic/time/hourglass-brown-orange.webp",
   "system": {
     "category": "technique",
     "source": {

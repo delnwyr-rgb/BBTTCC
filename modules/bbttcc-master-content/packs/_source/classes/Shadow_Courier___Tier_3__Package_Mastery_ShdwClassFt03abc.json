@@ -1,7 +1,7 @@
 {
   "name": "Shadow Courier — Tier 3: Package Mastery",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hypercube_1.png",
+  "img": "icons/sundries/documents/envelope-letter-post.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",

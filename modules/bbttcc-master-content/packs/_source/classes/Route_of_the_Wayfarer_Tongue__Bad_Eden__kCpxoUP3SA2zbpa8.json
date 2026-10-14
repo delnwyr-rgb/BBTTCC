@@ -1,7 +1,7 @@
 {
   "name": "Route of the Wayfarer Tongue (Bad Eden)",
   "type": "subclass",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music.png",
+  "img": "icons/skills/trades/music-notes-sound-blue.webp",
   "system": {
     "category": "doctrine",
     "classIdentifier": "shadow_courier",

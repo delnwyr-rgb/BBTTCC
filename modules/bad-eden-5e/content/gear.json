@@ -3,7 +3,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-13",
+    "at": "2026-10-14",
     "overridesApplied": 0
   },
   "items": [
@@ -11,7 +11,7 @@
       "slug": "gear-abacus-gauntlet",
       "name": "Abacus Gauntlet",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/hand/gauntlet-clawed-steel-blue.webp",
       "system": {
         "description": {
           "value": "<p>Adds +1 bonus on Economy/Logistics checks; once per a long rest, negate a single 'shortfall' penalty during a raid prep.</p>",
@@ -75,7 +75,7 @@
       "slug": "gear-adrenal-burn",
       "name": "Adrenal Burn",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/sundries/books/book-symbol-fire-gold-orange.webp",
       "system": {
         "description": {
           "value": "<p>Combat stim that primes the next move. Returns one Frame Die to the pool.</p>\n",
@@ -248,7 +248,7 @@
       "slug": "gear-anchor-of-the-known",
       "name": "Anchor of the Known",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/neck/pendant-gold-anchor.webp",
       "system": {
         "description": {
           "value": "<p><i>“The world remembers this place.”</i></p><p><b>Deploy.</b> Once per a long rest, place an Anchor in your current hex. For 1 turn, random encounter chance is reduced (engine hook planned).</p><p><b>Safe:</b> Does not affect faction tracks.</p>",
@@ -317,7 +317,7 @@
       "slug": "gear-anchor-quartz",
       "name": "Anchor Quartz",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/sundries/survival/climbing-anchor-steel-grey.webp",
       "system": {
         "description": {
           "value": "<p>Crystal core extracted from anchorstone deposits. Holds resonance; ballasts heavy weapons.</p>",
@@ -361,7 +361,7 @@
       "slug": "gear-anchorstone",
       "name": "Anchorstone",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/tools/hand/hammer-simple-wood-stone.webp",
       "system": {
         "description": {
           "value": "<p>Dense igneous rubble harvested from collapsed sept-foundations. Used to ballast Bulwark armor and ritual tools that need to <i>stay</i>.</p>",
@@ -405,7 +405,7 @@
       "slug": "gear-antidote-cartridge",
       "name": "Antidote Cartridge",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/consumables/potions/potion-vial-corked-labeled-purple.webp",
       "system": {
         "description": {
           "value": "<p>Auto-injector loaded with broad-spectrum counteragent. Clears poisoned in a single press.</p>\n",
@@ -474,7 +474,7 @@
       "slug": "gear-apology-knife-mass-produced",
       "name": "Apology Knife, Mass-Produced",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/daggers/knife-butterfly.webp",
       "system": {
         "description": {
           "value": "<p><em>It says it's sorry. It means it. Reality keeps the receipt.</em></p><p>Mercy Engraving: kills with this weapon incur no Blood Debt.</p><p>A cheap, mass-produced stiletto with an apology engraved up the fuller. The engraving is competent. The steel is mediocre. The point is sharp. They were sold in bulk before the Shattering as novelty items at gas stations. After the Shattering, somebody noticed they actually work — and not just in the obvious ways.</p><p><b>Mercy Engraving.</b> When you reduce a creature to 0 hit points with this knife, the kill incurs <b>no Blood Debt</b>. The engraved apology counts. Reality accepts the receipt. (Mal: \"Don't think about this too hard. The metaphysics are at minimum dubious. The mechanic is real.\")</p>\n",
@@ -656,7 +656,7 @@
       "slug": "gear-archivist-s-spectacles",
       "name": "Archivist's Spectacles",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/tools/scribal/spectacles-glasses.webp",
       "system": {
         "description": {
           "value": "<p>Advantage to investigate ruins; once/day auto‑succeed to find a hidden cache in Urban Wreckage.</p>",
@@ -720,7 +720,7 @@
       "slug": "gear-atonement-lozenge",
       "name": "Atonement Lozenge",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/sundries/books/book-symbol-link-brown.webp",
       "system": {
         "description": {
           "value": "<p>Sept-blessed. Loosens one knot in the Blood Debt ledger; the wearer spends the relief in nerves.</p>\n",
@@ -789,7 +789,7 @@
       "slug": "gear-audit-oversight-module",
       "name": "Audit Oversight Module",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/head/tech-helm-blue.webp",
       "system": {
         "description": {
           "value": "<p>Vehicle/construct upgrade for Attaccountant craft: 300‑ft Aura of Accountability (enemies −2 to deception/false reports).</p>",
@@ -853,7 +853,7 @@
       "slug": "gear-balance-bind",
       "name": "Balance Bind",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/equipment/waist/belt-rope.webp",
       "system": {
         "description": {
           "value": "<p>Hand-twisted cord of hex-rope and witness-thread. Used in cleats and ritual harnesses where staying upright matters.</p>",
@@ -897,7 +897,7 @@
       "slug": "gear-blessed-blockbuster-membership-card",
       "name": "Blessed Blockbuster Membership Card",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/gaming/card-game-pink.webp",
       "system": {
         "description": {
           "value": "<p>Plastic card that smells faintly of carpet cleaner and late fees forgiven by an angel. The number changes depending on who's holding it; the back always reads <i>FOREVER MEMBER</i>.</p><p><b>Be Kind, Rewind.</b> Gain advantage on Intelligence (Lore) checks about popular entertainment, celebrities, urban legends, and \"what everyone was watching back then.\"</p><p><b>Late Fee Absolution (1/long rest).</b> When you fail an attribute check, pay it forward and reroll. Use the new roll. If it fails too, take −1 to your next attribute check before end of next turn — the universe <i>remembers</i>.</p><p><b>Sleeve of Protection.</b> Gain advantage on saving throws against effects that would magically force you to forget something you've seen or learned in the last 24 hours.</p>",
@@ -965,7 +965,7 @@
       "slug": "gear-blessed-thread",
       "name": "Blessed Thread",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/tools/hand/needle-thread-spool.webp",
       "system": {
         "description": {
           "value": "<p>Hand-spun thread blessed at a sept-altar. Sewn into vestments and pact-bindings.</p>",
@@ -1009,7 +1009,7 @@
       "slug": "gear-bolt-driver",
       "name": "Bolt-Driver",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/crossbows/crossbow-golden-bolt.webp",
       "system": {
         "description": {
           "value": "<p><em>The kind of weapon that knows how to shut up.</em></p><p>Silent on discharge. GM may call for a 1-action reload between shots.</p><p>Compact crossbow built around a salvaged spring-tension mechanism. Slow to reload, near-silent on release. The Courier's preferred long-touch tool when noise is a tax you can't afford to pay.</p><p><b>Standard Issue.</b> Silent. Slow to reload (1 action between shots, GM call). No signature.</p>\n",
@@ -1194,7 +1194,7 @@
       "slug": "gear-boots-that-knew-each-other-once",
       "name": "Boots That Knew Each Other Once",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/feet/boots-simple-leather-brown.webp",
       "system": {
         "description": {
           "value": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><strong>Mismatched Stride.</strong> +1 zone to your standard Move action. Stealth checks gain advantage because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p><p><strong>Worn:</strong> +1 to Dexterity saving throws.</p>",
@@ -1251,7 +1251,7 @@
         {
           "_id": "be5ec1289375536f",
           "name": "Boots That Knew Each Other Once",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/feet/boots-simple-leather-brown.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -1286,7 +1286,7 @@
       "slug": "gear-brass-knife-of-the-quiet-word",
       "name": "Brass Knife of the Quiet Word",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/swords/shortsword-guard-brass.webp",
       "system": {
         "description": {
           "value": "<p><em>Carried in the inside seam, not the belt.</em></p><p>Quiet Word: +1 Evasion vs the first attack each round while attuned and equipped.</p><p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to Evasion against the first attack each round.</p>\n",
@@ -1468,7 +1468,7 @@
       "slug": "gear-brass-thumb-bell",
       "name": "Brass Thumb-Bell",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/tools/instruments/bell-brass-brown.webp",
       "system": {
         "description": {
           "value": "<p>Tiny brass bell on a hex-rope cord. Rung once before crossing a threshold that matters.</p>",
@@ -1512,7 +1512,7 @@
       "slug": "gear-bronze-nail",
       "name": "Bronze Nail",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/tools/hand/hammer-and-nail.webp",
       "system": {
         "description": {
           "value": "<p>Plain bronze nail. Useful in knife construction, sept-fittings, and patching boots. Common.</p>",
@@ -1556,7 +1556,7 @@
       "slug": "gear-buc-ee-s-beaver-talisman-tarnished-gold",
       "name": "Buc-ee's Beaver Talisman (Tarnished Gold)",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/commodities/treasure/talisman-embossed-rune-red.webp",
       "system": {
         "description": {
           "value": "<p>A small, slightly tacky golden beaver pendant on a brass chain. The smile is wide. The teeth are alarming. Several Frontier-Formerly-Known cults consider this a holy relic. Several other Frontier-Formerly-Known cults consider this an insult. Nobody is neutral. The beaver doesn't care.</p><p><strong>Cleanest Bathrooms in the Wasteland.</strong> +1 to wasteland-market negotiation rolls. Once per session, when a deal would fall through, you may invoke the Beaver — quote a pre-Fall slogan, gesture at the pendant, look serious. The deal goes through, but you owe the merchant a small future favor. Mal: \"That's the Beaver's contract. He always gets paid.\"</p>",
@@ -1600,7 +1600,7 @@
       "slug": "gear-bulwark-hauberk",
       "name": "Bulwark Hauberk",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/breastplate-layered-leather-black.webp",
       "system": {
         "description": {
           "value": "<p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p><strong>Standard Issue.</strong> Path-defining silhouette without path-defining cost. Frame Dice and Ruin Charges still come from your Bulwark features — the hauberk is just the surface they sit on.</p>\n<p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
@@ -1659,7 +1659,7 @@
         {
           "_id": "be5e69da6a808405",
           "name": "Bulwark Hauberk",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/chest/breastplate-layered-leather-black.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -1694,7 +1694,7 @@
       "slug": "gear-calmpact-vial",
       "name": "Calmpact Vial",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/consumables/potions/potion-vial-corked-labeled-purple.webp",
       "system": {
         "description": {
           "value": "<p>A dose of pacifying compound. Drops the cortisol floor; the world stays loud but stops cutting.</p>",
@@ -1763,7 +1763,7 @@
       "slug": "gear-cassette-of-the-long-drive",
       "name": "Cassette of the Long Drive",
       "type": "equipment",
-      "img": "icons/sundries/misc/lantern-copper-lit.webp",
+      "img": "icons/sundries/flags/banner-sword-blue.webp",
       "system": {
         "description": {
           "value": "<p>A pre-Fall mixtape someone made for someone they loved, labeled only FOR THE LONG DRIVE in faded marker. Plays on anything with the decency to have a tape deck. Mal is fond of it and will occasionally sing along, badly, on purpose.</p><p><strong>Use.</strong> During a rest, play it to clear 1d6 Stress from each ally who listens. Once per session — the magic is in the first listen.</p>",
@@ -1937,7 +1937,7 @@
       "slug": "gear-cathedral-crystal",
       "name": "Cathedral Crystal",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/commodities/tech/battery-arcane-crystal-green.webp",
       "system": {
         "description": {
           "value": "<p>Resonant lattice grown in a sept-vault. Snaps in the hand, releasing a soft tone that scrubs the inner channel clean.</p>",
@@ -2006,7 +2006,7 @@
       "slug": "gear-clarity-wafer",
       "name": "Clarity Wafer",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/commodities/biological/tongue-brown.webp",
       "system": {
         "description": {
           "value": "<p>Dissolves on the tongue. Cuts the static between intention and effect.</p>\n",
@@ -2075,7 +2075,7 @@
       "slug": "gear-cloak-of-null-profile",
       "name": "Cloak of Null Profile",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/back/cloak-collared-pink-gold.webp",
       "system": {
         "description": {
           "value": "<p>You and carried gear have gain advantage on checks to avoid detection by sensors/AAE and leave no heat signature [TODO(adv-call)].</p>",
@@ -2139,7 +2139,7 @@
       "slug": "gear-cold-iron",
       "name": "Cold-Iron",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/metal/ingot-iron.webp",
       "system": {
         "description": {
           "value": "<p>Iron worked once at low temperature and sealed before it can sing. Bites against curses and qliphothic substance; brittle to careless shaping.</p>",
@@ -2183,7 +2183,7 @@
       "slug": "gear-combat-knife",
       "name": "Combat Knife",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/daggers/knife-green.webp",
       "system": {
         "description": {
           "value": "<p><em>Cheap. Honest. Always sharp enough.</em></p><p>Light, finesse-friendly. No signature ability.</p><p>Standard-issue field knife. Single-edge, thumb groove, hard sheath that clips to a belt or boot. The first weapon most Stewards carry and the last one they put down. Honest steel — no signature, no story, just edge.</p><p><b>Standard Issue.</b> Light enough for off-hand work; close enough for the kind of conversation knives are for.</p>\n",
@@ -2368,7 +2368,7 @@
       "slug": "gear-communion-tea",
       "name": "Communion Tea",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/consumables/drinks/tea-jug-glowing-brown-pink.webp",
       "system": {
         "description": {
           "value": "<p>Brewed at sept-houses and shared on the road. Settles the nerves, brightens the inner light. Three doses to a thermos.</p>",
@@ -2437,7 +2437,7 @@
       "slug": "gear-confession-crystal",
       "name": "Confession Crystal",
       "type": "equipment",
-      "img": "icons/sundries/misc/lantern-copper-lit.webp",
+      "img": "icons/equipment/finger/ring-crown-crystal.webp",
       "system": {
         "description": {
           "value": "<p>Palm-sized crystal of fogged quartz. Records the most recent admission of guilt or truth spoken within 30 feet</p><p><b>Replay (once per short rest).</b> As an action, the wearer may play the recording back in the original speaker's voice. Useful for negotiations, blackmail, and very awkward weddings.</p><p><i>Charges refresh on long rest.</i></p>",
@@ -2507,7 +2507,7 @@
       "slug": "gear-coolant-glycerol",
       "name": "Coolant Glycerol",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/commodities/gems/pearl-fire-swirl.webp",
       "system": {
         "description": {
           "value": "\n",
@@ -2576,7 +2576,7 @@
       "slug": "gear-courier-glass",
       "name": "Courier Glass",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/treasure/glass-crystal-green.webp",
       "system": {
         "description": {
           "value": "<p>Hand-blown glass from courier-route waystations. Each piece carries the route it traveled in its faint internal striae.</p>",
@@ -2620,7 +2620,7 @@
       "slug": "gear-crowd-calmer-beacon",
       "name": "Crowd-Calmer Beacon",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/lights/lantern-bullseye-signal-copper.webp",
       "system": {
         "description": {
           "value": "<p>Action: emit soothing tone (Calm Emotions, DC 14) in 60‑ft radius; 3 charges/day.</p>",
@@ -2684,7 +2684,7 @@
       "slug": "gear-decay-inhibitor",
       "name": "Decay Inhibitor",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/equipment/neck/pendant-gold-crystal-blue.webp",
       "system": {
         "description": {
           "value": "\n",
@@ -2753,7 +2753,7 @@
       "slug": "gear-discount-summoning-circle-10-off",
       "name": "Discount Summoning Circle (10% off)",
       "type": "consumable",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/consumables/potions/bottle-round-ring-teal.webp",
       "system": {
         "description": {
           "value": "<p>A cheap vinyl mat printed with runes and an aggressively cheerful coupon code. The fine print is in Infernal, and it is <i>mostly</i> about arbitration.</p><p><b>Action — Place Circle.</b> Set the mat in an unoccupied space within reach. The circle lasts 10 minutes or until used. While within 5 ft, you can cast one conjuration powers with these benefits:</p><ul><li><b>10% Off Materials.</b> Reduce a costly material component cost by 10% (min 1 gp). Reduced cost is still consumed.</li><li><b>Coupon Stabilizer.</b> +1 to your Resolve DC for that powers.</li></ul><p>After the powers lands, the mat smokes, curls, and crumbles into glittery ash.</p>",
@@ -2908,7 +2908,7 @@
       "slug": "gear-drifter-s-weave",
       "name": "Drifter's Weave",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/vest-cloth-tattered-tan.webp",
       "system": {
         "description": {
           "value": "<p>Layered travel cloth — patchwork canvas over a quilted underlayer, road-stained at the cuffs. Cut for moving. Sold on every frontier table from Allesh Gilliam to the edge of the Lyrenn line. The first armor most Stewards ever buy, and the first they outgrow.</p><p><strong>Standard Issue.</strong> Worn in the field, not the throne room. Easy to repair, easy to replace, easy to forget you have it on.</p>\n<p><strong>Worn:</strong> +1 to Dexterity saving throws.</p>",
@@ -2965,7 +2965,7 @@
         {
           "_id": "be5e845eb41eb8b7",
           "name": "Drifter's Weave",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/chest/vest-cloth-tattered-tan.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -3000,7 +3000,7 @@
       "slug": "gear-ego-dragon-scale-aegis",
       "name": "Ego‑Dragon Scale Aegis",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
         "description": {
           "value": "<p>Armor (breastplate). Grants resistance to psychic; once/day negate a charm/fear effect for you and allies within 30 ft.</p>",
@@ -3064,7 +3064,7 @@
       "slug": "gear-enamel-pin",
       "name": "Enamel Pin",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/tools/fasteners/pin-spiked.webp",
       "system": {
         "description": {
           "value": "<p>Enameled metal pin, sigil-blank. Used to identify Shadow Couriers — and, when worked, to bind crossing-magic.</p>",
@@ -3108,7 +3108,7 @@
       "slug": "gear-field-patch",
       "name": "Field Patch",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/commodities/leather/leather-patch-grey.webp",
       "system": {
         "description": {
           "value": "<p>Standard battlefield seal. A pulse of restorative gel and a synthetic heartbeat — enough to keep moving, not enough to keep going.</p>\n",
@@ -3177,7 +3177,7 @@
       "slug": "gear-filtermask-mk-ii",
       "name": "Filtermask Mk II",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/head/hood-leather-orange-mask.webp",
       "system": {
         "description": {
           "value": "<p>Breather mask; grants gain advantage on Con saves vs [TODO(adv-call)]. gases; counts as tools for Athletics (Constitution) checks to endure dust storms.</p>",
@@ -3241,7 +3241,7 @@
       "slug": "gear-finger-bone",
       "name": "Finger-Bone",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/bones/bone-spine-white.webp",
       "system": {
         "description": {
           "value": "<p>Knuckle-bone of a confessed witness. Used as a binding fetter or knife pommel — small admissions, sharp consequences.</p>",
@@ -3285,7 +3285,7 @@
       "slug": "gear-foam-finger-structural",
       "name": "Foam Finger (Structural)",
       "type": "equipment",
-      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "img": "icons/equipment/chest/collar-steel.webp",
       "system": {
         "description": {
           "value": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><strong>Structural Foam.</strong> Counts as a buckler — +1 AC while equipped in the off-hand. Once per short rest, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
@@ -3342,7 +3342,7 @@
         {
           "_id": "be5e515ca2b132b1",
           "name": "Foam Finger (Structural)",
-          "img": "icons/equipment/shield/heater-steel-worn.webp",
+          "img": "icons/equipment/chest/collar-steel.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -3395,7 +3395,7 @@
       "slug": "gear-focused-crystal",
       "name": "Focused Crystal",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/treasure/crystal-ball-blue-purple.webp",
       "system": {
         "description": {
           "value": "<p>Lattice-grown crystal tuned to one frequency of the visible spectrum. Drives saber emitters and signal lenses.</p>",
@@ -3439,7 +3439,7 @@
       "slug": "gear-focusing-lens",
       "name": "Focusing Lens",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/sundries/documents/document-symbol-eye.webp",
       "system": {
         "description": {
           "value": "<p>Hand-ground glass blank, optical-grade. Used in laser barrels, sephirotic lenses, and confession crystals. Tedious to make; cheap to buy if you don't ask where it came from.</p>",
@@ -3483,7 +3483,7 @@
       "slug": "gear-fogged-quartz",
       "name": "Fogged Quartz",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/stone/stone-white-quartz-ball.webp",
       "system": {
         "description": {
           "value": "<p>Slow-cooled quartz with internal cloudiness. Records audible truth; releases it on a touch and a name.</p>",
@@ -3527,7 +3527,7 @@
       "slug": "gear-frikkin-laser-blade-saber",
       "name": "Frikkin' Laser Blade Saber",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/swords/sword-flanged-lightning.webp",
       "system": {
         "description": {
           "value": "<p><em>What?</em></p><p>On a clean hit, the saber may sever a powers's anchor — at GM discretion, suppress one ongoing powers effect on the target until end of next turn.</p><p>A saber made of light. No big deal.</p><p></p><p>What?</p>\n",
@@ -3713,7 +3713,7 @@
       "slug": "gear-geiger-familiar-drone",
       "name": "Geiger Familiar Drone",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/commodities/tech/electronics-tech-sensor-orange.webp",
       "system": {
         "description": {
           "value": "<p>Tiny flying sensor (AC 15, hit points 5). As an action, release drone for 10 minutes to map radiation pockets and Spark traces within 300 ft.</p>",
@@ -3777,7 +3777,7 @@
       "slug": "gear-gene-cleanse-serum",
       "name": "Gene-Cleanse Serum",
       "type": "consumable",
-      "img": "icons/svg/mystery-man.svg",
+      "img": "icons/commodities/bones/bones-broken-marrow-white-red.webp",
       "system": {
         "description": {
           "value": "Retroviral scrub-kit. Targets a single mutation and unwrites it from the marrow — you choose which scar to lose.\n",
@@ -3846,7 +3846,7 @@
       "slug": "gear-gene-purge-infusion",
       "name": "Gene-Purge Infusion",
       "type": "consumable",
-      "img": "icons/svg/mystery-man.svg",
+      "img": "icons/tools/medical/medication-pills-red-blue.webp",
       "system": {
         "description": {
           "value": "Full-spectrum genomic reset, vault-grade and brutal. Strips away every radiation mutation — boon and bane alike — in one searing pass.\n",
@@ -3915,7 +3915,7 @@
       "slug": "gear-gilded-atonement-blade",
       "name": "Gilded Atonement Blade",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "system": {
         "description": {
           "value": "<p><em>Forged in a sept-foundry. Tempered in a confession.</em></p><p>Mercy Finish: a kill turns into stable unconsciousness; a Qliphothic/Darkness state is suppressed.</p><p><em>“The edge hums when you lie, you know.”</em></p><p><strong>Sanctified.</strong> This weapon deals <strong>radiant</strong> damage.</p><p><strong>Mercy Finish.</strong> If a creature is reduced to 0 hit points by this weapon’s damage, it falls <strong>unconscious and stable</strong> instead of dying. If it is Qliphothified/Corrupted/Darkness-bound, that state is suppressed; the GM may describe the target “coming back to themselves.”</p><p><strong>Playtest safety:</strong> This item is designed to avoid faction-level knock-on effects.</p>",
@@ -4098,7 +4098,7 @@
       "slug": "gear-glowstick-of-the-ancients",
       "name": "Glowstick of the Ancients",
       "type": "consumable",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
       "system": {
         "description": {
           "value": "<p>Crack to emit bright light 60 ft for 8 hours; reveals invisible Qliphothic residue (faint outlines).</p>",
@@ -4169,7 +4169,7 @@
       "slug": "gear-grapnel-spool",
       "name": "Grapnel Spool",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/survival/rope-coil-white.webp",
       "system": {
         "description": {
           "value": "<p>50‑ft mono‑filament grapnel; gain advantage on climb/jump checks [TODO(adv-call)]; can pull Medium target (Str vs DC 13).</p>",
@@ -4233,7 +4233,7 @@
       "slug": "gear-hand-axe",
       "name": "Hand Axe",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/axes/axe-battle-broad-stone.webp",
       "system": {
         "description": {
           "value": "<p><em>Equally good at cordwood and conversation.</em></p><p>Versatile. May be thrown at short range as an improvised ranged attack.</p><p>Single-bit utility axe with a hickory haft and a leather wrist-thong. Cuts kindling, cuts cord, cuts targets that get within arm's reach. Throws acceptably for short distances.</p><p><b>Standard Issue.</b> Pulls double duty as a tool. No signature, no surprise — just dependable weight.</p>\n",
@@ -4420,7 +4420,7 @@
       "slug": "gear-heart-coil",
       "name": "Heart-Coil",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/tech/spring-steel-coil-wound.webp",
       "system": {
         "description": {
           "value": "<p>Hand-wound copper-and-aurablade-resin coil, harvested from intact pre-Eden tech caches. The coil hums when current passes; the hum harmonizes with the wielder's pulse.</p>",
@@ -4464,7 +4464,7 @@
       "slug": "gear-heart-iron",
       "name": "Heart-Iron",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/metal/ingot-iron.webp",
       "system": {
         "description": {
           "value": "<p>Slow-cooled meteoric iron with an aural signature — strikes a tone when shaped, holds its temper through a powers. Aurablade smiths swear by it.</p>",
@@ -4508,7 +4508,7 @@
       "slug": "gear-heart-iron-shaving",
       "name": "Heart-Iron Shaving",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/metal/ingot-iron.webp",
       "system": {
         "description": {
           "value": "<p>Curl of heart-iron pulled from the smith's anvil. Used as catalyst in marrow tonics and aurablade compounds; one stack equals one full bar shaved.</p>",
@@ -4552,7 +4552,7 @@
       "slug": "gear-hex-boots",
       "name": "Hex Boots",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/feet/boots-leather-teal.webp",
       "system": {
         "description": {
           "value": "<p>Boosters tuned for hex-crawl reality.\n\n<b>Travel Assist.</b> Once per travel leg, you may reduce the Travel Check DC by 2 (to a minimum of 10) for the party’s movement. This does not change faction OP costs.\n\n<i>Playtest note:</i> If you want the old behavior, add a GM-only tag and let the travel engine read it later.</p>",
@@ -4616,7 +4616,7 @@
       "slug": "gear-hex-compass",
       "name": "Hex Compass",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/magic/symbols/rune-sigil-green-purple.webp",
       "system": {
         "description": {
           "value": "<p>When traveling overland, you can always determine the nearest aligned Hex of your faction.</p>",
@@ -4680,7 +4680,7 @@
       "slug": "gear-hex-rope",
       "name": "Hex Rope",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/sundries/survival/rope-braided-yellow.webp",
       "system": {
         "description": {
           "value": "<p>Plain rope knotted in a hex-pattern by a courier. The knots remember the route.</p>",
@@ -4724,7 +4724,7 @@
       "slug": "gear-hex-carved-plate",
       "name": "Hex-Carved Plate",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/breastplate-layered-leather-studded-black.webp",
       "system": {
         "description": {
           "value": "<p><strong>Worn:</strong> -1 to Dexterity saving throws, +1 to Wisdom saving throws.</p>",
@@ -4783,7 +4783,7 @@
         {
           "_id": "be5e56308a84a1bb",
           "name": "Hex-Carved Plate",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/chest/breastplate-layered-leather-studded-black.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -4848,7 +4848,7 @@
       "slug": "gear-hex-glyph-plate",
       "name": "Hex-Glyph Plate",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/metal/armor-plate-reticulated.webp",
       "system": {
         "description": {
           "value": "<p>Sheet steel pre-engraved with hex-warding glyphs by an apprentice scribe. Each plate covers about a forearm's worth of armor; the glyph chosen at engraving decides what it deflects.</p>",
@@ -4892,7 +4892,7 @@
       "slug": "gear-hex-iron-cleat",
       "name": "Hex-Iron Cleat",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/metal/ingot-iron.webp",
       "system": {
         "description": {
           "value": "<p>Stamped iron cleat with hex-warding pattern. The pattern shifts when you're not looking — and when you need it to.</p>",
@@ -4936,7 +4936,7 @@
       "slug": "gear-hex-script-pistol",
       "name": "Hex-Script Pistol",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/guns/pistol-revolver-long.webp",
       "system": {
         "description": {
           "value": "<p>A rad-iron flintlock that burns Yesodium dust per shot. Each round inscribes the wound with a small, vicious hex.</p>\n",
@@ -5120,7 +5120,7 @@
       "slug": "gear-hex-script-plate",
       "name": "Hex-Script Plate",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/metal/armor-plate-reticulated.webp",
       "system": {
         "description": {
           "value": "<p>Pre-engraved metal strip carrying a single hex-warding glyph. Hand-applied by hex-scribes.</p>",
@@ -5208,7 +5208,7 @@
       "slug": "gear-hex-tuner-cassette-player",
       "name": "Hex-Tuner Cassette Player",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
       "system": {
         "description": {
           "value": "<p>An old yellow Walkman with a single cassette permanently inside. The label is hand-written in a marker that has since stopped being manufactured. The headphones are foam-and-tinfoil affairs that ride over the ears with the dignity of a sleeping cat. The player is, somehow, ley-tuned. It plays when you need it to. Sometimes more.</p><p><strong>Side A — GENERIC MOTIVATIONAL.</strong> Once per short rest as a free action, press play. You and one ally within Near range gain advantage on the next Resolve check.</p><p><strong>Side B — EMERGENCY ONLY.</strong> Once per session, flip the cassette. The track plays for the rest of the scene. All allies within Near range have advantage on every Resolve check. The cassette will not flip back without 24 hours of silence. Mal does not recommend abusing this.</p>",
@@ -5252,7 +5252,7 @@
       "slug": "gear-hex-warded-duster",
       "name": "Hex-Warded Duster",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/breastplate-banded-steel-grey.webp",
       "system": {
         "description": {
           "value": "<p>A long frontier coat with hex-script stitched into the lining and threshold-wax worked into the seams. Light enough to ride in, warded enough to sleep in. The wrongness slides off it like rain off oilcloth.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
@@ -5309,7 +5309,7 @@
         {
           "_id": "be5e4da4ff6edb08",
           "name": "Hex-Warded Duster",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/chest/breastplate-banded-steel-grey.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -5350,7 +5350,7 @@
       "slug": "gear-hex-wound-coffee-thermos",
       "name": "Hex-Wound Coffee Thermos",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
       "system": {
         "description": {
           "value": "<p>A battered steel thermos wrapped in hex-script copper wire. The interior is older than the exterior, somehow. The lid screws on counterclockwise. The coffee inside is always hot, always strong, and always tastes like exactly what kind of day you're having. Some days it's cardamom and rain. Some days it's the warm bitter ash of decisions you'd rather not revisit. Some days it's just plain.</p><p><strong>Day's Reading.</strong> Once per short rest, take a sip. The GM names a single mood-word that describes the current scene's emotional center: <em>tense. desperate. hollow. tender. funny.</em> You may use that word in conversation as if you'd been told it directly by an authority figure. (NPCs accept it as plausibly true.) The thermos refills overnight. Coffee is non-negotiable.</p>",
@@ -5504,7 +5504,7 @@
       "slug": "gear-hexstrider-cleats",
       "name": "Hexstrider Cleats",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/equipment/finger/ring-bone-spiked-skull.webp",
       "system": {
         "description": {
           "value": "<p>Lightweight cleats fitted with hex-iron studs in a deliberate pattern. The pattern shifts when no one's watching.</p><p><strong>Sure-Footed.</strong> While equipped, you have advantage on Constitution checks to keep balance on hostile terrain (rubble, ice, slick blood, hex-warped ground).</p>",
@@ -5548,7 +5548,7 @@
       "slug": "gear-horizon-courier-pack",
       "name": "Horizon Courier Pack",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/containers/bags/pack-leather-stitched-tan.webp",
       "system": {
         "description": {
           "value": "<p>Folding glider + energy assist. Gain 40‑ft fly speed for 10 minutes 1/day; overland travel time −25% for small party.</p>",
@@ -5612,7 +5612,7 @@
       "slug": "gear-hunting-rifle",
       "name": "Hunting Rifle",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/guns/rifle-hunting-scoped-sight.webp",
       "system": {
         "description": {
           "value": "<p><em>Loud where it counts. Quiet otherwise.</em></p><p>Long-arm ballistic. Two-handed.</p><p>Bolt-action long arm, walnut stock, iron sights with an optional clamp-mount for a scope nobody can afford. Slow, accurate, loud. Used for game, for guard duty, and once memorably for an argument over fence lines.</p><p><b>Standard Issue.</b> Long range, no electronics, no magic. The rifle every patrol cabinet has at least one of.</p>\n",
@@ -5797,7 +5797,7 @@
       "slug": "gear-initiate-s-robe",
       "name": "Initiate's Robe",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/robe-layered-red.webp",
       "system": {
         "description": {
           "value": "<p>Undyed sept-cloth cut to a long working robe with a corded belt. Issued to first-circle initiates of any chapterhouse or tutor-cell — the kind of garment that gets traded between students faster than any of them keep notebooks. Comfortable to channel in. Forgettable to anyone watching for trouble.</p><p><strong>Standard Issue.</strong> Light enough to manifest in. Dignified enough to walk past a sept-warden.</p>\n<p><strong>Worn:</strong> +1 to Dexterity saving throws, +1 to Wisdom saving throws.</p>",
@@ -5854,7 +5854,7 @@
         {
           "_id": "be5e02b4ee52049c",
           "name": "Initiate's Robe",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/chest/robe-layered-red.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -5895,7 +5895,7 @@
       "slug": "gear-iodine-capsule",
       "name": "Iodine Capsule",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/containers/chest/chest-tech-gold.webp",
       "system": {
         "description": {
           "value": "\n",
@@ -5964,7 +5964,7 @@
       "slug": "gear-jackalope-haggler-s-ledger",
       "name": "Jackalope Haggler's Ledger",
       "type": "equipment",
-      "img": "icons/sundries/misc/lantern-copper-lit.webp",
+      "img": "icons/sundries/books/book-teal-lightning.webp",
       "system": {
         "description": {
           "value": "<p>A fat, dog-eared ledger of debts, prices, and who-owes-whom across the Thatwards. While carried, you have an edge on any negotiation, bribe, or appraisal. The Jackalopes update theirs hourly. Yours is probably out of date and still better than nothing.</p><p><strong>Use.</strong> Once per short rest, recall an exact figure or favor to gain advantage on a single Dexterity or Economy check.</p>",
@@ -6034,7 +6034,7 @@
       "slug": "gear-lantern-of-unforgotten-light",
       "name": "Lantern of Unforgotten Light",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/lights/lantern-steel.webp",
       "system": {
         "description": {
           "value": "<p><i>“Some memories refuse to stay buried.”</i></p><p><b>Glow.</b> While lit, allies within 20 ft have have advantage on checks to resist fear/despair effects sourced from Darkness (GM adjudication) [TODO(adv-call)].</p><p><b>Purge Pulse.</b> 1/a long rest. As an action, suppress 1 level of personal Darkness/Corruption effects on allies in 20 ft for 10 minutes.</p><p><b>Note:</b> Does not change faction Darkness.</p>",
@@ -6103,7 +6103,7 @@
       "slug": "gear-laser-pistol-rad",
       "name": "Laser Pistol, Rad",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/guns/pistol-revolver-energy-heavy.webp",
       "system": {
         "description": {
           "value": "<p><em>RIGHT??</em></p><p>Stun Mode: free-action toggle; on hit, Constitution DC 12 or slowed (speed halved, −2 to attack rolls) (no hit points dealt).</p><p>You know that really cool laser blaster that you saw that one time?<br /><br />This is it.</p><p></p><p>It shoots lasers.</p><p></p><p>And has a stun mode.</p><p></p><p>RIGHT??</p>\n",
@@ -6288,7 +6288,7 @@
       "slug": "gear-laser-rifle-rad",
       "name": "Laser Rifle, Rad",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/guns/rifle-energy-blaster.webp",
       "system": {
         "description": {
           "value": "<p><em>Carry-name: Dutch. Sarge. Arnold.</em></p><p>Penetrating Beam: ignores half cover; three-quarters cover counts as half.</p><p>The kinds of people who carry guns like this are called things like \"Dutch,\" or \"Sarge,\" or \"Arnold Schwarzenegger.\"</p><p></p><p>It shoots through buildings.</p>\n",
@@ -6473,7 +6473,7 @@
       "slug": "gear-lens-of-tikkun",
       "name": "Lens of Tikkun",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/tools/scribal/lens-grey-red.webp",
       "system": {
         "description": {
           "value": "<p>Attuned only by Illuminated/Transcendent. Once/week, purify one Corrupted Spark or reduce global Darkness by 1.</p>",
@@ -6653,7 +6653,7 @@
       "slug": "gear-mantle-of-witnessed-silence",
       "name": "Mantle of Witnessed Silence",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/back/mantle-collared-black.webp",
       "system": {
         "description": {
           "value": "<p>Long ceremonial mantle worn by sept-witnesses at the trials of the lost. Silence-silk weave; vow-bone clasp at the throat.</p><p>The wearer cannot be moved by what is whispered. Charm finds no purchase; compulsion forgets its own intent.</p><p><strong>Soulbound.</strong> The mantle binds at first attunement. It cannot be re-bonded.</p><p><strong>Worn:</strong> +1 to Dexterity saving throws, +5 to Wisdom saving throws.</p>",
@@ -6710,7 +6710,7 @@
         {
           "_id": "be5e943efc29466d",
           "name": "Mantle of Witnessed Silence",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/back/mantle-collared-black.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -6757,7 +6757,7 @@
       "slug": "gear-marrow-pact-tonic",
       "name": "Marrow Pact Tonic",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/commodities/bones/bones-broken-marrow-white-red.webp",
       "system": {
         "description": {
           "value": "<p>Black-market potion brewed from heart-iron shavings, vow-resin, and a measure of the drinker's own marrow.</p><p>One ledger entry softens. Two frame dice return to the pool. The drinker pays in nerves; the body pays later.</p>",
@@ -6826,7 +6826,7 @@
       "slug": "gear-marrow-tincture",
       "name": "Marrow Tincture",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/bones/bones-broken-marrow-white-red.webp",
       "system": {
         "description": {
           "value": "<p>Refined marrow tincture, drawn under sept-supervision. Required to bind heart-iron and vow-resin compounds; can never be commercially substituted.</p>",
@@ -6870,7 +6870,7 @@
       "slug": "gear-maul",
       "name": "Maul",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/hammers/hammer-double-sledge-engraved.webp",
       "system": {
         "description": {
           "value": "<p><em>Not subtle. Not trying to be.</em></p><p>Two-handed, heavy. Pairs well with Bulwark Frame.</p><p>Two-handed iron-headed maul on a long ash haft. Heavy, slow, and absolutely uninterested in your finesse. The Bulwark's first real weapon — the one you swing when subtlety has already failed.</p><p><b>Standard Issue.</b> Heavy two-handed kinetic. No signature — Frame Dice and Ruin Charges still do their work; the maul just makes the impact mean it.</p>\n",
@@ -7055,7 +7055,7 @@
       "slug": "gear-memory-resin",
       "name": "Memory Resin",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/gems/gem-amber-insect-orange.webp",
       "system": {
         "description": {
           "value": "<p>Slow-curing resin that holds its last molded shape; useful as a binder in confession crystals and recording matrices.</p>",
@@ -7099,7 +7099,7 @@
       "slug": "gear-memory-restorative",
       "name": "Memory Restorative",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/commodities/biological/organ-brain-red.webp",
       "system": {
         "description": {
           "value": "Ritual draught — equal parts pharmacology and naming. Strips charm and compulsion off the will.\n",
@@ -7168,7 +7168,7 @@
       "slug": "gear-mercy-driver",
       "name": "Mercy Driver",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "system": {
         "description": {
           "value": "<p><em>The handle is stained where the wielder grips it. The head is unmarked.</em></p><p>Nonlethal by Design: kill becomes stable-unconscious. Stabilize 3/long rest: stabilize a visible creature, no action.</p><p><i>“Not every monster deserves a grave.”</i></p><p><b>Nonlethal by Design.</b> When you reduce a humanoid to 0 hit points with this weapon, it becomes <b>unconscious and stable</b>.</p><p><b>Charges.</b> 3/day. Spend 1 charge to stabilize a creature you can see within range (no action; once per turn).</p>",
@@ -7467,7 +7467,7 @@
       "slug": "gear-neon-spirit-armor",
       "name": "Neon Spirit Armor",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/commodities/metal/armor-plate-reticulated.webp",
       "system": {
         "description": {
           "value": "<p>It hums with the after-image of fluorescent signage. Smells like ozone and pretzel salt.</p><p><b>Neon Afterimage.</b> While in dim light or within 30 ft of an obvious artificial light source (signage, streetlights, neon, holo-ads), gain advantage on Dexterity (tumble/balance/slip-past) checks to avoid provoking opportunity attacks.</p><p><b>Ghostwalk (1/long rest).</b> As a bonus action, become briefly half-ethereal until the end of your current turn. You can move through creatures and objects as if difficult terrain. If you end your turn inside an object, you're shunted to the nearest open space and take <b>1d10 bludgeoning damage</b>.</p><p><b>Neon Signature.</b> The armor sheds faint, shifting light: a 5-ft radius of dim light. Suppress or restore as a bonus action.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
@@ -7525,7 +7525,7 @@
         {
           "_id": "be5e09b429e93d54",
           "name": "Neon Spirit Armor",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/commodities/metal/armor-plate-reticulated.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -7560,7 +7560,7 @@
       "slug": "gear-noise-suppressant",
       "name": "Noise Suppressant",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/tools/hand/wrench-mechanical-heal-blue.webp",
       "system": {
         "description": {
           "value": "<p>Counter-resonant draught. Eats the static you've been carrying — the kind powers leave behind.</p>\n",
@@ -7629,7 +7629,7 @@
       "slug": "gear-null-field-tower-shield",
       "name": "Null-Field Tower Shield",
       "type": "equipment",
-      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "img": "icons/equipment/shield/buckler-iron-cross-gray.webp",
       "system": {
         "description": {
           "value": "<p>A slab of scribed steel and hex-glyph plate that projects a small reality-stabilizing null field. The broken, corrupted, please-stop-hitting-yourself things of the Qliphoth can't get a grip on what stands behind it. Heavy. Slow. Worth it.</p><p><strong>Null Field.</strong> Resists qliphothic damage and, while braced, extends the steadying field to one adjacent ally (they ignore Compelled until they move away).</p><p><strong>Worn:</strong> -1 to Dexterity saving throws, +1 to Wisdom saving throws.</p>",
@@ -7686,7 +7686,7 @@
         {
           "_id": "be5e29575ffec271",
           "name": "Null-Field Tower Shield",
-          "img": "icons/equipment/shield/heater-steel-worn.webp",
+          "img": "icons/equipment/shield/buckler-iron-cross-gray.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -7733,7 +7733,7 @@
       "slug": "gear-oath-anchor-stone",
       "name": "Oath-Anchor Stone",
       "type": "loot",
-      "img": "icons/sundries/gaming/rune-stone-tan.webp",
+      "img": "icons/sundries/scrolls/scroll-bound-red.webp",
       "system": {
         "description": {
           "value": "<p>A carved anchorstone bound to a treaty. While the stone is intact, the treaty holds; cracking it pings every signatory across the hex.</p>",
@@ -7777,7 +7777,7 @@
       "slug": "gear-oath-ink",
       "name": "Oath-Ink",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/tools/scribal/ink-quill-pink.webp",
       "system": {
         "description": {
           "value": "<p>Vegetal ink mixed with a drop of the writer's blood and a sept-witness's tear. Used in pact-styluses and notarized vows.</p>",
@@ -7931,7 +7931,7 @@
       "slug": "gear-pact-pen-stylus",
       "name": "Pact-Pen Stylus",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "system": {
         "description": {
           "value": "<p><em>Looks like a fountain pen. Reads like a contract.</em></p><p>Binding: on hit, target either honors a prior oath or takes 1 stress (GM call).</p><p>A heavy stylus of vow-shaft and witness-glass. Held by Pactkeepers; favored when an oath needs an enforcement clause.</p><p><b>Binding.</b> On a clean hit, GM may invite the target to honor an oath they have previously sworn — at GM discretion, the target either complies or takes 1 stress.</p>\n",
@@ -8113,7 +8113,7 @@
       "slug": "gear-patrolman-s-plate",
       "name": "Patrolman's Plate",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/breastplate-layered-leather-black.webp",
       "system": {
         "description": {
           "value": "<p>A studded breastplate over a gambeson, with shoulder pauldrons that fit at least three different body types badly. Worn by faction patrols, hex constables, and anyone who needs to look like they have authority without carrying signature gear. Cheap, repairable, and forgivingly average.</p><p><strong>Standard Issue.</strong> No signature, no harmonization, no questions asked at the gate.</p>\n",
@@ -8183,7 +8183,7 @@
       "slug": "gear-pocket-sun-battery-powered",
       "name": "Pocket Sun (Battery Powered)",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/commodities/tech/battery-fuel-cell-teal.webp",
       "system": {
         "description": {
           "value": "<p>A small steel flashlight with a yellow filter and a faint, persistent warmth. Switch it on and the immediate surroundings look like 4pm in late June, regardless of when or where you are. The batteries last unreasonably long. The light is technically real. The comfort is technically real. The smell of cut grass is, fine, the smell of cut grass is in your head.</p><p><strong>Pocket Noon.</strong> Once per short rest, illuminate one Near zone in soft golden light for one minute. Allies in the zone have advantage on Resolve checks against fear, despair, or the slow corruption of qliphothic ambient. Enemies in the zone are visible regardless of cover. Mal: \"It's not actually sunlight. It's, you know, *vibes.*\"</p>",
@@ -8227,7 +8227,7 @@
       "slug": "gear-postal-worker-s-last-route-map",
       "name": "Postal Worker's Last Route Map",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/tools/navigation/map-marked-black.webp",
       "system": {
         "description": {
           "value": "<p>A laminated mail-route map, hand-annotated in three colors of ink. The roads are pre-Shattering. Most are now dust, briar, or crater. The annotations include phrases like <em>\"dog at 12, friendly,\"</em> and <em>\"Mrs. Vorhees needs the package put inside the screen door,\"</em> and, more recently in different handwriting, <em>\"the bend remembers wrong.\"</em></p><p><strong>Pre-Shattering Memory.</strong> Once per short rest, consult the map. The GM tells you one fact about the current hex that pre-dates the Shattering — a building, a road, a name, a habit of the land. This information is true; it is also at least 27 years out of date. Use it however you want.</p>",
@@ -8271,7 +8271,7 @@
       "slug": "gear-potion-of-radical-chill",
       "name": "Potion of Radical Chill",
       "type": "consumable",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/consumables/potions/potion-vial-tube-yellow.webp",
       "system": {
         "description": {
           "value": "\n",
@@ -8426,7 +8426,7 @@
       "slug": "gear-prayer-binding",
       "name": "Prayer Binding",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/materials/material-feathers-blue.webp",
       "system": {
         "description": {
           "value": "<p>Cord knotted in a sept-ritual pattern. Used to bind lenses, components, and oaths.</p>",
@@ -8470,7 +8470,7 @@
       "slug": "gear-prayer-resin",
       "name": "Prayer Resin",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/gems/gem-amber-insect-orange.webp",
       "system": {
         "description": {
           "value": "<p>Waxy buildup scraped from sept-pews after long vigils. Smells of incense and exhaustion.</p>",
@@ -8514,7 +8514,7 @@
       "slug": "gear-prayer-resin-censer",
       "name": "Prayer-Resin Censer",
       "type": "loot",
-      "img": "icons/sundries/lights/incense-burner-brass.webp",
+      "img": "icons/commodities/gems/gem-amber-insect-orange.webp",
       "system": {
         "description": {
           "value": "<p>A brass censer whose smoke carries soft-power blessings. Three sanctifications per long rest; the area resists profanation.</p>",
@@ -8602,7 +8602,7 @@
       "slug": "gear-pre-fall-scanner",
       "name": "Pre-Fall Scanner",
       "type": "loot",
-      "img": "icons/tools/navigation/compass-brass-blue.webp",
+      "img": "icons/commodities/metal/ingots-metal-tech.webp",
       "system": {
         "description": {
           "value": "<p>A relic-scanner. Sweep a hex and the device names what's hidden — radiation, waystones, buried tech, sleeping things. Three sweeps per long rest.</p>",
@@ -8646,7 +8646,7 @@
       "slug": "gear-pre-fall-transmitter",
       "name": "Pre-Fall Transmitter",
       "type": "loot",
-      "img": "icons/sundries/lights/lantern-bullseye-blue.webp",
+      "img": "icons/commodities/tech/detonator-radio.webp",
       "system": {
         "description": {
           "value": "<p>A relic-grade transmitter. Encrypts faction-wide comms across an entire hex; pre-Fall pattern, Witness-shielded against detection.</p>",
@@ -8690,7 +8690,7 @@
       "slug": "gear-pre-shattering-concert-t-shirt-xl",
       "name": "Pre-Shattering Concert T-Shirt (XL)",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/shirt-collared-yellow.webp",
       "system": {
         "description": {
           "value": "<p>Faded black cotton, unreasonably soft from a thousand washes, sized XL regardless of who's wearing it. The graphic is a band logo and tour list, both indistinct. Cities and dates the world no longer keeps. Wearers consistently describe the same vague dream — a stadium, a lighter held aloft, a single sustained chord — and consistently fail to remember it past breakfast.</p><p><strong>Tour Memory.</strong> +1 to Resolve. While worn, you do not gain Stress from being homesick, lost, or out of your element. The shirt has been to bigger venues than this one. The shirt is unimpressed.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
@@ -8747,7 +8747,7 @@
         {
           "_id": "be5ec406aef16f4b",
           "name": "Pre-Shattering Concert T-Shirt (XL)",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/chest/shirt-collared-yellow.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -8782,7 +8782,7 @@
       "slug": "gear-pressed-buckler",
       "name": "Pressed Buckler",
       "type": "equipment",
-      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "img": "icons/equipment/shield/buckler-wooden-boss-lightning.webp",
       "system": {
         "description": {
           "value": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker — the dent in the front is where someone else's mistake stopped.</p><p><strong>Standard Issue.</strong> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>\n",
@@ -8852,7 +8852,7 @@
       "slug": "gear-proselyte-recon-drone",
       "name": "Proselyte Recon Drone",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/head/tech-steel-mask.webp",
       "system": {
         "description": {
           "value": "<p>Orb drone with omnidirectional eyes. gain advantage on Stealth (Dexterity) while surveilling; can project Minor Illusion (at will) [TODO(adv-call)].</p>",
@@ -8916,7 +8916,7 @@
       "slug": "gear-proselytizer-eye-of-ezekiel",
       "name": "Proselytizer 'Eye of Ezekiel'",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/commodities/biological/eye-lizard-orange-red.webp",
       "system": {
         "description": {
           "value": "<p>Socketable orb. At will: see invisible/ethereal; 1/day mass calm‑emotions in 300 ft; surveillance cannot be fooled by illusions.</p>",
@@ -8980,7 +8980,7 @@
       "slug": "gear-quantum-staff",
       "name": "Quantum Staff",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/staves/staff-simple-jeweled-green.webp",
       "system": {
         "description": {
           "value": "<p><em>Certainty is a luxury. So is dodging.</em></p><p>Reach 10 ft. The head exists in a small superposition: once per turn, if your attack misses, you may reroll it (it turns out it landed in the timeline where it connected). Reach attacks count as melee.</p><p>A length of focusing-lens and witness-glass wound around a heart-coil that never quite decides where its business end is. Strikes register a half-second before and after they happen, which is unsettling for everyone, the wielder included.</p>\n",
@@ -9164,7 +9164,7 @@
       "slug": "gear-quipu-ledger-strap",
       "name": "Quipu Ledger Strap",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/survival/leather-strap-brown.webp",
       "system": {
         "description": {
           "value": "<p>Knotted cord mnemonic. You always recall last 10 War Log entries precisely; +1 to Economy checks to audit supplies.</p>",
@@ -9228,7 +9228,7 @@
       "slug": "gear-rad-suit-mk-i",
       "name": "Rad Suit (Mk I)",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/commodities/tech/plating-metal-armor-tech-steel-blue.webp",
       "system": {
         "description": {
           "value": "\n<p><strong>Worn:</strong> +1 to Dexterity saving throws, +1 to Wisdom saving throws.</p>",
@@ -9286,7 +9286,7 @@
         {
           "_id": "be5e88696ef0d7c5",
           "name": "Rad Suit (Mk I)",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/commodities/tech/plating-metal-armor-tech-steel-blue.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -9333,7 +9333,7 @@
       "slug": "gear-rad-suit-mk-ii",
       "name": "Rad Suit (Mk II)",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/commodities/metal/plating-metal-armor-tech-steel.webp",
       "system": {
         "description": {
           "value": "\n<p><strong>Worn:</strong> +2 to Wisdom saving throws.</p>",
@@ -9391,7 +9391,7 @@
         {
           "_id": "be5e93d0767445fd",
           "name": "Rad Suit (Mk II)",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/commodities/metal/plating-metal-armor-tech-steel.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -9438,7 +9438,7 @@
       "slug": "gear-rad-suit-mk-iii",
       "name": "Rad Suit (Mk III)",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/commodities/tech/plating-metal-armor-tech-energy-white.webp",
       "system": {
         "description": {
           "value": "\n<p><strong>Worn:</strong> -1 to Dexterity saving throws, +3 to Wisdom saving throws.</p>",
@@ -9496,7 +9496,7 @@
         {
           "_id": "be5e5949efd140b7",
           "name": "Rad Suit (Mk III)",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/commodities/tech/plating-metal-armor-tech-energy-white.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -9567,7 +9567,7 @@
       "slug": "gear-rad-iron",
       "name": "Rad-Iron",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/metal/ingot-worn-iron.webp",
       "system": {
         "description": {
           "value": "<p>Reclaimed iron from radiation-saturated ruins. Carries a faint click; tempered for energy weapon frames.</p>",
@@ -9611,7 +9611,7 @@
       "slug": "gear-rad-bloom-injector",
       "name": "Rad‑Bloom Injector",
       "type": "consumable",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/consumables/potions/potion-vial-tube-yellow.webp",
       "system": {
         "description": {
           "value": "<p><b>Use:</b> Remove radiation effects from yourself. For the next 10 minutes, you experience vivid hallucinations (GM voice opportunity).</p><p><b>Engine hook:</b> flagged for Bad Eden radiation cleanse.</p>",
@@ -9682,7 +9682,7 @@
       "slug": "gear-radcloth-hood",
       "name": "Radcloth Hood",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/head/hood-cowl-mask-purple.webp",
       "system": {
         "description": {
           "value": "<p>Provides gain advantage on saves vs [TODO(adv-call)]. mild radiation &amp; spores; reduces Swamp/Mire and Wasteland exposure checks.</p>",
@@ -9746,7 +9746,7 @@
       "slug": "gear-reactor-shield-cape",
       "name": "Reactor Shield Cape",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/back/cape-layered-orange.webp",
       "system": {
         "description": {
           "value": "<p>As a reaction to taking fire or lightning damage, gain resistance until end of your next turn (3/day).</p>",
@@ -9810,7 +9810,7 @@
       "slug": "gear-root-leather",
       "name": "Root Leather",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/equipment/hand/gauntlet-tooled-leather-blue.webp",
       "system": {
         "description": {
           "value": "<p>Leather cured with hex-root extract; tougher than vegetable-tan, breathes against radiation.</p>",
@@ -9854,7 +9854,7 @@
       "slug": "gear-rust-ooze-solvent-vial",
       "name": "Rust-Ooze Solvent Vial",
       "type": "consumable",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/consumables/potions/potion-vial-corked-purple.webp",
       "system": {
         "description": {
           "value": "<p>Dissolves mundane rust/ooze residue; grants advantage to escape viscous traps or restraints crafted from rusting materials for 1 minute.</p>",
@@ -9925,7 +9925,7 @@
       "slug": "gear-s-narchy-burger-mascot-s-final-smile",
       "name": "S'narchy Burger Mascot's Final Smile",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/commodities/currency/coin-engraved-sun-smile-copper.webp",
       "system": {
         "description": {
           "value": "<p>A jagged shard of pre-Fall enamel signage. The mascot's grin is preserved exactly as it was when the world stopped being funny on purpose. Most people pin it to a coat. Some keep it in a pocket. A few have tried to throw it away. It comes back. Probably. I haven't checked.</p><p><strong>Mascot's Last Dignity.</strong> Gain advantage on the first Intimidate or Mock check you make each encounter. Other people see the brooch. Other people remember S'narchy Burger. Other people make their check against being charmed by your obvious bad taste.</p>",
@@ -9969,7 +9969,7 @@
       "slug": "gear-s-narchy-burger-spatula-of-1-sass",
       "name": "S'narchy Burger Spatula of +1 Sass",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/maces/mace-spiked-cube-wood.webp",
       "system": {
         "description": {
           "value": "<p><em>The grill is cold. The burns are not.</em></p><p>Improvised melee. On a hit, you may make a withering remark — target rolls Wisdom saving throw, DC 11 or is Frightened until the end of its next turn.</p><p>Standard-issue S'narchy Burger flat-top spatula, well-seasoned, slightly cursed by decades of overheard sarcasm. Hits about as hard as you'd expect and exactly as hard as it needs to.</p>\n",
@@ -10151,7 +10151,7 @@
       "slug": "gear-s-narchy-burger-special-sauce-sealed-packet-pre-fall",
       "name": "S'narchy Burger Special Sauce (Sealed Packet, Pre-Fall)",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/sundries/documents/envelope-sealed-red-white.webp",
       "system": {
         "description": {
           "value": "<p>A small foil packet. The logo is half-flaked. The expiration date is, generously, optimistic. The seal is intact. The contents are, against all known food science and several known thermodynamic principles, still safe. Allesh Gilliam has a quiet trade in these. Lyrenn refuses to touch them. Khezek Tor takes them as wages.</p><p><strong>The Sauce That Knows.</strong> Eat (action). For the next scene, you cannot tell a lie. (You may decline to speak. You may speak truthfully. You may speak incompletely. You cannot affirm a falsehood.) NPCs notice. Some will trust you more. Some will leave the room. Mal: \"This is S'narchy Burger Special Sauce. We don't know why it works. We've stopped asking.\"</p>",
@@ -10220,7 +10220,7 @@
       "slug": "gear-sacred-gold",
       "name": "Sacred Gold",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/materials/material-feathers-blue.webp",
       "system": {
         "description": {
           "value": "<p>Gold reclaimed from sept-tithes and re-melted at consecrated forge. Resists qliphothic tarnish.</p>",
@@ -10264,7 +10264,7 @@
       "slug": "gear-salvager-s-crown",
       "name": "Salvager's Crown",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/commodities/treasure/crown-blue-gold.webp",
       "system": {
         "description": {
           "value": "<p>While in Ruins/Urban, double Materials recovered; gain advantage on checks to repair vehicles [TODO(adv-call)].</p>",
@@ -10328,7 +10328,7 @@
       "slug": "gear-sap",
       "name": "Sap",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/clubs/club-baton-studded.webp",
       "system": {
         "description": {
           "value": "<p><em>Compact. Apologetic. Functional.</em></p><p>Concealable. Damage easily declared nonlethal at the wielder's option.</p><p>Leather-wrapped lead-shot bludgeon, palm-sized. Lives in a pocket or a sleeve. Designed to put someone out without breaking anything that won't heal in a week.</p><p><b>Standard Issue (Subdual).</b> Damage is subdual-flavored — narratively kinetic but easy to declare nonlethal. Useful for Couriers, intriguers, and anyone whose plan ended with \"and then we walk away.\"</p>\n",
@@ -10510,7 +10510,7 @@
       "slug": "gear-scarf-that-was-a-cat-probably",
       "name": "Scarf That Was a Cat (Probably)",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/leg/pants-cloth-flowing-purple.webp",
       "system": {
         "description": {
           "value": "<p>An unreasonably long woolen scarf, two-tone gray, that occasionally shifts position on its own. Sometimes it tightens against the neck on a cold night. Sometimes it falls off your shoulder for no reason. Sometimes, very quietly, when you are alone in a room, it purrs. The previous owner left it to you. The previous owner was very specific that this was a kindness.</p><p><strong>Companion-Texture.</strong> +1 to Resolve while worn. Once per short rest, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p><p><strong>Worn:</strong> +2 to Wisdom saving throws.</p>",
@@ -10567,7 +10567,7 @@
         {
           "_id": "be5e01842b9c798d",
           "name": "Scarf That Was a Cat (Probably)",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/leg/pants-cloth-flowing-purple.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -10608,7 +10608,7 @@
       "slug": "gear-schr-dinger-s-cudgel",
       "name": "Schrödinger's Cudgel",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/staves/staff-orb-feather.webp",
       "system": {
         "description": {
           "value": "<p><em>Mal: 'I peeked. It's both. It's so both.'</em></p><p>On a hit, roll the 1d12 twice — the wielder chooses which result the universe collapses to (cat alive / cat extremely not). Observers describe the noise differently afterward and are always certain they're right.</p><p>A sealed box on the end of a stick. Do not open the box. Inside is, allegedly, a probability core and, allegedly, a cat, and the staff's whole function is to refuse to tell you which until the swing lands. Hits with the confidence of something that already knows how this ends.</p>\n",
@@ -10790,7 +10790,7 @@
       "slug": "gear-scrapwork-toolkit",
       "name": "Scrapwork Toolkit",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/tools/medical/toolkit-surgical-pink.webp",
       "system": {
         "description": {
           "value": "<p>Counts as tinker's tools; when repairing constructs/vehicles, reduce time by 25%.</p>",
@@ -10854,7 +10854,7 @@
       "slug": "gear-scribed-steel",
       "name": "Scribed Steel",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/metal/ingot-steel-brass.webp",
       "system": {
         "description": {
           "value": "<p>Forge-blank steel inscribed with sept-canon glyphs along the fuller. Holds blessing in the cut.</p>",
@@ -10898,7 +10898,7 @@
       "slug": "gear-scrubber-harness",
       "name": "Scrubber Harness",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/waist/belt-leather-black-brass.webp",
       "system": {
         "description": {
           "value": "<p><i>“The Geiger clicks slow, then stops.”</i></p><p><b>Radiation Dampening.</b> Reduce radiation exposure tier by 1 for the wearer (to a minimum of 0), if your Bad Eden radiation engine is enabled.</p><p><b>Cleanse.</b> 2/day. As an action, cleanse radiation effects from one ally within 5 ft (GM adjudication; engine hook planned).</p>",
@@ -10967,7 +10967,7 @@
       "slug": "gear-self-wrapping-sandwich",
       "name": "Self-Wrapping Sandwich",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/commodities/bones/skull-weird.webp",
       "system": {
         "description": {
           "value": "<p>A wax-paper sandwich that re-folds itself when you set it down. Take a bite, set it down, look up, look back: re-wrapped. Take another bite, set it down. Re-wrapped. The bread stays fresh. The filling stays at exactly the temperature it was when you got it. You have been eating this sandwich for three days now. So has the previous owner, apparently. So has the owner before them.</p><p><strong>Eternal Lunch.</strong> Heals 1 Stress per short rest if eaten during the scene. Cannot be eaten in fewer than 4 actions across at least 4 scenes. The sandwich never spoils. The sandwich never runs out. The sandwich is approximately 60% as satisfying as a real sandwich.</p>",
@@ -11036,7 +11036,7 @@
       "slug": "gear-sephirotic-anchor",
       "name": "Sephirotic Anchor",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/tools/nautical/anchor-blue.webp",
       "system": {
         "description": {
           "value": "<p>When planted for 10 minutes, creates a 60‑ft sanctuary: enemies have roll disadvantage on attacks; Darkness events suppressed [TODO(adv-call)].</p>",
@@ -11100,7 +11100,7 @@
       "slug": "gear-sephirotic-lens",
       "name": "Sephirotic Lens",
       "type": "equipment",
-      "img": "icons/sundries/misc/lantern-copper-lit.webp",
+      "img": "icons/tools/scribal/lens-grey-brown.webp",
       "system": {
         "description": {
           "value": "<p>Crystal lens carved with a single sefirot glyph at the rim. Hold it up and only that emanation passes through.</p><p><b>Aligned Sight.</b> While attuned, equipped, and tuned to a sephirah you've named, you have advantage on magic tests aligned to that sephirah.</p>",
@@ -11170,7 +11170,7 @@
       "slug": "gear-sept-tuning-fork",
       "name": "Sept Tuning Fork",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/tools/cooking/fork-steel-tan.webp",
       "system": {
         "description": {
           "value": "<p>Cast at the moment of dawn from sept-bell alloy. Used as a tuning core in resonant weapons.</p>",
@@ -11312,7 +11312,7 @@
       "slug": "gear-sept-cloth",
       "name": "Sept-Cloth",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/cloth/cloth-bolt-light-green.webp",
       "system": {
         "description": {
           "value": "<p>Hand-loomed cloth carrying the residue of the prayers worked into it. Light, breathable, faintly luminous in the dark.</p>",
@@ -11356,7 +11356,7 @@
       "slug": "gear-sept-hush-amulet",
       "name": "Sept-Hush Amulet",
       "type": "equipment",
-      "img": "icons/equipment/neck/amulet-runed-tan.webp",
+      "img": "icons/equipment/chest/tech-red.webp",
       "system": {
         "description": {
           "value": "<p>A worn amulet that swallows sound around the wearer. Three scenes of silence per long rest; speech still passes, but boots and breath do not.</p>\n<p><strong>Worn:</strong> +1 to Dexterity saving throws, +1 to Wisdom saving throws.</p>",
@@ -11413,7 +11413,7 @@
         {
           "_id": "be5e651d5f3811ae",
           "name": "Sept-Hush Amulet",
-          "img": "icons/equipment/neck/amulet-runed-tan.webp",
+          "img": "icons/equipment/chest/tech-red.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -11454,7 +11454,7 @@
       "slug": "gear-sept-stamped-haft",
       "name": "Sept-Stamped Haft",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/metal/ingot-stamped-steel.webp",
       "system": {
         "description": {
           "value": "<p>Hardwood haft pressed with the maker-sept's seal. Improves grip in mercy weapons and ritual mauls.</p>",
@@ -11498,7 +11498,7 @@
       "slug": "gear-septhide-vestments",
       "name": "Septhide Vestments",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/vest-bulletproof-body-armor.webp",
       "system": {
         "description": {
           "value": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in — corruption finds the cloth quieter than the body beneath.</p>\n<p><strong>Worn:</strong> +1 to Dexterity saving throws, +2 to Wisdom saving throws.</p>",
@@ -11555,7 +11555,7 @@
         {
           "_id": "be5e31ca4f7367d5",
           "name": "Septhide Vestments",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/chest/vest-bulletproof-body-armor.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -11646,7 +11646,7 @@
       "slug": "gear-sigil-of-quiet-crossings",
       "name": "Sigil of Quiet Crossings",
       "type": "equipment",
-      "img": "icons/sundries/misc/lantern-copper-lit.webp",
+      "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
       "system": {
         "description": {
           "value": "<p>A small enameled pin worn at the collar by Shadow Couriers. The sigil shifts depending on the threshold most recently crossed by the wearer.</p><p><strong>Recognized in Transit.</strong> While attuned and equipped, doors that the wearer has previously passed remain open one beat longer than they should — narratively, the courier slips through where another wouldn't.</p>",
@@ -11716,7 +11716,7 @@
       "slug": "gear-silence-silk",
       "name": "Silence-Silk",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/materials/material-cotton-white.webp",
       "system": {
         "description": {
           "value": "<p>Spider-silk from caves below sept-trial chambers. Dampens sound and rumor in equal measure.</p>",
@@ -11760,7 +11760,7 @@
       "slug": "gear-singing-hammer",
       "name": "Singing Hammer",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/hammers/hammer-mallet-black.webp",
       "system": {
         "description": {
           "value": "<p><em>Held wrong, it sings flat.</em></p><p>Resonant: on hit, target's next powers rolls misfire with +1 bias.</p><p>Two-handed maul forged around a sept-tuning-fork. The head hums a single note when drawn — the note matches the wielder's name when spoken aloud.</p><p><b>Resonant.</b> On a clean hit, the target's next powers has +1 misfire bias.</p>\n",
@@ -11944,7 +11944,7 @@
       "slug": "gear-slug-pistol",
       "name": "Slug Pistol",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/guns/pistol-revolver-energy-heavy.webp",
       "system": {
         "description": {
           "value": "<p><em>Boring. Reliable. The two best things a pistol can be.</em></p><p>Standard ballistic sidearm. No signature ability.</p><p>Standard-pattern slug-throwing sidearm. Iron sights, six-round chamber, kicks like a polite mule. The most common ranged weapon in Bad Eden — the kind of pistol you find in a glove box, a holster, or the bottom of a trade-post crate.</p><p><b>Standard Issue.</b> No signature, no electronics, no hum. It just shoots.</p>\n",
@@ -12128,7 +12128,7 @@
       "slug": "gear-snack-machine-familiar",
       "name": "Snack Machine Familiar",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/commodities/tech/gear-wheels-double-steel.webp",
       "system": {
         "description": {
           "value": "<p>Tiny construct. Display of impossible snacks. Temperament like a disgruntled cashier.</p><p><b>Familiar (Action, 8 hours or until dismissed).</b> Deploy as a familiar. Acts on your initiative. Speed 25 ft (no fly). Can take Help; cannot Attack.</p><p><b>Snack Dispense (3/Day, bonus action while within 5 ft).</b> Choose one:</p><ul><li><b>Sugar Rush.</b> Gain 1d4 temporary hit points.</li><li><b>Salt &amp; Focus.</b> +1 to your next attribute check within 1 minute.</li><li><b>Caffeine Bolt.</b> Walking speed +10 ft for 1 minute.</li></ul><p><b>Stat Block (quick).</b> Tiny construct; AC 13; hit points 5; Str 6 Dex 14 Con 10 Int 4 Wis 10 Cha 5; darkvision 60 ft; immune poison; condition immune poisoned. Perception +2; Stealth +4.</p><p><b>Dismiss.</b> Action — recall into the item. If it drops to 0 hit points, it vanishes; redeploys after a long rest.</p>",
@@ -12284,7 +12284,7 @@
       "slug": "gear-soft-alloy",
       "name": "Soft Alloy",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/materials/material-webbing.webp",
       "system": {
         "description": {
           "value": "<p>Engineered alloy that deforms under impact, transferring force without fragmenting bone. Mercy-weapon staple.</p>",
@@ -12328,7 +12328,7 @@
       "slug": "gear-soulbound-hex-reaver",
       "name": "Soulbound Hex-Reaver",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/fist/claw-tech-spike-red.webp",
       "system": {
         "description": {
           "value": "<p>A black-bladed reaver, etched with the wielder's true name. Speaks softly when drawn. Refuses any other grip.</p>\n",
@@ -12512,7 +12512,7 @@
       "slug": "gear-spark-tuned-rosary",
       "name": "Spark‑Tuned Rosary",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/consumables/potions/potion-flask-corked-tied-necklace-teal.webp",
       "system": {
         "description": {
           "value": "<p>While attuned, you have gain advantage on checks to identify Sparks and −1 local Darkness once per week after a vigil [TODO(adv-call)].</p>",
@@ -12576,7 +12576,7 @@
       "slug": "gear-stabilizer-patch",
       "name": "Stabilizer Patch",
       "type": "consumable",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/tools/medical/bandage-rough.webp",
       "system": {
         "description": {
           "value": "<p>Adhesive med patch. Bonus Action: remove 1 level of exhaustion from environmental travel once per day.</p>",
@@ -12647,7 +12647,7 @@
       "slug": "gear-static-aegis",
       "name": "Static Aegis",
       "type": "equipment",
-      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "img": "icons/equipment/shield/buckler-wooden-boss-lightning.webp",
       "system": {
         "description": {
           "value": "<p>A salvaged pre-Fall riot shield with the emitter coil still good. Thumb the stud and a crackling static field sheets across the face — it grounds incoming electrical and stands the hair up on everyone within arm's reach. Pairs with any one-handed weapon.</p><p><b>Active Ward.</b> While raised, the field bleeds off lightning damage; a melee attacker that hits you takes 1 electrical from the discharge.</p>\n",
@@ -12704,7 +12704,7 @@
         {
           "_id": "be5e14df9b9b7b71",
           "name": "Static Aegis",
-          "img": "icons/equipment/shield/heater-steel-worn.webp",
+          "img": "icons/equipment/shield/buckler-wooden-boss-lightning.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -12739,7 +12739,7 @@
       "slug": "gear-stay-in-milk-embroidered-tea-towel",
       "name": "STAY IN MILK Embroidered Tea Towel",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/commodities/cloth/cloth-bolt-embroidered-pink.webp",
       "system": {
         "description": {
           "value": "<p>Hand-embroidered. Cross-stitched. The advice is, on examination, slightly off. The advice is also, on examination, somehow correct in this specific timeline. Folded once and tucked into a belt or backpack. The corner pokes out of your gear like a small flag of misplaced parental concern.</p><p><strong>Bad Advice Resistance.</strong> Gain advantage on Resolve checks against compulsion, charm, or social pressure that takes the form of \"helpful\" advice from authority figures. Doesn't work against advice from your own parents. Sorry. That's just how the embroidery is wired.</p>",
@@ -12783,7 +12783,7 @@
       "slug": "gear-steelweave-hauberk",
       "name": "Steelweave Hauberk",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/breastplate-scale-grey.webp",
       "system": {
         "description": {
           "value": "<p>A heavy hauberk woven through with a fine tension-thread of reactive yesodium-doped wire, cut and rivetted by a journeyman armorer in one of the older Bad Eden plate-houses. The weave snags incoming force a half-beat before it lands, redistributing it into the wearer's stance instead of their ribs. Heavy. Expensive. Worth it.</p><p><strong>Reactive Lacing.</strong> While worn, the wearer may shift one die of incoming bludgeoning, piercing, or slashing damage into Stress instead of hit points, once per short rest. No upkeep, no harmonization — the thread does the thinking.</p><p><strong>Worn:</strong> +1 to Wisdom saving throws.</p>",
@@ -12842,7 +12842,7 @@
         {
           "_id": "be5efba9a5303e57",
           "name": "Steelweave Hauberk",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/chest/breastplate-scale-grey.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -12895,7 +12895,7 @@
       "slug": "gear-stim-spike",
       "name": "Stim Spike",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/equipment/finger/ring-bone-horned-spike.webp",
       "system": {
         "description": {
           "value": "<p>Combat stim ampoule. Burns clean, knits torn meat, leaves the user steady-handed for the next exchange.</p>\n",
@@ -12964,7 +12964,7 @@
       "slug": "gear-surgeon-s-pact",
       "name": "Surgeon's Pact",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/tools/laboratory/injector-needle-syringe-plunger.webp",
       "system": {
         "description": {
           "value": "<p>Black-market field surgery in a syringe. Unbinds death from the body for a moment; the cost lands in stress, not flesh.</p>",
@@ -13033,7 +13033,7 @@
       "slug": "gear-terraformer-ampule",
       "name": "Terraformer Ampule",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/consumables/potions/potion-vial-corked-purple.webp",
       "system": {
         "description": {
           "value": "<p>Crystal vial. Expend to cleanse a 30‑ft radius hazard; if used in Wasteland, reduce regional Darkness by 1 (once/region).</p>",
@@ -13097,7 +13097,7 @@
       "slug": "gear-tesseract-map",
       "name": "Tesseract Map",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/tools/navigation/map-marked-brown.webp",
       "system": {
         "description": {
           "value": "<p>Folding holo‑map. Once/turn strategic: preview one travel encounter before it triggers; 1/day retcon last travel as if safe.</p>",
@@ -13161,7 +13161,7 @@
       "slug": "gear-texas-shaped-belt-buckle-of-mild-authority",
       "name": "Texas-Shaped Belt Buckle of Mild Authority",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/equipment/waist/belt-buckle-gold-blue.webp",
       "system": {
         "description": {
           "value": "<p>A belt buckle in the shape of the Frontier Formerly Known As Texas. Cast brass, slightly tarnished, the panhandle a little crooked because nobody really knows where the panhandle WAS, alright? The maps are vague. The buckle is more confident than the maps. People notice.</p><p><strong>Mild Authority.</strong> While worn (visibly), once per short rest you may extend a social interaction by one sentence. The other party will hear you out. They are not obligated to agree. (Mal: \"This is, technically, a magic item. Mostly it's brass and audacity.\")</p>",
@@ -13205,7 +13205,7 @@
       "slug": "gear-the-apologizing-burger",
       "name": "The Apologizing Burger",
       "type": "consumable",
-      "img": "icons/consumables/potions/bottle-round-corked-glowing-red.webp",
+      "img": "icons/consumables/food/shank-meat-bone-glazed-red.webp",
       "system": {
         "description": {
           "value": "<p>A wrapped burger that murmurs faint apologies through the wax paper. Listen, I don't know either. I've stopped asking. Some chef in Allesh Gilliam started making them after the Shattering and people just kept eating them. The bun is good. The meat is real-ish. The apologies are sincere.</p><p><strong>One-Time Snack.</strong> Eat (action). Recover 1d4 Stress and 1 hit points. The burger thanks you for forgiving it. Cannot be saved for later — apologies don't keep.</p>",
@@ -13274,7 +13274,7 @@
       "slug": "gear-the-last-working-vending-machine-in-bad-eden-portable-kit",
       "name": "The Last Working Vending Machine in Bad Eden (Portable Kit)",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/commodities/tech/cog-gear-steel-glass.webp",
       "system": {
         "description": {
           "value": "<p>Not actually a full vending machine. A small folding kit — about the size of a lunchbox — that, when unfolded, is unmistakably the input slot, the selection grid, and the dispenser of a 1980s vending machine. Drop a small item in. Press a button (any button — it doesn't matter which). Wait six seconds. A different item drops out. The kit was built by someone who had clearly thought about this for a long time and lost.</p><p><strong>The Trade.</strong> Once per session, deposit any single Tier-I item. Roll 1d6: 1-2 = a roughly equivalent Tier-I item (GM choice), 3-4 = a Tier-II item that is *somehow related*, 5 = a small useful tool you didn't know you needed, 6 = the original item back, plus a sandwich. The kit refuses to operate twice in the same scene. The kit has opinions.</p>",
@@ -13318,7 +13318,7 @@
       "slug": "gear-threshold-bell-hand-sized",
       "name": "Threshold Bell, Hand-Sized",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/tools/fishing/net-hand-white.webp",
       "system": {
         "description": {
           "value": "<p>Brass thumb-bell on a hex-rope cord. Couriers and sept-witnesses ring it once before crossing a threshold that matters; the sound marks the door for return.</p><p>Mundane bell. Ritual matters. Foley for fiction.</p>",
@@ -13362,7 +13362,7 @@
       "slug": "gear-threshold-wax",
       "name": "Threshold Wax",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/sundries/lights/candle-unlit-red.webp",
       "system": {
         "description": {
           "value": "<p>Black wax sealed at a sept-threshold. Holds the threshold's permission; used in courier sigils and crossing pacts.</p>",
@@ -13406,7 +13406,7 @@
       "slug": "gear-tree-of-life-shard",
       "name": "Tree-of-Life Shard",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/sundries/documents/document-tree-brown.webp",
       "system": {
         "description": {
           "value": "<p>Crystalline fragment dropped from sephirotic alignment events. Each shard carries one sefirah's signature; used in lenses and ward-anchors.</p>",
@@ -13450,7 +13450,7 @@
       "slug": "gear-unicorn-ramming-module",
       "name": "Unicorn Ramming Module",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/commodities/tech/plating-metal-armor-tech-energy-white.webp",
       "system": {
         "description": {
           "value": "<p>Vehicle upgrade: grants Energy Ramming Horn action (6d10 force; push 30 ft; recharge 5‑6).</p>",
@@ -13514,7 +13514,7 @@
       "slug": "gear-valhauler-pulsar-core",
       "name": "Valhauler Pulsar Core",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/commodities/tech/electronics-tech-interface-crystal-yellow.webp",
       "system": {
         "description": {
           "value": "<p>Vehicle super‑core: doubles pulsar weapon die size; once/day skip 1 travel encounter and gain +2 to next opposed roll.</p>",
@@ -13578,7 +13578,7 @@
       "slug": "gear-veilbreaker-mantle",
       "name": "Veilbreaker Mantle",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/back/mantle-collared-black.webp",
       "system": {
         "description": {
           "value": "<p><em>“You remember who you were.”</em></p><p><strong>Ward.</strong> You gain +1 to Wisdom check and +1 to Insight (Wisdom).</p><p><strong>Once per short rest:</strong> Ignore the first failed check caused by ambient Darkness (GM adjudication).</p>",
@@ -13746,7 +13746,7 @@
       "slug": "gear-vow-bone",
       "name": "Vow-Bone",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/bones/bone-fragments-white.webp",
       "system": {
         "description": {
           "value": "<p>Calcified marrow recovered from witnesses who died holding a vow. Carved into clasps, hilt-pommels, and ritual fastenings.</p>",
@@ -13790,7 +13790,7 @@
       "slug": "gear-vow-bone-stamp",
       "name": "Vow-Bone Stamp",
       "type": "loot",
-      "img": "icons/sundries/documents/document-sealed-tan.webp",
+      "img": "icons/commodities/bones/bone-jaw-teeth-grey.webp",
       "system": {
         "description": {
           "value": "<p>Press the carved bone into oath-ink and a document becomes a vow. Breaking the vow blackens the seal — and the breaker.</p>",
@@ -13834,7 +13834,7 @@
       "slug": "gear-vow-bound-cuffs",
       "name": "Vow-Bound Cuffs",
       "type": "loot",
-      "img": "icons/equipment/wrist/manacles-iron.webp",
+      "img": "icons/sundries/scrolls/scroll-bound-gold.webp",
       "system": {
         "description": {
           "value": "<p>Cold-iron cuffs scribed with a vow of stillness. The wearer cannot lie, attack, or flee until they accept the oath, fulfill it, or break it (and themselves).</p>",
@@ -13878,7 +13878,7 @@
       "slug": "gear-vow-bound-edge",
       "name": "Vow-Bound Edge",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-black-orange.webp",
       "system": {
         "description": {
           "value": "<p>Tempered cutting blank consecrated to a single function. Loses its potency if used outside its sworn role.</p>",
@@ -13922,7 +13922,7 @@
       "slug": "gear-vow-resin",
       "name": "Vow-Resin",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-black-orange.webp",
       "system": {
         "description": {
           "value": "<p>Crystalized residue collected from sept-rooms after long oath-keeping vigils. Used to seal pact-pen barrels and bind marrow-tonic compounds.</p>",
@@ -13966,7 +13966,7 @@
       "slug": "gear-vow-shaft",
       "name": "Vow-Shaft",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/sundries/scrolls/scroll-bound-gold.webp",
       "system": {
         "description": {
           "value": "<p>Hollow oath-wood reinforced with witness-glass. Forms the spine of pact styluses and binding tools.</p>",
@@ -14010,7 +14010,7 @@
       "slug": "gear-war-tower-teeth-halo",
       "name": "War Tower Teeth Halo",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/sundries/flags/banner-sword-blue.webp",
       "system": {
         "description": {
           "value": "<p>Vehicle upgrade: reactive radiant bite (2d8) vs attackers; stacks with sanctum shields.</p>",
@@ -14288,7 +14288,7 @@
       "slug": "gear-wardstone-of-gevurah",
       "name": "Wardstone of Gevurah",
       "type": "equipment",
-      "img": "icons/svg/item-bag.svg",
+      "img": "icons/equipment/neck/necklace-simple-carved-stone.webp",
       "system": {
         "description": {
           "value": "<p>Socketed stone. Allies within 30 ft gain +1 to AC while defending a hex; counts as 'fortified' for one encounter.</p>",
@@ -14352,7 +14352,7 @@
       "slug": "gear-whataburger-coupon-unredeemed-vintage",
       "name": "Whataburger Coupon, Unredeemed (Vintage)",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/commodities/currency/coins-shield-sword-stack-silver.webp",
       "system": {
         "description": {
           "value": "<p>A laminated paper coupon. Two for one breakfast taquitos, valid through a date so old the typeface itself is illegal in three coalitions. Yes. People will trade you a horse for it. Yes, even now. Yes, I'm aware that doesn't make sense. Take it up with the Akashic field.</p><p><strong>Currency of the Frontier-Formerly-Known.</strong> Once per session, in any wasteland market or trading post, this coupon counts as a Tier-II trade good for purposes of barter. After the trade, it goes back in your pocket. The vendor is still happy about it three days later.</p>",
@@ -14396,7 +14396,7 @@
       "slug": "gear-witness-receipt",
       "name": "Witness Receipt",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/sundries/documents/document-sealed-red-white.webp",
       "system": {
         "description": {
           "value": "<p>You're not sure when it started. You found one in your jacket after a fight you survived. Then another after a deal you regretted. Then another after a kindness you forgot you'd done. The receipts are itemized, dated, and printed in a font that doesn't quite exist. They are addressed to you. They are sometimes harsh. They are never wrong.</p><p><strong>The Ledger Knows.</strong> Soulbound to you the moment you accept the first receipt. Once per session, present a recent receipt to a Pactkeeper, an archivist, or a sufficiently old institutional NPC. They treat the receipt as legitimate testimony. (Mal: \"Yes. They will. I don't know why. Don't ask. Just use it sparingly.\")</p>",
@@ -14440,7 +14440,7 @@
       "slug": "gear-witness-resin",
       "name": "Witness Resin",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/gems/gem-amber-insect-orange.webp",
       "system": {
         "description": {
           "value": "<p>Resinous residue from sept-witnesses who held truth too long. Used in the highest-tier ceremonial gear.</p>",
@@ -14484,7 +14484,7 @@
       "slug": "gear-witness-decoy-pin",
       "name": "Witness-Decoy Pin",
       "type": "equipment",
-      "img": "icons/sundries/misc/lantern-copper-lit.webp",
+      "img": "icons/tools/fasteners/pin-spiked.webp",
       "system": {
         "description": {
           "value": "<p>Snap the pin — for one round, a witness-glass simulacrum walks where you stood. Single use; the pin shatters.</p>",
@@ -14554,7 +14554,7 @@
       "slug": "gear-witness-glass",
       "name": "Witness-Glass",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/treasure/glass-crystal-green.webp",
       "system": {
         "description": {
           "value": "<p>Slag glass cooled too slow at a sept-trial. Holds an impression of the testimony given over it. Used in recording crystals and oath-styluses.</p>",
@@ -14598,7 +14598,7 @@
       "slug": "gear-witness-glass-scope",
       "name": "Witness-Glass Scope",
       "type": "equipment",
-      "img": "icons/sundries/misc/lantern-copper-lit.webp",
+      "img": "icons/commodities/treasure/glass-crystal-green.webp",
       "system": {
         "description": {
           "value": "<p>A short hand-scope. Through the witness-glass lens, illusion thins and concealment glows the color of its weave.</p>",
@@ -14668,7 +14668,7 @@
       "slug": "gear-worker-s-leathers",
       "name": "Worker's Leathers",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/breastplate-layered-leather-stitched.webp",
       "system": {
         "description": {
           "value": "<p>Heavy work jacket, reinforced gloves, and a thigh-strap of tool loops. The standard kit for hex-laborers, salvage crews, scrap-line foremen, and anyone whose day involves both sharp edges and difficult conversations with their employer. Not glamorous. Hard to ruin.</p><p><strong>Standard Issue.</strong> Counts as armor for protection rolls and as gear for any skill check you can talk your way into calling \"work.\"</p><p><strong>Worn:</strong> +1 to Dexterity saving throws.</p>",
@@ -14725,7 +14725,7 @@
         {
           "_id": "be5e555884e82711",
           "name": "Worker's Leathers",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/chest/breastplate-layered-leather-stitched.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -14760,7 +14760,7 @@
       "slug": "gear-yesodic-edge",
       "name": "Yesodic Edge",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "system": {
         "description": {
           "value": "<p><em>Hum and edge agree on a single conclusion.</em></p><p>Memory Edge (1/raid +1 margin), Adaptive Weight, Identity Cut (+1 damageStep vs constructs/gates/dream-entities). Harmonized only.</p><p>One-handed blade forged from Yesodium tempered in scribed-steel and bound with marrow tincture. When stabilized to <i>Harmonized</i>, the blade carries Yesod's signature.</p><p><b>Memory Edge.</b> Once per raid, after a roll resolves, add +1 margin retroactively.</p><p><b>Adaptive Weight.</b> Counts as the wielder's optimal metal — no encumbrance penalties.</p><p><b>Identity Cut.</b> +1 effective damageStep against constructs, gates, and dream-entities.</p><p><i>Unharmonized: stats apply, signal abilities dormant.</i></p>\n",
@@ -14944,7 +14944,7 @@
       "slug": "gear-yesodic-gate-frame",
       "name": "Yesodic Gate Frame",
       "type": "equipment",
-      "img": "icons/sundries/misc/lantern-copper-lit.webp",
+      "img": "icons/commodities/wood/frame-fastened-mount-steel.webp",
       "system": {
         "description": {
           "value": "<p>Modular Yesodium frame component, hand-fitted at a Ley Gate site. One set of brackets — three are typically needed for a working gate.</p><p><strong>Leyline Stable (Harmonized).</strong> +1 to stabilization checks involving Leylines within the gate's cell.</p><p><strong>Gate Attunement (Harmonized).</strong> Reduces Gate-travel instability chance by one tier.</p><p><strong>Reversion Note.</strong> If Khezek-Tor's main vein destabilizes, every Yesodic structure globally rolls Reversion. Plan accordingly.</p><p><em>Unharmonized: structural value only — signal abilities inert.</em></p>",
@@ -15014,7 +15014,7 @@
       "slug": "gear-yesodic-hammer-of-the-first-word",
       "name": "Yesodic Hammer of the First Word",
       "type": "weapon",
-      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "img": "icons/weapons/hammers/hammer-mallet-wood.webp",
       "system": {
         "description": {
           "value": "<p><em>Held wrong, it sings flat. Held right, the world quiets.</em></p><p>Memory Edge, Adaptive Weight, Identity Cut. Resonant: the first strike of an exchange echoes; targets within 5 ft hear their own name.</p><p>Two-handed maul cast from Yesodium around a sept-tuning-fork core, hafted on heart-iron and ballasted with anchor quartz.</p><p><b>Memory Edge.</b> Once per raid, after a roll resolves, add +1 margin retroactively.</p><p><b>Identity Cut.</b> +1 effective damageStep against constructs, gates, and dream-entities.</p><p><b>Adaptive Weight.</b> Wields as if balanced for the wielder, regardless of build.</p><p><i>Unharmonized: stats apply, signal abilities dormant.</i></p>\n",
@@ -15199,7 +15199,7 @@
       "slug": "gear-yesodic-memory-lens",
       "name": "Yesodic Memory Lens",
       "type": "equipment",
-      "img": "icons/sundries/misc/lantern-copper-lit.webp",
+      "img": "icons/tools/scribal/lens-grey-red.webp",
       "system": {
         "description": {
           "value": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><strong>Recall Sephirah (Harmonized, 1/short rest).</strong> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><strong>Memory Edge (Harmonized).</strong> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><em>Unharmonized: clear glass. Pretty. Inert.</em></p>",
@@ -15269,7 +15269,7 @@
       "slug": "gear-yesodic-plating",
       "name": "Yesodic Plating",
       "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+      "img": "icons/equipment/chest/breastplate-collared-leather-brown.webp",
       "system": {
         "description": {
           "value": "<p>Heavy plate forged from Yesodium over hex-glyph plates, ballasted at the joints with anchor quartz.</p><p><strong>Memory of Protection.</strong> Once per raid, reduce incoming margin by 1.</p><p><strong>Flow Plating.</strong> May convert one structural damageStep into narrative strain (cosmetic, no track loss).</p><p><strong>Gate Attunement.</strong> +1 defensive bonus when operating near Ley Gates.</p><p><em>Unharmonized: stats apply, signal abilities dormant.</em></p><p><strong>Worn:</strong> +2 to Wisdom saving throws.</p>",
@@ -15328,7 +15328,7 @@
         {
           "_id": "be5e3522bbec97d1",
           "name": "Yesodic Plating",
-          "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+          "img": "icons/equipment/chest/breastplate-collared-leather-brown.webp",
           "transfer": true,
           "disabled": false,
           "changes": [
@@ -15387,7 +15387,7 @@
       "slug": "gear-yesodic-sigil-of-the-hearthward",
       "name": "Yesodic Sigil of the Hearthward",
       "type": "equipment",
-      "img": "icons/sundries/misc/lantern-copper-lit.webp",
+      "img": "icons/magic/symbols/rune-sigil-white-pink.webp",
       "system": {
         "description": {
           "value": "<p>Small enameled sigil of Yesodium-bonded sept-cloth and blessed thread, worn at the throat or pinned under the lapel.</p><p><strong>Reversion Shield (Harmonized, 1/raid).</strong> When the wearer (or one item they're carrying) would suffer a Reversion event, the sigil takes the hit instead — the sigil itself reverts to slag and is destroyed.</p><p><em>Unharmonized: a comforting weight at the throat. Nothing more.</em></p>",
@@ -15457,7 +15457,7 @@
       "slug": "gear-yesodium",
       "name": "Yesodium",
       "type": "loot",
-      "img": "icons/commodities/materials/bowl-powder-grey.webp",
+      "img": "icons/commodities/stone/ore-chunk-iron-black.webp",
       "system": {
         "description": {
           "value": "<h3>⛏️ Yesodium</h3><p><em>Canonical Resource Block — Bad Eden.</em></p><h4>🜂 Resource Classification</h4><ul><li><p><strong>Type:</strong> Metastable Proto-Ore</p></li><li><p><strong>Origin:</strong> Yesod Impact Strata</p></li><li><p><strong>Rarity:</strong> Rare (Hex-Unique: <strong>Khezek-Tor Primary Vein</strong>)</p></li><li><p><strong>State:</strong> Narrative-Responsive Mineral</p></li></ul><p>Yesodium is matter that has not fully collapsed into identity. It remembers being ore <em>before it chose a form</em>. It may be convinced to become:</p><ul><li><p>Iron, Steel, Copper, Silver, Gold</p></li><li><p>Exotic alloys</p></li><li><p>Conductive arcane metals</p></li></ul><p>It cannot become: organic matter, complex composites (without additional crafting), or living material. It must be <strong>stabilized</strong> during shaping.</p><h4>⚙️ Core Mechanics</h4><h4>🧠 Stabilization Check (Crafting Gate)</h4><p>When forging Yesodium into a defined material, make a Stabilization Roll using the dominant crafting approach:</p><table><tbody><tr><th><p><span style=\"width: 100%; font-size: 0.9em\">Approach</span></p></th><th><p><span style=\"width: 100%; font-size: 0.9em\">OP Pool Used</span></p></th></tr><tr><td><p><span style=\"width: 100%; font-size: 0.9em\">Ritualized Forging</span></p></td><td><p><span style=\"width: 100%; font-size: 0.9em\">Faith</span></p></td></tr><tr><td><p><span style=\"width: 100%; font-size: 0.9em\">Precision Engineering</span></p></td><td><p><span style=\"width: 100%; font-size: 0.9em\">Economy</span></p></td></tr><tr><td><p><span style=\"width: 100%; font-size: 0.9em\">Coercive Hammering</span></p></td><td><p><span style=\"width: 100%; font-size: 0.9em\">Strength</span></p></td></tr><tr><td><p><span style=\"width: 100%; font-size: 0.9em\">Whispered Binding</span></p></td><td><p><span style=\"width: 100%; font-size: 0.9em\">Dexterity</span></p></td></tr><tr><td><p><span style=\"width: 100%; font-size: 0.9em\">Cultural Songwork</span></p></td><td><p><span style=\"width: 100%; font-size: 0.9em\">Soft Power</span></p></td></tr></tbody></table><p><strong>DC</strong> scales with material complexity: Common metal (Iron/Steel) <strong>10</strong>; Precious (Silver/Gold) <strong>12</strong>; Alloy / Exotic (Starsteel, etc.) <strong>14–16</strong>.</p><h4>Outcomes</h4><ul><li><p><strong>Great Success</strong> — Material gains +1 margin bonus to its primary function. Counts as <em>Harmonized Yesodium</em>.</p></li><li><p><strong>Success</strong> — Material stabilizes normally.</p></li><li><p><strong>Failure</strong> — Material stabilizes with a flaw (hairline instability). GM adds minor narrative risk.</p></li><li><p><strong>Critical Failure</strong> — Reversion event. Slag collapse or dream fracture.</p></li></ul><h4>⚠️ Reversion Risk</h4><p>Yesodium retains memory. Under extreme stress (raid great failure, catastrophic damage, magical backlash), roll a <strong>Reversion Check (d6):</strong></p><ul><li><p><strong>1–2:</strong> Stable</p></li><li><p><strong>3–4:</strong> Flicker (temporary disadvantage next round)</p></li><li><p><strong>5:</strong> Structural Weakening (damageStep +1)</p></li><li><p><strong>6:</strong> Reversion Event — material destabilizes (weapon loses form mid-swing; armor softens under blow; structure partially dematerializes; rig plating destabilizes)</p></li></ul><h4>🗡️ Yesodic Weapons</h4><p>Weapons forged from <em>Harmonized</em> Yesodium gain:</p><ul><li><p><strong>Memory Edge.</strong> Once per raid, add +1 margin after roll resolution.</p></li><li><p><strong>Adaptive Weight.</strong> Counts as optimal metal for the wielder's build (no mechanical encumbrance penalties).</p></li><li><p><strong>Identity Cut.</strong> Against constructs, gates, or dream-entities: +1 effective damageStep.</p></li></ul><p>If improperly stabilized: Reversion check triggered on Great Failure.</p><h4>🛡️ Yesodic Armor</h4><ul><li><p><strong>Memory of Protection.</strong> Once per raid, reduce incoming margin by 1.</p></li><li><p><strong>Flow Plating.</strong> May convert one structural damageStep into narrative strain (cosmetic, no track loss).</p></li><li><p><strong>Gate Attunement.</strong> +1 defensive bonus when operating near Ley Gates.</p></li></ul><p>On catastrophic failure, armor may partially dematerialize.</p><h4>🏗️ Yesodic Structures</h4><p>Used in: Gate frames, Rig reinforcement, Ritual chambers, Defensive bastions.</p><ul><li><p><strong>Benefit.</strong> +1 to stabilization checks when interacting with Leylines. Reduced Gate travel instability chance.</p></li><li><p><strong>Danger.</strong> If Khezek-Tor's main vein destabilizes, every Yesodic structure globally must roll Reversion once. Yes. Globally.</p></li></ul>",
@@ -15501,7 +15501,7 @@
       "slug": "gear-yesodium-tongue-stud",
       "name": "Yesodium Tongue-Stud",
       "type": "loot",
-      "img": "icons/containers/bags/pack-leather-brown.webp",
+      "img": "icons/commodities/biological/tongue-violet.webp",
       "system": {
         "description": {
           "value": "<p>A tiny stud of refined yesodium installed through the tongue by someone who absolutely knew what they were doing or absolutely didn't, no in-between. The wearer reports a faint pulse-memory taste, like licking a battery you used to own. Khezek Tor doesn't sell these. They also don't NOT sell these. You understand the distinction.</p><p><strong>Pulse-Memory.</strong> While installed, +1 to Wisdom-channel powers rolls. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><strong>Drawback.</strong> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",

@@ -1,7 +1,7 @@
 {
   "name": "Oldenborn (Earthbound): Deep-Blooded",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cave_2.png",
+  "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
   "system": {
     "category": "technique",
     "source": {

@@ -1,7 +1,7 @@
 {
   "name": "Pressure Transference",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_pressure_transference.png",
+  "img": "icons/commodities/tech/valve-pressure-pipe-copper.webp",
   "system": {
     "category": "technique",
     "source": {

@@ -1,7 +1,7 @@
 {
   "name": "Charity Drive",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_charity_drive.png",
+  "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
   "system": {
     "description": {
       "value": "<p><b>Charity Drive</b></p><p>Reduce regional Darkness −1.</p><p><b>Cost:</b> Faith 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>charity_drive</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Reactor Shield Cape",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_reactor_shield_cape.jpeg",
+  "img": "icons/equipment/back/cape-layered-orange.webp",
   "system": {
     "description": {
       "value": "<p>As a reaction to taking energy damage, gain resistance until end of your next turn (3/day).</p>",
@@ -62,7 +62,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 2.0,
+            "rarityMult": 2,
             "notes": "TII vestment stamp × rarity 2.0 (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 180

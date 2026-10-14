@@ -1,7 +1,7 @@
 {
   "name": "Path of the Avalanche (Bad Eden)",
   "type": "subclass",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_avalanche.png",
+  "img": "icons/skills/targeting/target-strike-triple-blue.webp",
   "system": {
     "category": "doctrine",
     "classIdentifier": "bulwark",

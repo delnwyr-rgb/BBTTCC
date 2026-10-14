@@ -1,7 +1,7 @@
 {
   "name": "Threshold Wax",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_beeswax.png",
+  "img": "icons/sundries/lights/candle-unlit-red.webp",
   "system": {
     "slot": "material",
     "tags": [

@@ -1,7 +1,7 @@
 {
   "name": "Terrain Calibration",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_terrain_calibration.jpeg",
+  "img": "icons/environment/wilderness/terrain-rocks-brown.webp",
   "system": {
     "description": {
       "value": "<p><b>Terrain Calibration</b></p><p>Calibrate local terrain geometry; improve route certainty and reduce surprises (GM adjudicates).</p><p><b>Cost:</b> Logistics 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>terrain_calibration</code></p>",

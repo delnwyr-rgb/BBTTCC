@@ -1,7 +1,7 @@
 {
   "name": "Valhaulan Lullaby-Barge",
   "type": "rig",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/AncientBlood3.png",
+  "img": "modules/bbttcc-core/assets/rigs/medium_rig_1.webp",
   "flags": {
     "bbttcc-auto-link": {
       "entityKind": "rig",

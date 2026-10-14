@@ -1,7 +1,7 @@
 {
   "name": "S'narchy Burger Drive-Thru (Mobile Unit)",
   "type": "rig",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+  "img": "modules/bbttcc-core/assets/rigs/medium_rig_1.webp",
   "flags": {
     "bbttcc-auto-link": {
       "entityKind": "rig",

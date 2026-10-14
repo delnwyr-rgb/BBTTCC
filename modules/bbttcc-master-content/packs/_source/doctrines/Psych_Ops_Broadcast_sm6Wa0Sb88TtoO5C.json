@@ -1,7 +1,7 @@
 {
   "name": "Psych-Ops Broadcast",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_psy_ops_broadcast.jpeg",
+  "img": "icons/magic/fire/dagger-rune-enchant-orange.webp",
   "system": {
     "description": {
       "value": "<p><b>Psych-Ops Broadcast</b></p><p>−2 Loyalty to enemy Hex.</p><p><b>Cost:</b> Intrigue 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>psych_ops_broadcast</code></p>",

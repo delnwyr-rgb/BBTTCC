@@ -1,7 +1,7 @@
 {
   "name": "Gather Intel",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_get_info.jpeg",
+  "img": "icons/magic/defensive/shield-hex-blue.webp",
   "system": {
     "description": {
       "value": "<p><b>Gather Intel</b></p><p><b>Cost:</b> Intrigue 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>gather_intel</code></p>",

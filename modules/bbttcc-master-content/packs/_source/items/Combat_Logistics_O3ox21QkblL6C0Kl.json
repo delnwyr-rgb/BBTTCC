@@ -1,7 +1,7 @@
 {
   "name": "Combat Logistics",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_combat_logistic.jpeg",
+  "img": "icons/environment/settlement/wagon.webp",
   "system": {
     "category": "technique",
     "source": {

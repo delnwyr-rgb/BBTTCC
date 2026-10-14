@@ -1,7 +1,7 @@
 {
   "name": "Human (Neanderthal): Old Hunt",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_X.png",
+  "img": "icons/creatures/eyes/human-single-blue.webp",
   "system": {
     "category": "technique",
     "source": {

@@ -1,7 +1,7 @@
 {
   "name": "Focused Crystal",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_crystal_5.png",
+  "img": "icons/commodities/treasure/crystal-ball-blue-purple.webp",
   "system": {
     "slot": "material",
     "tags": [

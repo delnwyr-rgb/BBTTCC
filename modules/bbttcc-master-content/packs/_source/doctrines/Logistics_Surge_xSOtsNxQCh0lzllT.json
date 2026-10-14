@@ -1,7 +1,7 @@
 {
   "name": "Logistics Surge",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_box_1.png",
+  "img": "icons/containers/boxes/crate-wooden-beige-red.webp",
   "system": {
     "category": "technique",
     "source": "",

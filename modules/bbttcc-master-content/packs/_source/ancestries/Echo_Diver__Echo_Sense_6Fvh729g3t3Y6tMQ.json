@@ -1,7 +1,7 @@
 {
   "name": "Echo-Diver: Echo Sense",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_bat_echo_1.png",
+  "img": "icons/magic/perception/orb-eye-scrying.webp",
   "system": {
     "category": "technique",
     "source": {

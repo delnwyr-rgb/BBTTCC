@@ -1,7 +1,7 @@
 {
   "name": "Veilbreaker Mantle",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_veilbreaker_mantle.jpeg",
+  "img": "icons/equipment/back/mantle-collared-black.webp",
   "system": {
     "description": {
       "value": "<p><em>“You remember who you were.”</em></p><p><strong>Ward.</strong> You gain +1 to Soul check and +1 to Insight (Soul) (Soul).</p><p><strong>Once per scene:</strong> Ignore the first failed check caused by ambient Darkness (GM adjudication).</p>",

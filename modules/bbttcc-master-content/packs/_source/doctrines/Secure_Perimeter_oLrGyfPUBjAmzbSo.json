@@ -1,7 +1,7 @@
 {
   "name": "Secure Perimeter",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_secure_perimeter.jpeg",
+  "img": "icons/magic/defensive/shield-hex-gold.webp",
   "system": {
     "description": {
       "value": "<p><b>Secure Perimeter</b></p><p><b>Cost:</b> Violence 1 • Logistics 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>secure_perimeter</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Aurablade",
   "type": "class",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+  "img": "icons/sundries/scrolls/scroll-bound-skull-brown.webp",
   "system": {
     "category": "path",
     "identifier": "aurablade",

@@ -1,7 +1,7 @@
 {
   "name": "Siege Logistics Overhaul",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_siege_logistics_overhaul.jpeg",
+  "img": "icons/weapons/artillery/catapult-white.webp",
   "system": {
     "description": {
       "value": "<p><b>Siege Logistics Overhaul</b></p><p>Reduce Siege costs by 25%.</p><p><b>Cost:</b> Violence 2 • Economy 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>siege_logistics_overhaul</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Marrow Pact Tonic",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_5.png",
+  "img": "icons/commodities/bones/bones-broken-marrow-white-red.webp",
   "system": {
     "slot": "consumable",
     "tags": [

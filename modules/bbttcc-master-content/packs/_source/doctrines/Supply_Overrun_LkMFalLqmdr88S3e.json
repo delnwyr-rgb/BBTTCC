@@ -1,7 +1,7 @@
 {
   "name": "Supply Overrun",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_supply_overrun.jpeg",
+  "img": "icons/skills/ranged/cannon-barrel-firing-white-yellow.webp",
   "system": {
     "category": "technique",
     "source": {

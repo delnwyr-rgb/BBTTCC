@@ -1,7 +1,7 @@
 {
   "name": "Sarmoung Whisper-Skiff",
   "type": "rig",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_golbe_1.png",
+  "img": "modules/bbttcc-core/assets/rigs/personal_rig_5.webp",
   "flags": {
     "bbttcc-auto-link": {
       "entityKind": "rig",

@@ -1,7 +1,7 @@
 {
   "name": "Patch the Breach",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_patch_the_breach.jpeg",
+  "img": "icons/magic/fire/barrier-wall-explosion-orange.webp",
   "system": {
     "category": "technique",
     "source": {

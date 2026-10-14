@@ -1,7 +1,7 @@
 {
   "name": "Iodine Capsule",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_capsule_7.png",
+  "img": "icons/containers/chest/chest-tech-gold.webp",
   "system": {
     "slot": "consumable",
     "tags": [

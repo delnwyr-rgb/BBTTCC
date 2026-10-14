@@ -1,7 +1,7 @@
 {
   "name": "Ego-Dragon Echo",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_ego_dragon_echo.jpeg",
+  "img": "icons/skills/melee/sword-echo-stylized-tan.webp",
   "system": {
     "category": "technique",
     "source": {

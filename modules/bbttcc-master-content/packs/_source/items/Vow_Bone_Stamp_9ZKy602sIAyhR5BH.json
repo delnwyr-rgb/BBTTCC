@@ -1,7 +1,7 @@
 {
   "name": "Vow-Bone Stamp",
   "type": "gear",
-  "img": "icons/sundries/documents/document-sealed-tan.webp",
+  "img": "icons/commodities/bones/bone-jaw-teeth-grey.webp",
   "system": {
     "slot": "misc",
     "tags": [

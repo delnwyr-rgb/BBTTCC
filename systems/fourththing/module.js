@@ -9461,7 +9461,8 @@ const _FT_WIZ_V2_FACULTIES = ["violence", "intrigue", "presence", "body", "mind"
 // (Trusted Player perm) can browse and pick; falls back to a kind-default
 // icon when the user doesn't pick. Path is relative to Foundry user data
 // root and uses raw spaces (FilePicker handles URL encoding internally).
-const FT_ICON_LIBRARY_PATH = "art/bbttcc/GOTTGAIT/BBTTCC Button Icons";
+// 2026-10-14 icon swap: the GOTTGAIT button library is retired — the picker opens on the core icon set (public source).
+const FT_ICON_LIBRARY_PATH = "icons/magic";
 
 const _FT_WIZ_V2_SIGILS = {
   concept:    "☉",  // sun — first principle, kindling the idea
@@ -10587,9 +10588,10 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
           const FP = foundry.applications?.apps?.FilePicker?.implementation ?? FilePicker;
           new FP({
             type: "image",
-            current: state.img && state.img !== "icons/svg/aura.svg" && state.img !== "icons/svg/sword.svg"
+            current: state.img && state.img !== "icons/svg/aura.svg" && state.img !== "icons/svg/sword.svg" && !/GOTTGAIT/.test(state.img)
               ? state.img
               : FT_ICON_LIBRARY_PATH,
+            activeSource: state.img && !/^icons\//.test(state.img) && !/GOTTGAIT/.test(state.img) ? "data" : "public",
             callback: (path) => {
               state.img = path;
               state._touched ??= new Set();

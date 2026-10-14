@@ -1,7 +1,7 @@
 {
   "name": "Hex-Carved Plate",
   "type": "armor",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/DiplomatBodyguard2.png",
+  "img": "icons/equipment/chest/breastplate-layered-leather-studded-black.webp",
   "system": {
     "guardBonus": 4,
     "evasionBonus": -1,

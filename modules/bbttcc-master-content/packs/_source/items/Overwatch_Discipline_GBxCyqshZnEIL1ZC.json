@@ -1,7 +1,7 @@
 {
   "name": "Overwatch Discipline",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_overwatch_discipline.png",
+  "img": "icons/skills/melee/strike-blade-poison-green.webp",
   "system": {
     "category": "technique",
     "source": {

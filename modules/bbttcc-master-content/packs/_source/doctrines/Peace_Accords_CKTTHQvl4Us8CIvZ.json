@@ -1,7 +1,7 @@
 {
   "name": "Peace Accords",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_peace_accords.jpeg",
+  "img": "icons/skills/social/diplomacy-peace-alliance.webp",
   "system": {
     "description": {
       "value": "<p><b>Peace Accords</b></p><p>Prevent enemy Raids for 2 turns on both sides.</p><p><b>Cost:</b> Diplomacy 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>peace_accords</code></p>",

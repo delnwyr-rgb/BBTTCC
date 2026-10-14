@@ -2,7 +2,7 @@
   "_id": "ftsurge000000015",
   "name": "Doomstrike",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_destruction_1.png",
+  "img": "icons/skills/melee/strike-blade-poison-green.webp",
   "system": {
     "category": "principle",
     "source": "Surge",

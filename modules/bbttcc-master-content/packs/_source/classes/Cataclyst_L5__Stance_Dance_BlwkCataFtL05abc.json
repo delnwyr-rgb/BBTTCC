@@ -1,7 +1,7 @@
 {
   "name": "Cataclyst L5: Stance Dance",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_11.png",
+  "img": "icons/magic/defensive/shield-barrier-flaming-diamond-acid.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",

@@ -1,7 +1,7 @@
 {
   "name": "Flaming Pitch",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flame_1.png",
+  "img": "icons/magic/defensive/shield-barrier-flaming-pentagon-green.webp",
   "system": {
     "category": "strategic",
     "source": "Bad Eden Doctrine",

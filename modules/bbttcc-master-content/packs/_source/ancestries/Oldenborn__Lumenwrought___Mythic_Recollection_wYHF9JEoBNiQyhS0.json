@@ -1,7 +1,7 @@
 {
   "name": "Oldenborn (Lumenwrought): Mythic Recollection",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_lightning.png",
+  "img": "icons/magic/symbols/symbol-lightning-bolt.webp",
   "system": {
     "category": "technique",
     "source": {

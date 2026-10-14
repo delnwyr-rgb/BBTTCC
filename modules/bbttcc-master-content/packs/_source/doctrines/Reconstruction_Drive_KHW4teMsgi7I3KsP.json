@@ -1,7 +1,7 @@
 {
   "name": "Reconstruction Drive",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hammer_1.png",
+  "img": "icons/skills/melee/hand-grip-hammer-spiked-blue.webp",
   "system": {
     "category": "strategic",
     "source": "Bad Eden Doctrine",

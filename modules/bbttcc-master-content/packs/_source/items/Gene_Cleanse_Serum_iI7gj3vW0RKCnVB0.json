@@ -1,7 +1,7 @@
 {
   "name": "Gene-Cleanse Serum",
   "type": "gear",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "icons/commodities/bones/bones-broken-marrow-white-red.webp",
   "system": {
     "slot": "consumable",
     "tags": [

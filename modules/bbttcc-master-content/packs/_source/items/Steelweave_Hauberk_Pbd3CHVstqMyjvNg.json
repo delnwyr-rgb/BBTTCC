@@ -1,7 +1,7 @@
 {
   "name": "Steelweave Hauberk",
   "type": "armor",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/steelweave_hauberk.png",
+  "img": "icons/equipment/chest/breastplate-scale-grey.webp",
   "system": {
     "guardBonus": 3,
     "evasionBonus": 0,

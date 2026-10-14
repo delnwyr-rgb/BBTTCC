@@ -1,7 +1,7 @@
 {
   "name": "Vow-Shaft",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_tree_of_life_section_1.png",
+  "img": "icons/sundries/scrolls/scroll-bound-gold.webp",
   "system": {
     "slot": "material",
     "tags": [

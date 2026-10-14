@@ -1,7 +1,7 @@
 {
   "name": "Flash Bargain",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_flash_bargain.png",
+  "img": "icons/magic/light/circle-window-clock-blue.webp",
   "system": {
     "category": "technique",
     "source": {

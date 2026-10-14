@@ -1,7 +1,7 @@
 {
   "name": "Psychic Disruption",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_psychic_disruption.jpeg",
+  "img": "icons/tools/navigation/watch-simple-blue.webp",
   "system": {
     "category": "technique",
     "source": {

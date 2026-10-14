@@ -1,7 +1,7 @@
 {
   "name": "Harmonic Chant",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_harmonic_chant.jpeg",
+  "img": "icons/skills/trades/music-notes-sound-blue.webp",
   "system": {
     "category": "technique",
     "source": {

@@ -1,7 +1,7 @@
 {
   "name": "Diplomatic Mission",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_diplomatic_mission.jpeg",
+  "img": "icons/sundries/documents/document-symbol-rune-tan.webp",
   "system": {
     "description": {
       "value": "<p><b>Diplomatic Mission</b></p><p><b>Cost:</b> Diplomacy 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>diplomatic_mission_std</code></p>",

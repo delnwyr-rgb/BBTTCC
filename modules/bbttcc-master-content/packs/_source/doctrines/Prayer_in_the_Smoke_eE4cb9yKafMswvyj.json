@@ -1,7 +1,7 @@
 {
   "name": "Prayer in the Smoke",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_prayer_in_the_smoke.jpeg",
+  "img": "icons/magic/holy/prayer-hands-glowing-yellow-green.webp",
   "system": {
     "category": "technique",
     "source": {

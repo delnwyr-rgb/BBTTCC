@@ -1,7 +1,7 @@
 {
   "name": "Communion Tea",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_rad_bloom_injector.jpeg",
+  "img": "icons/consumables/drinks/tea-jug-glowing-brown-pink.webp",
   "system": {
     "slot": "consumable",
     "tags": [

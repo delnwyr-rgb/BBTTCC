@@ -1,7 +1,7 @@
 {
   "name": "Local Festival",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_local_festival.jpeg",
+  "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
   "system": {
     "description": {
       "value": "<p><b>Local Festival</b></p><p>+1 Empathy Meter.</p><p><b>Cost:</b> Culture 1 • Faith 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>local_festival</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Mercy Driver",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_boffo_sword.jpeg",
+  "img": "icons/weapons/swords/sword-gold-holy.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

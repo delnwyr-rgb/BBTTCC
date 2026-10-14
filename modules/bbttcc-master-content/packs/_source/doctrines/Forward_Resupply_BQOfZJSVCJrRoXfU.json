@@ -1,7 +1,7 @@
 {
   "name": "Forward Resupply",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_box_1.png",
+  "img": "icons/containers/boxes/box-gift-pink.webp",
   "system": {
     "category": "technique",
     "source": "",

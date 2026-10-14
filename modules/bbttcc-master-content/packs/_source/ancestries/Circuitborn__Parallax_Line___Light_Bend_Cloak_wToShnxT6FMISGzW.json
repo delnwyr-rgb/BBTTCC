@@ -1,7 +1,7 @@
 {
   "name": "Circuitborn (Parallax Line): Light-Bend Cloak",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cloak_hooded_1.png",
+  "img": "icons/magic/light/light-lantern-lit-white.webp",
   "system": {
     "category": "technique",
     "source": {

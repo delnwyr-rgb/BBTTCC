@@ -1,7 +1,7 @@
 {
   "name": "Refraction of Mercy (Bad Eden)",
   "type": "subclass",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+  "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
   "system": {
     "category": "doctrine",
     "classIdentifier": "wyrdlens-adept",

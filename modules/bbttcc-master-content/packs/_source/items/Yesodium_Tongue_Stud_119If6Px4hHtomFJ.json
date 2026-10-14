@@ -1,7 +1,7 @@
 {
   "name": "Yesodium Tongue-Stud",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/yesodium_tongue_stud.png",
+  "img": "icons/commodities/biological/tongue-violet.webp",
   "system": {
     "slot": "implant",
     "tags": [

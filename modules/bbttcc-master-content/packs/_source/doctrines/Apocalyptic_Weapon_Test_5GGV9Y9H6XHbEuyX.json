@@ -1,7 +1,7 @@
 {
   "name": "Apocalyptic Weapon Test",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_apocalyptic_weapons_test.png",
+  "img": "icons/weapons/artillery/mount-weapon-sprayer-chem-green-purple.webp",
   "system": {
     "description": {
       "value": "<p><b>Apocalyptic Weapon Test</b></p><p>Destroy enemy Hex; Darkness +3.</p><p><b>Cost:</b> Violence 8 • Intrigue 4</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>apocalyptic_weapon_test</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Faultline Tuning",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_faultline_tuning.jpeg",
+  "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
   "system": {
     "description": {
       "value": "<p><b>Faultline Tuning</b></p><p>Tune resonant faultlines and leylines; stabilize a region or reveal hidden pathways (GM adjudicates).</p><p><b>Cost:</b> Faith 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>faultline_tuning</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "The Apologizing Burger",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/the_apologizing_burger.png",
+  "img": "icons/consumables/food/shank-meat-bone-glazed-red.webp",
   "system": {
     "slot": "consumable",
     "tags": [

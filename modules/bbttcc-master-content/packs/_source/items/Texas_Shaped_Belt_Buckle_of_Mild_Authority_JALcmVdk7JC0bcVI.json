@@ -1,7 +1,7 @@
 {
   "name": "Texas-Shaped Belt Buckle of Mild Authority",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/texas_belt_buckle.png",
+  "img": "icons/equipment/waist/belt-buckle-gold-blue.webp",
   "system": {
     "slot": "trinket",
     "tags": [

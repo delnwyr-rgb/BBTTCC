@@ -1,7 +1,7 @@
 {
   "name": "Bulwark — Tier 3: Polarity Mastery",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_scales.png",
+  "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",

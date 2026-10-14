@@ -1,7 +1,7 @@
 {
   "name": "Reconstruction Drive",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_reconstruction_drive.jpeg",
+  "img": "icons/skills/melee/hand-grip-hammer-spiked-blue.webp",
   "system": {
     "description": {
       "value": "<p><b>Reconstruction Drive</b></p><p>Upgrade Hex status to 'Claimed'.</p><p><b>Cost:</b> Economy 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>reconstruction_drive</code></p>",

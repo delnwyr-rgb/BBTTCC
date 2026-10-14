@@ -1,7 +1,7 @@
 {
   "name": "Vow-Resin",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_vow_wac.png",
+  "img": "icons/sundries/scrolls/scroll-bound-sealed-black-orange.webp",
   "system": {
     "slot": "material",
     "tags": [

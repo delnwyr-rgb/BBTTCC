@@ -1,7 +1,7 @@
 {
   "name": "Wyrdlens Adept",
   "type": "class",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/WyrdlensAdept2.png",
+  "img": "icons/magic/perception/eye-ringed-glow-angry-large-teal.webp",
   "system": {
     "category": "path",
     "identifier": "wyrdlens-adept",

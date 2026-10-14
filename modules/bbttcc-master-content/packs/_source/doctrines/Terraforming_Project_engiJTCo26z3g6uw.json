@@ -1,7 +1,7 @@
 {
   "name": "Terraforming Project",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_terraforming_project.png",
+  "img": "icons/magic/defensive/shield-hex-red.webp",
   "system": {
     "description": {
       "value": "<p><b>Terraforming Project</b></p><p>Cleanse 1 Corrupted Hex.</p><p><b>Cost:</b> Economy 4 • Faith 4</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>terraforming_project</code></p>",

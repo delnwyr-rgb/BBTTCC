@@ -1,7 +1,7 @@
 {
   "name": "Aurablade: Change Aura",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_2.png",
+  "img": "icons/magic/control/silhouette-hold-change-blue.webp",
   "system": {
     "category": "technique",
     "source": {

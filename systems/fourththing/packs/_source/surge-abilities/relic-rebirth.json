@@ -2,7 +2,7 @@
   "_id": "ftsurge000000032",
   "name": "Relic of Rebirth",
   "type": "feature",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_smith_hammer_holy_2.png",
+  "img": "icons/tools/hand/hammer-maul-wood.webp",
   "system": {
     "category": "principle",
     "source": "Surge",

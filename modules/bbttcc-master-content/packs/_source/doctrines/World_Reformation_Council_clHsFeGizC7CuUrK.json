@@ -1,7 +1,7 @@
 {
   "name": "World Reformation Council",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_world_reformation_council.jpeg",
+  "img": "icons/environment/wilderness/terrain-rocky-ground.webp",
   "system": {
     "description": {
       "value": "<p><b>World Reformation Council</b></p><p>Permanently raise global Empathy Meter +2.</p><p><b>Cost:</b> Economy 6 • Diplomacy 8</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>world_reformation_council</code></p>",

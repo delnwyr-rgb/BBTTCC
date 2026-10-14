@@ -1,7 +1,7 @@
 {
   "name": "Repair Rig",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_repair_rig.jpeg",
+  "img": "icons/environment/settlement/wagon-black.webp",
   "system": {
     "description": {
       "value": "<p><b>Repair Rig</b></p><p><b>Cost:</b> Economy 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>repair_rig</code></p>",

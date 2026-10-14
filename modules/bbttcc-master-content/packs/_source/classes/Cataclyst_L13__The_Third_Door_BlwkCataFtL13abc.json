@@ -1,7 +1,7 @@
 {
   "name": "Cataclyst L13: The Third Door",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_explosion_4.png",
+  "img": "icons/magic/perception/third-eye-blue-red.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",

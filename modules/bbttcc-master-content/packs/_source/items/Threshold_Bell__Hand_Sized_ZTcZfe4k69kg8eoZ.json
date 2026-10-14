@@ -1,7 +1,7 @@
 {
   "name": "Threshold Bell, Hand-Sized",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_bell_2.png",
+  "img": "icons/tools/fishing/net-hand-white.webp",
   "system": {
     "slot": "ritual-tool",
     "tags": [

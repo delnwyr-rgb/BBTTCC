@@ -1,7 +1,7 @@
 {
   "name": "Vow-Bound Cuffs",
   "type": "gear",
-  "img": "icons/equipment/wrist/manacles-iron.webp",
+  "img": "icons/sundries/scrolls/scroll-bound-gold.webp",
   "system": {
     "slot": "misc",
     "tags": [

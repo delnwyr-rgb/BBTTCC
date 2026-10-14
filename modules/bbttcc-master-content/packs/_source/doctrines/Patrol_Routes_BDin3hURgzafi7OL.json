@@ -1,7 +1,7 @@
 {
   "name": "Patrol Routes",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_patrol_routes.jpeg",
+  "img": "icons/tools/navigation/map-marked-blue.webp",
   "system": {
     "description": {
       "value": "<p><b>Patrol Routes</b></p><p><b>Cost:</b> Violence 1 • Logistics 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>patrol_routes</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Qliph-Scarred (Diabolic): What’s Inside You",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_lightning.png",
+  "img": "icons/magic/lightning/bolt-beam-strike-blue.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",

@@ -1,7 +1,7 @@
 {
   "name": "Establish Supply Line",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_establish_supply_line.jpeg",
+  "img": "icons/containers/barrels/barrel-oak-banded-tan.webp",
   "system": {
     "description": {
       "value": "<p><b>Establish Supply Line</b></p><p><b>Cost:</b> Economy 1 • Logistics 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>establish_supply_line</code></p>",

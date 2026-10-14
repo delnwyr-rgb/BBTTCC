@@ -1,7 +1,7 @@
 {
   "name": "Anchor Quartz",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_crystal_2.png",
+  "img": "icons/sundries/survival/climbing-anchor-steel-grey.webp",
   "system": {
     "slot": "material",
     "tags": [

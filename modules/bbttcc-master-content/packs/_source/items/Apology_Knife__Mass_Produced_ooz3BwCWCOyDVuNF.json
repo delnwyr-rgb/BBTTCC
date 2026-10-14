@@ -1,7 +1,7 @@
 {
   "name": "Apology Knife, Mass-Produced",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/apology_knife.png",
+  "img": "icons/weapons/daggers/knife-butterfly.webp",
   "system": {
     "category": "melee",
     "intent": "violence",

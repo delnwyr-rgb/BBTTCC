@@ -1,7 +1,7 @@
 {
   "name": "Horizon Courier Pack",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_horizon_courier_pack.jpeg",
+  "img": "icons/containers/bags/pack-leather-stitched-tan.webp",
   "system": {
     "description": {
       "value": "<p>Folding glider + energy assist. Gain 40‑ft fly speed for 10 minutes 1/day; overland travel time −25% for small party.</p>",
@@ -62,7 +62,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 2.0,
+            "rarityMult": 2,
             "notes": "TII tool stamp × rarity 2.0 (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 72

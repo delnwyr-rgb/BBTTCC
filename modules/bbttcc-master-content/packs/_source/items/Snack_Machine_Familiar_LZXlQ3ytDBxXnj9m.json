@@ -1,7 +1,7 @@
 {
   "name": "Snack Machine Familiar",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_snack_machine_familiar.jpeg",
+  "img": "icons/commodities/tech/gear-wheels-double-steel.webp",
   "system": {
     "description": {
       "value": "<p>Tiny construct. Display of impossible snacks. Temperament like a disgruntled cashier.</p><p><b>Familiar (Action, 8 hours or until dismissed).</b> Deploy as a familiar. Acts on your initiative. Speed 25 ft (no fly). Can take Help; cannot Attack.</p><p><b>Snack Dispense (3/Day, bonus action while within 5 ft).</b> Choose one:</p><ul><li><b>Sugar Rush.</b> Gain 1d4 temporary Integrity.</li><li><b>Salt &amp; Focus.</b> +1 to your next attribute check within 1 minute.</li><li><b>Caffeine Bolt.</b> Walking speed +10 ft for 1 minute.</li></ul><p><b>Stat Block (quick).</b> Tiny construct; Guard 13; Integrity 5; Str 6 Dex 14 Con 10 Int 4 Wis 10 Cha 5; darkvision 60 ft; immune poison; condition immune poisoned. Perception (Mind) +2; Stealth (Intrigue) +4.</p><p><b>Dismiss.</b> Action — recall into the item. If it drops to 0 Integrity, it vanishes; redeploys after a Soma Break.</p>",

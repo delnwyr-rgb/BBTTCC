@@ -1,7 +1,7 @@
 {
   "name": "Soul-Smith: Tier 2 — Atonement Crucible",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_crucible_2.png",
+  "img": "icons/tools/hand/hammer-mallet-brown.webp",
   "system": {
     "category": "technique",
     "source": {

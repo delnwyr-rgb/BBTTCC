@@ -19,6 +19,7 @@
  *   I14 I calling Trick text with no per-use route
  *   I16 E  item ladder stamps (flags.fourththing.grade / .working) inconsistent with the item: rank↔name↔bonuses↔bound, working payload/charges/tech
  *   I17 W  pricing drift vs systems/fourththing/rfi-pricing.js (E when a market item has no price): frame unknown to the tables, currency ≠ frame
+ *   I18 E  non-native icon (2026-10-14 icon swap): img is GOTTGAIT (AI placeholder), generic icons/svg/*, dnd5e, Devin Night, or empty — approved = core webp, art/bbttcc/asli-*, art/bbttcc/overlays-icons, bbttcc-core rigs
  *          default (no gmOverride), marks ≠ computeListPrice ±5, tech recipe without a binding material. Skips npc-abilities + starter kits.
  */
 import fs from "node:fs";
@@ -286,6 +287,16 @@ const _listOf = (name) => { const m = PR.match(new RegExp(`export const ${name} 
 const TRIGGER_EVENTS = _listOf("TRIGGER_EVENTS"), TRIGGER_KINDS = _listOf("TRIGGER_EFFECT_KINDS"), WHEN_VOCAB = _listOf("REROLL_WHEN_VOCAB");
 const PASSIVE_KEYS = new Set(["ranks", "checkBonus", "aura", "movement", "initiative", "vision", "combat"]);
 const _whenBad = (w) => (Array.isArray(w) ? w : [w]).filter(x => !WHEN_VOCAB.has(String(x)));
+// I18 (2026-10-14): the icon swap ruling — every item icon comes from an approved pool. GOTTGAIT = the AI
+// placeholder library (retired), icons/svg = generic core silhouettes (banned by ruling), dnd5e/Devin Night = not ours.
+const ICON_BAD = /GOTTGAIT|^icons\/svg\/|^systems\/dnd5e\/|^art\/devin-knight\//;
+const ICON_OK = /^icons\/(commodities|consumables|containers|creatures|environment|equipment|magic|skills|sundries|tools|weapons)\/|^art\/bbttcc\/(asli-icons|asli-tokens|overlays-icons)\/|^modules\/bbttcc-core\/assets\/rigs\//;
+function lintIcon(pack, v) {
+  const img = String(v.img || "");
+  if (!img) return hit("I18", "E", pack, v, "no img");
+  if (ICON_BAD.test(img)) return hit("I18", "E", pack, v, `non-native icon ${img}`);
+  if (!ICON_OK.test(img)) hit("I18", "W", pack, v, `icon outside the approved pools: ${img}`);
+}
 // I16/I17 (2026-10-07): the pricing rubric + the item ladder, imported from the SYSTEM source so the lint cannot drift from the code.
 globalThis.Hooks ??= { on() {}, once() {}, callAll() {} }; globalThis.game ??= { settings: { get() { return undefined; } } };
 const PRICING = await import(pathToFileURL(path.resolve(HERE, "../../../systems/fourththing/rfi-pricing.js")).href);
@@ -343,6 +354,7 @@ for (const file of PACK_FILES) {
     const ff = v.flags?.fourththing || {}, id = String(v.system?.identifier || "");
     if (mech && !auto && !isAnchor) { S.prose++; const sh = shapeOf(text); hit("P1", "W", pack, v, `prose-only [${sh}] → ${HINT[sh]} :: ${text.slice(0, 110)}`); }
     lintLadder(pack, v); lintPrice(pack, v);   // I16 / I17 (2026-10-07)
+    lintIcon(pack, v);                          // I18 (2026-10-14)
     if (c.includes("technique:card-only") && mech) hit("I1", "W", pack, v, `technique ${id} routes to a card only`);
     if (c.includes("triggers(chat-prompt only)")) hit("I2", "W", pack, v, "triggers are chat-prompts only");
     // I15 (2026-10-07): data the engine would silently ignore — unknown trigger event / kind, reroll `when`, passives key, aura shape.

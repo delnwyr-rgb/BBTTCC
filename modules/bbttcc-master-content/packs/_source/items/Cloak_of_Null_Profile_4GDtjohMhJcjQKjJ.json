@@ -1,7 +1,7 @@
 {
   "name": "Cloak of Null Profile",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_cloak_of_null_profile.jpeg",
+  "img": "icons/equipment/back/cloak-collared-pink-gold.webp",
   "system": {
     "description": {
       "value": "<p>You and carried gear have reroll the lowest die on checks to avoid detection by sensors/AAE and leave no heat signature [TODO(adv-call)].</p>",

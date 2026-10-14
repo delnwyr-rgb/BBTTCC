@@ -1,7 +1,7 @@
 {
   "name": "Tactical Overwatch",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_tactical_overwatch.jpeg",
+  "img": "icons/skills/ranged/target-bullseye-arrow-yellow.webp",
   "system": {
     "category": "technique",
     "source": {

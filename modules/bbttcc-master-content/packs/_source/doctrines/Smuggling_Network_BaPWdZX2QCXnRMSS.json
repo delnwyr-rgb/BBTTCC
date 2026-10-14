@@ -1,7 +1,7 @@
 {
   "name": "Smuggling Network",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_smuggling_network.jpeg",
+  "img": "icons/commodities/currency/coin-embossed-star-gold.webp",
   "system": {
     "description": {
       "value": "<p><b>Smuggling Network</b></p><p>Establish 1 Trade Route (+1 Diplomacy regen).</p><p><b>Cost:</b> Intrigue 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>smuggling_network</code></p>",

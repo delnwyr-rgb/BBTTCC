@@ -1,7 +1,7 @@
 {
   "name": "Reinforce Garrison",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rampart_2.png",
+  "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_fortress.webp",
   "system": {
     "category": "strategic",
     "source": "Bad Eden Doctrine",

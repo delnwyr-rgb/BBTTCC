@@ -1,7 +1,7 @@
 {
   "name": "Yesodic Sigil of the Hearthward",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/yesodic_sigil_ward.png",
+  "img": "icons/magic/symbols/rune-sigil-white-pink.webp",
   "system": {
     "slot": "pin",
     "tags": [

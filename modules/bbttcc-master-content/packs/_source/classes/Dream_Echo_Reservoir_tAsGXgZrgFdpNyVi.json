@@ -1,7 +1,7 @@
 {
   "name": "Dream Echo Reservoir",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_2.png",
+  "img": "icons/skills/melee/sword-echo-stylized-tan.webp",
   "system": {
     "category": "technique",
     "source": {
@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Dream Echo Reservoir.</strong> You have learned to bottle a working before the world hears it.</p><p><strong>Store (1 slot):</strong> choose a manifestation you know and seal it into the reservoir. It waits \u2014 a dream deferred, still warm.</p><p><strong>Release:</strong> cast the stored manifestation at <strong>no base cost</strong> \u2014 no Clarity, no Noise. (Reach, overcast, and misfire rules still apply if you push it beyond its tier.) The reservoir then stands empty until you store again.</p><p><em>Separate from the retired Echo Dice \u2014 this is a vessel, not a currency. The Reservoir button on your sheet manages store and release.</em></p>",
+      "value": "<p><strong>Dream Echo Reservoir.</strong> You have learned to bottle a working before the world hears it.</p><p><strong>Store (1 slot):</strong> choose a manifestation you know and seal it into the reservoir. It waits — a dream deferred, still warm.</p><p><strong>Release:</strong> cast the stored manifestation at <strong>no base cost</strong> — no Clarity, no Noise. (Reach, overcast, and misfire rules still apply if you push it beyond its tier.) The reservoir then stands empty until you store again.</p><p><em>Separate from the retired Echo Dice — this is a vessel, not a currency. The Reservoir button on your sheet manages store and release.</em></p>",
       "chat": ""
     },
     "activities": {

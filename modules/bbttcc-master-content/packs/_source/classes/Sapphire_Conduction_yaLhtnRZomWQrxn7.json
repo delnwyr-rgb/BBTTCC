@@ -1,7 +1,7 @@
 {
   "name": "Sapphire Conduction",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_earth_3.png",
+  "img": "icons/skills/melee/drill-heavy-earth.webp",
   "system": {
     "category": "technique",
     "source": {

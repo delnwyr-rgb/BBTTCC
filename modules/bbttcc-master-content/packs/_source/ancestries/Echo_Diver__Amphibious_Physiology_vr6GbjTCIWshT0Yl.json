@@ -1,7 +1,7 @@
 {
   "name": "Echo-Diver: Amphibious Physiology",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_frog_2.png",
+  "img": "icons/magic/water/bubbles-air-water-pink.webp",
   "system": {
     "category": "technique",
     "source": {

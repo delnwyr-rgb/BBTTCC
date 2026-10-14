@@ -1,7 +1,7 @@
 {
   "name": "Balance Bind",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/techno_binding_2.png",
+  "img": "icons/equipment/waist/belt-rope.webp",
   "system": {
     "slot": "material",
     "tags": [

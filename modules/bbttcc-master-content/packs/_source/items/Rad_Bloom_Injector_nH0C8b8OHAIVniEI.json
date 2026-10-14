@@ -1,7 +1,7 @@
 {
   "name": "Rad‑Bloom Injector",
   "type": "consumable",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_rad_bloom_injector.jpeg",
+  "img": "icons/consumables/potions/potion-vial-tube-yellow.webp",
   "system": {
     "description": {
       "value": "<p><b>Use:</b> Remove radiation effects from yourself. For the next 10 minutes, you experience vivid hallucinations (GM voice opportunity).</p><p><b>Engine hook:</b> flagged for Bad Eden radiation cleanse.</p>",

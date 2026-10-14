@@ -1,7 +1,7 @@
 {
   "name": "Supply Cache",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_supply_cache.jpeg",
+  "img": "icons/containers/boxes/crate-wooden-grey.webp",
   "system": {
     "description": {
       "value": "<p><b>Supply Cache</b></p><p><b>Cost:</b> Economy 1 • Logistics 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>supply_cache</code></p>",

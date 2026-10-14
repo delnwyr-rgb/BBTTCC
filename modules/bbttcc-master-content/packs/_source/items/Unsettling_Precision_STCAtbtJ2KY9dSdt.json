@@ -1,7 +1,7 @@
 {
   "name": "Unsettling Precision",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_unsettling_precision.png",
+  "img": "icons/skills/targeting/crosshair-arrowhead-blue.webp",
   "system": {
     "category": "technique",
     "source": {

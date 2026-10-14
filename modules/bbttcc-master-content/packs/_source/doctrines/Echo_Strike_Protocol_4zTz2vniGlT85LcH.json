@@ -1,7 +1,7 @@
 {
   "name": "Echo Strike Protocol",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_echo_strike_protocol.jpeg",
+  "img": "icons/skills/melee/strike-blade-hooked-green-purple.webp",
   "system": {
     "category": "technique",
     "source": {

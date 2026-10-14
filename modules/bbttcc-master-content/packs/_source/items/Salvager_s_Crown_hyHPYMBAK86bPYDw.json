@@ -1,7 +1,7 @@
 {
   "name": "Salvager's Crown",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_salvagers_crown.jpeg",
+  "img": "icons/commodities/treasure/crown-blue-gold.webp",
   "system": {
     "description": {
       "value": "<p>While in Ruins/Urban, double Materials recovered; reroll the lowest die on checks to repair vehicles [TODO(adv-call)].</p>",

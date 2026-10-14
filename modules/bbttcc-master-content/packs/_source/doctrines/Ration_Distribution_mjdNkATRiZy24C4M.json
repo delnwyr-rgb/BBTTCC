@@ -1,7 +1,7 @@
 {
   "name": "Ration Distribution",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_ration_distribiution.jpeg",
+  "img": "icons/skills/trades/baking-bread-rolls-green.webp",
   "system": {
     "description": {
       "value": "<p><b>Ration Distribution</b></p><p>+1 Loyalty to one controlled Hex.</p><p><b>Cost:</b> —</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>ration_distribution</code></p>",

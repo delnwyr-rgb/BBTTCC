@@ -1,7 +1,7 @@
 {
   "name": "Stim Spike",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/techno_capsule_1.png",
+  "img": "icons/equipment/finger/ring-bone-horned-spike.webp",
   "system": {
     "slot": "consumable",
     "tags": [

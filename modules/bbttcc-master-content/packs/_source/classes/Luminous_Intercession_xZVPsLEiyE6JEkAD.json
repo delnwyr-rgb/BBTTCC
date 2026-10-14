@@ -1,7 +1,7 @@
 {
   "name": "Luminous Intercession",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_energy_blast_1.png",
+  "img": "icons/skills/ranged/blast-energy-plating-orange.webp",
   "system": {
     "category": "technique",
     "source": {

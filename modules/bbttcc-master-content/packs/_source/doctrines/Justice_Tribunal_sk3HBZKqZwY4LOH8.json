@@ -1,7 +1,7 @@
 {
   "name": "Justice Tribunal",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_justic_tribunal.jpeg",
+  "img": "icons/skills/social/trading-justice-scale-yellow.webp",
   "system": {
     "description": {
       "value": "<p><strong>Justice Tribunal</strong></p><p>Remove 1 Darkness; Morale +1.</p><p><strong>Cost:</strong> Faith 1</p><hr /><p class=\"hint\"><em>BBTTCC Doctrine</em> • <code>strategic</code> • <code>justice_tribunal</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Heart-Coil",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_coil_1.png",
+  "img": "icons/commodities/tech/spring-steel-coil-wound.webp",
   "system": {
     "slot": "material",
     "tags": [

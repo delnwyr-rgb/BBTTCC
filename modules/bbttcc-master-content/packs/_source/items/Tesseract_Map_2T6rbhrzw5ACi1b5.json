@@ -1,7 +1,7 @@
 {
   "name": "Tesseract Map",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_tesseract_map.jpeg",
+  "img": "icons/tools/navigation/map-marked-brown.webp",
   "system": {
     "description": {
       "value": "<p>Folding holo‑map. Once/turn strategic: preview one travel encounter before it triggers; 1/day retcon last travel as if safe.</p>",

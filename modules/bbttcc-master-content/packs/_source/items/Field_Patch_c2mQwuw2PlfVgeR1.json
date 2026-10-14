@@ -1,7 +1,7 @@
 {
   "name": "Field Patch",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/combat_stim_1.png",
+  "img": "icons/commodities/leather/leather-patch-grey.webp",
   "system": {
     "slot": "consumable",
     "tags": [

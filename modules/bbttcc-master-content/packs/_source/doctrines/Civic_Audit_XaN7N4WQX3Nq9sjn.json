@@ -1,7 +1,7 @@
 {
   "name": "Civic Audit",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_civic_audit.png",
+  "img": "icons/sundries/documents/document-symbol-eye.webp",
   "system": {
     "description": {
       "value": "<p><b>Civic Audit</b></p><p>Detect corruption; restore Loyalty +1.</p><p><b>Cost:</b> Intrigue 1 • Economy 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>civic_audit</code></p>",

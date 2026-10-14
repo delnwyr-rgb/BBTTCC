@@ -1,7 +1,7 @@
 {
   "name": "Logistical Surge",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_logistical_surge.jpeg",
+  "img": "icons/tools/navigation/compass-chain-blue.webp",
   "system": {
     "category": "technique",
     "source": {

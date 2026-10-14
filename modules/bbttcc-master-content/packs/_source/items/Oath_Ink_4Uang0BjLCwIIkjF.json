@@ -1,7 +1,7 @@
 {
   "name": "Oath-Ink",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_ink.png",
+  "img": "icons/tools/scribal/ink-quill-pink.webp",
   "system": {
     "slot": "material",
     "tags": [

@@ -1,7 +1,7 @@
 {
   "name": "Minor Repair",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_minor_repair.jpeg",
+  "img": "icons/tools/navigation/map-marked-gold.webp",
   "system": {
     "description": {
       "value": "<p><b>Minor Repair</b></p><p>Remove 'Damaged Infrastructure'.</p><p><b>Cost:</b> Economy 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>minor_repair</code></p>",

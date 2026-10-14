@@ -1,7 +1,7 @@
 {
   "name": "Shadow Courier — Tier 4: Unfound Route",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_road_1.png",
+  "img": "icons/magic/life/ankh-shadow-green.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",

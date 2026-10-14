@@ -1,7 +1,7 @@
 {
   "name": "Spark‑Tuned Rosary",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_spark_tuned_rosary.jpeg",
+  "img": "icons/consumables/potions/potion-flask-corked-tied-necklace-teal.webp",
   "system": {
     "description": {
       "value": "<p>While attuned, you have reroll the lowest die on checks to identify Sparks and −1 local Darkness once per week after a vigil [TODO(adv-call)].</p>",

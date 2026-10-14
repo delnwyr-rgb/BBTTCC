@@ -1,7 +1,7 @@
 {
   "name": "Supply Surge",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_supply_surge.jpeg",
+  "img": "icons/containers/boxes/crate-modern-open.webp",
   "system": {
     "category": "technique",
     "source": {

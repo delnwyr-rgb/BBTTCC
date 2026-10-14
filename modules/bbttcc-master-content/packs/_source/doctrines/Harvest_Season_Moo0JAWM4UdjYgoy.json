@@ -1,7 +1,7 @@
 {
   "name": "Harvest Season",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_harvest_season.jpeg",
+  "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_farm.webp",
   "system": {
     "description": {
       "value": "<p><b>Harvest Season</b></p><p>+1 Economy regen next turn.</p><p><b>Cost:</b> Economy 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>harvest_season</code></p>",

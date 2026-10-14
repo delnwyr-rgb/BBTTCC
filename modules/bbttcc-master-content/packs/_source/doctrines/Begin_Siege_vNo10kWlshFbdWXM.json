@@ -1,7 +1,7 @@
 {
   "name": "Begin Siege",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_siege_2.png",
+  "img": "icons/weapons/artillery/catapult-simple.webp",
   "system": {
     "category": "strategic",
     "source": "Bad Eden Doctrine",

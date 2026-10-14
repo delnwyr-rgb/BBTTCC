@@ -1,7 +1,7 @@
 {
   "name": "Found Farm",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_found_farm.jpeg",
+  "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_farm.webp",
   "system": {
     "description": {
       "value": "<p><b>Found Farm</b></p><p>Found a new farm site at a developed settlement.</p><p><b>Cost:</b> Economy 2 • Logistics 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>found_site_farm</code></p>",

@@ -1,7 +1,7 @@
 {
   "name": "Anchorstone",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_crystal3.png",
+  "img": "icons/tools/hand/hammer-simple-wood-stone.webp",
   "system": {
     "slot": "material",
     "tags": [

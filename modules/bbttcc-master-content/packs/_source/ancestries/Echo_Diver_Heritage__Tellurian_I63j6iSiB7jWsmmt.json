@@ -1,7 +1,7 @@
 {
   "name": "Echo-Diver Heritage: Tellurian",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_earthquake_1.png",
+  "img": "icons/creatures/birds/corvid-call-sound-glowing.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",

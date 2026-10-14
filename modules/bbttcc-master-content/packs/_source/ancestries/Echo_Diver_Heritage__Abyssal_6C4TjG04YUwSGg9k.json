@@ -1,7 +1,7 @@
 {
   "name": "Echo-Diver Heritage: Abyssal",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wasteland_3.png",
+  "img": "icons/creatures/birds/corvid-call-sound-glowing.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",

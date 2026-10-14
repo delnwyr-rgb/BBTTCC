@@ -1,7 +1,7 @@
 {
   "name": "Heart-Iron",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_heart_iron.png",
+  "img": "icons/commodities/metal/ingot-iron.webp",
   "system": {
     "slot": "material",
     "tags": [

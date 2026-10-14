@@ -1,7 +1,7 @@
 {
   "name": "Pre-Fall Transmitter",
   "type": "gear",
-  "img": "icons/sundries/lights/lantern-bullseye-blue.webp",
+  "img": "icons/commodities/tech/detonator-radio.webp",
   "system": {
     "slot": "misc",
     "tags": [

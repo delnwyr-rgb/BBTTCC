@@ -1,7 +1,7 @@
 {
   "name": "Mountain L9: The Hold",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_3.png",
+  "img": "icons/magic/control/encase-creature-monster-hold.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",

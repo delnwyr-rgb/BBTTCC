@@ -1,7 +1,7 @@
 {
   "name": "Heart-Iron Shaving",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/techno_heart_2_iron.png",
+  "img": "icons/commodities/metal/ingot-iron.webp",
   "system": {
     "slot": "material",
     "tags": [

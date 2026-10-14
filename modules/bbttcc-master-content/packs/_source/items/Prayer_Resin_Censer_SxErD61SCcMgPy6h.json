@@ -1,7 +1,7 @@
 {
   "name": "Prayer-Resin Censer",
   "type": "gear",
-  "img": "icons/sundries/lights/incense-burner-brass.webp",
+  "img": "icons/commodities/gems/gem-amber-insect-orange.webp",
   "system": {
     "slot": "misc",
     "tags": [

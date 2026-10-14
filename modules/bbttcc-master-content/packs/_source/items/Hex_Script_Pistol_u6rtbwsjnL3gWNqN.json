@@ -1,7 +1,7 @@
 {
   "name": "Hex-Script Pistol",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hex_1.png",
+  "img": "icons/weapons/guns/pistol-revolver-long.webp",
   "system": {
     "category": "ranged",
     "intent": "violence",

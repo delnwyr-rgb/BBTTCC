@@ -1,7 +1,7 @@
 {
   "name": "Industrial Sabotage",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_industrial_sabotage.png",
+  "img": "icons/magic/death/skull-sand-white-yellow.webp",
   "system": {
     "category": "technique",
     "source": {

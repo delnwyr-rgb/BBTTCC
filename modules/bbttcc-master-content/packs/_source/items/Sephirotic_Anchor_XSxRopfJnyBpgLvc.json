@@ -1,7 +1,7 @@
 {
   "name": "Sephirotic Anchor",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_sephirotic_anchor.jpeg",
+  "img": "icons/tools/nautical/anchor-blue.webp",
   "system": {
     "description": {
       "value": "<p>When planted for 10 minutes, creates a 60‑ft sanctuary: enemies have roll 3d10 keep lowest 2 on attacks; Darkness events suppressed [TODO(adv-call)].</p>",

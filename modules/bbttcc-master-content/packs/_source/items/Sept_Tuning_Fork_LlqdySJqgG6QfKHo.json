@@ -1,7 +1,7 @@
 {
   "name": "Sept Tuning Fork",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_spanner.png",
+  "img": "icons/tools/cooking/fork-steel-tan.webp",
   "system": {
     "slot": "material",
     "tags": [

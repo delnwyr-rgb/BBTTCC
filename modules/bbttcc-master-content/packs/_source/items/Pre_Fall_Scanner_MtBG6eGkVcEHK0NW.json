@@ -1,7 +1,7 @@
 {
   "name": "Pre-Fall Scanner",
   "type": "gear",
-  "img": "icons/tools/navigation/compass-brass-blue.webp",
+  "img": "icons/commodities/metal/ingots-metal-tech.webp",
   "system": {
     "slot": "misc",
     "tags": [

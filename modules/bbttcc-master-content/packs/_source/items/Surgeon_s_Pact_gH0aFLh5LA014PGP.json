@@ -1,7 +1,7 @@
 {
   "name": "Surgeon's Pact",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_syringe.jpeg",
+  "img": "icons/tools/laboratory/injector-needle-syringe-plunger.webp",
   "system": {
     "slot": "consumable",
     "tags": [

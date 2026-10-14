@@ -1,7 +1,7 @@
 {
   "name": "Aurablade: Stabilize Burn",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_escape.png.png",
+  "img": "icons/skills/movement/feet-bladed-boots-fire.webp",
   "system": {
     "category": "technique",
     "source": {

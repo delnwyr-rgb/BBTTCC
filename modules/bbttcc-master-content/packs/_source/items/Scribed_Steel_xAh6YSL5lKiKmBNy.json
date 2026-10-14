@@ -1,7 +1,7 @@
 {
   "name": "Scribed Steel",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/valhaualan_seals_1.png",
+  "img": "icons/commodities/metal/ingot-steel-brass.webp",
   "system": {
     "slot": "material",
     "tags": [

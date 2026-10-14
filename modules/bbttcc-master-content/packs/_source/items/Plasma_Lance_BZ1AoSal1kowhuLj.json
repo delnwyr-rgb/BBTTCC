@@ -1,7 +1,7 @@
 {
   "name": "Plasma Lance",
   "type": "weapon",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ray_1.png",
+  "img": "icons/weapons/guns/pistol-energy-plasma.webp",
   "system": {
     "category": "ranged",
     "intent": "violence",

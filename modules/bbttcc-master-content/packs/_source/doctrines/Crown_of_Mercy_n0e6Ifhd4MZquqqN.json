@@ -1,7 +1,7 @@
 {
   "name": "Crown of Mercy",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_crown_of_mercy.jpeg",
+  "img": "icons/magic/control/control-influence-crown-yellow.webp",
   "system": {
     "category": "technique",
     "source": {

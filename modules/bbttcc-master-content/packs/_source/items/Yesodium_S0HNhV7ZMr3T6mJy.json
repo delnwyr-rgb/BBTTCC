@@ -1,7 +1,7 @@
 {
   "name": "Yesodium",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/yesodium.png",
+  "img": "icons/commodities/stone/ore-chunk-iron-black.webp",
   "system": {
     "slot": "material",
     "tags": [

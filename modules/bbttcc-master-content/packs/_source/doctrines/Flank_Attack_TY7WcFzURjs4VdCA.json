@@ -1,7 +1,7 @@
 {
   "name": "Flank Attack",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_flank_attack.png",
+  "img": "icons/skills/melee/strike-sword-slashing-red.webp",
   "system": {
     "category": "technique",
     "source": {

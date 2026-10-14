@@ -1,7 +1,7 @@
 {
   "name": "The Final Weave",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_final_weave.jpeg",
+  "img": "icons/skills/ranged/bullet-sparks-yellow.webp",
   "system": {
     "description": {
       "value": "<p><b>The Final Weave</b></p><p>Merge five purified Sparks into Final Ritual.</p><p><b>Cost:</b> Faith 10</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>the_final_weave</code></p>",

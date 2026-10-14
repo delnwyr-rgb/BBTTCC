@@ -1,7 +1,7 @@
 {
   "name": "Sacred Gold",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_gold.png",
+  "img": "icons/commodities/materials/material-feathers-blue.webp",
   "system": {
     "slot": "material",
     "tags": [

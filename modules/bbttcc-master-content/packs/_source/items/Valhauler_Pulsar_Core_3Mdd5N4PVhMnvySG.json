@@ -1,7 +1,7 @@
 {
   "name": "Valhauler Pulsar Core",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_valhaulan_pulsar_core.jpeg",
+  "img": "icons/commodities/tech/electronics-tech-interface-crystal-yellow.webp",
   "system": {
     "description": {
       "value": "<p>Vehicle super‑core: doubles pulsar weapon die size; once/day skip 1 travel encounter and gain +2 to next opposed roll.</p>",

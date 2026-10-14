@@ -1,7 +1,7 @@
 {
   "name": "Auto-Recon Sweep",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_recon_sweep.jpeg",
+  "img": "icons/weapons/artillery/mount-weapon-auto-steel.webp",
   "system": {
     "description": {
       "value": "<p><b>Auto-Recon Sweep</b></p><p>Deploy drones/recorders to sweep nearby territory; gain intel and reduce risk on the next leg/turn (GM adjudicates).</p><p><b>Cost:</b> Intrigue 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>auto_recon_sweep</code></p>",

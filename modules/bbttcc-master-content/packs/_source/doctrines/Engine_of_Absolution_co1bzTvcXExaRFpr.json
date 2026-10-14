@@ -1,7 +1,7 @@
 {
   "name": "Engine of Absolution",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_engine_of_absolution.png",
+  "img": "icons/containers/boxes/crate-tech-red.webp",
   "system": {
     "category": "technique",
     "source": {

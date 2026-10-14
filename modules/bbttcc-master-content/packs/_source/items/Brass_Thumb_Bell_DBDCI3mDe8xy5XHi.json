@@ -1,7 +1,7 @@
 {
   "name": "Brass Thumb-Bell",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_bell.png",
+  "img": "icons/tools/instruments/bell-brass-brown.webp",
   "system": {
     "slot": "material",
     "tags": [

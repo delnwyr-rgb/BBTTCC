@@ -1,7 +1,7 @@
 {
   "name": "Sortie en Masse",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_castle_1.png",
+  "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
   "system": {
     "category": "technique",
     "source": "",

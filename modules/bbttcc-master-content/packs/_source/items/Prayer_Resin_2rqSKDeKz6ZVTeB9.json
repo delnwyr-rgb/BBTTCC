@@ -1,7 +1,7 @@
 {
   "name": "Prayer Resin",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/technoa-rresin.jpeg",
+  "img": "icons/commodities/gems/gem-amber-insect-orange.webp",
   "system": {
     "slot": "material",
     "tags": [

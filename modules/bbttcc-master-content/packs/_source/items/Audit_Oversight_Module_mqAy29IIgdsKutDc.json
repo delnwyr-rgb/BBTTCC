@@ -1,7 +1,7 @@
 {
   "name": "Audit Oversight Module",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_audit_oversight_module.jpeg",
+  "img": "icons/equipment/head/tech-helm-blue.webp",
   "system": {
     "description": {
       "value": "<p>Vehicle/construct upgrade for Attaccountant craft: 300‑ft Aura of Accountability (enemies −2 to deception/false reports).</p>",

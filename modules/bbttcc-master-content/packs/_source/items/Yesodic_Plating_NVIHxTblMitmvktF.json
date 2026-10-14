@@ -1,7 +1,7 @@
 {
   "name": "Yesodic Plating",
   "type": "armor",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Old%20God.png",
+  "img": "icons/equipment/chest/breastplate-collared-leather-brown.webp",
   "system": {
     "guardBonus": 3,
     "evasionBonus": 0,

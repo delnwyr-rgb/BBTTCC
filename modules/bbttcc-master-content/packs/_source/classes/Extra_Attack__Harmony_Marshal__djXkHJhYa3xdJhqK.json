@@ -1,7 +1,7 @@
 {
   "name": "Extra Attack (Harmony Marshal)",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_axe.png",
+  "img": "icons/skills/melee/strike-sword-dagger-runes-yellow.webp",
   "system": {
     "category": "technique",
     "source": {

@@ -1,7 +1,7 @@
 {
   "name": "Gene-Purge Infusion",
   "type": "gear",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "icons/tools/medical/medication-pills-red-blue.webp",
   "system": {
     "slot": "consumable",
     "tags": [

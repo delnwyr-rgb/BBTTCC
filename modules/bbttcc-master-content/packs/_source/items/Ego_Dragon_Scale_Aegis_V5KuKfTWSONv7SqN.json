@@ -1,7 +1,7 @@
 {
   "name": "Ego‑Dragon Scale Aegis",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_%20ego_dragon_scale_aegis.png",
+  "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
   "system": {
     "description": {
       "value": "<p>Armor (breastplate). Grants resistance to psychic; once/day negate a charm/fear effect for you and allies within 30 ft.</p>",

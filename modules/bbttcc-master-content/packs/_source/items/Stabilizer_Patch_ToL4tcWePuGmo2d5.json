@@ -1,7 +1,7 @@
 {
   "name": "Stabilizer Patch",
   "type": "consumable",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+  "img": "icons/tools/medical/bandage-rough.webp",
   "system": {
     "description": {
       "value": "<p>Adhesive med patch. Bonus Action: remove 1 level of Stress from environmental travel once per day.</p>",

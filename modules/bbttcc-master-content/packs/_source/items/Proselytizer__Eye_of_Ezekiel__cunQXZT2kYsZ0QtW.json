@@ -1,7 +1,7 @@
 {
   "name": "Proselytizer 'Eye of Ezekiel'",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_eye_of_ezekiel.jpeg",
+  "img": "icons/commodities/biological/eye-lizard-orange-red.webp",
   "system": {
     "description": {
       "value": "<p>Socketable orb. At will: see invisible/ethereal; 1/day mass calm‑emotions in 300 ft; surveillance cannot be fooled by illusions.</p>",

@@ -1,7 +1,7 @@
 {
   "name": "Clarity Wafer",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_wafer_1.png",
+  "img": "icons/commodities/biological/tongue-brown.webp",
   "system": {
     "slot": "consumable",
     "tags": [

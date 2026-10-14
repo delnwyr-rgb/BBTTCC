@@ -1,7 +1,7 @@
 {
   "name": "Training Drills",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_training_drill.jpeg",
+  "img": "icons/skills/melee/drill-heavy-earth.webp",
   "system": {
     "description": {
       "value": "<p><b>Training Drills</b></p><p>Increase Violence cap +1 for 2 turns.</p><p><b>Cost:</b> Violence 3 • Nonlethal 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>training_drills</code></p>",

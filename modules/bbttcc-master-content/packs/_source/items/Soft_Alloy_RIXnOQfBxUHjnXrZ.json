@@ -1,7 +1,7 @@
 {
   "name": "Soft Alloy",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_soft_alloy.png",
+  "img": "icons/commodities/materials/material-webbing.webp",
   "system": {
     "slot": "material",
     "tags": [

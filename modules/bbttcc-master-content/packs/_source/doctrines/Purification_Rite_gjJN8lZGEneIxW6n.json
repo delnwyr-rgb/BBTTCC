@@ -1,7 +1,7 @@
 {
   "name": "Purification Rite",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_purification_ritual.jpeg",
+  "img": "icons/skills/social/diplomacy-offering-ritual.webp",
   "system": {
     "description": {
       "value": "<p><b>Purification Rite</b></p><p>Reduce Darkness Track −2.</p><p><b>Cost:</b> Faith 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>purification_rite</code></p>",

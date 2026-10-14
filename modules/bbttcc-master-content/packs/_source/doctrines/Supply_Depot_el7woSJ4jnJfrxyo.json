@@ -1,7 +1,7 @@
 {
   "name": "Supply Depot",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_supply_depot.jpeg",
+  "img": "icons/containers/boxes/crate-reinforced-brown.webp",
   "system": {
     "description": {
       "value": "<p><b>Supply Depot</b></p><p><b>Cost:</b> Economy 2 • Logistics 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>supply_depot</code></p>",

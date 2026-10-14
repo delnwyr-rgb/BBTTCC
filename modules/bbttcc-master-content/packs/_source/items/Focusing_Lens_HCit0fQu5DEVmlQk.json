@@ -1,7 +1,7 @@
 {
   "name": "Focusing Lens",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_lens_2.png",
+  "img": "icons/sundries/documents/document-symbol-eye.webp",
   "system": {
     "slot": "material",
     "tags": [

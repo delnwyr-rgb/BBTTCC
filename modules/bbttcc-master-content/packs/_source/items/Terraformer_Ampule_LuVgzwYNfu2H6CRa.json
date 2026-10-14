@@ -1,7 +1,7 @@
 {
   "name": "Terraformer Ampule",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_terraformer_ampule.jpeg",
+  "img": "icons/consumables/potions/potion-vial-corked-purple.webp",
   "system": {
     "description": {
       "value": "<p>Crystal vial. Expend to cleanse a 30‑ft radius hazard; if used in Wasteland, reduce regional Darkness by 1 (once/region).</p>",

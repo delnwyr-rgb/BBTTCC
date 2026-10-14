@@ -1,7 +1,7 @@
 {
   "name": "Anchor of the Known",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_anchor_of_the_known.jpeg",
+  "img": "icons/equipment/neck/pendant-gold-anchor.webp",
   "system": {
     "description": {
       "value": "<p><i>“The world remembers this place.”</i></p><p><b>Deploy.</b> Once per a Soma Break, place an Anchor in your current hex. For 1 turn, random encounter chance is reduced (engine hook planned).</p><p><b>Safe:</b> Does not affect faction tracks.</p>",

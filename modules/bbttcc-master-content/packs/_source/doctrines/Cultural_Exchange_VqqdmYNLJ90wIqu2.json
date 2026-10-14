@@ -1,7 +1,7 @@
 {
   "name": "Cultural Exchange",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_cultural_exchange.jpeg",
+  "img": "icons/magic/symbols/rune-sigil-white-pink.webp",
   "system": {
     "description": {
       "value": "<p><b>Cultural Exchange</b></p><p>Share Alignment bonus between Hexes.</p><p><b>Cost:</b> Diplomacy 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>cultural_exchange</code></p>",

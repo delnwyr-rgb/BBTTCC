@@ -1,7 +1,7 @@
 {
   "name": "Scrubber Harness",
   "type": "equipment",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_scrubber_harness.jpeg",
+  "img": "icons/equipment/waist/belt-leather-black-brass.webp",
   "system": {
     "description": {
       "value": "<p><i>“The Geiger clicks slow, then stops.”</i></p><p><b>Radiation Dampening.</b> Reduce radiation exposure tier by 1 for the wearer (to a minimum of 0), if your Bad Eden radiation engine is enabled.</p><p><b>Cleanse.</b> 2/day. As an action, cleanse radiation effects from one ally within 5 ft (GM adjudication; engine hook planned).</p>",
@@ -74,7 +74,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 2.0,
+            "rarityMult": 2,
             "notes": "TII vestment stamp × rarity 2.0 (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 180

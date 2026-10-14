@@ -1,7 +1,7 @@
 {
   "name": "Self-Wrapping Sandwich",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/self_wrapping_sandwich.png",
+  "img": "icons/commodities/bones/skull-weird.webp",
   "system": {
     "slot": "consumable",
     "tags": [

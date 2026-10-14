@@ -1,7 +1,7 @@
 {
   "name": "Borrowed Voice",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_speech_2.png",
+  "img": "icons/skills/trades/music-singing-voice-blue.webp",
   "system": {
     "category": "technique",
     "source": {

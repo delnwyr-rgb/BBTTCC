@@ -1,7 +1,7 @@
 {
   "name": "Develop Infrastructure",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_develop_infrastructure.png",
+  "img": "icons/environment/wilderness/wall-ruins.webp",
   "system": {
     "description": {
       "value": "<p><b>Develop Infrastructure</b></p><p><b>Cost:</b> Economy 4 • Logistics 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>develop_infrastructure_std</code></p>",

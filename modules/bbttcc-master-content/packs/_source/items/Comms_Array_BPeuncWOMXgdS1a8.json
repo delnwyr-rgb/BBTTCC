@@ -1,7 +1,7 @@
 {
   "name": "Comms Array",
   "type": "gear",
-  "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+  "img": "icons/tools/fasteners/washer-hex-copper-brown.webp",
   "system": {
     "slot": "misc",
     "tags": [],
@@ -26,7 +26,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI tool stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 12

@@ -1,7 +1,7 @@
 {
   "name": "Soul-Smith",
   "type": "class",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SoulSmith3.png",
+  "img": "icons/magic/death/skeleton-skull-soul-blue.webp",
   "system": {
     "category": "path",
     "identifier": "soul-smith",

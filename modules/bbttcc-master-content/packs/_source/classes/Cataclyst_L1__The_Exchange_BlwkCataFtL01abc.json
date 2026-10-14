@@ -1,7 +1,7 @@
 {
   "name": "Cataclyst L1: The Exchange",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_gauntlet_2.png",
+  "img": "icons/magic/time/hourglass-tilted-gray.webp",
   "system": {
     "category": "technique",
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",

@@ -1,7 +1,7 @@
 {
   "name": "Witness-Glass",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_lens.png",
+  "img": "icons/commodities/treasure/glass-crystal-green.webp",
   "system": {
     "slot": "material",
     "tags": [

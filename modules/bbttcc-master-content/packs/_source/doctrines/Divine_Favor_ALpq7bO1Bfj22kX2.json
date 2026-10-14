@@ -1,7 +1,7 @@
 {
   "name": "Divine Favor",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_divine_favor.jpeg",
+  "img": "icons/skills/melee/sword-winged-holy-orange.webp",
   "system": {
     "category": "technique",
     "source": {

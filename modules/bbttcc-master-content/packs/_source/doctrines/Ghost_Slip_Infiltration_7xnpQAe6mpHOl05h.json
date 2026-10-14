@@ -1,7 +1,7 @@
 {
   "name": "Ghost-Slip Infiltration",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_ghost_slip_protocol.jpeg",
+  "img": "icons/magic/death/undead-ghost-strike-white.webp",
   "system": {
     "category": "technique",
     "source": {

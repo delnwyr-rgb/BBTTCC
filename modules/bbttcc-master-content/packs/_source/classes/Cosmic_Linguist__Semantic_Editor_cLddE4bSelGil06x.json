@@ -2,7 +2,7 @@
   "_id": "cLddE4bSelGil06x",
   "name": "Cosmic Linguist: Semantic Editor",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scissors.png",
+  "img": "icons/sundries/scrolls/scroll-rolled-white.webp",
   "system": {
     "category": "technique",
     "source": {
@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>\"I am not casting. I am editing.\"</em></p><p><strong>Roleplay register, not rules.</strong> Choose the voice of your edits \u2014 <strong>Additive, Subtractive, Transformative, Referential, or Performative</strong>. Narrate every manifestation in your mode: it shapes how the working looks, sounds, and is remembered \u2014 never what it costs.</p><p><em>The cast dialog's cost line is the truth. (An earlier draft priced modes in Strain; Strain is retired.)</em></p>",
+      "value": "<p><em>\"I am not casting. I am editing.\"</em></p><p><strong>Roleplay register, not rules.</strong> Choose the voice of your edits — <strong>Additive, Subtractive, Transformative, Referential, or Performative</strong>. Narrate every manifestation in your mode: it shapes how the working looks, sounds, and is remembered — never what it costs.</p><p><em>The cast dialog's cost line is the truth. (An earlier draft priced modes in Strain; Strain is retired.)</em></p>",
       "chat": ""
     },
     "identifier": "cosmic_linguist_semantic_editor",

@@ -1,7 +1,7 @@
 {
   "name": "S'narchy Burger Special Sauce (Sealed Packet, Pre-Fall)",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/snarky_burger_sauce_packet_2.png",
+  "img": "icons/sundries/documents/envelope-sealed-red-white.webp",
   "system": {
     "slot": "consumable",
     "tags": [

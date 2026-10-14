@@ -1,7 +1,7 @@
 {
   "name": "Interdict Supply Line",
   "type": "feat",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_net_1.png",
+  "img": "icons/containers/boxes/crate-modern-open.webp",
   "system": {
     "category": "strategic",
     "source": "Bad Eden Doctrine",

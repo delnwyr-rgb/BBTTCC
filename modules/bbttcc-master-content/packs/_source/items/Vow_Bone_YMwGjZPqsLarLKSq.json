@@ -1,7 +1,7 @@
 {
   "name": "Vow-Bone",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_ritual_bone.png",
+  "img": "icons/commodities/bones/bone-fragments-white.webp",
   "system": {
     "slot": "material",
     "tags": [

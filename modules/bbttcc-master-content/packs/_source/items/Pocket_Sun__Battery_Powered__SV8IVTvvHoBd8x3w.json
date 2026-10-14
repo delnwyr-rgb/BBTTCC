@@ -1,7 +1,7 @@
 {
   "name": "Pocket Sun (Battery Powered)",
   "type": "gear",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/flashlight.png",
+  "img": "icons/commodities/tech/battery-fuel-cell-teal.webp",
   "system": {
     "slot": "tool",
     "tags": [

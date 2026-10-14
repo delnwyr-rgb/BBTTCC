@@ -1,7 +1,7 @@
 {
   "name": "Bulwark Hauberk",
   "type": "armor",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/bulwark_hauberk.png",
+  "img": "icons/equipment/chest/breastplate-layered-leather-black.webp",
   "system": {
     "guardBonus": 2,
     "evasionBonus": 0,

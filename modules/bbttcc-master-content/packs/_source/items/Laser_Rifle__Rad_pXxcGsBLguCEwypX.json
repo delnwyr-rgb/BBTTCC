@@ -3,7 +3,7 @@
   "name": "Laser Rifle, Rad",
   "type": "weapon",
   "_id": "pXxcGsBLguCEwypX",
-  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+  "img": "icons/weapons/guns/rifle-energy-blaster.webp",
   "system": {
     "category": "ranged",
     "intent": "violence",
