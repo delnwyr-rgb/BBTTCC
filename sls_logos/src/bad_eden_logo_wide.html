@@ -1,0 +1,54 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Bad Eden lockup (wide)</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+  body { width: 2400px; height: 700px; overflow: hidden; }
+  .bad  { font-family: "HexCircuit"; font-size: 300px; fill: var(--blue-light); }
+  .eden { font-family: "HexCircuit"; font-size: 300px; fill: var(--gold); }
+  .tag  { font-family: "HexCircuit"; font-size: 40px; letter-spacing: 13px; fill: var(--blue-light); }
+</style></head>
+<body>
+<svg id="svg" xmlns="http://www.w3.org/2000/svg" width="2400" height="700" viewBox="0 0 2400 700">
+  <defs>
+    <linearGradient id="goldRule" x1="0" x2="1"><stop offset="0" stop-color="#f4c842" stop-opacity="0"/><stop offset=".18" stop-color="#f4c842"/><stop offset=".82" stop-color="#f4c842"/><stop offset="1" stop-color="#f4c842" stop-opacity="0"/></linearGradient>
+    <g id="bundle">
+      <g class="glow-blue" stroke="#4a8fd6" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+        <polyline points="0,0 -70,0 -110,-40 -240,-40"/>
+        <polyline points="0,90 -90,90 -130,130 -210,130"/>
+        <polyline points="0,190 -60,190 -100,150 -250,150"/>
+      </g>
+      <g class="node">
+        <circle cx="-240" cy="-40" r="7"/><circle cx="-210" cy="130" r="7"/><circle cx="-250" cy="150" r="7"/>
+        <rect class="pad" x="-177" y="-47" width="14" height="14" stroke="none"/><rect class="pad" x="-187" y="143" width="14" height="14" stroke="none"/>
+      </g>
+    </g>
+  </defs>
+  <g id="traceL"><use href="#bundle"/></g>
+  <g id="traceR"><use href="#bundle"/></g>
+  <g id="words">
+  <text id="bad"  class="bad glow-blue"  x="1200" y="420" text-anchor="end">Bad&#8202;</text>
+  <text id="eden" class="eden glow-gold" x="1240" y="420" text-anchor="start">Eden</text>
+  </g>
+  <g class="glow-gold">
+    <rect id="ruleLine" x="300" y="478" width="1800" height="3" fill="url(#goldRule)"/>
+    <polygon id="d1" points="1200,469 1211,480 1200,491 1189,480" fill="#f4c842"/>
+    <polygon id="d2" points="900,471 909,480 900,489 891,480" fill="#f4c842"/>
+    <polygon id="d3" points="1500,471 1509,480 1500,489 1491,480" fill="#f4c842"/>
+  </g>
+</svg>
+<script>
+const m = location.search.match(/bg=(\w+)/); if (m) document.body.classList.add(m[1]);
+function layout() {
+  const b = document.getElementById("bad").getBBox(), e = document.getElementById("eden").getBBox();
+  let left = b.x, right = e.x + e.width; const dx = 1200 - (left + right) / 2; document.getElementById("words").setAttribute("transform", `translate(${dx},0)`); left += dx; right += dx; const top = Math.min(b.y, e.y), bottom = Math.max(b.y + b.height, e.y + e.height);
+  const y0 = top + 30;
+  document.getElementById("traceL").setAttribute("transform", `translate(${left - 26},${y0})`);
+  document.getElementById("traceR").setAttribute("transform", `translate(${right + 26},${y0}) scale(-1,1)`);
+  const ry = bottom + 44, cx = (left + right) / 2, w = right - left;
+  const L = document.getElementById("ruleLine"); L.setAttribute("x", left - 20); L.setAttribute("width", w + 40); L.setAttribute("y", ry - 1.5);
+  const dia = (id, x, r) => document.getElementById(id).setAttribute("points", `${x},${ry - r} ${x + r},${ry} ${x},${ry + r} ${x - r},${ry}`);
+  dia("d1", cx, 11); dia("d2", cx - w * 0.3, 8); dia("d3", cx + w * 0.3, 8);
+}
+document.fonts.ready.then(layout);
+</script>
+</body></html>

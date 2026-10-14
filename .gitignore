@@ -17,6 +17,11 @@
 !/ACT2_LINT_2026_09_05.md
 # OP-unit unification plan — documents the marks refactor across the versioned modules.
 !/MARKS_EVERYWHERE_PLAN.md
+# Studio logo sources (HTML/SVG lockups, render + video pipeline). Renders and
+# video stay local-only — they are large and reproducible from src/.
+!/sls_logos/
+/sls_logos/*
+!/sls_logos/src/
 
 # Allowlist the fourththing system
 !/systems/

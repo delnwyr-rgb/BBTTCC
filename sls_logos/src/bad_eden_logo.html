@@ -1,0 +1,63 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Bad Eden lockup</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+  body { width: 1600px; height: 1000px; overflow: hidden; }
+  .bad  { font-family: "HexCircuit"; font-size: 290px; fill: var(--blue-light); }
+  .eden { font-family: "HexCircuit"; font-size: 290px; fill: var(--gold); }
+  .tag  { font-family: "HexCircuit"; font-size: 44px; letter-spacing: 14px; fill: var(--blue-light); }
+</style></head>
+<body>
+<svg id="svg" xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <!-- traces fade toward their outer ends (x = -1 side of the gradient box is the outer end) -->
+    <linearGradient id="fadeOut" gradientUnits="userSpaceOnUse" x1="-520" x2="0"><stop offset="0" stop-color="#4a8fd6" stop-opacity="0"/><stop offset=".45" stop-color="#4a8fd6" stop-opacity=".9"/><stop offset="1" stop-color="#4a8fd6"/></linearGradient>
+    <linearGradient id="goldRule" x1="0" x2="1"><stop offset="0" stop-color="#f4c842" stop-opacity="0"/><stop offset=".18" stop-color="#f4c842"/><stop offset=".82" stop-color="#f4c842"/><stop offset="1" stop-color="#f4c842" stop-opacity="0"/></linearGradient>
+    <!-- one trace bundle, authored running LEFT from x=0 (the wordmark edge); mirrored for the right side -->
+    <g id="bundle">
+      <g class="glow-blue" stroke="#4a8fd6" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+        <polyline points="0,0 -70,0 -110,-40 -240,-40"/>
+        <polyline points="0,100 -90,100 -130,140 -250,140"/>
+        <polyline points="0,230 -60,230 -100,190 -250,190"/>
+        <polyline points="0,330 -80,330 -120,370 -240,370"/>
+        <polyline points="0,440 -60,440 -100,400 -230,400"/>
+      </g>
+      <g class="node">
+        <circle cx="-240" cy="-40" r="7"/><circle cx="-250" cy="140" r="7"/><circle cx="-250" cy="190" r="7"/><circle cx="-240" cy="370" r="7"/><circle cx="-230" cy="400" r="7"/>
+        <rect class="pad" x="-197" y="-47" width="14" height="14" stroke="none"/><rect class="pad" x="-207" y="183" width="14" height="14" stroke="none"/><rect class="pad" x="-187" y="393" width="14" height="14" stroke="none"/>
+      </g>
+    </g>
+  </defs>
+
+  <g id="traceL"><use href="#bundle"/></g>
+  <g id="traceR"><use href="#bundle"/></g>
+
+  <!-- wordmark -->
+  <text id="bad"  class="bad glow-blue"  x="800" y="420" text-anchor="middle">Bad</text>
+  <text id="eden" class="eden glow-gold" x="800" y="740" text-anchor="middle">Eden</text>
+
+  <!-- gold circuit rule + tagline (positioned from the measured wordmark) -->
+  <g id="rule" class="glow-gold">
+    <rect id="ruleLine" x="330" y="813" width="940" height="3" fill="url(#goldRule)"/>
+    <polygon id="d1" points="800,804 811,815 800,826 789,815" fill="#f4c842"/>
+    <polygon id="d2" points="560,806 569,815 560,824 551,815" fill="#f4c842"/>
+    <polygon id="d3" points="1040,806 1049,815 1040,824 1031,815" fill="#f4c842"/>
+  </g>
+</svg>
+<script>
+const m = location.search.match(/bg=(\w+)/); if (m) document.body.classList.add(m[1]);
+function layout() {
+  const b = document.getElementById("bad").getBBox(), e = document.getElementById("eden").getBBox();
+  const left = Math.min(b.x, e.x), right = Math.max(b.x + b.width, e.x + e.width), top = b.y, mid = (b.y + b.height + e.y) / 2;
+  // bundles hug the wordmark edges, vertically centred on the two-line block
+  const y0 = top + 40;
+  document.getElementById("traceL").setAttribute("transform", `translate(${left - 26},${y0})`);
+  document.getElementById("traceR").setAttribute("transform", `translate(${right + 26},${y0}) scale(-1,1)`);
+  const ry = e.y + e.height + 42, cx = (left + right) / 2, w = right - left;
+  const L = document.getElementById("ruleLine"); L.setAttribute("x", left - 20); L.setAttribute("width", w + 40); L.setAttribute("y", ry - 1.5);
+  const dia = (id, x, r) => document.getElementById(id).setAttribute("points", `${x},${ry - r} ${x + r},${ry} ${x},${ry + r} ${x - r},${ry}`);
+  dia("d1", cx, 11); dia("d2", cx - w * 0.28, 8); dia("d3", cx + w * 0.28, 8);
+}
+document.fonts.ready.then(layout);
+</script>
+</body></html>

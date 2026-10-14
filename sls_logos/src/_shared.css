@@ -1,0 +1,22 @@
+@font-face { font-family: "HexDisplay"; src: url("file:///Users/gamingaccount/systems/fourththing/fonts/bbttcc-display/BBTTCC-Display.ttf"); }
+@font-face { font-family: "HexInlay";   src: url("file:///Users/gamingaccount/systems/fourththing/fonts/bbttcc-display/BBTTCC-Display-Inlay.ttf"); }
+@font-face { font-family: "HexCircuit"; src: url("file:///Users/gamingaccount/systems/fourththing/fonts/bbttcc-display/BBTTCC-Display-Circuit.ttf"); }
+:root {
+  --blue-deep: #0a1f4a; --blue-stamp: #1d3a7a; --blue-edge: #4a8fd6; --blue-light: #9fc8f2; --blue-ice: #d9ecff;
+  --gold: #f4c842; --gold-glow: #ffdf6b; --gold-deep: #b98a1c; --ink: #000;
+}
+html, body { margin: 0; padding: 0; background: transparent; }
+body.black { background: #000; }
+body.navy  { background: radial-gradient(ellipse at 50% 45%, #0f2a5e 0%, #0a1f4a 45%, #04101f 100%); }
+svg { display: block; }
+.circuit { font-family: "HexCircuit"; }
+.inlay   { font-family: "HexInlay"; }
+.display { font-family: "HexDisplay"; }
+.glow-gold { filter: drop-shadow(0 0 10px rgba(244,200,66,.55)) drop-shadow(0 0 28px rgba(244,200,66,.35)); }
+.glow-blue { filter: drop-shadow(0 0 10px rgba(143,192,240,.6))  drop-shadow(0 0 28px rgba(74,143,214,.4)); }
+.trace { fill: none; stroke: var(--blue-edge); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.trace.gold { stroke: var(--gold-deep); }
+.node { fill: none; stroke: var(--blue-edge); stroke-width: 3; }
+.node.gold { stroke: var(--gold-deep); }
+.pad { fill: var(--blue-edge); }
+.pad.gold { fill: var(--gold); }

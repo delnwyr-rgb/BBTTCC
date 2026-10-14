@@ -1,0 +1,86 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Roll for Initiation lockup</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+  body { width: 1800px; height: 1000px; overflow: hidden; }
+  .roll { font-family: "HexInlay"; font-size: 150px; fill: var(--blue-light); }
+  .init { font-family: "HexInlay"; font-size: 196px; fill: var(--gold); }
+  .sub  { font-family: "HexCircuit"; font-size: 38px; letter-spacing: 12px; fill: var(--blue-light); }
+  .hex  { fill: none; stroke: var(--gold); stroke-width: 6; stroke-linejoin: round; }
+  .hexin{ fill: none; stroke: var(--blue-edge); stroke-width: 3; stroke-linejoin: round; opacity: .85; }
+</style></head>
+<body>
+<svg id="svg" xmlns="http://www.w3.org/2000/svg" width="1800" height="1000" viewBox="0 0 1800 1000">
+  <defs>
+    <linearGradient id="fadeOut" gradientUnits="userSpaceOnUse" x1="0" x2="420"><stop offset="0" stop-color="#4a8fd6"/><stop offset=".55" stop-color="#4a8fd6" stop-opacity=".9"/><stop offset="1" stop-color="#4a8fd6" stop-opacity="0"/></linearGradient>
+    <linearGradient id="goldRule" x1="0" x2="1"><stop offset="0" stop-color="#f4c842"/><stop offset=".85" stop-color="#f4c842"/><stop offset="1" stop-color="#f4c842" stop-opacity="0"/></linearGradient>
+    <polygon id="hx"  points="0,-110 95,-55 95,55 0,110 -95,55 -95,-55"/>
+    <polygon id="hxs" points="0,-62 54,-31 54,31 0,62 -54,31 -54,-31"/>
+  </defs>
+
+  <!-- THE MARK: three stacked hexes — roll (die) · star (the sigil) · initiation (the threshold) -->
+  <g id="mark" transform="translate(300,500)">
+    <g class="glow-gold">
+      <use href="#hx" class="hex" transform="translate(0,-230)"/>
+      <use href="#hx" class="hex"/>
+      <use href="#hx" class="hex" transform="translate(0,230)"/>
+      <circle cx="0" cy="-115" r="9" fill="#f4c842"/><circle cx="0" cy="115" r="9" fill="#f4c842"/>
+      <circle cx="0" cy="-340" r="9" fill="#f4c842"/><circle cx="0" cy="340" r="9" fill="#f4c842"/>
+    </g>
+    <g class="glow-blue">
+      <use href="#hxs" class="hexin" transform="translate(0,-230)"/>
+      <use href="#hxs" class="hexin" transform="translate(0,230)"/>
+      <g transform="translate(0,-230)" fill="none" stroke="#9fc8f2" stroke-width="3" stroke-linejoin="round">
+        <polygon points="0,-34 30,18 -30,18"/><circle cx="0" cy="-34" r="5" fill="#9fc8f2"/><circle cx="30" cy="18" r="5" fill="#9fc8f2"/><circle cx="-30" cy="18" r="5" fill="#9fc8f2"/>
+      </g>
+      <g fill="#d9ecff" stroke="#f4c842" stroke-width="2">
+        <polygon points="0,-70 12,-14 0,0 -12,-14"/><polygon points="0,70 12,14 0,0 -12,14"/>
+        <polygon points="-70,0 -14,-12 0,0 -14,12"/><polygon points="70,0 14,-12 0,0 14,12"/>
+        <polygon points="-50,-50 -8,-24 0,0 -24,-8"/><polygon points="50,-50 8,-24 0,0 24,-8"/>
+        <polygon points="-50,50 -8,24 0,0 -24,8"/><polygon points="50,50 8,24 0,0 24,8"/>
+      </g>
+      <g transform="translate(0,230)" fill="none" stroke="#9fc8f2" stroke-width="3" stroke-linejoin="round">
+        <polyline points="-26,34 -26,-10 0,-34 26,-10 26,34"/><line x1="-38" y1="34" x2="38" y2="34"/><circle cx="0" cy="-34" r="5" fill="#9fc8f2"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- WORDMARK -->
+  <text id="roll" class="roll glow-blue" x="470" y="400">roll for</text>
+  <text id="init" class="init glow-gold" x="470" y="640">initiation</text>
+
+  <!-- trace bundle, authored running RIGHT from x=0 (the wordmark's right edge); placed by script -->
+  <g id="traces">
+    <g class="glow-blue" stroke="#4a8fd6" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+      <polyline points="0,-150 50,-150 90,-190 210,-190"/>
+      <polyline points="0,-90 70,-90 110,-50 230,-50"/>
+      <polyline points="0,40 60,40 100,80 200,80"/>
+      <polyline points="0,-10 110,-10 150,-50 170,-50"/>
+    </g>
+    <g class="node"><circle cx="210" cy="-190" r="7"/><circle cx="230" cy="-50" r="7"/><circle cx="200" cy="80" r="7"/><rect class="pad" x="63" y="-97" width="14" height="14" stroke="none"/><rect class="pad" x="53" y="33" width="14" height="14" stroke="none"/></g>
+  </g>
+
+  <!-- gold rule + sub-line -->
+  <g class="glow-gold">
+    <rect id="ruleLine" x="475" y="728" width="1025" height="3" fill="url(#goldRule)"/>
+    <polygon id="d1" points="475,719 486,730 475,741 464,730" fill="#f4c842"/>
+  </g>
+  <text id="sub" class="sub glow-blue" x="478" y="800">BY SHATTERED LENS STUDIOS</text>
+</svg>
+<script>
+const m = location.search.match(/bg=(\w+)/); if (m) document.body.classList.add(m[1]);
+function layout() {
+  const r = document.getElementById("roll").getBBox(), i = document.getElementById("init").getBBox();
+  const right = Math.max(r.x + r.width, i.x + i.width), left = Math.min(r.x, i.x);
+  // traces hang off the right edge of "initiation", vertically on its x-height band
+  document.getElementById("traces").setAttribute("transform", `translate(${right + 22},${i.y + i.height * 0.62})`);
+  const ry = i.y + i.height + 40;
+  const L = document.getElementById("ruleLine"); L.setAttribute("x", left); L.setAttribute("width", right + 40 - left); L.setAttribute("y", ry - 1.5);
+  document.getElementById("d1").setAttribute("points", `${left},${ry - 11} ${left + 11},${ry} ${left},${ry + 11} ${left - 11},${ry}`);
+  const s = document.getElementById("sub"); s.setAttribute("x", left + 3); s.setAttribute("y", ry + 66);
+  // centre the whole composition vertically on the mark
+  const g = document.getElementById("svg").getBBox();
+}
+document.fonts.ready.then(layout);
+</script>
+</body></html>
