@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 """build-golden-base.py — make a new golden-master BASE save from two Bad Eden save files (2026-10-02).
 
-    build-golden-base.py <golden.json> <live.json> <out.json> [--label "..."]
+    build-golden-base.py <golden.json> <live.json> <out.json> [--label "..."] [--turn N]
+        [--live-settings ns.key,ns.key,...]   extra CONTENT settings taken from live (default: bbttcc-campaign.encounterTables,
+                                              bbttcc-market.catalog, bbttcc-market.vendors — added 2026-10-13 for Golden 15)
+        [--no-new-settings]                   do NOT carry settings live has but the golden lacks (default: carried — they are
+                                              config keys added since the golden: facilitation, tableAnnouncements, market fees…)
+        [--drop-deleted]                      golden actors that LIVE has deleted stay deleted (default: golden's copy comes back)
+        [--exclude REGEX]                     live-only actors whose name matches are NOT carried (shoot props, test crews)
+        [--turn N]                            override the world turn in the base (default: the golden's)
+    2026-10-13 (Golden 15): a live-only PLAYER-OWNED actor is skipped only when it is a character, a rig or a faction — an NPC
+    whose ownership was handed to a player seat for a shoot (the bandit crews) is carried with ownership reset.
 
 WHY: a golden master is a clean turn-1 world. Content (beats, story scripts, NPCs, door drawings, scene setups) keeps
 growing on the LIVE world through seeders and patches; play state (turns, factions, hexes held, fired beats, steward
@@ -25,9 +34,10 @@ THE SPLIT (measured on golden 12 c2bab28jbixz vs live rmh94lhf20ee, 2026-10-02):
             are left out (a load never deletes a scene).
   journal   golden's (identical to live on 2026-10-02).
 """
-import json, sys, time, random, string
+import json, sys, time, random, string, re
 
 GM_IDS = {"bytUGWIOqq9eT7Or"}            # the Gamemaster user on ember (owns 185 of 208 actors)
+LIVE_SETTINGS, CARRY_NEW_SETTINGS, DROP_DELETED, EXCLUDE, TURN = set(), True, False, None, None   # set from argv in main()
 FRESH = {("bbttcc-campaign", "humRoofs"): 0, ("bbttcc-factions", "opRelayStrict"): False, ("bbttcc-onboarding", "cohorts"): {},
          ("bbttcc-territory", "questMarkers"): "gm", ("fourththing", "actionEconomy"): False}
 DROP_SETTINGS = {("bbttcc-mal-voice", "apiKey")}
@@ -48,8 +58,21 @@ def hex_flags(d):
 
 def main():
     gp, lp, op = sys.argv[1:4]
-    label = sys.argv[sys.argv.index("--label") + 1] if "--label" in sys.argv else "Golden 13 base"
+    def opt(name, default=None): return sys.argv[sys.argv.index(name) + 1] if name in sys.argv else default
+    label = opt("--label", "Golden base")
+    global LIVE_SETTINGS, CARRY_NEW_SETTINGS, DROP_DELETED, EXCLUDE, TURN
+    LIVE_SETTINGS = {tuple(x.split(".", 1)) for x in (opt("--live-settings", "bbttcc-campaign.encounterTables,bbttcc-market.catalog,bbttcc-market.vendors")).split(",") if x}
+    CARRY_NEW_SETTINGS = "--no-new-settings" not in sys.argv
+    DROP_DELETED = "--drop-deleted" in sys.argv
+    EXCLUDE = re.compile(opt("--exclude")) if opt("--exclude") else None
+    TURN = int(opt("--turn")) if opt("--turn") is not None else None
     G, L = load(gp), load(lp); rep = []
+    if TURN is not None:
+        for st in L["settings"] + G["settings"]:
+            if (st["ns"], st["key"]) == ("bbttcc-world", "worldState"):
+                v, was_str = parse(st["value"])
+                if isinstance(v, dict): v["turn"] = TURN; st["value"] = json.dumps(v) if was_str else v
+        rep.append(f"world turn overridden → {TURN}")
 
     # ── settings ──
     ls = {(s["ns"], s["key"]): s["value"] for s in L["settings"]}
@@ -58,6 +81,7 @@ def main():
         k = (s["ns"], s["key"])
         if k in DROP_SETTINGS: rep.append(f"setting DROPPED {k}"); continue
         if k == ("bbttcc-campaign", "campaigns"): out_settings.append({**s, "value": ls[k]}); rep.append("setting campaigns ← live (beats + story)"); continue
+        if k in LIVE_SETTINGS and k in ls: out_settings.append({**s, "value": ls[k]}); rep.append(f"setting {k} ← live (content)"); continue
         if k == ("bbttcc-campaign", "quests"):
             gv, gstr = parse(s["value"]); lv, _ = parse(ls[k])
             add = {q: r for q, r in lv.items() if q not in gv and not q.startswith("word_")}
@@ -65,6 +89,11 @@ def main():
             out_settings.append({**s, "value": json.dumps(gv) if gstr else gv}); continue
         out_settings.append(s)
     have = {(s["ns"], s["key"]) for s in out_settings}
+    if CARRY_NEW_SETTINGS:
+        for st in L["settings"]:
+            k = (st["ns"], st["key"])
+            if k in have or k in DROP_SETTINGS: continue
+            out_settings.append(st); have.add(k); rep.append(f"setting new-since-golden {k} ← live (config)")
     for k, v in FRESH.items():
         if k not in have and k not in DROP_SETTINGS: out_settings.append({"ns": k[0], "key": k[1], "value": v}); rep.append(f"setting fresh {k} = {v!r}")
 
@@ -73,6 +102,7 @@ def main():
     out_actors = []; n = {"golden": 0, "live": 0, "new": 0, "skipped-player": 0}
     for i, g in ga.items():
         l = la.get(i)
+        if not l and DROP_DELETED: n["dropped-deleted-on-live"] = n.get("dropped-deleted-on-live", 0) + 1; rep.append(f"actor dropped (deleted on live): {g['name']}"); continue
         if not l or player_owned(l) or player_owned(g) or is_faction(g) or is_faction(l): out_actors.append(g); n["golden"] += 1; continue
         a = json.loads(json.dumps(l))
         fl = a.setdefault("flags", {})
@@ -90,19 +120,22 @@ def main():
         out_actors.append(a); n["live"] += 1
     for i, l in la.items():
         if i in ga: continue
-        if player_owned(l): n["skipped-player"] += 1; rep.append(f"actor skipped (player-owned, made in play): {l['name']}"); continue
+        if EXCLUDE and EXCLUDE.search(l.get("name") or ""): n["excluded"] = n.get("excluded", 0) + 1; rep.append(f"actor excluded (--exclude): {l['name']}"); continue
+        if player_owned(l) and (l.get("type") != "npc" or is_faction(l)): n["skipped-player"] += 1; rep.append(f"actor skipped (player-owned, made in play): {l['name']}"); continue
         a = json.loads(json.dumps(l)); fl = a.setdefault("flags", {})
+        if player_owned(l): a["ownership"] = {"default": 0}; rep.append(f"actor carried with ownership reset (NPC lent to a player seat): {l['name']}")
         if isinstance(fl.get("bbttcc-factions"), dict): fl["bbttcc-factions"]["warLogs"] = []
         if isinstance(fl.get("bbttcc-mal-voice"), dict): fl["bbttcc-mal-voice"].pop("memories", None)
         out_actors.append(a); n["new"] += 1
     rep.append(f"actors: {n}")
     player_ids = {a["_id"] for a in out_actors if player_owned(a)} | {i for i, a in la.items() if player_owned(a)}
     faction_ids = {a["_id"] for a in out_actors if is_faction(a)}
+    kept_ids = {a["_id"] for a in out_actors}
 
     # ── scenes ──
     gs = {s["_id"]: s for s in G["scenes"]}
     out_scenes = []; hexes = 0; doors = 0; toks = 0
-    def keep_token(t): return t.get("actorId") not in player_ids and t.get("actorId") not in faction_ids
+    def keep_token(t): return t.get("actorId") not in player_ids and t.get("actorId") not in faction_ids and (not DROP_DELETED or not t.get("actorId") or t.get("actorId") in kept_ids)
     for s in L["scenes"]:
         g = gs.get(s["_id"]); sc = json.loads(json.dumps(s))
         gd = {d["_id"]: d for d in (g or {}).get("drawings", [])}
@@ -129,7 +162,7 @@ def main():
         sc["drawings"] = dr
         if g:
             gt = {t["_id"] for t in g.get("tokens", [])}
-            sc["tokens"] = list(g.get("tokens", [])) + [t for t in s.get("tokens", []) if t["_id"] not in gt and keep_token(t)]
+            sc["tokens"] = [t for t in g.get("tokens", []) if not DROP_DELETED or keep_token(t) or t.get("actorId") in player_ids or t.get("actorId") in faction_ids] + [t for t in s.get("tokens", []) if t["_id"] not in gt and keep_token(t)]   # --drop-deleted: a golden token of a dropped actor goes too
         else:
             sc["tokens"] = [t for t in s.get("tokens", []) if keep_token(t)]
         toks += len(sc["tokens"])
@@ -139,7 +172,7 @@ def main():
     snap = {"kind": "bbttcc-savegame", "v": 1, "id": "".join(random.choice(string.ascii_letters + string.digits) for _ in range(12)),
             "label": label, "note": f"built offline {time.strftime('%Y-%m-%d %H:%M')} from {G.get('label')} ({G.get('id')}) + live {L.get('label')} ({L.get('id')}) by build-golden-base.py",
             "at": int(time.time() * 1000), "by": "build-golden-base.py", "world": G.get("world"), "foundry": L.get("foundry"),
-            "turn": G.get("turn"), "storyPhase": G.get("storyPhase"), "settings": out_settings, "actors": out_actors, "scenes": out_scenes, "journal": G.get("journal", [])}
+            "turn": TURN if TURN is not None else G.get("turn"), "storyPhase": G.get("storyPhase"), "settings": out_settings, "actors": out_actors, "scenes": out_scenes, "journal": G.get("journal", [])}
     snap["counts"] = {"settings": len(out_settings), "actors": len(out_actors), "items": sum(len(a.get("items") or []) for a in out_actors), "scenes": len(out_scenes),
                       "drawings": sum(len(s.get("drawings") or []) for s in out_scenes), "tokens": toks, "journal": len(snap["journal"])}
     json.dump(snap, open(op, "w"))
