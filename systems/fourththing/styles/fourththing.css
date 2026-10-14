@@ -6346,6 +6346,33 @@
 }
 .ft-strain-adj:hover { background: rgba(196,122,58,0.3); }
 
+/* ── Meter rows (2026-10-13 QoL): Radiation / Darkness / Strain share one shape; steppers reuse the Strain look ── */
+.ft-meters { display: flex; gap: 0.6rem; align-items: flex-start; margin: 0.4rem 0; }
+.ft-meters .ft-meter-row { flex: 1 1 0; min-width: 0; margin: 0; padding: 0.35rem 0.5rem; border: 1px solid rgba(160,180,255,0.14); border-radius: 6px; background: rgba(255,255,255,0.02); }
+.ft-meters .ft-meter-row .ft-rad-penalties { flex-basis: 100%; }
+@media (max-width: 900px) { .ft-meters { flex-wrap: wrap; } .ft-meters .ft-meter-row { flex-basis: 100%; } }
+.ft-meter-row { opacity: 0.85; }
+.ft-meter-row.ft-rad-sick { opacity: 1; }
+.ft-meter-steps { display: inline-flex; gap: 0.2rem; margin-left: 0.15rem; }
+.ft-meter-adj {
+  width: 1.35rem; height: 1.35rem; line-height: 1; padding: 0;
+  font-size: 0.8rem; font-weight: 700; cursor: pointer;
+  background: rgba(196,122,58,0.12); color: #e0a070;
+  border: 1px solid rgba(196,122,58,0.5); border-radius: 4px;
+}
+.ft-meter-adj:hover { background: rgba(196,122,58,0.3); }
+.ft-meter-row.ft-dark .ft-meter-adj { background: rgba(140,110,200,0.12); color: #c9b8f0; border-color: rgba(140,110,200,0.5); }
+.ft-meter-row.ft-dark .ft-meter-adj:hover { background: rgba(140,110,200,0.3); }
+.ft-sheet .ft-meter-row .ft-meter-input { width: 3.4rem; font-size: 0.78rem; padding: 0.05rem 0.3rem; }
+.ft-sheet.ft-edit-mode .ft-meter-row .ft-meter-input { display: inline-flex !important; }
+.ft-repair-row { margin: 0.2rem 0 0.5rem; }
+/* header breaks beside Initiation */
+.ft-level-break-btn {
+  padding: 0.08rem 0.45rem; font-size: 0.7rem; font-weight: 700; cursor: pointer; border-radius: 4px; line-height: 1.3;
+  background: rgba(232,200,74,0.1); border: 1px solid rgba(232,200,74,0.4); color: #e8c84a;
+}
+.ft-level-break-btn:hover { background: rgba(232,200,74,0.22); }
+
 /* ── THE WORK tab — redesign 2026-09-21 ────────────────────────────────────────
    One ladder (Enlightenment, stepped by the Constellation), the Steward-tab panel
    language (soft glass panels, amber structural labels, cyan emissive accents).

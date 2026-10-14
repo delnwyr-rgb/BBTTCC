@@ -17765,7 +17765,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // at floor 0" trap is designed out). value can never rest below taint;
   // overflow past 10 scars taint +1; taint heals ONLY via face().
   game.fourththing.darknessBite = _ftDarknessBite;
-  const _ftDarkSpikes = (actor) => actor?.getFlag?.("bbttcc", "enlightenment")?.darknessSpikes === true;
+  // 2026-10-13: read the spike flag WITHOUT getFlag — "bbttcc" is no longer a package scope, so getFlag threw
+  // "Flag scope bbttcc is not valid" on EVERY gain() (caught live from the new Darkness stepper; the old number box
+  // never went through this path). Both the legacy scope and the bbttcc-core/tikkun homes are honoured.
+  const _ftDarkSpikes = (actor) => {
+    const gp = (p) => { try { return foundry.utils.getProperty(actor, p) === true; } catch (_e) { return false; } };
+    return gp("flags.bbttcc.enlightenment.darknessSpikes") || gp("flags.bbttcc-core.enlightenment.darknessSpikes") || gp("flags.bbttcc-tikkun.enlightenment.darknessSpikes");
+  };
   game.fourththing.darkness = {
     bite: _ftDarknessBite,
     get(actor)  { const b = _ftDarknessBite(actor); return { value: b.value, taint: b.taint, band: b.band }; },
@@ -20194,6 +20200,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ftMoveAdjust:     FourthThingCharacterSheet._onFtMoveAdjust,
         ftNewTurn:        FourthThingCharacterSheet._onFtNewTurn,
         ftStrainAdjust:   FourthThingCharacterSheet._onFtStrainAdjust,
+        ftRadAdjust:      FourthThingCharacterSheet._onFtRadAdjust,      // 2026-10-13 QoL meter steppers
+        ftDarkAdjust:     FourthThingCharacterSheet._onFtDarkAdjust,
+        ftRepairPath:     FourthThingCharacterSheet._onFtRepairPath,
         ftBurnTimer:      FourthThingCharacterSheet._onFtBurnTimer,
         ftBloodDebtGM:    FourthThingCharacterSheet._onFtBloodDebtGM,
         ftActAgain:      FourthThingCharacterSheet._onFtActAgain,
@@ -21599,6 +21608,42 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const delta = Number(target.dataset.delta) || 0;
       if (!delta) return;
       return game.fourththing.strain.gain(this.actor, delta, "sheet");
+    }
+    // 2026-10-13 QoL (owner): the three meters share one stepper shape and every write goes through the
+    // meter's own API — the old Radiation pop-up wrote the raw value past the exposure ledger, and the
+    // Darkness number box skipped the overflow/taint rules. Shift-click steps Radiation by 5.
+    static async _onFtRadAdjust(event, target) {
+      let delta = Number(target?.dataset?.delta) || 0;
+      if (!delta) return;
+      if (event?.shiftKey) delta *= 5;
+      const api = game.bbttcc?.api?.radiation;
+      try {
+        if (typeof api?.add === "function") await api.add(this.actor, delta);
+        else {
+          const cur = Number(this.actor.system?.radiation?.rp) || 0;
+          await this.actor.update({ "system.radiation.rp": Math.max(0, cur + delta) });
+        }
+      } catch (e) {
+        console.warn("Roll for Initiation | radiation adjust failed:", e);
+        ui.notifications?.warn?.(`Radiation adjust failed: ${e?.message || e}`);
+      }
+      this.render();
+    }
+    static async _onFtDarkAdjust(event, target) {
+      if (!game.user?.isGM) return ui.notifications?.info?.("Darkness moves in play — your GM adjusts it here.");
+      const delta = Number(target?.dataset?.delta) || 0;
+      if (!delta) return;
+      const dk = game.fourththing?.darkness;
+      if (!dk) return;
+      if (delta > 0) await dk.gain(this.actor, delta, "sheet");
+      else await dk.wash(this.actor, -delta, "sheet");
+      this.render();
+    }
+    // GM repair hatch (✎ Edit mode): the two retired Steward-tab buttons in one — level-ups run both automatically.
+    static async _onFtRepairPath(event, target) {
+      if (!game.user?.isGM) return;
+      await FourthThingCharacterSheet._onFtApplyPathFeatures.call(this, event, target);
+      await FourthThingCharacterSheet._onFtGrantSkillRanks.call(this, event, target);
     }
     // Burn timer (lock / scheduled delta / end-of-turn set) — GM or owner.
     static async _onFtBurnTimer(event, target) {

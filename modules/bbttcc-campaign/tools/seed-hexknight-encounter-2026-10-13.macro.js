@@ -15,7 +15,7 @@ const QUEST = "quest_travel_encounters";
   const campaignId = game.settings.get(NS, "activeCampaignId");
   let campsRaw = game.settings.get(NS, "campaigns");
   const campsWasStr = typeof campsRaw === "string";
-  const camps = campsWasStr ? JSON.parse(campsRaw || "{}") : (campsRaw || {});
+  const camps = campsWasStr ? JSON.parse(campsRaw || "{}") : foundry.utils.deepClone(campsRaw || {});   // CLONE: never mutate the live setting object
   const camp = camps?.[campaignId];
   if (!camp) return ui.notifications?.error(`No active campaign (${campaignId}).`);
   camp.beats = Array.isArray(camp.beats) ? camp.beats : [];
@@ -81,7 +81,7 @@ const QUEST = "quest_travel_encounters";
   // ── tables: one row per terrain table (weight 1, Act 3+) ──
   let tablesRaw = game.settings.get(NS, "encounterTables");
   const tablesWasStr = typeof tablesRaw === "string";
-  const tables = tablesWasStr ? JSON.parse(tablesRaw || "{}") : (tablesRaw || {});
+  const tables = tablesWasStr ? JSON.parse(tablesRaw || "{}") : foundry.utils.deepClone(tablesRaw || {});
   let rows = 0;
   for (const [id, t] of Object.entries(tables)) {
     const m = String(id).match(/^travel_([a-z]+)_t1$/); if (!m || !t || typeof t !== "object") continue;

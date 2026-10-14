@@ -37,6 +37,9 @@
         <span class="ft-level-num">Initiation {{details.level}}</span>
         <button type="button" class="ft-level-adj ft-level-adj-plus" data-action="ftLevelAdjust" data-delta="1" data-tooltip="Advance Initiation by one (same flow as ✦ Advance Initiation)">+</button>
         <span class="ft-tier-badge">Tier {{details.tier}}</span>
+        {{!-- 2026-10-13 QoL: the two breaks live beside Initiation (they were buried on the Steward tab) --}}
+        <button type="button" data-action="ftSomaBreak" class="ft-level-break-btn" data-tooltip="Soma Break — refresh item uses, clarity, resource dice, Integrity and Stress. GM-gated if used twice in a scene.">❈ Soma</button>
+        <button type="button" data-action="ftSceneBreak" class="ft-level-break-btn" data-tooltip="Scene Break — lighter recovery between Soma Breaks: Clarity to at least half, shaves 1 Noise.">◐ Scene</button>
         {{#if details.statPoints}}<span class="ft-sp-badge ft-sp-stat" data-tooltip="Unspent attribute points — bump a Faculty by clicking it in edit mode.">{{details.statPoints}} attr pts</span>{{/if}}
         {{#if details.skillPoints}}<span class="ft-sp-badge ft-sp-skill" data-tooltip="Unspent aptitude points — click to open the spend dialog." data-action="ftSpendSkillPoints">{{details.skillPoints}} apt pts ▶</span>{{/if}}
       </div>
@@ -391,30 +394,16 @@
           </div>
           {{/if}}
 
-          {{!-- #4: Bad Eden shortcut buttons on Core tab --}}
-          {{#if bbttcc.active}}
-          <div class="ft-core-bbttcc">
-            <button type="button" data-action="ftBBTTCCBridge"    class="ft-bbttcc-btn ft-bridge-btn">Bridge</button>
-            <button type="button" data-action="ftBBTTCCTikkun"    class="ft-bbttcc-btn ft-tikkun-btn">Tikkun</button>
-            <button type="button" data-action="ftBBTTCCRadiation" class="ft-bbttcc-btn ft-rad-btn">Radiation</button>
+          {{!-- 2026-10-13 QoL (owner): the Bridge / Tikkun / Radiation row, the ✦ Advance Initiation + ⊕ Grant / ⊕ Apply row and
+               Quick Checks are gone — Bridge sits in the window header, Tikkun's ritual console is superseded by The Work tab,
+               Radiation adjusts in the meter row below, Advance = the header ± (same levelUp), Quick Checks = the ⚀ on each
+               faculty row, and level-ups already run applyPathFeatures + applySkillGrantsFromFeatures (ledgered, reversible).
+               The two repair hatches survive as ONE GM button under ✎ Edit, for a steward that is out of sync. --}}
+          {{#if isGM}}
+          <div class="ft-edit-only ft-repair-row">
+            <button type="button" data-action="ftRepairPath" class="ft-grant-skills-btn" data-tooltip="GM repair hatch — re-import path principles (+ the starter manifestation kit) and re-grant aptitude rank 1 from principles. Idempotent. Level-ups do this automatically; use only when a steward is out of sync.">⟳ Re-sync path features &amp; aptitudes</button>
           </div>
           {{/if}}
-
-          {{!-- Sprint E: Level up + skill grant --}}
-          <div class="ft-level-actions">
-            <button type="button" data-action="ftLevelUp" class="ft-level-up-btn">✦ Advance Initiation</button>
-            <button type="button" data-action="ftGrantSkillRanks" class="ft-grant-skills-btn" data-tooltip="Auto-grant rank 1 in aptitudes from path principles">⊕ Grant Aptitudes</button>
-            <button type="button" data-action="ftApplyPathFeatures" class="ft-grant-skills-btn" data-tooltip="Import class-core and chosen-subclass feature items from the compendium. Skips duplicates; safe to run at tier-ups.">⊕ Apply Path Features</button>
-            <button type="button" data-action="ftSomaBreak" class="ft-soma-break-btn" data-tooltip="Refresh item uses, clarity, resource dice, Integrity and Stress. GM-gated if used twice in a scene.">❈ Soma Break</button>
-            <button type="button" data-action="ftSceneBreak" class="ft-soma-break-btn" data-tooltip="Lighter recovery cadence between Soma Breaks. Refills Clarity to at least half max, shaves 1 Noise.">◐ Scene Break</button>
-          </div>
-
-          <h3>Quick Checks</h3>
-          <div class="ft-quick-rolls">
-            <button type="button" data-action="ftRoll" data-attribute="violence" data-label="Violence Test">Violence</button>
-            <button type="button" data-action="ftRoll" data-attribute="intrigue" data-label="Intrigue Test">Intrigue</button>
-            <button type="button" data-action="ftRoll" data-attribute="presence" data-label="Presence Test">Presence</button>
-          </div>
 
           {{#if isDying}}
           <div class="ft-last-stand" style="margin-top:0.6rem;padding:0.45rem 0.6rem;background:rgba(139,0,0,0.08);border:1px solid rgba(139,0,0,0.4);border-radius:4px;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap">
@@ -437,37 +426,50 @@
           </div>
           {{/if}}
 
-          {{!-- #4: Radiation — RP + auto tier + active penalties (editable via Radiation button) --}}
-          <div class="ft-rad-display{{#if radiation.sick}} ft-rad-sick{{/if}}">
+          {{!-- Meters (2026-10-13 QoL): Radiation / Darkness / Strain share ONE row shape — label · value · band · − + steppers.
+               Every write goes through the meter's own API (radiation exposure ledger, darkness taint/overflow rules, strain
+               levels) — the raw number boxes are ✎ Edit-mode GM overrides. Darkness steppers are GM-only (Ruling 7: details
+               private; writes belong to game.fourththing.darkness). Radiation steps ±1, shift-click ±5. --}}
+          <div class="ft-meters">{{!-- 2026-10-13: three meters side by side (owner: "a row instead of a column") --}}
+          <div class="ft-meter-row ft-rad-display{{#if radiation.sick}} ft-rad-sick{{/if}}">
             <span class="ft-rad-label">Radiation</span>
             <span class="ft-rad-val">{{system.radiation.rp}} RP</span>
             <span class="ft-rad-tier" style="color:{{radiation.color}};border-color:{{radiation.color}}">☢ {{radiation.tierLabel}}</span>
+            <span class="ft-meter-steps">
+              <button type="button" class="ft-meter-adj" data-action="ftRadAdjust" data-delta="-1" data-tooltip="−1 RP (shift-click −5)">−</button>
+              <button type="button" class="ft-meter-adj" data-action="ftRadAdjust" data-delta="1" data-tooltip="+1 RP (shift-click +5)">+</button>
+            </span>
+            {{#if isGM}}<input type="number" class="ft-edit-only ft-meter-input" name="system.radiation.rp" value="{{system.radiation.rp}}" min="0" data-tooltip="GM override — raw RP (bypasses the exposure ledger)"/>{{/if}}
             {{#if radiation.penalties.length}}
             <span class="ft-rad-penalties" style="color:{{radiation.color}}">{{#each radiation.penalties}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
             {{/if}}
           </div>
 
-          {{!-- #5: Darkness — value + band chip + taint + fragment tally (Descent
-               Engine D1). Owner/GM sheet = "details private" (Ruling 7); writes
-               belong to game.fourththing.darkness — the input is a GM override. --}}
-          <div class="ft-dark{{#if darkness.deep}} ft-rad-sick{{/if}}">
-            <label>Darkness</label>
-            <input type="number" name="system.darkness.value" value="{{system.darkness.value}}" min="0" max="10"/>
-            <span class="ft-out-of">/ 10</span>
+          <div class="ft-meter-row ft-rad-display ft-dark{{#if darkness.deep}} ft-rad-sick{{/if}}">
+            <span class="ft-rad-label">Darkness</span>
+            <span class="ft-rad-val" style="color:{{darkness.color}}">{{system.darkness.value}} / 10</span>
             <span class="ft-rad-tier" style="color:{{darkness.color}};border-color:{{darkness.color}}">🜃 {{darkness.bandLabel}}</span>
+            {{#if isGM}}
+            <span class="ft-meter-steps">
+              <button type="button" class="ft-meter-adj" data-action="ftDarkAdjust" data-delta="-1" data-tooltip="GM: wash one Darkness">−</button>
+              <button type="button" class="ft-meter-adj" data-action="ftDarkAdjust" data-delta="1" data-tooltip="GM: gain one Darkness (overflow past 10 scars as taint)">+</button>
+            </span>
+            <input type="number" class="ft-edit-only ft-meter-input" name="system.darkness.value" value="{{system.darkness.value}}" min="0" max="10" data-tooltip="GM override — raw Darkness (bypasses the overflow/taint rules)"/>
+            {{/if}}
             <span class="ft-rad-penalties" style="opacity:0.75">taint {{darkness.taint}}{{#if darkness.fragTotal}} · fragments {{darkness.fragFaced}}/{{darkness.fragTotal}} faced{{/if}}</span>
           </div>
 
-          {{!-- Strain — stackable, exhaustion-style condition (techniques ruling R1, 2026-09-21).
-               Levels via game.fourththing.strain; a Soma Break recovers one. --}}
-          <div class="ft-rad-display ft-strain{{#if strain.active}} ft-rad-sick{{/if}}" data-tooltip="Strain — stackable like exhaustion: 1 −1 to all rolls · 2 movement halved · 3 −2 to all rolls · 4 max Integrity and Stress halved · 5 movement 0 · 6 you fall (Dying). A Soma Break recovers one level.">
+          <div class="ft-meter-row ft-rad-display ft-strain{{#if strain.active}} ft-rad-sick{{/if}}" data-tooltip="Strain — stackable like exhaustion: 1 −1 to all rolls · 2 movement halved · 3 −2 to all rolls · 4 max Integrity and Stress halved · 5 speed 0 · 6 Blood Debt. A Soma Break recovers one level.">
             <span class="ft-rad-label">Strain</span>
             <span class="ft-rad-val" style="color:{{strain.color}}">{{strain.level}} / {{strain.max}}</span>
-            <button type="button" class="ft-strain-adj" data-action="ftStrainAdjust" data-delta="-1" data-tooltip="Recover one level of Strain">−</button>
-            <button type="button" class="ft-strain-adj" data-action="ftStrainAdjust" data-delta="1" data-tooltip="Take one level of Strain">+</button>
+            <span class="ft-meter-steps">
+              <button type="button" class="ft-meter-adj" data-action="ftStrainAdjust" data-delta="-1" data-tooltip="Recover one level of Strain">−</button>
+              <button type="button" class="ft-meter-adj" data-action="ftStrainAdjust" data-delta="1" data-tooltip="Take one level of Strain">+</button>
+            </span>
             {{#if strain.bits.length}}
             <span class="ft-rad-penalties" style="color:{{strain.color}}">{{#each strain.bits}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
             {{/if}}
+          </div>
           </div>
           {{#if darkness.fragTotal}}
           {{!-- Descent D3 — the fragment ledger (owner/GM sheet = details
@@ -1419,7 +1421,7 @@
       <div class="ft-empty-state">
         <p>No principles yet.</p>
         {{#unless bbttcc.identity.classApplied}}
-        <p class="ft-hint">Click <em>⊕ Apply Path Features</em> on the Steward tab to import your path principles.</p>
+        <p class="ft-hint">Advance Initiation imports path principles automatically; a GM can re-sync them from ✎ Edit mode on the Steward tab.</p>
         {{else}}
         <p class="ft-hint">Path and ancestry principles will appear here once applied.</p>
         {{/unless}}
