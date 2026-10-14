@@ -200,7 +200,9 @@
   }
 
   function weightedPick(entries) {
-    const list = Array.isArray(entries) ? entries : [];
+    // 2026-10-13: an EXPLICIT weight ≤ 0 is a parked row (placeholder beats on the high-tier tables) — never rolled.
+    // A missing/invalid weight still counts as 1 (legacy rows).
+    const list = (Array.isArray(entries) ? entries : []).filter(e => { const w = Number(e && e.weight); return !(Number.isFinite(w) && w <= 0); });
     if (!list.length) return null;
 
     let total = 0;

@@ -85,7 +85,8 @@
   }
 
   function _weightedPick(entries) {
-    const list = Array.isArray(entries) ? entries : [];
+    // 2026-10-13: explicit weight ≤ 0 = parked row (placeholder), never rolled; missing weight still = 1.
+    const list = (Array.isArray(entries) ? entries : []).filter(e => { const w = Number(e?.weight); return !(Number.isFinite(w) && w <= 0); });
     let total = 0;
     const w = list.map(ent => {
       const ww = Number(ent?.weight);

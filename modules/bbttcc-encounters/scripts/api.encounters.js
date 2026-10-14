@@ -42,6 +42,7 @@
     scout_signs_valuable:        "travel_scout_signs_valuable_t1",
     desenitarius_maarg:          "travel_desenitarius_maarg_t4",
     raider_raze_team:            "travel_raider_raze_team_t3",
+    hexknight:                   "travel_hexknight_t3",   // 2026-10-13: the old T2 Commander build, knighted (higher-tier tables)
   
     apex_predator:         "travel_apex_predator_t4",
     qliphotic_whorl:       "travel_qliphotic_whorl_t4",
@@ -666,6 +667,33 @@ const SCENARIOS = {
     },
 
     // Raider Raze Team
+    // -----------------------------------------------------------------------
+    // Travel / Hostile / Hybrid — The Hexknight (Tier 3 tables, 2026-10-13)
+    // A single oath-bound duelist in the road (bestiary "Hexknight": the old tier-2
+    // Commander Road Bandit build). Beat `enc_hexknight` brings its own battlemap and
+    // names the foe via beat.encounter.actorName — the spawner interface drops it on
+    // the `bbttcc:beat:stageReady` hook; this scenario covers the engine/testFire path.
+    // -----------------------------------------------------------------------
+    travel_hexknight_t3: {
+      key: "travel_hexknight_t3",
+      label: "The Hexknight (Tier 3)",
+      type: "travel",
+      category: "travel",
+      subcategory: "hostile",
+      scale: "hybrid",
+      tableTier: 3,
+      tikkunTie: "Gevurah",
+      spawnerKey: "hexknight_standard",
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.kVBYeEgVGDxJvifz",
+          name: "mountain_shrines_hexchrome_battlemap",
+          role: "main"
+        }
+      ]
+    },
+
     travel_raider_raze_team_t3: {
       key: "travel_raider_raze_team_t3",
       label: "Raider Raze Team (Tier 3)",

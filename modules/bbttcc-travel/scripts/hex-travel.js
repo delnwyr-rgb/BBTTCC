@@ -111,6 +111,29 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
     return String(t || "").replace(/\s+/g, "").replace(/[^\w]/g, "").toLowerCase();
   }
 
+  // Travel encounter tier for a leg (2026-10-13, "high-end travel tables").
+  //   danger (default): 1 + ⌊hexDanger/4⌋ from the DESTINATION hex (0–3 → T1, 4–7 → T2, 8–11 → T3, 12 → T4),
+  //     read through game.bbttcc.api.market.hexDanger (the delivery-fee scorer: development, authority, terrain
+  //     type, radiation, darkness, modifiers, conditions, holder stance). A held, developed hex rolls its terrain's
+  //     T1 table; scorched hostile ground rolls T3–T4. Missing tables cascade DOWN (api.travel.pickEncounter), so
+  //     a tier is never a dead end — authoring travel_<terrain>_t3 is what turns T3 on for that terrain.
+  //   ladder: the pre-2026-10-13 rule below (highest authored table = the terrain's tier).
+  // Why: with the ladder rule, authoring a T3 table PINNED that terrain at T3 for every leg; danger lets the same
+  // terrain run T1 near home and T3 in the badlands, and the DC step follows (base + tier × step).
+  function _resolveTravelTier(terrainKey, fallbackTier, toHex, factionId) {
+    const ladder = _resolveTerrainTierFromCampaign(terrainKey, fallbackTier);
+    let mode = "danger";
+    try { _ensureEncounterDialSettings(); mode = String(game.settings.get(ENC_DIAL_NS, TIER_SOURCE_KEY) || "danger"); } catch (_e) {}
+    if (mode !== "danger") return ladder;
+    const doc = toHex?.document ?? toHex;
+    const dangerFn = game.bbttcc?.api?.market?.hexDanger;
+    if (typeof dangerFn !== "function" || !doc) return ladder;
+    let score = NaN;
+    try { score = Number(dangerFn(doc, factionId)?.score); } catch (_e) {}
+    if (!Number.isFinite(score)) return ladder;
+    return Math.max(1, Math.min(4, 1 + Math.floor(score / 4)));
+  }
+
   // Highest authored tier for a terrain in the Campaign Builder's travel tables.
   // Why: the hardcoded TERRAIN_TABLE pegs each terrain to a fixed tier (e.g. swamp=3),
   // which forces DC/OP-cost ladder + encounter label to that tier even when the GM has
@@ -778,6 +801,7 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
   const ENC_BASE_DC_KEY = "travelEncounterBaseDC";
   const ENC_TIER_STEP_KEY = "travelEncounterTierStep";
   const DOMAIN_GATE_KEY = "travelDomainGate";
+  const TIER_SOURCE_KEY = "travelTierSource";   // 2026-10-13: what sets a leg's encounter tier
 
   function _ensureEncounterDialSettings() {
     try {
@@ -793,6 +817,14 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
           name: "Travel: Encounter DC per Tier",
           hint: "Extra DC added per terrain danger tier (1-4). HIGHER = dangerous terrain ramps encounter chance faster. Default 2.",
           scope: "world", config: true, type: Number, default: 2
+        });
+      }
+      if (!game.settings?.settings?.has(`${ENC_DIAL_NS}.${TIER_SOURCE_KEY}`)) {
+        game.settings.register(ENC_DIAL_NS, TIER_SOURCE_KEY, {
+          name: "Travel: Encounter Tier Source",
+          hint: "What sets a leg's encounter tier (table rolled + DC step). Hex danger (default): the destination hex's danger score (development, authority, terrain type, radiation, darkness, modifiers, holder stance; 0–12 → tier 1–4; the same score the Market's delivery fee uses). Authored ladder: the highest travel table authored for the terrain (pre-2026-10-13 behaviour).",
+          scope: "world", config: true, type: String, default: "danger",
+          choices: { danger: "Hex danger (destination hex, 0–12 → tier 1–4)", ladder: "Authored ladder (highest authored table for the terrain)" }
         });
       }
       if (!game.settings?.settings?.has(`${ENC_DIAL_NS}.${DOMAIN_GATE_KEY}`)) {
@@ -1064,7 +1096,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     const ctx = {
       factionId, actor, from, to,
       terrainKey: key,
-      terrainTier: _resolveTerrainTierFromCampaign(key, spec.tier),
+      terrainTier: _resolveTravelTier(key, spec.tier, to, factionId),   // 2026-10-13: hex danger → tier (setting travelTierSource)
       cost: _applyPricePolicy(clone(spec.cost)),   // OP economy ruling 2026-09-12: travel legs take the same ×0.75 as strategic rows
       crew: actor.getFlag(MOD_FCT, "crew") || [],
       preventHazard: false,

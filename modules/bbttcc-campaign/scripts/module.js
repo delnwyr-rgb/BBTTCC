@@ -3825,6 +3825,10 @@ async function executeBeat(campaign, beat, ctx = {}) {
         } catch (eSpawnPC) {
           warn("Participating-faction PC drop failed (non-blocking):", eSpawnPC);
         }
+        // Stage ready (2026-10-13): the beat's own battlemap is up and the party is placed.
+        // bbttcc-encounters listens — spawns `beat.encounter.actorName` when the scene has
+        // no such hostile, and swaps in storyline crew variants (Bandit Accord).
+        try { Hooks.callAll("bbttcc:beat:stageReady", { campaignId: campaign?.id ?? null, beat, scene, ctx }); } catch (_eStage) {}
       } catch (e) {
         err("Scene activation failed:", e);
         ui.notifications?.error?.("Error activating scene for campaign beat; see console.");

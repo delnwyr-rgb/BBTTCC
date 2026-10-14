@@ -37,6 +37,19 @@
       exampleScenarioKey: "travel_bandit_ambush_t2"
     },
 
+    travel_hexknight_t3: {
+      key: "travel_hexknight_t3",
+      category: "travel",
+      subcategory: "hostile",
+      tier: 3,
+      scale: "hybrid",
+      label: "The Hexknight in the Road",
+      summary: "An oath-bound duelist holds the road and names a toll; pay it, or meet the lance.",
+      tikkunTie: "Gevurah",
+      darknessHint: +1,
+      exampleScenarioKey: "travel_hexknight_t3"
+    },
+
     travel_broken_bridge_t1: {
       key: "travel_broken_bridge_t1",
       category: "travel",

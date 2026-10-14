@@ -1,17 +1,21 @@
 {
   "name": "Commander Road Bandit",
   "type": "npc",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Close-Combat%20Raider1.png",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/cryptidkin_furrykin_2.webp",
   "system": {
-    "role": "Humanoid",
-    "tier": 2,
+    "role": "brute",
+    "tier": 1,
     "factionId": "",
-    "notes": "",
+    "notes": "The one who owns the map. Keeps the crew pointed at the road and the loot pointed at the lockbox. Better shot than the crew, worse nerves than they think. Retuned 2026-10-13 to a tier-1 heavy: the first ambush's boss — scary for a round, beatable by a fresh coalition. The old tier-2 build rides on as the Hexknight.",
     "details": {
-      "level": 8,
-      "tier": 2,
+      "level": 1,
+      "tier": 1,
       "statPoints": 0,
-      "skillPoints": 0
+      "skillPoints": 0,
+      "biography": {
+        "value": "<p><strong>Concept.</strong> The one who owns the map. Keeps the crew pointed at the road and the loot pointed at the lockbox.</p>\n<p><strong>Signature.</strong> Shouts the plan loud enough that the party hears it too.</p>",
+        "public": ""
+      }
     },
     "faction": {
       "id": null,
@@ -19,16 +23,16 @@
     },
     "attributes": {
       "violence": {
-        "value": 5
+        "value": 3
       },
       "intrigue": {
-        "value": 5
+        "value": 3
       },
       "presence": {
         "value": 2
       },
       "body": {
-        "value": 5
+        "value": 2
       },
       "mind": {
         "value": 2
@@ -40,21 +44,22 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 40,
-        "max": 40
+        "value": 48,
+        "max": 48,
+        "temp": 0
       },
       "stress": {
-        "value": 20,
-        "max": 20
+        "value": 48,
+        "max": 48
       },
       "guard": {
-        "value": 12
+        "value": 15
       },
       "evasion": {
-        "value": 12
+        "value": 15
       },
       "resolve": {
-        "value": 10
+        "value": 14
       }
     },
     "magic": {
@@ -127,7 +132,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,10 +149,13 @@
     },
     "conditionImmunities": [],
     "tags": [
-      "5e-port",
       "cr-2",
-      "common"
+      "common",
+      "rfi-scrubbed"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -159,597 +168,14 @@
       "value": 0,
       "taint": 0,
       "fragments": []
-    }
+    },
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "description": "<p><strong>Concept.</strong> The one who owns the map. Keeps the crew pointed at the road and the loot pointed at the lockbox.</p>\n<p><strong>Signature.</strong> Shouts the plan loud enough that the party hears it too.</p>"
   },
   "items": [
-    {
-      "name": "Ambush Crew",
-      "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
-      "system": {
-        "category": "principle",
-        "source": "",
-        "tags": [
-          "translated",
-          "5e-port"
-        ],
-        "description": {
-          "value": "<p>In the first round of combat, the bandit reroll the lowest die on attack rolls against any creature that hasn\u2019t taken a turn yet.</p>",
-          "chat": ""
-        }
-      },
-      "_id": "SCgsC8nUhwk3TnNo",
-      "effects": [],
-      "folder": null,
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "flags": {},
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1777700829085,
-        "modifiedTime": 1782167242740,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!DhIEpSsPkg1BoFkq.SCgsC8nUhwk3TnNo"
-    },
-    {
-      "name": "Poor Discipline",
-      "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fear_1.png",
-      "system": {
-        "category": "principle",
-        "source": "",
-        "tags": [
-          "translated",
-          "5e-port"
-        ],
-        "description": {
-          "value": "<p>If reduced below half Integrity, the bandit must succeed on a DC 12 Soul check at the start of its turn or take the Disengage action and move away.</p>",
-          "chat": ""
-        }
-      },
-      "_id": "SjAeCTzTKudlg2qr",
-      "effects": [],
-      "folder": null,
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "flags": {},
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1777700829085,
-        "modifiedTime": 1782167242740,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!DhIEpSsPkg1BoFkq.SjAeCTzTKudlg2qr"
-    },
-    {
-      "name": "Pipe Rifle",
-      "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
-      "system": {
-        "category": "ranged",
-        "intent": "violence",
-        "skill": "firearms",
-        "damage": {
-          "formula": "1d8",
-          "attribute": "violence",
-          "type": "kinetic",
-          "damageFlavor": "",
-          "track": "integrity"
-        },
-        "damageParts": [],
-        "range": {
-          "short": 1,
-          "long": 1
-        },
-        "tags": [
-          "translated",
-          "5e-port"
-        ],
-        "effect": "<p><strong>Attack.</strong> +9 to hit, range 60/180 ft., one target. Hit: 11 (1d8+6) piercing.</p>",
-        "flavor": "",
-        "manifestation": {
-          "tier": 1,
-          "family": "form",
-          "concept": "",
-          "form": "weapon",
-          "function": "harm",
-          "stability": "bound",
-          "interactionModel": "weapon",
-          "costType": "none",
-          "costValue": 0,
-          "costText": "",
-          "duration": "scene",
-          "durationText": "",
-          "triggerText": "",
-          "scale": "personal",
-          "targetText": "",
-          "rangeAreaText": "",
-          "rangeFt": 0,
-          "maintenanceCost": "",
-          "riskText": "",
-          "pathResonance": "",
-          "fictionalPermission": "",
-          "gmCalibration": "",
-          "mechanicalHook": "",
-          "signature": "",
-          "thirdThing": "",
-          "opCost": {
-            "pool": "",
-            "value": 0
-          }
-        }
-      },
-      "_id": "AMw0EdjtQBFDZ05V",
-      "effects": [],
-      "folder": null,
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "flags": {
-        "autoanimations": {
-          "id": "ft-pipe-rifle",
-          "label": "Pipe Rifle",
-          "macro": {
-            "enable": false,
-            "playWhen": "0"
-          },
-          "menu": "range",
-          "primary": {
-            "video": {
-              "dbSection": "range",
-              "menuType": "weapon",
-              "animation": "arrow",
-              "variant": "regular",
-              "color": "regular",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "isWait": false,
-              "opacity": 1,
-              "playbackRate": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "secondary": {
-            "enable": false,
-            "video": {
-              "dbSection": "static",
-              "menuType": "spell",
-              "animation": "curewounds",
-              "variant": "01",
-              "color": "blue",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "addTokenWidth": false,
-              "anchor": "0.5",
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "fadeIn": 250,
-              "fadeOut": 500,
-              "isMasked": false,
-              "isRadius": true,
-              "isWait": false,
-              "opacity": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1.5,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "soundOnly": {
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            }
-          },
-          "source": {
-            "enable": false,
-            "video": {
-              "dbSection": "static",
-              "menuType": "spell",
-              "animation": "curewounds",
-              "variant": "01",
-              "color": "blue",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "addTokenWidth": false,
-              "anchor": "0.5",
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "fadeIn": 250,
-              "fadeOut": 500,
-              "isMasked": false,
-              "isRadius": true,
-              "isWait": false,
-              "opacity": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1.5,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "target": {
-            "enable": false,
-            "video": {
-              "dbSection": "static",
-              "menuType": "spell",
-              "animation": "curewounds",
-              "variant": "01",
-              "color": "blue",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "addTokenWidth": false,
-              "anchor": "0.5",
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "fadeIn": 250,
-              "fadeOut": 500,
-              "isMasked": false,
-              "isRadius": true,
-              "isWait": false,
-              "opacity": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1.5,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "isEnabled": true,
-          "isCustomized": true,
-          "fromAmmo": false,
-          "version": 5
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.363",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "createdTime": 1777700829085,
-        "modifiedTime": 1780163238904,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!DhIEpSsPkg1BoFkq.AMw0EdjtQBFDZ05V"
-    },
-    {
-      "name": "Shiv",
-      "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_1.png",
-      "system": {
-        "category": "melee",
-        "intent": "violence",
-        "skill": "melee",
-        "damage": {
-          "formula": "1d6",
-          "attribute": "violence",
-          "type": "kinetic",
-          "damageFlavor": "",
-          "track": "integrity"
-        },
-        "damageParts": [],
-        "range": {
-          "short": 1,
-          "long": 1
-        },
-        "tags": [
-          "translated",
-          "5e-port"
-        ],
-        "effect": "<p><strong>Attack.</strong> +3 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing.</p>",
-        "flavor": "",
-        "manifestation": {
-          "tier": 1,
-          "family": "form",
-          "concept": "",
-          "form": "weapon",
-          "function": "harm",
-          "stability": "bound",
-          "interactionModel": "weapon",
-          "costType": "none",
-          "costValue": 0,
-          "costText": "",
-          "duration": "scene",
-          "durationText": "",
-          "triggerText": "",
-          "scale": "personal",
-          "targetText": "",
-          "rangeAreaText": "",
-          "rangeFt": 0,
-          "maintenanceCost": "",
-          "riskText": "",
-          "pathResonance": "",
-          "fictionalPermission": "",
-          "gmCalibration": "",
-          "mechanicalHook": "",
-          "signature": "",
-          "thirdThing": "",
-          "opCost": {
-            "pool": "",
-            "value": 0
-          }
-        }
-      },
-      "_id": "mJWSOJ8Ri97OxwdS",
-      "effects": [],
-      "folder": null,
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "flags": {
-        "autoanimations": {
-          "id": "ft-shiv",
-          "label": "Shiv",
-          "macro": {
-            "enable": false,
-            "playWhen": "0"
-          },
-          "menu": "melee",
-          "primary": {
-            "video": {
-              "dbSection": "melee",
-              "menuType": "weapon",
-              "animation": "dagger",
-              "variant": "01",
-              "color": "white",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "isWait": false,
-              "opacity": 1,
-              "playbackRate": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "secondary": {
-            "enable": false,
-            "video": {
-              "dbSection": "static",
-              "menuType": "spell",
-              "animation": "curewounds",
-              "variant": "01",
-              "color": "blue",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "addTokenWidth": false,
-              "anchor": "0.5",
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "fadeIn": 250,
-              "fadeOut": 500,
-              "isMasked": false,
-              "isRadius": true,
-              "isWait": false,
-              "opacity": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1.5,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "soundOnly": {
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            }
-          },
-          "source": {
-            "enable": false,
-            "video": {
-              "dbSection": "static",
-              "menuType": "spell",
-              "animation": "curewounds",
-              "variant": "01",
-              "color": "blue",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "addTokenWidth": false,
-              "anchor": "0.5",
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "fadeIn": 250,
-              "fadeOut": 500,
-              "isMasked": false,
-              "isRadius": true,
-              "isWait": false,
-              "opacity": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1.5,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "target": {
-            "enable": false,
-            "video": {
-              "dbSection": "static",
-              "menuType": "spell",
-              "animation": "curewounds",
-              "variant": "01",
-              "color": "blue",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "addTokenWidth": false,
-              "anchor": "0.5",
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "fadeIn": 250,
-              "fadeOut": 500,
-              "isMasked": false,
-              "isRadius": true,
-              "isWait": false,
-              "opacity": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1.5,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "isEnabled": true,
-          "isCustomized": true,
-          "fromAmmo": false,
-          "version": 5
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.363",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "createdTime": 1777700829085,
-        "modifiedTime": 1780163238904,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!DhIEpSsPkg1BoFkq.mJWSOJ8Ri97OxwdS"
-    },
     {
       "name": "Shiv (Offhand)",
       "type": "weapon",
@@ -772,9 +198,9 @@
         },
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
-        "effect": "<p><strong>Attack.</strong> +3 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing.</p>",
+        "effect": "Bonus action after a Shiv hit: one more stab, same target. Damage die rerolls the highest (the off hand is the bad hand).",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -806,6 +232,9 @@
             "pool": "",
             "value": 0
           }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. Bonus action, only after a Shiv hit this turn, same target. Damage die rerolls the highest.</p><p><em>The off hand is the bad hand.</em></p>"
         }
       },
       "_id": "4OTgooHSKy8nQTZF",
@@ -992,20 +421,639 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "weapon": "Shiv (Offhand)"
+                },
+                "do": {
+                  "reroll": "damage-highest"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Pipe Rifle",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 12,
+          "long": 36
+        },
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "effect": "Commander's rifle — better sighted than the crew's. On a hit, one ally bandit within 6 squares may immediately move up to 2 squares as a reaction (the commander's shot is the signal).",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> range 60/180 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit, one ally bandit within 6 squares may immediately move 2 squares as a reaction — the commander's shot is the signal.</p><p><em>The one rifle in the crew with a real scope.</em></p>"
         }
       },
-      "_stats": {
-        "coreVersion": "14.363",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "createdTime": 1777700829085,
-        "modifiedTime": 1780163238904,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
+      "_id": "AMw0EdjtQBFDZ05V",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
       },
-      "_key": "!actors.items!DhIEpSsPkg1BoFkq.4OTgooHSKy8nQTZF"
+      "flags": {
+        "autoanimations": {
+          "id": "ft-pipe-rifle",
+          "label": "Pipe Rifle",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Pipe Rifle"
+                },
+                "do": {
+                  "prompt": "Signal shot: one ally bandit within 6 sq may move 2 sq as a reaction."
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Ambush Crew",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "description": {
+          "value": "<p>In the first round of combat, the bandit rerolls the lowest die on attack rolls against any creature that hasn't taken a turn yet.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "SCgsC8nUhwk3TnNo",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": "firstRound",
+              "vs": "a creature that hasn't taken a turn yet",
+              "note": "Ambush Crew"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Holds the Line (Barely)",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fear_1.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "description": {
+          "value": "<p>If reduced below half Integrity, the commander must succeed a Soul check vs DC 12 at the start of its turn or order a retreat: every bandit within 6 squares disengages and moves away at full speed.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "SjAeCTzTKudlg2qr",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "bloodied",
+                "do": {
+                  "morale": {
+                    "attr": "soul",
+                    "dc": 12,
+                    "outcome": "orders a retreat — every bandit within 6 sq disengages at full speed"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Shiv",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_1.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "effect": "Sharpened scrap. On a hit against a Prone or Restrained target, +1d4 kinetic.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 kinetic.</p>"
+        }
+      },
+      "_id": "mJWSOJ8Ri97OxwdS",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "autoanimations": {
+          "id": "ft-shiv",
+          "label": "Shiv",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "dagger",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Shiv",
+                  "targetCondition": [
+                    "prone",
+                    "restrained"
+                  ]
+                },
+                "do": {
+                  "damage": {
+                    "formula": "1d4",
+                    "type": "kinetic"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
     }
   ],
   "effects": [],
@@ -1022,7 +1070,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Close-Combat%20Raider1.png",
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/cryptidkin_furrykin_2.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -1108,17 +1156,27 @@
   },
   "folder": "uMhSIaldbbcnBh0H",
   "sort": 2300000,
-  "flags": {},
-  "_stats": {
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.0",
-    "createdTime": 1777700829085,
-    "modifiedTime": 1783219918017,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null
-  },
-  "_key": "!actors!DhIEpSsPkg1BoFkq"
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "lineage": "mortal",
+          "subLineage": "raider",
+          "tier": "I",
+          "bracket": "heavy",
+          "price": {
+            "marks": 10,
+            "bounty": 10,
+            "hire": 15,
+            "ransom": 15,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "TI heavy mortal — bounty 10 / hire 15 marks; credited to the pool matching the method (default violence)"
+          },
+          "title": "Humanoid"
+        }
+      },
+      "creatureType": "humanoid"
+    }
+  }
 }

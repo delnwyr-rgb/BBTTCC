@@ -2451,6 +2451,11 @@ game.bbttcc.api.market.openCatalogEditor = (() => {
 
   game.bbttcc.api.market.listCatalog = () => foundry.utils.duplicate(_catalogArray().map(_normalizeEntry));
 
+  // 2026-10-13: the hex danger score (0–12, itemised) is shared — bbttcc-travel keys the travel encounter
+  // TIER off it (setting bbttcc-core.travelTierSource = "danger"). Pass a hex Drawing document (+ the
+  // travelling faction id for the holder-stance part).
+  game.bbttcc.api.market.hexDanger = (d, factionId = "") => _hexDanger(d, factionId);
+
   
 
   // ---------------------------

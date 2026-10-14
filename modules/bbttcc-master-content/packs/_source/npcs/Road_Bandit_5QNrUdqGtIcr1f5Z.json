@@ -1,17 +1,21 @@
 {
   "name": "Road Bandit",
   "type": "npc",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/FactionA1.png",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/chupacabra-background-removed.webp",
   "system": {
-    "role": "Humanoid",
+    "role": "brute",
     "tier": 1,
     "factionId": "",
-    "notes": "",
+    "notes": "The bottom rung of every raider warband: somebody's cousin with a pipe rifle and a bad plan. Fights in crews, fires early, runs when the crew thins.",
     "details": {
       "level": 1,
       "tier": 1,
       "statPoints": 0,
-      "skillPoints": 0
+      "skillPoints": 0,
+      "biography": {
+        "value": "<p><strong>Concept.</strong> The bottom rung of every raider warband. Somebody's cousin with a pipe rifle and a bad plan.</p>\n<p><strong>Signature.</strong> Fires the first shot a full second before anyone told them to.</p>",
+        "public": ""
+      }
     },
     "faction": {
       "id": null,
@@ -19,7 +23,7 @@
     },
     "attributes": {
       "violence": {
-        "value": 3
+        "value": 1
       },
       "intrigue": {
         "value": 3
@@ -40,21 +44,22 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 22,
-        "max": 22
+        "value": 11,
+        "max": 11,
+        "temp": 0
       },
       "stress": {
-        "value": 11,
-        "max": 11
+        "value": 10,
+        "max": 10
       },
       "guard": {
-        "value": 12
+        "value": 14
       },
       "evasion": {
-        "value": 12
+        "value": 16
       },
       "resolve": {
-        "value": 10
+        "value": 14
       }
     },
     "magic": {
@@ -127,7 +132,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,10 +149,13 @@
     },
     "conditionImmunities": [],
     "tags": [
-      "5e-port",
       "cr-1",
-      "common"
+      "common",
+      "rfi-scrubbed"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -159,83 +168,14 @@
       "value": 0,
       "taint": 0,
       "fragments": []
-    }
+    },
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "description": "<p><strong>Concept.</strong> The bottom rung of every raider warband. Somebody's cousin with a pipe rifle and a bad plan.</p>\n<p><strong>Signature.</strong> Fires the first shot a full second before anyone told them to.</p>"
   },
   "items": [
-    {
-      "name": "Ambush Crew",
-      "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
-      "system": {
-        "category": "principle",
-        "source": "",
-        "tags": [
-          "translated",
-          "5e-port"
-        ],
-        "description": {
-          "value": "<p>In the first round of combat, the bandit reroll the lowest die on attack rolls against any creature that hasn’t taken a turn yet.</p>",
-          "chat": ""
-        }
-      },
-      "_id": "eZeCUtHui2PZfXCO",
-      "effects": [],
-      "folder": null,
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "flags": {},
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1777700829202,
-        "modifiedTime": 1782167242254,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!5QNrUdqGtIcr1f5Z.eZeCUtHui2PZfXCO"
-    },
-    {
-      "name": "Poor Discipline",
-      "type": "feature",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fear_1.png",
-      "system": {
-        "category": "principle",
-        "source": "",
-        "tags": [
-          "translated",
-          "5e-port"
-        ],
-        "description": {
-          "value": "<p>If reduced below half Integrity, the bandit must succeed on a DC 12 Soul check at the start of its turn or take the Disengage action and move away.</p>",
-          "chat": ""
-        }
-      },
-      "_id": "wDDLCStYDKjBkVM0",
-      "effects": [],
-      "folder": null,
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "flags": {},
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1777700829202,
-        "modifiedTime": 1782167242254,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!5QNrUdqGtIcr1f5Z.wDDLCStYDKjBkVM0"
-    },
     {
       "name": "Pipe Rifle",
       "type": "weapon",
@@ -245,7 +185,7 @@
         "intent": "violence",
         "skill": "firearms",
         "damage": {
-          "formula": "1d8+3",
+          "formula": "1d6",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "",
@@ -253,14 +193,14 @@
         },
         "damageParts": [],
         "range": {
-          "short": 1,
-          "long": 1
+          "short": 12,
+          "long": 36
         },
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
-        "effect": "<p><strong>Attack.</strong> +4 to hit, range 60/180 ft., one target. Hit: 7 (1d8+3) piercing.</p>",
+        "effect": "Salvage rifle. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -292,6 +232,9 @@
             "pool": "",
             "value": 0
           }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> range 60/180 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest.</p><p><em>Held together with tape and confidence.</em></p>"
         }
       },
       "_id": "IknBNvAVYXRCelYc",
@@ -478,20 +421,62 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "weapon": "Pipe Rifle",
+                  "targetNotActed": true
+                },
+                "do": {
+                  "reroll": "damage"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Ambush Crew",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "description": {
+          "value": "<p>In the first round of combat, the bandit rerolls the lowest die on attack rolls against any creature that hasn't taken a turn yet.</p>",
+          "chat": ""
         }
       },
-      "_stats": {
-        "coreVersion": "14.363",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "createdTime": 1777700829202,
-        "modifiedTime": 1780163238555,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
+      "_id": "eZeCUtHui2PZfXCO",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
       },
-      "_key": "!actors.items!5QNrUdqGtIcr1f5Z.IknBNvAVYXRCelYc"
+      "flags": {
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": "firstRound",
+              "vs": "a creature that hasn't taken a turn yet",
+              "note": "Ambush Crew"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Shiv",
@@ -502,7 +487,7 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "1d6+2",
+          "formula": "1d6",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "",
@@ -515,9 +500,9 @@
         },
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
-        "effect": "<p><strong>Attack.</strong> +3 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing.</p>",
+        "effect": "Sharpened scrap. On a hit against a Prone or Restrained target, +1d4 kinetic.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -549,6 +534,9 @@
             "pool": "",
             "value": 0
           }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 kinetic.</p><p><em>Nobody's proud of the shiv.</em></p>"
         }
       },
       "_id": "jtCqz9pt2aQ62UuF",
@@ -735,20 +723,74 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Shiv",
+                  "targetCondition": [
+                    "prone",
+                    "restrained"
+                  ]
+                },
+                "do": {
+                  "damage": {
+                    "formula": "1d4",
+                    "type": "kinetic"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Poor Discipline",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fear_1.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "description": {
+          "value": "<p>If reduced below half Integrity, the bandit must succeed a Soul check vs DC 12 at the start of its turn or disengage and move away at full speed.</p>",
+          "chat": ""
         }
       },
-      "_stats": {
-        "coreVersion": "14.363",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "createdTime": 1777700829202,
-        "modifiedTime": 1780163238555,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
+      "_id": "wDDLCStYDKjBkVM0",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
       },
-      "_key": "!actors.items!5QNrUdqGtIcr1f5Z.jtCqz9pt2aQ62UuF"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "bloodied",
+                "do": {
+                  "morale": {
+                    "attr": "soul",
+                    "dc": 12,
+                    "outcome": "disengages and moves away at full speed"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
     }
   ],
   "effects": [],
@@ -765,7 +807,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/FactionA1.png",
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/chupacabra-background-removed.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -851,17 +893,27 @@
   },
   "folder": "uMhSIaldbbcnBh0H",
   "sort": 625000,
-  "flags": {},
-  "_stats": {
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.0",
-    "createdTime": 1777700829202,
-    "modifiedTime": 1783219919796,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null
-  },
-  "_key": "!actors!5QNrUdqGtIcr1f5Z"
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "lineage": "mortal",
+          "subLineage": "raider",
+          "tier": "I",
+          "bracket": "light",
+          "price": {
+            "marks": 5,
+            "bounty": 5,
+            "hire": 10,
+            "ransom": 10,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "TI light mortal — bounty 5 / hire 10 marks; credited to the pool matching the method (default violence)"
+          },
+          "title": "Humanoid"
+        }
+      },
+      "creatureType": "humanoid"
+    }
+  }
 }

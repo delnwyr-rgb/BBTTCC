@@ -480,11 +480,144 @@
   }
 
   // ---------------------------------------------------------------------------
+  // Spawn-by-name + storyline crew variants (2026-10-13)
+  //  - actorByName / spawnByName: world actor by exact name, else imported ONCE from the
+  //    NPC pack. Lets a beat name its foe (beat.encounter.actorName) instead of a dead id.
+  //  - Bandit Ambush crew variants: the Asli battlemap carries LINKED "Road Bandit 1..3"
+  //    tokens. Once the Bandit Accord is underway (mercy ledger > 0, or the free/jail
+  //    ending played) the ambushes that follow are the Drowned South's — the tokens are
+  //    re-pointed at "Drowned South Bandit 1..3" world copies (imported from the pack).
+  //    `setBanditAmbushCrew(scene, "first")` flips them back for a re-shoot.
+  //  - Hook `bbttcc:beat:stageReady` (fired by bbttcc-campaign once a beat's own scene is
+  //    up and the party is placed) drives both.
+  // ---------------------------------------------------------------------------
+  const NPC_PACK = "bbttcc-master-content.npcs";
+  const HOSTILE = () => CONST.TOKEN_DISPOSITIONS.HOSTILE;
+
+  async function actorByName(name) {
+    const want = String(name || "").trim();
+    if (!want) return null;
+    const world = game.actors?.find?.(a => a?.name === want) || null;
+    if (world) return world;
+    const pack = game.packs?.get(NPC_PACK);
+    if (!pack) return null;
+    try {
+      const idx = (await pack.getIndex()).find(e => e.name === want);
+      if (!idx) return null;
+      return await game.actors.importFromCompendium(pack, idx._id);
+    } catch (e) { warn("actorByName: import failed", want, e); return null; }
+  }
+
+  /** World copies "<name> 1..n" (linked-token duty: each token needs its own Integrity). */
+  async function actorCopies(name, n) {
+    const base = await actorByName(name);
+    if (!base) return [];
+    const out = [];
+    for (let i = 1; i <= n; i++) {
+      const nm = `${name} ${i}`;
+      let a = game.actors?.find?.(x => x?.name === nm) || null;
+      if (!a) {
+        try { a = await base.clone({ name: nm, "prototypeToken.name": nm }, { save: true }); }
+        catch (e) { warn("actorCopies: clone failed", nm, e); continue; }
+      }
+      out.push(a);
+    }
+    return out;
+  }
+
+  async function spawnByName(scene, name, { count = 1, spawnedBy = "by_name", role = "npc" } = {}) {
+    if (!scene) return [];
+    const base = await actorByName(name);
+    if (!base) { warn("spawnByName: no actor named", name); return []; }
+    const dims = scene.dimensions || {};
+    const grid = scene.grid?.size || 100;
+    const sx = Number(dims.sceneX ?? 0), sy = Number(dims.sceneY ?? 0);
+    const sw = Number(dims.sceneWidth ?? scene.width ?? 4000);
+    const cx = sx + sw / 2;
+    const topY = Math.floor((sy + 3 * grid) / grid) * grid;
+    const specs = [];
+    for (let i = 0; i < count; i++) specs.push({
+      actor: base.id, role, spawnedBy, disposition: HOSTILE(),
+      x: Math.floor((cx + (i - (count - 1) / 2) * (1.5 * grid)) / grid) * grid, y: topY
+    });
+    return spawnTokens(scene, specs);
+  }
+
+  function _settingJson(key) {
+    try {
+      const v = game.settings.get("bbttcc-campaign", key);
+      return (typeof v === "string") ? JSON.parse(v || "null") : v;
+    } catch (_e) { return null; }
+  }
+
+  /** The Bandit Accord storyline has started: a bandit was let walk (ledger), or the free/jail ending played. */
+  function banditAccordUnderway() {
+    try { if ((Number(game.settings.get("bbttcc-campaign", "banditMercy")) || 0) > 0) return true; } catch (_e) {}
+    try {
+      const all = _settingJson("storyState") || {};
+      const cid = game.settings.get("bbttcc-campaign", "activeCampaignId");
+      const played = all?.[cid]?.played || all?.played || {};
+      return !!(played["enc_bandit_ambush_win_free"] || played["enc_bandit_ambush_win_jail"] || played["bandit_accord_opening"]);
+    } catch (_e) { return false; }
+  }
+
+  /**
+   * Point the ambush map's hostile "Road Bandit" / "Drowned South Bandit" tokens at the
+   * crew for this stage of the story. variant: "accord" → Drowned South Bandit 1..n,
+   * "first" → Road Bandit 1..n. Linked tokens keep their own actor per token.
+   */
+  async function setBanditAmbushCrew(scene, variant = "accord") {
+    if (!scene || !game.user?.isGM) return 0;
+    const toName = variant === "first" ? "Road Bandit" : "Drowned South Bandit";
+    const crewRe = /^(Road Bandit|Drowned South Bandit)/;
+    const toks = iterTokenDocs(scene).filter(t =>
+      Number(t?.disposition) === HOSTILE() && crewRe.test(String(t?.actor?.name || t?.name || "")));
+    if (!toks.length) return 0;
+    const already = toks.every(t => String(t?.actor?.name || "").startsWith(toName));
+    if (already) return 0;
+    const copies = await actorCopies(toName, toks.length);
+    if (copies.length < toks.length) { warn("setBanditAmbushCrew: not enough world copies", toName, copies.length); return 0; }
+    const updates = toks.map((t, i) => {
+      const a = copies[i];
+      const src = a.prototypeToken?.texture?.src || a.img;
+      return { _id: t.id, actorId: a.id, actorLink: true, name: a.name, ...(src ? { "texture.src": src } : {}) };
+    });
+    await scene.updateEmbeddedDocuments("Token", updates);
+    log(`Bandit Ambush crew → ${toName} ×${updates.length} (${variant})`);
+    return updates.length;
+  }
+
+  /** Scenario spawner (engine/testFire path): party + one Hexknight when the scene has no hostiles. */
+  async function spawnHexknight(ctx, scene, _scenario, _step) {
+    if (!scene) return;
+    const spawnedKey = "hexknight_standard";
+    if (hasSpawnedFlag(scene, spawnedKey)) { log("Hexknight already present; skipping respawn."); return; }
+    await spawnFactionPCs(scene, ctx, { spawnedBy: spawnedKey });
+    const hasHostiles = iterTokenDocs(scene).some(t => Number(t?.disposition) === HOSTILE());
+    if (!hasHostiles) await spawnByName(scene, "Hexknight", { count: 1, spawnedBy: spawnedKey });
+    else log("Hexknight: hostiles pre-positioned on scene; not spawning.");
+  }
+
+  function onStageReady({ beat, scene } = {}) {
+    if (!game.user?.isGM || !scene || !beat) return;
+    (async () => {
+      if (String(beat.id) === "enc_bandit_ambush" && banditAccordUnderway()) await setBanditAmbushCrew(scene, "accord");
+      const want = String(beat.encounter?.actorName || "").trim();
+      if (want) {
+        const present = iterTokenDocs(scene).some(t =>
+          Number(t?.disposition) === HOSTILE() && (String(t?.actor?.name || "") === want || String(t?.name || "") === want));
+        if (!present) await spawnByName(scene, want, { count: 1, spawnedBy: `enc:${beat.id}` });
+      }
+    })().catch(e => warn("stageReady handler failed", beat?.id, e));
+  }
+
+  // ---------------------------------------------------------------------------
   // Registry + install
   // ---------------------------------------------------------------------------
 
   const SPAWNERS = {
-    bandit_ambush_standard: spawnBanditAmbush
+    bandit_ambush_standard: spawnBanditAmbush,
+    hexknight_standard: spawnHexknight
   };
 
   async function runSpawner(spawnerKey, payload) {
@@ -517,6 +650,10 @@
         spawnFactionPCs
       }
     };
+
+    // 2026-10-13: name-driven spawns + storyline crew variants
+    Object.assign(game.bbttcc.api.encounters._spawner, { actorByName, spawnByName, setBanditAmbushCrew, banditAccordUnderway });
+    Hooks.on("bbttcc:beat:stageReady", onStageReady);
 
     log("Spawner interface installed");
   }
