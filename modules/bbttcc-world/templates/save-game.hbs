@@ -3,7 +3,7 @@
   <header class="sg-head">
     <div>
       <div class="sg-title">💾 Save Games</div>
-      <div class="bbttcc-muted sg-sub">Everything, exactly as it is: every Bad Eden setting, every actor with its items and feats, every scene's hexes and tokens, the Turn Press. Files live in <code>{{dir}}</code>.</div>
+      <div class="bbttcc-muted sg-sub">A save captures everything: every Bad Eden setting, every actor with its items and feats, every scene's hexes and tokens, the Turn Press. Loading defaults to <b>⟲ Reset story</b> — the play-through goes back, the game as built (campaigns, tables, catalog, tuning, library NPCs, hex definitions) stays. <i>Exact restore</i> is still there. Files live in <code>{{dir}}</code>.</div>
     </div>
     <div class="sg-head-acts">
       <button type="button" class="button" data-action="prune" title="Delete every save older than the newest 20 — the golden master always stays">🧹 Keep newest 20</button>
@@ -25,7 +25,7 @@
   <div class="sg-golden">
     <span class="star">★</span>
     <span><b>Golden master:</b> {{golden.label}} <span class="bbttcc-muted">· {{golden.when}} · Turn {{golden.turn}} · Act {{golden.storyPhase}}</span></span>
-    <button type="button" class="button sg-load" data-slot-act="load" data-id="{{golden.id}}">⟲ Load golden master</button>
+    <button type="button" class="button sg-load" data-slot-act="load" data-id="{{golden.id}}" title="Reset the story to the golden master — the game as built stays">⟲ Reset story to golden</button>
   </div>
   {{/if}}
 

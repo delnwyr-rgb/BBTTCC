@@ -138,34 +138,70 @@
       this._run("Load", async () => {
         this._setStatus(`⏳ reading “${row.label}”…`);
         const snap = await a.readSlot(id);
-        const p = a.plan(snap);
+        // Two plans, one dialog (2026-10-14): ⟲ Reset story (default) leaves the GAME layer alone — the
+        // campaigns bundle, tables, catalog, tuning, library NPCs, hex definitions; Exact restore = everything.
+        const ps = a.plan(snap, { mode: "story" });
+        const pe = a.plan(snap, { mode: "exact" });
         const li = (t) => `<li>${t}</li>`;
-        const content = `
-          <p>Restore the world to <b>${esc(row.label)}</b> — ${esc(fmtWhen(row.at))}, Turn ${esc(row.turn)}, Act ${esc(row.storyPhase)}?</p>
+        const names = (arr, n = 8) => arr.length ? `: <i>${esc(arr.slice(0, n).join(", "))}${arr.length > n ? " …" : ""}</i>` : "";
+        const storyList = `
           <ul style="margin:.3rem 0 .5rem 1.1rem; font-size:.9em; line-height:1.5">
-            ${li(`<b>${p.settingsChange}</b> world settings change${p.settingsUnknown ? ` <span class="bbttcc-muted">(${p.settingsUnknown} in the save are no longer registered — skipped)</span>` : ""}`)}
-            ${li(`Actors: <b>${p.actorsUpdate}</b> restored in place · <b>${p.actorsCreate}</b> re-created · <b>${p.actorsDelete.length}</b> made since the save${p.actorsDelete.length ? `: <i>${esc(p.actorsDelete.slice(0, 8).join(", "))}${p.actorsDelete.length > 8 ? " …" : ""}</i>` : ""}`)}
-            ${li(`Scenes: <b>${p.scenesKnown}</b> restored (flags, hexes, tokens)${p.scenesMissing.length ? ` · ${p.scenesMissing.length} in the save no longer exist (skipped)` : ""}${p.scenesExtra.length ? ` · ${p.scenesExtra.length} made since the save are left alone` : ""}`)}
-            ${li(`Journal: <b>${p.journal}</b> Bad Eden entries`)}
+            ${li(`<b>${ps.settingsChange}</b> story settings restored · <b>${ps.settingsKeep}</b> game settings kept as they are now${ps.settingsKeepList.length ? ` <span class="bbttcc-muted" title="${esc(ps.settingsKeepList.join(", "))}">(hover)</span>` : ""}${ps.settingsUnknown ? ` <span class="bbttcc-muted">· ${ps.settingsUnknown} no longer registered</span>` : ""}`)}
+            ${li(`Stewards, factions, rigs: <b>${ps.actorsUpdate}</b> restored · <b>${ps.actorsCreate}</b> re-created · <b>${ps.actorsDelete.length}</b> made since the save${names(ps.actorsDelete)} · library NPCs: <b>${ps.actorsKept}</b> kept`)}
+            ${li(`Hexes: <b>${ps.hexesMerged}</b> get their play state back (owner, builds, pressure, sparks…) — names, terrain, nodes, travel links stay · <b>${ps.hexesLiveOnly}</b> made since the save stay${ps.hexesSavedMissing ? ` · ${ps.hexesSavedMissing} removed since the save stay gone` : ""}`)}
+            ${li(`Tokens on <b>${ps.scenesKnown}</b> scenes put back · Journal: <b>${ps.journal}</b> Bad Eden entries`)}
           </ul>
-          ${p.actorsDelete.length ? `<label style="display:flex;gap:.4rem;align-items:center;font-size:.9em"><input type="checkbox" name="deleteExtras" checked/> Delete the ${p.actorsDelete.length} actor${p.actorsDelete.length === 1 ? "" : "s"} that did not exist at save time (exact restore)</label>` : ""}
-          ${p.others.length ? `<p style="color:#fbbf24;font-size:.9em;margin:.5rem 0 0">⚠ ${esc(p.others.join(", "))} ${p.others.length === 1 ? "is" : "are"} connected. Their clients will reload when the load finishes.</p>` : ""}
+          ${ps.actorsDelete.length ? `<label style="display:flex;gap:.4rem;align-items:center;font-size:.9em"><input type="checkbox" name="deleteExtras" checked/> Delete the ${ps.actorsDelete.length} steward/faction/rig actor${ps.actorsDelete.length === 1 ? "" : "s"} made since the save</label>` : ""}
+          ${ps.actorsDeleteGame.length ? `<label style="display:flex;gap:.4rem;align-items:center;font-size:.9em"><input type="checkbox" name="deleteGameExtras"/> Also delete the ${ps.actorsDeleteGame.length} NPC actor${ps.actorsDeleteGame.length === 1 ? "" : "s"} made since the save${names(ps.actorsDeleteGame, 6)} <span class="bbttcc-muted">(play-made crews yes; new bestiary entries no)</span></label>` : ""}`;
+        const exactList = `
+          <ul style="margin:.3rem 0 .5rem 1.1rem; font-size:.9em; line-height:1.5">
+            ${li(`<b>${pe.settingsChange}</b> world settings change${pe.settingsUnknown ? ` <span class="bbttcc-muted">(${pe.settingsUnknown} in the save are no longer registered — skipped)</span>` : ""}`)}
+            ${li(`Actors: <b>${pe.actorsUpdate}</b> restored in place · <b>${pe.actorsCreate}</b> re-created · <b>${pe.actorsDelete.length}</b> made since the save${names(pe.actorsDelete)}`)}
+            ${li(`Scenes: <b>${pe.scenesKnown}</b> restored (flags, hexes, tokens)${pe.scenesMissing.length ? ` · ${pe.scenesMissing.length} in the save no longer exist (skipped)` : ""}${pe.scenesExtra.length ? ` · ${pe.scenesExtra.length} made since the save are left alone` : ""}`)}
+            ${li(`Journal: <b>${pe.journal}</b> Bad Eden entries`)}
+          </ul>
+          ${pe.actorsDelete.length ? `<label style="display:flex;gap:.4rem;align-items:center;font-size:.9em"><input type="checkbox" name="deleteExtrasExact" checked/> Delete the ${pe.actorsDelete.length} actor${pe.actorsDelete.length === 1 ? "" : "s"} that did not exist at save time (exact restore)</label>` : ""}`;
+        const content = `
+          <p>Go back to <b>${esc(row.label)}</b> — ${esc(fmtWhen(row.at))}, Turn ${esc(row.turn)}, Act ${esc(row.storyPhase)}?</p>
+          <div class="sg-modes" style="display:flex;gap:1rem;margin:.2rem 0 .4rem">
+            <label style="display:flex;gap:.35rem;align-items:center"><input type="radio" name="mode" value="story" checked/> <b>⟲ Reset story</b> <span class="bbttcc-muted">— undo the play-through, keep the game as built</span></label>
+            <label style="display:flex;gap:.35rem;align-items:center"><input type="radio" name="mode" value="exact"/> <b>Exact restore</b> <span class="bbttcc-muted">— everything, as it was</span></label>
+          </div>
+          <div data-mode-pane="story">${storyList}</div>
+          <div data-mode-pane="exact" hidden>${exactList}</div>
+          ${ps.others.length ? `<p style="color:#fbbf24;font-size:.9em;margin:.5rem 0 0">⚠ ${esc(ps.others.join(", "))} ${ps.others.length === 1 ? "is" : "are"} connected. Their clients will reload when the load finishes.</p>` : ""}
           <p class="bbttcc-muted" style="font-size:.85em;margin:.5rem 0 0">Every client reloads afterwards — modules cache state in memory. Nothing else is undoable: save first if in doubt.</p>`;
-        let deleteExtras = true;
+        let mode = "story", deleteExtras = true, deleteGameExtras = false;
         const ok = await foundry.applications.api.DialogV2.wait({
           window: { title: `Load “${row.label}”?` },
           content,
+          render: (_ev, dialog) => {
+            const el = dialog.element;
+            const sync = () => {
+              const m = el.querySelector("input[name='mode']:checked")?.value || "story";
+              for (const pane of el.querySelectorAll("[data-mode-pane]")) pane.hidden = pane.dataset.modePane !== m;
+              const btn = el.querySelector("button[data-action='load']"); if (btn) btn.innerHTML = m === "story" ? `<i class="fas fa-undo"></i> Reset story` : `<i class="fas fa-download"></i> Restore exactly`;
+            };
+            for (const r of el.querySelectorAll("input[name='mode']")) r.addEventListener("change", sync);
+            sync();
+          },
           buttons: [
-            { action: "load", label: "Load", icon: "fas fa-download", default: true, callback: (ev, button) => { const cb = button.form?.elements?.deleteExtras; deleteExtras = cb ? !!cb.checked : true; return true; } },
+            { action: "load", label: "Reset story", icon: "fas fa-undo", default: true, callback: (ev, button) => {
+                const f = button.form?.elements;
+                mode = (f?.mode?.value === "exact") ? "exact" : "story";
+                if (mode === "story") { deleteExtras = f?.deleteExtras ? !!f.deleteExtras.checked : true; deleteGameExtras = f?.deleteGameExtras ? !!f.deleteGameExtras.checked : false; }
+                else { deleteExtras = f?.deleteExtrasExact ? !!f.deleteExtrasExact.checked : true; deleteGameExtras = deleteExtras; }
+                return true;
+              } },
             { action: "cancel", label: "Cancel", callback: () => false }
           ],
           rejectClose: false
         });
         if (!ok) { this._setStatus(""); return; }
-        const res = await a.load(id, { deleteExtras, progress: (stage, i, n) => this._setStatus(`⏳ restoring ${stage} ${i}/${n}…`) });
+        const res = await a.load(id, { mode, deleteExtras, deleteGameExtras, progress: (stage, i, n) => this._setStatus(`⏳ restoring ${stage} ${i}/${n}…`) });
         const r = res.report;
-        this._setStatus(`✓ loaded “${row.label}” — ${r.settings} settings · actors ${r.actorsUpdated}/${r.actorsCreated}/${r.actorsDeleted} · ${r.scenes} scenes${r.errors.length ? ` · ${r.errors.length} error(s)` : ""} — reloading…`);
-        ui.notifications?.info?.(`Loaded “${row.label}”. Reloading all clients…`);
+        this._setStatus(`✓ ${mode === "story" ? "story reset to" : "loaded"} “${row.label}” — ${r.settings} settings · actors ${r.actorsUpdated}/${r.actorsCreated}/${r.actorsDeleted} · ${r.scenes} scenes${r.errors.length ? ` · ${r.errors.length} error(s)` : ""} — reloading…`);
+        ui.notifications?.info?.(`${mode === "story" ? "Story reset to" : "Loaded"} “${row.label}”. Reloading all clients…`);
         try { game.socket.emit("reload"); } catch (_e) {}
         setTimeout(() => { try { foundry.utils.debouncedReload(); } catch (_e) { location.reload(); } }, 1200);
       });
@@ -179,7 +215,7 @@
       game.settings.registerMenu(MOD, "saveGames", {
         name: "Bad Eden — Save Games",
         label: "Open Save Games",
-        hint: "Full save slots: every setting, actor (with items), scene (hexes + tokens) and Bad Eden journal. Mark one as the Golden Master.",
+        hint: "Full save slots: every setting, actor (with items), scene (hexes + tokens) and Bad Eden journal. Loading defaults to ⟲ Reset story (the play-through only; the game as built stays). Mark one as the Golden Master.",
         icon: "fas fa-save",
         type: BBTTCCSaveGameApp,
         restricted: true

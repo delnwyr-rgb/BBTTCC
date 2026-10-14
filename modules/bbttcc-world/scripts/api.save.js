@@ -26,8 +26,27 @@
 // Foundry has no file-delete API, so "delete" overwrites the file with a stub
 // and drops the index row.
 //
+// LAYERS (2026-10-14, owner: "changes to game functionality should survive a load;
+// the golden master is a giant undo-story button"): every captured thing is
+// either STORY (the play-through: turn, phase, director/quest ledgers, stewards,
+// factions, rigs, hex ownership/builds/pressure, tokens, Turn Press) or GAME
+// (the authored game: campaigns bundle, tables, catalog, vendors, facilitation,
+// tuning knobs, Mal Voice config, library NPCs, hex definitions, travel links).
+//   load(id, {mode:"story"})  — the default in the Save Games window and for
+//                               ⟲ Load golden master: restores STORY only.
+//   load(id, {mode:"exact"})  — the 2026-09-08 behaviour: everything, exactly
+//                               (API default, so runner macros are unchanged).
+// A save still CAPTURES both layers (it is a full backup either way), except
+// the God Panel snapshot store and the Mal Voice call log, which are neither.
+// Classification: settings — `bbttcc.layer` on the registration wins, then the
+// GAME_SETTINGS table below, else STORY (so a new key is reset by default);
+// actors — `flags.bbttcc-world.layer` wins, then character/rig/faction = STORY,
+// other npc = GAME; hexes — HEX_DEF_KEYS stay live, every other territory key
+// comes from the save; live-only hexes are never deleted, saved hexes missing
+// live are not re-created, geometry/text/travel links stay live.
+//
 // API: game.bbttcc.api.world.saves.{list, save, load, plan, setGolden, remove,
-//      exportSlot, importFile, golden, open}
+//      exportSlot, importFile, golden, open, layers}
 (() => {
   const MOD = "bbttcc-world";
   const TAG = "[bbttcc-world/save]";
@@ -42,6 +61,81 @@
   const randId = () => foundry.utils.randomID(12);
   const clone = (o) => foundry.utils.deepClone(o);
   const isGM = () => !!game.user?.isGM;
+
+  // ── layers ───────────────────────────────────────────────────────────────
+  // Never captured — not story, not game (snapshot store = saves of saves; call log = billing noise).
+  const EXCLUDE_SETTINGS = new Set(["bbttcc-world.worldSnapshots", "bbttcc-mal-voice.callLog"]);
+  // GAME-layer settings: left alone by a story load. Namespace-wide entries end in ".*".
+  const GAME_SETTINGS = [
+    "fourththing.*", "surge-powers.*", "bbttcc-mal-voice.*",
+    "bbttcc-campaign.campaigns", "bbttcc-campaign.encounterTables",
+    "bbttcc-campaign.facilitation.policy", "bbttcc-campaign.facilitation.mode",
+    "bbttcc-campaign.director.enabled", "bbttcc-campaign.director.autoInvite", "bbttcc-campaign.director.pressureThreshold",
+    "bbttcc-campaign.director.sealDoneActs", "bbttcc-campaign.director.sealCompletedQuests", "bbttcc-campaign.director.turnTickOnlyChains",
+    "bbttcc-campaign.overshoot.drawsBeats", "bbttcc-campaign.invites.playerAccept",
+    "bbttcc-campaign.ledger.travelDaysPerTier", "bbttcc-campaign.ledger.turnTimeBudget",
+    "bbttcc-market.catalog", "bbttcc-market.vendors", "bbttcc-market.deliveryFeeBase", "bbttcc-market.deliveryFeePerDanger", "bbttcc-market.catalogMarksMigrated",
+    "bbttcc-territory.hexFogColor", "bbttcc-territory.hexFogEnabled", "bbttcc-territory.hexFogAlpha", "bbttcc-territory.tableAnnouncements",
+    "bbttcc-territory.questMarkers", "bbttcc-territory.districtYieldShare", "bbttcc-territory.townbuilderChargeMaterials",
+    "bbttcc-territory.townbuilderBuCostT1", "bbttcc-territory.townbuilderBuCostT2", "bbttcc-territory.townbuilderBuCostT3",
+    "bbttcc-territory.buildUnitCostRepair", "bbttcc-territory.buildUnitCostFortify", "bbttcc-territory.buildUnitCostAsset",
+    "bbttcc-core.travelTierSource", "bbttcc-core.travelDomainGate", "bbttcc-core.travelEncounterBaseDC", "bbttcc-core.travelEncounterTierStep",
+    "bbttcc-core.gmEditMode", "bbttcc-core.gmAuditLog",
+    "bbttcc-raid.directionalArtOnRotate", "bbttcc-raid.directionalArtOnMove",
+    "bbttcc-radiation.rpStoreUnified", "bbttcc-radiation.enableZoneDrift",
+    "bbttcc-travel.doorsPlayerActivate",
+    "bbttcc-factions.opRelayStrict", "bbttcc-factions.autoRelationshipNudge", "bbttcc-factions.fairTradeTolerance",
+    "bbttcc-factions.nudgeCooldownHours", "bbttcc-factions.expireSweepIntervalMinutes",
+    "bbttcc-onboarding.wakeThemeSrc", "bbttcc-onboarding.campaignWakeBeatId", "bbttcc-onboarding.campaignResumeBeatId",
+    "bbttcc-onboarding.offerOnReady", "bbttcc-onboarding.operatorAudience",
+    "bbttcc-epic.protagonistFactions", "bbttcc-epic.daathSceneId"
+  ];
+  const GAME_NS = new Set(GAME_SETTINGS.filter(k => k.endsWith(".*")).map(k => k.slice(0, -2)));
+  const GAME_KEYS = new Set(GAME_SETTINGS.filter(k => !k.endsWith(".*")));
+  function settingLayer(ns, key) {
+    const full = `${ns}.${key}`;
+    if (EXCLUDE_SETTINGS.has(full) || (ns === MOD && key === SETTING_INDEX)) return "exclude";
+    try {
+      const tag = game.settings.settings.get(full)?.bbttcc?.layer;
+      if (tag === "game" || tag === "story") return tag;
+    } catch (_e) {}
+    if (GAME_KEYS.has(full) || GAME_NS.has(ns)) return "game";
+    return "story";
+  }
+  // Actors: stewards (character), rigs and faction actors are the play-through; every other npc is the library.
+  function actorLayer(a) {
+    const flags = a?.flags || {};
+    const tag = flags["bbttcc-world"]?.layer;
+    if (tag === "game" || tag === "story") return tag;
+    if (a?.type === "character" || a?.type === "rig") return "story";
+    if (flags["bbttcc-factions"]?.isFaction === true) return "story";
+    return "game";
+  }
+  // Hex drawings: these territory keys DEFINE the hex (stay live); everything else is play state (from the save).
+  const HEX_DEF_KEYS = ["isHex", "kind", "name", "type", "terrain", "terrainType", "terrainKey", "notes", "hexImage", "createdAt",
+    "resourceNodes", "resources", "size", "capital", "population", "campaign"];
+  const HEX_LEYLINE_STATE = ["flowState", "purity", "memoryCharge"];   // placement/resonance stay live; charge + gate state are play
+  const isHexFlags = (f) => !!(f && typeof f["bbttcc-territory"] === "object" && f["bbttcc-territory"]);
+  function storyFlagsForDrawing(liveFlags, savedFlags) {
+    const out = clone(liveFlags || {});   // every scope from live: travel links, campaign hooks, onboarding, raid tableau
+    const sT = savedFlags?.["bbttcc-territory"], lT = liveFlags?.["bbttcc-territory"];
+    if (sT && typeof sT === "object") {
+      const t = {};
+      if (lT) for (const k of HEX_DEF_KEYS) if (k in lT) t[k] = clone(lT[k]);
+      for (const [k, v] of Object.entries(sT)) if (!HEX_DEF_KEYS.includes(k)) t[k] = clone(v);   // live-only state keys drop
+      if (lT?.leylines || sT.leylines) {
+        const ll = clone(lT?.leylines ?? sT.leylines ?? {}); const sl = sT.leylines || {};
+        for (const k of HEX_LEYLINE_STATE) if (k in sl) ll[k] = clone(sl[k]);
+        if (sl.gate && typeof sl.gate === "object") ll.gate = Object.assign({}, ll.gate || {}, { enabled: sl.gate.enabled, locked: sl.gate.locked });
+        t.leylines = ll;
+      }
+      out["bbttcc-territory"] = t;
+    }
+    const sR = savedFlags?.["bbttcc-raid"];
+    if (sR && typeof sR === "object" && "currentSceneIdx" in sR) out["bbttcc-raid"] = Object.assign({}, out["bbttcc-raid"] || {}, { currentSceneIdx: sR.currentSceneIdx });
+    return out;
+  }
+  const layers = { setting: settingLayer, actor: actorLayer, drawingFlags: storyFlagsForDrawing, GAME_SETTINGS, EXCLUDE_SETTINGS: [...EXCLUDE_SETTINGS], HEX_DEF_KEYS, HEX_LEYLINE_STATE };
 
   // ── index ────────────────────────────────────────────────────────────────
   function readIndex() {
@@ -95,7 +189,7 @@
         const ns = String(cfg.namespace || fullKey.split(".")[0]);
         if (!OUR_NS(ns)) continue;
         const key = String(cfg.key || fullKey.slice(ns.length + 1));
-        if (ns === MOD && key === SETTING_INDEX) continue;   // the index is not part of a save
+        if (settingLayer(ns, key) === "exclude") continue;   // the index, the snapshot store, the call log
         let value = game.settings.get(ns, key);
         if (value && typeof value === "object" && typeof value.toObject === "function") value = value.toObject();
         out.push({ ns, key, value: clone(value) });
@@ -173,20 +267,46 @@
   }
 
   // What a load would do — shown in the confirm.
-  function plan(snap) {
+  const modeOf = (opts) => (opts?.mode === "story" ? "story" : "exact");
+  function plan(snap, opts = {}) {
+    const mode = modeOf(opts); const story = mode === "story";
+    // settings — per layer
+    const settingsChangeList = [], settingsKeepList = [];
+    let settingsUnknown = 0;
+    for (const s of snap.settings) {
+      const full = `${s.ns}.${s.key}`;
+      if (!game.settings.settings.has(full)) { settingsUnknown++; continue; }
+      const layer = settingLayer(s.ns, s.key);
+      if (layer === "exclude") continue;
+      let differs = false; try { differs = !sameJson(game.settings.get(s.ns, s.key), s.value); } catch (_e) {}
+      if (!differs) continue;
+      if (story && layer === "game") settingsKeepList.push(full); else settingsChangeList.push(full);
+    }
+    // actors — per layer
     const savedActorIds = new Set(snap.actors.map(a => a._id));
-    const actorsUpdate = snap.actors.filter(a => game.actors.get(a._id)).length;
-    const actorsCreate = snap.actors.length - actorsUpdate;
-    const actorsDelete = game.actors.filter(a => !savedActorIds.has(a.id)).map(a => a.name);
+    const touched = snap.actors.filter(a => !story || actorLayer(a) === "story");
+    const actorsUpdate = touched.filter(a => game.actors.get(a._id)).length;
+    const actorsCreate = touched.length - actorsUpdate;
+    const actorsKept = snap.actors.length - touched.length;
+    const extras = game.actors.filter(a => !savedActorIds.has(a.id));
+    const actorsDelete = extras.filter(a => !story || actorLayer(a) === "story").map(a => a.name);
+    const actorsDeleteGame = story ? extras.filter(a => actorLayer(a) === "game").map(a => a.name) : [];
+    // scenes + hexes
     const scenesKnown = snap.scenes.filter(s => game.scenes.get(s._id)).length;
     const scenesMissing = snap.scenes.filter(s => !game.scenes.get(s._id)).map(s => s.name);
     const scenesExtra = game.scenes.filter(s => !snap.scenes.some(x => x._id === s.id)).map(s => s.name);
-    const settingsChange = snap.settings.filter(s => {
-      try { return game.settings.settings.has(`${s.ns}.${s.key}`) && !sameJson(game.settings.get(s.ns, s.key), s.value); } catch (_e) { return false; }
-    }).length;
-    const settingsUnknown = snap.settings.filter(s => !game.settings.settings.has(`${s.ns}.${s.key}`)).length;
+    let hexesMerged = 0, hexesLiveOnly = 0, hexesSavedMissing = 0;
+    if (story) for (const s of snap.scenes) {
+      const scene = game.scenes.get(s._id); if (!scene) continue;
+      const savedHex = (s.drawings || []).filter(d => isHexFlags(d.flags));
+      const savedIds = new Set(savedHex.map(d => d._id));
+      for (const d of savedHex) { if (scene.drawings.get(d._id)) hexesMerged++; else hexesSavedMissing++; }
+      hexesLiveOnly += scene.drawings.filter(d => isHexFlags(d.flags) && !savedIds.has(d.id)).length;
+    }
     const others = game.users.filter(u => u.active && u.id !== game.user.id).map(u => u.name);
-    return { actorsUpdate, actorsCreate, actorsDelete, scenesKnown, scenesMissing, scenesExtra, settingsChange, settingsUnknown, journal: snap.journal.length, others };
+    return { mode, actorsUpdate, actorsCreate, actorsKept, actorsDelete, actorsDeleteGame, scenesKnown, scenesMissing, scenesExtra,
+      settingsChange: settingsChangeList.length, settingsKeep: settingsKeepList.length, settingsChangeList, settingsKeepList, settingsUnknown,
+      hexesMerged, hexesLiveOnly, hexesSavedMissing, journal: snap.journal.length, others };
   }
 
   async function _loadInner(id, opts = {}) {
@@ -195,9 +315,11 @@
     if (!row) throw new Error("save not found in index");
     const snap = await readFile(row.path);
     if (snap?.kind !== "bbttcc-savegame") throw new Error("not a Bad Eden save file");
-    const deleteExtras = opts.deleteExtras !== false;
+    const mode = modeOf(opts); const story = mode === "story";
+    const deleteExtras = opts.deleteExtras !== false;            // story-layer actors made since the save
+    const deleteGameExtras = story ? opts.deleteGameExtras === true : deleteExtras;   // library npcs made since the save: opt-IN on a story load
     const progress = typeof opts.progress === "function" ? opts.progress : (() => {});
-    const report = { settings: 0, actorsUpdated: 0, actorsCreated: 0, actorsDeleted: 0, itemsReplaced: 0, scenes: 0, drawings: 0, tokens: 0, journal: 0, errors: [] };
+    const report = { mode, settings: 0, settingsKept: 0, actorsUpdated: 0, actorsCreated: 0, actorsKept: 0, actorsDeleted: 0, itemsReplaced: 0, scenes: 0, drawings: 0, hexesMerged: 0, tokens: 0, journal: 0, errors: [] };
     game.bbttcc = game.bbttcc || {};
     game.bbttcc.saveRestoreActive = true;
     // RESTORE MODE (fix-the-boat item 4, 2026-09-12): a restore recreates every document; hooks that
@@ -210,7 +332,10 @@
       for (const s of snap.settings) {
         try {
           if (!game.settings.settings.has(`${s.ns}.${s.key}`)) continue;
+          const layer = settingLayer(s.ns, s.key);
+          if (layer === "exclude") continue;
           if (sameJson(game.settings.get(s.ns, s.key), s.value)) continue;
+          if (story && layer === "game") { report.settingsKept++; continue; }
           await game.settings.set(s.ns, s.key, s.value);
           report.settings++;
         } catch (e) { report.errors.push(`setting ${s.ns}.${s.key}: ${e?.message || e}`); }
@@ -221,6 +346,7 @@
       let n = 0;
       for (const a of snap.actors) {
         progress("actors", ++n, snap.actors.length);
+        if (story && actorLayer(a) === "game") { report.actorsKept++; continue; }
         try {
           const existing = game.actors.get(a._id);
           const body = stripDoc(a);
@@ -238,9 +364,10 @@
           }
         } catch (e) { report.errors.push(`actor ${a.name}: ${e?.message || e}`); }
       }
-      if (deleteExtras) {
+      if (deleteExtras || deleteGameExtras) {
         const savedIds = new Set(snap.actors.map(a => a._id));
-        const extras = game.actors.filter(x => !savedIds.has(x.id)).map(x => x.id);
+        const extras = game.actors.filter(x => !savedIds.has(x.id))
+          .filter(x => (actorLayer(x) === "story") ? deleteExtras : deleteGameExtras).map(x => x.id);
         if (extras.length) { try { await Actor.implementation.deleteDocuments(extras); report.actorsDeleted = extras.length; } catch (e) { report.errors.push(`delete actors: ${e?.message || e}`); } }
       }
 
@@ -251,12 +378,25 @@
         const scene = game.scenes.get(s._id);
         if (!scene) continue;
         try {
-          const body = stripDoc(s);
-          if (!folderOk(body.folder)) body.folder = null;
-          delete body.active;   // which scene is active is the GM's business, not the save's
-          const curBody = stripDoc(captureScene(scene)); delete curBody.active;
-          if (!sameJson(curBody, body)) await scene.update(body, { diff: false, recursive: false });
-          report.drawings += await replaceEmbedded(scene, "Drawing", s.drawings || []) ? (s.drawings?.length || 0) : 0;
+          if (story) {
+            // STORY: the scene itself (art, dimensions, flags = hub/tableau/board wiring) stays live. Hexes that exist
+            // in both get definition-from-live + state-from-save flags; live-only hexes stay; saved-missing stay gone.
+            const updates = [];
+            for (const d of (s.drawings || [])) {
+              if (!isHexFlags(d.flags)) continue;
+              const live = scene.drawings.get(d._id); if (!live) continue;
+              const flags = storyFlagsForDrawing(live.toObject().flags, d.flags);
+              if (!sameJson(live.toObject().flags, flags)) updates.push({ _id: d._id, flags });
+            }
+            if (updates.length) { await scene.updateEmbeddedDocuments("Drawing", updates, { diff: false, recursive: false, bbttccRestore: true }); report.hexesMerged += updates.length; }
+          } else {
+            const body = stripDoc(s);
+            if (!folderOk(body.folder)) body.folder = null;
+            delete body.active;   // which scene is active is the GM's business, not the save's
+            const curBody = stripDoc(captureScene(scene)); delete curBody.active;
+            if (!sameJson(curBody, body)) await scene.update(body, { diff: false, recursive: false });
+            report.drawings += await replaceEmbedded(scene, "Drawing", s.drawings || []) ? (s.drawings?.length || 0) : 0;
+          }
           report.tokens += await replaceEmbedded(scene, "Token", s.tokens || []) ? (s.tokens?.length || 0) : 0;
           report.scenes++;
         } catch (e) { report.errors.push(`scene ${s.name}: ${e?.message || e}`); }
@@ -297,8 +437,8 @@
     try {
       await ChatMessage.create({
         whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
-        content: `<div class="bbttcc-card"><b>💾 Save loaded: ${foundry.utils.escapeHTML(row.label)}</b><br/>` +
-          `${report.settings} settings · actors ${report.actorsUpdated} updated / ${report.actorsCreated} created / ${report.actorsDeleted} deleted · ${report.scenes} scenes (${report.drawings} drawings, ${report.tokens} tokens) · ${report.journal} journal` +
+        content: `<div class="bbttcc-card"><b>${story ? "⟲ Story reset to" : "💾 Save loaded"}: ${foundry.utils.escapeHTML(row.label)}</b><br/>` +
+          `${report.settings} settings${story ? ` (${report.settingsKept} game-layer kept)` : ""} · actors ${report.actorsUpdated} updated / ${report.actorsCreated} created / ${report.actorsDeleted} deleted${story ? ` / ${report.actorsKept} library kept` : ""} · ${report.scenes} scenes (${story ? `${report.hexesMerged} hexes merged` : `${report.drawings} drawings`}, ${report.tokens} tokens) · ${report.journal} journal` +
           (report.staleCards ? ` · ${report.staleCards} newer invitation card(s) sealed` : "") +
           (report.errors.length ? `<br/><span style="color:#f87171">${report.errors.length} error(s) — see console</span>` : "") +
           `<br/><i>All clients reload now.</i></div>`
@@ -382,7 +522,7 @@
       game.bbttcc.api = game.bbttcc.api || {};
       game.bbttcc.api.world = game.bbttcc.api.world || {};
       game.bbttcc.api.world.saves = {
-        list, golden, save, load, plan, readSlot, setGolden, remove, prune, exportSlot, importFile, capture,
+        list, golden, save, load, plan, readSlot, setGolden, remove, prune, exportSlot, importFile, capture, layers,
         dir: saveDir,
         open: () => { try { globalThis.BBTTCCSaveGameApp?.open?.(); } catch (e) { warn("open failed", e); } }
       };
