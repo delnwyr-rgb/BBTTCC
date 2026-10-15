@@ -54,6 +54,7 @@ import {
   applySkillGrantsFromFeatures,
   extractSkillGrantsFromFeature,
   promoteStampedAptitudeAEs,
+  itemHasPromotableAptitudeAE,
   applyPathFeatures,
   grantStarterManifestations,
   syncAuraEffects,
@@ -14457,6 +14458,7 @@ Hooks.once("init", function () {
       applySkillGrantsFromFeatures,
       extractSkillGrantsFromFeature,
       promoteStampedAptitudeAEs,
+      itemHasPromotableAptitudeAE,
       levelUp,
       levelDown,
       resetLegendaryOnSceneChange
@@ -29220,6 +29222,33 @@ Hooks.on("updateActor", (actor, changed) => {
 Hooks.on("createItem", (item) => {
   const a = item?.parent;
   if (a?.type === "character" || a?.type === "npc") _ftRefreshAffiliationsForActor(a);
+});
+// 2026-10-14 — an archetype / crew-type added AFTER chargen (Cinder's Death
+// archetype) never reached the promoter, which only ran at chargen finalize and
+// level-up. Promote its Tier 1 proficiency grant into source ranks on arrival.
+// Active GM only (one writer); debounced per actor so a multi-item drop
+// promotes once.
+const _ftPromoteOnCreateTimers = new Map();
+Hooks.on("createItem", (item) => {
+  try {
+    const a = item?.parent;
+    if (!a || a.type !== "character" || !game.user?.isGM) return;
+    if (game.users?.activeGM && game.users.activeGM.id !== game.user.id) return;
+    if (!itemHasPromotableAptitudeAE(item)) return;
+    clearTimeout(_ftPromoteOnCreateTimers.get(a.id));
+    _ftPromoteOnCreateTimers.set(a.id, setTimeout(async () => {
+      _ftPromoteOnCreateTimers.delete(a.id);
+      try {
+        const promoted = await promoteStampedAptitudeAEs(a);
+        if (Array.isArray(promoted) && promoted.length) {
+          const lines = promoted.map(p => `${p.skill} ${p.from} → ${p.to} (${p.source})`).join("<br/>");
+          ui.notifications?.info?.(`${a.name}: aptitude rank${promoted.length > 1 ? "s" : ""} granted — ${promoted.map(p => p.skill).join(", ")}`);
+          await ChatMessage.create({ whisper: game.users.filter(u => u.isGM).map(u => u.id), speaker: { alias: "Roll for Initiation" },
+            content: `<section class="ft-card"><h3>Aptitude ranks granted — ${foundry.utils.escapeHTML(a.name)}</h3><p>${lines}</p></section>` }).catch(() => {});
+        }
+      } catch (e) { console.warn("[fourththing] promote-on-create failed", e); }
+    }, 400));
+  } catch (_e) {}
 });
 Hooks.on("deleteItem", (item) => {
   const a = item?.parent;

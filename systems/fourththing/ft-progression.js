@@ -2602,6 +2602,17 @@ export async function applySkillGrantsFromFeatures(actor) {
 // Old armor-skill names → current keys (mirror of FT.LEGACY_SKILL_ALIASES in
 // module.js; owner rename 2026-08-22).
 const LEGACY_SKILL_ALIASES = { weave: "fitting", warding: "bracing", weaver: "fitting" };
+// Archetype / Crew-Type Tier 1 proficiency grants (character-options packs).
+export const _FT_PROFICIENCY_AE_RE = /tier 1 proficiencies|\bt1 skills\b|tier 1 skills/i;
+// True when an item carries a promotable aptitude AE (stamp flag or Tier 1 proficiency grant).
+export function itemHasPromotableAptitudeAE(item) {
+  for (const e of item?.effects ?? []) {
+    if (e.flags?.fourththing?.aptitudeStamp || _FT_PROFICIENCY_AE_RE.test(String(e.name ?? ""))) {
+      if ((e.changes ?? []).some(c => /^system\.skills\.[a-zA-Z0-9_]+\.value$/.test(String(c.key ?? "")))) return true;
+    }
+  }
+  return false;
+}
 
 export async function promoteStampedAptitudeAEs(actor) {
   // ⚠ ROOT-CAUSE FIX 2026-07-13 (the recurring "1 dot + ancestry bonus → rank
@@ -2628,11 +2639,18 @@ export async function promoteStampedAptitudeAEs(actor) {
 
   for (const item of Array.from(actor.items ?? [])) {
     for (const effect of Array.from(item.effects ?? [])) {
-      if (!effect.flags?.fourththing?.aptitudeStamp) continue;
+      // 2026-10-14 — archetype / crew "Tier 1 Proficiencies" AEs ("you gain a
+      // skill rank in X and Y") were authored as upgrade-to-1 floors: invisible
+      // to the rank pips (source read) and never a second rank when the actor
+      // already held one (Techniques R1 canon = +1 either way). Treat them as
+      // promotable stamps: +1 source rank once per (item|skill), then disable.
+      const isProficiencyAE = _FT_PROFICIENCY_AE_RE.test(String(effect.name ?? ""));
+      if (!effect.flags?.fourththing?.aptitudeStamp && !isProficiencyAE) continue;
       let touched = false;
       for (const change of effect.changes ?? []) {
         const isAdd = change?.type === "add" || change?.mode === 2;
-        if (!isAdd) continue;
+        const isFloor = isProficiencyAE && (["upgrade", "override"].includes(change?.type) || [4, 5].includes(change?.mode));
+        if (!isAdd && !isFloor) continue;
         const m = String(change.key ?? "").match(/^system\.skills\.([a-zA-Z0-9_]+)\.value$/);
         if (!m) continue;
         // 2026-10-12 — resolve the 2026-08-22 armor-skill rename (weave→fitting,
@@ -2646,7 +2664,8 @@ export async function promoteStampedAptitudeAEs(actor) {
         // from source" as rank 0 rather than skipping the grant (2026-10-12).
         const knownKey = skills[skillKey] !== undefined || actor.system?.skills?.[skillKey] !== undefined;
         if (!knownKey) continue;
-        const delta = Number(change.value) || 0;
+        // A floor ("at least rank 1") promotes as exactly one rank; an add promotes its value.
+        const delta = isFloor ? 1 : (Number(change.value) || 0);
         if (!delta) continue;
         touched = true;                       // this is a promotable stamp change —
         const lk = _ledgerKey(item.name, skillKey);
