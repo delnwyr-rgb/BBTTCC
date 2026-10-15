@@ -422,6 +422,11 @@ export function createFXAPI() {
     const margin = Number(marginRaw);
     const label = String(opts.label || ctx.label || raidType || "Raid Clash").replace(/_/g, " ");
 
+    // Roll banners were GM-local (the infiltration clash never reached player seats, 2026-10-14):
+    // opts.broadcast=true replays the same chips on every other seat via fx-moments.
+    if (opts.broadcast === true && !opts.relayed) {
+      relay({ t: "rolls", ctx: safeCtx(ctx), opts: { raidType, label: opts.label } });
+    }
     await enqueueBanner(label, "info", 1200, 900, { raidType });
     if (Number.isFinite(aTotal)) createRollChip(`${aName}: ${aTotal}`, "bbttcc-fx-roll-chip-attacker", 246);
     await wait(320);

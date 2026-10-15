@@ -64,7 +64,7 @@
         attackerTotal: ctx.attackerTotal,
         defenderTotal: ctx.defenderTotal,
         margin: ctx.margin
-      });
+      }, { broadcast: true }); // every seat sees the clash (2026-10-14)
     } catch (_e) {}
   }
 
@@ -75,7 +75,7 @@
       await fx.playScenarioShift("infiltration_alarm", {
         raidType: "infiltration",
         outcome: `Alarm ${ctx.before} → ${ctx.after} — ${ctx.band}`
-      }, { raidType: "infiltration" });
+      }, { raidType: "infiltration", broadcast: true }); // alarm shift banner on every seat (2026-10-14)
     } catch (_e) {}
   }
 
