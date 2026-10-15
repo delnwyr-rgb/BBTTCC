@@ -914,7 +914,7 @@
           {{#each CONDITIONS as |cond key|}}
           {{#unless cond.ladder}}
           <button type="button" data-action="ftConditionToggle" data-condition="{{key}}"
-                  class="ft-condition-btn {{#if (lookup ../conditions key)}}active{{/if}}" data-tooltip="{{cond.desc}}">
+                  class="ft-condition-btn {{#if (lookup ../conditionsActive key)}}active{{/if}}" data-tooltip="{{cond.desc}}">
             {{cond.label}}
           </button>
           {{/unless}}
@@ -1018,7 +1018,7 @@
       {{!-- ── Conditions (mirror of Combat-tab toggles, dedicated row per active state) ── --}}
       <div class="ft-section-header" style="margin-top:0.6rem">
         <h3>Conditions</h3>
-        <span style="font-size:0.72rem;opacity:0.6;font-style:italic">toggle from the Engagement tab</span>
+        <span style="font-size:0.72rem;opacity:0.6;font-style:italic">toggle from the Engagement tab · ✕ clears</span>
       </div>
       <div class="ft-conditions-active-list" style="display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem">
         {{#each activeConditions as |c|}}
@@ -1027,6 +1027,9 @@
           <div style="flex:1;min-width:0">
             <div style="font-weight:600;font-size:0.86rem;color:{{c.color}};line-height:1.2">{{c.label}}</div>
             <div style="margin-top:0.2rem;font-size:0.78rem;opacity:0.8">{{c.desc}}</div>
+          </div>
+          <div class="ft-effect-controls">
+            <button type="button" class="ft-power-delete" data-action="ftConditionToggle" data-condition="{{c.key}}" title="Clear {{c.label}}">✕</button>
           </div>
         </div>
         {{else}}
@@ -1136,7 +1139,10 @@
 
       <div class="ft-section-header">
         <h3>States & Modifiers</h3>
-        <button type="button" data-action="ftAddEffect" class="ft-add-btn">+ Add Effect</button>
+        <div style="display:flex;gap:0.35rem;align-items:center">
+          <button type="button" data-action="ftEndEffects" class="ft-add-btn ft-end-effects-btn" data-tooltip="End Effects — clear every active condition and every state / modifier on this actor in one go (checklist confirm; untick anything that should stay). Passives from items are never touched.">⏹ End Effects</button>
+          <button type="button" data-action="ftAddEffect" class="ft-add-btn">+ Add Effect</button>
+        </div>
       </div>
       {{#if activeEffectGroups.length}}
       <div class="ft-effects-list">

@@ -20252,6 +20252,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ftAddEffect:        FourthThingCharacterSheet._onFtAddEffect,
         ftToggleEffect:     FourthThingCharacterSheet._onFtToggleEffect,
         ftDeleteEffect:     FourthThingCharacterSheet._onFtDeleteEffect,
+        ftEndEffects:       FourthThingCharacterSheet._onFtEndEffects,
         ftDefenseRoll:      FourthThingCharacterSheet._onFtDefenseRoll,
         ftDefenseCycle:     FourthThingCharacterSheet._onFtDefenseCycle,
         ftVulnToggle:       FourthThingCharacterSheet._onFtVulnToggle,
@@ -20914,6 +20915,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           };
         })(),
         conditions:    conditionList,
+        // key → active map for the Engagement grid's `lookup` (the list above is an
+        // array, so `lookup conditions key` never matched and no button ever lit).
+        conditionsActive: Object.fromEntries(conditionList.map(c => [c.key, !!c.active])),
         activeConditions,
         isDying,
         lastStand:     lsData,
@@ -22550,6 +22554,70 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (ok) await eff.delete();
     }
 
+    // 2026-10-15 — "End Effects": one click ends the transient states on this
+    // actor — every active condition plus every actor-owned (non-condition)
+    // Active Effect in the States & Modifiers list. Item-transferred passives
+    // are never touched (they live on the item). A checklist confirm lets the
+    // seat keep anything that should outlive the scene (a long ward, a rig
+    // state). Conditions route through game.fourththing.toggleCondition so the
+    // native status AE and the seat-safe GM relay both apply.
+    static async _onFtEndEffects(event, target) {
+      const actor = this.actor;
+      if (!actor) return;
+      const esc    = (s) => foundry.utils.escapeHTML(String(s ?? ""));
+      const sysOf  = () => actor.system?.system ?? actor.system ?? {};
+      const conds  = Object.entries(FT.CONDITIONS ?? {})
+        .filter(([k]) => sysOf()?.conditions?.[k] === true)
+        .map(([k, cfg]) => ({ key: k, label: cfg.label ?? k, color: cfg.color ?? "#aaa" }));
+      const effs   = Array.from(actor.effects ?? [])
+        .filter(e => !e.flags?.fourththing?.condition)
+        .map(e => ({ id: e.id, name: e.name, disabled: e.disabled, source: e.flags?.fourththing?.source ?? "" }));
+      if (!conds.length && !effs.length) return ui.notifications?.info(`${actor.name}: nothing to end — no active conditions or states.`);
+      const row = (name, value, label, extra = "") =>
+        `<label style="display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0.3rem;font-size:0.84rem"><input type="checkbox" name="${name}" value="${esc(value)}" checked> <span>${label}</span>${extra}</label>`;
+      const section = (title, rows) => rows.length
+        ? `<div style="margin:0.4rem 0 0.2rem;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.7">${title} (${rows.length})</div>${rows.join("")}`
+        : "";
+      const content = `<p style="margin:0 0 0.3rem">End these on <b>${esc(actor.name)}</b>? Untick anything that should stay.</p>`
+        + section("Conditions", conds.map(c => row("cond", c.key, `<b style="color:${c.color}">${esc(c.label)}</b>`)))
+        + section("States &amp; Modifiers", effs.map(e => row("eff", e.id,
+            esc(e.name) + (e.disabled ? ` <span style="opacity:0.55;font-size:0.74rem">(disabled)</span>` : ""),
+            e.source ? ` <span style="margin-left:auto;opacity:0.5;font-size:0.72rem">${esc(e.source)}</span>` : "")))
+        + `<p class="ft-hint" style="margin:0.5rem 0 0;font-size:0.72rem;opacity:0.6;font-style:italic">Passives from gear, path and ancestry are never ended here — they live on their items.</p>`;
+      let picked = null;
+      try {
+        picked = await foundry.applications.api.DialogV2.wait({
+          window: { title: `End Effects — ${actor.name}` }, content, rejectClose: false,
+          buttons: [
+            { action: "end", label: "End selected", default: true, callback: (ev, btn, dialog) => ({
+              conds: Array.from(dialog.element.querySelectorAll('input[name="cond"]:checked')).map(i => i.value),
+              effs:  Array.from(dialog.element.querySelectorAll('input[name="eff"]:checked')).map(i => i.value)
+            }) },
+            { action: "cancel", label: "Cancel" }
+          ]
+        });
+      } catch { picked = null; }
+      if (!picked || typeof picked !== "object") return;
+      const ended = [];
+      for (const k of picked.conds ?? []) {
+        if (sysOf()?.conditions?.[k] !== true) continue;
+        try { await game.fourththing.toggleCondition(actor, k); ended.push(FT.CONDITIONS?.[k]?.label ?? k); }
+        catch (e) { console.warn("fourththing | End Effects: condition", k, e); }
+      }
+      const ids = (picked.effs ?? []).filter(id => actor.effects.get(id));
+      if (ids.length) {
+        const names = ids.map(id => actor.effects.get(id)?.name).filter(Boolean);
+        try { await actor.deleteEmbeddedDocuments("ActiveEffect", ids); ended.push(...names); }
+        catch (e) { console.warn("fourththing | End Effects: effects", e); }
+      }
+      if (!ended.length) return ui.notifications?.info(`${actor.name}: nothing ended.`);
+      ui.notifications?.info(`${actor.name}: ended ${ended.length} — ${ended.join(", ")}.`);
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll"><span class="ft-condition-applied" style="color:#94a3b8">◈ ${esc(actor.name)} ends: <b>${ended.map(esc).join(", ")}</b></span></div>`
+      });
+    }
+
     // ── Bulwark Inevitability merged-pool +/- (Cataclyst L17) ──────────────
     // After the L17 capstone fires, Frame and Ruin show as a single
     // Inevitability chip. Underlying storage is still frameDice + ruinCharges
@@ -22881,6 +22949,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         // ftAddEffect → opens the V14 ActiveEffectConfig in author mode.
         // ftBad EdenTikkun → opens the Tikkun bridge panel for this actor.
         ftAddEffect:           FourthThingCharacterSheet._onFtAddEffect,
+        ftEndEffects:          FourthThingCharacterSheet._onFtEndEffects,
         ftBBTTCCTikkun:        FourthThingCharacterSheet._onFtBBTTCCTikkun,
         // Legacy NPC-only roll handlers retained for back-compat with any
         // saved macros / external callers; new sheet uses ftRoll/ftDefenseRoll.

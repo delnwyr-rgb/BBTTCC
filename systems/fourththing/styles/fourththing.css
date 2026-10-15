@@ -781,6 +781,8 @@
 }
 
 .ft-add-btn:hover { background: rgba(160,180,255,0.18); }
+.ft-add-btn.ft-end-effects-btn { background: rgba(255,170,120,0.08); border-color: rgba(255,170,120,0.3); color: #ffb98a; }
+.ft-add-btn.ft-end-effects-btn:hover { background: rgba(255,170,120,0.2); }
 
 .ft-powers-list { display: flex; flex-direction: column; gap: 0.5rem; }
 
