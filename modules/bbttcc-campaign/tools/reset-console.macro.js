@@ -194,10 +194,10 @@
     await writeInject();
     // Story store: strike the played marks (api.story.forget recomputes starts / endings from what remains).
     try {
-      const sApi = game.bbttcc?.api?.story;
+      const sApi = game.bbttcc?.api?.campaign?.story;   // story API hangs off the CAMPAIGN api (buildCampaignAPI → story:{…})
       const sIds = ids.filter(id => playedMarks[id]);
       if (sIds.length && typeof sApi?.forget === "function") { await sApi.forget(sIds, campaignId); for (const id of sIds) delete playedMarks[id]; }
-      else if (sIds.length) console.warn("[reset-console] game.bbttcc.api.story.forget missing — story marks NOT cleared for", sIds);
+      else if (sIds.length) console.warn("[reset-console] game.bbttcc.api.campaign.story.forget missing — story marks NOT cleared for", sIds);
     } catch (e) { console.warn("[reset-console] story forget failed", e); }
     // Per-beat quest progress marks (seen/completed) — every bucket, every faction.
     await fanOutTrack(cur => {
@@ -490,7 +490,7 @@
         istate = {};
         await writeDirector(); await writeInject();
         // story store (Phase 2) — played marks, starts, endings for this campaign
-        try { if (typeof game.bbttcc?.api?.story?.reset === "function") await game.bbttcc.api.story.reset(campaignId); } catch (e) { console.warn("[reset-console] story reset failed", e); }
+        try { if (typeof game.bbttcc?.api?.campaign?.story?.reset === "function") await game.bbttcc.api.campaign.story.reset(campaignId); } catch (e) { console.warn("[reset-console] story reset failed", e); }
         // quest log + registry statuses
         await fanOutTrack(cur => { cur.active = {}; cur.completed = {}; cur.archived = {}; });
         for (const q of Object.values(questsReg)) if (q && typeof q === "object") q.status = "active";
