@@ -50,6 +50,11 @@
   dstate.firedStoryBeats ||= {}; dstate.dialogueFired ||= {}; dstate.invited ||= {}; dstate.levelPrompts ||= {};
   let istate = clone(getSetting("injectState", {})) || {};
   let questsReg = clone(getSetting("quests", {})) || {};
+  // Phase 2 story store (2026-09-13): executeBeat records EVERY run — travel table, ▶ Run, chain —
+  // in storyState[cid].played. The Director's firedStoryBeats only holds beats the Director picked
+  // itself, so a bridge crossed off the travel table read "0 fired" here (owner, 2026-10-15).
+  const sstate = clone(getSetting("storyState", {})) || {};
+  const playedMarks = (sstate?.[String(campaignId)]?.played && typeof sstate[String(campaignId)].played === "object") ? sstate[String(campaignId)].played : {};
 
   // Coalition factions (campaign.factionIds are UUIDs; primary factionId folded in).
   const factionRefs = [...(Array.isArray(camp.factionIds) ? camp.factionIds : []), ...(camp.factionId ? [camp.factionId] : [])];
@@ -76,6 +81,7 @@
   const firedIds = [...new Set([
     ...Object.keys(dstate.firedStoryBeats),
     ...Object.keys(dstate.dialogueFired),
+    ...Object.keys(playedMarks),
     ...injectBeatIds
   ])].filter(id => beatById.has(id));
   firedIds.sort((a, b) => String(beatById.get(a)?.label || a).localeCompare(String(beatById.get(b)?.label || b)));
@@ -84,6 +90,7 @@
     const src = [];
     if (dstate.firedStoryBeats[id]) src.push(`director${dstate.firedStoryBeats[id]?.turn ? ` T${dstate.firedStoryBeats[id].turn}` : ""}`);
     if (dstate.dialogueFired[id]) src.push("dialogue");
+    if (playedMarks[id]) src.push(`story${playedMarks[id]?.turn ? ` T${playedMarks[id].turn}` : ""}${Number(playedMarks[id]?.n) > 1 ? ` ×${playedMarks[id].n}` : ""}`);
     if (injectBeatIds.has(id)) src.push("injector");
     return src.join(" · ");
   };
@@ -185,6 +192,13 @@
     }
     await writeDirector();
     await writeInject();
+    // Story store: strike the played marks (api.story.forget recomputes starts / endings from what remains).
+    try {
+      const sApi = game.bbttcc?.api?.story;
+      const sIds = ids.filter(id => playedMarks[id]);
+      if (sIds.length && typeof sApi?.forget === "function") { await sApi.forget(sIds, campaignId); for (const id of sIds) delete playedMarks[id]; }
+      else if (sIds.length) console.warn("[reset-console] game.bbttcc.api.story.forget missing — story marks NOT cleared for", sIds);
+    } catch (e) { console.warn("[reset-console] story forget failed", e); }
     // Per-beat quest progress marks (seen/completed) — every bucket, every faction.
     await fanOutTrack(cur => {
       for (const bk of BUCKETS) for (const entry of Object.values(cur[bk] || {})) {
@@ -339,7 +353,7 @@
         if (!ids.length) return say("no beats selected.");
         const n = await reArmBeats(ids);
         for (const cb of root.querySelectorAll(".rc-beat")) if (ids.includes(cb.value)) cb.closest(".rc-row").remove();
-        say(`↺ re-armed ${n} beat(s) — director marks, dialogue consumption, injector gates, and quest beat-marks cleared.`);
+        say(`↺ re-armed ${n} beat(s) — director marks, dialogue consumption, story store, injector gates, and quest beat-marks cleared.`);
         ui.notifications.info(`Re-armed ${n} beat(s).`);
       };
       const selBtn = root.querySelector(".rc-beats-selected");
@@ -475,6 +489,8 @@
         dstate = { firedStoryBeats: {}, dialogueFired: {}, invited: {}, levelPrompts: {}, lastStoryTurn: 0, stewardLevelFloor: 0, factionTierFloor: 0, pressure: 0 };
         istate = {};
         await writeDirector(); await writeInject();
+        // story store (Phase 2) — played marks, starts, endings for this campaign
+        try { if (typeof game.bbttcc?.api?.story?.reset === "function") await game.bbttcc.api.story.reset(campaignId); } catch (e) { console.warn("[reset-console] story reset failed", e); }
         // quest log + registry statuses
         await fanOutTrack(cur => { cur.active = {}; cur.completed = {}; cur.archived = {}; });
         for (const q of Object.values(questsReg)) if (q && typeof q === "object") q.status = "active";

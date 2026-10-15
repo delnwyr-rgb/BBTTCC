@@ -393,10 +393,11 @@ function filterBeats(campaign, searchRaw = "", typeFilter = "all", turnFilter = 
       if (String(st) !== String(questStatusFilter).toLowerCase()) continue;
     }
 if (q) {
-      const id = String(beat.id || "").toLowerCase();
-      const lbl = String(beat.label || "").toLowerCase();
-      const tt = t.toLowerCase();
-      if (!id.includes(q) && !lbl.includes(q) && !tt.includes(q)) continue;
+      // Word match (2026-10-15): every typed word must appear somewhere in id + label + type,
+      // in any order — "bridge broken" finds "Broken Bridge" just like "broken bridge" does.
+      const hay = `${String(beat.id || "")} ${String(beat.label || "")} ${String(t || "")}`.toLowerCase();
+      const words = q.split(/\s+/).filter(Boolean);
+      if (!words.every(w => hay.includes(w))) continue;
     }
 
     out.push({ beat, n: i + 1 });
