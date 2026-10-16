@@ -58,7 +58,7 @@ for (const b of beats) for (const t of targetsOf(b)) incoming.set(t, (incoming.g
 
 /* ── markdown parsing (the export format) ──────────────────────────────────── */
 const HEAD = /^#### (.*?) \(([^)]*`[^`]+`[^)]*)\)(.*)$/;   // label (`id`[, `id`…]) — meta; the ×8 "Filed" heading lists eight ids
-const GEN_MARK = /^\*\*(Step|Door|Arrival|After|Also in this quest|Chapter)\b.*\*\*\s*$/;
+const GEN_MARK = /^\*\*(Step|Door|Arrival|After|Also in this quest|Also here|Chapter)\b.*\*\*\s*$/;   // markers this tool regenerates (never carried over)
 const ANY_MARK = /^\*\*[^*]+\*\*\s*$/;
 function parseTab(md) {
   // The engine's export spells edit-fragmented bold as "**So****,**** ****i****n**…" (adjacent bold runs); the
@@ -149,15 +149,19 @@ function walkScript(key, memberIds) {
     for (const d of (sc.doors || [])) for (const b of (d.beats || [])) designated.add(b);
     for (const b of (sc.after || [])) designated.add(b);
   }
-  const dfs = (id, marker) => {
+  // A beat's routed continuations follow it in choice order. Beats that belong to the SAME step/door/arrival
+  // entry may be walked into (so "intro → listen → survey → crew → read → fetch Plumb → tally" reads in menu
+  // order); other designated beats wait for their own slot.
+  const dfs = (id, marker, allow = EMPTY) => {
     if (!mem.has(id) || placed.has(id)) return;
     placed.add(id); out.push({ id, marker }); marker = undefined;
-    for (const t of targetsOf(byId.get(id))) if (mem.has(t) && !placed.has(t) && !designated.has(t)) dfs(t);
+    for (const t of targetsOf(byId.get(id))) if (mem.has(t) && !placed.has(t) && (!designated.has(t) || allow.has(t))) dfs(t, undefined, allow);
   };
+  const EMPTY = new Set();
   if (sc) {
-    for (const st of (sc.arrival?.steps || [])) { let m = `**Arrival · ${st.label || st.id}**`; for (const b of (st.beats || [])) { if (mem.has(b) && !placed.has(b)) { dfs(b, m); m = undefined; } } }
-    for (const st of (sc.steps || [])) { let m = `**Step · ${st.label || st.id}**`; for (const b of (st.beats || [])) { if (mem.has(b) && !placed.has(b)) { dfs(b, m); m = undefined; } } }
-    for (const d of (sc.doors || [])) { let m = `**Door · ${d.label || d.id}**`; for (const b of (d.beats || [])) { if (mem.has(b) && !placed.has(b)) { dfs(b, m); m = undefined; } } }
+    for (const st of (sc.arrival?.steps || [])) { let m = `**Arrival · ${st.label || st.id}**`; const allow = new Set(st.beats || []); for (const b of (st.beats || [])) { if (mem.has(b) && !placed.has(b)) { dfs(b, m, allow); m = undefined; } } }
+    for (const st of (sc.steps || [])) { let m = `**Step · ${st.label || st.id}**`; const allow = new Set(st.beats || []); for (const b of (st.beats || [])) { if (mem.has(b) && !placed.has(b)) { dfs(b, m, allow); m = undefined; } } }
+    for (const d of (sc.doors || [])) { let m = `**Door · ${d.label || d.id}**`; const allow = new Set(d.beats || []); for (const b of (d.beats || [])) { if (mem.has(b) && !placed.has(b)) { dfs(b, m, allow); m = undefined; } } }
     { let m = "**After**"; for (const b of (sc.after || [])) { if (mem.has(b) && !placed.has(b)) { dfs(b, m); m = undefined; } } }
   }
   // leftovers: grouped by registry quest (chapters first keep the main quest's registry id first), roots first
