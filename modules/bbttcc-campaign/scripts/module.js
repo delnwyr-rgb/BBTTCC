@@ -6131,7 +6131,7 @@ async function directorTick(opts = {}) {
         });
         await _postTalkInvitation(speaker, [pick]);
         log(`[director] invitation posted for '${pick.id}' via ${speaker.name} on turn ${turn}.`);
-        return { fired: null, invited: pick.id, speaker: speaker.name, turn };
+        return { fired: null, invited: pick.id, speaker: _npcDisplayName(speaker) || speaker.name, turn };
       }
       // Speaker actor missing (deleted?) — fall through to a normal fire.
     }
@@ -6674,7 +6674,7 @@ async function dialogueEnact(opts = {}) {
 
     // GM log whisper (transcript excerpt when provided).
     try {
-      const speakerName = (speakerActorId && game.actors?.get?.(speakerActorId)?.name) || beat.speakerActorId || "NPC";
+      const speakerName = (speakerActorId && _npcDisplayName(speakerActorId)) || beat.speakerActorId || "NPC";
       const tx = Array.isArray(opts.transcript) ? opts.transcript.join("<br>") : String(opts.transcript || "").trim();
       await ChatMessage.create({
         whisper: game.users.filter(u => u.isGM).map(u => u.id),
@@ -6862,6 +6862,27 @@ function _onBeatResolvedStoryMark({ beat } = {}) {
 // door open…"), Act-2 conversation lines are full sentences that start with the
 // speaker's name — the card printed "Father Tamsin Father Tamsin keeps…". If the
 // line already names the speaker, render it alone.
+// NPC ALIAS (2026-10-16, Gully/Dougan): an actor may wear a name until a story
+// beat has been played — flags["bbttcc-campaign"].alias = { name, untilMark }
+// (untilMark = a beat id or a list; any of them played = the true name is out).
+// Every player-facing surface that prints a speaker's name goes through here;
+// the Talk window (bbttcc-mal-voice) reaches it as api.campaign.npcName(actor).
+function _npcDisplayName(actor) {
+  try {
+    const a = (typeof actor === "string") ? game.actors?.get?.(actor) : actor;
+    if (!a) return "";
+    const alias = a.getFlag?.(MOD_ID, "alias") || a.flags?.[MOD_ID]?.alias || null;
+    const nm = String(alias?.name || "").trim();
+    if (!nm) return String(a.name || "");
+    const until = [].concat(alias?.untilMark ?? alias?.untilMarks ?? []).map(s => String(s || "").trim()).filter(Boolean);
+    if (until.length) {
+      const cid = getActiveCampaignId();
+      const played = cid ? (_storyStateFor(cid)?.played || {}) : {};
+      if (until.some(id => played[id])) return String(a.name || "");
+    }
+    return nm;
+  } catch (_e) { return String(actor?.name || ""); }
+}
 function _inviteNameMatch(a, b) {   // "caulder" ≈ "calder", "sable" = "sable"; short words must match exactly
   if (a === b) return true;
   if (a.length < 4 || b.length < 4) return false;
@@ -6872,17 +6893,18 @@ function _inviteNameMatch(a, b) {   // "caulder" ≈ "calder", "sable" = "sable"
 }
 function _inviteLine(actor, inviteText) {
   const text = String(inviteText || "").trim() || "wants a word.";
-  const words = String(actor?.name || "").toLowerCase().split(/[\s,'’-]+/).filter(w => w.length > 2);
+  const shown = _npcDisplayName(actor) || String(actor?.name || "");   // alias-aware (2026-10-16)
+  const words = String(shown).toLowerCase().split(/[\s,'’-]+/).filter(w => w.length > 2);
   const head = text.toLowerCase().split(/[\s,'’]+/).slice(0, 4).map(w => w.replace(/[^a-z0-9]/g, ""));
   const namesItself = words.some(w => head.some(h => _inviteNameMatch(w, h)));
-  return { text, html: namesItself ? foundry.utils.escapeHTML(text) : `<b>${foundry.utils.escapeHTML(String(actor?.name || ""))}</b> ${foundry.utils.escapeHTML(text)}`, plain: namesItself ? text : `${actor?.name || ""} ${text}` };
+  return { text, html: namesItself ? foundry.utils.escapeHTML(text) : `<b>${foundry.utils.escapeHTML(String(shown))}</b> ${foundry.utils.escapeHTML(text)}`, plain: namesItself ? text : `${shown} ${text}` };
 }
 // "A Word from X" ×2 per NPC was indistinguishable in the Quest Log (owner,
 // 2026-09-09). The beat's own label, minus the town prefix and the speaker's
 // name, tells them apart; generic "Conversation"/"Chat with" labels fall back
 // to the act.
 function _inviteQuestName(actor, beat) {
-  const name = String(actor?.name || "Someone");
+  const name = String(_npcDisplayName(actor) || actor?.name || "Someone");   // alias-aware (2026-10-16)
   // Town prefix = everything up to the first SPACED dash ("Allesh-Gilliam — …", "Khezek-Tor - …").
   const short = String(beat?.label || "").replace(/^.+?\s[—–-]\s+/, "").trim();
   const generic = !short || /\b(conversation|convo)\s*$/i.test(short) || /^(chat|talk)\b/i.test(short);
@@ -7479,10 +7501,10 @@ async function _gmPromptTalkInvite(beat, speaker, turn) {
     new Dialog({
       title: "Bad Eden: Story Director",
       content: `
-        <p><b>Story Director</b> — Turn ${turn}: a story moment is live, carried by <b>${foundry.utils.escapeHTML(speaker?.name || "an NPC")}</b>.</p>
+        <p><b>Story Director</b> — Turn ${turn}: a story moment is live, carried by <b>${foundry.utils.escapeHTML(_npcDisplayName(speaker) || "an NPC")}</b>.</p>
         <p style="margin:4px 0"><b>${beat?.label || beat?.id}</b>${chain ? ` <span style="opacity:.7">(chain: ${chain})</span>` : ""}</p>
         ${_ledgerOfferPriceLine(beat)}
-        <p style="opacity:.8;font-size:.9em">Speaker beats play out in conversation, not narration. Post a public "${foundry.utils.escapeHTML(speaker?.name || "NPC")} wants a word" invitation? (Declining rests this moment — and its chain — until the next world turn; it stays quietly available in dialogue.)</p>`,
+        <p style="opacity:.8;font-size:.9em">Speaker beats play out in conversation, not narration. Post a public "${foundry.utils.escapeHTML(_npcDisplayName(speaker) || "NPC")} wants a word" invitation? (Declining rests this moment — and its chain — until the next world turn; it stays quietly available in dialogue.)</p>`,
       buttons: {
         invite:  { icon: '<i class="fas fa-comments"></i>', label: "Invite",  callback: () => resolve(true) },
         decline: { icon: '<i class="fas fa-clock"></i>',    label: "Not now", callback: () => resolve(false) }
@@ -9440,6 +9462,7 @@ Hooks.once("ready", () => {
     // (or a courier miss) can eat a mirror the players still need. One call
     // puts it back.
     game.bbttcc.api.campaign.expandStoryTokens = (text) => _expandStoryTokens(text);   // {{coalition.hexCount}} etc. (2026-10-05)
+    game.bbttcc.api.campaign.npcName = (actorOrId) => _npcDisplayName(actorOrId);        // NPC alias until a beat is played (2026-10-16)
     game.bbttcc.api.campaign.remirrorBeatDialog = async () => {
       try {
         const beat = __bbttccCurrentBeatDialogBeat;

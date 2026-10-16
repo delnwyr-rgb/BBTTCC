@@ -44,6 +44,13 @@
  */
 
 const MODULE_ID = "bbttcc-mal-voice";
+// NPC alias (2026-10-16): the campaign engine may have an actor wearing a name
+// until a story beat is played (flags.bbttcc-campaign.alias — Gully/Dougan).
+// Every name the players can SEE in this window goes through here.
+function _displayName(actor) {
+  try { const n = game.bbttcc?.api?.campaign?.npcName?.(actor); if (n) return String(n); } catch (_e) {}
+  return String(actor?.name || "");
+}
 const TAG = "[mal-voice:npc]";
 const log  = (...a) => console.log(TAG, ...a);
 const warn = (...a) => console.warn(TAG, ...a);
@@ -723,6 +730,9 @@ function _buildPersonaPrompt(actor, lore = null, state = null, dossier = null) {
   facts.push(..._identityFromItems(actor));
   if (tags)        facts.push(`Tags: ${tags}`);
   facts.push(`Rough power tier: ${tier} (express through demeanor, never numbers)`);
+  // NPC alias (2026-10-16): wearing a name until a beat is played — the voice
+  // knows its true name and holds it back the way the authored beats do.
+  try { const shown = _displayName(actor); if (shown && shown !== name) facts.push(`THE NAME YOU GO BY: "${shown}". Your true name, ${name}, is NOT something these people have earned yet — introduce yourself and sign off as ${shown}; if asked for your real name, say they'll see if they earn it. Never let "${name}" slip.`); } catch (_eAl) {}
   if (sceneName)   facts.push(`Current scene: ${sceneName}`);
 
   const worldLore = (lore === null) ? _gatherWorldLore(actor, { state }) : String(lore || "");
@@ -899,7 +909,7 @@ function _defineAppClass() {
         this._storyState = await _storyState(this.actor);
         this._lore = _gatherWorldLore(this.actor, { state: this._storyState });
         this._dossier = _gatherDossier(this.actor, { state: this._storyState });
-        log(`world lore for '${this.actor.name}': ${this._lore.length} chars, dossier: ${this._dossier.length} chars` +
+        log(`world lore for '${_displayName(this.actor)}': ${this._lore.length} chars, dossier: ${this._dossier.length} chars` +
             (this._storyState ? " (story-state gated)" : " (no story state API — ungated)"));
       }
       const root = document.createElement("div");
@@ -911,7 +921,7 @@ function _defineAppClass() {
       header.innerHTML = `
         <img src="${_esc(this.actor.img || "icons/svg/mystery-man.svg")}" style="width:36px;height:36px;object-fit:cover;border:1px solid #666;border-radius:4px;flex:0 0 auto;"/>
         <div style="flex:1;min-width:0;">
-          <div style="font-weight:bold;">${_esc(this.actor.name)}</div>
+          <div style="font-weight:bold;">${_esc(_displayName(this.actor))}</div>
           <div style="font-size:.75em;opacity:.65;">${_esc(_npcRole(this.actor.system?.system ?? this.actor.system ?? {}) || "…is listening.")}</div>
         </div>`;
       if (game.user.isGM) {
@@ -961,7 +971,7 @@ function _defineAppClass() {
       inputRow.style.cssText = "display:flex;gap:.4em;flex:0 0 auto;align-items:flex-end;";
       const input = document.createElement("textarea");
       input.rows = 2;
-      input.placeholder = `Speak to ${this.actor.name}… (Enter to send, Shift+Enter for a new line)`;
+      input.placeholder = `Speak to ${_displayName(this.actor)}… (Enter to send, Shift+Enter for a new line)`;
       input.style.cssText = "flex:1;resize:none;";
       input.addEventListener("keydown", (ev) => {
         if (ev.key === "Enter" && !ev.shiftKey) { ev.preventDefault(); this._send(); }
@@ -1036,7 +1046,7 @@ function _defineAppClass() {
       wrap.style.cssText = `max-width:85%;align-self:${isNpc ? "flex-start" : "flex-end"};`;
       const label = document.createElement("div");
       label.style.cssText = "font-size:.68em;opacity:.55;margin:0 .2em .1em;";
-      label.textContent = isNpc ? this.actor.name : (speaker || game.user.name);
+      label.textContent = isNpc ? _displayName(this.actor) : (speaker || game.user.name);
       const body = document.createElement("div");
       body.style.cssText = isNpc
         ? "border-left:3px solid #4db8b0;background:rgba(77,184,176,.10);padding:.35em .55em;border-radius:0 6px 6px 0;white-space:pre-wrap;"
@@ -1066,7 +1076,7 @@ function _defineAppClass() {
       if (!text) return;
       try {
         await ChatMessage.create({
-          speaker: ChatMessage.getSpeaker({ actor: this.actor, alias: this.actor.name }),
+          speaker: ChatMessage.getSpeaker({ actor: this.actor, alias: _displayName(this.actor) }),
           content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4db8b0;padding:.4em .6em;background:rgba(77,184,176,.08);font-style:italic">${_esc(text)}</div>`,
           flags: { [MODULE_ID]: { npcDialogue: this.actor.id } }
         });
@@ -1199,17 +1209,17 @@ How to handle them:
       const api = game.bbttcc?.api?.campaign?.dialogue;
       if (!api?.enact) return ui.notifications?.warn?.("Campaign dialogue API not available.");
       const choices = await this._availableChoices();
-      if (!choices.length) return ui.notifications?.info?.(`${this.actor.name} holds no live story moments right now.`);
+      if (!choices.length) return ui.notifications?.info?.(`${_displayName(this.actor)} holds no live story moments right now.`);
       const DialogV2 = foundry.applications?.api?.DialogV2;
       const options = choices.map(c =>
         `<option value="${_esc(c.choiceKey)}">${_esc(c.beatLabel || c.beatId)} — ${_esc(c.label)}</option>`).join("");
-      const content = `<p style="font-size:.85em;opacity:.8;">Enact which moment through <b>${_esc(this.actor.name)}</b>? (Runs the real pipeline; the NPC then closes the scene in character.)</p>
+      const content = `<p style="font-size:.85em;opacity:.8;">Enact which moment through <b>${_esc(_displayName(this.actor))}</b>? (Runs the real pipeline; the NPC then closes the scene in character.)</p>
         <select name="choiceKey" style="width:100%;">${options}</select>`;
       let picked = null;
       try {
         if (DialogV2?.wait) {
           picked = await DialogV2.wait({
-            window: { title: `Story moment — ${this.actor.name}` }, content,
+            window: { title: `Story moment — ${_displayName(this.actor)}` }, content,
             buttons: [
               { action: "fire", label: "Enact", icon: "fa-solid fa-bolt", default: true,
                 callback: (_ev, button) => String(button.form?.elements?.choiceKey?.value || "") },
@@ -1279,7 +1289,7 @@ How to handle them:
 
     async _confirmEnact(choice) {
       const DialogV2 = foundry.applications?.api?.DialogV2;
-      const content = `<p><b>${_esc(this.actor.name)}</b> wants to enact:</p><p style="margin:.3em 0;"><b>${_esc(choice.label)}</b>${choice.description ? `<br><span style="font-size:.85em;opacity:.8;">${_esc(choice.description)}</span>` : ""}</p>`;
+      const content = `<p><b>${_esc(_displayName(this.actor))}</b> wants to enact:</p><p style="margin:.3em 0;"><b>${_esc(choice.label)}</b>${choice.description ? `<br><span style="font-size:.85em;opacity:.8;">${_esc(choice.description)}</span>` : ""}</p>`;
       try {
         if (DialogV2?.confirm) return !!(await DialogV2.confirm({ window: { title: "Enact story moment?" }, content }));
         return !!(await Dialog.confirm({ title: "Enact story moment?", content }));
@@ -1293,7 +1303,7 @@ How to handle them:
           whisper: gmIds,
           content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #b8974d;padding:.4em .6em;background:rgba(184,151,77,.08);">
             <b>Story moment awaiting approval</b><br>
-            <b>${_esc(this.actor.name)}</b> → <i>${_esc(choice.label)}</i><br>
+            <b>${_esc(_displayName(this.actor))}</b> → <i>${_esc(choice.label)}</i><br>
             ${choice.description ? `<span style="font-size:.85em;opacity:.8;">${_esc(choice.description)}</span><br>` : ""}
             <button type="button" data-bbttcc-enact="approve" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-check"></i> Enact</button>
             <button type="button" data-bbttcc-enact="decline" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-xmark"></i> Decline</button>
@@ -1383,7 +1393,7 @@ How to guard them:
       if (!factions.length) { ui.notifications?.warn?.("No faction actors exist to receive the secret."); return null; }
       const opts = factions.map(f => `<option value="${_esc(f.id)}"${faction?.id === f.id ? " selected" : ""}>${_esc(f.name)}</option>`).join("");
       const content = `
-        <p><b>${_esc(this.actor.name)}</b> is ready to divulge <b>${_esc(def.label)}</b>.</p>
+        <p><b>${_esc(_displayName(this.actor))}</b> is ready to divulge <b>${_esc(def.label)}</b>.</p>
         <p style="font-size:.85em;opacity:.85;margin:.3em 0;"><em>${_esc(def.truth)}</em></p>
         <p style="font-size:.8em;opacity:.7;margin:.3em 0;">Condition: ${_esc(def.condition)} — model judged it met (${_esc(method)}).<br>Effect if granted: ${_esc(_secretsApi()?.describeEffect?.(def.effectKey) || def.effectKey)}</p>
         <div class="form-group"><label>Leverage goes to</label><select name="factionId" style="width:100%;">${opts}</select></div>`;
@@ -1391,7 +1401,7 @@ How to guard them:
       try {
         if (DialogV2?.wait) {
           const r = await DialogV2.wait({
-            window: { title: `Divulge secret — ${this.actor.name}` },
+            window: { title: `Divulge secret — ${_displayName(this.actor)}` },
             position: { width: 440 },
             content,
             buttons: [
@@ -1417,7 +1427,7 @@ How to guard them:
           whisper: gmIds,
           content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #7a4db8;padding:.4em .6em;background:rgba(122,77,184,.08);">
             <b>Secret divulged — leverage awaiting approval</b><br>
-            <b>${_esc(this.actor.name)}</b> gave up <i>${_esc(def.label)}</i> to ${_esc(speakerName)} <small style="opacity:.7;">(model judged: ${_esc(method)})</small><br>
+            <b>${_esc(_displayName(this.actor))}</b> gave up <i>${_esc(def.label)}</i> to ${_esc(speakerName)} <small style="opacity:.7;">(model judged: ${_esc(method)})</small><br>
             <span style="font-size:.85em;opacity:.85;"><em>${_esc(def.truth)}</em></span><br>
             <span style="font-size:.8em;opacity:.7;">Condition: ${_esc(def.condition)}${rationale ? ` — ${_esc(rationale)}` : ""}</span><br>
             <span style="font-size:.8em;opacity:.7;">Effect if granted: ${_esc(_secretsApi()?.describeEffect?.(def.effectKey) || def.effectKey)}. The NPC has already said the words — granting only attaches the leverage.</span><br>
@@ -1507,12 +1517,12 @@ How to hold them:
       const factions = _allFactions();
       if (!factions.length) { ui.notifications?.warn?.("No faction actors exist to learn the recipe."); return null; }
       const opts = factions.map(f => `<option value="${_esc(f.id)}"${faction?.id === f.id ? " selected" : ""}>${_esc(f.name)}</option>`).join("");
-      const content = `<p><b>${_esc(this.actor.name)}</b> is ready to teach <b>${_esc(def.label)}</b>.</p>
+      const content = `<p><b>${_esc(_displayName(this.actor))}</b> is ready to teach <b>${_esc(def.label)}</b>.</p>
         <p style="font-size:.8em;opacity:.7;margin:.3em 0;">Condition: ${_esc(def.condition)} — model judged it met.</p>
         <div class="form-group"><label>The recipe goes to</label><select name="factionId" style="width:100%;">${opts}</select></div>`;
       try {
         if (DialogV2?.wait) {
-          const r = await DialogV2.wait({ window: { title: `Teach recipe — ${this.actor.name}` }, position: { width: 420 }, content,
+          const r = await DialogV2.wait({ window: { title: `Teach recipe — ${_displayName(this.actor)}` }, position: { width: 420 }, content,
             buttons: [ { action: "teach", label: "Teach", icon: "fa-solid fa-book-open", default: true, callback: (_ev, button) => ({ factionId: String(button.form?.elements?.factionId?.value || "") }) },
                        { action: "withhold", label: "Withhold", callback: () => null } ] }).catch(() => null);
           return (r && typeof r === "object" && r.factionId) ? r : null;
@@ -1529,7 +1539,7 @@ How to hold them:
         await ChatMessage.create({ whisper: gmIds,
           content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4d8fb8;padding:.4em .6em;background:rgba(77,143,184,.08);">
             <b>Recipe offered — awaiting approval</b><br>
-            <b>${_esc(this.actor.name)}</b> began teaching <i>${_esc(def.label)}</i> to ${_esc(speakerName)}<br>
+            <b>${_esc(_displayName(this.actor))}</b> began teaching <i>${_esc(def.label)}</i> to ${_esc(speakerName)}<br>
             <span style="font-size:.8em;opacity:.7;">Condition: ${_esc(def.condition)}${rationale ? ` — ${_esc(rationale)}` : ""}</span><br>
             ${factions.length ? `<label style="font-size:.8em;">Recipe to <select name="bbttccTeachFaction" style="width:auto;max-width:60%;">${opts}</select></label><br>` : ""}
             <button type="button" data-bbttcc-teach="teach" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-book-open"></i> Teach</button>
@@ -1603,14 +1613,14 @@ How to hold it:
       if (!factions.length) { ui.notifications?.warn?.("No faction actors exist to walk through the door."); return null; }
       const opts = factions.map(f => `<option value="${_esc(f.id)}"${faction?.id === f.id ? " selected" : ""}>${_esc(f.name)}</option>`).join("");
       const content = `
-        <p><b>${_esc(this.actor.name)}</b> is ready to open the court door into <b>${_esc(door.defender.name)}</b>.</p>
+        <p><b>${_esc(_displayName(this.actor))}</b> is ready to open the court door into <b>${_esc(door.defender.name)}</b>.</p>
         <p style="font-size:.8em;opacity:.7;margin:.3em 0;">Condition: ${_esc(door.condition)} — model judged it met (${_esc(method)}).<br>Invited = +2 on the first exchange. Conceded = +1, and Suspicion starts at 1.</p>
         <div class="form-group"><label>Entering faction (attacker)</label><select name="factionId" style="width:100%;">${opts}</select></div>`;
       const read = (button, m) => ({ factionId: String(button.form?.elements?.factionId?.value || ""), method: m });
       try {
         if (DialogV2?.wait) {
           const r = await DialogV2.wait({
-            window: { title: `Court door — ${this.actor.name}` },
+            window: { title: `Court door — ${_displayName(this.actor)}` },
             position: { width: 440 },
             content,
             buttons: [
@@ -1636,7 +1646,7 @@ How to hold it:
           whisper: gmIds,
           content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4db87a;padding:.4em .6em;background:rgba(77,184,122,.08);">
             <b>Court door — entry awaiting approval</b><br>
-            <b>${_esc(this.actor.name)}</b> would usher ${_esc(speakerName)} into <b>${_esc(door.defender.name)}</b>'s court <small style="opacity:.7;">(model judged: ${_esc(method)})</small><br>
+            <b>${_esc(_displayName(this.actor))}</b> would usher ${_esc(speakerName)} into <b>${_esc(door.defender.name)}</b>'s court <small style="opacity:.7;">(model judged: ${_esc(method)})</small><br>
             <span style="font-size:.8em;opacity:.7;">Condition: ${_esc(door.condition)}${rationale ? ` — ${_esc(rationale)}` : ""}</span><br>
             <span style="font-size:.8em;opacity:.7;">Invited = +2 on the first exchange. Conceded = +1, and Suspicion starts at 1. The NPC has already spoken the way open — granting stamps the entry; the raid itself still begins from the Raid Console.</span><br>
             ${factions.length ? `<label style="font-size:.8em;">Entering faction <select name="bbttccCourtDoorFaction" style="width:auto;max-width:60%;">${opts}</select></label><br>` : ""}
@@ -1681,7 +1691,7 @@ How to hold it:
         const mySide = myFaction?.id === A.id ? "A" : myFaction?.id === D.id ? "D" : null;
         if (!isCourtier && !mySide) {
           // Validation eyes: distinguish "not fired" from "fired but subtle".
-          log(`courtly scenario ongoing, but '${this.actor.name}' is NOT in that room (token not tableau-flagged; faction ${myFaction ? `'${myFaction.name}'` : "none"} is not a side) — no board section`);
+          log(`courtly scenario ongoing, but '${_displayName(this.actor)}' is NOT in that room (token not tableau-flagged; faction ${myFaction ? `'${myFaction.name}'` : "none"} is not a side) — no board section`);
           return null;
         }
         return { sc, st, A, D, mySide };
@@ -1803,7 +1813,7 @@ Every word of this conversation lands inside the engagement above — and courts
           whisper: gmIds,
           content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #d0a04a;padding:.4em .6em;background:rgba(208,160,74,.08);">
             <b>The court notices? — awaiting the GM's read</b><br>
-            <b>${_esc(this.actor.name)}</b> judges the room caught a misstep <small style="opacity:.7;">(model judged: ${_esc(severity)}, +${amount})</small><br>
+            <b>${_esc(_displayName(this.actor))}</b> judges the room caught a misstep <small style="opacity:.7;">(model judged: ${_esc(severity)}, +${amount})</small><br>
             ${line ? `<em style="font-size:.85em;">"${_esc(line)}"</em><br>` : ""}
             <span style="font-size:.8em;opacity:.7;">Applies to the live courtly scenario on YOUR client via raiseSuspicion.</span><br>
             <button type="button" data-bbttcc-court-notice="murmur" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-eye"></i> Murmur (+1)</button>
@@ -1820,7 +1830,7 @@ Every word of this conversation lands inside the engagement above — and courts
 
     async _confirmCourtNotice(severity, amount, line) {
       const DialogV2 = foundry.applications?.api?.DialogV2;
-      const content = `<p><b>${_esc(this.actor.name)}</b> judges the room caught a misstep${line ? `:<br><em style="font-size:.85em;">"${_esc(line)}"</em>` : "."}</p>
+      const content = `<p><b>${_esc(_displayName(this.actor))}</b> judges the room caught a misstep${line ? `:<br><em style="font-size:.85em;">"${_esc(line)}"</em>` : "."}</p>
         <p style="font-size:.8em;opacity:.7;margin:.3em 0;">${severity === "stir" ? "An open blunder" : "A small lapse"} — Suspicion +${amount}.</p>`;
       try {
         if (DialogV2?.confirm) return !!(await DialogV2.confirm({ window: { title: "The court notices?" }, content }));
@@ -1844,7 +1854,7 @@ Every word of this conversation lands inside the engagement above — and courts
       // Player seats speak through the GM's seat (owner ruling 2026-10-02) —
       // with no GM connected, nobody picks up. No call; the typed line stays.
       if (!isGM && !provider.gmOnline?.()) {
-        this._bubble("assistant", `(${this.actor.name} doesn't answer — the line is dead. NPC voices speak through the GM's seat, and no GM is connected.)`, { system: true });
+        this._bubble("assistant", `(${_displayName(this.actor)} doesn't answer — the line is dead. NPC voices speak through the GM's seat, and no GM is connected.)`, { system: true });
         return;
       }
 
@@ -1892,7 +1902,7 @@ Every word of this conversation lands inside the engagement above — and courts
         if (live) {
           const favA = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[live.A.id] ?? 0);
           const favD = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[live.D.id] ?? 0);
-          log(`courtly board INJECTED for '${this.actor.name}' — round ${live.st.round}, influence ${live.st.influenceA}/${live.st.influenceD}, suspicion ${live.st.suspicion}, favor A:${favA} D:${favD}${live.sc ? ", court_notices armed (direct)" : ", court_notices armed (routes via GM card)"}`);
+          log(`courtly board INJECTED for '${_displayName(this.actor)}' — round ${live.st.round}, influence ${live.st.influenceA}/${live.st.influenceD}, suspicion ${live.st.suspicion}, favor A:${favA} D:${favD}${live.sc ? ", court_notices armed (direct)" : ", court_notices armed (routes via GM card)"}`);
           const board = this._courtlyBoardSection(live);
           if (board) system.push({ text: board });
           // Direct apply where the scenario object lives; on snapshot
@@ -1940,7 +1950,7 @@ Every word of this conversation lands inside the engagement above — and courts
         });
 
         if (!res.ok) {
-          npcBubble.textContent = _relayFailureLine(this.actor.name, res)
+          npcBubble.textContent = _relayFailureLine(_displayName(this.actor), res)
             || `(…the words don't come. ${res.error}: ${res.message || ""})`;
           npcBubble.style.opacity = ".55";
         } else {
