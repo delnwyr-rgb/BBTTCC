@@ -2206,6 +2206,18 @@ function _ftSkillKeyFor(stat) {
   return _FT_SKILL_ALIASES[s] || s;
 }
 
+// SECRET CHECKS (2026-10-15, owner ask: "rolled in secret — the players have to NOTICE it, not be told"): a
+// choice authored `secret: true` rolls GM-only — the system's chat card goes out as a blind roll (core rollMode
+// flipped to blindroll for the duration of the roll, then restored), the SUCCESS/FAIL toast is marked 🤫 and
+// stays on the GM client, and a miss does NOT re-offer the menu (the re-offer is a tell). Author the hit and the
+// miss beats to read alike — same label, same exits — and let only the hit set the mark downstream gates read.
+async function _withSecretRollMode(choice, fn) {
+  if (!choice || choice.secret !== true) return fn();
+  let prev = null; try { prev = game.settings.get("core", "rollMode"); } catch (_e) {}
+  try { await game.settings.set("core", "rollMode", "blindroll"); } catch (_e) {}
+  try { return await fn(); }
+  finally { try { if (prev != null) await game.settings.set("core", "rollMode", prev); } catch (_e) {} }
+}
 async function _rollChoiceCheck(choice, ctx={}) {
   const stat = String(choice.checkStat || "").trim().toLowerCase();
   const dc = _num(choice.checkDC, 0);
@@ -2259,7 +2271,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
         const ftSys = actor.system?.system ?? actor.system;
         const ftKey = _ftSkillKeyFor(stat);
         if (ftSys?.skills && ftKey && ftSys.skills[ftKey]) {
-          const r = await ftRolls.skillCheck(actor, { skill: ftKey });
+          const r = await _withSecretRollMode(choice, () => ftRolls.skillCheck(actor, { skill: ftKey }));
           const total = _num(r?.total, 0) + supportBonus;
           return { kind:"actor", subkind:"ft-skill", stat, skill:ftKey, dc, actorName:actor.name, total, ok: total>=dc, roll:r?.roll ?? null, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
         }
@@ -2845,11 +2857,11 @@ ${
 
                 if (res.kind === "op") {
                   ui.notifications?.info?.(
-                    `${label}: ${res.total} (${_ftCanonDie()} + ${res.bonus}) vs DC ${res.dc}  ->  ${res.ok ? "SUCCESS" : "FAIL"}${res.momentumBanked ? ` · +${res.momentumBanked} Momentum` : ""}${res.doubleTen ? " · ✦ Decisive Moment" : ""}`
+                    `${ch.secret === true ? "🤫 secret · " : ""}${label}: ${res.total} (${_ftCanonDie()} + ${res.bonus}) vs DC ${res.dc}  ->  ${res.ok ? "SUCCESS" : "FAIL"}${res.momentumBanked ? ` · +${res.momentumBanked} Momentum` : ""}${res.doubleTen ? " · ✦ Decisive Moment" : ""}`
                   );
                 } else {
                   ui.notifications?.info?.(
-                    `${label}: ${res.total} vs DC ${res.dc}  ->  ${res.ok ? "SUCCESS" : "FAIL"}`
+                    `${ch.secret === true ? "🤫 secret · " : ""}${label}: ${res.total} vs DC ${res.dc}  ->  ${res.ok ? "SUCCESS" : "FAIL"}`
                   );
                 }
 
@@ -2859,7 +2871,7 @@ ${
 
                 try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
                 if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
-                if (!res.ok) await _offerRetryInChain(campaign, beat, ctx);
+                if (!res.ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx);   // a secret miss stands quietly
 
                 finish({
                   acted: true,
@@ -6577,7 +6589,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
       rosterActorId, supportOpKey, supportSpend
     });
     try {
-      ui.notifications?.info?.(`${label}: ${res.total}${res.kind === "op" ? ` (${_ftCanonDie()} + ${res.bonus})` : ""} vs DC ${res.dc}${res.momentumBanked ? ` · +${res.momentumBanked} Momentum` : ""}${res.doubleTen ? " · ✦ Decisive Moment" : ""}  ->  ${res.ok ? "SUCCESS" : "FAIL"}`);
+      ui.notifications?.info?.(`${ch.secret === true ? "🤫 secret · " : ""}${label}: ${res.total}${res.kind === "op" ? ` (${_ftCanonDie()} + ${res.bonus})` : ""} vs DC ${res.dc}${res.momentumBanked ? ` · +${res.momentumBanked} Momentum` : ""}${res.doubleTen ? " · ✦ Decisive Moment" : ""}  ->  ${res.ok ? "SUCCESS" : "FAIL"}`);
     } catch (_eN) {}
     const nextId = res.ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
     try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
