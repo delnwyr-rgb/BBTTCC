@@ -670,6 +670,24 @@
         <input type="number" name="world-radiation-delta" value="{{worldEffects.radiationDelta}}" placeholder="0" />
       </div>
 
+      <div class="form-group" data-tour="beats.stageCue">
+        <label data-tooltip="{{bbttccTip 'beats' 'stageCue'}}">🎬 Stage Cue</label>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; flex:1;">
+          <input type="text" name="world-stagecue-key" list="bbttcc-stagecue-keys" value="{{stageCue.key}}" placeholder="cue key (blank = none)" style="flex:1; min-width:140px;" />
+          <datalist id="bbttcc-stagecue-keys">
+            {{#each stageCueCatalog}}{{#each this.keys}}<option value="{{this.key}}">{{../name}} — {{this.label}}</option>{{/each}}{{/each}}
+          </datalist>
+          <select name="world-stagecue-scene" style="width:auto; max-width:220px;">
+            <option value="" {{#unless stageCue.sceneId}}selected{{/unless}}>(this beat's scene)</option>
+            {{#each stageCueCatalog}}<option value="{{this.id}}" {{#if this.selected}}selected{{/if}}>{{this.name}}</option>{{/each}}
+          </select>
+          <select name="world-stagecue-direction" style="width:auto;">
+            <option value="after" {{#unless (eq stageCue.direction "before")}}selected{{/unless}}>play (A→B)</option>
+            <option value="before" {{#if (eq stageCue.direction "before")}}selected{{/if}}>undo (B→A)</option>
+          </select>
+        </div>
+      </div>
+
       {{!-- Spark Link (Phase B of B3 — beat-driven Tikkun progression).
             When set, resolves through tikkun-beat-listener.enhancer.js into
             the spark API. Spark dropdown lists every item authored in the

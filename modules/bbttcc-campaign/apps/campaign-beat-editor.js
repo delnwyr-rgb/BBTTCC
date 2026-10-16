@@ -152,6 +152,7 @@ const BEATS_HELP = {
   worldEffects: "World Effects — applied when the beat resolves, in engine order: Territory Outcome → Faction deltas → Unlocks → Relationship steps → World Modifiers → Radiation → Turn Requests → War Log; Quest Effects and Casualties follow after.",
   territoryOutcome: "Territory Outcome — hands this key to the Territory/Resolution engine against the run-context hex: Justice Reformation, Liberation, Best Friends Integration, Retribution/Subjugation, or Salt the Earth. The outcome mechanics live in the resolution engine, not the beat.",
   factionEffectsLegacy: "Faction Effects (legacy editor) — hidden and disabled once the Faction GM Effects panel below injects; only that panel's rows are harvested on save (this block stays functional only as a fallback if the panel fails to load).",
+  stageCue: "Stage Cue — plays a recorded before/after scene state (🎬 Stage Cues panel on the Lighting controls: darkness, lights, walls, tiles, animated on every seat) when the beat resolves. Scene defaults to this beat's own Scene, then the viewed scene. Direction 'before' plays the cue backwards (undo). Stored at worldEffects.stageCue = {key, sceneId?, direction?}.",
   radiationDelta: "Radiation Delta — a GLOBAL shift: adjusts Radiation Pressure for everyone (radiation.adjustAll), not one hex. Positive = hotter world.",
   sparkLink: "Spark Link — Tikkun progression. On beat resolution the tikkun listener routes into the spark API: Identify marks the spark known, Acquire gains it, Integrate absorbs it personally, Deposit banks it to the faction. Leave Action blank to disable.",
   sparkLinkSpark: "Spark — which authored spark (bbttcc-tikkun.sparks pack) this beat advances. Both Spark and Action are required or the link saves as disabled.",
@@ -1181,8 +1182,15 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     worldEffects.turnRequests ??= [];
     worldEffects.radiationDelta ??= 0;
     worldEffects.warLog ??= "";
+    // STAGE CUES (2026-10-15): one row — key + scene + direction; catalog = every scene that carries cues
+    const stageCueRaw = Array.isArray(worldEffects.stageCue) ? worldEffects.stageCue[0] : worldEffects.stageCue;
+    const stageCue = (stageCueRaw && typeof stageCueRaw === "object") ? { key: String(stageCueRaw.key || ""), sceneId: String(stageCueRaw.sceneId || ""), direction: String(stageCueRaw.direction || "after") } : { key: "", sceneId: "", direction: "after" };
+    let stageCueCatalog = [];
+    try { stageCueCatalog = (game.bbttcc?.api?.stage?.catalog?.() || []).map(sc => ({ ...sc, selected: sc.id === stageCue.sceneId })); } catch (_eSC) {}
 
     return {
+      stageCue,
+      stageCueCatalog,
       ...data,
       campaignId: this.campaignId,
       beat: this.beat,
@@ -3469,6 +3477,14 @@ _syncCoreFromForm() {
 
     const wl = fd.get("world-warlog");
     if (wl != null) we.warLog = String(wl || "").trim() || "";
+
+    // STAGE CUES (2026-10-15)
+    const scKey = fd.get("world-stagecue-key");
+    if (scKey != null) {
+      const key = String(scKey || "").trim();
+      if (key) we.stageCue = { key, sceneId: String(fd.get("world-stagecue-scene") || "").trim(), direction: String(fd.get("world-stagecue-direction") || "after") === "before" ? "before" : "after" };
+      else delete we.stageCue;
+    }
 
     // --- Outcomes (success/failure fallback routing, Choices tab) ---
     try {

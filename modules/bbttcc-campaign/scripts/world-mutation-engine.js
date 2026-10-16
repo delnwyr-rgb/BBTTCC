@@ -1583,6 +1583,31 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       console.warn(TAG, "hexSpark apply failed", eHS);
     }
 
+    // 2g') STAGE CUES (2026-10-15): worldEffects.stageCue = { key, sceneId?, direction? } (or a LIST).
+    // Plays a recorded before/after scene state (bbttcc-campaign/scripts/stage-cues.js) — darkness,
+    // lights, walls, tiles — animated, on every seat (document updates). Scene resolves sceneId →
+    // the beat's own sceneId → the viewed scene. GM-only: walls/lights/tiles are GM documents; a
+    // player-resolved beat logs a warning and skips (the GM can play the cue from the panel).
+    try {
+      const scList = Array.isArray(we.stageCue) ? we.stageCue : (we.stageCue && typeof we.stageCue === "object" ? [we.stageCue] : []);
+      const stage = get(game, "bbttcc.api.stage", null);
+      if (scList.length && !stage) console.warn(TAG, "stageCue: stage API not available — nothing applied", { beatId: beatCtx.beatId });
+      for (const sc of (stage ? scList : [])) {
+        const key = String(sc?.key || "").trim();
+        if (!key) { console.warn(TAG, "stageCue: row has no key", sc); continue; }
+        if (!game.user?.isGM) { console.warn(TAG, "stageCue: not GM — skipped", { key, beatId: beatCtx.beatId }); notes.push("stageCue:skipped(not-gm)"); continue; }
+        const scene = stage.resolveScene(String(sc.sceneId || beat.sceneId || "").trim() || null);
+        if (!scene) { console.warn(TAG, "stageCue: scene not found", { sceneId: sc.sceneId, beatSceneId: beat.sceneId, key }); continue; }
+        if (!stage.get(scene, key)) { console.warn(TAG, "stageCue: no such cue on scene", { scene: scene.name, key, beatId: beatCtx.beatId }); continue; }
+        const direction = String(sc.direction || "after").toLowerCase() === "before" ? "before" : "after";
+        // fire-and-forget: the fade runs for seconds; the beat chain must not wait on it
+        stage.play(scene, key, { direction }).catch(eP => console.warn(TAG, "stageCue: play failed", key, eP));
+        changed = true; notes.push(`stageCue:${key}${direction === "before" ? "(undo)" : ""}`);
+      }
+    } catch (eSC) {
+      console.warn(TAG, "stageCue apply failed", eSC);
+    }
+
     // 2h) TYPED RAID WORLD EFFECTS (owner ruling 2026-10-02): the raid console's "Apply (GM)" passes
     // round.meta.intents.pending.worldEffects — a LIST of { type, ... } rows — as input.worldEffects, and
     // the console's commit path routes Engine of Absolution / Crown of Mercy / Ego Breaker through here

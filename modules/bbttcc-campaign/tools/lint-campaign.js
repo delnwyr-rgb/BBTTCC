@@ -780,6 +780,12 @@ for (const b of beats) {
   }
   for (const [i, r] of (Array.isArray(we.sparkGrants) ? we.sparkGrants : []).entries())
     if (!r || typeof r !== "object" || !s(r.key)) F("E17", "WARN", b.id, `sparkGrants[${i}] needs a key — WME skips the row`);
+  // ── E18: STAGE CUES (2026-10-15) — worldEffects.stageCue = {key, sceneId?, direction?} | list; the cue itself lives on the Scene (not in the bundle) ──
+  for (const [i, r] of (Array.isArray(we.stageCue) ? we.stageCue : (we.stageCue ? [we.stageCue] : [])).entries()) {
+    if (!r || typeof r !== "object" || !s(r.key)) { F("E18", "WARN", b.id, `stageCue[${i}] needs a key — WME skips the row`); continue; }
+    if (r.direction != null && !["after", "before"].includes(String(r.direction).toLowerCase())) F("E18", "WARN", b.id, `stageCue[${i}].direction '${r.direction}' — engine knows "after" | "before"`);
+    if (!s(r.sceneId) && !s(b.sceneId)) F("E18", "WARN", b.id, `stageCue[${i}] '${r.key}' names no scene and the beat has no sceneId — plays on whatever scene is viewed`);
+  }
   if (we.levelEffects != null) {
     const le = we.levelEffects;
     for (const [k, lo, hi] of [["stewardLevelFloor", 1, 20], ["factionTierFloor", 0, 6]]) {
