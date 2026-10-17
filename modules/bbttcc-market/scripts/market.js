@@ -113,15 +113,20 @@ function scaledEconomyCost(baseCost, distance) {
 // whose effective rarity sits at Uncommon or below (= Tier I on the ladder) is free within the
 // horizon; tiered gear above that pays LIST PRICE within the horizon and strains ×2/×4 over it.
 // Rigs / facilities / assets / actors were never free and still pay base within the horizon.
-function isStandardIssue(kind, rarity, distance) {
+// 2026-10-17 (owner: "exempt frames and rigs in general from the freebie rule"): gear whose RFI frame
+// is "vehicle" (every rig frame — Light Skiff, Landspeeder, Recon Drone …) is never Standard Issue
+// either; a hull always costs its hull price. `docFrame` = resolveItemFlagPrice().docFrame.
+const NEVER_FREE_FRAMES = new Set(["vehicle", "rig"]);
+function isStandardIssue(kind, rarity, distance, docFrame = "") {
   return String(kind || "").toLowerCase() === "gear"
       && distance <= 0
+      && !NEVER_FREE_FRAMES.has(String(docFrame || "").toLowerCase())
       && (RARITY_RANK[normalizeRarity(rarity)] <= RARITY_RANK.uncommon);
 }
 // The one cost rule every surface (list chip, buy dialog, purchase(), _chargeFor) must share.
-function horizonEconCost(baseCost, distance, kind, rarity) {
+function horizonEconCost(baseCost, distance, kind, rarity, docFrame = "") {
   const n = Number(baseCost ?? 0) || 0;
-  if (isStandardIssue(kind, rarity, distance)) return 0;
+  if (isStandardIssue(kind, rarity, distance, docFrame)) return 0;
   if (distance <= 0) return n;            // within horizon, above the T1 kit: list price
   return scaledEconomyCost(n, distance);  // over the horizon: ×1 / ×2 / ×4
 }
@@ -525,7 +530,7 @@ const MARKET_TIPS = {
   sort:      "Sort — Name (A→Z), or RFI Tier (I–IV) ascending/descending. Entries with no tier sort after Tier IV; equal-tier rows stay alphabetized.",
   openDoc:   "Open item sheet — inspect the actual item (stats, description, tier) before you spend marks on it.",
   cost:      "Cost — the list price. RFI flag-priced items show their native pool in marks (e.g. 'Viol 50 marks'); 'Split' items pay each portion to its own pool; legacy entries show catalog Economy OP (1 OP = 10 marks). The Horizon chip shows the final scaled price your faction pays.",
-  chip:      "Economic Horizon — your faction's tier sets its rarity horizon (Tier 0–1→Uncommon, 2→Rare, 3→Very Rare, 4→Legendary). An item's rarity is the higher of its stamped RFI tier (I→Uncommon, II→Rare, III→Very Rare, IV→Legendary) and its native rarity. Tier I kit at or under the horizon is Standard Issue (free). Anything tiered above that pays list price within the horizon (rigs/facilities/assets always pay base). Above the horizon the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
+  chip:      "Economic Horizon — your faction's tier sets its rarity horizon (Tier 0–1→Uncommon, 2→Rare, 3→Very Rare, 4→Legendary). An item's rarity is the higher of its stamped RFI tier (I→Uncommon, II→Rare, III→Very Rare, IV→Legendary) and its native rarity. Tier I kit at or under the horizon is Standard Issue (free) — except rig frames, which always cost their hull price. Anything tiered above that pays list price within the horizon (rigs/facilities/assets always pay base). Above the horizon the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
   profChip:  "Untrained — the selected Buyer Character has rank 0 in the skill this weapon or armor is gated on. Armor worn at rank 0 grants NO defensive benefit; weapons are wielded untrained. You can still buy it (stockpiling, training ahead, gifting) — the chip is a warning, not a block.",
   buy:       "Buy — commits the purchase: confirmation first (flag-priced items let you pay from a non-native pool at ×1.5 friction), then the marks are spent from the Buyer Faction's OP bank and the goods are delivered — gear to the Buyer Character's inventory, rigs to the faction, facilities/assets/upgrades to the Delivery Hex, actor entries cloned into the world under the buying faction. Writes a war-log receipt and whispers the GM.",
   payFromPool: "Pay from — which OP pool covers the bill. The native pool pays list price; any other pool pays ×1.5 (cross-pool friction). Balances shown are the faction's current opBank, in marks.",
@@ -1003,7 +1008,7 @@ async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" })
   const dRarity = await resolveEntryRarity(entry);
   const dDistance = rarityDistance(dRarity, factionEconomicHorizon(faction));
   const dKind = String(entry.kind || "").toLowerCase();
-  const dEconCost = horizonEconCost(dBaseCost, dDistance, dKind, dRarity);
+  const dEconCost = horizonEconCost(dBaseCost, dDistance, dKind, dRarity, flagPrice?.docFrame);
   const scaledMarks = Math.round(dEconCost);
   const rawMarks = Number(flagPrice.marks) || 0;
   const scaleNote = (scaledMarks !== rawMarks)
@@ -1145,7 +1150,7 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
   const kind = String(entry.kind || "").toLowerCase();
   // Tier I kit is free within the horizon (Standard Issue); everything else pays list price
   // within it and strains ×2/×4 over it — horizonEconCost() is the one rule (2026-10-16).
-  const econCost = horizonEconCost(baseCost, distance, kind, rarity);
+  const econCost = horizonEconCost(baseCost, distance, kind, rarity, flagPrice?.docFrame);
 
   // 0) Validate delivery prerequisites BEFORE spending — the OP engine has no
   //    rollback, so a delivery failure after commit would strand the marks.
@@ -1507,7 +1512,7 @@ function _chargeFor(entry, faction, flagPrice, rarity) {
   const baseCost = flagPrice ? Number(flagPrice.marks) : (Number(entry?.cost?.economy ?? 0) || 0);
   const horizon  = faction ? factionEconomicHorizon(faction) : null;
   const distance = horizon ? rarityDistance(rarity, horizon) : 1;
-  const marks = Math.round(horizonEconCost(baseCost, distance, kind, rarity));
+  const marks = Math.round(horizonEconCost(baseCost, distance, kind, rarity, flagPrice?.docFrame));
   const pools = {};
   if (flagPrice?.split && Object.keys(flagPrice.split).length) {
     const sum = Object.values(flagPrice.split).reduce((a, v) => a + (Number(v) || 0), 0);
@@ -1526,7 +1531,7 @@ function _chargeFor(entry, faction, flagPrice, rarity) {
     pools.economy = marks;
   }
   return { artifact: false, priceless: false, marks, pools, rarity, distance, baseCost,
-           standardIssue: !!faction && isStandardIssue(kind, rarity, distance) };
+           standardIssue: !!faction && isStandardIssue(kind, rarity, distance, flagPrice?.docFrame) };
 }
 function _affordFor(charge, balances) {
   if (!charge || charge.artifact || charge.priceless) return { ok: false, short: [] };
@@ -1907,7 +1912,7 @@ try {
       const rarity = await resolveEntryRarity(entry);
       const distance = rarityDistance(rarity, horizon0);
       const kind = String(entry?.kind || "").toLowerCase();
-      const econCost = horizonEconCost(baseCost, distance, kind, rarity);
+      const econCost = horizonEconCost(baseCost, distance, kind, rarity, flagPrice?.docFrame);
 
       // Pool label: "Split" if multi-pool, else short label for the native pool.
       let chipPoolLabel = "Econ";

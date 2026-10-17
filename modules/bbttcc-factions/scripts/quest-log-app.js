@@ -121,7 +121,8 @@
         const m = api.story.registryOf(qid); const q = m ? story.byKey[m.quest] : null; const sc = q?.script; if (!sc) return null;
         if (m.chapter) {
           const ch = sc.chapters?.[m.chapter] || {}; const cq = (q.chapters || []).find(c => c.key === m.chapter) || null;
-          const line = ch.line || (cq?.next?.line || ""); const giver = ch.giver || "";
+          // the current rung's line first (scriptView.chapterLines, 2026-10-17), then the chapter's fixed line — the words advance by themselves
+          const line = sc.chapterLines?.[m.chapter]?.line || ch.line || (cq?.next?.line || ""); const giver = ch.giver || "";
           return { giver, description: ch.description || "", stepLabel: cq ? (cq.state === "done" ? "done" : cq.state) : "", lines: line ? [line] : [], doors: [] };
         }
         const cur = (sc.steps || []).filter(st => st.status === "current");

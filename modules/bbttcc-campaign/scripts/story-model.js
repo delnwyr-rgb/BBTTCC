@@ -1000,15 +1000,36 @@ export function scriptView(sc, ctx) {
     if (h) { const handoff = h.handoff || (Array.isArray(h.done.chapter) ? { quest: h.done.chapter[0], chapter: h.done.chapter[1] } : { quest: h.done.quest }); next = { ...mk(h, null, false, []), handoff }; stepOf = h; why = "handoff"; }
   }
   if (!next && !current.length) why = steps.length && steps.every(s => s.status === "done" || s.status === "sealed") ? "complete" : "empty";
+  // RUNGS (2026-10-17): a chapter-scoped door may carry `rungs` — the chapter's own ordered steps (same `done` rules as
+  // steps). The current rung is the first unfinished one AFTER the last finished one, so a rung the table skipped
+  // (Verna's star when they went straight to the tea) never pins the Log to a stale line. Its `line` becomes the
+  // chapter's Next: line in the player Log (chapterLines) — the authored words advance by themselves, no GM override.
+  const rungView = (d) => {
+    const rs = Array.isArray(d.rungs) ? d.rungs.filter(r => r && typeof r === "object") : [];
+    if (!rs.length) return { rungs: [], currentRung: null };
+    const done = rs.map(isDone); const lastDone = done.lastIndexOf(true);
+    const curIdx = done.findIndex((x, i) => !x && i > lastDone);
+    const rungs = rs.map((r, i) => ({ id: r.id, label: r.label || "", line: r.line || "", status: done[i] ? "done" : (i === curIdx ? "current" : (i < lastDone ? "skipped" : "todo")) }));
+    return { rungs, currentRung: curIdx >= 0 ? rungs[curIdx] : null };
+  };
   const doors = (Array.isArray(sc.doors) ? sc.doors : []).map(d => {
     const bs = (Array.isArray(d.beats) ? d.beats : []).map(id => byId.get(String(id))).filter(Boolean);
     const first = bs.find(b => !played(b.id)) || bs[0] || null;
-    return { id: d.id, label: d.label || "", line: d.line || "", beat: first, ready: first ? !!readiness(first).ready : false, played: bs.some(b => played(b.id)) };
+    return { id: d.id, label: d.label || "", line: d.line || "", chapter: d.chapter || null, beat: first, ready: first ? !!readiness(first).ready : false, played: bs.some(b => played(b.id)), ...rungView(d) };
   });
+  const chapters = sc.chapters && typeof sc.chapters === "object" ? sc.chapters : {};
+  // chapterLines: chKey → the line the player Log should print for that chapter row — the current rung's line first,
+  // the chapter's fixed `line` when no rung is current (chapter not started, or every rung done but the ending unplayed)
+  const chapterLines = {};
+  for (const ck of new Set([...Object.keys(chapters), ...doors.map(d => d.chapter).filter(Boolean)])) {
+    const rung = doors.find(d => d.chapter === ck && d.currentRung?.line)?.currentRung || null;
+    const line = rung?.line || String(chapters[ck]?.line || "");
+    if (line) chapterLines[ck] = { line, rung: rung ? rung.id : null };
+  }
   return {
     giver: String(sc.giver || ""), description: String(sc.description || ""),
     steps: steps.map(s => ({ id: s.id, label: s.label || "", line: s.line || "", status: s.status, group: s.group || null, arrival: !!s.arrival, chapter: s.chapter || null })),
-    current: current.map(s => s.id), doors, after: Array.isArray(sc.after) ? sc.after.slice() : [], chapters: sc.chapters && typeof sc.chapters === "object" ? sc.chapters : {},
+    current: current.map(s => s.id), doors, after: Array.isArray(sc.after) ? sc.after.slice() : [], chapters, chapterLines,
     next, why, chapter: stepOf?.chapter || null
   };
 }

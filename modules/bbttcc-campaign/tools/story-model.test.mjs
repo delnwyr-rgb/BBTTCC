@@ -11,7 +11,7 @@ const __dir = path.dirname(fileURLToPath(import.meta.url));
 const m = await import(path.join(__dir, "..", "scripts", "story-model.js"));
 
 let pass = 0, fail = 0;
-const test = (name, fn) => { try { fn(); pass++; console.log("  ✓", name); } catch (e) { fail++; console.log("  ✗", name, "\n     ", String(e.message || e).split("\n")[0]); } };
+const test = (name, fn) => { try { fn(); pass++; console.log("  ✓", name); } catch (e) { fail++; console.log("  ✗", name, "\n     ", String(e.message || e).split("\n").slice(0, 6).join("\n      ")); } };
 
 // ── fixture: a tiny world with one scripted quest + one unscripted helper quest ─────────────────────────
 const Q = "allesh_gilliam";               // a real QUEST_MAP key (act 2, chapters exist)
@@ -28,6 +28,8 @@ const beats = [
   beat("b_install", { inject: { requires: [{ questBucket: "quest_fixit_stab", is: "completed" }] } }),
   beat("b_close", { story: { quest: Q, role: "closer", ending: "closure" } }),
   beat("d_tamsin"),
+  // a chapter door with rungs (the Pipeline shape, 2026-10-17)
+  beat("p_back"), beat("p_market"), beat("p_route"), beat("p_pact"), beat("p_skip"),
   // the handoff target quest's start (unscripted): the model's inference offers it
   { id: "f_start", label: "f_start", type: "dialog", story: { quest: H, role: "start" }, choices: [], inject: { requires: [] } }
 ];
@@ -45,8 +47,19 @@ const script = {
     { id: "install", label: "The Gate Remembers Right", beats: ["b_install"], line: "Bring the crate to Garren." },
     { id: "close", label: "Pike Updates the Map", beats: ["b_close"], line: "See your names on the map." }
   ],
-  doors: [{ id: "tamsin", label: "Father Tamsin", beats: ["d_tamsin"], line: "Ask about the dream." }],
-  after: []
+  doors: [
+    { id: "tamsin", label: "Father Tamsin", beats: ["d_tamsin"], line: "Ask about the dream." },
+    { id: "pipeline", label: "The Pipeline", chapter: "the_pipeline", beats: ["p_back", "p_market", "p_pact"], rungs: [
+      { id: "backward", label: "Run it backward", line: "Run the channel backward.", beats: ["p_back"] },
+      { id: "market", label: "Etta first", line: "Etta will sell you preserves first.", beats: ["p_market"], done: { mark: "p_route" } },
+      { id: "pactkeeper", label: "Read the terms", line: "Tamsin wants to read the terms.", beats: ["p_pact"] }
+    ] },
+    { id: "skippy", label: "Skippable", chapter: "skippy", beats: ["p_skip"], rungs: [
+      { id: "r1", line: "one", beats: ["p_back"] }, { id: "r2", line: "two", beats: ["p_skip"] }, { id: "r3", line: "three", beats: ["p_pact"] }
+    ] }
+  ],
+  after: [],
+  chapters: { the_pipeline: { giver: "Father Tamsin", line: "Three headings came down the mountain." }, skippy: { line: "the fixed skippy line" } }
 };
 const byId = new Map(beats.map(b => [b.id, b]));
 const gateOK = (b, phase, buckets) => (b.inject?.requires || []).every(r => r.flag === "storyPhase" ? phase >= r.gte : r.questBucket ? (buckets[r.questBucket] || null) === r.is : true);
@@ -118,6 +131,24 @@ test("closer: everything done → next = the closer; after the closer the quest 
 test("doors: listed with their line and readiness, never offered as next", () => {
   const s = q(situation({ fired: ["a_welcome", "a_round", "b_hq"], phase: 2 }));
   assert.equal(s.script.doors[0].line, "Ask about the dream."); assert.equal(s.script.doors[0].ready, true); assert.notEqual(s.next?.beat?.id, "d_tamsin");
+});
+test("rungs: a chapter door's current rung drives chapterLines; the fixed chapter line is the fallback", () => {
+  const sc0 = q(situation({ fired: ["a_welcome", "a_round", "b_hq"], phase: 2 })).script;
+  const door = sc0.doors.find(d => d.id === "pipeline");
+  assert.equal(door.chapter, "the_pipeline"); assert.equal(door.rungs.length, 3); assert.equal(door.currentRung.id, "backward");
+  assert.deepEqual(sc0.doors.find(d => d.id === "tamsin").rungs, []);
+  // chapter just opened: the channel ran backward → Etta's rung
+  const scA = q(situation({ fired: ["a_welcome", "a_round", "b_hq", "p_back"], phase: 2 })).script;
+  assert.equal(scA.chapterLines.the_pipeline.line, "Etta will sell you preserves first."); assert.equal(scA.chapterLines.the_pipeline.rung, "market");
+  // the route is in hand (done by MARK, not by the listed beat) → Tamsin's rung, i.e. the line that used to need a GM override
+  const scB = q(situation({ fired: ["a_welcome", "a_round", "b_hq", "p_back", "p_route"], phase: 2 })).script;
+  assert.equal(scB.chapterLines.the_pipeline.line, "Tamsin wants to read the terms."); assert.equal(scB.doors.find(d => d.id === "pipeline").rungs[1].status, "done");
+  // every rung done → fixed chapter line
+  const scC = q(situation({ fired: ["a_welcome", "a_round", "b_hq", "p_back", "p_route", "p_pact"], phase: 2 })).script;
+  assert.equal(scC.chapterLines.the_pipeline.line, "Three headings came down the mountain."); assert.equal(scC.chapterLines.the_pipeline.rung, null);
+  // a skipped rung never pins the line: r1 + r3 done, r2 unplayed → r2 is "skipped", no current rung, fixed line
+  const sk = scC.doors.find(d => d.id === "skippy");
+  assert.equal(sk.currentRung, null); assert.equal(sk.rungs[1].status, "skipped"); assert.equal(scC.chapterLines.skippy.line, "the fixed skippy line");
 });
 test("unscripted quests are untouched: the fixit_farm helper has no script and its next is the inferred start", () => {
   const s = situation({ phase: 2 }).byKey[H];
