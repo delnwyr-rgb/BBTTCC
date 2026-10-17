@@ -72,6 +72,23 @@
           "soft-target"
         ],
         "visualFrame": "closed-corners"
+      },
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "vehicle",
+          "price": {
+            "marks": 750,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1.0,
+            "notes": "TII medium stationary frame (feat-type frames pass 2026-10-16)",
+            "bound": "free",
+            "saleBack": 300
+          }
+        }
       }
     }
   },

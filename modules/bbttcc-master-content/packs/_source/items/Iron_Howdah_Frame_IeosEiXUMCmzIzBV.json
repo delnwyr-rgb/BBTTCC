@@ -73,6 +73,23 @@
           "hybrid"
         ],
         "visualFrame": "hybrid"
+      },
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "vehicle",
+          "price": {
+            "marks": 750,
+            "currency": "violence",
+            "gmOverride": true,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1.0,
+            "notes": "TII medium frame · mounted gunnery pays Violence (rubric §7) (feat-type frames pass 2026-10-16)",
+            "bound": "free",
+            "saleBack": 300
+          }
+        }
       }
     }
   },

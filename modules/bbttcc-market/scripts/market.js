@@ -51,6 +51,12 @@ function _tierToRarity(tier) {
   return "legendary"; // tier 4+
 }
 
+// "III" / "3" / 3 → 3 (RFI stamps tiers as Roman numerals; catalog fields may hold numbers).
+function _tierInt(t) {
+  if (t === null || t === undefined || t === "") return NaN;
+  return { I: 1, II: 2, III: 3, IV: 4 }[String(t).trim().toUpperCase()] ?? Number(t);
+}
+
 function normalizeRarity(r) {
   const k = String(r || "common").trim().toLowerCase();
   return RARITY_RANK[k] ? k : "common";
@@ -98,6 +104,26 @@ function scaledEconomyCost(baseCost, distance) {
   if (distance === 1) return n;
   if (distance === 2) return n * 2;
   return n * 4;                    // distance ≥ 3
+}
+
+// STANDARD ISSUE = the Tier I kit (owner tier convention: "T1 = chargen / standard issue").
+// 2026-10-16 (owner: "even a Tier 3 forge facility frame that costs 2250 Econ marks, LOL"):
+// until tonight EVERY gear row at or under the horizon was free, so a Tier 3 faction took
+// 2250-mark Forge Facility Frames and 1350-mark Circuited lasers for nothing. Now only gear
+// whose effective rarity sits at Uncommon or below (= Tier I on the ladder) is free within the
+// horizon; tiered gear above that pays LIST PRICE within the horizon and strains ×2/×4 over it.
+// Rigs / facilities / assets / actors were never free and still pay base within the horizon.
+function isStandardIssue(kind, rarity, distance) {
+  return String(kind || "").toLowerCase() === "gear"
+      && distance <= 0
+      && (RARITY_RANK[normalizeRarity(rarity)] <= RARITY_RANK.uncommon);
+}
+// The one cost rule every surface (list chip, buy dialog, purchase(), _chargeFor) must share.
+function horizonEconCost(baseCost, distance, kind, rarity) {
+  const n = Number(baseCost ?? 0) || 0;
+  if (isStandardIssue(kind, rarity, distance)) return 0;
+  if (distance <= 0) return n;            // within horizon, above the T1 kit: list price
+  return scaledEconomyCost(n, distance);  // over the horizon: ×1 / ×2 / ×4
 }
 
 /**
@@ -202,16 +228,19 @@ async function resolveEntryRarity(entry) {
         const sysR = foundry.utils.getProperty(doc, "system.rarity");
         const altR = foundry.utils.getProperty(doc, "system.traits.rarity") || foundry.utils.getProperty(doc, "flags.dnd5e.rarity");
         const raw = sysR || altR || "";
-        if (raw) return normalizeRarity(_normalizeExternalRarity(raw));
-        // No native rarity — derive from RFI tier if present (T1→uncommon,
-        // T2→rare, T3→very_rare, T4→legendary). Roman numerals supported.
+        const native = raw ? normalizeRarity(_normalizeExternalRarity(raw)) : null;
+        // RFI tier → rarity (T1→uncommon, T2→rare, T3→very_rare, T4→legendary). Roman numerals supported.
+        // 2026-10-16: the TIER IS A FLOOR, not a fallback. The Frikkin' Laser Blade Saber is stamped
+        // Tier III but carries a legacy system.rarity of "uncommon", the Rad Laser Pistol / Circuited
+        // Laser Pistol "common" — native rarity used to win outright, so Tier III/IV arms read as
+        // Standard Issue at a Tier 0–1 horizon. Whichever of (native rarity, tier rarity) ranks
+        // higher is the entry's rarity; list prices are untouched (RARITY_MULT still reads the item).
         const rfiTier = foundry.utils.getProperty(doc, "flags.fourththing.rfi.item.tier")
                      ?? foundry.utils.getProperty(doc, "flags.rfi.item.tier"); // legacy path
-        if (rfiTier) {
-          const tierInt = { I: 1, II: 2, III: 3, IV: 4 }[String(rfiTier).toUpperCase()] ?? Number(rfiTier);
-          const mapped = _tierToRarity(tierInt);
-          if (mapped) return normalizeRarity(mapped);
-        }
+        const tierR = rfiTier ? _tierToRarity(_tierInt(rfiTier)) : null;
+        if (native && tierR) return (RARITY_RANK[tierR] > RARITY_RANK[native]) ? tierR : native;
+        if (native) return native;
+        if (tierR) return normalizeRarity(tierR);
       }
     }
   } catch {}
@@ -227,7 +256,7 @@ async function resolveEntryRarity(entry) {
         entry?.patch?.tier ??
         entry?.rigData?.minTier ??
         entry?.facilityPatch?.minTier;
-      const mapped = _tierToRarity(t);
+      const mapped = _tierToRarity(_tierInt(t));   // Roman numerals accepted here too (2026-10-16)
       if (mapped) return normalizeRarity(mapped);
     }
   } catch {}
@@ -262,10 +291,17 @@ function chipSpecFor(rarity, horizon, distance, baseCost, econCost, poolLabel = 
   }
 
   if (d <= 0) {
-    return {
-      text: e0 ? `Standard Issue • ${pLab} ${e0}` : "Standard Issue",
-      title: e0 ? `Rarity ${rLab} (≤ Horizon ${hLab}) • Base ${b0} → ${e0}` : `Rarity ${rLab} (≤ Horizon ${hLab})`,
+    // Free = Standard Issue (the Tier I kit). Within the horizon but tiered above it = list price,
+    // its own chip so a 2250-mark frame never wears the Standard Issue badge (2026-10-16).
+    if (!e0) return {
+      text: "Standard Issue",
+      title: `Rarity ${rLab} (≤ Horizon ${hLab}) • Tier I kit — free`,
       style: "border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10);"
+    };
+    return {
+      text: `Within Horizon • ${pLab} ${e0}`,
+      title: `Rarity ${rLab} (≤ Horizon ${hLab}) • list price ${b0}`,
+      style: "border-color:rgba(56,189,248,.35);background:rgba(56,189,248,.10);"
     };
   }
 
@@ -483,13 +519,13 @@ const MARKET_TIPS = {
   search:    "Search — live filter on entry name, blurb, and kind text within the selected vendor's catalog.",
   treasury:  "Treasury — the Buyer Faction's current OP banks, in marks, one pill per pool, plus its Economic Horizon. This is what every price on this page is measured against; pools at zero are dimmed.",
   tabs:      "Gear-type tabs — the catalog is always split by what the entry is: Weapons / Armor / Gear / Consumables (by the underlying item), then Rigs, Hire, Facilities, Hex Assets, and Upgrades. Counts reflect the search, cost and affordability filters.",
-  costBand:  "Cost band — filter by what the Buyer Faction would actually pay (horizon-scaled; list price when no faction is selected): Standard Issue (free), then marks brackets that follow the RFI tier ladder (50 / 150 / 500 / 1500).",
+  costBand:  "Cost band — filter by what the Buyer Faction would actually pay (horizon-scaled; list price when no faction is selected): Standard Issue (free — the Tier I kit), then marks brackets that follow the RFI tier ladder (50 / 150 / 500 / 1500).",
   affordOnly: "Only what we can afford — hides every entry whose bill exceeds the Buyer Faction's pool balances (split items need every portion covered). Needs a Buyer Faction. Unaffordable rows otherwise stay visible, dimmed, with a 'Short' pill saying how much is missing and in which pool.",
   category:  "Category — filters the list. Weapons / Armor / Gear / Consumables subdivide gear entries by the underlying item's type (consumables are detected via RFI frame, slot, or tag); the remaining options match the entry kind directly (rig, facility, hex asset, upgrades).",
   sort:      "Sort — Name (A→Z), or RFI Tier (I–IV) ascending/descending. Entries with no tier sort after Tier IV; equal-tier rows stay alphabetized.",
   openDoc:   "Open item sheet — inspect the actual item (stats, description, tier) before you spend marks on it.",
   cost:      "Cost — the list price. RFI flag-priced items show their native pool in marks (e.g. 'Viol 50 marks'); 'Split' items pay each portion to its own pool; legacy entries show catalog Economy OP (1 OP = 10 marks). The Horizon chip shows the final scaled price your faction pays.",
-  chip:      "Economic Horizon — your faction's tier sets its rarity horizon (Tier 0–1→Uncommon, 2→Rare, 3→Very Rare, 4→Legendary). At or under the horizon, gear is Standard Issue (free; rigs/facilities/assets still pay base cost). Above it the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
+  chip:      "Economic Horizon — your faction's tier sets its rarity horizon (Tier 0–1→Uncommon, 2→Rare, 3→Very Rare, 4→Legendary). An item's rarity is the higher of its stamped RFI tier (I→Uncommon, II→Rare, III→Very Rare, IV→Legendary) and its native rarity. Tier I kit at or under the horizon is Standard Issue (free). Anything tiered above that pays list price within the horizon (rigs/facilities/assets always pay base). Above the horizon the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
   profChip:  "Untrained — the selected Buyer Character has rank 0 in the skill this weapon or armor is gated on. Armor worn at rank 0 grants NO defensive benefit; weapons are wielded untrained. You can still buy it (stockpiling, training ahead, gifting) — the chip is a warning, not a block.",
   buy:       "Buy — commits the purchase: confirmation first (flag-priced items let you pay from a non-native pool at ×1.5 friction), then the marks are spent from the Buyer Faction's OP bank and the goods are delivered — gear to the Buyer Character's inventory, rigs to the faction, facilities/assets/upgrades to the Delivery Hex, actor entries cloned into the world under the buying faction. Writes a war-log receipt and whispers the GM.",
   payFromPool: "Pay from — which OP pool covers the bill. The native pool pays list price; any other pool pays ×1.5 (cross-pool friction). Balances shown are the faction's current opBank, in marks.",
@@ -961,13 +997,13 @@ async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" })
 
   // Horizon-scaled cost — MUST mirror purchase()'s math exactly, or the dialog
   // shows a different number than what actually commits (fixed 2026-07-07):
-  // Standard Issue gear is free, over-horizon strains ×2/×4, non-gear kinds
-  // pay base within horizon.
+  // one shared rule, horizonEconCost() (2026-10-16): Tier I kit free within the
+  // horizon, everything else list price within it, ×2/×4 over it.
   const dBaseCost = Number(flagPrice.marks);   // marks
-  const dDistance = rarityDistance(await resolveEntryRarity(entry), factionEconomicHorizon(faction));
+  const dRarity = await resolveEntryRarity(entry);
+  const dDistance = rarityDistance(dRarity, factionEconomicHorizon(faction));
   const dKind = String(entry.kind || "").toLowerCase();
-  let dEconCost = scaledEconomyCost(dBaseCost, dDistance);
-  if (dDistance <= 0 && dKind && dKind !== "gear") dEconCost = dBaseCost;
+  const dEconCost = horizonEconCost(dBaseCost, dDistance, dKind, dRarity);
   const scaledMarks = Math.round(dEconCost);
   const rawMarks = Number(flagPrice.marks) || 0;
   const scaleNote = (scaledMarks !== rawMarks)
@@ -1107,12 +1143,9 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
 
   const distance = rarityDistance(rarity, horizon);
   const kind = String(entry.kind || "").toLowerCase();
-  let econCost = scaledEconomyCost(baseCost, distance);
-
-  // Gear can be free if within horizon (Standard Issue). Big-ticket purchases should still cost their base Econ.
-  if (distance <= 0 && kind && kind !== "gear") {
-    econCost = baseCost;
-  }
+  // Tier I kit is free within the horizon (Standard Issue); everything else pays list price
+  // within it and strains ×2/×4 over it — horizonEconCost() is the one rule (2026-10-16).
+  const econCost = horizonEconCost(baseCost, distance, kind, rarity);
 
   // 0) Validate delivery prerequisites BEFORE spending — the OP engine has no
   //    rollback, so a delivery failure after commit would strand the marks.
@@ -1463,8 +1496,8 @@ function _costBandFor(charge) {
   return "b1500p";
 }
 // Effective bill for `entry` as the buyer faction would pay it. MUST mirror
-// purchase() / openBuyConfirmDialog(): horizon-scaled (Standard Issue gear is
-// free, non-gear kinds pay base within horizon, ×1/×2/×4 over it), split items
+// purchase() / openBuyConfirmDialog(): horizonEconCost() (Tier I kit free within
+// the horizon, list price within it otherwise, ×2/×4 over it), split items
 // pay each portion to its native pool, single-currency items pay their native
 // pool. No faction → list price (distance treated as 1).
 function _chargeFor(entry, faction, flagPrice, rarity) {
@@ -1474,9 +1507,7 @@ function _chargeFor(entry, faction, flagPrice, rarity) {
   const baseCost = flagPrice ? Number(flagPrice.marks) : (Number(entry?.cost?.economy ?? 0) || 0);
   const horizon  = faction ? factionEconomicHorizon(faction) : null;
   const distance = horizon ? rarityDistance(rarity, horizon) : 1;
-  let econ = scaledEconomyCost(baseCost, distance);
-  if (distance <= 0 && kind && kind !== "gear") econ = baseCost;
-  const marks = Math.round(econ);
+  const marks = Math.round(horizonEconCost(baseCost, distance, kind, rarity));
   const pools = {};
   if (flagPrice?.split && Object.keys(flagPrice.split).length) {
     const sum = Object.values(flagPrice.split).reduce((a, v) => a + (Number(v) || 0), 0);
@@ -1495,7 +1526,7 @@ function _chargeFor(entry, faction, flagPrice, rarity) {
     pools.economy = marks;
   }
   return { artifact: false, priceless: false, marks, pools, rarity, distance, baseCost,
-           standardIssue: !!faction && distance <= 0 && kind === "gear" };
+           standardIssue: !!faction && isStandardIssue(kind, rarity, distance) };
 }
 function _affordFor(charge, balances) {
   if (!charge || charge.artifact || charge.priceless) return { ok: false, short: [] };
@@ -1875,9 +1906,8 @@ try {
     : (Number(entry?.cost?.economy ?? 0) || 0);   // both MARKS
       const rarity = await resolveEntryRarity(entry);
       const distance = rarityDistance(rarity, horizon0);
-      let econCost = scaledEconomyCost(baseCost, distance);
       const kind = String(entry?.kind || "").toLowerCase();
-      if (distance <= 0 && kind && kind !== "gear") econCost = baseCost;
+      const econCost = horizonEconCost(baseCost, distance, kind, rarity);
 
       // Pool label: "Split" if multi-pool, else short label for the native pool.
       let chipPoolLabel = "Econ";

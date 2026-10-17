@@ -70,6 +70,23 @@
           "fast"
         ],
         "visualFrame": "open-corners"
+      },
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "vehicle",
+          "price": {
+            "marks": 250,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1.0,
+            "notes": "TI personal frame (feat-type frames pass 2026-10-16)",
+            "bound": "free",
+            "saleBack": 100
+          }
+        }
       }
     }
   },

@@ -79,6 +79,23 @@
           "fortification-class"
         ],
         "visualFrame": "closed-corners"
+      },
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "vehicle",
+          "price": {
+            "marks": 2250,
+            "currency": "violence",
+            "gmOverride": true,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1.0,
+            "notes": "TIII siege frame · gunnery pays Violence (rubric §7) (feat-type frames pass 2026-10-16)",
+            "bound": "free",
+            "saleBack": 900
+          }
+        }
       }
     }
   },
