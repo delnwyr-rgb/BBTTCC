@@ -699,6 +699,7 @@
         <p style="font-size:.7rem;opacity:.55;margin:.5rem 0 0">Spends are hard-gated by your pool. Mechanical effects apply now; <em>italic</em> lines are GM-applied riders.</p>`,
       buttons: [
         ...(canTakePath(actor) ? [{ action: "path", label: "🜂 Choose a Path…", callback: () => { pickPath(actor); } }] : []),
+        ...(Object.keys(PATHS).length ? [{ action: "guide", label: pathsOf(actor).length ? "📖 Path guide" : "📖 Browse the Paths", callback: () => { pathGuide(actor); } }] : []),
         { action: "close", label: "Close", default: true }],
       rejectClose: false,
     }).render(true);
@@ -753,19 +754,28 @@
   async function chooseDoctrine(item) {
     const def = PATHS[pathOfItem(item)?.key];
     if (!def?.doctrines) return;
-    const options = Object.entries(def.doctrines).map(([k, d]) =>
-      `<label style="display:block;margin:.35rem 0"><input type="radio" name="doctrine" value="${k}"> <b>${d.name}</b>${d.tagline ? ` <em style="opacity:.7">“${d.tagline}”</em>` : ""}<br><span style="font-size:.8rem;opacity:.8">${(d.perk?.description ?? "").replace(/<[^>]+>/g, "")}</span></label>`).join("");
+    const prof = item.parent instanceof Actor ? profOf(item.parent) : null;
+    const options = Object.entries(def.doctrines).map(([k, d]) => {
+      const own = sortedAbilities(def).filter(a => a.doctrine === k);
+      return `<label style="display:block;margin:.4rem 0;padding:.45rem .6rem;border:1px solid #b9882e44;border-radius:6px;cursor:pointer">
+        <input type="radio" name="doctrine" value="${k}"> <b>${esc(d.name)}</b>${d.tagline ? ` <em style="opacity:.7">“${esc(d.tagline)}”</em>` : ""}
+        <div style="font-size:.8rem;margin:.2rem 0 0 1.4rem">${d.perk?.description ?? ""}
+          ${own.length ? `<p style="margin:.35rem 0 .1rem;font-size:.68rem;opacity:.7;text-transform:uppercase;letter-spacing:.04em">${esc(d.name)} powers</p>${powerTable(def, own, { prof })}` : ""}
+        </div></label>`;
+    }).join("");
     const pick = await foundry.applications.api.DialogV2.prompt({
-      window: { title: `${def.name}: choose a doctrine` },
-      content: `<p>Choose once; a doctrine can't be changed later.</p>${options}`,
+      window: { title: `${def.name}: choose a doctrine`, resizable: true },
+      position: { width: 640 },
+      content: `<p style="margin:0 0 .3rem">Choose once; a doctrine can't be changed later.</p>
+        <p style="margin:0 0 .4rem;font-size:.78rem;opacity:.75">Every walker of the ${esc(def.name)} shares its entry feature and shared powers (open the 📖 Path guide from the Surge menu to read them). A doctrine adds a perk and the powers listed under it.</p>
+        <div style="max-height:min(64vh,620px);overflow-y:auto;padding-right:.3rem">${options}</div>`,
       ok: { label: "Choose", callback: (_ev, b) => b.form.querySelector("input[name=doctrine]:checked")?.value },
       rejectClose: false,
     }).catch(() => null);
     if (!pick) return ui.notifications?.info?.(`${def.name}: no doctrine chosen yet; you'll be asked again next time you open the Surge menu.`);
     const doc = def.doctrines[pick];
-    await item.update({ name: `${def.name} (${doc.name})`, [`flags.${MOD}.path.doctrine`]: pick,
-      "system.description.value": `${def.entry?.description ?? ""}<h3>Doctrine: ${doc.name}</h3>${doc.perk?.description ?? ""}` });
-    await ensurePerk(item);
+    await item.update({ name: `${def.name} (${doc.name})`, [`flags.${MOD}.path.doctrine`]: pick, [`flags.${MOD}.path.sheet`]: SHEET_VERSION,
+      "system.description.value": pathDescription(def, pick) });
   }
   /** The doctrine perk's transfer effect, created once. */
   async function ensurePerk(item) {
@@ -933,27 +943,162 @@
   function pathItemData(key, def) {
     return {
       name: def.name, type: "feat", img: def.img ?? "icons/svg/mystery-man.svg",
-      system: { description: { value: `<p><em>${def.tagline ?? ""}</em></p>${def.entry?.description ?? ""}` } },
-      flags: { [MOD]: { path: { key } } }
+      system: { description: { value: pathDescription(def, null) } },
+      flags: { [MOD]: { path: { key, sheet: SHEET_VERSION } } }
     };
+  }
+
+  // ── Path reference (the full power list) ───────────────────────────────────
+  // One renderer feeds the picker, the doctrine chooser, the 📖 Path guide and the
+  // Path item's description, so the player can read every power a Path grants —
+  // not just the entry feature — before (and after) choosing.
+  const SHEET_VERSION = 2;   // bump when the rendered description changes; stale items are rewritten on ready
+  const PROF_LEVEL = { 0: "1st", 2: "1st", 3: "5th", 4: "9th", 5: "13th", 6: "17th" };
+  const ONCE = { long: "once per long rest", short: "once per short rest", round: "once per round", turn: "once per turn" };
+  const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const sortedAbilities = (def) => [...(def?.abilities ?? [])].sort((a, z) => ((a.minProf ?? 0) - (z.minProf ?? 0)) || (a.cost - z.cost));
+  /** Rows for a list of Path abilities. prof (optional) dims the rows above the reader's proficiency. */
+  function powerTable(def, list, { prof = null } = {}) {
+    if (!list.length) return `<p style="font-size:.75rem;opacity:.5;margin:.2rem 0">—</p>`;
+    const row = (a) => {
+      const label = a.fx?.dreamCache ? "Dream-Cache — store a 1st–3rd level spell or power to cast free later (once per long rest)" : a.label;
+      const [name, ...rest] = String(label).split("—");
+      const effect = rest.join("—").trim();
+      const locked = prof != null && (a.minProf ?? 0) > prof;
+      const tags = [];
+      if (a.perk) tags.push("free move");
+      if (a.oncePer) tags.push(ONCE[a.oncePer] ?? `once per ${a.oncePer}`);
+      if (a.gmOnly) tags.push("your GM confirms");
+      const notes = [a.fx?.note, a.fx?.auto, a.fx?.alsoNote].filter(Boolean).map(esc);
+      const sharpened = Object.keys(a.byDoctrine ?? {}).map(k => def.doctrines?.[k]?.name).filter(Boolean);
+      if (sharpened.length) notes.push(`Sharpened by the ${sharpened.map(esc).join(" / ")} doctrine${sharpened.length > 1 ? "s" : ""}.`);
+      return `<tr style="${locked ? "opacity:.5;" : ""}border-top:1px solid #b9882e22">
+        <td style="padding:.25rem .3rem;vertical-align:top;white-space:nowrap">${a.minProf ? `+${a.minProf}` : "—"}<br><span style="font-size:.66rem;opacity:.65">${PROF_LEVEL[a.minProf ?? 0] ?? ""}</span></td>
+        <td style="padding:.25rem .3rem;vertical-align:top;white-space:nowrap;color:#e8c84a;font-weight:700">${a.cost ? `${a.cost}⚡` : "free"}</td>
+        <td style="padding:.25rem .3rem;vertical-align:top"><b>${esc(name.trim())}</b>${tags.length ? ` <span style="font-size:.68rem;opacity:.7">(${tags.join(" · ")})</span>` : ""}
+          ${effect ? `<br>${esc(effect)}` : ""}
+          ${notes.length ? `<br><span style="font-size:.72rem;opacity:.75">${notes.join(" ")}</span>` : ""}
+          ${a.fiction ? `<br><em style="font-size:.72rem;opacity:.6">${esc(a.fiction)}</em>` : ""}</td></tr>`;
+    };
+    return `<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin:.2rem 0"><thead><tr style="opacity:.65;font-size:.68rem;text-transform:uppercase;letter-spacing:.04em">
+      <th style="text-align:left;padding:.15rem .3rem">Prof</th><th style="text-align:left;padding:.15rem .3rem">Cost</th><th style="text-align:left;padding:.15rem .3rem">Power</th></tr></thead>
+      <tbody>${list.map(row).join("")}</tbody></table>`;
+  }
+  /** The whole Path on one sheet: entry feature, doctrines (with their powers), shared powers. */
+  function pathSheetHtml(def, { doctrine = null, prof = null, header = true } = {}) {
+    if (!def) return "";
+    const all = sortedAbilities(def);
+    const short = def.name.replace(/^Path of the /, "");
+    const h3 = (t) => `<h3 style="margin:.8rem 0 .25rem;font-size:.9rem;border-bottom:1px solid #b9882e44;padding-bottom:.1rem">${t}</h3>`;
+    const docs = Object.entries(def.doctrines ?? {}).map(([k, d]) => {
+      const mine = doctrine === k, other = !!doctrine && !mine;
+      const own = all.filter(a => a.doctrine === k);
+      return `<div style="margin:.45rem 0;padding:.4rem .6rem;border:1px solid ${mine ? "#e8c84a" : "#b9882e44"};border-radius:6px;${other ? "opacity:.5" : ""}">
+        <p style="margin:0;font-weight:700">${esc(d.name)}${mine ? ' <span style="color:#e8c84a;font-size:.72rem">· your doctrine</span>' : ""}${d.tagline ? ` <em style="font-weight:400;opacity:.7">“${esc(d.tagline)}”</em>` : ""}</p>
+        <div style="margin:.2rem 0 0;font-size:.8rem">${d.perk?.description ?? ""}</div>
+        ${own.length ? `<p style="margin:.35rem 0 .1rem;font-size:.68rem;opacity:.7;text-transform:uppercase;letter-spacing:.04em">${esc(d.name)} powers</p>${powerTable(def, own, { prof })}` : ""}
+      </div>`;
+    }).join("");
+    return `<div class="surge-path-sheet">
+      ${header ? `<div style="display:flex;gap:.6rem;align-items:center">${def.img ? `<img src="${def.img}" style="width:48px;height:48px;border:none;border-radius:6px;object-fit:cover;flex:0 0 auto">` : ""}
+        <div><p style="margin:0;font-size:1.1rem;font-weight:700">${esc(def.name)}</p>${def.tagline ? `<p style="margin:0;opacity:.75"><em>${esc(def.tagline)}</em></p>` : ""}</div></div>` : ""}
+      ${h3("Entry feature · how you bank Surge")}<div style="font-size:.85rem">${def.entry?.description ?? ""}</div>
+      ${h3(doctrine ? "Doctrines · you chose one when you walked the Path" : "Doctrines · pick one when you walk the Path")}${docs}
+      ${h3(`Shared powers · every ${esc(short)} gets these`)}${powerTable(def, all.filter(a => !a.doctrine), { prof })}
+      <p style="font-size:.7rem;opacity:.55;margin:.5rem 0 0">Prof = the proficiency bonus a power needs: +2 from 1st level, +3 from 5th, +4 from 9th, +5 from 13th, +6 from 17th. ⚡ = its Surge cost; free moves cost nothing.${prof != null ? " Dimmed rows are above your proficiency for now — they unlock as you level." : ""}</p>
+    </div>`;
+  }
+  /** The description written onto the Path item (shows on the character sheet). */
+  function pathDescription(def, doctrine) {
+    const doc = doctrine ? def.doctrines?.[doctrine] : null;
+    return `<p><em>${esc(def.tagline ?? "")}</em></p>${doc ? `<p><strong>Doctrine: ${esc(doc.name)}</strong>${doc.tagline ? ` — <em>${esc(doc.tagline)}</em>` : ""}</p>` : ""}${pathSheetHtml(def, { doctrine, header: false })}`;
+  }
+  /** Browse every Path (two panes: list on the left, the full sheet on the right). choose=true adds "Walk this Path". */
+  async function browsePaths(actor, { choose = false } = {}) {
+    const have = pathsOf(actor), prof = actor ? profOf(actor) : null;
+    const open = Object.entries(PATHS).filter(([k]) => !choose || !have.some(p => p.key === k));
+    if (!open.length) return null;
+    const list = open.map(([k, d]) => `<button type="button" data-path-pick="${k}" style="display:block;width:100%;height:auto;min-height:0;line-height:1.25;white-space:normal;text-align:left;margin:.2rem 0;padding:.35rem .5rem;border-radius:5px;border:1px solid #b9882e44;background:rgba(185,136,46,.08)">
+        <b>${esc(d.name)}</b>${have.some(p => p.key === k) ? ' <span style="font-size:.68rem;color:#e8c84a">· yours</span>' : ""}<br><span style="font-size:.72rem;opacity:.75">${esc(d.tagline ?? "")}</span></button>`).join("");
+    const intro = choose
+      ? `${have.length ? "Your second Path" : "Your Path"} can't be changed later — read the whole list before you walk it.`
+      : "Every Path, with its entry feature, doctrines and every power it grants.";
+    const buttons = choose
+      ? [{ action: "walk", label: "🜂 Walk this Path", default: true, callback: (_ev, b) => b.form.elements.path?.value || null },
+         { action: "cancel", label: "Not yet", callback: () => null }]
+      : [{ action: "close", label: "Close", default: true, callback: () => null }];
+    return foundry.applications.api.DialogV2.wait({
+      window: { title: choose ? `${actor.name}: choose a Path` : "🜂 The Paths", resizable: true },
+      position: { width: 880 },
+      content: `<p style="margin:0 0 .4rem">${intro}</p><input type="hidden" name="path" value="">
+        <div style="display:flex;gap:.8rem;height:min(68vh,660px)">
+          <div style="flex:0 0 230px;overflow-y:auto;padding-right:.2rem">${list}</div>
+          <div data-path-detail style="flex:1;overflow-y:auto;border-left:1px solid #b9882e44;padding:0 .3rem 0 .8rem"><p style="opacity:.6">Pick a Path on the left to read its entry feature, doctrines and every power it grants.</p></div>
+        </div>`,
+      buttons,
+      render: (_ev, dialog) => {
+        const el = dialog instanceof HTMLElement ? dialog : dialog.element;
+        const walk = el.querySelector('button[data-action="walk"]');
+        if (walk) walk.disabled = true;
+        const show = (btn) => {
+          const k = btn.dataset.pathPick, def = PATHS[k];
+          el.querySelector('input[name="path"]').value = k;
+          el.querySelectorAll("[data-path-pick]").forEach(b => { b.style.borderColor = b === btn ? "#e8c84a" : "#b9882e44"; b.style.background = b === btn ? "rgba(232,200,74,.14)" : "rgba(185,136,46,.08)"; });
+          const pane = el.querySelector("[data-path-detail]");
+          pane.innerHTML = pathSheetHtml(def, { prof, doctrine: have.find(p => p.key === k)?.doctrine ?? null });
+          pane.scrollTop = 0;
+          if (walk) walk.disabled = false;
+        };
+        const btns = el.querySelectorAll("[data-path-pick]");
+        btns.forEach(btn => btn.addEventListener("click", () => show(btn)));
+        if (!choose && btns.length) show(have.length ? ([...btns].find(b => b.dataset.pathPick === have[0].key) ?? btns[0]) : btns[0]);
+      },
+      rejectClose: false,
+    }).catch(() => null);
   }
   /** Pick a Path from the Surge menu; adding it then asks for the doctrine (onCreateItem). */
   async function pickPath(actor) {
-    const have = pathsOf(actor);
-    const options = Object.entries(PATHS).filter(([k]) => !have.some(p => p.key === k)).map(([k, d]) =>
-      `<label style="display:block;margin:.35rem 0"><input type="radio" name="path" value="${k}"> <b>${d.name}</b>${d.tagline ? ` <em style="opacity:.7">“${d.tagline}”</em>` : ""}<br><span style="font-size:.8rem;opacity:.8">${(d.entry?.description ?? "").replace(/<[^>]+>/g, " ")}</span></label>`).join("");
-    const key = await foundry.applications.api.DialogV2.prompt({
-      window: { title: `${actor.name}: choose a Path` },
-      content: `<p>${have.length ? "Your second Path" : "Your Path"} can't be changed later.</p>${options}`,
-      ok: { label: "Walk this Path", callback: (_ev, b) => b.form.querySelector("input[name=path]:checked")?.value },
-      rejectClose: false,
-    }).catch(() => null);
-    if (!key) return;
+    const key = await browsePaths(actor, { choose: true });
+    if (!key || !PATHS[key]) return;
     // Prefer the GM's world item (it carries the reaction activity); otherwise build one.
     const world = game.items.find(i => i.flags?.[MOD]?.path?.key === key);
     const data = world ? world.toObject() : pathItemData(key, PATHS[key]);
     delete data._id; delete data.folder;
     await actor.createEmbeddedDocuments("Item", [data]);
+  }
+  /** 📖 Path guide: the full sheet for every Path the character walks (its doctrine highlighted); no Path yet → browse them all. */
+  async function pathGuide(actor) {
+    const mine = pathsOf(actor).filter(p => PATHS[p.key]);
+    if (!mine.length) return browsePaths(actor, { choose: false });
+    const prof = profOf(actor);
+    return foundry.applications.api.DialogV2.wait({
+      window: { title: `📖 Path guide — ${actor.name}`, resizable: true },
+      position: { width: 720 },
+      content: `<div style="max-height:min(72vh,720px);overflow-y:auto;padding-right:.3rem">
+        ${mine.map(p => pathSheetHtml(PATHS[p.key], { doctrine: p.doctrine, prof })).join('<hr style="margin:1rem 0;border-color:#b9882e44">')}
+        ${mine.length === 1 && Object.keys(PATHS).length > 1 ? '<p style="font-size:.72rem;opacity:.6;margin:.8rem 0 0">A second Path opens at 17th level. Use "Browse all Paths" to read the others.</p>' : ""}
+      </div>`,
+      buttons: [
+        { action: "browse", label: "Browse all Paths", callback: () => { browsePaths(actor, { choose: false }); return null; } },
+        { action: "close", label: "Close", default: true, callback: () => null }],
+      rejectClose: false,
+    }).catch(() => null);
+  }
+  /** Rewrite the description of every Path item (world + actors) from the current data; the active GM runs it on ready for stale ones. */
+  async function refreshPathDescriptions({ force = false } = {}) {
+    if (!game.user.isGM) return 0;
+    let n = 0;
+    const docs = [...game.items.contents, ...game.actors.contents.flatMap(a => a.items.contents)];
+    for (const item of docs) {
+      const path = pathOfItem(item), def = PATHS[path?.key];
+      if (!def || (!force && path.sheet === SHEET_VERSION)) continue;
+      try {
+        await item.update({ "system.description.value": pathDescription(def, path.doctrine ?? null), [`flags.${MOD}.path.sheet`]: SHEET_VERSION }, { surgePathForce: true });
+        n++;
+      } catch (e) { console.warn(TAG, "Path description refresh failed", item.name, e); }
+    }
+    if (n) console.log(TAG, `refreshed ${n} Path item description(s)`);
+    return n;
   }
 
   /** GM helper: create (or refresh) one world item per Path, ready to drag onto a sheet. */
@@ -998,8 +1143,10 @@
     Hooks.on("surgePowers.banked", onBanked);
     game.surgePowers = Object.assign(game.surgePowers || {}, {
       openMenu, menu: MENU, applyEntry, profOf,
-      paths: { debug: { clientId: () => CLIENT_ID, distanceFt, dcOf, alliesNear }, get data() { return PATHS; }, load: loadPaths, of: pathsOf, entries: pathEntries, chooseDoctrine, pick: pickPath, canTake: canTakePath, createItems: createPathItems }
+      paths: { debug: { clientId: () => CLIENT_ID, distanceFt, dcOf, alliesNear }, get data() { return PATHS; }, load: loadPaths, of: pathsOf, entries: pathEntries, chooseDoctrine, pick: pickPath, browse: browsePaths, guide: pathGuide, sheetHtml: pathSheetHtml, refreshDescriptions: refreshPathDescriptions, canTake: canTakePath, createItems: createPathItems }
     });
     console.log(TAG, `Surge Powers table ready (${MENU.length} universal entries, ${Object.keys(PATHS).length} Path(s))`);
+    // Existing Path items predate the full power list in their description: the active GM rewrites stale ones once.
+    if (game.users.activeGM?.id === game.user.id) refreshPathDescriptions().catch(e => console.warn(TAG, "Path description refresh failed", e));
   });
 })();
