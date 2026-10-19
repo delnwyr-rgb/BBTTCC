@@ -686,6 +686,38 @@
         </div>
       </div>
 
+      {{!-- ALPHA CUT ruling 22 (2026-10-18): the STORY offers every Battle / Heist / Parley — worldEffects.raid. --}}
+      <div class="form-group" data-tour="beats.raidOffer">
+        <label data-tooltip="{{bbttccTip 'beats' 'raidOffer'}}">⚔ Offer a fight</label>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; flex:1;">
+          <select name="world-raid-type" style="width:auto;">
+            <option value="" {{#unless raidOffer.type}}selected{{/unless}}>(none)</option>
+            <option value="battle" {{#if (eq raidOffer.type "battle")}}selected{{/if}}>Battle — on the battlemap</option>
+            <option value="heist" {{#if (eq raidOffer.type "heist")}}selected{{/if}}>Heist — quiet, until the alarm</option>
+            <option value="parley" {{#if (eq raidOffer.type "parley")}}selected{{/if}}>Parley — at the table</option>
+          </select>
+          <input type="text" name="world-raid-hex" list="bbttcc-raid-hexes" value="{{raidOffer.hexName}}" placeholder="target hex (name)" style="flex:1; min-width:140px;" />
+          <datalist id="bbttcc-raid-hexes">{{#each raidHexCatalog}}<option value="{{this.name}}">{{this.scene}}{{#if this.owner}} — {{this.owner}}{{/if}}</option>{{/each}}</datalist>
+          <select name="world-raid-court" style="width:auto; max-width:220px;" title="Parley only — the tableau scene the table is pulled to">
+            <option value="" {{#unless raidOffer.courtScene}}selected{{/unless}}>(no court scene)</option>
+            {{#each raidCourtCatalog}}<option value="{{this.id}}" {{#if this.selected}}selected{{/if}}>{{this.name}}</option>{{/each}}
+          </select>
+          <select name="world-raid-goal" style="width:auto;" title="Parley goal">
+            <option value="" {{#unless raidOffer.goal}}selected{{/unless}}>(goal)</option>
+            <option value="persuade" {{#if (eq raidOffer.goal "persuade")}}selected{{/if}}>Persuade</option>
+            <option value="deceive" {{#if (eq raidOffer.goal "deceive")}}selected{{/if}}>Deceive</option>
+            <option value="impress" {{#if (eq raidOffer.goal "impress")}}selected{{/if}}>Impress</option>
+            <option value="unnoticed" {{#if (eq raidOffer.goal "unnoticed")}}selected{{/if}}>Stay unnoticed</option>
+          </select>
+          <select name="world-raid-style" style="width:auto;" title="Impress style">
+            <option value="" {{#unless raidOffer.style}}selected{{/unless}}>(style)</option>
+            {{#each raidStyleCatalog}}<option value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>{{/each}}
+          </select>
+          <input type="text" name="world-raid-stake" value="{{raidOffer.stake}}" placeholder="stake, one line the players read (optional)" style="flex:2; min-width:200px;" />
+        </div>
+        <p class="bbttcc-muted bbttcc-section-hint">Taking this choice opens the console aimed on every seat that owns the Domain. Battle and Heist are fought on the battlemap; a Parley needs a court scene. Players cannot start a fight themselves.</p>
+      </div>
+
       {{!-- Spark Link (Phase B of B3 — beat-driven Tikkun progression).
             When set, resolves through tikkun-beat-listener.enhancer.js into
             the spark API. Spark dropdown lists every item authored in the

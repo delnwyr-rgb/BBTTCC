@@ -2955,7 +2955,7 @@ function _bindCourtConsoleButtons(_message, root) {
       ev.preventDefault();
       const open = game.bbttcc?.api?.raid?.openConsole || game.bbttcc?.api?.raid?.openRaidConsole;
       if (typeof open !== "function") return ui.notifications?.warn?.("Raid Console not available on this world.");
-      open({ factionId: String(btn.dataset.bbttccCourtConsole || "") });
+      open({ factionId: String(btn.dataset.bbttccCourtConsole || ""), fromBeat: true });   // ruling 22: an earned court door IS the story's offer
     });
   }
 }

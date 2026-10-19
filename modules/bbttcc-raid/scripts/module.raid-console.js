@@ -2785,6 +2785,10 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       this.vm.tokenUuid   = String(s.tokenUuid   || this.vm.tokenUuid   || "");
       this.vm.logWar      = !!s.logWar;
       this.vm.includeDefender = (s.includeDefender !== undefined) ? !!s.includeDefender : this.vm.includeDefender;
+      // Ruling 22 — what the story asked for: the Parley goal/style preset, the stake line, the offering beat.
+      this.vm.parley    = (s.parley && typeof s.parley === "object") ? { goal: String(s.parley.goal || "persuade"), style: String(s.parley.style || "show") } : null;
+      this.vm.stake     = String(s.stake || "");
+      this.vm.offeredBy = String(s.offeredBy || "");
 
       // Never let a sync re-open a once-per-round fire gate this seat already holds.
       const prevRounds = this.vm.rounds || [];
@@ -5349,9 +5353,10 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
             ["impress",   "Impress — a show, a dance-off, a skate-off"],
             ["unnoticed", "Stay unnoticed — work the room without raising Suspicion"]
           ];
-          const goalOpts = GOALS.map(([k, l]) => `<option value="${k}">${l}</option>`).join("");
+          const __pre = (this.vm.parley && typeof this.vm.parley === "object") ? this.vm.parley : { goal: "persuade", style: "show" };   // ruling 22: the story's preset
+          const goalOpts = GOALS.map(([k, l]) => `<option value="${k}"${k === String(__pre.goal || "persuade") ? " selected" : ""}>${l}</option>`).join("");
           const __profiles = (typeof raidApi.performanceProfiles === "function") ? raidApi.performanceProfiles() : {};
-          const styleOpts = Object.entries(__profiles).map(([k, v]) => `<option value="${k}"${k === "show" ? " selected" : ""}>${foundry.utils.escapeHTML(v?.label || k)}</option>`).join("") || `<option value="show">The Show</option>`;
+          const styleOpts = Object.entries(__profiles).map(([k, v]) => `<option value="${k}"${k === String(__pre.style || "show") ? " selected" : ""}>${foundry.utils.escapeHTML(v?.label || k)}</option>`).join("") || `<option value="show">The Show</option>`;
           const init = await new Promise((resolve) => {
             new Dialog({
               title: "Parley — Open the table",
@@ -6113,6 +6118,7 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
       let __stake = null;
       try { if (r.targetType === "hex" && targetHex) __stake = await _rcBattleStake(r, attacker, targetHex); } catch (_e) {}
       r.meta ||= {}; if (__stake) r.meta.stake = __stake;
+      if (__stake && this.vm.stake) __stake = Object.assign({}, __stake, { text: `${__stake.text} ${this.vm.stake}` });   // ruling 22: the story's own line
       const call = await _rcBattleCallDialog(r, attacker, defender, __stake);
       if (call === null) return;                       // cancelled — nothing spent, nothing rolled
       __battleCall = (call === "roll") ? null : call;  // "roll" = the GM wants the dice
@@ -7242,7 +7248,7 @@ async function _findActiveRaidForFaction(factionId) {
       const hasTarget   = !!String(s.targetUuid || "").trim();
       const hasRounds   = Array.isArray(s.rounds) && s.rounds.length > 0;
       const hasSupports = supports.length > 0;
-      if (!hasTarget && !hasRounds && !hasSupports) continue;
+      if (!hasTarget && !hasRounds && !hasSupports && s.by !== "story") continue;   // ruling 22: a story offer is live even before a target resolves
       candidates.push({
         attackerId, isAttacker,
         rev: Number(s.rev || 0), ts: Number(s.ts || 0)
@@ -7308,6 +7314,13 @@ function bindAPI() {
   let _console = null;
   async function openConsole(options) {
     options = options || {};
+    // ALPHA CUT ruling 22 (Dave, 2026-10-18) — the story opens the table. On a player seat with the cut on, the console
+    // opens only for a story-offered or already-live raid of the player's own Domain (fromBeat = a beat is opening it).
+    if (!_rcIsGMUser() && !options.fromBeat && game.bbttcc?.alpha?.hidden?.("raidDoors")) {
+      let found = null;
+      try { found = options.factionId ? await _findActiveRaidForFaction(options.factionId) : await _findActiveRaidForUser(); } catch (_e) {}
+      if (!found?.attackerId) { try { ui.notifications?.info?.("The story opens the table — a Battle, Heist or Parley comes to you as a choice."); } catch (_e) {} return null; }
+    }
     if (!_console) _console = new BBTTCC_RaidConsole();
     try { globalThis.__bbttccRaidOpenConsoles?.add?.(_console); } catch(_e) {}
     try {
@@ -7712,6 +7725,7 @@ function attachRaidButtonToToolbar() {
     btn.className = "bbttcc-btn";
     btn.type = "button";
     btn.setAttribute("data-act","raid");
+    btn.setAttribute("data-alpha-hide","raidDoors");   // ruling 22
     btn.innerHTML = `<i class="fas fa-crosshairs"></i><span>Raid</span>`;
     targetRow.appendChild(btn);
 

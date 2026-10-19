@@ -2158,6 +2158,56 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       } catch (e) { console.warn(TAG, "openMarket failed", e); }
     }
 
+    // ── raid (ALPHA CUT ruling 22, Dave 2026-10-18: the STORY offers every Battle / Heist / Parley; stewards never start one) ──
+    // worldEffects.raid = { type: "battle"|"heist"|"parley" (or violence|intrigue|presence), factionId? (default: the party's Domain),
+    //   hexName? | hexUuid? (the target hex) | rigId? (+ defenderId?, targetName?), courtScene? (scene id or name — a Parley's tableau),
+    //   goal? ("persuade"|"deceive"|"impress"|"unnoticed"), style? (Impress profile key), stake? (one line for the console),
+    //   difficulty? ("normal"), label? }. The GM seat writes the attacker's raidSession preset (by:"story"), activates the court
+    //   scene for a Parley, and every seat that owns the Domain opens the console aimed (fromBeat token passes the ruling-22 gate).
+    if (we.raid && typeof we.raid === "object" && game.user && game.user.isGM) {
+      try {
+        const R = we.raid;
+        const camp = ctx.campaignId ? game.bbttcc?.api?.campaign?.getCampaign?.(ctx.campaignId) : null;
+        const fid = String(R.factionId || ctx.factionId || camp?.factionId || (camp?.factionIds || [])[0] || "").replace(/^Actor\./, "");
+        const A = fid ? game.actors.get(fid) : null;
+        if (!A) throw new Error("raid: no attacker Domain (factionId / ctx.factionId / campaign.factionId)");
+        const TYPE = ({ battle: "violence", heist: "intrigue", parley: "presence", violence: "violence", intrigue: "intrigue", presence: "presence", courtly: "presence" })[String(R.type || "battle").toLowerCase()] || "violence";
+        let targetUuid = String(R.hexUuid || "").trim(), targetName = String(R.targetName || "").trim(), defenderId = String(R.defenderId || "").replace(/^Actor\./, ""), targetType = "hex", rigId = "";
+        if (!targetUuid && R.hexName) {
+          const sc = _sceneWithHexNamed(R.hexName); const want = _normHexName(R.hexName);
+          const d = sc ? Array.from(sc.drawings ?? []).find(x => { const f = x?.flags?.["bbttcc-territory"]; return f && _normHexName(f.name || x.text || "") === want; }) : null;
+          if (d) targetUuid = d.uuid;
+        }
+        if (targetUuid) {
+          const td = await fromUuid(targetUuid).catch(() => null); const tdoc = td?.document ?? td; const tf = tdoc?.flags?.["bbttcc-territory"] || {};
+          targetName = targetName || tf.name || tdoc?.text || String(R.hexName || "");
+          if (!defenderId) defenderId = String(tf.factionId || tf.ownerId || "").replace(/^Actor\./, "");
+        }
+        if (R.rigId) { targetType = "rig"; rigId = String(R.rigId); targetName = targetName || String(R.rigName || "a rig"); }
+        if (!targetUuid && !rigId) throw new Error(`raid: target not found (${R.hexName || R.hexUuid || "no hexName / hexUuid / rigId"})`);
+        let courtSceneId = "";
+        if (TYPE === "presence") {
+          const cs = R.courtScene ? (game.scenes.get(String(R.courtScene)) || game.scenes.find(s => _normHexName(s.name) === _normHexName(R.courtScene))) : null;
+          if (cs) { courtSceneId = cs.id; try { await cs.activate(); } catch (_e) { try { await cs.view(); } catch (_e2) {} } }
+          else console.warn(TAG, "raid: a Parley with no courtScene — the Parley engine needs a tableau scene viewed", R);
+        }
+        const prev = A.getFlag("bbttcc-raid", "raidSession") || {};
+        const session = {
+          rev: Number(prev.rev || 0) + 1, ts: Date.now(), by: "story", offeredBy: String(beatCtx.beatId || ""),
+          attackerId: A.id, supportFactionIds: [], activityKey: TYPE, difficulty: String(R.difficulty || "normal"),
+          targetType, targetName: targetName || "—", targetUuid, defenderId, rigId, creatureId: "", actorUuid: "", sceneUuid: "", tokenUuid: "",
+          rounds: [], logWar: true, includeDefender: true,
+          parley: TYPE === "presence" ? { goal: String(R.goal || "persuade").toLowerCase(), style: String(R.style || "show") } : null,
+          stake: String(R.stake || ""), label: String(R.label || "")
+        };
+        await A.setFlag("bbttcc-raid", "raidSession", session);
+        const payload = { factionId: A.id, type: TYPE, targetName: session.targetName, courtSceneId, stake: session.stake };
+        try { game.socket?.emit?.("module.bbttcc-campaign", { type: "bbttccOpenRaid", payload }); } catch (_e) {}
+        await _openRaidOnThisClient(payload); // sockets don't echo to the sender
+        changed = true; notes.push(`raid:${TYPE}:${session.targetName}`);
+      } catch (e) { console.warn(TAG, "raid offer failed", e); }
+    }
+
     // ── closeMarket (2026-10-17): worldEffects.closeMarket = { vendorId?, vendorName? } — the vendor goes inactive for players now ──
     // The explicit "the convoy rolls on" counterpart of openMarket.activate (the turn-end sweep is the implicit one).
     if (we.closeMarket && typeof we.closeMarket === "object") {
@@ -2232,6 +2282,18 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
 
   // ── openMarket client-side plumbing (2026-10-17) ───────────────────────────
   // Point this client's Market context at the vendor (lastContext is client-scoped), then open it.
+  // Ruling 22 — every seat that owns the offered Domain (and the GM) opens the console aimed at the story's target.
+  async function _openRaidOnThisClient({ factionId = "", type = "", targetName = "", courtSceneId = "", stake = "" } = {}) {
+    try {
+      const fid = String(factionId || ""); if (!fid) return;
+      if (!game.user?.isGM) { const mine = (game.actors?.contents || []).some(a => a.id === fid && a.isOwner); if (!mine) return; }
+      if (game.user?.isGM && courtSceneId && canvas?.scene?.id !== courtSceneId) { try { await game.scenes.get(courtSceneId)?.view(); } catch (_e) {} }
+      const open = game.bbttcc?.api?.raid?.openConsole; if (typeof open !== "function") return;
+      await open({ factionId: fid, fromBeat: true });
+      const lbl = game.bbttcc?.api?.raid?.typeLabel?.(type) || type;
+      ui.notifications?.info?.(`${lbl}${targetName ? ` — ${targetName}` : ""}: the story opens the table.${stake ? ` ${stake}` : ""}`);
+    } catch (e) { console.warn(TAG, "open raid on this client failed", e); }
+  }
   async function _openMarketOnThisClient({ vendorId = "", vendorName = "", note = "" } = {}) {
     try {
       const M = game.bbttcc?.api?.market;
@@ -2369,6 +2431,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         if (!msg) return;
         if (msg.type === "bbttccOpenTravel") return _openTravelOnThisClient(msg.payload || {});
         if (msg.type === "bbttccOpenMarket") return _openMarketOnThisClient(msg.payload || {});
+        if (msg.type === "bbttccOpenRaid") return _openRaidOnThisClient(msg.payload || {});
         if (msg.type === "bbttccRefreshMarket") return _refreshMarketOnThisClient();
         if (msg.type === "bbttccPullScene") return _pullSceneOnThisClient(msg.payload || {});
       });

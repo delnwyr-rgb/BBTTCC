@@ -2848,7 +2848,7 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey
           await _pause(700);
         }
       }
-      try { await globalThis.game?.bbttcc?.api?.raid?.openConsole?.({ factionId: f.id }); }
+      try { await globalThis.game?.bbttcc?.api?.raid?.openConsole?.({ factionId: f.id, fromBeat: true }); }
       catch (e) { console.warn(TAG, `openConsole (${activityKey}) failed`, e); }
 
       // Raids are GM-driven — the player's console is staging-only (attacker

@@ -1187,10 +1187,24 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     const stageCue = (stageCueRaw && typeof stageCueRaw === "object") ? { key: String(stageCueRaw.key || ""), sceneId: String(stageCueRaw.sceneId || ""), direction: String(stageCueRaw.direction || "after") } : { key: "", sceneId: "", direction: "after" };
     let stageCueCatalog = [];
     try { stageCueCatalog = (game.bbttcc?.api?.stage?.catalog?.() || []).map(sc => ({ ...sc, selected: sc.id === stageCue.sceneId })); } catch (_eSC) {}
+    // ALPHA CUT ruling 22 (2026-10-18): the story offers every fight — worldEffects.raid row.
+    const raidRaw = (worldEffects.raid && typeof worldEffects.raid === "object") ? worldEffects.raid : {};
+    const _tNorm = { violence: "battle", intrigue: "heist", presence: "parley", courtly: "parley" };
+    const raidOffer = { type: _tNorm[String(raidRaw.type || "").toLowerCase()] || String(raidRaw.type || "").toLowerCase(), hexName: String(raidRaw.hexName || ""), courtScene: String(raidRaw.courtScene || ""), goal: String(raidRaw.goal || "").toLowerCase(), style: String(raidRaw.style || ""), stake: String(raidRaw.stake || "") };
+    let raidHexCatalog = [], raidCourtCatalog = [], raidStyleCatalog = [];
+    try {
+      const seen = new Set();
+      for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) { const f = d.flags?.["bbttcc-territory"]; if (!f || !(f.isHex === true || f.kind === "territory-hex")) continue; const nm = String(f.name || d.text || "").trim(); if (!nm || seen.has(nm)) continue; seen.add(nm); const oid = String(f.factionId || f.ownerId || "").replace(/^Actor\./, ""); raidHexCatalog.push({ name: nm, scene: sc.name, owner: oid ? (game.actors.get(oid)?.name || "") : "" }); }
+      raidHexCatalog.sort((a, b) => a.name.localeCompare(b.name));
+      raidCourtCatalog = (game.scenes ?? []).filter(s => s.flags?.["bbttcc-raid"]?.tableau?.enabled === true).map(s => ({ id: s.id, name: s.name, selected: s.id === raidOffer.courtScene || s.name === raidOffer.courtScene }));
+      const prof = game.bbttcc?.api?.raid?.performanceProfiles?.() || {};
+      raidStyleCatalog = Object.entries(prof).map(([k, v]) => ({ key: k, label: v?.label || k, selected: k === raidOffer.style }));
+    } catch (_eRO) {}
 
     return {
       stageCue,
       stageCueCatalog,
+      raidOffer, raidHexCatalog, raidCourtCatalog, raidStyleCatalog,
       ...data,
       campaignId: this.campaignId,
       beat: this.beat,
@@ -3473,6 +3487,23 @@ _syncCoreFromForm() {
 
     const wl = fd.get("world-warlog");
     if (wl != null) we.warLog = String(wl || "").trim() || "";
+
+    // ALPHA CUT ruling 22 (2026-10-18): worldEffects.raid — the story offers a fight
+    const rdType = fd.get("world-raid-type");
+    if (rdType != null) {
+      const type = String(rdType || "").trim().toLowerCase();
+      if (type) {
+        const raid = { type, hexName: String(fd.get("world-raid-hex") || "").trim() };
+        const court = String(fd.get("world-raid-court") || "").trim(); if (court) raid.courtScene = court;
+        const goal = String(fd.get("world-raid-goal") || "").trim(); if (goal && type === "parley") raid.goal = goal;
+        const style = String(fd.get("world-raid-style") || "").trim(); if (style && type === "parley") raid.style = style;
+        const stake = String(fd.get("world-raid-stake") || "").trim(); if (stake) raid.stake = stake;
+        // keep fields the row does not edit (factionId, rigId, difficulty, label)
+        const prevR = (we.raid && typeof we.raid === "object") ? we.raid : {};
+        for (const k of ["factionId", "rigId", "defenderId", "targetName", "hexUuid", "difficulty", "label"]) if (prevR[k] != null && prevR[k] !== "") raid[k] = prevR[k];
+        we.raid = raid;
+      } else delete we.raid;
+    }
 
     // STAGE CUES (2026-10-15)
     const scKey = fd.get("world-stagecue-key");

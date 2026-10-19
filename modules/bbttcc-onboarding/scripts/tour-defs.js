@@ -620,7 +620,7 @@ const raidConsoleTour = {
       }
     } catch (e) { console.warn("[onboarding/tour-defs] raid tour staging skipped:", e); }
 
-    raidApi.openConsole({ factionId: faction.id });
+    raidApi.openConsole({ factionId: faction.id, fromBeat: true });
     return null; // window mounts at #bbttcc-raid-console
   },
 

@@ -35,6 +35,7 @@ export const ALPHA_KEYS = Object.freeze({
   "epic":                "Epic play (Tier 5)",
   // Strategic side
   "siege":               "Sieges (raid console tab, HUD, macros)",
+  "raidDoors":           "Raid doors — the story opens the table (Domain ⚔ Raid, faction Open Raid, toolbar Raid; ruling 22)",
   "marketFacilities":    "Market: Facilities tab",
   "marketHexAssets":     "Market: Hex assets tab",
   "catalogEditor":       "Market: catalog editor",

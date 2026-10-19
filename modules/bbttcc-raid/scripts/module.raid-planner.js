@@ -2438,6 +2438,7 @@ Hooks.once("ready",()=>{
       a.type = "button";
       a.className = "bbttcc-btn";
       a.dataset.act = act;
+      if (act === "raid") a.dataset.alphaHide = "raidDoors";   // ruling 22: the story opens the table
       a.innerHTML = `<i class="fas fa-${icon}"></i><span>${label}</span>`;
       a.addEventListener("click",(e)=>{
         e.preventDefault();

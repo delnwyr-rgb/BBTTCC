@@ -55,6 +55,7 @@
           {{#if vm.targetName}} • Target: <b>{{default vm.targetName "—"}}</b>{{/if}}
         </div>
         {{#if activityHint}}<div class="bbttcc-activity-hint" style="font-size:.78rem; opacity:.8; font-style:italic;">{{activityHint}}</div>{{/if}}
+        {{#if vm.stake}}<div class="bbttcc-story-stake" style="font-size:.8rem; opacity:.9;">{{vm.stake}}</div>{{/if}}
       </div>
       <div class="flex0" style="opacity:.8; font-size:.85rem;">
         {{#if playerRole}}
