@@ -61,7 +61,7 @@ const stewardSheetTour = {
       id: "tabs", title: "The tabs",
       selector: ".ft-tabs",
       // ALPHA CUT (2026-10-17): player seats see five tabs; the rest open up later.
-      text: "Everything else lives behind these: Steward (this overview), Engagement (combat), Aptitudes (trained skills), Manifestations (your powers) and Inventory.\nMore tabs open up as you grow. We'll hit the important ones now."
+      text: "Everything else lives behind these: Steward (this overview), Domain (your holdings, once you have one), Conflict (fights), Aptitudes (trained skills), Manifestations (your powers) and Inventory.\nMore tabs open up as you grow. We'll hit the important ones now."
     },
     {
       id: "aptitudes", title: "Aptitudes — trained skill ranks",
