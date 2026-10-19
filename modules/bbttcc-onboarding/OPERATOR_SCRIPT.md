@@ -76,15 +76,21 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 ### Stewardship — OP & Turn `stewardship_turn`
 
-**`stewardship_turn.01`** Your treasury — OPERATIONS POINTS. Economy ⟨fmt(b.economy)⟩, Violence ⟨fmt(b.violence)⟩, Diplomacy ⟨fmt(b.diplomacy)⟩. Every order spends from these buckets; they refill each Turn, capped by your tier.
+**`stewardship_turn.01`** Your Domain has a treasury now — ⟨total⟩, sorted into pools. Every order it gives is paid from there; the land refills it each Turn.  /  Your Domain has a treasury now, sorted into pools. Every order it gives is paid from there; the land refills it each Turn.
 
-**`stewardship_turn.02`** Operations Points — OP — fund every order you give. They refill each Turn, capped by your tier.
+**`stewardship_turn.02`** A Turn is the Domain's heartbeat: you plan, the GM runs it at Day's End, the land answers. Let's plan one — something small, on the hold you just claimed.
 
-**`stewardship_turn.03`** Now the heartbeat that refills them: the TURN. Advancing one regens your OP toward its caps, resolves every queued order, and ticks the clock. We'll run a true PREVIEW — all rhythm, zero consequences.
+**`stewardship_turn.03`** The planner's shelf is bare for this hold— *bzzt* —skipping the order and running the heartbeat.
 
-**`stewardship_turn.04`** That's a Turn — previewed. In the living world it'd refill your OP and resolve every queued order. Nothing was committed here. You've got the rhythm.
+**`stewardship_turn.04`** That's the whole shelf — browse it later. For today I'll file the first one.
 
-**`stewardship_turn.05`** Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.
+**`stewardship_turn.05`** Filed: ⟨chosen.label⟩ on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.
+
+**`stewardship_turn.06`** The planner balked at that one— *bzzt* —no matter. The shape's the lesson: pick an order, it waits for the Turn.
+
+**`stewardship_turn.07`** That's a Turn, previewed. In the living world the land pays in, your order resolves, the clock ticks. Nothing was committed here — you've got the rhythm.
+
+**`stewardship_turn.08`** Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.
 
 ### Outfitting `outfitting`
 
@@ -222,7 +228,7 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 **`final_showdown.15`** So here's the shape of it. You can finish what's in the circle — it's losing, and nobody would blame you. Or you can take the surrender, open the parley, and find out what was so frightened of this place that it tried to unmake it.
 
-**`final_showdown.16`** ⟨camePlain⟩. Either way it's talking now. Your GM runs the parley from the Raid Console — a PARLEY, not a Battle. I've pointed it at you.
+**`final_showdown.16`** ⟨camePlain⟩. Either way it's talking now. Your GM runs the parley from the Domain Conflict console — a PARLEY, not a Battle. I've pointed it at you.
 
 **`final_showdown.17`** However that ended — it ended with words on the table. Remember that you had the option. Most things in Bad Eden won't offer it twice.
 
@@ -238,7 +244,7 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 **`travel.03`** You're across. They've seen you now — no walking this back. Time to choose HOW you take them.
 
-**`travel.04`** No Domain on file to raid under— *bzzt* —I can't open a war console without one. Hold a Domain, then replay the finale.
+**`travel.04`** No Domain on file to fight under— *bzzt* —I can't open a war console without one. Hold a Domain, then replay the finale.
 
 **`travel.05`** Your GM's console just lit up on your banner — they run the rounds. Pick your maneuvers; your Domain brings what it owns, and the GM calls it.
 
@@ -357,8 +363,8 @@ Your people have opinions. The Center is the dominant philosophy; Drift (−100.
 Rupturing factions can split or flip. Soft-power campaigns, atrocities and succession crises all feed Drift.
 
 **`tour.faction-sheet.08` · Activities — where fights arrive**  
-The Activities tab is where the Domain acts. Battle, Heist and Parley come to you through the story — when one is offered, the Raid console opens here already aimed. Your Domain brings what it owns; the GM resolves the rounds.  
-The Raid console has its own tour.
+The Activities tab is where the Domain acts. Battle, Heist and Parley come to you through the story — when one is offered, the Domain Conflict console opens here already aimed. Your Domain brings what it owns; the GM resolves the rounds.  
+The Domain Conflict console has its own tour.
 
 **`tour.faction-sheet.09` · The Next Turn queue**  
 Strategic actions staged here fire when the GM advances the Turn (Apply). Anything flagged 'Cannot afford' will fizzle — check your bank before the Turn ticks.
@@ -387,7 +393,7 @@ Offers from other factions land here — Accept, Decline or Counter. The history
 Bigger deals (Allied Sends, brokered exchanges) run through the Exchange dialogs.
 
 **`tour.faction-sheet.16` · War Logs — the memory**  
-Everything the faction has done or suffered — Turns, commits, raids, outcomes. When you're arguing about how the war started, the answer is in here.
+Everything the faction has done or suffered — Turns, commits, conflicts, outcomes. When you're arguing about how the war started, the answer is in here.
 
 > *Operator:* The war log never argues back. That's what makes it the most dangerous document you own.
 
@@ -551,15 +557,15 @@ One activity per click; the war log records it as planned.
 
 **`tour.planner-hud.outro`** Planner toured. Fights win rounds; planned activities win Turns. The Domains that scare people do both — and a Domain grows from held ground.
 
-### The Sharp End (Raid Console) `raid-console` — player
+### The Sharp End (Domain Conflict) `raid-console` — player
 
-**`tour.raid-console.intro`** Opening the Raid Console. Three ways to take what's theirs: Battle, Heist, Parley. Battle and Heist are fought on the battlemap in combat rounds; a Parley is talked out at the table. The story opens the table — a fight comes to you as a choice, you never start one yourself. If there's no live fight I've staged you a practice target— *bzzt* —it won't mind.
+**`tour.raid-console.intro`** Opening the Domain Conflict console. Three ways to take what's theirs: Battle, Heist, Parley. Battle and Heist are fought on the battlemap in combat rounds; a Parley is talked out at the table. The story opens the table — a fight comes to you as a choice, you never start one yourself. If there's no live fight I've staged you a practice target— *bzzt* —it won't mind.
 
 **`tour.raid-console.01` · The identity strip**  
 Who's fighting over what: the target, the key this fight leans on (gold pill — the strength your Domain brings is read from it), and portraits of the attacker plus any coalition supporters.
 
 **`tour.raid-console.02` · GM setup row**  
-GM-only: the attacker, the raid type — Battle, Heist or Parley, each with its own maneuver set — the difficulty band, and the target (Pick Target grabs a hex off the canvas). The story usually sets all of this; the GM can improvise.  
+GM-only: the attacker, the kind of conflict — Battle, Heist or Parley, each with its own maneuver set — the difficulty band, and the target (Pick Target grabs a hex off the canvas). The story usually sets all of this; the GM can improvise.  
 Add Round starts the exchange once attacker + target + type are set.
 
 **`tour.raid-console.03` · Your bank**  
@@ -582,10 +588,10 @@ Availability gates on Domain tier, your class and Beat grants.
 **`tour.raid-console.07` · Commit (Roll) — resolving the round**  
 GM-only: resolves the round. A Battle is fought on the battlemap first, then called here — won, stalemate or lost; open ground changes hands with the field. A Heist runs the alarm; a Parley runs the influence duel at the table. The outcome colors the round log.
 
-**`tour.raid-console.08` · Reset & End Raid**  
-GM-only: Reset clears the rounds but keeps the setup; End Raid tears down the whole fight — rounds, supporters, target — and propagates the clear to every player's console.
+**`tour.raid-console.08` · Reset & End**  
+GM-only: Reset clears the rounds but keeps the setup; End tears down the whole fight — rounds, supporters, target — and propagates the clear to every player's console.
 
-**`tour.raid-console.outro`** Raid console toured. Remember the shape: the story offers the fight, your Domain brings what it owns, you pick the maneuvers, the GM calls it. No marks change hands in a Battle or Heist; a Parley can sweeten the deal.
+**`tour.raid-console.outro`** Console toured. Remember the shape: the story offers the fight, your Domain brings what it owns, you pick the maneuvers, the GM calls it. No marks change hands in a Battle or Heist; a Parley can sweeten the deal.
 
 ### The Rolling Body (Rig Sheet) `rig-sheet` — player
 
@@ -596,7 +602,7 @@ The pills that matter: Mobility (stationary / mobile / hybrid) decides if this t
 The owner pill binds it to a faction; the duplicate button opens the Rig Builder pre-filled.
 
 **`tour.rig-sheet.02` · The four tiles**  
-Integrity is the rig's health — zero means destroyed. Tier and bracket gate what it can mount; Crew shows seated versus capacity; Output is current throughput after the state throttle.  
+Integrity is the rig's health — zero means destroyed. Tier and bracket gate what it can mount; Crew shows seated versus capacity; Output is how much its output modules yield this Turn — parked 100%, deployed 50%, destroyed nothing.  
 Mobile rigs get Deploy / Recall buttons right on the Integrity tile.
 
 **`tour.rig-sheet.03` · Crew — who runs the meat-wagon**  

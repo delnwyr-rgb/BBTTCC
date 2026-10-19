@@ -29,7 +29,7 @@
       <button class="btn flex0" data-id="pick-hex" title="Pick target on canvas">Pick Target</button>
       <button class="btn flex0" data-id="add-round">Add Round</button>
       <button class="btn flex0" data-id="reset" title="Clear rounds; keeps attacker, target, and supporters">Reset</button>
-      <button class="btn flex0" data-id="end-raid" title="End the raid: clears rounds, supporters, and target. Propagates to all players.">End Raid</button>
+      <button class="btn flex0" data-id="end-raid" title="End the conflict: clears rounds, supporters, and target. Propagates to all players.">End</button>
 
       {{#unless alphaOn}}
       {{!-- Alpha Cut (Dave 2026-10-18): both sides are always logged; the two toggles are hidden. --}}
@@ -42,7 +42,7 @@
       {{/unless}}
     {{else}}
       <div class="flex1">
-        <div style="font-weight:700; letter-spacing:.06em; text-transform:uppercase; opacity:.9;">Raid Commitments</div>
+        <div style="font-weight:700; letter-spacing:.06em; text-transform:uppercase; opacity:.9;">Conflict Commitments</div>
         <div style="font-size:.85rem; opacity:.85;">
           Your Domain: <b>{{default playerFactionName currentBank.attackerName}}</b>
           {{#if playerRole}}
@@ -119,7 +119,7 @@
         {{#if currentBank.topDC.defProjBonus}} • <b>Defender staged bonus:</b> +{{currentBank.topDC.defProjBonus}}{{/if}}
         {{#if currentBank.topDC.diff}} • <b>Diff:</b> +{{currentBank.topDC.diff}}{{/if}}
         {{#if currentBank.topDC.facDef}} • <b>Domain:</b> +{{currentBank.topDC.facDef}}{{/if}}
-        {{#if currentBank.topDC.nextB}} • <b>Next-Raid:</b> +{{currentBank.topDC.nextB}}{{/if}}
+        {{#if currentBank.topDC.nextB}} • <b>Next conflict:</b> +{{currentBank.topDC.nextB}}{{/if}}
         {{#if currentBank.topDC.projected}}
           • <b>Projected DC:</b>
             <span {{#if currentBank.topDC.breakdown}}title="{{currentBank.topDC.breakdown}}"{{/if}} style="font-weight:700;">{{currentBank.topDC.projected}}</span>
@@ -404,7 +404,7 @@
                         </div>
                         {{/if}}
                         {{else}}
-                        <p style="margin:.25rem 0;font-size:.78rem;opacity:.7;"><em>You're not in this raid — staging unavailable.</em></p>
+                        <p style="margin:.25rem 0;font-size:.78rem;opacity:.7;"><em>You're not in this conflict — staging unavailable.</em></p>
                         {{/if}}
                       </div>
                       {{/if}}
@@ -418,7 +418,7 @@
                           {{#if r.view.defProjBonus}} • Defender staged bonus: <b>+{{r.view.defProjBonus}}</b>{{/if}}
                           {{#if r.view.diff}} • Diff: <b>+{{r.view.diff}}</b>{{/if}}
                           {{#if r.view.facDef}} • Domain: <b>+{{r.view.facDef}}</b>{{/if}}
-                          {{#if r.view.nextB}} • Next-Raid: <b>+{{r.view.nextB}}</b>{{/if}}
+                          {{#if r.view.nextB}} • Next conflict: <b>+{{r.view.nextB}}</b>{{/if}}
                           {{#if r.view.dcProjected}}
                             • <i>Projected DC</i>: <b {{#if r.view.breakdown}}title="{{r.view.breakdown}}"{{/if}}>{{r.view.dcProjected}}</b>
                             {{#if r.view.breakdown}}<span class="bbttcc-tip" data-tip="{{r.view.breakdown}}" aria-label="DC breakdown">ⓘ</span>{{/if}}

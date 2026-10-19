@@ -292,7 +292,7 @@ const factionSheetTour = {
       pre: 'nav.bbttcc-tabs a.item[data-tab="activities"]',
       selector: "button[data-open-raid-console]",
       optional: true,
-      text: "The Activities tab is where the Domain acts. Battle, Heist and Parley come to you through the story — when one is offered, the Raid console opens here already aimed. Your Domain brings what it owns; the GM resolves the rounds.\nThe Raid console has its own tour."
+      text: "The Activities tab is where the Domain acts. Battle, Heist and Parley come to you through the story — when one is offered, the Domain Conflict console opens here already aimed. Your Domain brings what it owns; the GM resolves the rounds.\nThe Domain Conflict console has its own tour."
     },
     {
       id: "planned", title: "The Next Turn queue",
@@ -343,7 +343,7 @@ const factionSheetTour = {
       pre: 'nav.bbttcc-tabs a.item[data-tab="warlogs"]',
       selector: "fieldset.bbttcc-card-warlogs",
       optional: true,
-      text: "Everything the faction has done or suffered — Turns, commits, raids, outcomes. When you're arguing about how the war started, the answer is in here.",
+      text: "Everything the faction has done or suffered — Turns, commits, conflicts, outcomes. When you're arguing about how the war started, the answer is in here.",
       speak: "The war log never argues back. That's what makes it the most dangerous document you own."
     }
   ]
@@ -552,7 +552,7 @@ const travelConsoleTour = {
 
 /* ───────────────────── PLAYER · Activity Planner ───────────────────── */
 // Strategic-turn activities (deliberately NOT the three raid types — those
-// live in the Raid Console). Opens locked to the player's faction.
+// live in the Domain Conflict console). Opens locked to the player's faction.
 
 const plannerTour = {
   id: "planner-hud",
@@ -622,7 +622,7 @@ const plannerTour = {
   ]
 };
 
-/* ───────────────────── PLAYER+GM · Raid Console ───────────────────── */
+/* ───────────────────── PLAYER+GM · Domain Conflict console ───────────────────── */
 // One template, isGM branches — GM-only steps auto-skip for players and
 // vice versa. If the faction has NO active raid session, we stage a practice
 // one (the onboarding finale's trick) so the console isn't an empty shell,
@@ -650,16 +650,16 @@ Hooks.once("ready", async () => {
 
 const raidConsoleTour = {
   id: "raid-console",
-  title: "The Sharp End (Raid Console)",
+  title: "The Sharp End (Domain Conflict)",
   audience: "player",
-  intro: "Opening the Raid Console. Three ways to take what's theirs: Battle, Heist, Parley. Battle and Heist are fought on the battlemap in combat rounds; a Parley is talked out at the table. The story opens the table — a fight comes to you as a choice, you never start one yourself. If there's no live fight I've staged you a practice target— *bzzt* —it won't mind.",
-  outro: "Raid console toured. Remember the shape: the story offers the fight, your Domain brings what it owns, you pick the maneuvers, the GM calls it. No marks change hands in a Battle or Heist; a Parley can sweeten the deal.",
+  intro: "Opening the Domain Conflict console. Three ways to take what's theirs: Battle, Heist, Parley. Battle and Heist are fought on the battlemap in combat rounds; a Parley is talked out at the table. The story opens the table — a fight comes to you as a choice, you never start one yourself. If there's no live fight I've staged you a practice target— *bzzt* —it won't mind.",
+  outro: "Console toured. Remember the shape: the story offers the fight, your Domain brings what it owns, you pick the maneuvers, the GM calls it. No marks change hands in a Battle or Heist; a Parley can sweeten the deal.",
 
   open: async (ctx) => {
     const raidApi = game.bbttcc?.api?.raid;
-    if (!raidApi?.openConsole) { ui.notifications?.warn?.("Raid Console not loaded — is bbttcc-raid enabled?"); return false; }
+    if (!raidApi?.openConsole) { ui.notifications?.warn?.("Domain Conflict console not loaded — is bbttcc-raid enabled?"); return false; }
     const faction = _resolveFactionForTour(ctx);
-    if (!faction) { ui.notifications?.warn?.("No faction found — the raid console needs one."); return false; }
+    if (!faction) { ui.notifications?.warn?.("No Domain found — the Domain Conflict console needs one."); return false; }
 
     _raidTourStagedFactionId = null;
     _raidTourStagedToken = null;
@@ -716,7 +716,7 @@ const raidConsoleTour = {
       id: "setup", title: "GM setup row",
       selector: 'select[data-id="attacker"]',
       optional: true,
-      text: "GM-only: the attacker, the raid type — Battle, Heist or Parley, each with its own maneuver set — the difficulty band, and the target (Pick Target grabs a hex off the canvas). The story usually sets all of this; the GM can improvise.\nAdd Round starts the exchange once attacker + target + type are set."
+      text: "GM-only: the attacker, the kind of conflict — Battle, Heist or Parley, each with its own maneuver set — the difficulty band, and the target (Pick Target grabs a hex off the canvas). The story usually sets all of this; the GM can improvise.\nAdd Round starts the exchange once attacker + target + type are set."
     },
     {
       id: "playerbank", title: "Your bank",
@@ -749,10 +749,10 @@ const raidConsoleTour = {
       text: "GM-only: resolves the round. A Battle is fought on the battlemap first, then called here — won, stalemate or lost; open ground changes hands with the field. A Heist runs the alarm; a Parley runs the influence duel at the table. The outcome colors the round log."
     },
     {
-      id: "end", title: "Reset & End Raid",
+      id: "end", title: "Reset & End",
       selector: 'button[data-id="end-raid"]',
       optional: true,
-      text: "GM-only: Reset clears the rounds but keeps the setup; End Raid tears down the whole fight — rounds, supporters, target — and propagates the clear to every player's console."
+      text: "GM-only: Reset clears the rounds but keeps the setup; End tears down the whole fight — rounds, supporters, target — and propagates the clear to every player's console."
     }
   ]
 };
@@ -801,7 +801,7 @@ const rigSheetTour = {
     {
       id: "stats", title: "The four tiles",
       selector: ".ft-rig-stat-grid",
-      text: "Integrity is the rig's health — zero means destroyed. Tier and bracket gate what it can mount; Crew shows seated versus capacity; Output is current throughput after the state throttle.\nMobile rigs get Deploy / Recall buttons right on the Integrity tile."
+      text: "Integrity is the rig's health — zero means destroyed. Tier and bracket gate what it can mount; Crew shows seated versus capacity; Output is how much its output modules yield this Turn — parked 100%, deployed 50%, destroyed nothing.\nMobile rigs get Deploy / Recall buttons right on the Integrity tile."
     },
     {
       id: "crew", title: "Crew — who runs the meat-wagon",

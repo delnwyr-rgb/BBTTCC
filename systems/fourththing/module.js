@@ -25330,7 +25330,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     try {
       switch (act) {
         case "planner": { if (!A.raid?.openActivityPlanner) return ui.notifications?.warn?.("Planner not available."); return A.raid.openActivityPlanner({ factionId: faction.id, lockFaction: true }); }
-        case "raid":    { const open = A.raid?.openConsole || A.raid?.openRaidConsole; if (typeof open !== "function") return ui.notifications?.warn?.("Raid Console not available."); return open({ factionId: faction.id, mode: "commit" }); }
+        case "raid":    { const open = A.raid?.openConsole || A.raid?.openRaidConsole; if (typeof open !== "function") return ui.notifications?.warn?.("Domain Conflict console not available."); return open({ factionId: faction.id, mode: "commit" }); }
         case "quests":  { if (!A.quests?.openQuestLog) return ui.notifications?.warn?.("Quest Log not available."); return A.quests.openQuestLog({ factionId: faction.id }); }
         case "market":  { try { const cur = game.settings.get("bbttcc-market", "lastContext") || {}; await game.settings.set("bbttcc-market", "lastContext", { ...cur, factionId: faction.id, characterId: actor.id }); } catch (_e) {} return A.market?.openMarket?.(); }
         case "vault":   { // ruling 16: one Treasury, opened as this steward (falls back to the faction bank on Beta worlds)
@@ -29101,7 +29101,7 @@ const _FT_RAID_KIND_PRESETS = {
   violence: { icon: "⚔", label: "Battle",  color: "#eb5757" },
   intrigue: { icon: "🥷", label: "Heist",   color: "#7ec0ff" },
   presence: { icon: "♕",  label: "Parley",  color: "#d4a35f" },
-  raid:     { icon: "⚡", label: "Raid",           color: "#d4a35f" }
+  raid:     { icon: "⚡", label: "Conflict",       color: "#d4a35f" }   // umbrella (Dave 2026-10-19): Domain Conflict = Battle / Heist / Parley
 };
 
 function _ftActiveRaidConsole() {

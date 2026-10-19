@@ -1394,7 +1394,7 @@ async function pickTargetHex({ prompt="Click a Bad Eden hex…" } = {}) {
 async function pickTargetHexOrRig(vm){
   const choice = await new Promise((resolve) => {
     new Dialog({
-      title: "Pick Raid Target",
+      title: "Pick Conflict Target",
       content: `<p>Choose your target type:</p>`,
       buttons: {
         hex: { label: "Hex", callback: () => resolve("hex") },
@@ -1441,7 +1441,7 @@ async function pickTargetHexOrRig(vm){
     const bossKey = await new Promise((resolve) => {
       const options = opts.map(b => `<option value="${foundry.utils.escapeHTML(String(b.key||""))}">${foundry.utils.escapeHTML(String(b.label||b.key||""))}</option>`).join("");
       new Dialog({
-        title: "Pick Creature (Raid Boss)",
+        title: "Pick Creature (Boss)",
         content: `
           <form>
             <div class="form-group">
@@ -1968,7 +1968,7 @@ function _rcEmitManFireCard(r, side, key, manDef, attacker, defender) {
       : (defender?.name || r?.targetName || "Target");
     const fmStyle = _RC_FM_BADGE_STYLES[fm] || _RC_FM_BADGE_STYLES.anytime;
     const fmBadge = `<span style="display:inline-block;padding:0 .35em;border-radius:3px;font-size:.7em;font-weight:700;letter-spacing:.06em;background:${fmStyle.bg};color:${fmStyle.fg};border:1px solid ${fmStyle.brd};vertical-align:middle;">${fmStyle.lbl}</span>`;
-    const roundLabel = r?.activityLabel ? `${r.activityLabel}` : "Raid";
+    const roundLabel = r?.activityLabel ? `${r.activityLabel}` : "Conflict";
     const card = `<section class="bbttcc-raid-fire">
       <p style="margin:0 0 .25rem;"><b>🎯 ${foundry.utils.escapeHTML(actorName)}</b> fires <b>${foundry.utils.escapeHTML(label)}</b> ${fmBadge}</p>
       <p style="margin:0;opacity:.85;font-size:.9em;">vs <b>${foundry.utils.escapeHTML(targetName)}</b> · <i>${foundry.utils.escapeHTML(roundLabel)}</i> · <span style="opacity:.7;">${sideLabel} side</span></p>
@@ -2585,7 +2585,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
     classes: ["bbttcc","bbttcc-raid-console","bbttcc-raid-planner"],
     position: { width: 980, height: 720 },
     window: {
-      title: "Bad Eden — Raid Console",
+      title: "Bad Eden — Domain Conflict",   // Conflict rename (Dave, 2026-10-19): the Steward has a Conflict tab; the Domain has this console
       resizable: true,
       minimizable: true
     }
@@ -4870,7 +4870,7 @@ r.view = {
 
     $root.on("click.bbttccRaid","[data-id='reset']", async (ev)=>{
       ev.preventDefault();
-      if (!(await _rcConfirm("Reset Raid Console", "Clear all rounds in this console?"))) return;
+      if (!(await _rcConfirm("Reset the console", "Clear all rounds in this console?"))) return;
       this.vm.rounds = [];
       // Propagate the cleared rounds via the session flag so any open player
       // consoles re-render via the updateActor hook below (bindAPI).
@@ -5218,7 +5218,7 @@ async _postRoundCard(idx){
 
   const card = `
     <section class="bbttcc-raid">
-      <h3 style="margin:0 0 .25rem 0;">Bad Eden — Raid (Round ${idx+1})</h3>
+      <h3 style="margin:0 0 .25rem 0;">Domain Conflict (Round ${idx+1})</h3>
       <p style="margin:.25rem 0;"><strong>Activity:</strong> ${foundry.utils.escapeHTML(r.activityLabel)} • <strong>Difficulty:</strong> ${diffName}${r.diffOffset?` • <strong>Adj:</strong> ${r.diffOffset>0?'+':''}${r.diffOffset}`:''}${mansA}${mansD}${coalitionLine}</p>
       <table class="bbttcc-table" style="width:100%;">
         <thead>
@@ -7058,7 +7058,7 @@ try {
       _bbttccFxPlay("raid_outcome", {
         root: __fxPanel,
         outcome: r.outcome,
-        outcomeLabel: `${r.activityLabel || "Raid"} — ${r.outcome}`,
+        outcomeLabel: `${r.activityLabel || "Conflict"} — ${r.outcome}`,
         margin: (typeof r.margin === "number") ? r.margin : (Number(totalFinal||0) - Number(dcFinal||0)),
         attackerName: attacker?.name || r.attackerName || "Attacker",
         defenderName: defender?.name || r.targetName || "Defender"
@@ -7774,7 +7774,7 @@ function attachRaidButtonToToolbar() {
         ev.preventDefault();
         try {
           const open = game?.bbttcc?.api?.raid?.openConsole || game.modules.get(RAID_ID)?.api?.openRaidConsole || globalThis.BBTTCC_OpenRaidConsole;
-          if (typeof open !== "function") return ui.notifications?.warn?.("Bad Eden Raid Console is not available.");
+          if (typeof open !== "function") return ui.notifications?.warn?.("The Domain Conflict console is not available.");
           await open();
         } catch (e) {
           console.error(TAG, "Toolbar button failed", e);

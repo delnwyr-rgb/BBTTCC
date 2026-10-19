@@ -86,8 +86,8 @@ const TOUR_OFFERS = {
     // maneuver and commit steps have nothing to anchor to and skip (trailer
     // shoot 2026-10-09: the tour ran 1 → 4 → 5 and ended).
     waitFor: (ctx) => _waitForFirstRaidRound(ctx),
-    prompt: "Last classroom, One. Your GM just opened round one — the Raid Console is where Domains bleed. Tour it before the round?",
-    label: "Tour the Raid Console",
+    prompt: "Last classroom, One. Your GM just opened round one — the Domain Conflict console is where Domains bleed. Tour it before the round?",
+    label: "Tour the Domain Conflict console",
     resume: "Class dismissed. The console's hot and pre-aimed — pick maneuvers, commit a round or two, then conclude."
   },
   graduation: {
@@ -232,7 +232,7 @@ const FIRST_OPEN_OFFERS = [
   },
   {
     api: () => globalThis.game?.bbttcc?.api?.raid, fn: "openConsole", tour: "raid-console",
-    prompt: "Back at the sharp end — want the Raid Console refresher? Your Domain brings what it owns, you pick the maneuvers, the GM calls it. Quick walk-through before blood?",
+    prompt: "Back at the sharp end — want the Domain Conflict refresher? Your Domain brings what it owns, you pick the maneuvers, the GM calls it. Quick walk-through before blood?",
     label: "Refresh me"
   }
 ];

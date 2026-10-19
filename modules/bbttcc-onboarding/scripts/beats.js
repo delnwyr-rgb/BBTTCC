@@ -32,6 +32,7 @@ const TAG = "[onboarding/beats]";
 const _tx = () => globalThis.game?.bbttcc?.api?.transition || null;
 const _stage = () => globalThis.game?.bbttcc?.onboarding?.stage || null;
 const _pause = (ms) => new Promise(r => setTimeout(r, ms)); // beat pacing — let steps land
+const _escH = (s) => foundry.utils.escapeHTML(String(s ?? ""));
 
 /** Resolve a tutorial scene or say so LOUDLY (chat + toast + console). A missing scene
  * must never silently degrade a beat into "nothing visibly happened" (owner playtest
@@ -509,40 +510,119 @@ const stewardshipTurn = {
   title: "Stewardship — OP & Turn",
   scope: "shared",
 
+  // Rewritten 2026-10-19 (Dave: "the speed of the operator goes super fast again… slow that down and truncate;
+  // open a small planner window and let the steward choose from like 3 simple options"): two short lines with
+  // long pauses, a THREE-order mini planner on the hold they just claimed (real catalog, real plan, cleared on
+  // exit), then ONE quiet practice Turn — the driver's ledgers and previews are muted on this seat.
   enter: async (ctx) => {
-    const op = globalThis.game?.bbttcc?.api?.op;
-    const fmt = (m) => { try { return op?.fmt ? op.fmt(m) : `${Math.round(Number(m) || 0)} marks`; } catch (_) { return `${Math.round(Number(m) || 0)} marks`; } };
-    let said = false;
-    if (ctx.faction && op?.preview) {
-      try {
-        const st = await op.preview(ctx.faction.id, {}, {});
-        const b = st?.before || {};
-        await ctx.speak(`Your treasury — OPERATIONS POINTS. Economy ${fmt(b.economy)}, Violence ${fmt(b.violence)}, Diplomacy ${fmt(b.diplomacy)}. Every order spends from these buckets; they refill each Turn, capped by your tier.`);
-        said = true;
-      } catch (_) {}
-    }
-    if (!said) await ctx.speak("Operations Points — OP — fund every order you give. They refill each Turn, capped by your tier.");
-    await _pause(1000);
-    await ctx.speak("Now the heartbeat that refills them: the TURN. Advancing one regens your OP toward its caps, resolves every queued order, and ticks the clock. We'll run a true PREVIEW — all rhythm, zero consequences.");
-    ctx.riff({ beat: "stewardship_turn", line: "Explaining OP and the Turn cycle; about to run a (now genuinely safe) dry-run preview.", intent: "Clinical, a touch grand. One line." });
+    ctx._tutorialPlan = null;
+    let total = null;
+    try {
+      const op = globalThis.game?.bbttcc?.api?.op;
+      const st = ctx.faction ? await op?.preview?.(ctx.faction.id, {}, {}) : null;
+      const sum = Object.values(st?.before || {}).reduce((n, v) => n + (Number(v) || 0), 0);
+      if (sum > 0) total = op?.fmt ? op.fmt(sum) : `${Math.round(sum)} marks`;
+    } catch (_) {}
+    await ctx.speak(total
+      ? `Your Domain has a treasury now — ${total}, sorted into pools. Every order it gives is paid from there; the land refills it each Turn.`
+      : "Your Domain has a treasury now, sorted into pools. Every order it gives is paid from there; the land refills it each Turn.");
+    await _pause(1800);
+    await ctx.speak("A Turn is the Domain's heartbeat: you plan, the GM runs it at Day's End, the land answers. Let's plan one — something small, on the hold you just claimed.");
+    await _pause(1200);
   },
 
   detect: (ctx, done) => {
-    ctx.prompt({
-      title: "◇ OPERATOR",
-      content: `<p>Feel the <b>Turn cycle</b>. This runs a real <b>preview</b> — the rhythm of a Turn with nothing committed to the living world.</p><p>Ready?</p>`,
-      label: "Run a practice Turn (preview)"
-    }).then(async () => {
-      const turn = globalThis.game?.bbttcc?.api?.turn;
-      try { if (turn?.advanceTurn) await turn.advanceTurn({ apply: false }); }
+    (async () => {
+      const hexUuid = ctx._sandboxHex?.hexUuid;
+      const raid = globalThis.game?.bbttcc?.api?.raid;
+      const fid = ctx.faction?.id;
+      // Three simple orders for Tutelary Hold, drawn from the real catalog; whatever the rules refuse is skipped.
+      const CANDIDATES = [
+        { key: "develop_outpost_stability", label: "Secure the hold",    why: "Steady the people — stability first." },
+        { key: "develop_infrastructure",    label: "Build it up",        why: "Roads, walls, a well — the land gets easier to hold." },
+        { key: "infrastructure_expansion",  label: "Expand the works",   why: "More of what already works." },
+        { key: "ration_distribution",       label: "Feed the people",    why: "Loyalty is cheaper bought with bread than with blood." },
+        { key: "establish_supply_line",     label: "Open a supply line", why: "Keep the hold fed from outside." }
+      ];
+      const options = [];
+      if (fid && hexUuid && raid?.planActivity) {
+        let tdoc = null, tf = {};
+        try { const t = await fromUuid(hexUuid); tdoc = t?.document ?? t; tf = tdoc?.getFlag?.("bbttcc-territory") || tdoc?.flags?.["bbttcc-territory"] || {}; } catch (_) {}
+        const EFFECTS = raid.EFFECTS || {};
+        for (const c of CANDIDATES) {
+          if (options.length >= 3) break;
+          const def = EFFECTS[c.key]; if (!def) continue;
+          try {
+            if (typeof def.canPlan === "function" && tdoc) {
+              const v = await def.canPlan({ actor: ctx.faction, targetDoc: tdoc, targetFlags: tf, activityKey: c.key, toHexUuid: null });
+              if (v && v.ok === false) continue;
+            }
+          } catch (_) {}
+          const costs = def.opCosts || def.cost || {};
+          const price = Object.entries(costs).filter(([, n]) => Number(n) > 0).map(([k, n]) => `${k} ${Math.round(Number(n))}`).join(" · ");
+          options.push({ ...c, catalogLabel: def.label || c.key, price });
+        }
+      }
+      if (!options.length) {
+        await ctx.speak("The planner's shelf is bare for this hold— *bzzt* —skipping the order and running the heartbeat.");
+      } else {
+        const content =
+          `<p><b>Give Tutelary Hold one order.</b> Three to choose from; the full planner holds dozens — this is the shape of it.</p><ul>` +
+          options.map(o => `<li><b>${_escH(o.label)}</b> <span class="bbttcc-muted">(${_escH(o.catalogLabel)}${o.price ? ` · ${_escH(o.price)}` : ""})</span><br/><i>${_escH(o.why)}</i></li>`).join("") +
+          `</ul>`;
+        let pick = await ctx.choose({
+          title: "◇ OPERATOR — Plan the Turn", content,
+          options: [...options.map(o => ({ action: o.key, label: o.label })), { action: "full", label: "Show me the full planner" }],
+          fallback: options[0].key
+        });
+        if (pick === "full") {
+          try { raid.openActivityPlanner?.({ attackerId: fid }); } catch (_) {}
+          await ctx.speak("That's the whole shelf — browse it later. For today I'll file the first one.");
+          pick = options[0].key;
+        }
+        const chosen = options.find(o => o.key === pick) || options[0];
+        try {
+          const before = (ctx.faction.getFlag("bbttcc-factions", "warLogs") || []).length;
+          await raid.planActivity({ attackerId: fid, targetUuid: hexUuid, activityKey: chosen.key, targetType: "hex", note: "Tutorial order — the Operator files it and clears it." });
+          const logs = ctx.faction.getFlag("bbttcc-factions", "warLogs") || [];
+          const mine = logs.slice(before).reverse().find(e => e?.type === "planned") || null;
+          ctx._tutorialPlan = mine?.ts ? { ts: mine.ts } : null;
+          try { const sh = ctx.steward?.sheet; if (sh) { sh.tabGroups ??= {}; sh.tabGroups.primary = "domain"; await sh.render(true, { focus: true }); sh._applyActiveTab?.(); } } catch (_) {}
+          await _pause(600);
+          await ctx.speak(`Filed: ${chosen.label} on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.`);
+        } catch (e) {
+          console.warn(TAG, "tutorial plan failed", e);
+          await ctx.speak("The planner balked at that one— *bzzt* —no matter. The shape's the lesson: pick an order, it waits for the Turn.");
+        }
+      }
+      await _pause(1500);
+      await ctx.prompt({
+        title: "◇ OPERATOR",
+        content: `<p>Now the heartbeat. This runs a <b>practice Turn</b> — the rhythm, with nothing committed to the living world.</p>`,
+        label: "Run a practice Turn"
+      });
+      // Quiet preview: the Turn driver whispers ledgers and previews as it goes — none of it is for a first-timer.
+      // Only the Operator's own lines pass while it runs.
+      const muteId = Hooks.on("preCreateChatMessage", (doc) => { try { return doc?.flags?.["bbttcc-onboarding"]?.operatorLine === true; } catch (_) { return true; } });
+      try { const turn = globalThis.game?.bbttcc?.api?.turn; if (turn?.advanceTurn) await turn.advanceTurn({ apply: false }); }
       catch (e) { console.warn(TAG, "dry-run turn failed", e); }
-      await ctx.speak("That's a Turn — previewed. In the living world it'd refill your OP and resolve every queued order. Nothing was committed here. You've got the rhythm.");
+      finally { try { Hooks.off("preCreateChatMessage", muteId); } catch (_) {} }
+      await _pause(800);
+      await ctx.speak("That's a Turn, previewed. In the living world the land pays in, your order resolves, the clock ticks. Nothing was committed here — you've got the rhythm.");
       done();
-    });
+    })().catch(e => { console.warn(TAG, "stewardship_turn detect failed", e); done(); });
     return null;
   },
 
   exit: async (ctx) => {
+    // The tutorial order never reaches a real Turn: pull it from the Domain's log before the hold goes back.
+    try {
+      if (ctx.faction && ctx._tutorialPlan?.ts) {
+        const logs = (ctx.faction.getFlag("bbttcc-factions", "warLogs") || []).filter(e => !(e?.type === "planned" && e?.ts === ctx._tutorialPlan.ts));
+        await ctx.faction.setFlag("bbttcc-factions", "warLogs", logs);
+      }
+    } catch (e) { console.warn(TAG, "tutorial plan cleanup failed", e); }
+    ctx._tutorialPlan = null;
     try { if (ctx._sandboxHex?.hexUuid) await _stage()?.unclaimHex?.(ctx._sandboxHex.hexUuid); } catch (_) {}
     try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
     ctx._spawned = [];
@@ -693,7 +773,7 @@ const crewOccult = {
           },
           {
             title: "What they bring",
-            body: `<p>Raid <b>maneuvers</b> — the special moves in the Raid Console — are gated. Most are locked until something on your side grants them.</p>
+            body: `<p>Raid <b>maneuvers</b> — the special moves in the Domain Conflict console — are gated. Most are locked until something on your side grants them.</p>
               <p>Three things grant maneuvers: your hired <b>Crew</b>, your hired <b>Association</b>, and the <b>classes</b> in your Domain.</p>
               <p>While the contract runs, their feats sit on your sheet and a granted maneuver wears a green <b>✦ badge</b> naming who unlocked it. Once a scene you may <b>Invoke</b> one of their people onto the screen.</p>`
           },
@@ -701,7 +781,7 @@ const crewOccult = {
             title: "When they walk",
             body: `<p>On the last turn of a contract you get a card. At Day's End they go, and their maneuvers, bonuses and people go with them.</p>
               <p>Renew at the Muster, or sign someone else. The <b>Retinue</b> card on your <b>Domain</b> tab shows who rides with you and for how long; the ✂ lets them go early — no refund.</p>
-              <span class="bbttcc-deck-key">Loyalty you rent runs out on schedule. Plan the raid before the contract does.</span>`
+              <span class="bbttcc-deck-key">Loyalty you rent runs out on schedule. Plan the fight before the contract does.</span>`
           }
         ]
       });
@@ -724,14 +804,14 @@ const crewOccult = {
         },
         {
           title: "What they actually unlock",
-          body: `<p>Raid <b>maneuvers</b> — the special moves in the Raid Console — are gated. Most are locked until something on your side grants them.</p>
+          body: `<p>Raid <b>maneuvers</b> — the special moves in the Domain Conflict console — are gated. Most are locked until something on your side grants them.</p>
             <p>Three things grant maneuvers:</p>
             <ul>
               <li>your faction's active <b>Crews</b></li>
               <li>its active <b>Occult Associations</b></li>
               <li>the <b>classes</b> on its roster</li>
             </ul>
-            <p>In the Raid Console a granted maneuver wears a green <b>✦ badge</b> naming exactly who unlocked it for you.</p>`
+            <p>In the Domain Conflict console a granted maneuver wears a green <b>✦ badge</b> naming exactly who unlocked it for you.</p>`
         },
         {
           title: "Why it's a real choice",
@@ -749,7 +829,7 @@ const crewOccult = {
         {
           title: "Spotlight — calling one in",
           body: `<p>Once per scene you may <b>Invoke</b> a roster member: pull one of them into the moment, on screen, doing the thing they're good at.</p>
-            <p>One spotlight per scene, refreshed by a <b>Scene Break</b>. Members flagged <b>Default present</b> are the ones pre-selected when the crew turns up in a raid.</p>
+            <p>One spotlight per scene, refreshed by a <b>Scene Break</b>. Members flagged <b>Default present</b> are the ones pre-selected when the crew turns up in a fight.</p>
             <span class="bbttcc-deck-key">This is the summon. Your Crew is not a bonus — it's a rolodex with teeth, and once a scene you get to cash one in.</span>`
         }
       ]
@@ -792,7 +872,7 @@ const crewOccult = {
         title: FALLBACK_TITLE,
         content:
           `<p>Crews and Associations are <b>hired at the Muster</b> in Allesh-Gilliam once the bandit road is yours — one Crew and one Association at a time, three turns a contract, paid from your Domain's treasury.</p>` +
-          `<p>Your <b>Domain tab → Retinue</b> shows who rides with you and for how long. Their maneuvers wear a ✦ badge in the Raid Console while the contract runs.</p>` +
+          `<p>Your <b>Domain tab → Retinue</b> shows who rides with you and for how long. Their maneuvers wear a ✦ badge in the Domain Conflict console while the contract runs.</p>` +
           `<p><i>Nothing to set here yet — continue.</i></p>`,
         label: "Company noted"
       }).then(() => done());
@@ -2597,7 +2677,7 @@ const finalShowdown = {
       await ctx.speak("So here's the shape of it. You can finish what's in the circle — it's losing, and nobody would blame you. Or you can take the surrender, open the parley, and find out what was so frightened of this place that it tried to unmake it.");
       await _pause(700);
       const camePlain = ctx._fs?.approach === "intrigue" ? "You came in quiet, and it still saw you coming" : "You came in loud, and it heard every step";
-      await ctx.speak(`${camePlain}. Either way it's talking now. Your GM runs the parley from the Raid Console — a PARLEY, not a Battle. I've pointed it at you.`);
+      await ctx.speak(`${camePlain}. Either way it's talking now. Your GM runs the parley from the Domain Conflict console — a PARLEY, not a Battle. I've pointed it at you.`);
 
       // Raids are GM-driven by design: pre-seed the session and open the GM's
       // console, exactly as the raid_presence finale beat does.
@@ -2666,7 +2746,7 @@ const finalShowdown = {
       title: FALLBACK_TITLE,
       content:
         `<p>Fight what's in the circle. When it starts losing, a <b>messenger</b> arrives with two <b>Receipts</b> and an offer.</p>` +
-        `<p><b>Finish it</b> — kill the thing on the lever — or <b>take the parley</b>, which your GM runs from the Raid Console on <b>presence</b>.</p>` +
+        `<p><b>Finish it</b> — kill the thing on the lever — or <b>take the parley</b>, which your GM runs from the Domain Conflict console on <b>presence</b>.</p>` +
         `<p><i>Either ending is real. Conclude when the table has settled it.</i></p>`,
       label: "This is settled"
     }).then(() => finish());
@@ -2786,7 +2866,7 @@ const travel = {
 };
 
 /* ───────────────────────── TRIPLE RAID (factory) ───────────────────────── */
-// One pre-targeted, player-driven raid per approach. We pre-seed the Raid Console's
+// One pre-targeted, player-driven raid per approach. We pre-seed the Domain Conflict console's
 // session flag on the player's REAL faction (the same flag the console persists) so it
 // opens already pointed at the hostile hold + the right raid type; the player runs the
 // rounds. Advance is a player-driven "Conclude" prompt (un-trappable), coloured by the
@@ -2824,7 +2904,7 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey
         }
       }
 
-      if (!f) { await ctx.speak("No Domain on file to raid under— *bzzt* —I can't open a war console without one. Hold a Domain, then replay the finale."); return; }
+      if (!f) { await ctx.speak("No Domain on file to fight under— *bzzt* —I can't open a war console without one. Hold a Domain, then replay the finale."); return; }
 
       const hex = fin.hostileHex;
       // Pre-seed the console session (read on first render via the console's session-apply).
@@ -3601,7 +3681,7 @@ finalShowdown.party = {
       await ctx.speakAll(granted
         ? `It hands every banner here two documents: ${PG_PARLEY_SECRETS.map(s => s.name).join(" and ")}. RECEIPTS — real ones, playable the moment the parley opens.`
         : "It hands over its paperwork — though the court's filing system just refused it. Your GM can add the secrets by hand.");
-      await ctx.speakAll("Finish what's in the circle — it's losing, nobody would blame you — or take the surrender and open the parley. Your GM runs it from the Raid Console: a PARLEY, not a Battle.");
+      await ctx.speakAll("Finish what's in the circle — it's losing, nobody would blame you — or take the surrender and open the parley. Your GM runs it from the Domain Conflict console: a PARLEY, not a Battle.");
       try {
         for (const f of factions) {
           await stage.setRaidSession?.(f.id, { rev: Date.now(), ts: Date.now(), by: "", attackerId: f.id, supportFactionIds: [], activityKey: "presence",

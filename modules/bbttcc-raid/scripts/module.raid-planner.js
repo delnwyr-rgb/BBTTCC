@@ -2408,7 +2408,7 @@ Hooks.once("init",()=>{
     app.render(true,{focus:true, window:{resizable:true, minimizable:true}});
     return app;
   };
-  raidAPI.openRaidConsole     = ()=>{ const C=globalThis.BBTTCC_RaidConsole;     if(!C) return ui.notifications?.warn?.("Raid Console not available.");     new C().render(true,{focus:true, window:{resizable:true, minimizable:true}}); };
+  raidAPI.openRaidConsole     = ()=>{ const C=globalThis.BBTTCC_RaidConsole;     if(!C) return ui.notifications?.warn?.("Domain Conflict console not available.");     new C().render(true,{focus:true, window:{resizable:true, minimizable:true}}); };
   raidAPI.openConsole = raidAPI.openRaidConsole;
 
   log("Raid API registered (V2 console + planner; consumePlanned is compat-bridge).");
@@ -2449,7 +2449,7 @@ Hooks.once("ready",()=>{
       targetRow.appendChild(a);
     };
 
-    mk("raid","Raid","crosshairs",openRaid);
+    mk("raid","Conflict","crosshairs",openRaid);
     mk("plan-activity","Plan","clipboard-list",openPlanner);
     el.__bbttccRaidClickBound = true;
     log("Toolbar buttons attached (V2).");
