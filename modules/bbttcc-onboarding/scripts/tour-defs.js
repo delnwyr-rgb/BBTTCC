@@ -860,8 +860,8 @@ const marketTour = {
   id: "market",
   title: "The Long Market (Market)",
   audience: "player",
-  intro: "Opening the Market. Everything has a price; whether it's YOUR price depends on your faction's Economic Horizon. Hover the chips— *bzzt* —the chips know.",
-  outro: "Market toured. Standard Issue is free, ambition costs double, and artifacts aren't for sale to anyone. That's not a bug, that's an economy.",
+  intro: "Opening the Market. Everything has a price, and the price on the row is yours — your Domain's weight is already in it. Hover a chip— *bzzt* —the chips know.",
+  outro: "Market toured. Standard Issue is free, ambition costs more, and some things aren't for sale to anyone. That's not a bug, that's an economy.",
 
   open: async () => {
     const openMarket = game.bbttcc?.api?.market?.openMarket;
@@ -878,10 +878,10 @@ const marketTour = {
     { id: "hex",      title: "Delivery hex",       selector: '[data-tour="market.hex"]',      help: ["market", "hex"], optional: true },
     { id: "catalog",  title: "The catalog",        selector: '[data-tour="market.catalog"]',  help: ["market", "catalog"] },
     { id: "search",   title: "Finding things",     selector: '[data-tour="market.search"]',   help: ["market", "search"] },
-    { id: "chip",     title: "The Horizon chip — your real price", selector: '[data-tour="market.chip"]', help: ["market", "chip"], optional: true,
-      speak: "The list price is a story. The chip is the truth." },
-    { id: "cost",     title: "The cost line",      selector: '[data-tour="market.cost"]',     help: ["market", "cost"], optional: true },
-    { id: "buy",      title: "Buy — the commit",   selector: '[data-tour="market.buy"]',      help: ["market", "buy"], optional: true },
+    { id: "chip",     title: "The price chip", selector: '[data-tour="market.chip"]', help: ["market", "chip"], optional: true,
+      speak: "The chip is the truth. Some of it is free because you're just that cool." },
+    { id: "cost",     title: "The price",          selector: '[data-tour="market.cost"]',     help: ["market", "cost"], optional: true },
+    { id: "buy",      title: "Buy",                selector: '[data-tour="market.buy"]',      help: ["market", "buy"], optional: true },
     { id: "manage",   title: "Manage Catalogs (GM)", selector: '[data-tour="market.manage"]', help: ["market", "manage"], optional: true }
   ]
 };

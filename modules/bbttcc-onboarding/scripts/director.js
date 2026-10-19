@@ -26,11 +26,13 @@ const _beats = []; // ordered
 
 // ─── ALPHA CUT ruling 23 (Dave, blessed 2026-10-18): THE THIRTY-MINUTE INDUCTION ───────────────────────────────
 // With the Alpha Cut world setting on, the arc keeps what only a sandbox can teach — incarnate, the dummy, the rig,
-// claim a hex, the Turn preview, the Long Market, the People You Know deck, Surge — and graduates straight into the
+// claim a hex, the Turn preview, the Long Market, Surge — and graduates straight into the
 // orientation film. Everything else stays registered (Beta gets the long course back; `start({only})` can still name
 // a cut beat) but is not on the arc: the story offers the first Battle, Heist and Parley (ruling 22), the first
 // Signature comes through the sheet (ruling 14), and the first real fights are the road ambush and the bridge.
-const ALPHA_CUT_BEATS = new Set(["manifestations", "combat_sim", "travel", "raid_violence", "raid_intrigue", "raid_presence", "proving_trials", "final_showdown"]);
+// 2026-10-19 (Dave): crew_occult cut too — Crews and Associations are not on the steward sheet and only unlock after an encounter the
+// players have not met yet; the Alpha induction never mentions them.
+const ALPHA_CUT_BEATS = new Set(["manifestations", "combat_sim", "travel", "raid_violence", "raid_intrigue", "raid_presence", "proving_trials", "final_showdown", "crew_occult"]);
 function _alphaOn() { try { return globalThis.game?.bbttcc?.alpha?.enabled?.() === true; } catch (_e) { return false; } }
 function _arcBeats() { return _alphaOn() ? _beats.filter(b => !ALPHA_CUT_BEATS.has(b.id)) : _beats.slice(); }
 

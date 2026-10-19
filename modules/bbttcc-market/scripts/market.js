@@ -717,33 +717,34 @@ function _entryPayloadString(e) {
      - templates:   data-tooltip="{{bbttccTip 'market' '<key>'}}"
      - JS DOM:      game.bbttcc.help.tip("market", "<key>")  (horizon chips, buy dialog)
      - tours:       inert data-tour="market.<key>" anchors use the same keys.
-   Style: "Name — what it is. What it does mechanically. When/why you'd use it."
+   Style (player-facing, Dave 2026-10-19: "super simplify this for players"): one plain sentence. No pricing math, no pool names, no OP.
+   The catalog-editor tips below stay GM-detailed.
 */
 const MARKET_TIPS = {
   // ---- Market app (player-facing) ----
-  context:   "Context — who is buying and where deliveries land. Vendor + Buyer Domain are required; Buyer Character only matters for gear, the Delivery Hex only for facility/asset purchases. All picks persist per client between sessions.",
-  vendor:    "Vendor — which market you are browsing. Players only see markets the GM has flagged Active; the GM sees inactive ones suffixed '(inactive)'. Your selection is remembered per client.",
-  faction:   "Buyer Domain — the Domain whose treasury pays for every purchase here . Bank and prices are in marks. Players buy as their own steward; the GM sees all. The purchase receipt is written to this faction's war log.",
-  character: "Buyer Character — where purchased GEAR lands: a copy of the item is created in this character's inventory, stamped as vendor-bought. Required before buying gear; ignored for rigs, facilities, and hex assets.",
-  hex:       "Delivery Hex — where facility, facility-upgrade, and hex-asset purchases land. The list holds the hexes the Buyer Domain KNOWS: ones it holds and ones it has visited. Each shows its danger score and the delivery fee Furrier's Fixit Farm charges the receiver. Facilities merge onto the hex's primary facility; assets append to its asset list. Those purchases cannot complete without a hex. Gear and rigs ignore this field.",
-  deliveryFee: "Delivery fee — Furrier's Fixit Farm (the Jackalope haulers) deliver; the RECEIVER pays base + per-danger-point, charged on top of the item in the delivery pool. Danger (0–12) counts low development, missing or hostile authority, wasteland/ruins, radiation, darkness, hostile hex modifiers, active conditions, and the holder's stance toward the buyer; your own fortified, well-kept holdings come out cheapest. GM tunes base, per-point rate and pool in module settings.",
-  note:      "Notes — free text stamped onto the purchase receipt (the Domain's war log + GM whisper). Use it to record why, or for whom, the purchase was made.",
+  context:   "Who is buying, and where it lands. Pick the vendor and your Domain; pick a character for gear.",
+  vendor:    "Which market you are browsing. You see the ones the GM has opened.",
+  faction:   "Your Domain pays. One treasury, in marks.",
+  character: "Who gets the gear. It lands in their inventory.",
+  hex:       "Where a facility or hex asset gets delivered. Gear and rigs ignore this.",
+  deliveryFee: "The haulers' fee for bringing it out there. Dangerous ground costs more; your own well-kept holdings cost least.",
+  note:      "A note for the receipt. Why, or for whom.",
   manage:    "Manage Catalogs — GM-only editor for vendors and their catalog entries. Add or rename markets, toggle player visibility, drag-drop items in, set costs.",
-  catalog:   "Catalog — the selected vendor's stock, filtered by search/category and sorted. Each row shows kind, RFI tier, list cost, and an Economic Horizon chip with the final price your faction actually pays.",
-  search:    "Search — live filter on entry name, blurb, and kind text within the selected vendor's catalog.",
-  treasury:  "Treasury — the Buyer Domain's current OP banks, in marks, one pill per pool, plus its Economic Horizon. This is what every price on this page is measured against; pools at zero are dimmed.",
-  tabs:      "Gear-type tabs — the catalog is always split by what the entry is: Weapons / Armor / Gear / Consumables (by the underlying item), then Rigs, Hire, Facilities, Hex Assets, and Upgrades. Counts reflect the search, cost and affordability filters.",
-  costBand:  "Cost band — filter by what the Buyer Domain would actually pay (horizon-scaled; list price when no Domain is selected): Standard Issue (free — the Tier I kit), then marks brackets that follow the RFI tier ladder (50 / 150 / 500 / 1500).",
-  affordOnly: "Only what we can afford — hides every entry whose bill exceeds the Buyer Domain's pool balances (split items need every portion covered). Needs a Buyer Domain. Unaffordable rows otherwise stay visible, dimmed, with a 'Short' pill saying how much is missing and in which pool.",
-  category:  "Category — filters the list. Weapons / Armor / Gear / Consumables subdivide gear entries by the underlying item's type (consumables are detected via RFI frame, slot, or tag); the remaining options match the entry kind directly (rig, facility, hex asset, upgrades).",
-  sort:      "Sort — Name (A→Z), or RFI Tier (I–IV) ascending/descending. Entries with no tier sort after Tier IV; equal-tier rows stay alphabetized.",
-  openDoc:   "Open item sheet — inspect the actual item (stats, description, tier) before you spend marks on it.",
-  cost:      "Cost — the list price. RFI flag-priced items show their native pool in marks (e.g. 'Viol 50 marks'); 'Split' items pay each portion to its own pool; legacy entries show catalog Economy OP (1 OP = 10 marks). The Horizon chip shows the final scaled price your faction pays.",
-  chip:      "Economic Horizon — your Domain's tier sets its rarity horizon (Tier 0–1→Uncommon, 2→Rare, 3→Very Rare, 4→Legendary). An item's rarity is the higher of its stamped RFI tier (I→Uncommon, II→Rare, III→Very Rare, IV→Legendary) and its native rarity. Tier I kit at or under the horizon is Standard Issue (free) — except rig frames, which always cost their hull price. Anything tiered above that pays list price within the horizon (rigs/facilities/assets always pay base). Above the horizon the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
-  profChip:  "Untrained — the selected Buyer Character has rank 0 in the skill this weapon or armor is gated on. Armor worn at rank 0 grants NO defensive benefit; weapons are wielded untrained. You can still buy it (stockpiling, training ahead, gifting) — the chip is a warning, not a block.",
-  buy:       "Buy — commits the purchase: confirmation first (flag-priced items let you pay from a non-native pool at ×1.5 friction), then the marks are spent from the Buyer Domain's OP bank and the goods are delivered — gear to the Buyer Character's inventory, rigs to the faction, facilities/assets/upgrades to the Delivery Hex, actor entries cloned into the world under the buying faction. Writes a war-log receipt and whispers the GM.",
-  payFromPool: "Pay from — which OP pool covers the bill. The native pool pays list price; any other pool pays ×1.5 (cross-pool friction). Balances shown are the Domain's current opBank, in marks.",
-  splitPay:  "Split payment — this item's price is divided across multiple OP pools. Each portion is always paid from its native pool; there is no cross-pool override on split items.",
+  catalog:   "What this vendor has. The price on each row is what your Domain pays.",
+  search:    "Type to find it.",
+  treasury:  "What your Domain has to spend.",
+  tabs:      "Sort the stock by what it is.",
+  costBand:  "Filter by price. Standard Issue is free.",
+  affordOnly: "Hide what you can't afford right now.",
+  category:  "Filter by kind.",
+  sort:      "Sort by name or by tier.",
+  openDoc:   "Open the item and read it before you spend.",
+  cost:      "The price you pay.",
+  chip:      "Gear cost is based on both the item and the power of your Domain. Some stuff is free because you're just that cool.",
+  profChip:  "Untrained — this character has no rank in the skill this needs. You can still buy it; you just won't be good with it yet.",
+  buy:       "Buy needs no explanation. Why did you even hover over this?",
+  payFromPool: "Which pool pays. The right pool pays list price; a wrong one pays half again.",
+  splitPay:  "This price is paid from more than one pool.",
 
   // ---- Catalog editor (GM-facing) ----
   editorVendor:  "Vendor — which market's catalog you are editing. The vendor fields and every entry row below belong to this vendor.",

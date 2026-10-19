@@ -106,24 +106,6 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 **`outfitting.06`** Look at you — dressed for the apocalypse you're about to drive into. The Syndicate won't know what pulled up.
 
-### The People You Know `crew_occult`
-
-**`crew_occult.01`** Before you point a weapon at anything — you're not alone out here, and the game knows it. *bzzt* Crews and associations are people you hire. The Muster in Allesh-Gilliam signs them, by the turn.
-
-**`crew_occult.02`** Before you point a weapon at anything — you're not alone out here, and the game knows it. *bzzt* Two lines on your sheet decide what your whole faction can do.
-
-**`crew_occult.03`** Sheet's up. Flip on EDIT mode (the pencil, top right) and find Awesome Crew and Occult Association in the identity block. Pick one of each — anything; you can change them later.
-
-**`crew_occult.04`** That's your Echo Assets panel — every Crew and Association you carry, with ROSTER and INVOKE on each row. Open a roster, hit ✨ Suggest members, and mint one of them into a real person.
-
-**`crew_occult.05`** Your Echo Assets panel lives on the sheet — that's where each Crew and Association gets its ROSTER and its once-a-scene INVOKE.
-
-**`crew_occult.06`** Good. People are infrastructure, One — hired by the turn, and the only kind that argues back. One spotlight a scene; spend it on the moment that deserves it.
-
-**`crew_occult.07`** No new maneuvers off that pairing yet — the grant shows up once the contract is signed at the Muster. Your GM can confirm it.
-
-**`crew_occult.08`** ⟨Domain name⟩ can now attempt ⟨keys.length⟩ granted maneuver⟨keys.length === 1 ? "" : "s"⟩: ⟨named.join(", ")⟩⟨keys.length > 6 ? "…" : ""⟩. Look for the ✦ badges when the story opens a fight.
-
 ### Surge `surge`
 
 **`surge.01`** Next: the currency nobody explains until it's too late. *bzzt* Surge.
@@ -147,6 +129,24 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 ---
 
 ## Part II — Beats the Alpha Cut leaves out (Beta worlds)
+
+### The People You Know `crew_occult` — *Beta-only, cut from the Alpha induction*
+
+**`crew_occult.01`** Before you point a weapon at anything — you're not alone out here, and the game knows it. *bzzt* Crews and associations are people you hire. The Muster in Allesh-Gilliam signs them, by the turn.
+
+**`crew_occult.02`** Before you point a weapon at anything — you're not alone out here, and the game knows it. *bzzt* Two lines on your sheet decide what your whole faction can do.
+
+**`crew_occult.03`** Sheet's up. Flip on EDIT mode (the pencil, top right) and find Awesome Crew and Occult Association in the identity block. Pick one of each — anything; you can change them later.
+
+**`crew_occult.04`** That's your Echo Assets panel — every Crew and Association you carry, with ROSTER and INVOKE on each row. Open a roster, hit ✨ Suggest members, and mint one of them into a real person.
+
+**`crew_occult.05`** Your Echo Assets panel lives on the sheet — that's where each Crew and Association gets its ROSTER and its once-a-scene INVOKE.
+
+**`crew_occult.06`** Good. People are infrastructure, One — hired by the turn, and the only kind that argues back. One spotlight a scene; spend it on the moment that deserves it.
+
+**`crew_occult.07`** No new maneuvers off that pairing yet — the grant shows up once the contract is signed at the Muster. Your GM can confirm it.
+
+**`crew_occult.08`** ⟨Domain name⟩ can now attempt ⟨keys.length⟩ granted maneuver⟨keys.length === 1 ? "" : "s"⟩: ⟨named.join(", ")⟩⟨keys.length > 6 ? "…" : ""⟩. Look for the ✦ badges when the story opens a fight.
 
 ### The Reality Dials `manifestations` — *Beta-only, cut from the Alpha induction*
 
@@ -637,9 +637,9 @@ GM-only (needs Edit Mode on): manual overrides for integrity, tier, bracket and 
 
 ### The Long Market (Market) `market` — player
 
-**`tour.market.intro`** Opening the Market. Everything has a price; whether it's YOUR price depends on your faction's Economic Horizon. Hover the chips— *bzzt* —the chips know.
+**`tour.market.intro`** Opening the Market. Everything has a price, and the price on the row is yours — your Domain's weight is already in it. Hover a chip— *bzzt* —the chips know.
 
-**`tour.market.outro`** Market toured. Standard Issue is free, ambition costs double, and artifacts aren't for sale to anyone. That's not a bug, that's an economy.
+**`tour.market.outro`** Market toured. Standard Issue is free, ambition costs more, and some things aren't for sale to anyone. That's not a bug, that's an economy.
 
 ### The Treasury `banks` — player
 
