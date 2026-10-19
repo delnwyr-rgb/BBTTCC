@@ -161,25 +161,93 @@ function _resolveFactionForTour(ctx) {
   }) || null;
 }
 
+// Ruling 16 (Alpha): a player's Domain lives on the Domain TAB of their own sheet — the faction window never opens
+// for them (its render redirects). The tour must open and anchor on THAT, or every step waits 4s on a selector that
+// does not exist and the tour ends having shown nothing (Dave, 2026-10-19: "it's hanging there").
+function _alphaDomainTab() { try { return !game.user?.isGM && game.bbttcc?.alpha?.enabled?.() === true; } catch (_) { return false; } }
+
 async function _openFactionSheet(ctx) {
   const faction = _resolveFactionForTour(ctx);
   if (!faction) {
-    ui.notifications?.warn?.("No faction found — found one first (or link your Steward to a faction), then rerun the tour.");
+    ui.notifications?.warn?.("No Domain found — found one first (or ask the GM to link your Steward), then rerun the tour.");
     return false;
   }
+  if (_alphaDomainTab()) {
+    const sheet = ctx.steward?.sheet;
+    if (!sheet) { ui.notifications?.warn?.("No Steward sheet to open the Domain tab on."); return false; }
+    sheet.tabGroups ??= {}; sheet.tabGroups.primary = "domain";
+    await sheet.render(true, { focus: true });
+    try { sheet._applyActiveTab?.(); } catch (_) {}
+    return sheet;
+  }
   await faction.sheet?.render(true);
+  if (faction.sheet && faction.sheet.rendered === false) return false;   // a redirect ate the window — don't tour nothing
   return faction.sheet;
 }
 
+/* The Domain tab, step by step (Alpha). Anchors = systems/fourththing/templates/partials/domain-panel.hbs. */
+const DOMAIN_TAB_STEPS = [
+  {
+    id: "domain-head", title: "Your Domain",
+    selector: ".ft-domain",
+    text: "This tab is the bigger body: the land you hold, the people under your banner and what they yield. Your Steward acts in scenes; your Domain acts in Turns.\nThe tier badge up top is the reach of your will over the land. It grows as the Domain grows."
+  },
+  {
+    id: "treasury", title: "Treasury — one purse",
+    selector: ".ft-domain-treasury",
+    text: "Marks are what the land yields to you — one treasury for everything you buy, build, hire or wage. The chips are the pools it is sorted into: Violence, Intrigue, Economy and the rest, each with its cap.\nNothing here is spent in a Battle or a Heist; a Parley can sweeten a deal.",
+    speak: "One purse. Nine pockets. Your enemies only ever count one of them."
+  },
+  {
+    id: "land", title: "The land — how it feels about you",
+    selector: ".ft-domain-feel",
+    text: "Loyalty is how your people hold; Darkness is the Qliphothic taint creeping in; Momentum is the strategic surge you bank from strong turns.\nThey move on their own each Turn. The chips tell you the band before the numbers get dangerous."
+  },
+  {
+    id: "holdings", title: "Holdings — hexes and rigs",
+    selector: ".ft-domain-holdings",
+    text: "Every hex you hold is a chip here — click one to open its sheet. A Domain grows from held ground: you can only claim what sits next to a hex you already hold at level 2.\nRigs are the Domain's rolling bodies."
+  },
+  {
+    id: "convictions", title: "Convictions — what you swore to",
+    selector: ".ft-domain-convictions",
+    optional: true,
+    text: "Your Domain's creed, and the meter of how far your actions have drifted from it. Steadfast is cheap; Rupturing costs you people.\nNothing has tested you yet. It will."
+  },
+  {
+    id: "retinue", title: "Retinue — who rides with you",
+    selector: ".ft-domain-retinue",
+    optional: true,
+    text: "Crews and Associations under contract, hired at the Muster by the turn. Their maneuvers and strength ride with your Domain into every fight while the contract holds."
+  },
+  {
+    id: "next-turn", title: "Next turn — the plan",
+    selector: ".ft-domain-turn",
+    text: "What your Domain will do when the Turn ticks. Nothing planned means nothing happens — plan the turn, then the GM runs it at Day's End."
+  },
+  {
+    id: "planner", title: "Plan the turn",
+    selector: '[data-domain-act="planner"]',
+    text: "The Activity Planner: secure, supply, build, expand. Slower than a fight, cheaper than a war, and it compounds. It has its own tour."
+  },
+  {
+    id: "doors", title: "The other doors",
+    selector: ".ft-domain-actions",
+    text: "Quest log — the jobs the land has given you. Market — spend the treasury on gear and rigs. Vault — what the Domain keeps in store.\nBattle, Heist and Parley are not doors you open: the story brings them to you as a choice."
+  }
+];
+
 const factionSheetTour = {
   id: "faction-sheet",
-  title: "The Bigger Body (Faction Sheet)",
+  title: "The Bigger Body (Your Domain)",
   audience: "player",
   intro: "Opening your Domain — a body made of land, people and leverage. Same idea as the meatsuit, bigger stakes, slower heartbeat. One Turn per beat.",
   outro: "Domain toured. Your steward acts in scenes; your Domain acts in Turns. Keep both alive and the world starts answering to you.",
   open: _openFactionSheet,
+  // Alpha player seats tour the Domain tab; GMs and Beta worlds tour the faction window.
+  get steps() { return _alphaDomainTab() ? DOMAIN_TAB_STEPS : this.factionSteps; },
 
-  steps: [
+  factionSteps: [
     {
       id: "hero", title: "Identity & vitals",
       selector: "fieldset.bbttcc-card-overview-hero",

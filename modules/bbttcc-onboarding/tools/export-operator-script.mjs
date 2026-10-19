@@ -113,7 +113,7 @@ const directorLines = speakLines("director.js", { idRx: /^(?!x)x/m });
 
 /* ── tours ─────────────────────────────────────────────────────────── */
 const tourSrc = S("tour-defs.js");
-const tourBlocks = [...tourSrc.matchAll(/^const (\w+Tour) = \{/gm)].map((m, i, arr) => ({ name: m[1], start: m.index, end: arr[i + 1]?.index ?? tourSrc.indexOf("/* ───────────────────── registration") }));
+const tourBlocks = [...tourSrc.matchAll(/^const (\w+Tour) = \{/gm)].map((m) => { const close = tourSrc.indexOf("\n};", m.index); return { name: m[1], start: m.index, end: close < 0 ? tourSrc.length : close + 3 }; });   // a tour block ends at its own closing brace, not at the next tour (helpers may sit between)
 const regOrder = [...tourSrc.matchAll(/tours\.register\((\w+)\)/g)].map(m => m[1]);
 const tours = [];
 for (const name of regOrder) {
@@ -136,6 +136,23 @@ for (const name of regOrder) {
     if (key === "title") cur.title = L.text; else if (key === "text") cur.text = L.text; else if (key === "speak") cur.speak = L.text;
   }
   tours.push(t);
+}
+
+/* Alpha twin of the faction-sheet tour: the Domain-tab steps live in a const beside it (tour-defs.js DOMAIN_TAB_STEPS). */
+{
+  const m = tourSrc.match(/^const DOMAIN_TAB_STEPS = \[/m);
+  if (m) {
+    const body = tourSrc.slice(m.index, tourSrc.indexOf("\n];", m.index) + 3);
+    const t = { name: "DOMAIN_TAB_STEPS", id: "faction-sheet · Alpha (the Domain tab)", title: "Your Domain — the Domain tab (Alpha player seats)", audience: "player", intro: "", outro: "", steps: [] };
+    const keyRx = /(?:^|,)[ \t]*(id|title|text|speak):\s*/gm; let k; let cur = null;
+    while ((k = keyRx.exec(body))) {
+      const L = readLiteral(body, k.index + k[0].length); if (!L) continue;
+      if (k[1] === "id") { cur = { id: L.text, title: "", text: "", speak: "" }; t.steps.push(cur); continue; }
+      if (cur) cur[k[1]] = L.text;
+    }
+    const i = tours.findIndex(x => x.id === "faction-sheet");
+    tours.splice(i >= 0 ? i + 1 : tours.length, 0, t);
+  }
 }
 
 /* ── render ────────────────────────────────────────────────────────── */

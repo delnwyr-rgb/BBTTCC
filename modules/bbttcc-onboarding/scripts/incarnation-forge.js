@@ -199,9 +199,9 @@ async function _foundFaction(ctx) {
     if (owned.length) {
       const pick = await ns?.ui?.choose?.({
         title: "◇ OPERATOR — Your Banner",
-        content: `<p><b>${foundry.utils.escapeHTML(ctx.steward.name)} needs a banner.</b> Raise a new faction, or march under one you already lead?</p>`,
+        content: `<p><b>${foundry.utils.escapeHTML(ctx.steward.name)} needs a banner.</b> Raise a new Domain, or march under one you already lead?</p>`,
         options: [
-          { action: "found", label: "Found a new faction" },
+          { action: "found", label: "Found a new Domain" },
           ...owned.slice(0, 6).map(f => ({ action: `join:${f.id}`, label: `Join ${f.name}` }))
         ],
         fallback: "found"
@@ -222,18 +222,18 @@ async function _foundFaction(ctx) {
     }
   }
 
-  await ctx.speak("A body needs a banner, One. Before you drive, claim, or raid, the world wants to know: in whose name?");
+  await ctx.speak("A body needs a banner, One. Before you drive, claim, or fight, the world wants to know: in whose name?");
 
   const DV2 = foundry?.applications?.api?.DialogV2;
-  const FOUND_TITLE = "◇ OPERATOR — Found Your Faction";
+  const FOUND_TITLE = "◇ OPERATOR — Found Your Domain";
   const nsUi = ns?.ui;
   let picked = null;
   const content =
     `<div class="bbttcc-onboarding-prompt">` +
-    `<p>Found your faction — the bigger body your Steward moves inside. You can rename, recrest and rebuild everything later from the faction sheet.</p>` +
-    `<div class="form-group"><label><b>Faction name</b></label><input type="text" name="factionName" placeholder="e.g. The Furrier's Fixit Farm" style="width:100%;"/></div>` +
+    `<p>Found your Domain — the bigger body your Steward moves inside: land, people and leverage. You can rename, recrest and rebuild everything later from the Domain tab on your sheet.</p>` +
+    `<div class="form-group"><label><b>Domain name</b></label><input type="text" name="factionName" placeholder="e.g. The Furrier's Fixit Farm" style="width:100%;"/></div>` +
     `<div class="form-group"><label>Creed (optional, one line)</label><input type="text" name="factionCreed" placeholder="What you tell recruits at the fire." style="width:100%;"/></div>` +
-    `<div class="form-group"><label><b>Starter rig</b> (free — same choice as faction creation)</label>` +
+    `<div class="form-group"><label><b>Starter rig</b> (free — every new Domain gets one)</label>` +
     `<label style="display:block;margin:0.2em 0;"><input type="radio" name="rigChassis" value="hexmobile" checked/> <b>Hexmobile</b> — scout-and-skirmish land ride, two riders</label>` +
     `<label style="display:block;margin:0.2em 0;"><input type="radio" name="rigChassis" value="space_marine"/> <b>Space Marine</b> — single-pilot power-armor mech</label>` +
     `</div>` +
@@ -264,19 +264,20 @@ async function _foundFaction(ctx) {
     return null;
   }
 
+  let rigLine = "";
   const res = await ns.runAsGM("foundPlayerFaction", {
     name: picked.name, creed: picked.creed,
     stewardId: ctx.steward.id, userId: ctx.user?.id || game.user.id,
     rigChassis: picked.rigChassis || "hexmobile"
   });
   if (!res?.factionId) {
-    ui.notifications?.warn?.("Faction founding failed (no GM online, or creation refused) — you can create one from the Actors tab later.");
+    ui.notifications?.warn?.("Domain founding failed (no GM online, or creation refused) — ask the GM to raise one for you.");
     return null;
   }
   const faction = await ns.relay.resolveActor(res.factionId);
   if (ctx && faction) ctx.faction = faction; // refresh the beat context in place
 
-  await ctx.speak(`${faction?.name || picked.name} — raised, rostered, and yours. Banks seeded, reputation unwritten. Best possible start— *bzzt* —nowhere to go but everywhere.`);
+  await ctx.speak(`${faction?.name || picked.name} — raised, rostered, and yours. Treasury seeded, reputation unwritten. Best possible start— *bzzt* —nowhere to go but everywhere.`);
 
   // Every new banner comes with its free starter Hexmobile — minted NOW, named by the
   // player, owned by the player (the driving beat and rig tour both need that ownership).
@@ -289,7 +290,8 @@ async function _foundFaction(ctx) {
     if (rigRes?.rigId) {
       const rig = await ns.relay.resolveActor(rigRes.rigId);
       const flavor = picked.rigChassis === "space_marine" ? "power-armor humming" : "keys in it";
-      await ctx.speak(`Parked out front: ${rig?.name || "your starter rig"} — ${flavor}. Yours to drive, yours to answer for.`);
+      // Dave 2026-10-19: don't talk about the rig until the Domain tour is done — the line waits below.
+      rigLine = `Parked out front: ${rig?.name || "your starter rig"} — ${flavor}. Yours to drive, yours to answer for.`;
     }
   } catch (e) { console.warn(TAG, "starter rig mint failed (driving beat will retry)", e); }
 
@@ -302,10 +304,13 @@ async function _foundFaction(ctx) {
   try {
     await ns.offerTour?.({
       tour: "faction-sheet",
-      prompt: "That banner comes with a control room. Your faction sheet is where everything rolls up — OP banks, roster, health tracks, the order queue. Tour it now, before the world starts billing you?",
-      label: "Tour my faction"
+      prompt: "That banner comes with a control room: the Domain tab on your sheet, where everything rolls up — the treasury, the land, who rides with you, next turn's plan. Tour it now, before the world starts billing you?",
+      label: "Tour my Domain"
     });
   } catch (e) { console.warn(TAG, "founding faction-tour offer failed", e); }
+
+  // The rig gets its line only now, with the Domain tour behind us (Dave, 2026-10-19).
+  if (rigLine) { try { await ctx.speak(rigLine); } catch (_) {} }
 
   return faction;
 }

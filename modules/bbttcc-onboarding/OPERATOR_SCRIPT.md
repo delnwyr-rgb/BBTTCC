@@ -30,13 +30,11 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 **`incarnation.09`** ⟨steward name⟩, under the ⟨Domain name⟩ banner. Rostered. Let's see what the two of you can break.
 
-**`incarnation.10`** A body needs a banner, One. Before you drive, claim, or raid, the world wants to know: in whose name?
+**`incarnation.10`** A body needs a banner, One. Before you drive, claim, or fight, the world wants to know: in whose name?
 
 **`incarnation.11`** No banner, no problem — for now. Some beats ahead need one; I'll ask again when the world does.
 
-**`incarnation.12`** ⟨Domain name⟩ — raised, rostered, and yours. Banks seeded, reputation unwritten. Best possible start— *bzzt* —nowhere to go but everywhere.
-
-**`incarnation.13`** Parked out front: ⟨rig name⟩ — ⟨flavor⟩. Yours to drive, yours to answer for.
+**`incarnation.12`** ⟨Domain name⟩ — raised, rostered, and yours. Treasury seeded, reputation unwritten. Best possible start— *bzzt* —nowhere to go but everywhere.
 
 ### Test the Meatsuit `meatsuit`
 
@@ -326,7 +324,7 @@ That interface has its own tour when you're ready.
 
 **`tour.bridge.outro`** Bridge tour complete. Sacrifice makes the faction strong; backing makes you dangerous; Blood Debt makes the world remember. Spend accordingly.
 
-### The Bigger Body (Faction Sheet) `faction-sheet` — player
+### The Bigger Body (Your Domain) `faction-sheet` — player
 
 **`tour.faction-sheet.intro`** Opening your Domain — a body made of land, people and leverage. Same idea as the meatsuit, bigger stakes, slower heartbeat. One Turn per beat.
 
@@ -394,6 +392,43 @@ Everything the faction has done or suffered — Turns, commits, raids, outcomes.
 > *Operator:* The war log never argues back. That's what makes it the most dangerous document you own.
 
 **`tour.faction-sheet.outro`** Domain toured. Your steward acts in scenes; your Domain acts in Turns. Keep both alive and the world starts answering to you.
+
+### Your Domain — the Domain tab (Alpha player seats) `faction-sheet · Alpha (the Domain tab)` — player
+
+**`tour.faction-sheet · Alpha (the Domain tab).01` · Your Domain**  
+This tab is the bigger body: the land you hold, the people under your banner and what they yield. Your Steward acts in scenes; your Domain acts in Turns.  
+The tier badge up top is the reach of your will over the land. It grows as the Domain grows.
+
+**`tour.faction-sheet · Alpha (the Domain tab).02` · Treasury — one purse**  
+Marks are what the land yields to you — one treasury for everything you buy, build, hire or wage. The chips are the pools it is sorted into: Violence, Intrigue, Economy and the rest, each with its cap.  
+Nothing here is spent in a Battle or a Heist; a Parley can sweeten a deal.
+
+> *Operator:* One purse. Nine pockets. Your enemies only ever count one of them.
+
+**`tour.faction-sheet · Alpha (the Domain tab).03` · The land — how it feels about you**  
+Loyalty is how your people hold; Darkness is the Qliphothic taint creeping in; Momentum is the strategic surge you bank from strong turns.  
+They move on their own each Turn. The chips tell you the band before the numbers get dangerous.
+
+**`tour.faction-sheet · Alpha (the Domain tab).04` · Holdings — hexes and rigs**  
+Every hex you hold is a chip here — click one to open its sheet. A Domain grows from held ground: you can only claim what sits next to a hex you already hold at level 2.  
+Rigs are the Domain's rolling bodies.
+
+**`tour.faction-sheet · Alpha (the Domain tab).05` · Convictions — what you swore to**  
+Your Domain's creed, and the meter of how far your actions have drifted from it. Steadfast is cheap; Rupturing costs you people.  
+Nothing has tested you yet. It will.
+
+**`tour.faction-sheet · Alpha (the Domain tab).06` · Retinue — who rides with you**  
+Crews and Associations under contract, hired at the Muster by the turn. Their maneuvers and strength ride with your Domain into every fight while the contract holds.
+
+**`tour.faction-sheet · Alpha (the Domain tab).07` · Next turn — the plan**  
+What your Domain will do when the Turn ticks. Nothing planned means nothing happens — plan the turn, then the GM runs it at Day's End.
+
+**`tour.faction-sheet · Alpha (the Domain tab).08` · Plan the turn**  
+The Activity Planner: secure, supply, build, expand. Slower than a fight, cheaper than a war, and it compounds. It has its own tour.
+
+**`tour.faction-sheet · Alpha (the Domain tab).09` · The other doors**  
+Quest log — the jobs the land has given you. Market — spend the treasury on gear and rigs. Vault — what the Domain keeps in store.  
+Battle, Heist and Parley are not doors you open: the story brings them to you as a choice.
 
 ### Faction Sheet — GM Controls `faction-gm` — gm
 
