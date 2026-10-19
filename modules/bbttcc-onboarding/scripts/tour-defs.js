@@ -64,6 +64,14 @@ const stewardSheetTour = {
       text: "Everything else lives behind these: Steward (this overview), Domain (your holdings, once you have one), Conflict (fights), Aptitudes (trained skills), Manifestations (your powers) and Inventory.\nMore tabs open up as you grow. We'll hit the important ones now."
     },
     {
+      // Dave 2026-10-19: Surge belongs in the meatsuit walkthrough. It lives on the Conflict tab's resource panel.
+      id: "surge", title: "Surge — the currency nobody explains",
+      pre: '.ft-tabs a[data-tab="combat"]',
+      selector: ".ft-combat-section.ft-resource-panel",
+      text: "Surge banks as you move and fight, and you spend it: on your doctrine's moves, and to bend a roll that matters.\nCapped by your tier. Surge in the bank is a decision you haven't made yet — try not to die holding ten of them.",
+      speak: "Surge. Everyone learns it too late. You're learning it now."
+    },
+    {
       id: "aptitudes", title: "Aptitudes — trained skill ranks",
       pre: '.ft-tabs a[data-tab="skills"]',
       selector: '.ft-body .tab[data-tab="skills"]',

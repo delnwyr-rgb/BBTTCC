@@ -487,7 +487,7 @@ const stewardshipClaim = {
     // Primary path: there is no player-facing claim GUI yet, so the tutorial files the claim.
     ctx.prompt({
       title: "◇ OPERATOR",
-      content: `<p>Plant your banner on <b>Tutelary Hold</b> — claim it for your Domain.</p><p><i>(No field UI for this yet, so I'll file the writ for you. One day you'll do it from a map menu.)</i></p>`,
+      content: `<p>Plant your banner on <b>Tutelary Hold</b> — claim it for your Domain.</p><p><i>Your steward's writ does the filing. You give the word.</i></p>`,
       label: "Plant my banner"
     }).then(async () => {
       if (ctx.faction && hexUuid) await _stage()?.claimHex?.(hexUuid, ctx.faction.id);
@@ -607,23 +607,39 @@ const stewardshipTurn = {
           options: [...options.map(o => ({ action: o.key, label: o.label })), { action: "full", label: "Show me the full planner" }],
           fallback: options[0].key
         });
+        const before = (ctx.faction.getFlag("bbttcc-factions", "warLogs") || []).length;
+        let chosen = null, plannedByHand = null;
         if (pick === "full") {
+          // Dave 2026-10-19: the door opens the planner and lets them PLAN THERE — it never auto-files one of mine.
           try { raid.openActivityPlanner?.({ attackerId: fid }); } catch (_) {}
-          await ctx.speak("That's the whole shelf — browse it later. For today I'll file the first one.");
-          pick = options[0].key;
-        }
-        const chosen = options.find(o => o.key === pick) || options[0];
+          await ctx.speak("That's the whole shelf. Pick Tutelary Hold as the target and plan one order there — or come back and take one of mine.");
+          const again = await ctx.choose({
+            title: "◇ OPERATOR — Plan the Turn", content: `<p>Planned one in the full planner? Say so. Otherwise take one of these.</p>`,
+            options: [{ action: "planned", label: "I planned one in the planner" }, ...options.map(o => ({ action: o.key, label: o.label }))],
+            fallback: "planned"
+          });
+          const logsNow = ctx.faction.getFlag("bbttcc-factions", "warLogs") || [];
+          plannedByHand = logsNow.slice(before).reverse().find(e => e?.type === "planned") || null;
+          if (again !== "planned" || !plannedByHand) { chosen = options.find(o => o.key === again) || null; plannedByHand = null; }
+          if (!chosen && !plannedByHand) { chosen = options[0]; await ctx.speak("Nothing filed over there — I'll take the first of mine, then."); }
+        } else chosen = options.find(o => o.key === pick) || options[0];
         try {
-          const before = (ctx.faction.getFlag("bbttcc-factions", "warLogs") || []).length;
-          await raid.planActivity({ attackerId: fid, targetUuid: hexUuid, activityKey: chosen.key, targetType: "hex", note: "Tutorial order — the Operator files it and clears it." });
+          if (!plannedByHand) await raid.planActivity({ attackerId: fid, targetUuid: hexUuid, activityKey: chosen.key, targetType: "hex", note: "Tutorial order — the Operator files it and clears it." });
           const logs = ctx.faction.getFlag("bbttcc-factions", "warLogs") || [];
-          const mine = logs.slice(before).reverse().find(e => e?.type === "planned") || null;
+          const mine = plannedByHand || logs.slice(before).reverse().find(e => e?.type === "planned") || null;
+          if (plannedByHand) {
+            const k = String(mine.activityKey || mine.activity || mine.key || "");
+            const def = (raid.EFFECTS || {})[k];
+            chosen = { key: k, label: def?.label || String(mine.summary || k).replace(/^.*planned\s+/i, "").split(" on ")[0] || k, catalogLabel: def?.label || k,
+                       price: Object.entries(def?.cost || {}).filter(([, n]) => Number(n) > 0).map(([p, n]) => `${p} ${Math.round(Number(n))}`).join(" · ") };
+          }
           ctx._tutorialPlan = mine?.ts ? { ts: mine.ts } : null;
           try { const sh = ctx.steward?.sheet; if (sh) { sh.tabGroups ??= {}; sh.tabGroups.primary = "domain"; await sh.render(true, { focus: true }); sh._applyActiveTab?.(); } } catch (_) {}
           ctx._tutorialPlan = Object.assign(ctx._tutorialPlan || {}, { key: chosen.key, label: chosen.label, catalogLabel: chosen.catalogLabel, price: chosen.price });
           // The choice lands with a flourish: the order's own effect family on the banner, and the hold pinged on the map.
           _fx(chosen.key, { label: `${chosen.label} — ordered` }, { phase: "invoke" });
           await _showTheHold(ctx);
+          try { globalThis.game?.bbttcc?.api?.fx?.playHexActivity?.(chosen.key, hexUuid, { ms: 2600 }); } catch (_) {}
           await _pause(600);
           await ctx.speak(`Filed: ${chosen.label} on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.`);
         } catch (e) {
@@ -651,6 +667,7 @@ const stewardshipTurn = {
       // The Turn, with a face on it: banner in, the hold pinged, the order's impact, banner out.
       _fx("turn_start", { label: `Practice Turn ${turnNow + 1}` }, { phase: "invoke" });
       await _showTheHold(ctx);
+      try { globalThis.game?.bbttcc?.api?.fx?.playHexActivity?.("harvest_season", hexUuid, { ms: 2400 }); } catch (_) {}
       // Quiet preview: the Turn driver whispers ledgers and previews as it goes — none of it is for a first-timer.
       // Only the Operator's own lines pass while it runs.
       const muteId = Hooks.on("preCreateChatMessage", (doc) => { try { return doc?.flags?.["bbttcc-onboarding"]?.operatorLine === true; } catch (_) { return true; } });
@@ -658,7 +675,11 @@ const stewardshipTurn = {
       catch (e) { console.warn(TAG, "dry-run turn failed", e); }
       finally { try { Hooks.off("preCreateChatMessage", muteId); } catch (_) {} }
       await _pause(1200);
-      if (plan?.key) { _fx(plan.key, { label: `${plan.label} — resolved`, floatText: plan.label }, { phase: "impact", banner: true }); await _showTheHold(ctx); }
+      if (plan?.key) {
+        _fx(plan.key, { label: `${plan.label} — resolved`, floatText: plan.label }, { phase: "impact", banner: true });
+        await _showTheHold(ctx);
+        try { globalThis.game?.bbttcc?.api?.fx?.playHexActivity?.(plan.key, hexUuid, { ms: 3200 }); } catch (_) {}
+      }
       await _pause(1400);
       // Readout AFTER: what a real Turn would have done.
       let income = "";

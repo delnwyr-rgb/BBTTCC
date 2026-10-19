@@ -82,15 +82,17 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 **`stewardship_turn.03`** The planner's shelf is bare for this hold— *bzzt* —skipping the order and running the heartbeat.
 
-**`stewardship_turn.04`** That's the whole shelf — browse it later. For today I'll file the first one.
+**`stewardship_turn.04`** That's the whole shelf. Pick Tutelary Hold as the target and plan one order there — or come back and take one of mine.
 
-**`stewardship_turn.05`** Filed: ⟨chosen.label⟩ on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.
+**`stewardship_turn.05`** Nothing filed over there — I'll take the first of mine, then.
 
-**`stewardship_turn.06`** The planner balked at that one— *bzzt* —no matter. The shape's the lesson: pick an order, it waits for the Turn.
+**`stewardship_turn.06`** Filed: ⟨chosen.label⟩ on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.
 
-**`stewardship_turn.07`** That's a Turn. In the living world you plan at the table, the GM runs it at Day's End, and the land answers in the morning.
+**`stewardship_turn.07`** The planner balked at that one— *bzzt* —no matter. The shape's the lesson: pick an order, it waits for the Turn.
 
-**`stewardship_turn.08`** Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.
+**`stewardship_turn.08`** That's a Turn. In the living world you plan at the table, the GM runs it at Day's End, and the land answers in the morning.
+
+**`stewardship_turn.09`** Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.
 
 ### Outfitting `outfitting`
 
@@ -292,31 +294,37 @@ Each has its own ⚀ roll (2d10 explode + defense) when the world tests you dire
 Everything else lives behind these: Steward (this overview), Domain (your holdings, once you have one), Conflict (fights), Aptitudes (trained skills), Manifestations (your powers) and Inventory.  
 More tabs open up as you grow. We'll hit the important ones now.
 
-**`tour.steward-sheet.06` · Aptitudes — trained skill ranks**  
+**`tour.steward-sheet.06` · Surge — the currency nobody explains**  
+Surge banks as you move and fight, and you spend it: on your doctrine's moves, and to bend a roll that matters.  
+Capped by your tier. Surge in the bank is a decision you haven't made yet — try not to die holding ten of them.
+
+> *Operator:* Surge. Everyone learns it too late. You're learning it now.
+
+**`tour.steward-sheet.07` · Aptitudes — trained skill ranks**  
 Aptitudes are Faculties with training. Ranks run 0–5 and each rank stacks a permanent benefit: Trained stops fumbles, Proficient rerolls your lowest die, Expert floors dice at 4, Master rolls 3d10 drop-lowest, Legendary auto-succeeds once per scene.  
 Hover any rank label for the full accrued list.
 
-**`tour.steward-sheet.07` · Manifestations — the reality dials**  
+**`tour.steward-sheet.08` · Manifestations — the reality dials**  
 Your manifestations live here — cast from this tab, sustained against your Clarity.  
 New ones come from your Path as you grow; the GM can grant a custom working.
 
-**`tour.steward-sheet.08` · States — what's riding you**  
+**`tour.steward-sheet.09` · States — what's riding you**  
 Active conditions, buffs, debuffs and lingering effects. Temporary ones list their clock and fall off when it runs out.  
 If something feels wrong with your numbers, look here first — something usually is.
 
-**`tour.steward-sheet.09` · Inventory**  
+**`tour.steward-sheet.10` · Inventory**  
 Carried gear, weapons and armor. Items you lack the training to use are flagged — untrained armor and weapons work badly, when they work at all.  
 Equip state matters: only equipped items contribute.
 
-**`tour.steward-sheet.10` · The Work**  
+**`tour.steward-sheet.11` · The Work**  
 The long game — repairing the world, not just surviving it. Progress here tracks your part in the repair and unlocks the campaign's highest-tier play.  
 It fills slowly. That's the point.
 
-**`tour.steward-sheet.11` · Edit mode**  
+**`tour.steward-sheet.12` · Edit mode**  
 The ✎ toggle exposes the raw inputs — direct rank edits, identity fields, the normally-locked plumbing.  
 Day to day you leave it off; the sheet plays itself through clicks and rolls.
 
-**`tour.steward-sheet.12` · Your Domain — the bigger body**  
+**`tour.steward-sheet.13` · Your Domain — the bigger body**  
 You aren't just a body — you're a stake in a faction. The → button opens its sheet: OP banks, territory, politics, the strategic layer.  
 That interface has its own tour when you're ready.
 
