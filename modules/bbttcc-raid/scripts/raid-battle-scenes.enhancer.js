@@ -100,7 +100,7 @@
           if (game.user?.isGM) await hexDoc.update({ [`flags.${MOD}.lastOutcome`]: { kind: "occupation", attackerId, attackerName: attacker?.name || "", timestamp: Date.now() } }, { parent: hexDoc.parent ?? null });
           if (game.user?.isGM && game.users.activeGM?.id === game.user.id) ChatMessage.create({
             content: `<div class="bbttcc-raid-outcome"><p style="margin:0"><b style="color:#a6e22e">⚑ Raid Victory — Hex Outcome: Occupation</b></p>
-              <p style="margin:.2rem 0;font-size:0.82rem">Final battle scene resolved. The hex flips to <b>${foundry.utils.escapeHTML(attacker?.name || "the attacker")}</b>'s control.</p>
+              <p style="margin:.2rem 0;font-size:0.82rem">Final battle scene resolved for <b>${foundry.utils.escapeHTML(attacker?.name || "the attacker")}</b>. Who holds the ground is on the Battle card: open ground changes hands, built ground takes a Siege (ruling 21).</p>
               <p style="margin:.2rem 0;font-size:0.74rem;opacity:0.75">The GM may apply a liberation outcome instead if the campaign calls for it.</p></div>`
           });
         }

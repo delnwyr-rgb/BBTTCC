@@ -2348,7 +2348,7 @@ export async function openHarmonyMarshalLoyaltySteward(actor) {
   new Dialog({
     title: "Harmony Marshal · Loyalty Steward (T3)",
     content: `<div class="ft-cast-dialog">
-      <p style="font-size:0.78rem;margin:0 0 0.4rem">On a successful major Diplomacy check (or Courtly Intrigue scene win) that resolves a hex- or faction-level conflict: choose one affected hex — <b>Loyalty in that hex increases by 1</b>.</p>
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">On a successful major Diplomacy check (or Parley win) that resolves a hex- or faction-level conflict: choose one affected hex — <b>Loyalty in that hex increases by 1</b>.</p>
       <div class="ft-cast-field">
         <label>Affected hex</label>
         <select name="hex" ${hexes.length ? "" : "disabled"}>${hexOptions}</select>
@@ -5843,7 +5843,7 @@ export const CHAR_OPT_ABILITIES = {
     label: "Trance of the Thousand Faces",
     abilities: [
       { key: "personaCache",  type: "info",        level: 3,  label: "Persona Cache (L3) — Spend 10 Soft Power marks",
-        body: "Maintain PB personas. In Courtly Intrigue, spend 10 Soft Power marks to switch personas and gain Advantage on your next Deception or Persuasion check. No daily cap; OP-cost only." },
+        body: "Maintain PB personas. In a Parley, spend 10 Soft Power marks to switch personas and gain Advantage on your next Deception or Persuasion check. No daily cap; OP-cost only." },
       { key: "borrowedVoice", type: "soma-break",  level: 10, label: "Borrowed Voice (L10)",
         body: "1/Soma Break, mimic a voice you've heard for up to 1 minute." }
     ]

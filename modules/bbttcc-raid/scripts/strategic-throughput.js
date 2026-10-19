@@ -537,7 +537,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async border_patrol(ctx){
       const A = game.actors.get(ctx.factionId);
       await setNextTurnFlag(A, { borderPatrol: 2 });   // ticks down at the end of each Advance: covers the NEXT turn's raids
-      await pushWarLog(A,"Border Patrol: infiltration (Intrigue raids) against your hexes is refused next turn.");
+      await pushWarLog(A,"Border Patrol: Heists against your hexes are refused next turn.");
     },
     // Local Festival / Training Parade: their only effect was faction Morale (+1 now / +1 next
     // turn) — retired 2026-10-18 (ruling 19). They log the activity and nothing else.
@@ -1024,8 +1024,23 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       return (r?.blocked && r.wordSent) ? no(r.message) : null;
     } catch (_e) { return null; }
   };
+  // ALPHA CUT ruling 20 (Dave, 2026-10-18): grow from held ground — a claim must touch a hex you hold at level 2+.
+  const _adjacencyNo = async (c) => {
+    try {
+      const adj = game.bbttcc?.api?.territory?.adjacency;
+      if (!adj?.isAdjacentToHeld || !adj.active?.() || !c.targetDoc) return null;
+      const r = await adj.isAdjacentToHeld({ hexDoc: c.targetDoc, factionId: c.actor?.id });
+      return r?.ok ? null : no(`${_nm(c.targetFlags)} is not next to ground you hold at level ${r?.minDev ?? 2}: ${r?.reason || "it touches no hex you hold."} A Domain grows from held ground.`);
+    } catch (_e) { return null; }
+  };
   const CAN_PLAN = {
-    establish_outpost: (c) => _surveyNo(c) || (_tfOwner(c.targetFlags) ? no(`${_nm(c.targetFlags)} is already held${_mine(c) ? " by you" : ""} — Establish Outpost claims UNCLAIMED ground.`) : ok),
+    establish_outpost: async (c) => _surveyNo(c) || (_tfOwner(c.targetFlags) ? no(`${_nm(c.targetFlags)} is already held${_mine(c) ? " by you" : ""} — Establish Outpost claims UNCLAIMED ground.`) : (await _adjacencyNo(c)) || ok),
+    expand_territory:  async (c) => _tfOwner(c.targetFlags) ? no(`${_nm(c.targetFlags)} is already held${_mine(c) ? " by you" : ""}.`) : ((await _adjacencyNo(c)) || ok),
+    // Ruling 20 — development happens on ground you HOLD (these rows had no ownership check at all).
+    develop_outpost:            (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to develop.`) : ok,
+    develop_infrastructure:     (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to develop.`) : ok,
+    develop_infrastructure_std: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to develop.`) : ok,
+    infrastructure_expansion:   (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to develop — Infrastructure Expansion builds on ground you HOLD.`) : ok,
     develop_outpost_stability: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to stabilize.`) : (!["outpost","village",""].includes(_size(c.targetFlags)) ? no(`${_nm(c.targetFlags)} is a ${_size(c.targetFlags)} — Develop Outpost is for a young outpost or village.`) : ok),
     upgrade_outpost_settlement: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to upgrade.`) : (_size(c.targetFlags) !== "outpost" ? no(`${_nm(c.targetFlags)} is a ${_size(c.targetFlags) || "settled hex"} — Upgrade is Outpost → Village; use the Townbuilder above that.`) : ok),
     establish_trade_route: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — a trade route starts from a hex you hold.`) : (!c.toHexUuid ? no("Pick a TO hex you hold for the route.") : ok),

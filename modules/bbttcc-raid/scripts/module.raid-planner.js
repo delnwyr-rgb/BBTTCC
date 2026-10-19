@@ -639,11 +639,13 @@ function listSceneHexes(){
     const h = Number(doc?.height ?? doc?.h ?? 0);
     const cx = x + (w ? w/2 : 0);
     const cy = y + (h ? h/2 : 0);
+    let dev = 0; try { const tf = doc.flags?.[TERR_ID] || {}; dev = Number(game.bbttcc?.facts?.hex?.integration?.(tf) ?? tf.integration?.progress ?? tf.development?.stage ?? 0) || 0; } catch (_e) { dev = 0; }
     out.push({
       uuid: doc.uuid,
       id: doc.id,
       name: f?.name || doc.text || doc.id || "Hex",
       ownerId: f?.factionId || f?.ownerId || "",
+      dev,   // ruling 20: integration level, the frontier grows only from level-2 ground
       source,
       x,y,w,h,cx,cy
     });
@@ -755,9 +757,14 @@ async function bbttccFilterHexTargets(allHexes, factionId){
     return out;
   }
 
-  // Include adjacent neighbors of ALL owned hexes
-  if (threshold && owned.length) {
-    for (const h of owned) {
+  // Include adjacent neighbors of owned hexes — ALPHA CUT ruling 20: only of hexes held at level 2+
+  // (the frontier grows from held ground; a level-1 outpost cannot push outward yet).
+  const _adjApi = game?.bbttcc?.api?.territory?.adjacency;
+  const _ruleOn = !!_adjApi?.active?.();
+  const _minDev = Number(_adjApi?.MIN_DEV ?? 2);
+  const growFrom = _ruleOn ? owned.filter(h => Number(h.dev || 0) >= _minDev) : owned;
+  if (threshold && growFrom.length) {
+    for (const h of growFrom) {
       for (const n of neighborsOf(h)) {
         allowed.add(n.uuid);
       }
@@ -772,7 +779,7 @@ async function bbttccFilterHexTargets(allHexes, factionId){
   try {
     const remote = game?.bbttcc?.api?.territory?.leylines?.resolveRemoteAdjacency;
     if (typeof remote === "function") {
-      for (const u of ownedUuids) {
+      for (const u of (_ruleOn ? growFrom.map(h => h.uuid) : ownedUuids)) {
         // Sync or async resolver — AWAIT it: the filtered list is built right after this
         // loop, so a .then() callback landed too late and ley-gate links never appeared.
         let r = null;
@@ -2072,6 +2079,15 @@ wrap.appendChild(top);
           }
         }
         if (chosen) {
+          // Ruling 20: a picked hex outside the list used to land as an empty select with a happy toast.
+          const inList = [...hexSel.options].some(o => o.value === chosen.uuid);
+          if (!inList) {
+            let why = "it is not yours and not next to ground you hold.";
+            try { const adj = game.bbttcc?.api?.territory?.adjacency; if (adj?.isAdjacentToHeld) { const r = await adj.isAdjacentToHeld({ hexUuid: chosen.uuid, factionId: this._plannerState.factionId }); if (r && !r.ok) why = r.reason; } } catch (_e) {}
+            ui.notifications?.warn?.(`${chosen.name} is out of reach — ${why}`);
+            endPick();
+            return;
+          }
           hexSel.value = chosen.uuid;
           this._plannerState.selectedHexUuid = chosen.uuid;
           hexSel.dispatchEvent(new Event("change"));   // refresh the TO list + terrain surcharge line

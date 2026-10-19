@@ -119,7 +119,7 @@
   }
 
 
-  async function adjustOpBank(actor, key, delta, scenarioLabel="Courtly Intrigue") {
+  async function adjustOpBank(actor, key, delta, scenarioLabel="Parley") {
     if (!actor || !key || !delta) return;
     const flags = dup(actor.flags?.[MODF] || {});
     const bank  = dup(flags.opBank || {});
@@ -150,12 +150,12 @@
   // Inputs are MARKS (owner ruling 2026-09-06); mechanics count "per 10 marks". Round spends down to whole tens.
   const _m10 = (v) => Math.floor(Math.max(0, Number(v) || 0) / 10) * 10;
 
-  async function sendChat(lines, {title="Courtly Intrigue"}={}) {
+  async function sendChat(lines, {title="Parley"}={}) {
     if (!lines.length) return;
     await ChatMessage.create({
       content: `<p><b>${title}</b></p>${lines.join("<br/>")}`,
       whisper: tableAudience(),
-      speaker: { alias: "Bad Eden Courtly Intrigue" }
+      speaker: { alias: "Bad Eden Parley" }
     }).catch(()=>{});
   }
 
@@ -266,7 +266,7 @@
       : `${outcomeKind}_${winner === "A" ? "attacker" : "defender"}`;
     const d = REL_DELTA_TABLE[key];
     if (!d) return;
-    const reason = `${label || "Courtly Intrigue"}: ${outcomeKind}`;
+    const reason = `${label || "Parley"}: ${outcomeKind}`;
     await shiftRelTier(A, D, d.att2def, reason);
     await shiftRelTier(D, A, d.def2att, reason);
   }
@@ -334,6 +334,9 @@
     skate: { label: "The Skate-Off", fuel: ["culture", "softpower"], crowd: "the rail", crowdTrack: "Rail", foul: "intimidate", foulText: "went full mall cop and shut the session down.",
       actions: { persuade: { label: "Land the Line", pool: "culture" }, inspire: { label: "Go Big", pool: "softpower" }, expose: { label: "Call Their Bail", pool: "culture" }, intimidate: { label: "Bust Them (Mall Cop)", pool: "violence" } } }
   };
+  // ALPHA CUT ruling 3 (2026-10-18): Impress with no particular style = a plain show. Same four moves, the crowd judges.
+  PERF_BUILTIN.show = { label: "The Show", fuel: ["softpower", "culture"], crowd: "the crowd", crowdTrack: "Crowd", foul: "intimidate", foulText: "turned the show into a brawl.",
+    actions: { persuade: { label: "Hold the Room", pool: "softpower" }, inspire: { label: "Showstopper", pool: "culture" }, expose: { label: "Upstage Them", pool: "softpower" }, intimidate: { label: "Start a Brawl", pool: "violence" } } };
   let PERF_PROFILES = { ...PERF_BUILTIN };
   async function _loadPerfProfiles() {
     try {
@@ -346,6 +349,8 @@
   function _perfProfile(key) { const k = String(key || "").trim(); const p = PERF_PROFILES[k]; return p ? { key: k, ...p } : null; }
 
   whenRaidReady((raidApi) => {
+    // Ruling 3: the console's Impress style picker reads the loaded profiles here.
+    raidApi.performanceProfiles = () => ({ ...PERF_PROFILES });
     raidApi.courtly = async function createCourtlyScenario({
       attackerId,
       defenderId,
@@ -353,8 +358,10 @@
       atkInitSoft = 0,
       defInitDip = 0,
       defInitSoft = 0,
-      label = "Courtly Intrigue",
-      performance = null              // PERFORMANCE MODE (2026-10-04): a profile key or object — see raid-performance below
+      label = "Parley",
+      performance = null,             // PERFORMANCE MODE (2026-10-04): a profile key or object — see raid-performance below
+      goal = "persuade",              // ALPHA CUT ruling 3: persuade | deceive | impress | unnoticed — one per Parley
+      domainStrength = null           // ALPHA CUT ruling 5: { atk:{dip,soft}, def:{dip,soft} } in OP — Influence from what the Domain owns, nothing debited
     } = {}) {
       const A = game.actors.get(String(attackerId||"").replace(/^Actor\./,""));
       const D = game.actors.get(String(defenderId||"").replace(/^Actor\./,""));
@@ -364,10 +371,22 @@
       // Spends are OP; banks store marks. Clamp to what each side can pay,
       // debit at marks scale (×10).
       // PERFORMANCE MODE: the profile's two fuel pools stand in for Diplomacy (full) and Soft Power (half)
+      goal = String(goal || "persuade").toLowerCase();
+      if (goal === "impress" && !performance) performance = "show";
       const PERF = performance ? (typeof performance === "object" ? performance : _perfProfile(performance)) : null;
       if (performance && !PERF) throw new Error(`${TAG} unknown performance profile ${performance}`);
+      if (PERF) goal = "impress";
+      const GOAL_LABELS = { persuade: "Persuade", deceive: "Deceive", impress: "Impress", unnoticed: "Stay unnoticed" };
+      if (!GOAL_LABELS[goal]) goal = "persuade";
       const FUEL1 = PERF?.fuel?.[0] || "diplomacy", FUEL2 = PERF?.fuel?.[1] || "softpower";
-      if (PERF && !label || (PERF && label === "Courtly Intrigue")) label = PERF.label || label;
+      if (PERF && !label || (PERF && (label === "Parley" || label === "Courtly Intrigue"))) label = PERF.label || label;
+      if (domainStrength) {
+        // Ruling 5: Influence opens from the Domain's own OP ratings (what its marks already bought). No debit.
+        atkInitDip = Math.max(0, Math.floor(Number(domainStrength.atk?.dip || 0)));
+        atkInitSoft = Math.max(0, Math.floor(Number(domainStrength.atk?.soft || 0)));
+        defInitDip = Math.max(0, Math.floor(Number(domainStrength.def?.dip || 0)));
+        defInitSoft = Math.max(0, Math.floor(Number(domainStrength.def?.soft || 0)));
+      } else {
       const atkInitDipM = Math.min(_m10(atkInitDip), bankOpOf(A, FUEL1));   // marks
       const atkInitSoftM = Math.min(_m10(atkInitSoft), bankOpOf(A, FUEL2));   // marks
       const defInitDipM = Math.min(_m10(defInitDip), bankOpOf(D, FUEL1));   // marks
@@ -379,6 +398,7 @@
       if (defInitSoftM) await adjustOpBank(D, FUEL2, -defInitSoftM, label);
       // influence math counts per 10 marks
       atkInitDip = atkInitDipM / 10; atkInitSoft = atkInitSoftM / 10; defInitDip = defInitDipM / 10; defInitSoft = defInitSoftM / 10;
+      }
 
       let initInfluenceA = computeInfluenceHP({ baseCommitDip: atkInitDip, baseCommitSoft: atkInitSoft });
       let initInfluenceD = computeInfluenceHP({ baseCommitDip: defInitDip, baseCommitSoft: defInitSoft });
@@ -403,6 +423,11 @@
         await D.unsetFlag(MOD_R, "nextCourtlyInfluenceCapDelta");
       }
       const state = {
+        id: foundry.utils.randomID(),  // ruling 4: receipts drawn here are stamped with THIS Parley
+        goal,                          // ruling 3
+        goalLabel: GOAL_LABELS[goal],
+        suspicionEnabled: goal === "unnoticed",   // ruling 3: Suspicion is the Stay-unnoticed goal (Impress has its crowd track instead)
+        trackLabel: PERF ? (PERF.crowdTrack || "Crowd") : (goal === "unnoticed" ? "Suspicion" : null),
         attackerId: A.id,
         defenderId: D.id,
         label,
@@ -515,6 +540,8 @@
         defSkillBonus = 0,
         atkOpBonus = 0,
         defOpBonus = 0,
+        atkSweeten = 0,   // ruling 5: Sweeten the deal — marks to the OTHER side, in the open
+        defSweeten = 0,
         note = ""
       } = {}) {
         if (state.outcome !== "ongoing") {
@@ -540,6 +567,7 @@
           state.history.push({ round: state.round, atkAction: atkAct, defAction: defAct, foul: state.foulBy, note });
           const who = state.foulBy === "both" ? "Both sides" : foundry.utils.escapeHTML((aF ? A : D).name);
           await sendChat([`<b>${who}</b> ${foundry.utils.escapeHTML(PERF.foulText || "broke the one rule.")}`, `The contest is over. Nobody calls this a win, whatever the scoreboard says.`], { title: `${label}: Round ${state.round} — Foul` });
+          await _expireParleyReceipts().catch(() => {});
           _emitCourtlyVfx("outcome", { outcome: state.outcome, outcomeKind: "foul", winnerSide: outcomeWinner(state), attackerName: A.name, defenderName: D.name });
           try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
           try { Hooks.callAll("bbttcc:performance:resolved", { profile: PERF.key, state: getState() }); } catch (_e) {}
@@ -567,9 +595,26 @@
         if (atkKey && atkSpendM) await adjustOpBank(A, atkKey, -atkSpendM, label);
         if (defKey && defSpendM) await adjustOpBank(D, defKey, -defSpendM, label);
 
+        // ALPHA CUT ruling 5 — Sweeten the deal. The marks move NOW to the other side's pool for the chosen action and
+        // stay there whatever the roll says; the sweetener rolls +1 per SWEETEN_PER marks this exchange (the staged-OP price).
+        const sweetNotes = [];
+        const SWEETEN_PER = Math.max(1, Math.round(10 * 2 * ((Number(raidApi.PRICE_MULT) > 0) ? Number(raidApi.PRICE_MULT) : 0.75)));
+        const _sweeten = async (from, to, poolKey, marks) => {
+          const pk = poolKey || "diplomacy";
+          const m = Math.min(_m10(marks), bankOpOf(from, pk));
+          if (m <= 0) return 0;
+          await adjustOpBank(from, pk, -m, `${label}: sweetened the deal`);
+          await adjustOpBank(to, pk, +m, `${label}: ${from.name} sweetened the deal`);
+          const b = Math.ceil(m / SWEETEN_PER);
+          sweetNotes.push(`${foundry.utils.escapeHTML(from.name)} sweetens the deal: ${m} marks to ${foundry.utils.escapeHTML(to.name)}, in the open (+${b} this exchange).`);
+          return b;
+        };
+        const atkSweetBonus = atkSweeten > 0 ? await _sweeten(A, D, atkKey, atkSweeten) : 0;
+        const defSweetBonus = defSweeten > 0 ? await _sweeten(D, A, defKey, defSweeten) : 0;
+
         // Compute bonuses
-        let atkBonus = Number(atkSkillBonus || 0);
-        let defBonus = Number(defSkillBonus || 0);
+        let atkBonus = Number(atkSkillBonus || 0) + atkSweetBonus;
+        let defBonus = Number(defSkillBonus || 0) + defSweetBonus;
 
         // Lead + Support coalition OP bonus (for the chosen action's category).
         // Caller computes via _rcCoalitionBonus on action's matched key (persuade→diplomacy,
@@ -694,7 +739,7 @@
         // Influence damage
         let damageToD = 0;
         let damageToA = 0;
-        let extraNotes = [...capNotes];
+        let extraNotes = [...capNotes, ...sweetNotes];
 
         if (result === "attacker") {
           const dmg = Math.max(1, Math.abs(margin));
@@ -705,6 +750,7 @@
             nextScandalOnD = true;
             extraNotes.push("Expose: Scandal applied to defender (–2 next exchange).");
           }
+          if (state.goal === "deceive" && atkAct === "expose") { damageToD += 1; extraNotes.push("Deceive: exposed — 1 extra Influence lost."); }
 
           // Defender intimidated and failed badly → backlash
           if (defAct === "intimidate" && margin >= 5) {   // attacker won by 5+ → defender failed by 5+
@@ -719,6 +765,8 @@
             nextScandalOnA = true;
             extraNotes.push("Expose: Scandal applied to attacker (–2 next exchange).");
           }
+          // Ruling 3 — Deceive: a liar caught out bleeds one more.
+          if (state.goal === "deceive" && defAct === "expose") { damageToA += 1; extraNotes.push("Deceive: exposed — 1 extra Influence lost."); }
           if (atkAct === "intimidate" && -margin >= 5) {   // defender won by 5+ → attacker failed by 5+
             damageToA += 2;
             extraNotes.push("Intimidate backlash: attacker loses 2 extra Influence.");
@@ -778,6 +826,8 @@
         if (state.envoysA) { if (_sideSuspContribution(atkAct, true) > 0) { suspDelta -= 1; susReasons.push("Diplomatic Envoys — attacker Suspicion −1"); } }
         if (state.envoysD) { if (_sideSuspContribution(defAct, false) > 0) { suspDelta -= 1; susReasons.push("Diplomatic Envoys — defender Suspicion −1"); } }
 
+        // Ruling 3 — Suspicion only runs for Stay unnoticed (Impress keeps it as the crowd track). Persuade / Deceive: nobody is hiding.
+        if (!PERF && state.suspicionEnabled === false) { suspDelta = 0; susReasons.length = 0; state.suspicionQuietStreak = 0; }
         state.suspicion = clamp(suspBefore + suspDelta, 0, 10);
 
         // Phase F — VFX hooks for suspicion threshold crosses (broadcast to all clients).
@@ -844,6 +894,9 @@
         if (state.outcome !== "ongoing" && !state.outcomeKind) {
           state.outcomeKind = detectOutcomeKind(state);
         }
+        // Ruling 3 — a Deceive win is recorded as a deception for later beats to read.
+        if (state.outcome === "attackerWin" && state.goal === "deceive") state.deceived = D.id;
+        if (state.outcome === "defenderWin" && state.goal === "deceive") state.deceived = A.id;
 
         // Record new scandal flags
         state.scandalOnA = nextScandalOnA;
@@ -933,6 +986,7 @@
           catch (e) { console.warn(TAG, "_applyOutcomeMarks failed", e); }
           } else { try { Hooks.callAll("bbttcc:performance:resolved", { profile: PERF.key, state: getState() }); } catch (_e) {} }
           // Phase F — broadcast outcome VFX to all clients.
+          await _expireParleyReceipts().catch(() => {});
           _emitCourtlyVfx("outcome", {
             outcome: state.outcome,
             outcomeKind: state.outcomeKind,
@@ -945,6 +999,17 @@
         try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
 
         return { ...state };
+      }
+
+      // ALPHA CUT ruling 4 — receipts belong to the Parley that made them. When this one ends, its unspent receipts go.
+      async function _expireParleyReceipts() {
+        let n = 0;
+        for (const actor of [A, D]) {
+          const ids = (actor?.items?.contents || []).filter(i => i.flags?.[MOD_R]?.secret?.parleyId === state.id).map(i => i.id);
+          if (!ids.length) continue;
+          try { await actor.deleteEmbeddedDocuments("Item", ids); n += ids.length; } catch (e) { console.warn(TAG, "receipt expiry failed", e); }
+        }
+        if (n) await sendChat([`${n} receipt${n === 1 ? "" : "s"} from this Parley ${n === 1 ? "is" : "are"} spent — ${n === 1 ? "it" : "they"} belonged to this table.`], { title: `${label}: Receipts` });
       }
 
       function getState() {
@@ -1029,7 +1094,8 @@
             try { await applyRelDeltas(A, D, state.outcomeKind, outcomeWinner(state), label); } catch (e) { console.warn(TAG, e); }
             try { await _applyOutcomeMarks(); } catch (e) { console.warn(TAG, "_applyOutcomeMarks failed", e); }
             try {
-              _emitCourtlyVfx("outcome", {
+              await _expireParleyReceipts().catch(() => {});
+          _emitCourtlyVfx("outcome", {
                 outcome: state.outcome,
                 outcomeKind: state.outcomeKind,
                 winnerSide: outcomeWinner(state),
@@ -1318,7 +1384,7 @@
               case "spendFavor":
                 await spendFavorAndBoost(selfSide, { minFavor: eff.minFavor ?? 2 }); break;
               case "noteForGM":
-                await ChatMessage.create({ content: `<p><em>${esc(eff.text || "")}</em></p>`, whisper: gmIds(), speaker: { alias: "Bad Eden Courtly Intrigue" } }).catch(()=>{});
+                await ChatMessage.create({ content: `<p><em>${esc(eff.text || "")}</em></p>`, whisper: gmIds(), speaker: { alias: "Bad Eden Parley" } }).catch(()=>{});
                 break;
               case "burnScandalScar": {
                 const ok = await burnScandalScar(resolveSide(eff.side));
@@ -1395,7 +1461,7 @@
             const flags = foundry.utils.duplicate(losActor.flags?.["bbttcc-raid"] || {});
             flags.nextCourtlyInfluenceCapDelta = Math.min(-1, Number(flags.nextCourtlyInfluenceCapDelta || 0) - 1);
             await losActor.update({ "flags.bbttcc-raid": flags });
-            lines.push(`${esc(losActor.name)} suffers −1 Influence cap on their next courtly raid.`);
+            lines.push(`${esc(losActor.name)} suffers −1 Influence cap on their next Parley.`);
           }
           // Clear winner's light scars (spec §4.1 lifecycle)
           const cleared = await clearLightScars(winActor);

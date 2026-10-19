@@ -241,7 +241,7 @@ const factionSheetTour = {
       id: "secrets", title: "Receipts",
       selector: 'tr.bbttcc-doctrine-row[data-kind="secret"]',
       optional: true,
-      text: "Leverage with a shelf life — you hold up to five Secrets, Stolen or Earned.\nThe Play button only lights up during an active Courtly/Presence raid: that's when a secret becomes a weapon."
+      text: "Leverage with a shelf life — you hold up to five Secrets, Stolen or Earned.\nThe Play button only lights up during an active Parley: that's when a secret becomes a weapon."
     },
     {
       id: "tier", title: "Assets — Tier & capacity",
@@ -583,8 +583,8 @@ const raidConsoleTour = {
   id: "raid-console",
   title: "The Sharp End (Raid Console)",
   audience: "player",
-  intro: "Opening the Raid Console. Three ways to take what's theirs: Violence, Intrigue, Presence. Same table, different knives. If there's no live raid I've staged you a practice target— *bzzt* —it won't mind.",
-  outro: "Raid console toured. Remember the shape: stage OP into the contested key, pick maneuvers, commit the round. Presence raids swap the dice for the courtly influence engine — different tour, same appetite.",
+  intro: "Opening the Raid Console. Three ways to take what's theirs: Battle, Heist, Parley. Battle and Heist are fought on the battlemap in combat rounds; a Parley is talked out at the table. If there's no live raid I've staged you a practice target— *bzzt* —it won't mind.",
+  outro: "Raid console toured. Remember the shape: stage OP into the contested key, pick maneuvers, commit the round. Parleys swap the dice for the influence engine — different tour, same appetite.",
 
   open: async (ctx) => {
     const raidApi = game.bbttcc?.api?.raid;
@@ -647,7 +647,7 @@ const raidConsoleTour = {
       id: "setup", title: "GM setup row",
       selector: 'select[data-id="attacker"]',
       optional: true,
-      text: "GM-only: pick the attacker, the activity type — Violence, Intrigue or Presence, each with its own maneuver set and math — the difficulty band, and the target (Pick Target grabs a hex off the canvas).\nAdd Round starts the exchange once attacker + target + activity are set."
+      text: "GM-only: pick the attacker, the raid type — Battle, Heist or Parley, each with its own maneuver set and math — the difficulty band, and the target (Pick Target grabs a hex off the canvas).\nAdd Round starts the exchange once attacker + target + activity are set."
     },
     {
       id: "playerbank", title: "Your bank",

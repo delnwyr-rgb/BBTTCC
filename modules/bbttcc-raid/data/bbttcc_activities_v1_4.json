@@ -123,7 +123,7 @@
           "nonLethal": 10
         },
         "effects": {
-          "text": "Next turn, Intrigue raids (infiltration) against your hexes are refused — the raider spends nothing and gains nothing."
+          "text": "Next turn, Heists against your hexes are refused — the raider spends nothing and gains nothing."
         },
         "minFactionTier": 1
       }

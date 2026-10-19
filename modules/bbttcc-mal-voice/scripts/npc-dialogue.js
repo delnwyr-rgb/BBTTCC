@@ -378,7 +378,7 @@ async function _grantCourtDoor({ npcActor, defenderId, factionId, method, speake
       content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4db87a;padding:.4em .6em;background:rgba(77,184,122,.08);">
         <b>🎭 The way into court stands open</b><br>
         <b>${_esc(npcActor.name)}</b> ushers <b>${_esc(attacker.name)}</b> toward <b>${_esc(defender.name)}</b>'s court <small style="opacity:.7;">(${stamp.method === "conceded" ? "grudgingly" : "a warm introduction"})</small>.<br>
-        <span style="font-size:.8em;opacity:.7;">Open the Raid Console, target one of ${_esc(defender.name)}'s holdings, and choose Courtly Intrigue — the introduction is waiting at the threshold.</span><br>
+        <span style="font-size:.8em;opacity:.7;">Open the Raid Console, target one of ${_esc(defender.name)}'s holdings, and choose Parley — the introduction is waiting at the threshold.</span><br>
         <button type="button" data-bbttcc-court-console="${_esc(attacker.id)}" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-chess-queen"></i> To the Court</button>
       </div>`,
       flags: { [MODULE_ID]: { courtDoorOpened: true } }
@@ -2269,7 +2269,7 @@ function _definePersonaEditor() {
       scroll.appendChild(addBtn);
 
       const npcFaction = _factionOfNpc(this.actor);
-      scroll.appendChild(this._hint(`<b>Court door</b> — leave blank for none. The condition under which ${_esc(this.actor.name)} would usher Stewards INTO ${npcFaction ? `<b>${_esc(npcFaction.name)}</b>'s` : "their faction's"} court — talking their way into a Courtly Intrigue engagement against it (invited = +2 on the first exchange; talked into it = +1 with Suspicion starting at 1). The door is standing — it can open again another day.${_courtlyRaidApi() ? "" : " <b>⚠ Courtly raid API not detected (bbttcc-raid) — the door stays dormant.</b>"}${npcFaction ? "" : " <b>⚠ This NPC belongs to no faction — the door stays dormant until they do.</b>"}`));
+      scroll.appendChild(this._hint(`<b>Court door</b> — leave blank for none. The condition under which ${_esc(this.actor.name)} would usher Stewards INTO ${npcFaction ? `<b>${_esc(npcFaction.name)}</b>'s` : "their faction's"} court — talking their way into a Parley against it (invited = +2 on the first exchange; talked into it = +1 with Suspicion starting at 1). The door is standing — it can open again another day.${_courtlyRaidApi() ? "" : " <b>⚠ Courtly raid API not detected (bbttcc-raid) — the door stays dormant.</b>"}${npcFaction ? "" : " <b>⚠ This NPC belongs to no faction — the door stays dormant until they do.</b>"}`));
       const courtDoor = document.createElement("input");
       courtDoor.type = "text";
       courtDoor.placeholder = "e.g. they bring proof the tithe is being skimmed, and swear to raise it before the court themselves";
@@ -2561,7 +2561,7 @@ async function _editPersonaLegacy(actor) {
     <p style="font-size:.8em;opacity:.75;margin:.6em 0 .4em;"><b>Teachable recipes</b> — one per line: <code>Recipe Name :: the condition under which ${_esc(actor.name)} would teach it</code>. The name must match a recipe item (the Forge's list). When a conversation genuinely meets the condition, ${_esc(actor.name)} teaches it and the asking Steward's faction can forge it (player conversations pause on a GM approval card; yours confirm inline). A taught recipe is spent — change its line to re-arm it.${_recipesApi() ? "" : " <b>⚠ Recipe book API not detected (fourththing) — this section stays dormant.</b>"}</p>
     <textarea name="recipesRaw" rows="3" style="width:100%;" placeholder="Hex-Warded Duster :: they bring back the courier's cloak with the seam intact and ask how it held">${_esc(cur.recipesRaw || "")}</textarea>
     ${Object.values(cur.recipesTaught || {}).length ? `<p style="font-size:.75em;opacity:.7;margin:.2em 0;">${Object.values(cur.recipesTaught || {}).map(u => `✓ ${_esc(u.label)} — taught to ${_esc(u.by || "?")}`).join("<br>")}</p>` : ""}
-    <p style="font-size:.8em;opacity:.75;margin:.6em 0 .4em;"><b>Court door</b> — leave blank for none. The condition under which ${_esc(actor.name)} would usher Stewards INTO their faction's court (a Courtly Intrigue engagement against it).</p>
+    <p style="font-size:.8em;opacity:.75;margin:.6em 0 .4em;"><b>Court door</b> — leave blank for none. The condition under which ${_esc(actor.name)} would usher Stewards INTO their faction's court (a Parley against it).</p>
     <input type="text" name="courtDoor" style="width:100%;" placeholder="e.g. they bring proof the tithe is being skimmed, and swear to raise it before the court themselves" value="${_esc(cur.courtDoor || "")}"/>`;
 
   const readForm = (form) => ({

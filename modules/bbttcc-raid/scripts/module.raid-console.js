@@ -279,7 +279,7 @@ function _bbttccFxPanelForRound(app, idx){
 
     if (String(m.kind) === "maneuver") {
       if (m.raidTypes) {
-        const rt = Array.isArray(m.raidTypes) ? m.raidTypes.join(", ") : String(m.raidTypes);
+        const rt = (Array.isArray(m.raidTypes) ? m.raidTypes : String(m.raidTypes).split(/\s*,\s*/)).map(_rcTypeLabel).join(", ");
         if (rt) lines.push('<div class="bbttcc-tip-line"><b>Raid Types:</b> ' + _escapeHtml(rt) + '</div>');
       }
       if (m.defenderAccess) lines.push('<div class="bbttcc-tip-line"><b>Defender:</b> ' + _escapeHtml(m.defenderAccess) + '</div>');
@@ -384,6 +384,98 @@ function _mpo() { return game.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.
 // (20 marks); the same ×0.75 the strategic rows and travel legs take makes it +1 per 15 marks.
 // api.raid.PRICE_MULT is the one policy; 0.75 is the fallback if throughput hasn't attached yet.
 function _rcPriceMult() { const m = Number(game?.bbttcc?.api?.raid?.PRICE_MULT); return (Number.isFinite(m) && m > 0) ? m : 0.75; }
+// ALPHA CUT ruling 5 (Dave, 2026-10-17; built 2026-10-18): while the Alpha Cut world setting is on, NO seat spends marks
+// inside a Battle or Heist. Strength is what the Domain owns (ops, roster, coalition; hex, holdings, defences, loyalty)
+// and is shown as one line per side. A Parley keeps one diegetic use of marks: Sweeten the deal (see the engine).
+function _rcNoMarks() { try { return game.bbttcc?.alpha?.enabled?.() === true; } catch (_e) { return false; } }
+
+// ─── ALPHA CUT ruling 21 (Dave, blessed 2026-10-18): WHAT A BATTLE IS FOR ─────────────────────────────────────
+// A Battle is the party's fight, token by token on the battlemap, in combat rounds. The console frames the STAKE,
+// sends everyone to the map, and the GM CALLS the result here (won / stalemate / lost); the 2d10 duel stays as the
+// GM-only "roll it off-map" fallback. Open ground — integration <= 2 and unfortified — is the prize: a won Battle
+// flips it to the attacker IF it touches the attacker's level-2 ground (ruling 20); otherwise the party holds the
+// field, not the hex. Built ground (Developing or better) is objective-only: taking it is a Siege (turn scale).
+function _rcIsBattleKey(k) {
+  const lk = String(k || "").toLowerCase();
+  try { const c = game.bbttcc?.api?.raid?.resolveCanonical?.(lk); if (c) return c === "violence"; } catch (_e) {}
+  return ["violence", "assault", "siege", "blockade"].includes(lk);
+}
+const _RC_FORTIFIED_RX = /fortif|wall|bastion|citadel|keep\b|garrison|stronghold|fortress/i;
+async function _rcBattleStake(r, attacker, hexDoc) {
+  const d = hexDoc?.document ?? hexDoc;
+  const tf = d?.flags?.["bbttcc-territory"] || null;
+  if (!tf || !attacker) return null;
+  const name = tf.name || d.text || "the hex";
+  const dev = Number(game.bbttcc?.facts?.hex?.integration?.(tf) ?? tf.integration?.progress ?? tf.development?.stage ?? 0) || 0;
+  const owner = String(tf.factionId || tf.ownerId || "").replace(/^Actor\./, "");
+  const ownerName = owner ? (game.actors.get(owner)?.name || "another Domain") : "";
+  const holdings = Number(r?.meta?.holdings?.total || 0);
+  const fortified = holdings > 0 || (Array.isArray(tf.modifiers) && tf.modifiers.some(m => _RC_FORTIFIED_RX.test(String(m || ""))));
+  if (owner === String(attacker.id)) return { kind: "own", dev, name, text: `Your own ground — you fight to hold ${name}.` };
+  if (dev > 2 || fortified) return { kind: "built", dev, name, ownerName, text: `Built ground (level ${dev}${fortified ? ", fortified" : ""}) — objective only. Taking ${name} is a Siege.` };
+  let adj = { ok: true, reason: "" };
+  try { const api = game.bbttcc?.api?.territory?.adjacency; if (api?.active?.() && api.isAdjacentToHeld) adj = await api.isAdjacentToHeld({ hexDoc: d, factionId: attacker.id }); } catch (_e) {}
+  if (adj?.ok === false) return { kind: "field", dev, name, ownerName, reason: adj.reason, text: `Open ground, but ${adj.reason} Win and you hold the field, not the hex.` };
+  return { kind: "ground", dev, name, ownerName, text: `Open ground — the hex is the prize. Win and ${attacker.name} holds ${name}${ownerName ? ` (now ${ownerName}'s)` : ""}.` };
+}
+/** GM calls the Battle: "won" | "stalemate" | "lost" | "roll" (off-map dice) | null (cancel). */
+async function _rcBattleCallDialog(r, attacker, defender, stake) {
+  const esc = (t) => foundry.utils.escapeHTML(String(t ?? ""));
+  const D2 = foundry.applications?.api?.DialogV2;
+  const content = `<div style="padding:.25rem .15rem;">
+    <p style="margin:.2rem 0;"><b>Battle${r.targetName ? ` for ${esc(r.targetName)}` : ""}</b> — ${esc(attacker?.name || "")}${defender ? ` vs ${esc(defender.name)}` : ""}</p>
+    <p style="margin:.2rem 0;">Fought on the battlemap, in combat rounds. When it is over, call it here.</p>
+    ${stake?.text ? `<p style="margin:.35rem 0 .2rem; opacity:.9;"><i>Stake:</i> ${esc(stake.text)}</p>` : ""}
+  </div>`;
+  if (!D2?.wait) return "roll";
+  try {
+    const v = await D2.wait({
+      window: { title: "Battle — call it", icon: "fa-solid fa-flag" }, position: { width: 520 }, content, rejectClose: false, modal: true,
+      buttons: [
+        { action: "won",       label: "⚑ Won",            default: true, callback: () => "won" },
+        { action: "stalemate", label: "Stalemate",                       callback: () => "stalemate" },
+        { action: "lost",      label: "Lost",                            callback: () => "lost" },
+        { action: "roll",      label: "🎲 Roll it off-map",              callback: () => "roll" },
+        { action: "cancel",    label: "Cancel",                          callback: () => null }
+      ]
+    });
+    return (v === "won" || v === "stalemate" || v === "lost" || v === "roll") ? v : null;
+  } catch (_e) { return null; }
+}
+/** After the round resolved: open ground changes hands on a won Battle (ruling 21 + 20). */
+async function _rcBattleGroundFlip(r, attacker, defender, hexDoc) {
+  if (!_rcNoMarks() || !_rcIsBattleKey(r?.activityKey) || r?.targetType !== "hex" || !hexDoc || !attacker) return null;
+  const d = hexDoc?.document ?? hexDoc;
+  const stake = await _rcBattleStake(r, attacker, d);
+  if (!stake) return null;
+  r.meta ||= {}; r.meta.stake = stake;
+  const won = Number(r.margin || 0) > 0;
+  const esc = (t) => foundry.utils.escapeHTML(String(t ?? ""));
+  const say = (html) => ChatMessage.create({ speaker: { alias: "Bad Eden Raid" }, content: `<section class="bbttcc-raid"><p style="margin:0;">${html}</p></section>` }).catch(() => {});
+  if (!won) return stake;
+  if (stake.kind === "ground") {
+    if (!game.user?.isGM) return stake;
+    const f = foundry.utils.deepClone(d.flags?.["bbttcc-territory"] || {});
+    const prev = String(f.factionId || f.ownerId || "");
+    f.factionId = String(attacker.id); if ("ownerId" in f) delete f.ownerId;
+    f.status = "occupied";
+    const cur = Number(f.integration?.progress ?? f.development?.stage ?? 0) || 0;
+    f.integration = Object.assign({}, f.integration || {}, { progress: Math.max(1, cur) });
+    f.lastOutcome = { kind: "occupation", attackerId: attacker.id, attackerName: attacker.name, timestamp: Date.now(), by: "battle" };
+    await d.update({ "flags.bbttcc-territory": f }, d.parent ? { parent: d.parent } : {});
+    try { await game.bbttcc?.api?.territory?.recomputeHexResources?.(d, { source: "battle" }); } catch (_e) {}
+    r.meta.groundFlipped = { hexUuid: d.uuid, from: prev, to: attacker.id, ts: Date.now() };
+    const prevName = prev ? (game.actors.get(prev)?.name || "its holder") : "no one";
+    await say(`<b style="color:#a6e22e">⚑ Battle for ${esc(stake.name)}</b> — <b>${esc(attacker.name)}</b> takes the ground${prev ? ` from ${esc(prevName)}` : ""}. Open country changes hands with the field.`);
+    try { await appendWarLog(attacker, { ts: Date.now(), date: new Date().toLocaleString(), type: "battle", summary: `Battle for ${stake.name}: ground taken` }); } catch (_e) {}
+    try { Hooks.callAll("bbttcc:hex:ownerChanged", { hexUuid: d.uuid, from: prev, to: attacker.id, by: "battle" }); } catch (_e) {}
+  } else if (stake.kind === "field") {
+    await say(`<b style="color:#fbbf24">⚑ Battle for ${esc(stake.name)}</b> — <b>${esc(attacker.name)}</b> holds the field, not the hex: ${esc(stake.reason || "it touches none of your level-2 ground.")}`);
+  } else if (stake.kind === "built") {
+    await say(`<b style="color:#fbbf24">⚑ Battle at ${esc(stake.name)}</b> — <b>${esc(attacker.name)}</b> carried the day. The ground stays ${stake.ownerName ? `${esc(stake.ownerName)}'s` : "held"}: taking built ground is a Siege.`);
+  }
+  return stake;
+}
 function stagedOpBonus(marks) {
   const per = Math.max(1, Math.round(_mpo() * 2 * _rcPriceMult()));   // marks per +1 (15 at ×0.75)
   return Math.ceil(Number(marks || 0) / per);
@@ -1454,10 +1546,26 @@ function getRaidTypes(){
     }
   } catch {}
   return [
-    { key:"violence", label:"Violence Raid", primaryKey:"violence", icon:"⚔" },
-    { key:"intrigue", label:"Intrigue Raid", primaryKey:"intrigue", icon:"🥷", kind:"scenario" },
-    { key:"presence", label:"Presence Raid", primaryKey:"softpower", icon:"♕", kind:"scenario" }
+    { key:"violence", label:"Battle", primaryKey:"violence", icon:"⚔", hint:"Fought on the battlemap, in combat rounds." },
+    { key:"intrigue", label:"Heist", primaryKey:"intrigue", icon:"🥷", kind:"scenario", hint:"Fought on the battlemap, in combat rounds. Quiet until the alarm trips." },
+    { key:"presence", label:"Parley", primaryKey:"softpower", icon:"♕", kind:"scenario", hint:"Talked out at the table. Influence, not dice." }
   ];
+}
+
+// ALPHA CUT ruling 2 — Battle / Heist / Parley on every player-facing surface. Keys stay.
+// Accepts a key OR a stored label (rounds committed before the rename keep "Violence Raid").
+function _rcTypeLabel(keyOrLabel) {
+  const api = game.bbttcc?.api?.raid;
+  if (typeof api?.typeLabel === "function") { try { const v = api.typeLabel(keyOrLabel); if (v) return v; } catch (_e) {} }
+  const s = String(keyOrLabel || "");
+  const hit = getRaidTypes().find(t => t.key === s.toLowerCase());
+  if (hit) return hit.label;
+  return ({ "Violence Raid":"Battle", "Intrigue Raid":"Heist", "Presence Raid":"Parley", "Courtly Intrigue":"Parley" })[s] || s;
+}
+function _rcTypeHint(key) {
+  const api = game.bbttcc?.api?.raid;
+  if (typeof api?.typeHint === "function") { try { return api.typeHint(key) || ""; } catch (_e) {} }
+  return getRaidTypes().find(t => t.key === String(key || "").toLowerCase())?.hint || "";
 }
 
 // S3a.4.1: canonical "intrigue" (post Phase 4A taxonomy) AND legacy
@@ -3006,7 +3114,7 @@ _renderScenarioHUD(host, round){
     row.style.background = "linear-gradient(90deg, rgba(2, 6, 23, 0.35), rgba(30, 64, 175, 0.08))";
 
     if (_isCourtlyKey(k)) {
-      row.appendChild(this._mkChip("COURTLY", { tone:"mode" }));
+      row.appendChild(this._mkChip("PARLEY", { tone:"mode" }));
 
       const rNum = (st && st.round != null)
         ? Number(st.round)
@@ -3522,7 +3630,7 @@ _renderScenarioHUD(host, round){
               grid.style.flexWrap = "wrap";
               grid.style.gap = ".25rem";
 
-              for (const k of keys) {
+              for (const k of (_rcNoMarks() ? [] : keys)) {   // ruling 5: no stage chips while the Alpha Cut is on
                 const staged = Number(round?.localStaged?.support?.[sf.id]?.[k] || 0);
                 const bank = Number(getOPBank(sf)?.[k] || 0);
 
@@ -3913,7 +4021,18 @@ _renderScenarioHUD(host, round){
     const facs = (game.actors?.contents ?? []).filter(isFaction).sort((a,b)=>a.name.localeCompare(b.name));
     const attackerOptions = [{ id:"", name:"(select)" }].concat(facs.map(f => ({ id:f.id, name:f.name })));
     const difficulties = Object.entries(RAID_DIFFICULTIES).map(([k,v]) => ({ key:k, label:`${v.name} (${v.modifier>=0?"+":""}${v.modifier})` }));
-    const activityOptions = this._activities().map(a => ({ key:a.key, label:a.label }));
+    const activityOptions = this._activities().map(a => ({ key:a.key, label:a.label, hint:a.hint || _rcTypeHint(a.key) }));
+    // Ruling 2: the console SAYS which raids are battlemap combats; saved rounds read through the new labels.
+    // Player seats read the LAST ROUND's type (the relay carries rounds; the GM's dropdown choice is local to the GM).
+    const __lastR = (this.vm.rounds || [])[(this.vm.rounds || []).length - 1];
+    const __hintKey = (!_rcIsGMUser() && __lastR?.activityKey) ? __lastR.activityKey : this.vm.activityKey;
+    context.activityLabel = __hintKey ? _rcTypeLabel(__hintKey) : "";
+    context.activityHint  = __hintKey ? _rcTypeHint(__hintKey) : "";
+    context.noMarks = _rcNoMarks();
+    // Alpha Cut (Dave 2026-10-18): the Log Attacker / Log Defender toggles are hidden and both sides are always logged.
+    context.alphaOn = context.noMarks;
+    if (context.alphaOn) { this.vm.logWar = true; this.vm.includeDefender = true; }
+    try { for (const r of (this.vm.rounds || [])) if (r && r.activityLabel) r.activityLabel = _rcTypeLabel(r.activityKey || r.activityLabel); } catch (_e) {}
 
     context.vm = this.vm;
     context.attackerOptions = attackerOptions;
@@ -4112,7 +4231,7 @@ _renderScenarioHUD(host, round){
     context.leadAttackerName = leadAttackerName;
     // Surface the "pending uncommitted staging" flag so the template can show
     // the player a Commit Staging banner. GM never has pending state.
-    context.stagingDirty = !_rcIsGMUser() && !!this.__stagingDirty;
+    context.stagingDirty = !_rcIsGMUser() && !!this.__stagingDirty && !_rcNoMarks();
 
     // Pick the bank the player sees: their own when supporting, the lead's
     // when leading, the resolved attacker otherwise (GM view).
@@ -4177,11 +4296,12 @@ _renderScenarioHUD(host, round){
       const bankAtt = att ? getOPBank(att) : _zeroOps();
       const bankDef = def ? getOPBank(def) : _zeroOps();
 
-      const stagedA = Number(staged?.att?.[cat]||0);
-      const stagedD = Number(staged?.def?.[cat]||0);
+      const __nm = _rcNoMarks();   // ruling 5: staged marks never reach the view while the Alpha Cut is on
+      const stagedA = __nm ? 0 : Number(staged?.att?.[cat]||0);
+      const stagedD = __nm ? 0 : Number(staged?.def?.[cat]||0);
 
       let stagedSupport = 0;
-      const supportStage = staged?.support || {};
+      const supportStage = __nm ? {} : (staged?.support || {});
       for (const bucket of Object.values(supportStage)) {
         stagedSupport += Number(bucket?.[cat] || 0);
       }
@@ -4231,6 +4351,26 @@ r.view = {
   defenderId: def?.id || "",
   coalition: coalitionRound,
   breakdown: `Att ${(attBaseRoll||0)} + ceil((StageA + Support) OP/2) ${stagedOpBonus(stagedA + stagedSupport)} = ${attProj}  •  Def ${(defBaseRoll||0)} + Base ${baseDefense} + Staged/2 ${defProjBonus}${diffR?` + Diff ${diffR}`:""}${facDefTotal?` + Defense ${facDefTotal}`:""}${nextBR?` + Next-Raid ${nextBR}`:""} = ${defProj}`};
+      // Ruling 5 — ONE line per side: what the Domain owns, as the engine already adds it.
+      r.view.noMarks = __nm;
+      if (__nm) {
+        const c = coalitionRound || {};
+        const sgn = (n) => `${Number(n) < 0 ? "−" : "+"}${Math.abs(Number(n) || 0)}`;
+        const aParts = [`ops & people ${sgn(c.leadTotal || 0)}`];
+        if (Number(c.supportTotal || 0)) aParts.push(`allies ${sgn(c.supportTotal)}`);
+        if (Number(c.coordinationPenalty || 0)) aParts.push(`coordination −${c.coordinationPenalty}`);
+        r.view.strengthAtt = { total: Number(attBaseRoll || 0), parts: aParts.join(" · ") };
+        const dParts = [`ground ${baseDefense}`];
+        if (defBaseRoll) dParts.push(`ops & people ${sgn(defBaseRoll)}`);
+        if (facDefTotal) dParts.push(`defences ${sgn(facDefTotal)}`);
+        if (nextBR) dParts.push(`loyalty ${sgn(nextBR)}`);
+        if (diffR) dParts.push(`difficulty ${sgn(diffR)}`);
+        r.view.strengthDef = { total: Number(defProj || 0), parts: dParts.join(" · ") };
+        // Ruling 21 — what this Battle is for (open ground = the hex; built ground = objective only).
+        if (_rcIsBattleKey(r.activityKey) && r.targetType === "hex" && r.targetUuid && att) {
+          try { const d0 = await fromUuid(r.targetUuid); const st0 = await _rcBattleStake(r, att, d0?.document ?? d0); if (st0) { r.view.stake = st0; r.meta ||= {}; r.meta.stake = st0; } } catch (_e) {}
+        }
+      }
 
       // Per-player staging context: which bucket the player can stage into
       // (their own attacker or support row), with bank/staged/remain numbers
@@ -4865,6 +5005,7 @@ r.view = {
   }
 
   async _stageOP(idx, { who, key, delta, factionId }){
+    if (_rcNoMarks()) { try { ui.notifications?.info?.("No marks at raid time: your Domain fights with what it owns."); } catch (_e) {} return; }
     const side = String(who || "").toLowerCase();
 
     // Permission gates for non-GM clicks:
@@ -4976,7 +5117,10 @@ async _postRoundCard(idx){
   const mansA = (r.mansSelected?.length) ? `<br/><i>Maneuvers (Att):</i> ${_escJ(r.mansSelected)}` : "";
   const mansD = (r.mansSelectedDef?.length) ? `<br/><i>Maneuvers (Def):</i> ${_escJ(r.mansSelectedDef)}` : "";
   const supportNames = Array.isArray(r.supportFactionNames) ? r.supportFactionNames.filter(Boolean) : [];
-  const coalitionLine = supportNames.length ? `<br/><i>Support:</i> ${_escJ(supportNames)}` : "";
+  const coalitionLine = (supportNames.length ? `<br/><i>Support:</i> ${_escJ(supportNames)}` : "")
+    + (r.meta?.stake?.text ? `<br/><i>Stake:</i> ${foundry.utils.escapeHTML(String(r.meta.stake.text))}` : "")
+    + (r.meta?.battlemap?.call ? `<br/><i>Fought on the battlemap:</i> ${foundry.utils.escapeHTML(String(r.meta.battlemap.call))}` : "")
+    + (r.meta?.groundFlipped ? `<br/><i>Ground:</i> taken by ${foundry.utils.escapeHTML(String(r.attackerName || ""))}` : "");
 
   const aTotal = Number(r.total ?? 0) || 0;
   const dTotal = Number((contested ? (r.defTotal ?? r.dcFinal) : (r.dcFinal ?? r.DC)) ?? 0) || 0;
@@ -5092,7 +5236,7 @@ async _postRoundCard(idx){
     // clicked "Commit Staging to GM" — that contribution won't be in the
     // session. The GM client can't see remote pending state, so we just warn
     // up front and let the GM decide.
-    if (!(await _rcConfirm("Resolve Round", "Resolve this round?\n\nAny supporter who staged but hasn't clicked 'Commit Staging to GM' yet will lose that contribution."))) {
+    if (!(await _rcConfirm("Resolve Round", _rcNoMarks() ? "Resolve this round?" : "Resolve this round?\n\nAny supporter who staged but hasn't clicked 'Commit Staging to GM' yet will lose that contribution."))) {
       return;
     }
 
@@ -5186,7 +5330,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
       // ----------------------------------------------------------
       if (_isCourtlyKey(r.activityKey)) {
         if (typeof raidApi.courtly !== "function") {
-          ui.notifications?.error?.("Courtly engine not loaded. (raid-courtly.influence.enhancer.js)");
+          ui.notifications?.error?.("Parley engine not loaded. (raid-courtly.influence.enhancer.js)");
           return;
         }
 
@@ -5196,43 +5340,69 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         // (owner hit this validating the courtly sprint 2026-07-14).
         const __prevCourtSt = this.__courtlyScenario?.getState?.() || null;
         if (!this.__courtlyScenario || !__prevCourtSt || __prevCourtSt.outcome !== "ongoing" || this.__courtlyScenarioAtt !== attacker.id || this.__courtlyScenarioDef !== defender.id) {
+          // ALPHA CUT ruling 3: one goal per Parley, picked here. Ruling 5: with the Alpha Cut on, Influence comes from what
+          // the Domain owns in Diplomacy and Soft Power (nothing debited) and the marks fields are not shown.
+          const __nm = _rcNoMarks();
+          const GOALS = [
+            ["persuade",  "Persuade — win them over"],
+            ["deceive",   "Deceive — make them believe a thing that is not so"],
+            ["impress",   "Impress — a show, a dance-off, a skate-off"],
+            ["unnoticed", "Stay unnoticed — work the room without raising Suspicion"]
+          ];
+          const goalOpts = GOALS.map(([k, l]) => `<option value="${k}">${l}</option>`).join("");
+          const __profiles = (typeof raidApi.performanceProfiles === "function") ? raidApi.performanceProfiles() : {};
+          const styleOpts = Object.entries(__profiles).map(([k, v]) => `<option value="${k}"${k === "show" ? " selected" : ""}>${foundry.utils.escapeHTML(v?.label || k)}</option>`).join("") || `<option value="show">The Show</option>`;
           const init = await new Promise((resolve) => {
             new Dialog({
-              title: "Courtly Intrigue — Initialize",
+              title: "Parley — Open the table",
               content: `
                 <form>
+                  <div class="form-group"><label>Goal</label><select name="goal">${goalOpts}</select></div>
+                  <div class="form-group" data-parley-style style="display:none;"><label>Style</label><select name="style">${styleOpts}</select></div>
+                  <p class="hint">One goal per Parley. Suspicion only runs when the goal is Stay unnoticed; Impress runs the contest with its crowd.</p>
+                  ${__nm ? `<p class="hint" style="opacity:.85;">Influence opens from what each Domain owns in Diplomacy and Soft Power. No marks are spent to sit down.</p>` : `
                   <p class="hint">Initial commitment sets starting Influence HP. You can leave these at 0 for a quick test.</p>
                   <p class="hint" style="opacity:.85;">Attacker bank — Diplomacy <b>${Math.floor(Number(attacker?.getFlag?.("bbttcc-factions","opBank")?.diplomacy||0))}</b> · Soft Power <b>${Math.floor(Number(attacker?.getFlag?.("bbttcc-factions","opBank")?.softpower||0))}</b> marks. 10 Soft Power stays in reserve so the next round can still be added.</p>
                   <div class="form-group"><label>Attacker: Diplomacy marks commit</label><input type="number" name="atkDip" value="0" min="0" step="10"/></div>
                   <div class="form-group"><label>Attacker: Soft Power marks commit</label><input type="number" name="atkSoft" value="0" min="0" step="10"/></div>
                   <hr/>
                   <div class="form-group"><label>Defender: Diplomacy marks commit</label><input type="number" name="defDip" value="0" min="0" step="10"/></div>
-                  <div class="form-group"><label>Defender: Soft Power marks commit</label><input type="number" name="defSoft" value="0" min="0" step="10"/></div>
-                  <div class="form-group"><label>Label</label><input type="text" name="label" value="Courtly Intrigue"/></div>
+                  <div class="form-group"><label>Defender: Soft Power marks commit</label><input type="number" name="defSoft" value="0" min="0" step="10"/></div>`}
+                  <div class="form-group"><label>Label</label><input type="text" name="label" value="" placeholder="Parley — Persuade"/></div>
                 </form>`,
               buttons: {
                 ok: { label:"Start", callback:(html)=> {
                   const f = html[0].querySelector("form");
                   resolve({
-                    atkDip: Number(f.atkDip.value||0),
-                    atkSoft: Number(f.atkSoft.value||0),
-                    defDip: Number(f.defDip.value||0),
-                    defSoft: Number(f.defSoft.value||0),
-                    label: String(f.label.value||"Courtly Intrigue")
+                    goal: String(f.goal?.value || "persuade"),
+                    style: String(f.style?.value || "show"),
+                    atkDip: Number(f.atkDip?.value||0),
+                    atkSoft: Number(f.atkSoft?.value||0),
+                    defDip: Number(f.defDip?.value||0),
+                    defSoft: Number(f.defSoft?.value||0),
+                    label: String(f.label.value||"")
                   });
                 }},
                 cancel: { label:"Cancel", callback:()=>resolve(null) }
               },
               default: "ok",
-              close: ()=>resolve(null)
+              close: ()=>resolve(null),
+              render: (html) => { try {
+                const root = html[0] || html; const g = root.querySelector("select[name=goal]"); const s = root.querySelector("[data-parley-style]");
+                const lbl = root.querySelector("input[name=label]");
+                const sync = () => { if (s) s.style.display = g?.value === "impress" ? "" : "none"; if (lbl && g) lbl.placeholder = g.value === "impress" ? "(the style names it)" : `Parley — ${(GOALS.find(([k]) => k === g.value) || GOALS[0])[1].split(" — ")[0]}`; };
+                g?.addEventListener("change", sync); sync();
+              } catch (_e) {} }
             }, { width: 520 }).render(true);
           });
           if (!init) return;
+          const __goalLabel = (GOALS.find(([k]) => k === init.goal) || GOALS[0])[1].split(" — ")[0];
+          if (!init.label) init.label = init.goal === "impress" ? "" : `Parley — ${__goalLabel}`;
 
           // 2026-10-09 — the opening commitment draws on the same Soft Power pool
           // that Add Round gates on. Keep the round cost in reserve so starting
           // the duel can't lock the attacker out of round 2.
-          try {
+          if (!__nm) try {
             const RESERVE = 10;
             const bankSoft = Math.floor(Number(attacker?.getFlag?.("bbttcc-factions", "opBank")?.softpower || 0));
             const maxSoft = Math.max(0, bankSoft - RESERVE);
@@ -5250,7 +5420,13 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
               atkInitSoft: init.atkSoft,
               defInitDip: init.defDip,
               defInitSoft: init.defSoft,
-              label: init.label
+              label: init.label,
+              goal: init.goal,
+              performance: init.goal === "impress" ? init.style : null,
+              domainStrength: __nm ? {
+                atk: { dip: Number(categoryTotalWithRoster(attacker, "diplomacy") || 0), soft: Number(categoryTotalWithRoster(attacker, "softpower") || 0) },
+                def: { dip: Number(categoryTotalWithRoster(defender, "diplomacy") || 0), soft: Number(categoryTotalWithRoster(defender, "softpower") || 0) }
+              } : null
             });
             this.__courtlyScenarioAtt = attacker.id;
             this.__courtlyScenarioDef = defender.id;
@@ -5263,34 +5439,40 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
               if (st0) {
                 if (r.meta.scenario.maxA == null) r.meta.scenario.maxA = Number(st0.influenceA || 0);
                 if (r.meta.scenario.maxD == null) r.meta.scenario.maxD = Number(st0.influenceD || 0);
+                r.meta.scenario.goal = st0.goal || init.goal || "persuade";
               }
             } catch (e2) {}
           } catch (e) {
             warn("courtly init failed", e);
-            ui.notifications?.error?.("Courtly init failed — see console.");
+            ui.notifications?.error?.("Parley could not open — see console.");
             return;
           }
         }
 
+        const __nmX = _rcNoMarks();
+        const __stX = this.__courtlyScenario?.getState?.() || {};
+        const __perfActs = __stX.performance?.actions || null;   // Impress: the style names the four moves
         const stepArgs = await new Promise((resolve) => {
           const actions = [
             ["persuade","Persuade (Diplomacy)"],
             ["inspire","Inspire (Soft Power)"],
             ["expose","Expose (Intrigue)"],
             ["intimidate","Intimidate (Violence Aura)"]
-          ].map(([k,l])=>`<option value="${k}">${l}</option>`).join("");
+          ].map(([k,l])=>`<option value="${k}">${foundry.utils.escapeHTML(__perfActs?.[k] || l)}</option>`).join("");
+          const sweetHint = `<p class="hint">Sweeten the deal: marks handed to the other side now, in the open. They keep them whatever happens; you roll +1 per 15 marks this exchange.</p>`;
           new Dialog({
-            title: "Courtly Intrigue — Exchange",
+            title: "Parley — Exchange",
             content: `
               <form class="bbttcc-raid-dialog-form">
                 <div class="form-group"><label>Attacker Action</label><select name="atkAction">${actions}</select></div>
-                <div class="form-group"><label>Attacker Spend (marks)</label><input type="number" name="atkSpend" value="20" min="0" step="10"/></div>
+                ${__nmX ? `<div class="form-group"><label>Attacker: Sweeten the deal (marks to ${foundry.utils.escapeHTML(defender.name)})</label><input type="number" name="atkSweeten" value="0" min="0" step="10"/></div>` : `<div class="form-group"><label>Attacker Spend (marks)</label><input type="number" name="atkSpend" value="20" min="0" step="10"/></div>`}
                 <div class="form-group"><label>Attacker Skill Bonus</label><input type="number" name="atkSkill" value="0" step="1"/></div>
                 <hr/>
                 <div class="form-group"><label>Defender Action</label><select name="defAction">${actions}</select></div>
-                <div class="form-group"><label>Defender Spend (marks)</label><input type="number" name="defSpend" value="20" min="0" step="10"/></div>
+                ${__nmX ? `<div class="form-group"><label>Defender: Sweeten the deal (marks to ${foundry.utils.escapeHTML(attacker.name)})</label><input type="number" name="defSweeten" value="0" min="0" step="10"/></div>` : `<div class="form-group"><label>Defender Spend (marks)</label><input type="number" name="defSpend" value="20" min="0" step="10"/></div>`}
                 <div class="form-group"><label>Defender Skill Bonus</label><input type="number" name="defSkill" value="0" step="1"/></div>
                 <div class="form-group"><label>Note (optional)</label><input type="text" name="note" value=""/></div>
+                ${__nmX ? sweetHint : ""}
               </form>`,
             buttons: {
               ok: { label:"Resolve", callback:(html)=>{
@@ -5298,8 +5480,10 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
                 resolve({
                   atkAction: f.atkAction.value,
                   defAction: f.defAction.value,
-                  atkSpend: Number(f.atkSpend.value||0),
-                  defSpend: Number(f.defSpend.value||0),
+                  atkSpend: Number(f.atkSpend?.value||0),
+                  defSpend: Number(f.defSpend?.value||0),
+                  atkSweeten: Number(f.atkSweeten?.value||0),
+                  defSweeten: Number(f.defSweeten?.value||0),
                   atkSkillBonus: Number(f.atkSkill.value||0),
                   defSkillBonus: Number(f.defSkill.value||0),
                   note: String(f.note.value||"")
@@ -5342,7 +5526,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
 
         let st = null;
         try { st = await this.__courtlyScenario.step(stepArgs); }
-        catch (e) { warn("courtly step failed", e); ui.notifications?.error?.("Courtly step failed — see console."); return; }
+        catch (e) { warn("courtly step failed", e); ui.notifications?.error?.("Parley exchange failed — see console."); return; }
 
         const last = (st?.history && st.history.length) ? st.history[st.history.length-1] : null;
         r.roll = { result: String((last?.atkTotal ?? 0)) + " vs " + String((last?.defTotal ?? 0)) };
@@ -5354,6 +5538,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         r.meta ||= {};
         r.meta.scenario = {
           kind:"courtly",
+          goal: st?.goal || r.meta.scenario?.goal || "persuade",   // ruling 3
           maxA: (r.meta && r.meta.scenario && r.meta.scenario.maxA != null) ? r.meta.scenario.maxA : (st?.maxA != null ? st.maxA : st?.influenceA),
           maxD: (r.meta && r.meta.scenario && r.meta.scenario.maxD != null) ? r.meta.scenario.maxD : (st?.maxD != null ? st.maxD : st?.influenceD),
           state: {
@@ -5367,7 +5552,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         };
 
         const ts = Date.now(), dateStr = new Date(ts).toLocaleString();
-        const summary = `Courtly: ${attacker.name} vs ${defender.name} — ${r.roll.result} • Influence ${st?.influenceA}/${st?.influenceD} • ${r.outcome}`;
+        const summary = `Parley: ${attacker.name} vs ${defender.name} — ${r.roll.result} • Influence ${st?.influenceA}/${st?.influenceD} • ${r.outcome}`;
         await appendWarLog(attacker, { ts, date:dateStr, type:"scenario", scenario:"courtly", side:"att", opponent:defender.name, summary });
         if (this.vm.includeDefender) await appendWarLog(defender, { ts, date:dateStr, type:"scenario", scenario:"courtly", side:"def", opponent:attacker.name, summary });
 
@@ -5394,7 +5579,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           // objective meter.
           let init = null;
           const dlg = new foundry.applications.api.DialogV2({
-            window: { title: "Infiltration (Alarm) — Initialize", resizable: false },
+            window: { title: "Heist — Open", resizable: false },
             position: { width: 480 },
             content: `<form style="display:flex; flex-direction:column; gap:.55rem; padding:8px 6px;">
               <p style="font-size:12px; opacity:.8; margin:0 0 .25rem 0;">Difficulty adds to defender rolls. Alarm Max is the detection cap. Progress Max is the objective threshold (S3a).</p>
@@ -5412,7 +5597,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
               </div>
               <div style="display:flex; align-items:center; gap:.5rem;">
                 <label style="flex: 0 0 140px; font-size:12px;">Label</label>
-                <input type="text" name="label" value="Infiltration" style="flex:1; padding:.25rem .4rem;"/>
+                <input type="text" name="label" value="Heist" style="flex:1; padding:.25rem .4rem;"/>
               </div>
             </form>`,
             buttons: [
@@ -5422,7 +5607,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
                   difficulty:  Number(f.elements.difficulty.value  || 0),
                   alarmMax:    Number(f.elements.alarmMax.value    || 5),
                   progressMax: Number(f.elements.progressMax.value || 5),
-                  label:       String(f.elements.label.value       || "Infiltration")
+                  label:       String(f.elements.label.value       || "Heist")
                 };
               }},
               { action: "cancel", label: "Cancel", callback: () => { init = null; } }
@@ -5460,16 +5645,17 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
             } catch (e2) {}
           } catch (e) {
             warn("infiltration init failed", e);
-            ui.notifications?.error?.("Infiltration init failed — see console.");
+            ui.notifications?.error?.("Heist could not open — see console.");
             return;
           }
         }
 
         const stepArgs = await new Promise((resolve) => {
           new Dialog({
-            title: "Infiltration (Alarm) — Round",
+            title: "Heist — Round",
             content: `
               <form>
+                ${_rcNoMarks() ? `<p class="hint">No marks are spent in a Heist. Your Domain works with what it owns; the stewards' chips and the coalition carry the roll.</p>` : `
                 <div class="form-group"><label>Attacker Spend (Intrigue marks)</label><input type="number" name="atk" value="20" min="0" step="10"/></div>
                 <div class="form-group"><label>Defender Spend (Nonlethal marks)</label><input type="number" name="def" value="20" min="0" step="10"/></div>
                 <div class="form-group"><label>Flashback (optional)</label>
@@ -5478,17 +5664,17 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
                     <span class="hint">Spend Intrigue OP to reduce Alarm by 1 (once per round).</span>
                   </div>
                 </div>
-                <div class="form-group"><label>Flashback Cost (Intrigue marks)</label><input type="number" name="flashCost" value="20" min="0" step="10"/></div>
+                <div class="form-group"><label>Flashback Cost (Intrigue marks)</label><input type="number" name="flashCost" value="20" min="0" step="10"/></div>`}
                 <div class="form-group"><label>Note (optional)</label><input type="text" name="note" value=""/></div>
               </form>`,
             buttons: {
               ok: { label:"Resolve", callback:(html)=>{
                 const f = html[0].querySelector("form");
                 resolve({
-                  spendIntrigue: Number(f.atk.value||0),
-                  spendNonlethal: Number(f.def.value||0),
-                  flash: !!f.flash.checked,
-                  flashCost: Number(f.flashCost.value||0),
+                  spendIntrigue: Number(f.atk?.value||0),
+                  spendNonlethal: Number(f.def?.value||0),
+                  flash: !!f.flash?.checked,
+                  flashCost: Number(f.flashCost?.value||0),
                   note: String(f.note.value||"")
                 });
               }},
@@ -5861,15 +6047,16 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
       addInto(manOpD, op);
     }
 
-    const stagedA = Number(r?.localStaged?.att?.[cat]||0);
-    const stagedD = Number(r?.localStaged?.def?.[cat]||0);
+    const __nmCommit = _rcNoMarks();   // ruling 5: nothing staged reaches the roll while the Alpha Cut is on
+    const stagedA = __nmCommit ? 0 : Number(r?.localStaged?.att?.[cat]||0);
+    const stagedD = __nmCommit ? 0 : Number(r?.localStaged?.def?.[cat]||0);
 
     let stagedSupport = 0;
     if (stagedA>0) manOpA[cat] = (manOpA[cat]||0)+stagedA;
     if (stagedD>0) manOpD[cat] = (manOpD[cat]||0)+stagedD;
 
     // Support faction staged OP
-    const supportStage = r?.localStaged?.support || {};
+    const supportStage = __nmCommit ? {} : (r?.localStaged?.support || {});
     for (const [sfid, bucket] of Object.entries(supportStage)) {
       const clean = {};
       for (const [k, v] of Object.entries(bucket || {})) {
@@ -5919,6 +6106,17 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
         return;
       }
     } catch (eAff) { warn("affordability check failed (non-fatal)", eAff); }
+
+    // ALPHA CUT ruling 21 — a Battle is fought on the battlemap; the GM calls it here. Dice = off-map fallback.
+    let __battleCall = null;
+    if (_rcNoMarks() && _rcIsBattleKey(r.activityKey) && r.targetType !== "creature") {
+      let __stake = null;
+      try { if (r.targetType === "hex" && targetHex) __stake = await _rcBattleStake(r, attacker, targetHex); } catch (_e) {}
+      r.meta ||= {}; if (__stake) r.meta.stake = __stake;
+      const call = await _rcBattleCallDialog(r, attacker, defender, __stake);
+      if (call === null) return;                       // cancelled — nothing spent, nothing rolled
+      __battleCall = (call === "roll") ? null : call;  // "roll" = the GM wants the dice
+    }
 
     // Past the early returns — this round WILL roll: consume the one-shot nextRoll mods now.
     try { if (attacker.getFlag(RAID_ID, "raidRollMods")) await attacker.unsetFlag(RAID_ID, "raidRollMods"); } catch (_eRM) {}
@@ -5981,6 +6179,19 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
 r.outcome = null;
 let totalFinal, dcFinal, rollUsed;
 
+// ALPHA CUT ruling 21 — the GM's call stands in for the dice (margin +1 / 0 / −1 keeps the post-round pipeline's
+// win / stalemate / loss vocabulary; "Success"/"Fail" words keep _b3IsSuccessOutcome and the casualty tiers honest).
+if (__battleCall) {
+  const dc0 = Number(r.baseDC ?? r.DC ?? 10) || 10;
+  const m0 = __battleCall === "won" ? 1 : __battleCall === "lost" ? -1 : 0;
+  r.contested = true; r.dcLabel = "DEF";
+  dcFinal = dc0; totalFinal = dc0 + m0; rollUsed = null;
+  r.attRoll = null; r.defRoll = null;
+  r.roll = { result: `Battlemap — ${__battleCall}` };
+  r.defTotal = dcFinal; r.margin = m0;
+  r.outcome = __battleCall === "won" ? "Success (battlemap)" : __battleCall === "lost" ? "Fail (battlemap)" : "Stalemate (battlemap)";
+  r.meta ||= {}; r.meta.battlemap = { call: __battleCall, by: game.user?.name || "", ts: Date.now() };
+} else
 // If a resolver produced final numbers, honor it (back-compat).
 if (res && res.totalFinal!=null && res.dcFinal!=null) {
   totalFinal = res.totalFinal; dcFinal = res.dcFinal; rollUsed = res.roll;
@@ -6325,7 +6536,7 @@ try {
 // B3.2: Apply Flank Attack margin delta (and other future margin-based effects) to outcome tiering.
 try {
   const md = Number(__b3ThisRound?.attackerMarginDelta || 0) || 0;
-  if (md) {
+  if (md && !r.meta?.battlemap) {   // ruling 21: a called Battle keeps its call
     r.meta ||= {};
     r.meta.b3 ||= {};
     const rawMargin = Number((r.total||0) - (r.dcFinal||0));
@@ -6414,6 +6625,8 @@ try {
         });
       }
     } catch (e) { warn("post-round effects failed", e); }
+    // ALPHA CUT ruling 21 — open ground changes hands on a won Battle (ruling 20 decides whether it can be kept).
+    try { await _rcBattleGroundFlip(r, attacker, defender, targetHex); } catch (eGF) { warn("battle ground flip failed (non-fatal)", eGF); }
 
 // Legacy fields: keep a Roll object for non-contested raids; contested raids store a friendly string in r.roll.result.
     if (!r.contested) {

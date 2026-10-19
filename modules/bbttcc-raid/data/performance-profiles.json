@@ -1,5 +1,19 @@
 {
   "_readme": "Performance contests (2026-10-04) — one social duel (the Courtly engine), many styles. Each profile: label, fuel [full pool, half pool] for starting Influence, the four moves (persuade/inspire/expose/intimidate keep their mechanics; label + OP pool are the style's), crowd (who is judging; the Suspicion track), crowdTrack (its chat name), foul (the move that ends it ugly) + foulText. Endings route via api.raid.performance: triumph (the party wins clean), grace (loss, stalemate, mutual ruin), ugly (anyone fouls). Add a style here; no code needed.",
+  "show": {
+    "label": "The Show",
+    "fuel": ["softpower", "culture"],
+    "crowd": "the crowd",
+    "crowdTrack": "Crowd",
+    "foul": "intimidate",
+    "foulText": "turned the show into a brawl.",
+    "actions": {
+      "persuade": { "label": "Hold the Room", "pool": "softpower" },
+      "inspire": { "label": "Showstopper", "pool": "culture" },
+      "expose": { "label": "Upstage Them", "pool": "softpower" },
+      "intimidate": { "label": "Start a Brawl", "pool": "violence" }
+    }
+  },
   "dance": {
     "label": "The Floor",
     "fuel": ["culture", "softpower"],

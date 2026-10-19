@@ -2317,14 +2317,14 @@ const PG_PARLEY_SECRETS = [
     img: BUTTON_ICON("BBTTCC_button_icon_fear_1.png"),
     effectKey: "oppRollMinus2",
     text: "<p>An unencrypted panic burst, sent to everyone at once and clearly not meant for you. Whatever is on the other end has done the arithmetic and does not like it.</p>"
-        + "<p><em>Play in a Courtly scenario: the opposition rolls at −2. They know you have read it.</em></p>"
+        + "<p><em>Play in a Parley: the opposition rolls at −2. They know you have read it.</em></p>"
   },
   {
     name: "\"Please Totally Don't Murder Us, We Give Up For Reals\"",
     img: BUTTON_ICON("bbttcc_icons_peace_hand_1.png"),
     effectKey: "favorPlus2+influenceDmg2",
     text: "<p>A formal capitulation, composed at speed by something with no idea how a formal capitulation is composed. It is signed. Repeatedly.</p>"
-        + "<p><em>Play in a Courtly scenario: +2 Favor and 2 Influence damage. A surrender entered into the record is worth more than a surrender shouted.</em></p>"
+        + "<p><em>Play in a Parley: +2 Favor and 2 Influence damage. A surrender entered into the record is worth more than a surrender shouted.</em></p>"
   }
 ];
 
@@ -2901,25 +2901,25 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey
 
 const raidViolence = makeRaidBeat({
   id: "raid_violence",
-  title: "Raid — Violence",
+  title: "Raid — Battle",
   activityKey: "violence",
-  intro: "First approach: the blunt one. VIOLENCE. Your console's loaded and aimed at the Rust hold — pick your maneuvers and run the rounds. Make it loud.",
-  instruct: `<p>The <b>Violence</b> raid on the <b>Rust Syndicate Hold</b> is staged and aimed.</p><p><b>You:</b> stage your OP and pick maneuvers in the console. <b>Your GM:</b> commits the rounds — their console is already open on your banner.</p><p>When you've felt the rhythm of assault, conclude.</p>`,
+  intro: "First approach: the blunt one. BATTLE — fought on the battlemap, in combat rounds. Your console's loaded and aimed at the Rust hold — pick your maneuvers and run the rounds. Make it loud.",
+  instruct: `<p>The <b>Battle</b> at the <b>Rust Syndicate Hold</b> is staged and aimed. It is fought on the battlemap, in combat rounds.</p><p><b>You:</b> pick maneuvers in the console. <b>Your GM:</b> commits the rounds — their console is already open on your banner.</p><p>When you've felt the rhythm of assault, conclude.</p>`,
   after: "Loud and effective. But not every door wants kicking. Some you pick— *bzzt* —quietly."
 });
 
 const raidIntrigue = makeRaidBeat({
   id: "raid_intrigue",
-  title: "Raid — Intrigue",
+  title: "Raid — Heist",
   activityKey: "intrigue",
-  intro: "Second approach: the quiet one. INTRIGUE. Same target, different knife — slip in, raise the alarm meter at your own pace, take them from inside. Console's re-aimed; go.",
-  instruct: `<p>The <b>Intrigue</b> raid is aimed at the same hold — infiltration and the alarm meter.</p><p><b>You:</b> stage OP and choose the quiet maneuvers. <b>Your GM:</b> rolls the rounds.</p><p>When you've felt how the quiet game plays, conclude.</p>`,
+  intro: "Second approach: the quiet one. HEIST — same battlemap, same combat rounds, but nobody knows you're there until the alarm says so. Slip in, take them from inside. Console's re-aimed; go.",
+  instruct: `<p>The <b>Heist</b> is aimed at the same hold — infiltration and the alarm meter, on the battlemap.</p><p><b>You:</b> choose the quiet maneuvers. <b>Your GM:</b> rolls the rounds.</p><p>When you've felt how the quiet game plays, conclude.</p>`,
   after: "Subtle. They never saw the hand in their pocket. One approach left, and it's the strangest— *bzzt* —winning without a single blow."
 });
 
 const raidPresence = makeRaidBeat({
   id: "raid_presence",
-  title: "Raid — Presence",
+  title: "Raid — Parley",
   activityKey: "presence",
   courtKey: "court-review",   // wired court scene → the Courtly engine engages
   // The Rust Syndicate's delegation: one face per courtly lesson. Grudge is
@@ -2945,8 +2945,8 @@ const raidPresence = makeRaidBeat({
       line: "And his right: TALLYMAN VERGE, holding the ledgers like a shield. He wants a deal more than he wants a winner — and men who keep the books KNOW things. Courtiers aren't scenery, One. Work the court."
     }
   ],
-  intro: "Last approach: the velvet one. PRESENCE — courtly intrigue. You don't break the hold, you out-talk it; bend influence until they fold to your face. Console's re-aimed; hold court.",
-  instruct: `<p>The <b>Presence</b> raid — courtly influence against the same hold.</p><p><b>You:</b> stage OP and choose how you press. <b>Your GM:</b> resolves each round.</p><p>Watch the <b>courtiers</b>: favor moves them, pressing wrong raises suspicion — and one of them knows something worth extracting.</p><p>When you've felt how soft power lands, conclude.</p>`,
+  intro: "Last approach: the velvet one. PARLEY — talked out at the table, no dice. You don't break the hold, you out-talk it; bend influence until they fold to your face. Console's re-aimed; hold court.",
+  instruct: `<p>The <b>Parley</b> — influence against the same hold, talked out at the table.</p><p><b>You:</b> choose how you press. <b>Your GM:</b> resolves each round.</p><p>Watch the <b>courtiers</b>: favor moves them, pressing wrong raises suspicion — and one of them knows something worth extracting.</p><p>When you've felt how soft power lands, conclude.</p>`,
   after: "And that's the whole grammar of taking ground — fist, knife, and word."
 });
 
@@ -2960,7 +2960,7 @@ const graduation = {
   scope: "shared",
 
   enter: async (ctx) => {
-    await ctx.speak("Three consoles, four anchors, one circle, and something that tried to unmake the whole board and had to sit down at a table instead. Violence, intrigue, presence — you can take ground any way the moment demands. That's a Steward.");
+    await ctx.speak("Three consoles, four anchors, one circle, and something that tried to unmake the whole board and had to sit down at a table instead. Battle, heist, parley — you can take ground any way the moment demands. That's a Steward.");
     await _pause(1000);
     await ctx.speak("Training's done, One. No more sandbox, no more straw adversaries. From here it's the real Bad Eden — your hold, your rig, your Domain, live in the weave. Go fix what broke. *bzzt*");
   },

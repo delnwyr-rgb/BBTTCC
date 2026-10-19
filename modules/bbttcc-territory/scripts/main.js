@@ -1788,6 +1788,55 @@ function _publishHexFacts() {
 Hooks.once("init", _publishHexFacts);
 Hooks.once("ready", _publishHexFacts);
 
+// ─── ALPHA CUT ruling 20 (Dave, 2026-10-18): GROW FROM HELD GROUND ─────────────────────────────────────────────
+// A Domain may only claim a hex ADJACENT to a hex it already holds, and the hex it expands from must be at
+// integration level ADJ_MIN_DEV (2 = Outpost; "level 1 just claimed is not under enough control"). One helper,
+// used by the plan-time gate (strategic-throughput CAN_PLAN.establish_outpost), the resolution backstop
+// (effects-wilderness establish_outpost.apply) and the Planner's target list. Neighbours are the turn driver's
+// rule: nearest six hex drawings on the same scene within 1.1 × the hex's size. Ley-gate links count as
+// adjacency (a gate hex of yours at level 2+ reaches its linked hex). GM paths (hex editor, dashboard, Epic,
+// the tutorial) are exempt. Active only while the Alpha Cut world setting is on.
+export const ADJ_MIN_DEV = 2;
+export function adjacencyRuleActive() { try { return game.bbttcc?.alpha?.enabled?.() === true; } catch (_e) { return false; } }
+function _adjHexDocs(sc) { return (sc?.drawings?.contents ?? []).filter(d => { const tf = d.flags?.[MOD]; return !!tf && (tf.isHex === true || tf.kind === "territory-hex"); }); }
+function _adjCenter(doc) { const w = Number(doc?.shape?.width || 0), h = Number(doc?.shape?.height || 0); return { x: Number(doc?.x || 0) + w / 2, y: Number(doc?.y || 0) + h / 2 }; }
+function _adjOwner(tf) { return String(tf?.factionId || tf?.ownerId || "").replace(/^Actor\./, ""); }
+/** The hexes touching `doc` on its scene (nearest six within 1.1 × size). */
+export function hexNeighbors(doc) {
+  const d = doc?.document ?? doc; const sc = d?.parent; if (!sc) return [];
+  const c = _adjCenter(d);
+  const size = Math.max(Number(d?.shape?.width || 0), Number(d?.shape?.height || 0));
+  const limit = size > 0 ? size * 1.1 : Infinity;
+  return _adjHexDocs(sc).filter(o => o.id !== d.id)
+    .map(o => { const oc = _adjCenter(o); return { o, dist: Math.hypot(oc.x - c.x, oc.y - c.y) }; })
+    .filter(e => e.dist <= limit).sort((a, b) => a.dist - b.dist).slice(0, 6).map(e => e.o);
+}
+/**
+ * Is `hexDoc` next to a hex `factionId` holds at integration >= minDev?
+ * → { ok, from:{name,dev,doc}|null, nearest:{name,dev}|null, minDev, reason }
+ */
+export async function isAdjacentToHeld({ hexDoc = null, hexUuid = "", factionId = "", minDev = ADJ_MIN_DEV } = {}) {
+  const raw = hexDoc || (hexUuid ? await fromUuid(String(hexUuid)).catch(() => null) : null);
+  const d = raw?.document ?? raw; const fid = String(factionId || "").replace(/^Actor\./, "");
+  if (!d || !fid) return { ok: false, from: null, nearest: null, minDev, reason: "no hex or no Domain" };
+  const held = [];
+  for (const n of hexNeighbors(d)) { const tf = n.flags?.[MOD] || {}; if (_adjOwner(tf) !== fid) continue; held.push({ doc: n, name: tf.name || n.text || n.id, dev: hexIntegration(tf) }); }
+  // Ley gates: a gate hex of yours whose links reach this hex counts as a neighbour.
+  try {
+    for (const sc of game.scenes ?? []) for (const g of _adjHexDocs(sc)) {
+      const tf = g.flags?.[MOD] || {}; if (_adjOwner(tf) !== fid || tf.leylines?.gate?.enabled !== true) continue;
+      const r = await bbttccResolveRemoteAdjacency({ hexUuid: g.uuid, factionId: fid });
+      if (r?.ok && Array.isArray(r.links) && r.links.some(l => String(l?.toUuid || "") === d.uuid)) held.push({ doc: g, name: tf.name || g.id, dev: hexIntegration(tf), gate: true });
+    }
+  } catch (_e) {}
+  held.sort((a, b) => b.dev - a.dev);
+  const from = held.find(h => h.dev >= minDev) || null;
+  const nearest = held[0] ? { name: held[0].name, dev: held[0].dev } : null;
+  if (from) return { ok: true, from: { name: from.name, dev: from.dev, doc: from.doc }, nearest, minDev, reason: "" };
+  const reason = nearest ? `${nearest.name} touches it but is only level ${nearest.dev}; it must reach level ${minDev} before you can grow from it.` : "it touches no hex you hold.";
+  return { ok: false, from: null, nearest, minDev, reason };
+}
+
 /* ---------------- Modifier → resource recompute (owner ruling 2026-09-10) ----------------
  * The +50% trade of "Trade Hub" (and every other production modifier) only reaches
  * flags.resources — the field OP regen reads — when the Hex Config save or an
@@ -3365,6 +3414,8 @@ Hooks.once("ready", ()=>{
   game.bbttcc.api.territory.leylines.getFactionTierKey = _bbttccGetFactionTierKey;
   game.bbttcc.api.territory.leylines.gateUsable = function(args){ return _bbttccGateUsable(args || {}); };
   game.bbttcc.api.territory.leylines.resolveRemoteAdjacency = function(args){ return bbttccResolveRemoteAdjacency(args || {}); };
+  // ALPHA CUT ruling 20 — grow from held ground (see isAdjacentToHeld above).
+  game.bbttcc.api.territory.adjacency = { neighbors: hexNeighbors, isAdjacentToHeld, active: adjacencyRuleActive, MIN_DEV: ADJ_MIN_DEV };
 
 
   // Leylines: expose conversion helper for debugging / macros

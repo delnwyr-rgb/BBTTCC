@@ -154,12 +154,20 @@
       ? `${scenario.getState().attackerId}::${scenario.getState().defenderId}`
       : (opts.raidId || "");
 
+    // ALPHA CUT ruling 4 (2026-10-18): a receipt drawn inside a Parley is stamped with THAT Parley and named for it;
+    // it plays there and nowhere else. Receipts the story hands out (no live Parley) carry no stamp and play anywhere.
+    // Only a LIVE Parley stamps: outcome rewards drawn as the table closes stay general (they would expire at once otherwise).
+    const _pstRaw = scenario?.getState?.() || null;
+    const _pst = (_pstRaw && _pstRaw.outcome === "ongoing") ? _pstRaw : null;
+    const parleyId = String(opts.parleyId ?? _pst?.id ?? "");
+    const parleyLabel = String(opts.parleyLabel ?? _pst?.label ?? "");
     const baseData = source.toObject();
     delete baseData._id;
+    if (parleyId && parleyLabel && !String(baseData.name || "").includes(parleyLabel)) baseData.name = `${baseData.name} — ${parleyLabel}`;
     foundry.utils.mergeObject(baseData, {
       flags: {
         [MOD_R]: {
-          secret: { acquisition, effectKey, effectKeys, raidId, acquiredAt: Date.now() }
+          secret: { acquisition, effectKey, effectKeys, raidId, parleyId, parleyLabel, acquiredAt: Date.now() }
         }
       }
     });
@@ -321,6 +329,12 @@
 
     const side = _holderSide(actor, scenario);
     if (!side) { ui.notifications?.error?.("Receipts: holder is not attacker or defender of the active scenario."); return { ok: false, error: "side-mismatch" }; }
+    // Ruling 4 — a receipt from another Parley does not play here.
+    const _pid = String(secretMeta.parleyId || "");
+    if (_pid && _pid !== String(scenario.getState?.()?.id || "")) {
+      ui.notifications?.warn?.(`"${item.name}" belongs to another table${secretMeta.parleyLabel ? ` (${secretMeta.parleyLabel})` : ""} — it cannot be produced here.`);
+      return { ok: false, error: "other-parley" };
+    }
 
     const effectKeys = normEffectKeys(secretMeta.effectKeys ?? secretMeta.effectKey);
     if (!effectKeys.length || effectKeys.some(k => !HANDLERS[k])) {
@@ -362,7 +376,7 @@
     }
     await ChatMessage.create({
       content: `<p><b>${esc(actor.name)}</b> plays the secret <b>${esc(item.name)}</b> <small style="opacity:.7;">(${esc(secretMeta.acquisition)})</small></p><p>${esc(JSON.stringify(result))}</p>`,
-      speaker: { alias: "Bad Eden Courtly Intrigue" }
+      speaker: { alias: "Bad Eden Parley" }
     }).catch(() => {});
     try { Hooks.callAll("bbttcc:courtly:state", { scenario, state: scenario.getState() }); } catch (_e) {}
 

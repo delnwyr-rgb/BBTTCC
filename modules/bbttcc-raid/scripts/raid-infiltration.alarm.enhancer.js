@@ -122,7 +122,7 @@
     if (!lines.length) return;
     const data = {
       content: `<p><b>${title}</b></p>${lines.join("<br/>")}`,
-      speaker: { alias: "Bad Eden Infiltration" }
+      speaker: { alias: "Bad Eden Heist" }
     };
     // S3a.5.2: GM-only by default for narrative cards; "public" for round
     // summaries so players see the math + dice. Passing Roll objects in
@@ -150,7 +150,7 @@
       alarmMax = 5,
       progressMax = 5,
       messyThreshold,
-      label = "Infiltration"
+      label = "Heist"
     } = {}) {
       const A = game.actors.get(String(attackerId||"").replace(/^Actor\./,""));
       const D = game.actors.get(String(defenderId||"").replace(/^Actor\./,""));
@@ -205,7 +205,7 @@
           lines = [`<b>⚠ ${aName} achieved the objective, but ${dName} is on alert.</b>`, meterLine, `Next raid against ${dName} inherits a defender-alerted bonus.`];
         } else if (outcome === "detected") {
           title = `${label}: 🚨 Alarm Cap Reached`;
-          lines = [`<b>${aName} has been detected at ${dName}.</b>`, meterLine, `GM: choose how this ends — convert to Violence Raid, escape now, or negotiate.`];
+          lines = [`<b>${aName} has been detected at ${dName}.</b>`, meterLine, `GM: choose how this ends — convert to a Battle, escape now, or negotiate.`];
         } else { return; }
         await sendChat(lines, { title });
       }
@@ -222,13 +222,13 @@
               <p>${foundry.utils.escapeHTML(A.name)} infiltrated ${foundry.utils.escapeHTML(D.name)} but tripped the alarm at progress ${state.progress}/${state.progressMax}.</p>
               <p style="margin-top:.6rem;"><b>How does this end?</b></p>
               <ul style="margin: .25rem 0 .25rem 1.2rem; font-size:12px;">
-                <li><b>Convert to Violence:</b> mid-round flip to a Violence Raid with current state preserved.</li>
+                <li><b>Convert to Battle:</b> mid-round flip to a Battle with current state preserved.</li>
                 <li><b>Escape Now:</b> attackers flee with what they got. No defender retaliation.</li>
                 <li><b>Negotiate:</b> hold the table — GM resolves narratively (capture, parlay, costly escape).</li>
               </ul>
             </div></form>`,
             buttons: [
-              { action: "violence",  label: "⚔ Convert to Violence", default: true, callback: () => { choice = "violence";  } },
+              { action: "violence",  label: "⚔ Convert to Battle", default: true, callback: () => { choice = "violence";  } },
               { action: "escape",    label: "🏃 Escape Now",                          callback: () => { choice = "escape";    } },
               { action: "negotiate", label: "🤝 Negotiate",                           callback: () => { choice = "negotiate"; } }
             ],
@@ -240,7 +240,7 @@
         state.flipResolution = choice;
         if (choice) {
           const blurb = ({
-            violence:  `GM resolves: <b>convert to Violence Raid</b> — current state preserved, no reset.`,
+            violence:  `GM resolves: <b>convert to a Battle</b> — current state preserved, no reset.`,
             escape:    `GM resolves: <b>attackers escape</b> — no defender retaliation.`,
             negotiate: `GM resolves: <b>negotiate</b> — held at the table for narrative resolution.`
           })[choice];

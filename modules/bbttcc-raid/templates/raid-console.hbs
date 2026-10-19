@@ -17,6 +17,7 @@
           <option value="{{this.key}}" {{#if (eq ../vm.activityKey this.key)}}selected{{/if}}>{{this.label}}</option>
         {{/each}}
       </select>
+      {{#if activityHint}}<span class="flex0 bbttcc-activity-hint" title="{{activityHint}}" style="font-size:.72rem; opacity:.75; font-style:italic; max-width:16rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{activityHint}}</span>{{/if}}
 
       <label class="flex0" style="margin-left:.5rem;">Diff</label>
       <select class="flex0" data-id="difficulty">
@@ -30,12 +31,15 @@
       <button class="btn flex0" data-id="reset" title="Clear rounds; keeps attacker, target, and supporters">Reset</button>
       <button class="btn flex0" data-id="end-raid" title="End the raid: clears rounds, supporters, and target. Propagates to all players.">End Raid</button>
 
+      {{#unless alphaOn}}
+      {{!-- Alpha Cut (Dave 2026-10-18): both sides are always logged; the two toggles are hidden. --}}
       <label class="flex0" style="margin-left:.5rem;">
         <input type="checkbox" data-id="logWar" {{#if vm.logWar}}checked{{/if}}> Log Attacker
       </label>
       <label class="flex0">
         <input type="checkbox" data-id="logDef" {{#if vm.includeDefender}}checked{{/if}}> Log Defender
       </label>
+      {{/unless}}
     {{else}}
       <div class="flex1">
         <div style="font-weight:700; letter-spacing:.06em; text-transform:uppercase; opacity:.9;">Raid Commitments</div>
@@ -47,9 +51,10 @@
             </span>
           {{/if}}
           {{#if (eq playerRole "supporter")}} • Supporting: <b>{{leadAttackerName}}</b>{{/if}}
-          {{#if vm.activityKey}} • Mode: <b>{{default vm.activityKey "—"}}</b>{{/if}}
+          {{#if vm.activityKey}} • <b>{{default activityLabel vm.activityKey}}</b>{{/if}}
           {{#if vm.targetName}} • Target: <b>{{default vm.targetName "—"}}</b>{{/if}}
         </div>
+        {{#if activityHint}}<div class="bbttcc-activity-hint" style="font-size:.78rem; opacity:.8; font-style:italic;">{{activityHint}}</div>{{/if}}
       </div>
       <div class="flex0" style="opacity:.8; font-size:.85rem;">
         {{#if playerRole}}
@@ -319,8 +324,17 @@
                 <div class="flexrow" style="gap:1rem;">
                   <!-- Manage -->
                   <div class="flex2 card" style="padding:.5rem;">
-                    <h4 style="margin:0 0 .25rem 0;">{{#if ../isGM}}Manage Spend{{else}}Your Commitments{{/if}} — Key: {{upper r.view.cat}}</h4>
+                    <h4 style="margin:0 0 .25rem 0;">{{#if r.view.noMarks}}Strength{{else}}{{#if ../isGM}}Manage Spend{{else}}Your Commitments{{/if}}{{/if}} — Key: {{upper r.view.cat}}</h4>
 
+                    {{#if r.view.noMarks}}
+                    {{!-- ALPHA CUT ruling 5 (2026-10-18): no marks at raid time. One line per side — what the Domain owns, as the engine adds it. --}}
+                    <div class="bbttcc-strength" style="display:flex; flex-direction:column; gap:.3rem;">
+                      <p style="margin:.25rem 0;"><b>Strength +{{r.view.strengthAtt.total}}</b> — {{r.view.attackerName}} <small style="opacity:.8;">· {{r.view.strengthAtt.parts}}</small></p>
+                      {{#if ../isGM}}{{#if r.view.hasDef}}<p style="margin:.25rem 0;"><b>Defence {{r.view.strengthDef.total}}</b> — {{r.view.defenderName}} <small style="opacity:.8;">· {{r.view.strengthDef.parts}}</small></p>{{/if}}{{/if}}
+                      {{#if r.view.stake}}<p style="margin:.25rem 0;"><b>Stake:</b> {{r.view.stake.text}}</p>{{/if}}
+                      <p class="hint" style="margin:.25rem 0; font-size:.78rem; opacity:.75;">No marks are spent in a {{default r.activityLabel "raid"}}. A Domain fights with what it owns: its ops, its people, its allies.{{#if r.view.stake}} A Battle is fought on the battlemap; the GM calls it.{{/if}}</p>
+                    </div>
+                    {{else}}
                     <div class="grid" style="grid-template-columns: {{#if ../isGM}}1fr 1fr{{else}}1fr{{/if}}; gap:.5rem;">
                       {{#if ../isGM}}
                       <div>
@@ -394,6 +408,7 @@
                       </div>
                       {{/if}}
                     </div>
+                    {{/if}}
 
                     {{#if ../isGM}}
                       <div style="margin-top:.5rem;">

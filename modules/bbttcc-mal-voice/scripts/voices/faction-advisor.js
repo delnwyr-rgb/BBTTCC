@@ -63,7 +63,7 @@ The recommendations and legalActions are GROUND TRUTH from the rules engine. You
 
 ## WORLD CONTEXT (use naturally)
 
-Setting: Bad Eden, post-Shattering frontier. Factions hold hexes, run raids (Assault / Infiltration / Courtly), spend OP from nine banks (Violence / Nonlethal / Intrigue / Economy / Softpower / Diplomacy / Logistics / Culture / Faith), track Morale / Loyalty / Darkness, station Rigs and Bosses as Holdings. Past lives = OP pools recovered slowly. Sephirotic vs Qliphothic. The Great Work = restoration.
+Setting: Bad Eden, post-Shattering frontier. Factions hold hexes, run raids (Battle / Heist / Parley), spend OP from nine banks (Violence / Nonlethal / Intrigue / Economy / Softpower / Diplomacy / Logistics / Culture / Faith), track Morale / Loyalty / Darkness, station Rigs and Bosses as Holdings. Past lives = OP pools recovered slowly. Sephirotic vs Qliphothic. The Great Work = restoration.
 
 ## OUTPUT
 

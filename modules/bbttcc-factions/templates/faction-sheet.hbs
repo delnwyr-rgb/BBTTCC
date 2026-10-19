@@ -642,9 +642,11 @@
           </div>
         </fieldset>
 
+        {{!-- ALPHA CUT ruling 4 (2026-10-18): receipts belong to the Parley that made them; players meet them only inside the Parley HUD. This list is GM-only. --}}
+        {{#if isGM}}
         <fieldset class="bbttcc-card bbttcc-card-ops">
           <legend style="display:flex; align-items:center; justify-content:space-between; gap:.5rem;">
-            <span>Courtly Secrets</span>
+            <span>Receipts (GM)</span>
             {{#if fx.doctrine.secrets.length}}
               <span class="hint" style="font-weight:600; opacity:.7;">{{fx.doctrine.secrets.length}} / 5</span>
             {{/if}}
@@ -673,9 +675,9 @@
                   {{#if ../isOwner}}
                   <td class="center" style="width:58px;">
                     {{#if ../secretsPlayable}}
-                      <button type="button" class="bbttcc-pill-btn" data-secret-act="play" data-item-id="{{it.id}}" style="padding:2px 9px; font-size:10px;" data-tooltip="Play this secret in the active Courtly raid">Play</button>
+                      <button type="button" class="bbttcc-pill-btn" data-secret-act="play" data-item-id="{{it.id}}" style="padding:2px 9px; font-size:10px;" data-tooltip="Produce this receipt in the active Parley">Play</button>
                     {{else}}
-                      <button type="button" class="bbttcc-pill-btn" disabled style="padding:2px 9px; font-size:10px; opacity:.4; cursor:not-allowed;" data-tooltip="Playable only during an active Courtly (Presence) raid this faction is part of">Play</button>
+                      <button type="button" class="bbttcc-pill-btn" disabled style="padding:2px 9px; font-size:10px; opacity:.4; cursor:not-allowed;" data-tooltip="Playable only during an active Parley this Domain is part of">Play</button>
                     {{/if}}
                   </td>
                   {{/if}}
@@ -689,13 +691,14 @@
               </tbody>
             </table>
             {{else}}
-              <p class="hint" style="margin:.35rem 0 0;">No courtly secrets held.</p>
+              <p class="hint" style="margin:.35rem 0 0;">No receipts held.</p>
             {{/if}}
             {{#if isGM}}
-              <p class="hint" style="margin:.35rem 0 0;">GM: drag a Courtly Secret item here to grant it (held at most 5 — the oldest is dropped).</p>
+              <p class="hint" style="margin:.35rem 0 0;">GM: drag a receipt item here to grant it (held at most 5 — the oldest is dropped). Receipts drawn inside a Parley carry its name and play only there.</p>
             {{/if}}
           </div>
         </fieldset>
+        {{/if}}
 
       </div>
     </section>

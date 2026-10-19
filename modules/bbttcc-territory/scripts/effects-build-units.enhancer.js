@@ -591,7 +591,7 @@ try {
           return `<div class="form-group" style="display:flex; align-items:center; gap:0.35rem; margin:0.2rem 0;">
             <span style="flex:0 0 1.3em; text-align:center; color:${cur ? "#a6e22e" : "#888"};">${cur ? "▶" : (i + 1) + "."}</span>
             <span style="flex:1 1 auto; color:#ffd28a;">${htmlEscape(e.label || e.sceneId)}</span>
-            <span title="Raid type — Advance only walks scenes of the same type" style="flex:0 0 auto; font-size:10px; padding:1px 5px; border-radius:6px; border:1px solid rgba(255,210,138,0.45); color:#ffd28a; opacity:${e.raidType ? 1 : 0.5};">${htmlEscape(({violence:"⚔ Violence", intrigue:"🥷 Intrigue", presence:"♕ Courtly", siege:"🏰 Siege"})[e.raidType] || "any")}</span>
+            <span title="Raid type — Advance only walks scenes of the same type" style="flex:0 0 auto; font-size:10px; padding:1px 5px; border-radius:6px; border:1px solid rgba(255,210,138,0.45); color:#ffd28a; opacity:${e.raidType ? 1 : 0.5};">${htmlEscape(({violence:"⚔ Battle", intrigue:"🥷 Heist", presence:"♕ Parley", siege:"🏰 Siege"})[e.raidType] || "any")}</span>
             <button type="button" class="bbttcc-btn" data-bs-activate="${i}">Activate</button>
             <button type="button" class="bbttcc-btn" data-bs-unbind="${htmlEscape(e.sceneId)}" title="Unbind (scene not deleted)">×</button>
           </div>`;
@@ -611,9 +611,9 @@ try {
             <select name="bs-pick" style="flex:1;">${opts}</select>
             <select name="bs-type" title="Raid type — each type keeps its own ordered sequence; 'any' = the legacy single sequence" style="flex:0 0 7.5em;">
               <option value="">any type</option>
-              <option value="violence">⚔ Violence</option>
-              <option value="intrigue">🥷 Intrigue</option>
-              <option value="presence">♕ Courtly</option>
+              <option value="violence">⚔ Battle</option>
+              <option value="intrigue">🥷 Heist</option>
+              <option value="presence">♕ Parley</option>
               <option value="siege">🏰 Siege</option>
             </select>
             <button type="button" class="bbttcc-btn" data-bs-bind>+ Bind</button>

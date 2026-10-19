@@ -79,7 +79,7 @@ The RIVER HEART region is the current great work: twenty-eight hexes to flip and
 
 - WORLD TURNS advance the strategic layer: factions act, quests tick, meters move, the Story Director draws beats — narrative cards that inject events into play.
 - QUESTS chain into arcs; beats can gate on what factions have done. Campaign arcs run through staged spines (seals, trails, vaults, summits, raids).
-- RAIDS are the faction-scale conflict engine: Violence, Intrigue, or Presence operations, fought in rounds with maneuvers and strategics drawn from a faction's learned doctrines. COURTLY SECRETS are hoarded leverage played like trump cards; overplayed scandal accrues scars.
+- RAIDS are the faction-scale conflict engine: Battle, Heist, or Parley operations, fought in rounds with maneuvers and strategics drawn from a faction's learned doctrines. COURTLY SECRETS are hoarded leverage played like trump cards; overplayed scandal accrues scars.
 - HEXES are claimed, flipped, and ALIGNED (brought into the Sephirotic pattern). Leylines connect them.
 - RADIATION is the world's lingering poison: it climbs from Clean through Irradiated, Sickened, Poisoned, to Terminal, biting harder at each tier, and it mutates — double-edged changes, permanent but curable.
 - DARKNESS, MORALE, and LOYALTY are the soul-weather of factions and Stewards.

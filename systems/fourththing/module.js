@@ -29089,9 +29089,9 @@ let __ftRaidHudRenderTimer = null;
 // classified by `_ftClassifyRaidKind` below so old in-flight raids render
 // with the right parent kind's color.
 const _FT_RAID_KIND_PRESETS = {
-  violence: { icon: "⚔", label: "Violence Raid",  color: "#eb5757" },
-  intrigue: { icon: "🥷", label: "Intrigue Raid",  color: "#7ec0ff" },
-  presence: { icon: "♕",  label: "Presence Raid",  color: "#d4a35f" },
+  violence: { icon: "⚔", label: "Battle",  color: "#eb5757" },
+  intrigue: { icon: "🥷", label: "Heist",   color: "#7ec0ff" },
+  presence: { icon: "♕",  label: "Parley",  color: "#d4a35f" },
   raid:     { icon: "⚡", label: "Raid",           color: "#d4a35f" }
 };
 
@@ -29156,7 +29156,9 @@ function _ftBuildRaidHudHtml(consoleApp) {
   const activityKey = consoleVm?.activityKey ?? "raid";
   const kind = _ftClassifyRaidKind(activityKey);
   const preset = _FT_RAID_KIND_PRESETS[kind] ?? _FT_RAID_KIND_PRESETS.raid;
-  const activityLabel = lastRound?.activityLabel || preset.label;
+  // Ruling 2: rounds saved before the rename keep "Violence Raid" etc. — read them through the raid API's label map.
+  const _lbl = (v) => { try { const f = game.bbttcc?.api?.raid?.typeLabel; return (typeof f === "function" && f(v)) || v; } catch (_e) { return v; } };
+  const activityLabel = _lbl(lastRound?.activityLabel || preset.label);
   const target = _ftResolveRaidTargetActor(consoleVm);
   const targetName = consoleVm?.targetName || target?.name || "—";
 

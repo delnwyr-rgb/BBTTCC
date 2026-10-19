@@ -29,18 +29,18 @@
 
     const pills = [];
     if (light) {
-      pills.push(`<span title="Light Scandal Scar — −2 to first roll of next courtly raid. Cleared by Clean Triumph." style="font-size:0.7rem;padding:1px 6px;border:1px solid #ffaa55;border-radius:8px;color:#ffaa55;background:rgba(255,170,85,0.08);">⚠ Scandal ×${light}</span>`);
+      pills.push(`<span title="Light Scandal Scar — −2 to first roll of next Parley. Cleared by Clean Triumph." style="font-size:0.7rem;padding:1px 6px;border:1px solid #ffaa55;border-radius:8px;color:#ffaa55;background:rgba(255,170,85,0.08);">⚠ Scandal ×${light}</span>`);
     }
     if (heavy || isDisgraced) {
       const cnt = heavy || 1;
-      pills.push(`<span title="Heavy Scandal Scar — −3 + −1 to first two rolls of next courtly raid. Disgraced for ~3 sessions." style="font-size:0.7rem;padding:1px 6px;border:1px solid #ff5555;border-radius:8px;color:#ff5555;background:rgba(255,85,85,0.10);font-weight:600;">💔 Disgraced ×${cnt}</span>`);
+      pills.push(`<span title="Heavy Scandal Scar — −3 + −1 to first two rolls of next Parley. Disgraced for ~3 sessions." style="font-size:0.7rem;padding:1px 6px;border:1px solid #ff5555;border-radius:8px;color:#ff5555;background:rgba(255,85,85,0.10);font-weight:600;">💔 Disgraced ×${cnt}</span>`);
     }
     if (capDelta) {
-      pills.push(`<span title="Influence cap penalty pending on next courtly raid" style="font-size:0.7rem;padding:1px 6px;border:1px solid #88aaff;border-radius:8px;color:#88aaff;background:rgba(136,170,255,0.08);">♕ Inf ${capDelta > 0 ? "+" : ""}${capDelta} next raid</span>`);
+      pills.push(`<span title="Influence cap penalty pending on next Parley" style="font-size:0.7rem;padding:1px 6px;border:1px solid #88aaff;border-radius:8px;color:#88aaff;background:rgba(136,170,255,0.08);">♕ Inf ${capDelta > 0 ? "+" : ""}${capDelta} next raid</span>`);
     }
 
     return `<div class="ft-courtly-scar-badges" data-bbttcc-courtly-badges="1" style="display:flex;flex-wrap:wrap;gap:4px;margin:.3rem .5rem .1rem;padding:.25rem .4rem;border-radius:4px;background:rgba(20,20,28,0.5);border:1px solid #333;">
-      <span style="font-size:0.7rem;color:#888;letter-spacing:.04em;align-self:center;">COURTLY:</span>
+      <span style="font-size:0.7rem;color:#888;letter-spacing:.04em;align-self:center;">PARLEY:</span>
       ${pills.join("")}
     </div>`;
   }

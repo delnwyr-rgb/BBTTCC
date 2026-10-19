@@ -22,12 +22,15 @@
   // CANONICAL — 3 raid types by active TCC faculty. The dropdown shows
   // these. Each carries an icon for HUD consumption.
   const TYPES_CANONICAL = freeze({
-    violence: { key: "violence", label: "Violence Raid", primaryKey: "violence", icon: "⚔",
+    violence: { key: "violence", label: "Battle", primaryKey: "violence", icon: "⚔",
+                hint: "Fought on the battlemap, in combat rounds.",
                 summary: "Direct combat across battle scenes. Subsumes Assault, Siege, Blockade." },
-    intrigue: { key: "intrigue", label: "Intrigue Raid", primaryKey: "intrigue", icon: "🥷",
+    intrigue: { key: "intrigue", label: "Heist", primaryKey: "intrigue", icon: "🥷",
+                hint: "Fought on the battlemap, in combat rounds. Quiet until the alarm trips.",
                 summary: "Stealth, intel, sabotage — uses the Alarm engine. Subsumes Infiltration, Espionage.",
                 kind: "scenario" },
-    presence: { key: "presence", label: "Presence Raid", primaryKey: "softpower", icon: "♕",
+    presence: { key: "presence", label: "Parley", primaryKey: "softpower", icon: "♕",
+                hint: "Talked out at the table. Influence, not dice.",
                 summary: "Social and narrative pressure — uses the Influence engine. Subsumes Propaganda, Courtly Intrigue.",
                 kind: "scenario" }
     // NOTE: presence's primaryKey is "softpower" (the canonical OP pool for social/narrative
@@ -48,7 +51,7 @@
     espionage:          { key: "espionage",          label: "Espionage",            primaryKey: "intrigue",   raidType: "intrigue", deprecated: true, summary: "Intel gathering; sabotage; preparation." },
     infiltration_alarm: { key: "infiltration_alarm", label: "Infiltration (Alarm)", primaryKey: "intrigue",   raidType: "intrigue", deprecated: true, kind: "scenario" },
     propaganda:         { key: "propaganda",         label: "Propaganda",           primaryKey: "softpower",  raidType: "presence", deprecated: true, summary: "Shape narratives; shift loyalty/attitudes." },
-    courtly:            { key: "courtly",            label: "Courtly Intrigue",     primaryKey: "diplomacy",  raidType: "presence", deprecated: true, kind: "scenario" },
+    courtly:            { key: "courtly",            label: "Parley",               primaryKey: "diplomacy",  raidType: "presence", deprecated: true, kind: "scenario" },
     // Out of raid scope:
     occupation:         { key: "occupation",         label: "Occupation",           primaryKey: "violence",   raidType: null, deprecated: true, removed: "outcome",        summary: "[moved] Now a raid outcome — hex state flip." },
     liberation:         { key: "liberation",         label: "Liberation",           primaryKey: "diplomacy",  raidType: null, deprecated: true, removed: "outcome",        summary: "[moved] Now a raid outcome — hex state flip." },
@@ -57,6 +60,30 @@
 
   // Full union — used for BC lookup by legacy `activityKey`.
   const TYPES = freeze({ ...TYPES_CANONICAL, ...TYPES_LEGACY });
+
+  // ALPHA CUT ruling 2 (Dave, blessed 2026-10-18): the table says Battle / Heist / Parley. Keys stay
+  // violence / intrigue / presence. Rounds saved under the old labels are read through LEGACY_LABELS.
+  const LEGACY_LABELS = freeze({
+    "Violence Raid": "Battle", "Violence": "Battle", "Assault": "Battle", "Siege": "Battle",
+    "Intrigue Raid": "Heist", "Intrigue": "Heist", "Infiltration": "Heist", "Infiltration (Alarm)": "Heist",
+    "Presence Raid": "Parley", "Presence": "Parley", "Courtly Intrigue": "Parley", "Courtly": "Parley", "Propaganda": "Parley"
+  });
+  /** Player-facing label for any raid-type key or any stored label (old or new). Falls back to the input. */
+  function typeLabel(keyOrLabel) {
+    const s = String(keyOrLabel || "").trim();
+    if (!s) return "";
+    const k = s.toLowerCase();
+    if (TYPES_CANONICAL[k]) return TYPES_CANONICAL[k].label;
+    const canon = resolveCanonical(k);
+    if (canon && TYPES_CANONICAL[canon]) return TYPES_CANONICAL[canon].label;
+    return LEGACY_LABELS[s] || s;
+  }
+  /** One-line on-screen hint for a raid-type key ("Fought on the battlemap…"). */
+  function typeHint(key) {
+    const k = String(key || "").toLowerCase();
+    const canon = TYPES_CANONICAL[k] ? k : resolveCanonical(k);
+    return (canon && TYPES_CANONICAL[canon]?.hint) || "";
+  }
 
   // Map any key (canonical or legacy) to its canonical raidType key. Returns
   // null for keys that are out of raid scope (occupation/liberation/ritual).
@@ -88,6 +115,9 @@
       raid.getCanonicalTypes = function getCanonicalTypes() { return TYPES_CANONICAL; };
       raid.getLegacyTypes    = function getLegacyTypes()    { return TYPES_LEGACY; };
       raid.resolveCanonical  = resolveCanonical;
+      raid.typeLabel         = typeLabel;
+      raid.typeHint          = typeHint;
+      raid.LEGACY_TYPE_LABELS = LEGACY_LABELS;
 
       // IMPORTANT:
       // Return {} so Raid Console does NOT receive extra maneuvers from this helper file.

@@ -197,6 +197,14 @@
         if (alreadyOwned) {
           return "Target hex is already owned.";
         }
+        // ALPHA CUT ruling 20 (Dave, 2026-10-18): grow from held ground — backstop of the plan-time gate.
+        try {
+          const adj = game.bbttcc?.api?.territory?.adjacency;
+          if (adj?.active?.() && adj.isAdjacentToHeld) {
+            const r = await adj.isAdjacentToHeld({ hexDoc: doc, factionId: A.id });
+            if (r && !r.ok) return `No outpost — ${f.name || "that hex"} is not next to ground you hold at level ${r.minDev}: ${r.reason}`;
+          }
+        } catch (eAdj) { console.warn(TAG, "adjacency rule check failed (founding proceeds)", eAdj); }
         // SURVEY RULE (owner ruling 2026-09-22): unvisited ground that hides unplayed story does not
         // found. The turn returns WORD instead — the quest starts, the hex is pinned on the map, and
         // founding waits until someone of this faction has stood there. The OP already spent is the

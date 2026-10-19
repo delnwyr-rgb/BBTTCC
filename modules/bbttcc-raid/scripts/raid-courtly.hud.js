@@ -152,6 +152,10 @@
     const scandalD = state.scandalOnD ? `<span title="Scandal: −2 next exchange" style="color:#ff7a7a;">⚠</span>` : "";
     const cbChip = (n, color, side) => n === 0 ? "" :
       `<span title="Court Bonus" style="font-size:0.7rem;padding:1px 5px;border:1px solid ${color};border-radius:8px;color:${color};">★ ${side} ${n > 0 ? "+" : ""}${n}</span>`;
+    // Ruling 3: the goal is a chip; the Suspicion track shows only for Stay unnoticed (Impress shows its crowd track).
+    const goalChip = state.goalLabel ? `<span title="Goal" style="font-size:0.7rem;padding:1px 6px;border:1px solid ${CYAN};border-radius:8px;color:${CYAN};">${esc(state.goalLabel)}</span>` : "";
+    const showTrack = state.performance ? true : (state.suspicionEnabled !== false);
+    const trackLabel = state.performance ? esc(state.trackLabel || "Crowd") : "Suspicion";
     const outChip = outcome === "ongoing" ? "" :
       `<span style="font-size:0.7rem;padding:1px 6px;background:#3a2a1a;color:#ffd28a;border:1px solid #ffd28a;border-radius:3px;">${esc(outcome.toUpperCase())}</span>`;
     // Concluded scenarios linger on the HUD (the record of how it ended)
@@ -159,27 +163,28 @@
     // instead of looking like a live board (owner confusion 2026-07-14).
     const ended = outcome !== "ongoing";
     const endedNote = !ended ? "" :
-      `<div style="margin-top:.35rem;font-size:0.68rem;color:#ffd28a;opacity:.85;font-style:italic;">Concluded — committing the next courtly exchange opens a fresh board.</div>`;
+      `<div style="margin-top:.35rem;font-size:0.68rem;color:#ffd28a;opacity:.85;font-style:italic;">Concluded — the next Parley exchange opens a fresh board.</div>`;
 
     return `<div id="ft-courtly-influence" class="ft-hud-panel ft-hud-acc-cyan" style="position:fixed;left:12px;top:60px;width:300px;padding:.5rem .7rem;${ended ? "opacity:.62;filter:saturate(.6);" : ""}">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem;">
-        <span style="color:${CYAN};font-weight:600;letter-spacing:.04em;">⚜ Courtly Intrigue${ended ? " — ended" : ""}</span>
+        <span style="color:${CYAN};font-weight:600;letter-spacing:.04em;">⚜ Parley${ended ? " — ended" : ""}</span>
         <span style="font-size:0.72rem;color:#999;">Round ${round}</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:.4rem;">
         ${_bar(`${atkName} ${scandalA}`, ATK_COLOR, state.influenceA ?? 0, maxA)}
         ${_bar(`${defName} ${scandalD}`, DEF_COLOR, state.influenceD ?? 0, maxD)}
       </div>
-      <div style="margin-top:.45rem;display:flex;flex-direction:column;gap:2px;">
+      ${showTrack ? `<div style="margin-top:.45rem;display:flex;flex-direction:column;gap:2px;">
         <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#ccc;">
-          <span style="color:${susColor};font-weight:600;">Suspicion</span>
+          <span style="color:${susColor};font-weight:600;">${trackLabel}</span>
           <span>${suspicion}/10</span>
         </div>
         <div style="position:relative;height:8px;background:#1a1a22;border:1px solid #333;border-radius:3px;overflow:hidden;">
           <div style="position:absolute;left:0;top:0;bottom:0;width:${suspicion * 10}%;background:${susColor};box-shadow:0 0 6px ${susColor};"></div>
         </div>
-      </div>
+      </div>` : ""}
       <div style="margin-top:.4rem;display:flex;flex-wrap:wrap;gap:4px;">
+        ${goalChip}
         ${cbChip(cbA, ATK_COLOR, "atk")}
         ${cbChip(cbD, DEF_COLOR, "def")}
         ${outChip}
@@ -250,7 +255,8 @@
     ];
 
     const sectionHtml = holders.map(({ actor, color }) => {
-      const secrets = (actor?.items?.contents || []).filter(i => i.flags?.[MOD_R]?.secret);
+      // Ruling 4: only receipts from THIS Parley (or unstamped story receipts) show here — others belong to another table.
+      const secrets = (actor?.items?.contents || []).filter(i => i.flags?.[MOD_R]?.secret).filter(i => { const pid = i.flags?.[MOD_R]?.secret?.parleyId; return !pid || pid === state.id; });
       const inner = secrets.length === 0
         ? `<div style="padding:.3rem;color:#888;font-style:italic;font-size:0.74rem;">No secrets held.<br/><span style="font-size:0.68rem;">Earn via Read the Room, Eavesdrop.</span></div>`
         : secrets.map(i => {
