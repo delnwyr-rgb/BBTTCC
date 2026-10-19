@@ -101,7 +101,9 @@
   // faction's stockpile (name/img/lastUuid remembered for pricing); anyone else stacks it in their pockets.
   async function _deliverMaterial(actor, data, units) {
     const fid = String(actor?.system?.faction?.id || "").replace(/^Actor\./, "");
-    const F = fid ? game.actors?.get(fid) : null; const stock = game.bbttcc?.api?.factions?.stockpile;
+    let F = null; try { F = game.bbttcc?.api?.banks?.domainOf?.(actor) || null; } catch (_e) { F = null; }   // the Domain link (ruling 16), legacy field as fallback
+    if (!F && fid) F = game.actors?.get(fid) || null;
+    const stock = game.bbttcc?.api?.factions?.stockpile;
     const key = foundry.utils.getProperty(data, "flags.fourththing.rfi.item.materialKey") || data.name;
     if (F && stock?.adjust) {
       await stock.adjust(F, key, +units, { name: data.name, img: data.img, lastUuid: data.flags?.core?.sourceId || data._stats?.compendiumSource || null });

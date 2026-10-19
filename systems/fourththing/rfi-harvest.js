@@ -126,8 +126,12 @@ export const RfiHarvest = {
    */
   /** Where a gather lands (owner ruling 2026-09-21): the steward's faction stockpile when they have one, else stacked in the pockets. */
   async _deliver(actor, data, units, srcUuid = null) {
+    // The steward's Domain (ruling 16, 2026-10-18): resolve it the way the sheet does (banks.domainOf → roster / link
+    // flags); `system.faction.id` is the legacy field and is often null on a linked steward (Marginalia 10-18).
     const fid = String(actor?.system?.faction?.id || "").replace(/^Actor\./, "");
-    const F = fid ? game.actors?.get(fid) : null; const stock = game.bbttcc?.api?.factions?.stockpile;
+    let F = null; try { F = game.bbttcc?.api?.banks?.domainOf?.(actor) || null; } catch (_e) { F = null; }
+    if (!F && fid) F = game.actors?.get(fid) || null;
+    const stock = game.bbttcc?.api?.factions?.stockpile;
     const key = foundry.utils.getProperty(data, "flags.fourththing.rfi.item.materialKey") || data.name;
     if (F && stock?.adjust) { await stock.adjust(F, key, +units, { name: data.name, img: data.img, lastUuid: srcUuid || data._stats?.compendiumSource || data.flags?.core?.sourceId || undefined }); return { to: "stockpile", faction: F }; }
     const orCreate = game.fourththing?.stack?.orCreate;
