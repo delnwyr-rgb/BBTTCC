@@ -102,7 +102,9 @@
     if (game.system?.id !== "dnd5e") return;
     game.socket.on(SOCKET, async (msg) => {
       try {
-        if (msg?.type !== "apply" || !game.surgePowers?.isLeader?.()) return;
+        if (!game.surgePowers?.isLeader?.()) return;
+        if (msg?.type === "pathLeave") return onLeaveRequest(msg);
+        if (msg?.type !== "apply") return;
         if (!RELAY_OPS.has(msg.op) || !game.users.get(msg.userId)) return;
         const t = await fromUuid(String(msg.actorUuid || ""));
         const actor = t instanceof Actor ? t : t?.actor;
@@ -335,8 +337,11 @@
   // ── Paths (Bad Eden) ───────────────────────────────────────────────────────
   // A Path is an item on the character (flags.surge-powers.path = {key, doctrine})
   // that adds its own column of entries to this menu. Path content lives in
-  // data/paths.json; entries share MENU's shape. Rules: chosen at 1st level, a
-  // second Path opens at 17th, never the same Path twice, players can't remove one.
+  // data/paths.json; entries share MENU's shape. Rules: chosen at 1st level, ONE
+  // Path per character unless the world setting "Second Path" opens one at 17th,
+  // never the same Path twice, never more than two; the GM may grant a second by
+  // hand (drag / paths.grant) and is the only one who removes one (paths.remove,
+  // 🜂 Manage Paths); a player asks through 🜂 Leave a Path (GM confirms).
   let PATHS = {};
   async function loadPaths() {
     try {
@@ -699,6 +704,8 @@
         <p style="font-size:.7rem;opacity:.55;margin:.5rem 0 0">Spends are hard-gated by your pool. Mechanical effects apply now; <em>italic</em> lines are GM-applied riders.</p>`,
       buttons: [
         ...(canTakePath(actor) ? [{ action: "path", label: "🜂 Choose a Path…", callback: () => { pickPath(actor); } }] : []),
+        ...(pathsOf(actor).length && game.user.isGM ? [{ action: "manage", label: "🜂 Manage Paths…", callback: () => { managePaths(actor); } }] : []),
+        ...(pathsOf(actor).length && !game.user.isGM && actor.isOwner ? [{ action: "leave", label: "🜂 Leave a Path…", callback: () => { leavePath(actor); } }] : []),
         ...(Object.keys(PATHS).length ? [{ action: "guide", label: pathsOf(actor).length ? "📖 Path guide" : "📖 Browse the Paths", callback: () => { pathGuide(actor); } }] : []),
         { action: "close", label: "Close", default: true }],
       rejectClose: false,
@@ -740,14 +747,17 @@
     const actor = item.parent;
     if (!path?.key || !(actor instanceof Actor)) return;
     if (options?.surgePathForce) { options[`${MOD}DoctrineBy`] = CLIENT_ID; return; }
-    const have = pathsOf(actor);
-    const level = Number(get(actor, "system.details.level", 0)) || 0;
+    // Paths already on the sheet PLUS the ones earlier in this same create call
+    // (a batch of two Path items used to slip past the count).
+    const batch = options[`${MOD}PathBatch`] ??= [];
+    const keys = [...pathsOf(actor).map(p => p.key), ...batch];
     const name = PATHS[path.key]?.name ?? path.key;
     let why = null;
-    if (have.some(p => p.key === path.key)) why = `${actor.name} already walks the ${name}.`;
-    else if (have.length >= 2) why = `${actor.name} already has two Paths.`;
-    else if (have.length === 1 && level < 17) why = `A second Path opens at 17th level (${actor.name} is level ${level}).`;
+    if (keys.includes(path.key)) why = `${actor.name} already walks the ${name}.`;
+    else if (keys.length >= 2) why = `${actor.name} already has two Paths.`;
+    else if (keys.length === 1 && !game.user.isGM) why = secondPathWhy(actor);   // the GM may grant a second by hand
     if (why) { ui.notifications?.warn?.(why); return false; }
+    batch.push(path.key);
     options[`${MOD}DoctrineBy`] = CLIENT_ID;
   }
 
@@ -794,9 +804,9 @@
     else chooseDoctrine(item);
   }
 
-  function onPreDeleteItem(item) {
-    if (!pathOfItem(item)?.key || game.user.isGM) return;
-    ui.notifications?.warn?.("A Path can't be removed or changed; ask your GM.");
+  function onPreDeleteItem(item, options) {
+    if (!pathOfItem(item)?.key || game.user.isGM || options?.surgePathForce) return;
+    ui.notifications?.warn?.("A Path can't be removed by hand — open the ⚡ Surge menu and use 🜂 Leave a Path to ask your GM.");
     return false;
   }
 
@@ -933,12 +943,129 @@
     fire("allyBanked", (w, r) => w !== actor && distanceFt(w, actor) <= (r.range ?? 30), { resonance: true });
   }
 
-  // A character can take a Path when it has none, or one and is 17th level+.
+  // The "Second Path" world setting: "none" = one Path per character (default);
+  // "17" = a second opens at 17th level (the original rule). The GM may always add
+  // a second by hand (drag the world item, or paths.grant) — never a third.
+  const secondPathMode = () => { try { return game.settings.get(MOD, "secondPath"); } catch { return "none"; } };
+  /** Why this character can't take a second Path right now (null = it can). */
+  function secondPathWhy(actor) {
+    const level = Number(get(actor, "system.details.level", 0)) || 0;
+    if (secondPathMode() === "17") return level >= 17 ? null : `A second Path opens at 17th level (${actor.name} is level ${level}).`;
+    return `${actor.name} already walks a Path — one Path per character. Your GM can grant a second.`;
+  }
+  // A character can take a Path when it has none, or one and the second-Path rule allows it.
   function canTakePath(actor) {
     if (!actor?.isOwner || !Object.keys(PATHS).length) return false;
-    const have = pathsOf(actor), level = Number(get(actor, "system.details.level", 0)) || 0;
+    const have = pathsOf(actor);
     const open = Object.keys(PATHS).some(k => !have.some(p => p.key === k));
-    return open && (have.length === 0 || (have.length === 1 && level >= 17));
+    return open && (have.length === 0 || (have.length === 1 && !secondPathWhy(actor)));
+  }
+  /** GM: put a Path on a character outright (a second one too; never a duplicate or a third). doctrine (optional) skips the prompt. */
+  async function grantPath(actor, key, { doctrine = null } = {}) {
+    if (!game.user.isGM) return ui.notifications?.warn?.("Only the GM grants a Path.");
+    if (!(actor instanceof Actor) || !PATHS[key]) return ui.notifications?.warn?.(`grantPath: unknown Path "${key}".`);
+    const world = game.items.find(i => i.flags?.[MOD]?.path?.key === key);
+    const data = world ? world.toObject() : pathItemData(key, PATHS[key]);
+    delete data._id; delete data.folder;
+    if (doctrine && PATHS[key].doctrines?.[doctrine]) foundry.utils.setProperty(data, `flags.${MOD}.path.doctrine`, doctrine);
+    const [item] = await actor.createEmbeddedDocuments("Item", [data]);
+    return item ?? null;
+  }
+  /**
+   * GM: take a Path off a character — the item (and its doctrine perk with it), the
+   * lingering effects it put on the actor, its generator tallies and once-per stamps,
+   * and the Dream-Cache if that Path held one. Accepts the Path key or its item.
+   */
+  async function removePath(actor, keyOrItem, { by = null, quiet = false } = {}) {
+    if (!game.user.isGM) return ui.notifications?.warn?.("Only the GM removes a Path — use 🜂 Leave a Path in the Surge menu to ask.");
+    if (!(actor instanceof Actor)) return false;
+    const key = keyOrItem instanceof Item ? pathOfItem(keyOrItem)?.key : String(keyOrItem ?? "");
+    const mine = pathsOf(actor).filter(p => p.key === key);
+    if (!mine.length) { ui.notifications?.warn?.(`${actor.name} doesn't walk that Path.`); return false; }
+    const def = PATHS[key], label = mine[0].item.name;
+    const uuids = new Set(mine.map(p => p.item.uuid));
+    // Effects the Path left on the actor: anything it originated, and anything named after it.
+    const stale = actor.effects.filter(e => uuids.has(e.origin) || (def?.name && String(e.name ?? "").startsWith(def.name)));
+    if (stale.length) await actor.deleteEmbeddedDocuments("ActiveEffect", stale.map(e => e.id));
+    await actor.deleteEmbeddedDocuments("Item", mine.map(p => p.item.id), { surgePathForce: true });
+    const flags = actor.flags?.[MOD] ?? {};
+    const update = {};
+    for (const k of Object.keys(flags.gen ?? {})) if (k.startsWith(`${key}_`)) update[`flags.${MOD}.gen.-=${k}`] = null;
+    for (const k of Object.keys(flags.used ?? {})) if (k.startsWith(`path_${key}_`)) update[`flags.${MOD}.used.-=${k}`] = null;
+    if (flags.dreamCache && (def?.abilities ?? []).some(a => a.fx?.dreamCache)) update[`flags.${MOD}.-=dreamCache`] = null;
+    if (Object.keys(update).length) await actor.update(update);
+    if (!quiet) {
+      const who = [...game.users.filter(u => u.isGM || actor.testUserPermission(u, "OWNER")).map(u => u.id)];
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), whisper: who,
+        content: `<p>🜂 <b>${esc(actor.name)}</b> leaves the <b>${esc(label)}</b>${by ? ` (asked by ${esc(by)})` : ""}. Its powers, perk and lingering effects are gone; the ⚡ Surge menu offers "Choose a Path…" again.</p>` });
+    }
+    console.log(TAG, `removed Path ${key} from ${actor.name}`, { effects: stale.length, flags: Object.keys(update) });
+    return true;
+  }
+  /** GM: the actor's Paths with a Remove button each (confirmed). */
+  async function managePaths(actor) {
+    if (!game.user.isGM) return;
+    const mine = pathsOf(actor);
+    if (!mine.length) return ui.notifications?.info?.(`${actor.name} walks no Path.`);
+    const rows = mine.map(p => `<div style="display:flex;align-items:center;gap:.6rem;margin:.35rem 0;padding:.4rem .6rem;border:1px solid #b9882e44;border-radius:6px">
+        ${p.item.img ? `<img src="${p.item.img}" style="width:36px;height:36px;border:none;border-radius:5px;object-fit:cover;flex:0 0 auto">` : ""}
+        <div style="flex:1"><b>${esc(p.item.name)}</b><br><span style="font-size:.72rem;opacity:.7">${esc(PATHS[p.key]?.tagline ?? p.key)}</span></div>
+        <button type="button" data-path-remove="${p.key}" style="flex:0 0 auto;width:auto;line-height:1.2;padding:.25rem .6rem">✖ Remove</button></div>`).join("");
+    const note = mine.length < 2 && secondPathMode() === "none"
+      ? `<p style="font-size:.72rem;opacity:.6;margin:.5rem 0 0">One Path per character is the table rule. To grant a second by hand, drag a Path item from the Paths folder onto the sheet (or <code>game.surgePowers.paths.grant(actor, key)</code>).</p>` : "";
+    const dlg = await new foundry.applications.api.DialogV2({
+      window: { title: `🜂 Manage Paths — ${actor.name}`, resizable: true },
+      position: { width: 520 },
+      content: `<p style="margin:0 0 .3rem">Removing a Path deletes its item, doctrine perk and lingering effects. The character can then choose again.</p>${rows}${note}`,
+      buttons: [{ action: "close", label: "Close", default: true }],
+      rejectClose: false,
+    }).render(true);
+    dlg.element.querySelectorAll("[data-path-remove]").forEach(btn => btn.addEventListener("click", async () => {
+      const key = btn.dataset.pathRemove, label = mine.find(p => p.key === key)?.item.name ?? key;
+      const ok = await foundry.applications.api.DialogV2.confirm({
+        window: { title: "Remove this Path?" },
+        content: `<p>Take the <b>${esc(label)}</b> off <b>${esc(actor.name)}</b>? This can't be undone (they can walk it again later).</p>`,
+        rejectClose: false }).catch(() => false);
+      if (!ok) return;
+      await removePath(actor, key);
+      dlg.close();
+    }));
+    return dlg;
+  }
+  /** Player: ask the GM to remove one of my Paths (the leader GM window confirms). */
+  async function leavePath(actor) {
+    if (!actor?.isOwner) return;
+    const mine = pathsOf(actor);
+    if (!mine.length) return;
+    if (!game.users?.activeGM) return ui.notifications?.warn?.("No GM online to approve leaving a Path — ask again when your GM is in.");
+    const options = mine.map((p, i) => `<label style="display:block;margin:.35rem 0;padding:.4rem .6rem;border:1px solid #b9882e44;border-radius:6px;cursor:pointer">
+        <input type="radio" name="path" value="${p.key}" ${i === 0 && mine.length === 1 ? "checked" : ""}> <b>${esc(p.item.name)}</b></label>`).join("");
+    const key = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `${actor.name}: leave a Path` },
+      position: { width: 460 },
+      content: `<p style="margin:0 0 .3rem">Your GM will be asked to remove the Path you pick — its powers, perk and effects go with it, and you can choose a Path again afterwards.</p>${options}`,
+      ok: { label: "Ask my GM", callback: (_ev, b) => b.form.querySelector("input[name=path]:checked")?.value || null },
+      rejectClose: false,
+    }).catch(() => null);
+    if (!key) return;
+    if (game.user.isGM) return removePath(actor, key);
+    game.socket.emit(SOCKET, { type: "pathLeave", actorUuid: actor.uuid, key, userId: game.user.id });
+    ui.notifications?.info?.(`Asked your GM to remove the ${PATHS[key]?.name ?? key} from ${actor.name}.`);
+  }
+  /** Leader GM window: a player's leave request → confirm → remove (the player hears either way). */
+  async function onLeaveRequest(msg) {
+    const user = game.users.get(msg?.userId);
+    const t = await fromUuid(String(msg?.actorUuid || ""));
+    const actor = t instanceof Actor ? t : t?.actor;
+    if (!user || !actor || !actor.testUserPermission(user, "OWNER")) return;
+    const p = pathsOf(actor).find(p => p.key === msg.key);
+    if (!p) return;
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window: { title: "Leave a Path?" },
+      content: `<p><b>${esc(user.name)}</b> asks to take the <b>${esc(p.item.name)}</b> off <b>${esc(actor.name)}</b>. Remove it? (Its powers, perk and lingering effects go with it.)</p>`,
+      rejectClose: false }).catch(() => false);
+    if (ok) return removePath(actor, p.key, { by: user.name });
+    await ChatMessage.create({ whisper: [user.id], content: `<p>🜂 Your GM kept the <b>${esc(p.item.name)}</b> on ${esc(actor.name)} for now.</p>` });
   }
   function pathItemData(key, def) {
     return {
@@ -1060,6 +1187,7 @@
   async function pickPath(actor) {
     const key = await browsePaths(actor, { choose: true });
     if (!key || !PATHS[key]) return;
+    if (!canTakePath(actor)) return ui.notifications?.warn?.(`${actor.name} can't take another Path right now.`);   // the menu was stale (a second picker, a Path added meanwhile)
     // Prefer the GM's world item (it carries the reaction activity); otherwise build one.
     const world = game.items.find(i => i.flags?.[MOD]?.path?.key === key);
     const data = world ? world.toObject() : pathItemData(key, PATHS[key]);
@@ -1124,6 +1252,15 @@
   }
 
   // ── API ────────────────────────────────────────────────────────────────────
+  Hooks.once("init", () => {
+    if (game.system?.id && game.system.id !== "dnd5e") return;
+    game.settings.register(MOD, "secondPath", {
+      name: "Second Path",
+      hint: "One Path per character is the rule. Open a second at 17th level if you want the old rule back. The GM can always grant a second by dragging a Path item onto a sheet, and removes one from 🜂 Manage Paths in the Surge menu.",
+      scope: "world", config: true, type: String, default: "none",
+      choices: { none: "One Path per character (GM may grant a second)", "17": "A second Path opens at 17th level" }
+    });
+  });
   Hooks.once("ready", async () => {
     if (game.system?.id !== "dnd5e") return;
     await loadPaths();
@@ -1143,7 +1280,7 @@
     Hooks.on("surgePowers.banked", onBanked);
     game.surgePowers = Object.assign(game.surgePowers || {}, {
       openMenu, menu: MENU, applyEntry, profOf,
-      paths: { debug: { clientId: () => CLIENT_ID, distanceFt, dcOf, alliesNear }, get data() { return PATHS; }, load: loadPaths, of: pathsOf, entries: pathEntries, chooseDoctrine, pick: pickPath, browse: browsePaths, guide: pathGuide, sheetHtml: pathSheetHtml, refreshDescriptions: refreshPathDescriptions, canTake: canTakePath, createItems: createPathItems }
+      paths: { debug: { clientId: () => CLIENT_ID, distanceFt, dcOf, alliesNear }, get data() { return PATHS; }, load: loadPaths, of: pathsOf, entries: pathEntries, chooseDoctrine, pick: pickPath, browse: browsePaths, guide: pathGuide, sheetHtml: pathSheetHtml, refreshDescriptions: refreshPathDescriptions, canTake: canTakePath, secondPathWhy, grant: grantPath, remove: removePath, manage: managePaths, leave: leavePath, createItems: createPathItems }
     });
     console.log(TAG, `Surge Powers table ready (${MENU.length} universal entries, ${Object.keys(PATHS).length} Path(s))`);
     // Existing Path items predate the full power list in their description: the active GM rewrites stale ones once.
