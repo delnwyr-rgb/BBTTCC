@@ -2162,7 +2162,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     // worldEffects.raid = { type: "battle"|"heist"|"parley" (or violence|intrigue|presence), factionId? (default: the party's Domain),
     //   hexName? | hexUuid? (the target hex) | rigId? (+ defenderId?, targetName?), courtScene? (scene id or name — a Parley's tableau),
     //   goal? ("persuade"|"deceive"|"impress"|"unnoticed"), style? (Impress profile key), stake? (one line for the console),
-    //   difficulty? ("normal"), label? }. The GM seat writes the attacker's raidSession preset (by:"story"), activates the court
+    //   difficulty? ("normal"), label?, objectiveOnly? (true = never the hex, ruling 21) }. The GM seat writes the attacker's raidSession preset (by:"story"), activates the court
     //   scene for a Parley, and every seat that owns the Domain opens the console aimed (fromBeat token passes the ruling-22 gate).
     if (we.raid && typeof we.raid === "object" && game.user && game.user.isGM) {
       try {
@@ -2188,7 +2188,12 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         let courtSceneId = "";
         if (TYPE === "presence") {
           const cs = R.courtScene ? (game.scenes.get(String(R.courtScene)) || game.scenes.find(s => _normHexName(s.name) === _normHexName(R.courtScene))) : null;
-          if (cs) { courtSceneId = cs.id; try { await cs.activate(); } catch (_e) { try { await cs.view(); } catch (_e2) {} } }
+          if (cs) {
+            courtSceneId = cs.id;
+            // A court scene IS a tableau: switch the Parley engine's gate on if the author forgot (GM write).
+            if (cs.flags?.["bbttcc-raid"]?.tableau?.enabled !== true) { try { await cs.setFlag("bbttcc-raid", "tableau", Object.assign({}, cs.flags?.["bbttcc-raid"]?.tableau || {}, { enabled: true })); } catch (_eT) {} }
+            try { await cs.activate(); } catch (_e) { try { await cs.view(); } catch (_e2) {} }
+          }
           else console.warn(TAG, "raid: a Parley with no courtScene — the Parley engine needs a tableau scene viewed", R);
         }
         const prev = A.getFlag("bbttcc-raid", "raidSession") || {};
@@ -2198,7 +2203,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           targetType, targetName: targetName || "—", targetUuid, defenderId, rigId, creatureId: "", actorUuid: "", sceneUuid: "", tokenUuid: "",
           rounds: [], logWar: true, includeDefender: true,
           parley: TYPE === "presence" ? { goal: String(R.goal || "persuade").toLowerCase(), style: String(R.style || "show") } : null,
-          stake: String(R.stake || ""), label: String(R.label || "")
+          stake: String(R.stake || ""), label: String(R.label || ""),
+          objectiveOnly: R.objectiveOnly === true   // ruling 21: the fight is over an objective, never the hex (a road ambush, a room)
         };
         await A.setFlag("bbttcc-raid", "raidSession", session);
         const payload = { factionId: A.id, type: TYPE, targetName: session.targetName, courtSceneId, stake: session.stake };

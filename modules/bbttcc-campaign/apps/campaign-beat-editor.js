@@ -3500,7 +3500,7 @@ _syncCoreFromForm() {
         const stake = String(fd.get("world-raid-stake") || "").trim(); if (stake) raid.stake = stake;
         // keep fields the row does not edit (factionId, rigId, difficulty, label)
         const prevR = (we.raid && typeof we.raid === "object") ? we.raid : {};
-        for (const k of ["factionId", "rigId", "defenderId", "targetName", "hexUuid", "difficulty", "label"]) if (prevR[k] != null && prevR[k] !== "") raid[k] = prevR[k];
+        for (const k of ["factionId", "rigId", "defenderId", "targetName", "hexUuid", "difficulty", "label", "objectiveOnly"]) if (prevR[k] != null && prevR[k] !== "") raid[k] = prevR[k];
         we.raid = raid;
       } else delete we.raid;
     }

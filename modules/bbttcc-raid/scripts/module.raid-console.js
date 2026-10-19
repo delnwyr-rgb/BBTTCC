@@ -401,11 +401,12 @@ function _rcIsBattleKey(k) {
   return ["violence", "assault", "siege", "blockade"].includes(lk);
 }
 const _RC_FORTIFIED_RX = /fortif|wall|bastion|citadel|keep\b|garrison|stronghold|fortress/i;
-async function _rcBattleStake(r, attacker, hexDoc) {
+async function _rcBattleStake(r, attacker, hexDoc, opts = {}) {
   const d = hexDoc?.document ?? hexDoc;
   const tf = d?.flags?.["bbttcc-territory"] || null;
   if (!tf || !attacker) return null;
   const name = tf.name || d.text || "the hex";
+  if (opts.objectiveOnly) return { kind: "objective", dev: 0, name, text: `An objective at ${name}, not the ground — the hex does not change hands.` };
   const dev = Number(game.bbttcc?.facts?.hex?.integration?.(tf) ?? tf.integration?.progress ?? tf.development?.stage ?? 0) || 0;
   const owner = String(tf.factionId || tf.ownerId || "").replace(/^Actor\./, "");
   const ownerName = owner ? (game.actors.get(owner)?.name || "another Domain") : "";
@@ -443,10 +444,10 @@ async function _rcBattleCallDialog(r, attacker, defender, stake) {
   } catch (_e) { return null; }
 }
 /** After the round resolved: open ground changes hands on a won Battle (ruling 21 + 20). */
-async function _rcBattleGroundFlip(r, attacker, defender, hexDoc) {
+async function _rcBattleGroundFlip(r, attacker, defender, hexDoc, opts = {}) {
   if (!_rcNoMarks() || !_rcIsBattleKey(r?.activityKey) || r?.targetType !== "hex" || !hexDoc || !attacker) return null;
   const d = hexDoc?.document ?? hexDoc;
-  const stake = await _rcBattleStake(r, attacker, d);
+  const stake = await _rcBattleStake(r, attacker, d, opts);
   if (!stake) return null;
   r.meta ||= {}; r.meta.stake = stake;
   const won = Number(r.margin || 0) > 0;
@@ -2789,6 +2790,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       this.vm.parley    = (s.parley && typeof s.parley === "object") ? { goal: String(s.parley.goal || "persuade"), style: String(s.parley.style || "show") } : null;
       this.vm.stake     = String(s.stake || "");
       this.vm.offeredBy = String(s.offeredBy || "");
+      this.vm.objectiveOnly = s.objectiveOnly === true;   // ruling 21: the story says the hex is not the prize
 
       // Never let a sync re-open a once-per-round fire gate this seat already holds.
       const prevRounds = this.vm.rounds || [];
@@ -4372,7 +4374,7 @@ r.view = {
         r.view.strengthDef = { total: Number(defProj || 0), parts: dParts.join(" · ") };
         // Ruling 21 — what this Battle is for (open ground = the hex; built ground = objective only).
         if (_rcIsBattleKey(r.activityKey) && r.targetType === "hex" && r.targetUuid && att) {
-          try { const d0 = await fromUuid(r.targetUuid); const st0 = await _rcBattleStake(r, att, d0?.document ?? d0); if (st0) { r.view.stake = st0; r.meta ||= {}; r.meta.stake = st0; } } catch (_e) {}
+          try { const d0 = await fromUuid(r.targetUuid); const st0 = await _rcBattleStake(r, att, d0?.document ?? d0, { objectiveOnly: this.vm.objectiveOnly === true }); if (st0) { r.view.stake = st0; r.meta ||= {}; r.meta.stake = st0; } } catch (_e) {}
         }
       }
 
@@ -6116,7 +6118,7 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
     let __battleCall = null;
     if (_rcNoMarks() && _rcIsBattleKey(r.activityKey) && r.targetType !== "creature") {
       let __stake = null;
-      try { if (r.targetType === "hex" && targetHex) __stake = await _rcBattleStake(r, attacker, targetHex); } catch (_e) {}
+      try { if (r.targetType === "hex" && targetHex) __stake = await _rcBattleStake(r, attacker, targetHex, { objectiveOnly: this.vm.objectiveOnly === true }); } catch (_e) {}
       r.meta ||= {}; if (__stake) r.meta.stake = __stake;
       if (__stake && this.vm.stake) __stake = Object.assign({}, __stake, { text: `${__stake.text} ${this.vm.stake}` });   // ruling 22: the story's own line
       const call = await _rcBattleCallDialog(r, attacker, defender, __stake);
@@ -6632,7 +6634,7 @@ try {
       }
     } catch (e) { warn("post-round effects failed", e); }
     // ALPHA CUT ruling 21 — open ground changes hands on a won Battle (ruling 20 decides whether it can be kept).
-    try { await _rcBattleGroundFlip(r, attacker, defender, targetHex); } catch (eGF) { warn("battle ground flip failed (non-fatal)", eGF); }
+    try { await _rcBattleGroundFlip(r, attacker, defender, targetHex, { objectiveOnly: this.vm.objectiveOnly === true }); } catch (eGF) { warn("battle ground flip failed (non-fatal)", eGF); }
 
 // Legacy fields: keep a Roll object for non-contested raids; contested raids store a friendly string in r.roll.result.
     if (!r.contested) {
