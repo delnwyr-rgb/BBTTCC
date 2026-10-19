@@ -156,10 +156,17 @@ function applyAlignmentBonuses(ranked, category, alignmentBonuses, alignmentResu
 // Per-category resolvers (thin wrappers over resolveCategory)
 // ============================================================================
 
+/** Sefirot a NEW operative cannot anchor to. Yesod unlocks at the end of the first campaign arc
+ *  (Dave, 2026-10-19): the engine never suggests it and the wizard never lists it. The spec keeps
+ *  its weights so unlocking later is one entry removed from this list. */
+export const LOCKED_ALIGNMENTS = Object.freeze(["Yesod"]);
+export const isAlignmentLocked = (name) => LOCKED_ALIGNMENTS.includes(String(name || ""));
+
 export function resolveAlignment(traitMap, spec = SPEC) {
   if (!spec) throw new Error(`${MOD_ID}: spec not loaded`);
   // Sefirot signals get ×2 in alignment per trait declaration's weightInAlignmentResolver.
-  const ranked = resolveCategory(traitMap, spec.resolverWeights.alignment, { signalMultiplier: 2 });
+  const ranked = resolveCategory(traitMap, spec.resolverWeights.alignment, { signalMultiplier: 2 })
+    .filter(r => !isAlignmentLocked(r.name));
   return { best: ranked[0] || null, ranked };
 }
 
@@ -419,6 +426,8 @@ const BBTTCCSortingEngineV2 = {
   // pure scoring + resolution
   scoreQuiz,
   resolveCategory,
+  LOCKED_ALIGNMENTS,
+  isAlignmentLocked,
   resolveAlignment,
   resolveAncestry,
   resolveOccult,

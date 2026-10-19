@@ -2363,7 +2363,12 @@ class BBTTCCFactionSheet extends ActorSheet {
     // opens the steward's sheet on its Domain tab instead (the GM keeps the record window).
     try {
       if (!game.user?.isGM && game.bbttcc?.alpha?.enabled?.() && this.actor && !this.actor.isToken) {
-        const steward = (game.actors?.contents ?? []).find(a => a?.type === "character" && a.isOwner && _characterBelongsToFaction(a, this.actor));
+        // Whose Domain tab? The seat's ASSIGNED character first (Mags owns eight Errata stewards and the first
+        // alphabetically — Bram — kept opening instead of Marginalia, 2026-10-19), then a controlled token, then any.
+        const owned = (game.actors?.contents ?? []).filter(a => a?.type === "character" && a.isOwner && _characterBelongsToFaction(a, this.actor));
+        const assigned = game.user?.character ?? null;
+        const controlled = (canvas?.tokens?.controlled ?? []).map(t => t?.actor).find(a => a && owned.includes(a)) ?? null;
+        const steward = (assigned && owned.includes(assigned)) ? assigned : (controlled ?? owned[0] ?? null);
         if (steward?.sheet) {
           steward.sheet.tabGroups ??= {}; steward.sheet.tabGroups.primary = "domain";
           steward.sheet.render(true);

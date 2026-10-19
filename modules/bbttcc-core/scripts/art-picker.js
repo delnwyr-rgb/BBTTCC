@@ -104,7 +104,10 @@ function _injectStylesOnce() {
     .be-art-bar input[type=search] { flex:1 1 140px; min-width:120px; padding:.2rem .45rem; border-radius:6px; }
     .be-art-bar label { display:inline-flex; gap:.3rem; align-items:center; cursor:pointer; opacity:.9; }
     .be-art-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); grid-auto-rows:max-content; align-items:start; gap:.5rem; max-height: 46vh; overflow:auto; padding:.15rem; }
-    .be-art-tile { position:relative; display:flex; flex-direction:column; align-items:center; gap:.25rem; padding:.35rem .25rem .4rem;
+    /* The tile is a <button>: Foundry's stock button rule pins it to a 28px line, so the 84px art spilled
+       out over the grid (Dave, wizard review screen, 2026-10-19). Let the tile grow to its art + label. */
+    .be-art-tile, .be-art-grid .be-art-tile, button.be-art-tile { position:relative; display:flex; flex-direction:column; align-items:center; gap:.25rem; padding:.35rem .25rem .4rem;
+      height:auto; min-height:0; width:100%; line-height:1.2; overflow:hidden;
       border:1px solid rgba(255,255,255,.12); border-radius:8px; background:rgba(0,0,0,.25); cursor:pointer; text-align:center; color:inherit; }
     .be-art-tile:hover { border-color: rgba(232,200,74,.6); background:rgba(232,200,74,.06); }
     .be-art-tile.is-selected { border-color:#e8c84a; box-shadow:0 0 0 2px rgba(232,200,74,.45) inset; background:rgba(232,200,74,.1); }

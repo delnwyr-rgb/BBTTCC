@@ -723,8 +723,31 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   }
 
   _replaceHTML(html, element, _options) {
+    // Keep the player's place (Dave, 2026-10-19): every pick re-renders the whole body, which threw
+    // the review back to the top. Remember each scrolled box by class + index, swap the DOM, put
+    // the scroll back — now, next frame, and once more after the async bits (art grid) have drawn.
+    const saved = [];
+    try {
+      for (const el of element.querySelectorAll("*")) {
+        if (!(el.scrollTop > 0 || el.scrollLeft > 0)) continue;
+        const cls = el.classList[0];
+        const sel = cls ? `.${CSS.escape(cls)}` : el.tagName;
+        saved.push({ sel, idx: [...element.querySelectorAll(sel)].indexOf(el), top: el.scrollTop, left: el.scrollLeft });
+      }
+    } catch (_e) {}
     element.innerHTML = html;
     this._wireHandlers(element);
+    if (!saved.length) return;
+    const restore = () => {
+      for (const s of saved) {
+        const el = element.querySelectorAll(s.sel)[s.idx];
+        if (!el) continue;
+        el.scrollTop = s.top; el.scrollLeft = s.left;
+      }
+    };
+    restore();
+    requestAnimationFrame(restore);
+    setTimeout(restore, 300);
   }
 
   // ============================================================================
@@ -992,6 +1015,8 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const isOverridden = !!overrideName && overrideName === effective;
     const hint = note ? `<span class="bbttcc-twv2-row-note">${note}</span>` : "";
     const placeholder = effective ? "" : `<option value="" selected disabled>— choose —</option>`;
+    // Yesod is locked until the end of the first arc (2026-10-19) — never offered, whatever ranked it.
+    if (category === "alignment") ranked = (ranked || []).filter(r => !BBTTCCSortingEngineV2.isAlignmentLocked?.(r.name));
     const optionsHtml = placeholder + (ranked || []).map(r => {
       const sel = r.name === effective ? "selected" : "";
       const score = (typeof r.score === "number" && r.score > 0) ? ` (${r.score})` : "";
@@ -1805,7 +1830,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     // Player picks every category explicitly via the override dropdowns.
     const spec = BBTTCCSortingEngineV2.getSpec();
     const alphaOpts = (catKey) => Object.keys(spec.resolverWeights[catKey] || {})
-      .filter(k => !k.startsWith("_"))
+      .filter(k => !k.startsWith("_") && !(catKey === "alignment" && BBTTCCSortingEngineV2.isAlignmentLocked?.(k)))
       .sort()
       .map(name => ({ name, score: 0 }));
     return {
@@ -2530,6 +2555,7 @@ function _injectStylesOnce() {
       overflow: hidden;
     }
     .bbttcc-twv2-review-scroll {
+      overflow-anchor: none; /* the art grid draws a beat after the swap; anchoring bumped the restored scroll by its height (2026-10-19) */
       flex: 1 1 auto;
       overflow-y: auto;
       min-height: 0;
