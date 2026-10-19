@@ -202,6 +202,15 @@ import { registerNpcAutomation } from "./npc-automation.js";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
+// Sefirot a PLAYER may not pick on the sheet or at cast time — Yesod unlocks at the end of the first campaign arc
+// (Dave, 2026-10-19; twin of the sorting engine's LOCKED_ALIGNMENTS). The GM sees everything; a value already set stays listed.
+const FT_LOCKED_SEPHIROTH = Object.freeze(["yesod"]);
+function ftSephirothFor(current = "") {
+  if (game.user?.isGM) return FT.SEPHIROTH;
+  const cur = String(current || "").toLowerCase();
+  return Object.fromEntries(Object.entries(FT.SEPHIROTH).filter(([k]) => !FT_LOCKED_SEPHIROTH.includes(k) || k === cur));
+}
+
 const FT = {
   MARKS_PER_OP,                 // 1 OP = 10 marks — from rfi-pricing.js (the one authority)
   SEPHIROTH: {
@@ -8863,7 +8872,7 @@ function buildManifestationWizardHTML(actor, { kind = "power", starter = "" } = 
     <div class="ft-cast-field"><label>Interaction Model</label><select name="manifestInteraction">${mkOpts(FT.MANIFESTATION_INTERACTIONS, defaults.interactionModel)}</select></div>
     <div class="ft-cast-field"><label>Intent</label><select name="intent">${mkOpts(FT.INTENTS, "presence")}</select></div>
     <div class="ft-cast-field"><label>Channel</label><select name="channel">${mkOpts(FT.CHANNELS, "soul")}</select></div>
-    <div class="ft-cast-field"><label>Sephirah</label><select name="sephirah">${mkOpts(FT.SEPHIROTH, rawSys?.magic?.sephirah ?? "tiferet")}</select></div>
+    <div class="ft-cast-field"><label>Sephirah</label><select name="sephirah">${mkOpts(ftSephirothFor(rawSys?.magic?.sephirah), rawSys?.magic?.sephirah ?? "tiferet")}</select></div>
     <div class="ft-cast-field"><label>Style</label><select name="mode">${mkOpts(FT.MODES, "hermetic")}</select></div>
 
     <div class="ft-cast-field"><label>Activation</label>
@@ -12483,7 +12492,7 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
     <div class="ft-cast-field"><label>Channel</label>
       <select name="channel">${mkOpts(FT.CHANNELS, channel)}</select></div>
     <div class="ft-cast-field"><label>Sephirah</label>
-      <select name="sephirah">${mkOpts(FT.SEPHIROTH, sephirah)}</select></div>
+      <select name="sephirah">${mkOpts(ftSephirothFor(sephirah), sephirah)}</select></div>
     <div class="ft-cast-field" data-tooltip="Tier baseline DC: T1 12 · T2 14 · T3 16 · T4 18. Override for GM scene pressure (cover, ritual aids, hostile resonance).">
       <label>Difficulty (DC) <span style="opacity:0.55;font-weight:400;font-size:0.78em">— T${manTier} baseline ${ftTierCastDC(manTier)}</span></label>
       <input type="number" name="difficulty" value="${ftTierCastDC(manTier)}" min="5" max="30"/></div>
@@ -21355,7 +21364,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           };
         })(),
         bbttcc,
-        SEPHIROTH:     FT.SEPHIROTH,
+        SEPHIROTH:     ftSephirothFor(this.actor?.system?.magic?.sephirah),   // players never see a locked sefirah (Yesod)
         INTENTS:       FT.INTENTS,
         CHANNELS:      FT.CHANNELS,
         MODES:         FT.MODES,

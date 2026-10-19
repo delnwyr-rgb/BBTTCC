@@ -224,6 +224,14 @@ function ftIsBaseOptionEntry(entry) {
   return !/(?:\(\s*Tier\s+\d+\s*\)|[—-]\s*Tier\s+\d+)$/i.test(name);
 }
 
+// Yesod is not an alignable sefirah until the end of the first arc (Dave, 2026-10-19): players never see it in the
+// identity Sephirotic Alignment select; the GM does, and an alignment already set on the sheet stays listed.
+const FT_LOCKED_ALIGNMENT_RX = /\bYesod\b/i;
+function ftLockedAlignmentFilter(rows, currentId = "") {
+  if (game.user?.isGM) return rows;
+  return (rows || []).filter(r => r.id === currentId || !FT_LOCKED_ALIGNMENT_RX.test(String(r.name || "")));
+}
+
 async function ftIndexIdentityPack(key) {
   const pack = game.packs?.get(key);
   if (!pack) return [];
@@ -1646,7 +1654,7 @@ async function ftBuildEditContext(actor) {
     currentArchetypeKey: ftIdentitySelectionKey(actor, "archetype"),
     philosophies: FT_POLITICAL_PHILOSOPHIES.map(p => ({ key: p.key, label: p.label })),
     currentPhilosophyKey: actor.getFlag?.("bbttcc-aae", "politicalPhilosophy") ?? "",
-    sephirothicAlignments: await ftIndexIdentityPack(FT_PACK_KEYS.sephirothicAlignment),
+    sephirothicAlignments: ftLockedAlignmentFilter(await ftIndexIdentityPack(FT_PACK_KEYS.sephirothicAlignment), ftIdentitySelectionKey(actor, "sephirothicAlignment")),
     currentSephirothicAlignmentKey: ftIdentitySelectionKey(actor, "sephirothicAlignment"),
     enlightenmentLevels: FT_ENLIGHTENMENT_LEVELS,
     currentEnlightenmentKey: actor.getFlag?.("bbttcc-character-options", "enlightenment")?.level ?? "unawakened",
