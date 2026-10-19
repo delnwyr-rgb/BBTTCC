@@ -88,7 +88,7 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 **`stewardship_turn.06`** The planner balked at that one— *bzzt* —no matter. The shape's the lesson: pick an order, it waits for the Turn.
 
-**`stewardship_turn.07`** That's a Turn, previewed. In the living world the land pays in, your order resolves, the clock ticks. Nothing was committed here — you've got the rhythm.
+**`stewardship_turn.07`** That's a Turn. In the living world you plan at the table, the GM runs it at Day's End, and the land answers in the morning.
 
 **`stewardship_turn.08`** Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.
 

@@ -505,6 +505,38 @@ const stewardshipClaim = {
 /* ───────────────────────── STEWARDSHIP — OP & TURN ───────────────────────── */
 // Familiarise with the OP economy (read-only readout of the REAL faction's banks) and
 // the Turn cycle via a NON-COMMITTING dry-run Advance Turn. Resets the sandbox hex after.
+// What each tutorial order DOES, in the player's words (Dave 2026-10-19: "give a readout of what the effects would be").
+const TUTORIAL_ORDER_OUTCOMES = {
+  develop_outpost_stability: (h) => `Clears Hostile Population, Propaganda and Damaged Infrastructure from ${h}. Stamps it Stabilized. Your people settle — Loyalty climbs next Turn.`,
+  develop_infrastructure:    (h, i) => `Roads, walls, a well. ${h}'s integration rises a rung${i == null ? "" : ` (${i} → ${i + 1})`} — more yield, and at level 2 it becomes ground you can grow from.`,
+  infrastructure_expansion:  (h, i) => `More of what already works. ${h}'s integration rises a rung${i == null ? "" : ` (${i} → ${i + 1})`} — more yield, and at level 2 it becomes ground you can grow from.`,
+  ration_distribution:       (h) => `Bread before blood. Unrest in ${h} eases and Loyalty rises — the cheapest peace there is.`,
+  establish_supply_line:     (h) => `A line from ${h} to your stores. When the road closes, the hold stays fed and supplied.`
+};
+function _hexCenter(ctx) {
+  try {
+    const d = canvas?.scene?.drawings?.get?.(ctx._sandboxHex?.drawingId);
+    if (!d) return null;
+    const w = Number(d.shape?.width ?? d.width ?? 0), h = Number(d.shape?.height ?? d.height ?? 0);
+    return { x: Number(d.x) + w / 2, y: Number(d.y) + h / 2 };
+  } catch (_) { return null; }
+}
+async function _showTheHold(ctx) {
+  const c = _hexCenter(ctx); if (!c) return;
+  try { await canvas.animatePan({ x: c.x, y: c.y, duration: 700 }); } catch (_) {}
+  try { canvas.ping(c, { style: "pulse" }); } catch (_) { try { canvas.ping(c); } catch (_e) {} }
+}
+async function _fx(key, ctx, opts) { try { return await globalThis.game?.bbttcc?.api?.fx?.playKey?.(key, ctx, opts); } catch (_) { return null; } }
+async function _hexIntegration(hexUuid) {
+  try {
+    const t = await fromUuid(hexUuid); const doc = t?.document ?? t;
+    const api = globalThis.game?.bbttcc?.api?.territory;
+    const v = api?.hexIntegration?.(doc) ?? doc?.getFlag?.("bbttcc-territory", "integration") ?? doc?.flags?.["bbttcc-territory"]?.integration;
+    const n = Number(typeof v === "object" ? v?.level ?? v?.value : v);
+    return Number.isFinite(n) ? n : null;
+  } catch (_) { return null; }
+}
+
 const stewardshipTurn = {
   id: "stewardship_turn",
   title: "Stewardship — OP & Turn",
@@ -588,6 +620,10 @@ const stewardshipTurn = {
           const mine = logs.slice(before).reverse().find(e => e?.type === "planned") || null;
           ctx._tutorialPlan = mine?.ts ? { ts: mine.ts } : null;
           try { const sh = ctx.steward?.sheet; if (sh) { sh.tabGroups ??= {}; sh.tabGroups.primary = "domain"; await sh.render(true, { focus: true }); sh._applyActiveTab?.(); } } catch (_) {}
+          ctx._tutorialPlan = Object.assign(ctx._tutorialPlan || {}, { key: chosen.key, label: chosen.label, catalogLabel: chosen.catalogLabel, price: chosen.price });
+          // The choice lands with a flourish: the order's own effect family on the banner, and the hold pinged on the map.
+          _fx(chosen.key, { label: `${chosen.label} — ordered` }, { phase: "invoke" });
+          await _showTheHold(ctx);
           await _pause(600);
           await ctx.speak(`Filed: ${chosen.label} on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.`);
         } catch (e) {
@@ -596,19 +632,54 @@ const stewardshipTurn = {
         }
       }
       await _pause(1500);
+      // Readout BEFORE the Turn: what the order does, what it costs, when it lands (Dave 2026-10-19: "we raced past it").
+      const plan = ctx._tutorialPlan;
+      const integ = hexUuid ? await _hexIntegration(hexUuid) : null;
+      const outcome = plan?.key && TUTORIAL_ORDER_OUTCOMES[plan.key] ? TUTORIAL_ORDER_OUTCOMES[plan.key]("Tutelary Hold", integ) : "";
+      const turnNow = (() => { try { return Math.max(0, Math.floor(Number(globalThis.game?.bbttcc?.api?.world?.getState?.()?.turn || 0) || 0)); } catch (_) { return 0; } })();
       await ctx.prompt({
-        title: "◇ OPERATOR",
-        content: `<p>Now the heartbeat. This runs a <b>practice Turn</b> — the rhythm, with nothing committed to the living world.</p>`,
+        title: "◇ OPERATOR — What the order does",
+        content: plan
+          ? `<p><b>${_escH(plan.label)}</b> <span class="bbttcc-muted">(${_escH(plan.catalogLabel || plan.key)})</span></p>` +
+            (outcome ? `<p>${_escH(outcome)}</p>` : "") +
+            `<p><b>Costs:</b> ${_escH(plan.price || "nothing today")} — paid from the treasury when the Turn ticks, after the land has paid in.<br/>` +
+            `<b>When:</b> it resolves in that same Turn. Until then it waits under <b>Next turn</b>.</p>` +
+            `<p><i>Now the heartbeat. This runs a practice Turn — the rhythm, nothing committed to the living world.</i></p>`
+          : `<p>Now the heartbeat. This runs a <b>practice Turn</b> — the rhythm, with nothing committed to the living world.</p>`,
         label: "Run a practice Turn"
       });
+      // The Turn, with a face on it: banner in, the hold pinged, the order's impact, banner out.
+      _fx("turn_start", { label: `Practice Turn ${turnNow + 1}` }, { phase: "invoke" });
+      await _showTheHold(ctx);
       // Quiet preview: the Turn driver whispers ledgers and previews as it goes — none of it is for a first-timer.
       // Only the Operator's own lines pass while it runs.
       const muteId = Hooks.on("preCreateChatMessage", (doc) => { try { return doc?.flags?.["bbttcc-onboarding"]?.operatorLine === true; } catch (_) { return true; } });
       try { const turn = globalThis.game?.bbttcc?.api?.turn; if (turn?.advanceTurn) await turn.advanceTurn({ apply: false }); }
       catch (e) { console.warn(TAG, "dry-run turn failed", e); }
       finally { try { Hooks.off("preCreateChatMessage", muteId); } catch (_) {} }
-      await _pause(800);
-      await ctx.speak("That's a Turn, previewed. In the living world the land pays in, your order resolves, the clock ticks. Nothing was committed here — you've got the rhythm.");
+      await _pause(1200);
+      if (plan?.key) { _fx(plan.key, { label: `${plan.label} — resolved`, floatText: plan.label }, { phase: "impact", banner: true }); await _showTheHold(ctx); }
+      await _pause(1400);
+      // Readout AFTER: what a real Turn would have done.
+      let income = "";
+      try {
+        const op = globalThis.game?.bbttcc?.api?.op;
+        const st = ctx.faction ? await op?.preview?.(ctx.faction.id, {}, {}) : null;
+        const sum = (o) => Object.values(o || {}).reduce((n, v) => n + (Number(v) || 0), 0);
+        const d = st?.after ? sum(st.after) - sum(st.before) : (st?.income ? sum(st.income) : (st?.delta ? sum(st.delta) : 0));
+        if (d > 0) income = op?.fmt ? op.fmt(d) : `${Math.round(d)} marks`;
+      } catch (_) {}
+      await ctx.prompt({
+        title: "◇ OPERATOR — What just happened",
+        content:
+          `<p><b>The land paid in.</b> ${income ? `About ${_escH(income)} into the treasury, ` : ""}Each held hex yields each Turn; more integration, more yield.</p>` +
+          (plan ? `<p><b>${_escH(plan.label)} resolved.</b> ${_escH(outcome || "The order took effect on Tutelary Hold.")}</p>` : "") +
+          `<p><b>The clock ticked.</b> Turn ${turnNow} → ${turnNow + 1}: contracts run down, pressures move, the world answers.</p>` +
+          `<p><i>Nothing was committed here — this was the rhythm, not the world.</i></p>`,
+        label: "Got the rhythm"
+      });
+      await _pause(600);
+      await ctx.speak("That's a Turn. In the living world you plan at the table, the GM runs it at Day's End, and the land answers in the morning.");
       done();
     })().catch(e => { console.warn(TAG, "stewardship_turn detect failed", e); done(); });
     return null;
