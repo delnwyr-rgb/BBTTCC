@@ -11,7 +11,7 @@
  *
  *  Usage:
  *    node polish-order.mjs --settings <ember-settings.json> [--actors <actors.json>] \
- *         --md "Act 0-1=t1.md" --md "Act 2 grief towns=t2.md" … --out <dir>   [--report-only]
+ *         --md "Act 0-1=t1.md" --md "Act 2 grief towns=t2.md" … --out <dir>   [--report-only] [--live-wins] [--keep id,id]
  *  `ember-settings.json` = { "bbttcc-campaign.campaigns": {...}, "bbttcc-campaign.quests": {...} } (classic-level
  *  dump of the world settings). Each --md is a tab's markdown EXPORT from Claude Docs (the engine's own md-v1).
  *  Writes <out>/<tab>.md (rebuilt, Dave's text untouched, sections reordered, missing beats added) + report.md.
@@ -29,6 +29,8 @@ for (let i = 0; i < args.length; i++) {
   else if (a === "--md") opt.md.push(args[++i]);
   else if (a === "--out") opt.out = args[++i];
   else if (a === "--report-only") opt.reportOnly = true;
+  else if (a === "--live-wins") opt.liveWins = true;
+  else if (a === "--keep") opt.keep = new Set(args[++i].split(",").map(x => x.trim()).filter(Boolean));   // beat ids whose DOC chunk is kept even under --live-wins   // 2026-10-19: every documented beat is re-rendered from live data (the doc's chunk prefix notes are kept); use after a patch has applied the doc's edits
   else { console.error("unknown arg", a); process.exit(2); }
 }
 if (!opt.settings || !opt.md.length || !opt.out) { console.error("need --settings, --md, --out"); process.exit(2); }
@@ -230,7 +232,7 @@ if (strays.length && encountersTab) {
 // rebuild every tab
 const summary = [];
 for (const t of tabs) {
-  const out = []; let moved = 0, added = 0, kept = 0;
+  const out = []; let moved = 0, added = 0, kept = 0, refreshed = 0;
   if (t.parsed.title) out.push(`# ${t.parsed.title}`, "");
   out.push(...t.parsed.preamble); while (out.length && out[out.length - 1].trim() === "") out.pop(); out.push("");
   // pull every chunk of this tab into a pool; chunks of a script whose home section is in this tab go there
@@ -261,7 +263,8 @@ for (const t of tabs) {
     const emit = (o) => {
       if (o.marker) out.push(o.marker, "");
       const c = pool.get(o.id);
-      if (c) { kept++; if (c.prefix.length) { out.push(...c.prefix.filter(l => !GEN_MARK.test(l)), ""); } out.push(c.heading, ""); const body = [...c.body]; while (body.length && body[0].trim() === "") body.shift(); out.push(...body, ""); }
+      if (c && !(opt.liveWins && byId.has(o.id) && !opt.keep?.has(o.id))) { kept++; if (c.prefix.length) { out.push(...c.prefix.filter(l => !GEN_MARK.test(l)), ""); } out.push(c.heading, ""); const body = [...c.body]; while (body.length && body[0].trim() === "") body.shift(); out.push(...body, ""); }
+      else if (c) { refreshed++; if (c.prefix.length) { out.push(...c.prefix.filter(l => !GEN_MARK.test(l)), ""); } out.push(...renderBeat(byId.get(o.id))); }
       else { added++; out.push(...renderBeat(byId.get(o.id))); }
     };
     for (const o of ordered) emit(o);
@@ -271,8 +274,8 @@ for (const t of tabs) {
   const md = out.join("\n") + "\n";
   const safe = t.name.replace(/[^A-Za-z0-9]+/g, "_");
   if (!opt.reportOnly) fs.writeFileSync(path.join(opt.out, `${safe}.md`), md);
-  summary.push({ tab: t.name, sections: t.parsed.sections.length, kept, added, moved });
-  say(`\n## ${t.name}\nsections ${t.parsed.sections.length} · beats kept ${kept} · added ${added} · moved into order ${moved}`);
+  summary.push({ tab: t.name, sections: t.parsed.sections.length, kept, refreshed, added, moved });
+  say(`\n## ${t.name}\nsections ${t.parsed.sections.length} · beats kept ${kept} · refreshed from live ${refreshed} · added ${added} · moved into order ${moved}`);
   const addedIds = [...t.parsed.sections].flatMap(s => inserts.get(s) || []); if (addedIds.length) say("added: " + addedIds.join(", "));
 }
 function lcsKeep(a, b) { const n = a.length, m = b.length; const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0)); for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]); const keep = new Set(); let i = 0, j = 0; while (i < n && j < m) { if (a[i] === b[j]) { keep.add(a[i]); i++; j++; } else if (dp[i + 1][j] >= dp[i][j + 1]) i++; else j++; } return keep; }
