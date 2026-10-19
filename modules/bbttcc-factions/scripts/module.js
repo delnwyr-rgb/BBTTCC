@@ -2359,6 +2359,19 @@ class BBTTCCFactionSheet extends ActorSheet {
    * remains as a harmless belt-and-suspenders for any path that still lands
    * here.) */
   async _render(force, options) {
+    // Ruling 16 (2026-10-18): one being, one sheet. On player seats under the Alpha cut, the faction window
+    // opens the steward's sheet on its Domain tab instead (the GM keeps the record window).
+    try {
+      if (!game.user?.isGM && game.bbttcc?.alpha?.enabled?.() && this.actor && !this.actor.isToken) {
+        const steward = (game.actors?.contents ?? []).find(a => a?.type === "character" && a.isOwner && _characterBelongsToFaction(a, this.actor));
+        if (steward?.sheet) {
+          steward.sheet.tabGroups ??= {}; steward.sheet.tabGroups.primary = "domain";
+          steward.sheet.render(true);
+          try { if (steward.sheet.rendered) steward.sheet._applyActiveTab?.(); } catch (_e) {}
+          return;
+        }
+      }
+    } catch (_e) {}
     try {
       if (this.actor?.isToken) {
         const world = this.actor.token?.baseActor || game.actors?.get?.(this.actor.token?.actorId) || null;
@@ -2658,7 +2671,7 @@ const politicalPressure = {
     const buildUnits = Math.max(0, Math.floor(Number(_bankActor.getFlag(MODULE_ID, "buildUnits") ?? 0) || 0));
 
     // Canonical faction track values used by the template + GM manual edit panel.
-    const morale   = Math.max(0, Number(this.actor.getFlag(MODULE_ID, "morale") ?? 0) || 0);
+    // (morale read dropped — faction Morale retired 2026-10-18, ruling 19)
     const loyalty  = Math.max(0, Number(this.actor.getFlag(MODULE_ID, "loyalty") ?? 0) || 0);
     const momentum = Math.max(0, Number(this.actor.getFlag(MODULE_ID, "momentum") ?? 0) || 0);
     const bonusDieArmed = !!this.actor.getFlag(MODULE_ID, "nextRollBonusDie");
@@ -2908,7 +2921,6 @@ const doctrine = await (async () => {
         politicalPressure,
         victory,
         mods: {
-          morale,
           loyalty,
           momentum,
           bonusDieArmed
@@ -3634,11 +3646,7 @@ try {
 
           // Derive from faction tier (authoritative) if present.
           let tier = _safeNum(f.tier, -1);
-          if (!Number.isFinite(tier) || tier < 0) {
-            const snap = (f.progression && f.progression.victory) ? f.progression.victory : null;
-            const tfb = snap ? _safeNum(snap.tierFromBadge, -1) : -1;   // facts-ok: legacy sheet fallback; derivedPer comes from facts
-            tier = (tfb >= 0) ? tfb : 0;
-          }
+          if (!Number.isFinite(tier) || tier < 0) tier = 1;   // retired 2026-10-18, ruling 18: no badge-derived tier; plain default = 1
           tier = Math.max(0, Math.min(4, Math.floor(tier)));
 
           const derivedPer = tierCapBand(tier);   // facts (op-engine) — 2026-09-12
@@ -3663,10 +3671,14 @@ try {
         newOpBank[k] = val;
         if (val !== want) clamped.push({ key: k, want, cap: capK, final: val });
       }      // Gather tracks
+      // data-gm-track="morale" was removed from the sheet 2026-10-18 (ruling 19: faction Morale retired);
+      // the handler stays tolerant — it only writes flags.morale if such an input is still present.
       const moraleEl  = fieldset.querySelector(`[data-gm-track="morale"]`);
       const loyaltyEl = fieldset.querySelector(`[data-gm-track="loyalty"]`);
       const darkEl    = fieldset.querySelector(`[data-gm-track="darkness"]`);
       const buEl      = fieldset.querySelector(`[data-gm-track="buildUnits"]`);
+      // data-gm-victory inputs were removed from the sheet 2026-10-18 (ruling 18: VP / Unity retired);
+      // the handler stays tolerant — it only touches flags.victory if such an input is still present.
       const vpEl      = fieldset.querySelector(`[data-gm-victory="vp"]`);
       const unityEl   = fieldset.querySelector(`[data-gm-victory="unity"]`);
 
@@ -3687,9 +3699,14 @@ try {
         note = note ? `${note} | OP clamped: ${parts.join(" • ")}` : `OP clamped to caps: ${parts.join(" • ")}`;
       }
 
-      // Preserve existing victory payload, only overwrite vp/unity
+      // Preserve existing victory payload (sparks / unityMap / tempCapBonus); vp/unity only if an input exists (legacy)
       const existingVictory = this.actor.getFlag(MODULE_ID, "victory") || {};
-      const newVictory = foundry.utils.mergeObject(foundry.utils.duplicate(existingVictory), { vp, unity }, { inplace: false });
+      const victoryPatch = {};
+      if (vpEl) victoryPatch.vp = vp;
+      if (unityEl) victoryPatch.unity = unity;
+      const newVictory = Object.keys(victoryPatch).length
+        ? foundry.utils.mergeObject(foundry.utils.duplicate(existingVictory), victoryPatch, { inplace: false })
+        : null;
 
       // Darkness must stay in object shape `{ global, [hexId]: N, ... }` — travel/raid
       // readers (hex-travel-mode darknessBump, victory enhancer) only look at .global
@@ -3704,11 +3721,11 @@ try {
       const updates = {};
       updates[`flags.${MODULE_ID}.opBank`] = newOpBank;
       updates[`flags.${MODULE_ID}.opBankMarksMigrated`] = true;   // GM typed MARKS — never let the ×10 migration touch this bank
-      updates[`flags.${MODULE_ID}.morale`] = morale;
+      if (moraleEl) updates[`flags.${MODULE_ID}.morale`] = morale;   // legacy input only (retired meter)
       updates[`flags.${MODULE_ID}.loyalty`] = loyalty;
       updates[`flags.${MODULE_ID}.darkness`] = newDarkness;
       if (buEl) updates[`flags.${MODULE_ID}.buildUnits`] = buildUnits;
-      updates[`flags.${MODULE_ID}.victory`] = newVictory;
+      if (newVictory) updates[`flags.${MODULE_ID}.victory`] = newVictory;
 
       try {
         await this.actor.update(updates);
@@ -4094,9 +4111,7 @@ Hooks.once("init", () => {
       const BBTTCC_FACTION_TIPS = {
         totalOPs:   "OP Bank total — sum of all 9 channel banks, in marks, vs. the summed caps. Informational; per-category caps aren't enforced.",
         maxOPs:     "Bank capacity — the summed per-channel caps, in marks. Edit to reflect campaign-level scale; no auto-deduction across categories.",
-        vp:         "Victory Points — progress toward this faction's victory condition. 0–25 ladder; 25 triggers a campaign resolution beat.",
-        unity:      "Unity — internal cohesion (0–100%). High Unity protects against Pressure drift and morale collapse; low Unity invites schism.",
-        morale:     "Morale — current fight in the faction (0–100%). Drops on losses/scarcity, recovers on wins/celebrations. Modifies OP rolls.",
+        // morale tip removed 2026-10-18 (ruling 19): faction Morale is retired.
         loyalty:    "Loyalty — adherence to faction leadership (0–100%). Low Loyalty risks defections, sabotage from within, Pressure flips.",
         darkness:   "Darkness — accumulated Qliphothic taint. Rises from atrocity, ritual desecration, sephirotic neglect. High Darkness corrupts rolls and recruits.",
         momentum:   "Momentum — strategic-layer Surge. Banked +1 each 10 rolled on OP checks; resets each turn. Spend menu: 1=arm +1d10 next OP roll · 2=force opposed reroll · 3=refund OP cost · 5=Reshape Strategy (GM-gated).",
@@ -4225,7 +4240,9 @@ Hooks.once("ready", async () => {
       startingRigs: [],
 
       // Tracks (kept mild; your sheet/enhancers already assume these exist)
-      tracks: { morale: 25, loyalty: 25, darkness: 0, victory: { vp: 0, unity: 0, badgeKey: "emerging" } },
+      // victory.vp / unity / badge retired 2026-10-18 (ruling 18); the victory object now only carries sparks (Tikkun).
+      // morale seed (25) retired 2026-10-18 (ruling 19): faction Morale is no longer a game meter.
+      tracks: { loyalty: 25, darkness: 0, victory: { sparks: [] } },
 
 
       // Doctrine (baseline, auto-granted on faction creation)
@@ -4319,23 +4336,20 @@ factionApi.applyStartingPackage ??= (async ({
   const opCaps = _normalizeOps(pkg.opCaps || {});
   const opSeed = _normalizeOps(pkg.opSeed || {});
 
-  // Victory object: keep existing badge payload if present, else set minimal defaults
-  const curVictory = a.getFlag?.(MODULE_ID, "victory") || {};
+  // Victory object (2026-10-18, ruling 18): VP / Unity / badge are retired. Keep whatever live
+  // Tikkun data already sits on the actor (sparks, unityMap, unityDev, unityRules, tempCapBonus)
+  // and only guarantee the minimal shape readFactionSparks() expects: { sparks: [] }.
+  const curVictory = deepClone(a.getFlag?.(MODULE_ID, "victory") || {});
   const vIn = pkg.tracks?.victory || {};
   const victory = foundry.utils.mergeObject(
-    {
-      vp: 0,
-      unity: 0,
-      badgeKey: "emerging",
-      badgeLabel: "Emerging",
-      badge: curVictory.badge || null
-    },
+    { ...curVictory, sparks: Array.isArray(curVictory.sparks) ? curVictory.sparks : [] },
     deepClone(vIn),
     { inplace: false, overwrite: true }
   );
+  for (const retired of ["vp", "unity", "badge", "badgeKey", "badgeLabel"]) delete victory[retired];
 
   const tracks = pkg.tracks || {};
-  const morale = clamp0(tracks.morale ?? 2);
+  // tracks.morale is ignored — faction Morale retired 2026-10-18 (ruling 19).
   const loyalty = clamp0(tracks.loyalty ?? 2);
   const darkness = clamp0(tracks.darkness ?? 0);
 
@@ -4357,6 +4371,10 @@ factionApi.applyStartingPackage ??= (async ({
   const patch = {
     isFaction: true,
     factionLevel: clamp0(pkg.factionLevel ?? 1) || 1,
+    // Tier is explicit from creation (2026-10-18, ruling 18): no badge-derived tier anywhere.
+    tier: (a.getFlag?.(MODULE_ID, "tier") == null)
+      ? 1
+      : Math.max(0, Math.min(4, Math.floor(Number(a.getFlag(MODULE_ID, "tier")) || 0))),
 
     // 2026-05-13 — Starting-package opSeed/opCaps are already in MARKS
     // (1 OP = 10 marks). Stamp the marks-migration flag so the one-shot
@@ -4380,7 +4398,6 @@ factionApi.applyStartingPackage ??= (async ({
     stockpile,
 
     // Tracks
-    morale,
     loyalty,
     darkness,
     victory,
@@ -5064,9 +5081,9 @@ Hooks.on("updateActor", async (actor, data) => {
 });
 
 // Auto-refresh any open faction sheet when its bbttcc-factions flags change.
-// Without this, the sheet keeps showing the opBank / morale / loyalty / etc.
+// Without this, the sheet keeps showing the opBank / loyalty / etc.
 // it read at render time — so a travel that debits OP, a raid that shifts
-// morale, or Advance Turn replenishing the bank all leave the sheet stale
+// loyalty, or Advance Turn replenishing the bank all leave the sheet stale
 // until it's closed and reopened. We only re-render on OUR flag changes and
 // skip if no sheet is actually rendered, so this is cheap.
 Hooks.on("updateActor", (actor, data) => {

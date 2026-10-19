@@ -31,8 +31,8 @@
       text: "+2 to the attacker's roll this round; in an Infiltration-Alarm raid the alarm also drops 1.",
       throughput: (ctx) => bundle("ghost_slip_infiltration", { roundEffects: [bonus("attacker", 2, "Ghost-Slip: +2")], scenarioEffects: [{ type: "alarmDecay", delta: 1, reason: "Ghost-Slip Infiltration" }] }) },
     { key: "sympathetic_stabilization", fireMode: "pre-roll",
-      text: "Defenders ignore the first Structure loss this round; on success your faction's Morale +1.",
-      throughput: (ctx) => bundle("sympathetic_stabilization", { roundEffects: [{ type: "ignoreStructureLoss", scope: "defender", count: 1, window: "thisRound", note: "Sympathetic Stabilization" }], factionEffects: ok(ctx) ? [{ factionId: att(ctx), moraleDelta: 1, label: "Sympathetic Stabilization" }] : [] }) },
+      text: "Defenders ignore the first Structure loss this round.",   // (Morale +1 rider retired 2026-10-18, ruling 19)
+      throughput: (ctx) => bundle("sympathetic_stabilization", { roundEffects: [{ type: "ignoreStructureLoss", scope: "defender", count: 1, window: "thisRound", note: "Sympathetic Stabilization" }], factionEffects: [] }) },
     { key: "gradient_surge", fireMode: "post-commit",
       text: "Converts 10 marks Economy into 10 marks Logistics on the spot.",
       throughput: (ctx) => bundle("gradient_surge", { factionEffects: [{ factionId: att(ctx), opDeltas: { economy: -10, logistics: 10 }, label: "Gradient Surge" }] }) },
@@ -58,8 +58,8 @@
       text: "On success the enemy faction's Violence cap drops 30 marks, permanently (applied at commit).",
       throughput: (ctx) => bundle("ego_breaker", {}) },
     { key: "temporal_armistice", fireMode: "pre-roll",
-      text: "All ENEMY maneuvers this round are nullified (yours resolve); on success your Darkness −2 and the enemy's Morale +1.",
-      throughput: (ctx) => bundle("temporal_armistice", { roundEffects: [{ type: "nullifyAllManeuvers", scope: "enemy", window: "thisRound", note: "Temporal Armistice" }], factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -2, label: "Temporal Armistice" }, ...(def(ctx) ? [{ factionId: def(ctx), moraleDelta: 1, label: "Temporal Armistice" }] : [])] : [] }) },
+      text: "All ENEMY maneuvers this round are nullified (yours resolve); on success your Darkness −2.",   // (enemy Morale +1 retired 2026-10-18, ruling 19)
+      throughput: (ctx) => bundle("temporal_armistice", { roundEffects: [{ type: "nullifyAllManeuvers", scope: "enemy", window: "thisRound", note: "Temporal Armistice" }], factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -2, label: "Temporal Armistice" }] : [] }) },
     { key: "crown_of_mercy", fireMode: "post-commit",
       text: "On success the corrupted Spark seated on the target hex is repaired — or, if it has none, one corrupted spark carried by your faction is purified (applied at commit).",
       throughput: (ctx) => bundle("crown_of_mercy", {}) },
@@ -70,8 +70,8 @@
       text: "+4 to the attacker's roll this round; your faction's Darkness +2 whatever happens.",
       throughput: (ctx) => bundle("ego_dragon_echo", { roundEffects: [bonus("attacker", 4, "Ego-Dragon Echo: +4")], factionEffects: [{ factionId: att(ctx), darknessDelta: 2, label: "Ego-Dragon Echo" }] }) },
     { key: "diplomatic_channel", fireMode: "post-commit",
-      text: "On success: your faction's Loyalty +1 and Morale +1; the other side's Morale +1.",
-      throughput: (ctx) => bundle("diplomatic_channel", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), loyaltyDelta: 1, moraleDelta: 1, label: "Diplomatic Channel" }, ...(def(ctx) ? [{ factionId: def(ctx), moraleDelta: 1, label: "Diplomatic Channel" }] : [])] : [] }) },
+      text: "On success: your faction's Loyalty +1.",   // (both Morale +1 riders retired 2026-10-18, ruling 19)
+      throughput: (ctx) => bundle("diplomatic_channel", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), loyaltyDelta: 1, label: "Diplomatic Channel" }] : [] }) },
     // Copy-vs-behaviour fixes (owner ruling 3): behaviour fixed, not the copy.
     { key: "prayer_in_the_smoke", fireMode: "pre-roll",
       text: "Advantage on the attacker's roll this round; on success your faction's Darkness −1.",
@@ -87,16 +87,16 @@
   // ── 2. Character-option L1 maneuvers — all 18 (ruling 2) ─────────────────
   const L1 = {
     shock_command:          { fireMode: "pre-roll", text: "Warlord: +2 to the attacker's roll this round.", t: (c) => ({ roundEffects: [bonus("attacker", 2, "Shock Command")] }) },
-    liturgical_rally:       { fireMode: "pre-roll", text: "Hierophant: advantage on the attacker's roll; on success Morale +1.", t: (c) => ({ roundEffects: [adv("attacker", "Liturgical Rally")], factionEffects: ok(c) ? [{ factionId: att(c), moraleDelta: 1, label: "Liturgical Rally" }] : [] }) },
+    liturgical_rally:       { fireMode: "pre-roll", text: "Hierophant: advantage on the attacker's roll.", t: (c) => ({ roundEffects: [adv("attacker", "Liturgical Rally")], factionEffects: [] }) },   // (Morale +1 retired 2026-10-18, ruling 19)
     bureaucratic_override:  { fireMode: "post-commit", text: "Bureaucratic Override: +20 marks Economy next turn (costs 10 now).", t: (c) => ({ factionEffects: [{ factionId: att(c), deferred: { when: "nextTurn", opDeltas: { economy: 20 } }, label: "Bureaucratic Override" }] }) },   // yield doubled 2026-10-06   // WME schedules `deferred` for the next WORLD turn — the copy now says so
     prepared_insight:       { fireMode: "pre-roll", text: "Wizard-Scholar: the opposing side rolls with disadvantage this round.", t: (c) => ({ roundEffects: [dis("enemy", "Prepared Insight")] }) },
     inherited_deference:    { fireMode: "pre-roll", text: "Ancient Blood: +1 to your roll and any enemy Propaganda maneuver this round is cancelled.", t: (c) => ({ roundEffects: [bonus("attacker", 1, "Inherited Deference"), { type: "cancelEnemyManeuver", tags: ["propaganda"], scope: "enemy" }] }) },
     coordinated_advance:    { fireMode: "pre-roll", text: "Squad Leader: +1 to the attacker's roll; friendly tokens on the bound battle scene gain Coordinated for a round.", t: (c) => ({ roundEffects: [bonus("attacker", 1, "Coordinated Advance"), { type: "buffSceneTokens", scope: "allies", factionId: att(c), ae: { name: "Coordinated", icon: "icons/svg/sword.svg", changes: [], duration: { rounds: 1 }, description: "Coordinated Advance" }, durationRounds: 1 }] }) },
-    hardened_advance:       { fireMode: "pre-roll", text: "Mercenary Band: +1 to the attacker's roll; on success Morale +1.", t: (c) => ({ roundEffects: [bonus("attacker", 1, "Hardened Advance")], factionEffects: ok(c) ? [{ factionId: att(c), moraleDelta: 1, label: "Hardened Advance" }] : [] }) },
+    hardened_advance:       { fireMode: "pre-roll", text: "Mercenary Band: +1 to the attacker's roll.", t: (c) => ({ roundEffects: [bonus("attacker", 1, "Hardened Advance")], factionEffects: [] }) },   // (Morale +1 retired 2026-10-18, ruling 19)
     containment_protocol:   { fireMode: "pre-roll", text: "Peacekeeper Corps: +2 to the DEFENDER's roll this round.", t: (c) => ({ roundEffects: [bonus("defender", 2, "Containment Protocol")] }) },
     silent_entry:           { fireMode: "pre-roll", text: "Covert Ops Cell: +1 to your roll; in an Infiltration-Alarm raid the alarm drops 1.", t: (c) => ({ roundEffects: [bonus("attacker", 1, "Silent Entry")], scenarioEffects: [{ type: "alarmDecay", delta: 1, reason: "Silent Entry" }] }) },
     psychological_pressure: { fireMode: "pre-roll", text: "Cultural Ambassadors: the opposing side rolls with disadvantage this round.", t: (c) => ({ roundEffects: [dis("enemy", "Psychological Pressure")] }) },
-    formal_parley:          { fireMode: "post-commit", text: "Diplomatic Envoys: on success your Loyalty +1 and the other side's Morale +1; in a Courtly raid suspicion falls 1.", t: (c) => ({ factionEffects: ok(c) ? [{ factionId: att(c), loyaltyDelta: 1, label: "Formal Parley" }, ...(def(c) ? [{ factionId: def(c), moraleDelta: 1, label: "Formal Parley" }] : [])] : [], scenarioEffects: [{ type: "suspicionFall", delta: 1, reason: "Formal Parley" }] }) },
+    formal_parley:          { fireMode: "post-commit", text: "Diplomatic Envoys: on success your Loyalty +1; in a Courtly raid suspicion falls 1.", t: (c) => ({ factionEffects: ok(c) ? [{ factionId: att(c), loyaltyDelta: 1, label: "Formal Parley" }] : [], scenarioEffects: [{ type: "suspicionFall", delta: 1, reason: "Formal Parley" }] }) },
     make_do_and_hold:       { fireMode: "pre-roll", text: "Survivors' Militia: defenders ignore the first Structure loss this round and roll +1.", t: (c) => ({ roundEffects: [{ type: "ignoreStructureLoss", scope: "defender", count: 1, window: "thisRound" }, bonus("defender", 1, "Make Do and Hold")] }) },
     sight_of_the_tree:      { fireMode: "pre-roll", text: "Kabbalist: advantage on the attacker's roll; on success Darkness −1.", t: (c) => ({ roundEffects: [adv("attacker", "Sight of the Tree")], factionEffects: ok(c) ? [{ factionId: att(c), darknessDelta: -1, label: "Sight of the Tree" }] : [] }) },
     rapid_transmutation:    { fireMode: "post-commit", text: "Rapid Transmutation: the 10 marks Economy you spent become 20 marks Faith.", t: (c) => ({ factionEffects: [{ factionId: att(c), opDeltas: { faith: 20 }, label: "Rapid Transmutation" }] }) },   // 2026-10-06: the maneuver cost already bills economy 10 — no second debit; yield doubled

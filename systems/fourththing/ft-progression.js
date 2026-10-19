@@ -2027,6 +2027,7 @@ export async function levelUp(actor) {
                   ${autoGranted.imported.length ? `<br/>✦ New principles: <b>${autoGranted.imported.join(", ")}</b>.` : ""}
                   ${autoGranted.grantedSkills.length ? `<br/>✦ Aptitude rank 1: <b>${autoGranted.grantedSkills.join(", ")}</b>.` : ""}
                   ${signatureLeveled.length ? `<br/>✦ Signature manifestations advanced to <b>Tier ${newTier}</b>: ${signatureLeveled.join(", ")}.` : ""}
+                  ${tierUp ? `<br/>✦ A new <b>Signature</b> slot opened (one per tier) — make it from the Core tab.` : ""}
                 </p>
               </div>`
             });

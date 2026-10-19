@@ -7,7 +7,7 @@
 //     - Seeds integration block so garrison/upkeep & integration engine can work.
 //   develop_outpost_stability
 //     - Stabilize an outpost: remove Hostile/Unrest, add Patrolled/Infrastructure+,
-//       small Loyalty/Morale bumps, +1 integration.progress.
+//       a small Loyalty bump (+2; was +1 Loyalty +1 Morale — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)), +1 integration.progress.
 //   upgrade_outpost_settlement
 //     - Outpost -> Village (Claimed), adds Well-Maintained, bumps resources,
 //       +1 integration.progress.
@@ -225,7 +225,7 @@
         // the old grudges into the first unrest check (Odaroloc River.c rioted twice on a −2 it
         // inherited from June).
         f.mods = (f.mods && typeof f.mods === "object") ? Object.assign({}, f.mods) : {};
-        f.mods.loyalty = 0; f.mods.morale = 0;
+        f.mods.loyalty = 0;   // (mods.morale no longer seeded — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.))
         f.modifiers  = Array.isArray(f.modifiers) ? f.modifiers.slice() : [];
         f.conditions = Array.isArray(f.conditions) ? f.conditions.slice() : [];
         f.population = f.population || "small";
@@ -298,8 +298,7 @@
           });
 
           // bump goodwill
-          pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + 1;
-          pend.moraleDelta  = Number(pend.moraleDelta  || 0) + 1;
+          pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + 1;   // +1 Loyalty +1 Morale folded into Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
 
           bumpIntegrationProgress(f, 1);
 
@@ -308,7 +307,7 @@
           return true;
         });
 
-        msg = 'Stability program queued: -Hostile/Propaganda/Damage • +Patrolled/Infrastructure+ • +1 Loyalty, +1 Morale • Integration +1';
+        msg = 'Stability program queued: -Hostile/Propaganda/Damage • +Patrolled/Infrastructure+ • +2 Loyalty • Integration +1';
         console.log(TAG, "develop_outpost_stability", { actor: actor?.name, target: entry?.targetUuid });
         return msg;
       }

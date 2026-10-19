@@ -1,6 +1,6 @@
 // v1.0.0 — Patrol Routes (mechanical):
 // Adds "Patrolled" tag; if already Fortified, may also add "Well-Maintained".
-// Queues +1 Defense and +1 Morale on the target hex drawing.
+// Queues +1 Defense and +1 Loyalty on the target hex drawing (was +1 Morale — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)).
 
 (() => {
   const MOD_R = "bbttcc-raid";
@@ -17,7 +17,7 @@
     if (game?.ready) go(); else Hooks.on("ready", go);
   }
 
-  async function queuePatrolRoutes({ targetUuid, defenseDelta=1, moraleDelta=1 }) {
+  async function queuePatrolRoutes({ targetUuid, defenseDelta=1, loyaltyDelta=1 }) {   // hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
     if (!targetUuid) return "No target";
     const ref = await fromUuid(targetUuid);
     const doc = ref?.document ?? ref;
@@ -43,10 +43,10 @@
 
     // Small bumps
     pend.defenseDelta = Number(pend.defenseDelta||0) + Number(defenseDelta||0);
-    pend.moraleDelta  = Number(pend.moraleDelta ||0) + Number(moraleDelta ||0);
+    pend.loyaltyDelta = Number(pend.loyaltyDelta||0) + Number(loyaltyDelta||0);
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
-    return `Queued: add "Patrolled"${currentMods.includes("Fortified")?" (chance Well-Maintained)":""} • +${defenseDelta} Defense • +${moraleDelta} Morale`;
+    return `Queued: add "Patrolled"${currentMods.includes("Fortified")?" (chance Well-Maintained)":""} • +${defenseDelta} Defense • +${loyaltyDelta} Loyalty`;
   }
 
   whenRaidReady((api)=>{
@@ -63,11 +63,11 @@
         if (typeof base==="function") {
           try{ msg=String(await base({ entry }))||""; }catch(e){ console.warn(TAG,"base apply error",e); }
         }
-        const m2 = await queuePatrolRoutes({ targetUuid: entry?.targetUuid, defenseDelta:1, moraleDelta:1 });
+        const m2 = await queuePatrolRoutes({ targetUuid: entry?.targetUuid, defenseDelta:1, loyaltyDelta:1 });
         return [msg,m2].filter(Boolean).join(" • ") || "Patrol Routes queued.";
       }
     });
 
-    console.log(TAG,"installed (Patrolled tag, +1 Def/+1 Morale, chance Well-Maintained).");
+    console.log(TAG,"installed (Patrolled tag, +1 Def/+1 Loyalty, chance Well-Maintained).");
   });
 })();

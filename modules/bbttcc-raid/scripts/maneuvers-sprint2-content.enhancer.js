@@ -119,7 +119,7 @@
                 icon: "icons/svg/upgrade.svg",
                 changes: [{ key: "system.attributes.movement.bonus", mode: 2, value: 5 }],
                 duration: { rounds: 1 },
-                description: "Faction-wide Rally: morale flush, +5 ft movement, 1 round."
+                description: "Faction-wide Rally: +5 ft movement, 1 round."
               },
               durationRounds: 1,
               note: "Faction-wide Rally: scene buff." }
@@ -140,17 +140,16 @@
       fireMode: "post-commit",
       costBand: "medium",
       cost: { faith: 40, softpower: 20 }, // 40 marks (faith=10/mark + softpower=10/mark)
-      effectsText: "On success: faction morale +2, darkness −1. Scene-bound: 'Prayer's Grace' on allies + gold pulse VFX.",
-      description: "<p>The faction's faithful raise their voices as one. On a successful round, the rebuke of the dark resonates outward.</p><p><b>Faction morale +2, darkness −1.</b> If a battle scene is bound, all friendly tokens gain <i>Prayer's Grace</i> for 3 rounds and the canvas pulses gold.</p>",
+      effectsText: "On success: faction darkness −1. Scene-bound: 'Prayer's Grace' on allies + gold pulse VFX.",   // (Morale +2 retired 2026-10-18, ruling 19)
+      description: "<p>The faction's faithful raise their voices as one. On a successful round, the rebuke of the dark resonates outward.</p><p><b>Faction darkness −1.</b> If a battle scene is bound, all friendly tokens gain <i>Prayer's Grace</i> for 3 rounds and the canvas pulses gold.</p>",
       throughput: function (ctx) {
         if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
         return {
           factionEffects: [{
             factionId: ctx.attackerFactionId || null,
-            moraleDelta: 2,
             darknessDelta: -1,
             when: "afterRound",
-            note: "Prayer Pulse: +2 Morale, −1 Darkness on success."
+            note: "Prayer Pulse: −1 Darkness on success."
           }],
           roundEffects: [
             { type: "buffSceneTokens", scope: "allies", factionId: ctx.attackerFactionId || null,
@@ -244,8 +243,8 @@
       fireMode: "post-commit",
       costBand: "medium",
       cost: { violence: 30, softpower: 10 }, // 40 marks
-      effectsText: "On success: enemy tokens take 7 damage, allied tokens gain 'Press the Advantage', faction morale +1.",
-      description: "<p>The faction's officers synchronize an attack with parade precision. On a successful round, the enemy line buckles.</p><p><b>All enemy tokens take 7 damage</b> (~2d6 avg), <b>allied tokens gain Press the Advantage</b> for 1 round, and faction morale ticks +1.</p>",
+      effectsText: "On success: enemy tokens take 7 damage, allied tokens gain 'Press the Advantage'.",   // (faction Morale +1 retired 2026-10-18, ruling 19)
+      description: "<p>The faction's officers synchronize an attack with parade precision. On a successful round, the enemy line buckles.</p><p><b>All enemy tokens take 7 damage</b> (~2d6 avg) and <b>allied tokens gain Press the Advantage</b> for 1 round.</p>",
       throughput: function (ctx) {
         if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
         return {
@@ -264,12 +263,7 @@
               durationRounds: 1,
               note: "Coordinated Strike: friendly buff." }
           ],
-          factionEffects: [{
-            factionId: ctx.attackerFactionId || null,
-            moraleDelta: 1,
-            when: "afterRound",
-            note: "Coordinated Strike: +1 morale on success."
-          }],
+          factionEffects: [],   // (+1 Morale retired 2026-10-18, ruling 19)
           meta: { source: "throughput", maneuverKey: "coordinated_strike", preview: true }
         };
       }
@@ -323,14 +317,14 @@
       fireMode: "anytime",
       costBand: "light",
       cost: { diplomacy: 10, faith: 10 }, // 20 marks
-      effectsText: "Offer the defender a sealed bargain: accept (+2 to defender's next roll, attacker gains 1 darkness) or refuse (defender morale −1 from the snubbed offer).",
-      description: "<p>The attacker's emissary presents a sealed offer with an unmistakable cost.</p><p><b>Defender chooses one (GM adjudicates):</b><ul><li><b>Accept</b> — defender gains +2 to their next exchange roll; attacker's faction gains 1 darkness.</li><li><b>Refuse</b> — defender's morale drops by 1 (the snub is read as weakness in the back-channels).</li></ul></p>",
+      effectsText: "Offer the defender a sealed bargain: accept (+2 to defender's next roll, attacker gains 1 darkness) or refuse (the snub is remembered in the back-channels).",   // (defender Morale −1 retired 2026-10-18, ruling 19)
+      description: "<p>The attacker's emissary presents a sealed offer with an unmistakable cost.</p><p><b>Defender chooses one (GM adjudicates):</b><ul><li><b>Accept</b> — defender gains +2 to their next exchange roll; attacker's faction gains 1 darkness.</li><li><b>Refuse</b> — the snub is read as weakness in the back-channels.</li></ul></p>",
       throughput: function (ctx) {
         return {
           factionEffects: [{
             factionId: ctx.defenderFactionId || null,
             when: "thisRound",
-            note: "Infernal Bargain (preview): defender presented with bargain — GM adjudicates accept/refuse. On accept: defender +2 next roll, attacker darkness +1. On refuse: defender morale −1."
+            note: "Infernal Bargain (preview): defender presented with bargain — GM adjudicates accept/refuse. On accept: defender +2 next roll, attacker darkness +1. On refuse: nothing mechanical (Morale retired)."
           }],
           meta: { source: "throughput", maneuverKey: "opt_infernal_bargain", preview: true }
         };

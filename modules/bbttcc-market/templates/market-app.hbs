@@ -8,7 +8,7 @@
     <header class="bbttcc-market-head">
       <div>
         <div class="bbttcc-market-title">Bad Eden Market</div>
-        <div class="bbttcc-muted">Procurement console: spend faction OP (pool set by item pricing) to buy gear, rigs, facilities, and hex assets.</div>
+        <div class="bbttcc-muted">{{#if lockedBuyer}}Spend your Domain's marks on gear and rigs — or ↺ sell what you carry.{{else}}Procurement console: spend a Domain's marks (pool set by item pricing) to buy gear, rigs, facilities, and hex assets — or ↺ sell what you carry.{{/if}}</div>
       </div>
       <div class="bbttcc-market-actions">
         {{#if isGM}}
@@ -36,15 +36,41 @@
             </select>
           </div>
 
+          {{#if lockedBuyer}}
+          {{!-- Ruling 16 (2026-10-18): a player buys as their steward; the treasury IS their Domain. Locked, not chosen. --}}
           <div class="field" data-tooltip="{{bbttccTip 'market' 'faction'}}" data-tour="market.faction">
-            <label>Buyer Faction</label>
+            <label>Treasury</label>
+            <select name="factionId" data-role="faction" disabled>
+              {{#each factions}}
+                <option value="{{id}}" selected>{{name}}</option>
+              {{else}}
+                <option value="">(no Domain yet — ask the GM)</option>
+              {{/each}}
+            </select>
+            <small>Your Domain's marks pay for everything here.</small>
+          </div>
+
+          <div class="field" data-tooltip="{{bbttccTip 'market' 'character'}}" data-tour="market.character">
+            <label>Buying as</label>
+            <select name="characterId" data-role="character">
+              {{#each characters}}
+                <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+              {{else}}
+                <option value="">(no character)</option>
+              {{/each}}
+            </select>
+            <small>Gear lands in this character's inventory.</small>
+          </div>
+          {{else}}
+          <div class="field" data-tooltip="{{bbttccTip 'market' 'faction'}}" data-tour="market.faction">
+            <label>Buyer Domain</label>
             <select name="factionId" data-role="faction">
               <option value="">(Select)</option>
               {{#each factions}}
                 <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
               {{/each}}
             </select>
-            <small>Economy OP is spent from this faction.</small>
+            <small>Marks are spent from this Domain's treasury.</small>
           </div>
 
           <div class="field" data-tooltip="{{bbttccTip 'market' 'character'}}" data-tour="market.character">
@@ -57,6 +83,7 @@
             </select>
             <small>Gear deliveries go to this character's inventory.</small>
           </div>
+          {{/if}}
 
           <div class="field" data-tooltip="{{bbttccTip 'market' 'hex'}}" data-tour="market.hex">
             <label>Delivery Hex (facilities / hex assets)</label>
@@ -104,7 +131,7 @@
                 {{/each}}
               </span>
             {{else}}
-              <span class="bbttcc-muted">Select a <b>Buyer Faction</b> to see its OP banks and what it can afford.</span>
+              <span class="bbttcc-muted">{{#if lockedBuyer}}No Domain is linked to {{#if buyerCharacterName}}{{buyerCharacterName}}{{else}}your character{{/if}} yet — ask the GM.{{else}}Select a <b>Buyer Domain</b> to see its treasury and what it can afford.{{/if}}</span>
             {{/if}}
           </div>
 
@@ -134,6 +161,42 @@
           </nav>
 
           <div class="bbttcc-market-list">
+            {{#if sellMode}}
+              <div class="bbttcc-market-sell-head" data-tooltip="{{bbttccTip 'market' 'sell'}}">
+                <p><b>{{sellLine}}</b></p>
+                {{#if sellWarn}}<p class="bbttcc-muted">{{sellWarn}}</p>{{/if}}
+              </div>
+              {{#each sellRows}}
+                <article class="bbttcc-market-item{{#unless sellable}} is-unaffordable{{/unless}}" data-item-uuid="{{uuid}}">
+                  {{#if img}}
+                    <img class="bbttcc-market-item__img" src="{{img}}" alt=""/>
+                  {{else}}
+                    <div class="bbttcc-market-item__img bbttcc-market-item__img--empty"></div>
+                  {{/if}}
+                  <div class="bbttcc-market-item__main">
+                    <div class="bbttcc-market-item__name">
+                      <a href="#" class="bbttcc-market-item__link" data-action="openDoc" data-uuid="{{uuid}}">{{name}}</a>
+                      {{#if qtyLabel}}<span class="bbttcc-muted">{{qtyLabel}}</span>{{/if}}
+                      {{#if sellable}}
+                        <span class="bbttcc-market-afford ok" title="{{rateTitle}}">↺ {{payout}} marks each</span>
+                      {{else}}
+                        <span class="bbttcc-market-afford no" title="{{reason}}">✗ {{reason}}</span>
+                      {{/if}}
+                    </div>
+                    <div class="bbttcc-muted">{{kindLabel}}{{#if tierLabel}} · {{tierLabel}}{{/if}} · List: <b>{{listLabel}}</b>{{#if sellable}} · pays {{rateLabel}}{{/if}}</div>
+                  </div>
+                  <div class="bbttcc-market-item__btns">
+                    {{#if sellable}}
+                      {{#if stack}}<input type="number" class="bbttcc-market-sell-qty" data-role="sellQty" min="1" max="{{qty}}" value="1" title="How many to sell"/>{{/if}}
+                      <button type="button" class="bbttcc-button primary" data-action="sell">Sell</button>
+                    {{/if}}
+                  </div>
+                </article>
+              {{/each}}
+              {{#unless sellRows.length}}
+                <p class="bbttcc-muted">{{sellEmpty}}</p>
+              {{/unless}}
+            {{/if}}
             {{#each entries}}
               <article class="bbttcc-market-item{{#if affordKnown}}{{#unless canAfford}} is-unaffordable{{/unless}}{{/if}}" data-entry-id="{{id}}">
                 {{#if img}}
@@ -164,9 +227,9 @@
                 </div>
               </article>
             {{/each}}
-            {{#unless entries.length}}
+            {{#unless sellMode}}{{#unless entries.length}}
               <p class="bbttcc-muted">No matching entries{{#if affordOnly}} you can afford{{/if}} in this tab.</p>
-            {{/unless}}
+            {{/unless}}{{/unless}}
           </div>
         </div>
       </section>

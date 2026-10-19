@@ -6,6 +6,8 @@
 // Deposit) and Stored (vault flag, with Withdraw). All moves route through
 // game.bbttcc.api.banks.{deposit,withdraw} so they're atomic + rollback-safe.
 
+import { alphaOneTreasury } from "./treasury-app.js";   // ruling 16 (2026-10-17): one Treasury under the Alpha Cut
+
 const MOD_ID = "bbttcc-banks";
 const TAG    = "[bbttcc-banks]";
 const warn   = (...a) => console.warn(TAG, ...a);
@@ -110,6 +112,7 @@ class PersonalBankApp extends ApplicationV2 {
     for (const f of (banks?.accessibleFactions?.() ?? [])) {
       opts += `<option value="faction:${_esc(f.id)}">🏴 ${_esc(f.name)} — treasury</option>`;
     }
+    if (game.bbttcc?.alpha?.hidden?.("coalitionBank")) return opts;   // ALPHA CUT (2026-10-17): no coalition destinations on player seats
     for (const f of (banks?.coalitionLeadFactions?.() ?? [])) {
       opts += `<option value="coalition:${_esc(f.id)}">🤝 Coalition — ${_esc(f.name)}</option>`;
     }
@@ -187,6 +190,8 @@ function openPersonalBank(actorOrId) {
   const actor = (actorOrId instanceof Actor) ? actorOrId
     : game.actors?.get(String(actorOrId ?? "").replace(/^Actor\./, ""));
   if (!actor) { ui.notifications?.warn?.("No actor for Personal Bank."); return null; }
+  // Ruling 16 (2026-10-17): the steward IS the Domain — one Treasury. The Personal Bank stays for Beta worlds.
+  if (alphaOneTreasury() && typeof game.bbttcc?.api?.banks?.openTreasury === "function") return game.bbttcc.api.banks.openTreasury(actor);
   let app = _open.get(actor.id);
   const dead = !app || app._state === 0 || (app.element && !app.element.isConnected);
   if (dead) {
@@ -213,7 +218,7 @@ function _injectBankButton(app, html) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.id = "bbttcc-bank-open-btn";
-    btn.title = "Open Personal Bank";
+    btn.title = alphaOneTreasury() ? "Open the Treasury" : "Open Personal Bank";
     btn.addEventListener("click", (ev) => {
       try { ev.preventDefault(); ev.stopPropagation(); } catch {}
       openPersonalBank(actor);

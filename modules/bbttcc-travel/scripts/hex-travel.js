@@ -120,7 +120,15 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
   //   ladder: the pre-2026-10-13 rule below (highest authored table = the terrain's tier).
   // Why: with the ladder rule, authoring a T3 table PINNED that terrain at T3 for every leg; danger lets the same
   // terrain run T1 near home and T3 in the badlands, and the DC step follows (base + tier × step).
+  // ALPHA CUT (2026-10-17): while the cut is on, every leg rolls the tier-1 table (world-level, any executing seat).
+  function _alphaTierCap(t) {
+    try { if (game.bbttcc?.alpha?.enabled?.() && !game.bbttcc.alpha.overrides().has("travelHighTier")) return Math.min(1, t); } catch (_e) {}
+    return t;
+  }
   function _resolveTravelTier(terrainKey, fallbackTier, toHex, factionId) {
+    return _alphaTierCap(_resolveTravelTierRaw(terrainKey, fallbackTier, toHex, factionId));
+  }
+  function _resolveTravelTierRaw(terrainKey, fallbackTier, toHex, factionId) {
     const ladder = _resolveTerrainTierFromCampaign(terrainKey, fallbackTier);
     let mode = "danger";
     try { _ensureEncounterDialSettings(); mode = String(game.settings.get(ENC_DIAL_NS, TIER_SOURCE_KEY) || "danger"); } catch (_e) {}
@@ -1314,7 +1322,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
 
       // Tier shift (minimum 1)
       if (Number.isFinite(scoutMod.encounterTierDelta)) {
-        ctx.terrainTier = Math.max(1, ctx.terrainTier + Number(scoutMod.encounterTierDelta));
+        ctx.terrainTier = _alphaTierCap(Math.max(1, ctx.terrainTier + Number(scoutMod.encounterTierDelta)));
       }
 
       // Chance shift implemented as roll modifier (+ = safer, - = riskier)

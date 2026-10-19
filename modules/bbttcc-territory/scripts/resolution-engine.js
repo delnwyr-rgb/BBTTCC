@@ -198,9 +198,7 @@
       const F = foundry.utils.duplicate(A.flags?.[MODF] || {});
       const T = outcome.tracks || {};
 
-      if (T.moraleDelta !== undefined) {
-        F.morale = clamp((F.morale || 0) + T.moraleDelta, 0, 100);
-      }
+      // (T.moraleDelta is accepted and ignored — faction Morale retired 2026-10-18, ruling 19.)
 
       if (T.loyaltyDelta !== undefined) {
         F.loyalty = clamp((F.loyalty || 0) + T.loyaltyDelta, 0, 100);
@@ -215,20 +213,9 @@
       F._resolution_effects = T;
 
       // -------------------------------------------------------
-      // VICTORY / UNITY one-time bonuses
+      // VICTORY / UNITY one-time bonuses — retired 2026-10-18 (ruling 18).
+      // outcome.victory.vpOnce / unityOnce are still accepted in config but have no effect.
       // -------------------------------------------------------
-      const V = foundry.utils.duplicate(F.victory || {});
-      const Vcfg = outcome.victory || {};
-
-      if (Vcfg.vpOnce) {
-        V.vp = Number(V.vp || 0) + Number(Vcfg.vpOnce || 0);
-      }
-
-      if (Vcfg.unityOnce) {
-        V.unity = Number(V.unity || 0) + Number(Vcfg.unityOnce || 0);
-      }
-
-      F.victory = V;
 
       await A.update({ [`flags.${MODF}`]: F });
 

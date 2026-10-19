@@ -177,14 +177,12 @@ function __bbttccInstallStrategicThroughputIfMissing(){
       await pushWarLog(A, `Civic Audit: Loyalty ${res.before} → ${res.after}.`);
     };
 
+    // Training Drills: its only effect was +1 faction Morale next turn — retired 2026-10-18
+    // (ruling 19). Logs the activity and nothing else.
     T.training_drills = async (ctx) => {
       const A = game.actors.get(ctx.factionId);
       if (!A) return;
-      const bonuses = safeDup(A.getFlag(MODF,"bonuses") || {});
-      bonuses.nextTurn = bonuses.nextTurn || {};
-      bonuses.nextTurn.moraleBonus = Number(bonuses.nextTurn.moraleBonus || 0) + 1;
-      await A.update({ [`flags.${MODF}.bonuses`]: bonuses });
-      await pushWarLog(A, "Training Drills: +1 Morale next turn.");
+      await pushWarLog(A, "Training Drills held.");
     };
 
     raid.STRATEGIC_THROUGHPUT = T;
@@ -268,7 +266,9 @@ function ensureConsumePlannedShim(){
   }
 
   // ⚗ Fuel side effects (owner ruling 2026-09-12): each recipe may carry
-  // fx = { faction:{moraleDelta,loyaltyDelta,darknessDelta}, hex:{darknessDelta,loyaltyDelta,moraleDelta,addModifiers,removeModifiers} }.
+  // fx = { faction:{loyaltyDelta,darknessDelta}, hex:{darknessDelta,loyaltyDelta,addModifiers,removeModifiers} }.
+  // (faction.moraleDelta is accepted and ignored — faction Morale retired 2026-10-18, ruling 19. hex.moraleDelta is
+  //  accepted and FOLDED INTO hex loyaltyDelta — hex Morale retired 2026-10-18 too; hex Loyalty is the hex's indicator now.)
   // Faction tracks are written directly (darkness is the {global,[hexId]} BOX — never a bare
   // number). Hex effects are QUEUED on the target hex's turn.pending, which applyHexPendingSweep
   // lands later this same Advance (modifiers → recompute; numeric deltas → mods.*).
@@ -277,7 +277,7 @@ function ensureConsumePlannedShim(){
     const fac = fx.faction || {};
     const upd = {};
     const f = factionActor.flags?.[MOD_FACTIONS] || {};
-    for (const [k, flagKey] of [["moraleDelta","morale"],["loyaltyDelta","loyalty"]]) {
+    for (const [k, flagKey] of [["loyaltyDelta","loyalty"]]) {
       const d = safeNum(fac[k]); if (!d) continue;
       const before = safeNum(f[flagKey], 50); const after = Math.max(0, Math.min(100, before + d));
       upd[`flags.${MOD_FACTIONS}.${flagKey}`] = after; notes.push(`${flagKey} ${before}→${after}`);
@@ -294,7 +294,7 @@ function ensureConsumePlannedShim(){
         const t = await fromUuid(entry.targetUuid); const d = t?.document ?? t;
         if (d?.update) {
           const tf = clone(d.flags?.[MOD_TERRITORY] || {}); const pend = clone(tf.turn?.pending || {});
-          for (const k of ["darknessDelta","loyaltyDelta","moraleDelta"]) { const v = safeNum(hx[k]); if (v) { pend[k] = safeNum(pend[k]) + v; notes.push(`hex ${k.replace(/Delta$/,"")} ${v > 0 ? "+" : ""}${v}`); } }
+          for (const k of ["darknessDelta","loyaltyDelta"]) { const v = safeNum(hx[k]) + (k === "loyaltyDelta" ? safeNum(hx.moraleDelta) : 0); if (v) { pend[k] = safeNum(pend[k]) + v; notes.push(`hex ${k.replace(/Delta$/,"")} ${v > 0 ? "+" : ""}${v}`); } }
           const add = Array.isArray(hx.addModifiers) ? hx.addModifiers.filter(Boolean) : []; const rm = Array.isArray(hx.removeModifiers) ? hx.removeModifiers.filter(Boolean) : [];
           if (add.length || rm.length) { pend.repairs = pend.repairs || {}; if (add.length) { pend.repairs.addModifiers = [...new Set([...(pend.repairs.addModifiers || []), ...add])]; notes.push(`hex +${add.join("/")}`); } if (rm.length) { pend.repairs.removeModifiers = [...new Set([...(pend.repairs.removeModifiers || []), ...rm])]; notes.push(`hex −${rm.join("/")}`); } }
           await d.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: pend });
@@ -813,7 +813,7 @@ function readRigs(factionActor){
 
 // Effective logistics CAP in marks (2026-09-10). Mirrors op-engine's _readCaps
 // resolution order exactly — explicit opCaps → opCapPer → tier band (tier flag,
-// else progression.victory.tierFromBadge, else 0) — so a faction with NO
+// else 1 since ruling 18, 2026-10-18 retired the badge) — so a faction with NO
 // explicit opCaps flag is sized by its tier band like every wizard-built
 // faction. Bank is the last resort only if the flag object is malformed.
 // Logistics CAPACITY cap in marks — facts.faction (op-engine) is the one home for tier / caps /
@@ -1508,8 +1508,9 @@ async function applyHexPendingSweep(){
         actionable = true;
       }
       // numeric deltas → mods (darknessDelta → mods.darkness, the field setHexDarkness writes — 2026-09-12)
+      // moraleDelta → mods.loyalty: hex Morale retired 2026-10-18 (ruling 19 ext.), a stale queued moraleDelta lands on Loyalty.
       const mods = dup(f.mods || {});
-      for (const [pk, mk] of [["defenseDelta","defense"],["tradeYieldDelta","tradeYield"],["loyaltyDelta","loyalty"],["enemyLoyaltyDelta","enemyLoyalty"],["moraleDelta","morale"],["radiationRisk","radiation"],["darknessDelta","darkness"]]) {
+      for (const [pk, mk] of [["defenseDelta","defense"],["tradeYieldDelta","tradeYield"],["loyaltyDelta","loyalty"],["moraleDelta","loyalty"],["enemyLoyaltyDelta","enemyLoyalty"],["radiationRisk","radiation"],["darknessDelta","darkness"]]) {
         const v = safeNum(pend[pk]);
         if (v) { mods[mk] = safeNum(mods[mk]) + v; actionable = true; }
       }
@@ -1575,7 +1576,7 @@ async function applyQueuedPostEffects(){
 /* ---------------- faction bonus consumers (2026-09-09) ----------------
  * flags.bbttcc-factions.bonuses.{regenPlan[], capBump{}, truce{}, nextTurn{borderPatrol, noMoraleLoss, spyInsertion}}
  * Written by strategic-throughput handlers; read here, in advanceOPRegen, in
- * consumePlanned (raid refusal) and in advance-turn.tracks (noMoraleLoss,
+ * consumePlanned (raid refusal) and in advance-turn.tracks (noMoraleLoss — retired 2026-10-18 ruling 19,
  * Blessed Ground). tickFactionBonuses() runs once per applied Advance and is
  * the only thing that expires them — hardCleanupQueued never touches bonuses.
  */
@@ -1657,9 +1658,10 @@ async function tickFactionBonuses(){
       }
       const nt = b.nextTurn || {};
       if (nt.borderPatrol) { const t = safeNum(nt.borderPatrol) - 1; if (t <= 0) { delete nt.borderPatrol; notes.push("Border Patrol stood down"); } else nt.borderPatrol = t; dirty = true; }
+      // noMoraleLoss / moraleBonus: faction Morale retired 2026-10-18 (ruling 19) — stale slots are
+      // cleared without being applied (nothing reads them any more).
       if (nt.noMoraleLoss) { delete nt.noMoraleLoss; dirty = true; }
-      // Training Drills (registry 2026-09-12): +N morale, applied here and cleared — it had no reader.
-      if (safeNum(nt.moraleBonus)) { const before = safeNum(F.getFlag(MOD_FACTIONS, "morale"), 50); const after = Math.max(0, Math.min(100, before + safeNum(nt.moraleBonus))); await F.update({ [`flags.${MOD_FACTIONS}.morale`]: after }); notes.push(`Training Drills: morale ${before}→${after}`); delete nt.moraleBonus; dirty = true; }
+      if (nt.moraleBonus !== undefined) { delete nt.moraleBonus; dirty = true; }
       // Loyalty stability one-turn effects (2026-09-10): consumed this Advance
       // (opGainPct in advanceOPRegen, defenseDC by raid defense DC readers) —
       // clear so tracks' loyalty phases write a fresh value, never a running sum.

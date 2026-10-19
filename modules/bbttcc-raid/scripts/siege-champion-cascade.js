@@ -3,9 +3,9 @@
 //
 // Subscribes bbttcc:siege:championDeath (fires from the Duel + Trojan Sinon, relayed via
 // siegeHook). GM-only single writer. When a champion falls:
-//   • attacker dies → Buffer.violence −20, attacker morale −2, and 30% of each OTHER *absent*
+//   • attacker dies → Buffer.violence −20, and 30% of each OTHER *absent*
 //     attacker champion flips to `active` (vengeance — Achilles answers Patroclus)
-//   • defender dies → defender morale −2, 30% of each OTHER *absent* defender champion flips to
+//   • defender dies → 30% of each OTHER *absent* defender champion flips to
 //     `active` (the wall rallies), and the CURRENT layer's threshold is weakened 10% (mourns →
 //     breaches more easily)
 // then fires bbttcc:siege:cascade (+relay) for the VFX banner + posts a consequences chat card.
@@ -14,9 +14,9 @@
 // the prose below it (line 551, "Achilles … flip to active") + the Iliad premise + the running
 // memory all describe RALLY (absent → active). The prose/memory win — death GALVANIZES the side.
 //
-// Morale is applied IMMEDIATELY via factions.bumpMorale (a faction-level atomic API, not siege
-// state) so the hit lands the moment the champion falls — F.1's siege-state single-writer rule
-// only governs the shared hex flag, which this handler also re-reads-mutates-persists once.
+// (The −2 faction Morale hit per fallen champion was RETIRED 2026-10-18, ruling 19: faction
+// Morale is no longer a game meter. F.1's siege-state single-writer rule only governs the
+// shared hex flag, which this handler re-reads-mutates-persists once.)
 //
 // RACE NOTE: Hooks.callAll does NOT await async handlers, so any firing site that writes siege
 // state AFTER firing championDeath would clobber this cascade's persist. The Duel fires it last
@@ -33,7 +33,7 @@
   const GRIEF_RALLY_CHANCE = 0.30;
   const THRESHOLD_WEAKEN = 0.10;
   const ATTACKER_BUFFER_HIT = 20;   // Buffer.violence
-  const MORALE_HIT = -2;
+  // MORALE_HIT (−2) retired 2026-10-18, ruling 19.
 
   const _nm = (id) => game.actors?.get?.(id)?.name || id || "a champion";
   const _currentTurn = () => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch { return 0; } };
@@ -41,15 +41,6 @@
   function _relayHook(hook, payload){
     Hooks.callAll(hook, payload);
     try { game.socket?.emit?.(`module.${MOD_R}`, { t: "siegeHook", hook, payload }); } catch (_e) {}
-  }
-
-  async function _bumpMorale(factionId, delta, reason){
-    if (!factionId || !delta) return;
-    try {
-      const fn = game.bbttcc?.api?.factions?.bumpMorale;
-      if (typeof fn === "function") await fn({ factionId, delta });
-      else console.warn(TAG, "factions.bumpMorale unavailable; morale skipped", { factionId, delta, reason });
-    } catch (e) { console.warn(TAG, "bumpMorale failed", reason, e); }
   }
 
   async function _hexDocFromUuid(uuid){
@@ -77,13 +68,13 @@
       const turn = _currentTurn();
       const hexDoc = hexUuid ? await _hexDocFromUuid(hexUuid) : null;
 
-      // Faction whose champion fell (morale hit + who rallies).
+      // Faction whose champion fell (who rallies).
       const factionId = side === "attacker"
         ? (await S.getSiegeState(hexUuid))?.attackerFactionId || null
         : (hexDoc && S.hexOwner ? S.hexOwner(hexDoc) || null : null);
 
-      // Morale lands immediately (faction-level, independent of siege state).
-      await _bumpMorale(factionId, MORALE_HIT, `${side}_champion_falls`);
+      // (Faction Morale −2 here retired 2026-10-18, ruling 19.)
+      void factionId;
 
       // Siege-state effects (Buffer / rally / threshold) only while the siege is still active.
       const state = await S.getSiegeState(hexUuid);
@@ -147,7 +138,6 @@
     const color = side === "attacker" ? "#ff9a9a" : "#88bbff";
     const lines = [];
     if (side === "attacker" && bufferHit) lines.push(`Buffer −${bufferHit} Violence`);
-    lines.push(`${side === "attacker" ? "Attacker" : "Defender"} morale −2`);
     if (rallied.length) lines.push(`<b style="color:${color};">${rallied.map(_nm).map(foundry.utils.escapeHTML).join(", ")}</b> ${side === "attacker" ? "rise for vengeance" : "rally to the wall"}`);
     if (thresholdWeakened) lines.push("The wall mourns — current layer threshold −10%");
     await ChatMessage.create({

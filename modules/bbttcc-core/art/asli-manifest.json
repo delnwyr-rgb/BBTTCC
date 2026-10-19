@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "credit": "Lineage tokens by Aslı for Bad Eden. Each token is the portrait AND the map token (owner ruling 2026-10-17).",
+  "base": "art/bbttcc/asli-trailer/tokens/",
+  "lineages": {
+    "circuitborn":      { "label": "Circuitborn",      "keys": ["circuitborn", "exo-knight", "exo knight", "parallax", "salvage", "synapse"] },
+    "cryptidkin":       { "label": "Cryptidkin",       "keys": ["cryptidkin", "furrykin", "jackalope", "chupacabra"] },
+    "human":            { "label": "Human",            "keys": ["human", "denisovan", "erectus", "cro-magnon", "cro magnon", "neanderthal", "florensis"] },
+    "menhirkin":        { "label": "Menhirkin",        "keys": ["menhirkin", "igneous", "metamorphic", "sedimentary"] },
+    "oldenborn":        { "label": "Oldenborn",        "keys": ["oldenborn", "oldborn", "oldborne", "tideborn", "tideborne", "earthbound", "lumenwrought", "rustland", "stormborn"] },
+    "qliph-scarred":    { "label": "Qliph-Scarred",    "keys": ["qliph", "chthonic", "diabolic", "husk"] },
+    "sephirotic-scion": { "label": "Sephirotic Scion", "keys": ["sephirotic", "scion", "cherubic", "ophanic", "seraphic"] },
+    "creature":         { "label": "Creatures",        "keys": [] }
+  },
+  "entries": [
+    { "file": "circuitborn-salvage-1.webp",   "label": "Circuitborn · Salvage I",      "lineage": "circuitborn", "heritages": ["salvage"] },
+    { "file": "circuitborn-salvage-2.webp",   "label": "Circuitborn · Salvage II",     "lineage": "circuitborn", "heritages": ["salvage"] },
+    { "file": "circuitborn-salvage-3.webp",   "label": "Circuitborn · Salvage III",    "lineage": "circuitborn", "heritages": ["salvage"] },
+    { "file": "circuitborn-synapse.webp",     "label": "Circuitborn · Synapse",        "lineage": "circuitborn", "heritages": ["synapse"] },
+    { "file": "circuitborn-synapse-1.webp",   "label": "Circuitborn · Synapse I",      "lineage": "circuitborn", "heritages": ["synapse"] },
+    { "file": "circuitborn-synapse-2.webp",   "label": "Circuitborn · Synapse II",     "lineage": "circuitborn", "heritages": ["synapse"] },
+
+    { "file": "cryptidkin-furrykin-1.webp",   "label": "Cryptidkin · Furrykin I",      "lineage": "cryptidkin", "heritages": ["furrykin"] },
+    { "file": "cryptidkin-furrykin-2.webp",   "label": "Cryptidkin · Furrykin II",     "lineage": "cryptidkin", "heritages": ["furrykin"] },
+    { "file": "cryptidkin-furrykin-3.webp",   "label": "Cryptidkin · Jackalope",       "lineage": "cryptidkin", "heritages": ["jackalope", "furrykin"] },
+    { "file": "cryptidkin-furrykin-4.webp",   "label": "Cryptidkin · Furrykin IV",     "lineage": "cryptidkin", "heritages": ["furrykin"] },
+    { "file": "cryptidkin-furrykin-5.webp",   "label": "Cryptidkin · Furrykin V",      "lineage": "cryptidkin", "heritages": ["furrykin", "chupacabra"] },
+    { "file": "chupacabra-background-removed.webp", "label": "Cryptidkin · Chupacabra", "lineage": "cryptidkin", "heritages": ["chupacabra"], "kinds": ["character", "echo", "npc"] },
+
+    { "file": "human-denisovan-1.webp",       "label": "Human · Denisovan",            "lineage": "human", "heritages": ["denisovan"] },
+    { "file": "human-erectus-1.webp",         "label": "Human · Erectus I",            "lineage": "human", "heritages": [] },
+    { "file": "human-erectus-2.webp",         "label": "Human · Erectus II",           "lineage": "human", "heritages": [] },
+
+    { "file": "menhirkin-1.webp",             "label": "Menhirkin I",                  "lineage": "menhirkin", "heritages": [] },
+    { "file": "menhirkin-2.webp",             "label": "Menhirkin II",                 "lineage": "menhirkin", "heritages": [] },
+
+    { "file": "oldborne-1.webp",              "label": "Oldenborn I",                  "lineage": "oldenborn", "heritages": [] },
+    { "file": "oldborne-2.webp",              "label": "Oldenborn II",                 "lineage": "oldenborn", "heritages": [] },
+    { "file": "oldborne-sky.webp",            "label": "Oldenborn · Sky",              "lineage": "oldenborn", "heritages": ["stormborn"] },
+    { "file": "oldborn-tideborn.webp",        "label": "Oldenborn · Tideborn I",       "lineage": "oldenborn", "heritages": ["tideborn"] },
+    { "file": "oldborn-tideborn-2.webp",      "label": "Oldenborn · Tideborn II",      "lineage": "oldenborn", "heritages": ["tideborn"] },
+    { "file": "oldenborn-tideborn-2.webp",    "label": "Oldenborn · Tideborn III",     "lineage": "oldenborn", "heritages": ["tideborn"] },
+    { "file": "oldenborn-earthbound.webp",    "label": "Oldenborn · Earthbound",       "lineage": "oldenborn", "heritages": ["earthbound"] },
+    { "file": "oldenborn-lumenwrought-1.webp","label": "Oldenborn · Lumenwrought I",   "lineage": "oldenborn", "heritages": ["lumenwrought"] },
+    { "file": "oldenborn-lumenwrought-2.webp","label": "Oldenborn · Lumenwrought II",  "lineage": "oldenborn", "heritages": ["lumenwrought"] },
+    { "file": "rustland-scavernger-1.webp",   "label": "Oldenborn · Rustland Scavenger","lineage": "oldenborn", "heritages": ["rustland"] },
+    { "file": "stormborn-nomad-1.webp",       "label": "Oldenborn · Stormborn Nomad I","lineage": "oldenborn", "heritages": ["stormborn"] },
+    { "file": "stormborn-nomad-2.webp",       "label": "Oldenborn · Stormborn Nomad II","lineage": "oldenborn", "heritages": ["stormborn"] },
+    { "file": "stormborn-nomad-3.webp",       "label": "Oldenborn · Stormborn Nomad III","lineage": "oldenborn", "heritages": ["stormborn"] },
+    { "file": "stormborn-nomad-4.webp",       "label": "Oldenborn · Stormborn Nomad IV","lineage": "oldenborn", "heritages": ["stormborn"] },
+
+    { "file": "qliph-scarred-1.webp",         "label": "Qliph-Scarred · Husk",         "lineage": "qliph-scarred", "heritages": ["husk"] },
+    { "file": "qliph-scarred-2.webp",         "label": "Qliph-Scarred II",             "lineage": "qliph-scarred", "heritages": [] },
+    { "file": "qliph-scarred-3.webp",         "label": "Qliph-Scarred · Diabolic",     "lineage": "qliph-scarred", "heritages": ["diabolic"] },
+    { "file": "qliph-scarred-4.webp",         "label": "Qliph-Scarred · Chthonic",     "lineage": "qliph-scarred", "heritages": ["chthonic"] },
+
+    { "file": "sephirotic-scion-1.webp",      "label": "Sephirotic Scion I",           "lineage": "sephirotic-scion", "heritages": [] },
+    { "file": "sephirotic-scion-2.webp",      "label": "Sephirotic Scion · Seraphic",  "lineage": "sephirotic-scion", "heritages": ["seraphic"] },
+    { "file": "sephirotic-scion-3.webp",      "label": "Sephirotic Scion · Ophanic",   "lineage": "sephirotic-scion", "heritages": ["ophanic"] },
+    { "file": "sephirotic-scion-4.webp",      "label": "Sephirotic Scion · Cherubic",  "lineage": "sephirotic-scion", "heritages": ["cherubic"] },
+
+    { "path": "art/bbttcc/asli-tokens/bad_eden_ash_wolf.webp",                "label": "Ash Wolf",                 "lineage": "creature", "heritages": [], "kinds": ["npc"] },
+    { "path": "art/bbttcc/asli-tokens/amy_battle_bassinet_berserker.webp",    "label": "Battle Bassinet Berserker", "lineage": "creature", "heritages": [], "kinds": ["npc"] }
+  ]
+}

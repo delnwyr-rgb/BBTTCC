@@ -1,5 +1,5 @@
 // v1.0.0 — Defuse Tensions (mechanical):
-// Removes "Hostile Population", adds "Loyal Population", and queues +2 Loyalty, +2 Morale on the target hex drawing.
+// Removes "Hostile Population", adds "Loyal Population", and queues +4 Loyalty on the target hex drawing (was +2 Loyalty +2 Morale — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.defuse_tensions.
 
 (() => {
@@ -17,7 +17,7 @@
     if (game?.ready) go(); else Hooks.on("ready", go);
   }
 
-  async function queueDefuseTensions({ targetUuid, loyaltyDelta = 2, moraleDelta = 2, addLoyalTag = true }) {
+  async function queueDefuseTensions({ targetUuid, loyaltyDelta = 2, addLoyalTag = true }) {   // hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.): the old moraleDelta is folded into loyaltyDelta
     if (!targetUuid) return "No target";
     const ref = await fromUuid(targetUuid);
     const doc = ref?.document ?? ref;
@@ -45,10 +45,9 @@
 
     // Goodwill bumps
     pending.loyaltyDelta = Number(pending.loyaltyDelta || 0) + Number(loyaltyDelta || 0);
-    pending.moraleDelta  = Number(pending.moraleDelta  || 0) + Number(moraleDelta  || 0);
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pending });
-    return `Queued: -Hostile Population, +Loyal Population • +${loyaltyDelta} Loyalty, +${moraleDelta} Morale`;
+    return `Queued: -Hostile Population, +Loyal Population • +${loyaltyDelta} Loyalty`;
   }
 
   whenRaidReady((api) => {
@@ -65,11 +64,11 @@
         if (typeof base === "function") {
           try { msg = String(await base({ entry })) || ""; } catch(e){ console.warn(TAG,"base apply error", e); }
         }
-        const m2 = await queueDefuseTensions({ targetUuid: entry?.targetUuid, loyaltyDelta: 2, moraleDelta: 2, addLoyalTag: true });
+        const m2 = await queueDefuseTensions({ targetUuid: entry?.targetUuid, loyaltyDelta: 2, addLoyalTag: true });
         return [msg, m2].filter(Boolean).join(" • ") || "Defuse Tensions queued.";
       }
     });
 
-    console.log(TAG, "installed (-Hostile Population, +Loyal Population, +Loyalty/+Morale).");
+    console.log(TAG, "installed (-Hostile Population, +Loyal Population, +4 Loyalty).");
   });
 })();

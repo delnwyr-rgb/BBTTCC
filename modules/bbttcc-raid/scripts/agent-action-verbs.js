@@ -15,7 +15,7 @@
  *
  * Verbs:
  *   world.setState                         (wraps game.bbttcc.api.gm.setWorld)
- *   faction.setMorale, faction.bumpMorale  (wraps game.bbttcc.api.factions.*)
+ *   faction.setMorale, faction.bumpMorale  (wraps game.bbttcc.api.factions.* — RETIRED 2026-10-18 ruling 19: the API calls are tolerant no-ops)
  *   faction.stockpile.deposit / withdraw / transfer
  *                                           (wraps game.bbttcc.api.factions.stockpile.*)
  *   manifestation.applyDamage              (wraps game.fourththing.rolls._applyDamageToActor)
@@ -99,7 +99,7 @@
       {
         name: "faction.setMorale",
         layer: "action",
-        description: "Set a faction's morale track to an absolute value.",
+        description: "RETIRED 2026-10-18 (ruling 19): faction Morale is no longer a game meter — this verb is a tolerant no-op.",
         args: {
           type: "object",
           required: ["factionId", "value"],
@@ -117,7 +117,7 @@
       {
         name: "faction.bumpMorale",
         layer: "action",
-        description: "Adjust a faction's morale track by a signed delta.",
+        description: "RETIRED 2026-10-18 (ruling 19): faction Morale is no longer a game meter — this verb is a tolerant no-op.",
         args: {
           type: "object",
           required: ["factionId", "delta"],

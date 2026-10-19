@@ -190,7 +190,8 @@
   async function creditFaction(faction, deltasOp, context = {}) {
     if (!faction) return null;
     const op = OP();
-    const perOp = Number(op?.marksPerOp?.() ?? op?.OP_TO_MARKS ?? 10) || 10;
+    const perOp = Number(op?.marksPerOp?.() ?? op?.OP_TO_MARKS) || 0;   // the live engine is the only ratio authority (marks-everywhere)
+    if (!perOp) { console.warn("[rigs-dnd5e] marks ratio unavailable — credit skipped", deltasOp); return null; }
     const marks = {};
     for (const [ch, n] of Object.entries(deltasOp ?? {})) { const m = Math.round((Number(n) || 0) * perOp); if (m) marks[ch] = m; }
     if (!Object.keys(marks).length) return null;

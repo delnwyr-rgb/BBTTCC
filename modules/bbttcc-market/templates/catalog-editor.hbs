@@ -50,6 +50,16 @@
           <label>Tags (comma)</label>
           <input type="text" data-role="vendorTags" value="{{vendor.tagsRaw}}"/>
         </div>
+
+        <div class="field" data-tooltip="{{bbttccTip 'market' 'vendorFaction'}}" data-tour="market.vendorFaction">
+          <label>Owning faction (sell-back stance)</label>
+          <select data-role="vendorFaction">
+            <option value="" {{#unless vendor.factionId}}selected{{/unless}}>{{#if autoFactionName}}(auto by name: {{autoFactionName}}){{else}}(none — neutral){{/if}}</option>
+            {{#each factionOptions}}
+              <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
       </div>
     </section>
 
@@ -81,6 +91,7 @@
                     <option value="facility" {{#if isFacility}}selected{{/if}}>facility</option>
                     <option value="hex_asset" {{#if isHexAsset}}selected{{/if}}>hex_asset</option>
                     <option value="rig_upgrade" {{#if isRigUpgrade}}selected{{/if}}>rig_upgrade</option>
+                    <option value="contract" {{#if isContract}}selected{{/if}}>contract</option>
                     <option value="facility_upgrade" {{#if isFacilityUpgrade}}selected{{/if}}>facility_upgrade</option>
                     <option value="actor" {{#if isActor}}selected{{/if}}>actor (Rig/Boss/NPC)</option>
                   </select>

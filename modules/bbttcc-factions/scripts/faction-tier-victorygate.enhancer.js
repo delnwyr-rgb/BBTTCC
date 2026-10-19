@@ -84,18 +84,21 @@
 
     // Current tier (if unset, treat as derived from badge for snapshot purposes)
     const curTierRaw = get(actor, `flags.${MODF}.tier`, null);
+    // retired 2026-10-18, ruling 18: the Victory badge no longer gates tiers.
+    // A missing tier defaults to 1 (plain); the snapshot is still written so
+    // downstream readers keep their shape, but meetsNextTier is always true.
     const curTier = (curTierRaw === null || curTierRaw === undefined)
-      ? tierFromBadge(badgeKey)   // facts-ok: the victory gate DERIVES the badge→tier snapshot that facts.faction.tier reads
+      ? 1
       : Math.max(0, Math.min(4, Math.floor(Number(curTierRaw) || 0)));
 
     const requiredKey = requiredBadgeForNextTier(curTier);
-    const meetsNext = meetsRequiredBadge(badgeKey, requiredKey);
+    void meetsRequiredBadge; void tierFromBadge; // retained helpers, unused since ruling 18
 
     const snapshot = {
       badgeKey,
-      tierFromBadge: tierFromBadge(badgeKey),   // facts-ok: the victory gate DERIVES the badge→tier snapshot that facts.faction.tier reads
+      tierFromBadge: curTier,
       requiredBadgeForNextTier: requiredKey,
-      meetsNextTier: meetsNext,
+      meetsNextTier: true,
       updatedTs: Date.now()
     };
 
@@ -105,7 +108,7 @@
 
     // Optional: set tier only if missing (do not override manual tier)
     if (curTierRaw === null || curTierRaw === undefined) {
-      patch[`flags.${MODF}.tier`] = snapshot.tierFromBadge;   // facts-ok: the victory gate DERIVES the badge→tier snapshot that facts.faction.tier reads
+      patch[`flags.${MODF}.tier`] = 1;   // retired 2026-10-18, ruling 18: plain default, no badge derivation
     }
 
     await actor.update(patch, { diff: true, recursive: true });

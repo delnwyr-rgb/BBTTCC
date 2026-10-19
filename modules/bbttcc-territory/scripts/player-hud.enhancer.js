@@ -192,14 +192,14 @@
   async function openFaction() {
     const factions = getOwnedFactions();
     if (!factions.length) {
-      ui.notifications?.warn?.("No faction assigned to you yet — ask the GM to grant ownership.");
+      ui.notifications?.warn?.("No Domain is yours yet — ask the GM to link your steward.");
       return;
     }
     if (factions.length === 1) return factions[0].sheet?.render(true, { focus:true });
     const opts = factions.map(f => `<option value="${f.id}">${esc(f.name)}</option>`).join("");
     new Dialog({
-      title: "Open Faction",
-      content: `<div class="form-group"><label>Faction</label><select name="fid" style="width:100%;">${opts}</select></div>`,
+      title: "Open Domain",
+      content: `<div class="form-group"><label>Domain</label><select name="fid" style="width:100%;">${opts}</select></div>`,
       buttons: {
         open: { icon:'<i class="fas fa-flag"></i>', label:"Open", callback: html => {
           const fid = String(html.find('select[name="fid"]').val()||"");
@@ -686,6 +686,13 @@
     return parts.join("");
   }
 
+  /** Hired crews / associations (bbttcc-market contracts, ruling 15) → [{label, name, clock}]. */
+  function contractRows(steward) {
+    try {
+      const C = game.bbttcc?.api?.contracts; if (!C?.list) return [];
+      return C.list(steward).map(c => ({ label: c.familyLabel, name: c.displayName, clock: c.turnsLeft === Infinity ? "standing" : (c.turnsLeft === 1 ? "last turn" : `${c.turnsLeft} turns`) }));
+    } catch (_e) { return []; }
+  }
   function abilitiesTrayHTML(steward) {
     if (IS_5E()) return abilitiesTrayHTML5e(steward);
     const { abilities, ancestry, echo, strikes, manifs } = collectSections(steward);
@@ -703,12 +710,16 @@
     if (apts.length) parts.push(section("aptitudes", "Aptitudes", apts.length, aptitudesBody(steward)));
     if (abilities.length) parts.push(section("abilities", "Steward Abilities", abilities.length, itemsBody(abilities, "ability")));
     if (ancestry.length)  parts.push(section("ancestry",  "Ancestry Abilities", ancestry.length, itemsBody(ancestry, "ability")));
-    if (echo.length) {
-      const echoInvokeBtns = `<div class="bbttcc-echo-actions" style="display:flex;gap:.35rem;padding:.3rem .4rem .4rem;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:.3rem;">
+    const contracts = contractRows(steward);
+    if (echo.length || contracts.length) {
+      // ruling 15 (2026-10-18): the Retinue is hired — name the contract and its clock above the crew's feats
+      const contractStrip = contracts.length ? `<div class="bbttcc-retinue-contracts" style="padding:.25rem .4rem .1rem;font-size:.8rem;opacity:.9;">${contracts.map(c =>
+        `<div style="display:flex;justify-content:space-between;gap:.5rem;"><span>${esc(c.label)}: <b>${esc(c.name)}</b></span><span style="opacity:.7;">${esc(c.clock)}</span></div>`).join("")}</div>` : "";
+      const echoInvokeBtns = contractStrip + `<div class="bbttcc-echo-actions" style="display:flex;gap:.35rem;padding:.3rem .4rem .4rem;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:.3rem;">
         <button type="button" data-ft-spotlight="crew" title="Spotlight a member from an active crew — one beat per scene" style="padding:.2rem .55rem;display:flex;align-items:center;gap:.25rem;font-size:.82rem;"><i class="fas fa-star"></i> Invoke Crew</button>
         <button type="button" data-ft-spotlight="occult" title="Spotlight a member from an active association — one beat per scene" style="padding:.2rem .55rem;display:flex;align-items:center;gap:.25rem;font-size:.82rem;"><i class="fas fa-star"></i> Invoke Association</button>
       </div>`;
-      parts.push(section("echo", "Echo Assets", echo.length, echoInvokeBtns + itemsBody(echo, "ability", "ghost")));
+      parts.push(section("echo", "Retinue", echo.length || contracts.length, echoInvokeBtns + itemsBody(echo, "ability", "ghost")));
     }
     if (strikes.length)   parts.push(section("strikes",   "Strikes", strikes.length, itemsBody(strikes, "strike")));
     if (manifs.length)    parts.push(section("manifestations", "Manifestations", manifs.length, itemsBody(manifs, manifFireKind)));
@@ -1020,7 +1031,7 @@
     root.innerHTML = `
       <div class="bbttcc-player-hud-bar">
         <button type="button" class="bbttcc-btn" data-action="faction">
-          <i class="fas fa-flag"></i><span>Faction</span>
+          <i class="fas fa-flag"></i><span>Domain</span>
         </button>
         <button type="button" class="bbttcc-btn" data-action="steward">
           <i class="fas fa-user-shield"></i><span>Steward</span>

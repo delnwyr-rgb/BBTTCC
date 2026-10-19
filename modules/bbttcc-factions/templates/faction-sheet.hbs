@@ -103,12 +103,7 @@
                     <strong>{{localize "BBTTCC.Labels.TotalOPs"}}:</strong> {{fx.totalOPs}} / {{fx.maxOPs}}
                   </div>
 
-                  <div class="bbttcc-overview-summary-chip">
-                    <span style="font-weight:700;" data-tooltip="{{bbttcc_factionTip 'vp'}}">VP: {{fx.victory.vp}}</span>
-                    <span style="font-weight:700;" data-tooltip="{{bbttcc_factionTip 'unity'}}">Unity</span>
-                    <div class="bbttcc-meter" data-tooltip="{{bbttcc_factionTip 'unity'}}"><div class="bbttcc-meter-fill" style="width: {{fx.victory.unity}}%;"></div></div>
-                    <span data-tooltip="{{bbttcc_factionTip 'unity'}}">{{fx.victory.unity}}%</span>
-                  </div>
+                  {{!-- VP / Unity summary chip removed 2026-10-18 (ruling 18): meters retired --}}
                 </div>
               </div>
             </div>
@@ -157,9 +152,6 @@
         <fieldset class="bbttcc-card bbttcc-card-health">
           <legend>Faction Health</legend>
           <div class="flexrow" style="justify-content:space-between; flex-wrap:wrap; font-size:12px; color:#e5e7eb;">
-            <div data-tooltip="{{bbttcc_factionTip 'vp'}}"><strong style="color:#1e90ff;">Victory:</strong> <span class="bbttcc-meter">{{fx.victory.vp}}</span> / 25</div>
-            <div data-tooltip="{{bbttcc_factionTip 'unity'}}"><strong style="color:#20b2aa;">Unity:</strong> <span class="bbttcc-meter">{{fx.victory.unity}}%</span></div>
-            <div data-tooltip="{{bbttcc_factionTip 'morale'}}"><strong style="color:#daa520;">Morale:</strong> <span class="bbttcc-meter">{{fx.mods.morale}}%</span></div>
             <div data-tooltip="{{bbttcc_factionTip 'loyalty'}}"><strong style="color:#228b22;">Loyalty:</strong> <span class="bbttcc-meter">{{fx.mods.loyalty}}%</span></div>
             <div data-tooltip="{{bbttcc_factionTip 'darkness'}}"><strong style="color:#b22222;">Darkness:</strong> <span class="bbttcc-meter">{{fx.darkness.global}}</span></div>
           </div>
@@ -235,7 +227,7 @@
         </fieldset>
 
         <fieldset class="bbttcc-card bbttcc-card-politics">
-          <legend>Political Pressure</legend>
+          <legend>Convictions</legend>
 
           {{#if fx.politicalPressure}}
             <div class="flexrow" style="justify-content:space-between; flex-wrap:wrap; gap:.75rem; align-items:center;">
@@ -302,11 +294,11 @@
                   </tbody>
                 </table>
                 <p class="hint" style="margin:.35rem 0 0;">
-                  Showing characters with a declared Political Philosophy.
+                  Showing stewards who have sworn their Convictions.
                   Total counted: {{fx.politicalPressure.totalWithPhilosophy}}.
                 </p>
               {{else}}
-                <em style="opacity:.75;">No roster members have a Political Philosophy set yet.</em>
+                <em style="opacity:.75;">No steward has sworn their Convictions yet (Steward tab → Convictions).</em>
               {{/if}}
             </div>
 
@@ -354,7 +346,7 @@
               </p>
             {{/if}}
           {{else}}
-            <em style="opacity:.75;">Political Pressure unavailable (AAE not loaded).</em>
+            <em style="opacity:.75;">Convictions unavailable (AAE module not loaded).</em>
           {{/if}}
         </fieldset>
 
@@ -405,10 +397,6 @@
             <strong style="display:block; margin-bottom:.25rem;">Tracks</strong>
             <div class="flexrow" style="gap:.75rem; flex-wrap:wrap; align-items:flex-end;">
               <div class="bbttcc-field" style="min-width:140px;">
-                <label>Morale</label>
-                <input type="number" min="0" step="1" value="{{fx.mods.morale}}" data-gm-track="morale"/>
-              </div>
-              <div class="bbttcc-field" style="min-width:140px;">
                 <label>Loyalty</label>
                 <input type="number" min="0" step="1" value="{{fx.mods.loyalty}}" data-gm-track="loyalty"/>
               </div>
@@ -419,14 +407,6 @@
               <div class="bbttcc-field" style="min-width:140px;">
                 <label>Build Units (BU)</label>
                 <input type="number" min="0" step="1" value="{{fx.buildUnits}}" data-gm-track="buildUnits" data-tooltip="Engineering Build Units banked by this faction (spent on Fortify / Repair / Townbuilder from any owned hex). Set to 0 for a fresh run."/>
-              </div>
-              <div class="bbttcc-field" style="min-width:140px;">
-                <label>Victory (VP)</label>
-                <input type="number" min="0" step="1" value="{{fx.victory.vp}}" data-gm-victory="vp"/>
-              </div>
-              <div class="bbttcc-field" style="min-width:140px;">
-                <label>Unity (%)</label>
-                <input type="number" min="0" step="1" value="{{fx.victory.unity}}" data-gm-victory="unity"/>
               </div>
               <div class="bbttcc-field" style="min-width:200px;">
                 <label>Faction Standing (level)</label>
@@ -493,7 +473,7 @@
         <fieldset class="bbttcc-card bbttcc-card-actions">
           <legend>Faction Actions</legend>
           <div class="flexrow" style="gap:.5rem; justify-content:flex-end; flex-wrap:wrap;">
-            <button type="button" class="button" data-open-advisor>
+            <button type="button" class="button" data-open-advisor data-alpha-hide="advisors">
               <i class="fas fa-compass"></i> Open Advisor
             </button>
             <button type="button" class="button" data-open-activity-planner>

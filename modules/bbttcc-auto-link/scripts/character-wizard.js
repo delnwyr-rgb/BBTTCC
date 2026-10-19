@@ -928,7 +928,9 @@ async function importDnd5eBuild(actor, payload) {
 
 async function createActorShellFromPayload(payload) {
   payload = payload || {};
-  const defaultImg = "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/QlipothicWhorlDude2.png";
+  // Aslı token from the review screen (2026-10-17) — portrait AND token; the
+  // GOTTGAIT placeholder only when no art was picked (picker unavailable).
+  const defaultImg = String(payload.img || "").trim() || "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/QlipothicWhorlDude2.png";
   const actor = await Actor.create({
     name: payload.name || "New Operative",
     type: "character",

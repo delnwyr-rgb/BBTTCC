@@ -383,7 +383,6 @@ async function showTextStep(step, ctx) {
           touchedHex = true;
 
           tracks.morale   = n(tracks.morale)   - 1;
-          tracks.unity    = n(tracks.unity)    - 1;
           tracks.darkness = n(tracks.darkness) + 2;
           touchedTracks = true;
           break;
@@ -444,14 +443,12 @@ async function showTextStep(step, ctx) {
             warn("Failed to grant Spark of the Shattered Chorus:", e);
           }
           tracks.morale = n(tracks.morale) + 1;
-          tracks.unity  = n(tracks.unity)  + 1;
           touchedTracks = true;
           break;
         }
 
         case "disruptive_feedback": {
           tracks.morale   = n(tracks.morale)   - 1;
-          tracks.unity    = n(tracks.unity)    - 1;
           tracks.darkness = n(tracks.darkness) + 1;
           touchedTracks = true;
 
@@ -495,7 +492,6 @@ async function showTextStep(step, ctx) {
       switch (outcomeKey) {
         case "diplomatic_breakthrough": {
           tracks.morale   = n(tracks.morale)   + 1;
-          tracks.unity    = n(tracks.unity)    + 2;
           tracks.darkness = Math.max(0, n(tracks.darkness) - 1);
           touchedTracks = true;
 
@@ -527,7 +523,6 @@ async function showTextStep(step, ctx) {
         }
 
         case "backchannel_deal": {
-          tracks.unity = n(tracks.unity) + 1;
           tracks.morale = n(tracks.morale) - 1;
           touchedTracks = true;
 
@@ -547,7 +542,6 @@ async function showTextStep(step, ctx) {
       switch (outcomeKey) {
         case "controlled_deescalation": {
           tracks.morale = n(tracks.morale) - 1;
-          tracks.unity  = n(tracks.unity)  + 1;
           touchedTracks = true;
 
           opBank.diplomacy = Math.max(0, n(opBank.diplomacy) - 10);
@@ -593,7 +587,6 @@ async function showTextStep(step, ctx) {
 
         case "strategic_withdrawal": {
           tracks.morale = n(tracks.morale) - 1;
-          tracks.unity  = n(tracks.unity)  + 1;
           touchedTracks = true;
 
           opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
@@ -623,7 +616,6 @@ async function showTextStep(step, ctx) {
           touchedOp = true;
 
           tracks.morale = n(tracks.morale) + 1;
-          tracks.unity  = n(tracks.unity)  + 1;
           touchedTracks = true;
           touchedHex = true;
           break;
@@ -651,7 +643,6 @@ async function showTextStep(step, ctx) {
           touchedOp = true;
 
           tracks.morale = n(tracks.morale) - 1;
-          tracks.unity  = n(tracks.unity)  - 1;
           touchedTracks = true;
           touchedHex = true;
           break;
@@ -666,7 +657,6 @@ async function showTextStep(step, ctx) {
           touchedOp = true;
 
           tracks.morale   = n(tracks.morale)   + 1;
-          tracks.unity    = n(tracks.unity)    + 2;
           tracks.darkness = Math.max(0, n(tracks.darkness) - 1);
           touchedTracks = true;
           touchedHex = true;
@@ -1056,7 +1046,6 @@ async function showTextStep(step, ctx) {
           touchedHex = true;
 
           tracks.darkness = n(tracks.darkness) + 1;
-          tracks.unity    = n(tracks.unity)    + 1;
           touchedTracks = true;
           break;
         }
@@ -1075,7 +1064,6 @@ async function showTextStep(step, ctx) {
           touchedHex = true;
 
           tracks.morale   = n(tracks.morale)   + 2;
-          tracks.unity    = n(tracks.unity)    + 1;
           tracks.darkness = Math.max(0, n(tracks.darkness) - 1);
           touchedTracks = true;
           break;
@@ -1157,8 +1145,6 @@ async function showTextStep(step, ctx) {
           if (!hasMod(label)) addMod(label);
           hexFlags.modifiers = modifiers;
           touchedHex = true;
-
-          tracks.unity  = n(tracks.unity)  + 2;
           tracks.morale = n(tracks.morale) + 1;
           touchedTracks = true;
           break;
@@ -1177,8 +1163,6 @@ async function showTextStep(step, ctx) {
           if (!hasMod(label)) addMod(label);
           hexFlags.modifiers = modifiers;
           touchedHex = true;
-
-          tracks.unity    = n(tracks.unity)    - 1;
           tracks.darkness = n(tracks.darkness) + 1;
           touchedTracks = true;
           break;
@@ -1193,7 +1177,6 @@ async function showTextStep(step, ctx) {
       switch (outcomeKey) {
         case "rare_alignment": {
           tracks.morale   = n(tracks.morale)   + 1;
-          tracks.unity    = n(tracks.unity)    + 1;
           tracks.darkness = Math.max(0, n(tracks.darkness) - 1);
           touchedTracks = true;
           break;
@@ -1201,7 +1184,6 @@ async function showTextStep(step, ctx) {
 
         case "paradoxic_echo": {
           tracks.morale   = n(tracks.morale)   - 1;
-          tracks.unity    = n(tracks.unity)    - 1;
           tracks.darkness = n(tracks.darkness) + 2;
           touchedTracks = true;
           break;
@@ -1245,7 +1227,6 @@ async function showTextStep(step, ctx) {
           touchedOp = true;
 
           tracks.morale   = n(tracks.morale)   - 2;
-          tracks.unity    = n(tracks.unity)    - 1;
           tracks.darkness = n(tracks.darkness) + 3;
           touchedTracks = true;
 
@@ -1266,8 +1247,6 @@ async function showTextStep(step, ctx) {
           opBank.violence  = Math.max(0, n(opBank.violence)  - 10);
           opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
-
-          tracks.unity    = n(tracks.unity)    + 2;
           tracks.darkness = n(tracks.darkness) + 2;
           touchedTracks = true;
 

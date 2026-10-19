@@ -53,28 +53,28 @@
       nextTier: 1,
       reach: { minHexes: 2, minHexesAtOrAbove: { progress: 3, count: 1 } },
       stability: { minStableTurns: 2, maxOverextDuringSpan: 1 },
-      identity: { requiresVictoryMeetsNextTier: true }
+      identity: { requiresVictoryMeetsNextTier: false }   // retired 2026-10-18, ruling 18: no Victory badge gate
     },
     // T1 -> T2
     1: {
       nextTier: 2,
       reach: { minHexes: 4, minAvgIntegration: 3 },
       stability: { minStableTurns: 3, maxOverextDuringSpan: 1 },
-      identity: { requiresVictoryMeetsNextTier: true }
+      identity: { requiresVictoryMeetsNextTier: false }   // retired 2026-10-18, ruling 18: no Victory badge gate
     },
     // T2 -> T3
     2: {
       nextTier: 3,
       reach: { minHexes: 7, minHexesAtOrAbove: { progress: 5, count: 2 } },
       stability: { minStableTurns: 4, maxOverextDuringSpan: 1 },
-      identity: { requiresVictoryMeetsNextTier: true }
+      identity: { requiresVictoryMeetsNextTier: false }   // retired 2026-10-18, ruling 18: no Victory badge gate
     },
     // T3 -> T4 (Mythic ramp: allow span to touch STRAINED)
     3: {
       nextTier: 4,
       reach: { minHexes: 10, minHexesAtOrAbove: { progress: 6, count: 1 } },
       stability: { minStableTurns: 5, maxOverextDuringSpan: 2 },
-      identity: { requiresVictoryMeetsNextTier: true }
+      identity: { requiresVictoryMeetsNextTier: false }   // retired 2026-10-18, ruling 18: no Victory badge gate
     }
   };
 

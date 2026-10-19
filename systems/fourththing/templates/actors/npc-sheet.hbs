@@ -125,8 +125,8 @@
     {{!-- NPC Parity Sprint C (2026-05-14) — Bad Eden bridges + Add Effect. --}}
     <div class="ft-bbttcc-bridges" style="display:flex; gap:0.25rem;">
       <button type="button" data-action="ftBBTTCCBridge"    class="ft-npc-tool" data-tooltip="Open the Bad Eden Bridge — campaign-state actions (faction OP transfer, hex bond, scenario beats).">🜲 Bridge</button>
-      <button type="button" data-action="ftBBTTCCTikkun"    class="ft-npc-tool" data-tooltip="Open the Tikkun panel — Sparks ledger / repair ritual / deposit (B3 system).">✦ Tikkun</button>
-      <button type="button" data-action="ftBBTTCCRadiation" class="ft-npc-tool" data-tooltip="Open the Radiation track — exposure ledger + manifestation interactions.">☢ Rad</button>
+      <button type="button" data-action="ftBBTTCCTikkun"    class="ft-npc-tool" data-alpha-hide="tikkunApp" data-tooltip="Open the Tikkun panel — Sparks ledger / repair ritual / deposit (B3 system).">✦ Tikkun</button>
+      <button type="button" data-action="ftBBTTCCRadiation" class="ft-npc-tool" data-alpha-hide="radiationApp" data-tooltip="Open the Radiation track — exposure ledger + manifestation interactions.">☢ Rad</button>
     </div>
     <button type="button" data-action="ftAddEffect" class="ft-npc-tool" data-tooltip="Author a new Active Effect on this actor (V14 ActiveEffectConfig — GM-style edit).">+ Effect</button>
     <button type="button" data-action="ftEndEffects" class="ft-npc-tool" data-tooltip="End Effects — clear every active condition and every actor-owned state / modifier in one go (checklist confirm). Item passives are never touched.">⏹ End</button>
@@ -530,7 +530,7 @@
           <h3>Manifestations &amp; Features</h3>
           {{#if hasManifestations}}<span class="ft-mini-count">{{manifestRows.length}}</span>{{/if}}
         </div>
-        <div class="ft-header-actions">
+        <div class="ft-header-actions" data-alpha-hide="manifestationWizard">
           <button type="button" data-action="ftManifestCreate" class="ft-add-btn" data-tooltip="Open the Manifestation Engine to author a custom NPC ability (breath weapon, aura, signature attack…).">+ Add Feature</button>
           <details class="ft-header-overflow">
             <summary class="ft-add-btn ft-add-btn-subtle">⋯</summary>

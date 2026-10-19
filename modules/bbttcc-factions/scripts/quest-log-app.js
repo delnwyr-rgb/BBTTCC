@@ -384,7 +384,7 @@
         if (!qid) return;
 
         const faction = await this._getFaction();
-        if (!faction) return ui.notifications?.error?.("Quest Log: faction not found.");
+        if (!faction) return ui.notifications?.error?.("Quest Log: Domain not found.");
 
         const reg = readRegistry();
         const qname = qName(reg, qid);
@@ -643,7 +643,7 @@
 
     game.bbttcc.api.quests.openQuestLog = async ({ factionId, factionActor } = {}) => {
       const a = await resolveActorRef(factionActor || factionId);
-      if (!a) return ui.notifications?.error?.("Quest Log: faction not found.");
+      if (!a) return ui.notifications?.error?.("Quest Log: Domain not found.");
       // Reuse the open window: a second instance with the same fixed id replaced the first
       // one's element without closing it, orphaning its updateActor/updateSetting hooks.
       const existing = foundry.applications.instances?.get?.("bbttcc-quest-log");

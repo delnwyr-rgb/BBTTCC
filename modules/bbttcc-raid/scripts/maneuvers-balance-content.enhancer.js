@@ -153,10 +153,7 @@
             { type: "playCanvasVfx", kind: "impact", color: 0xc24a1f,
               note: "Crack the Keep: breach burst VFX." }
           ],
-          factionEffects: [{
-            factionId: ctx.attackerFactionId || null, moraleDelta: 1, when: "afterRound",
-            note: "Crack the Keep: +1 morale on the breach."
-          }],
+          factionEffects: [],   // (+1 Morale on the breach retired 2026-10-18, ruling 19)
           meta: { source: "throughput", maneuverKey: "crack_the_keep", preview: true }
         };
       }
@@ -235,15 +232,12 @@
       fireMode: "post-commit",
       costBand: "medium",
       cost: { culture: 30, softpower: 10 }, // 40 marks
-      effectsText: "On success: win hearts as well as ground — faction morale +2.",
-      description: "<p>Songs, stories, and the right gift at the right time turn a victory into a legend people repeat. On a successful round, <b>faction morale +2.</b></p>",
+      effectsText: "On success: win hearts as well as ground — the victory becomes a story people repeat.",   // (faction Morale +2 retired 2026-10-18, ruling 19)
+      description: "<p>Songs, stories, and the right gift at the right time turn a victory into a legend people repeat.</p>",
       throughput: function (ctx) {
         if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
         return {
-          factionEffects: [{
-            factionId: ctx.attackerFactionId || null, moraleDelta: 2, when: "afterRound",
-            note: "Cultural Offensive: +2 morale on success."
-          }],
+          factionEffects: [],   // (+2 Morale retired 2026-10-18, ruling 19)
           meta: { source: "throughput", maneuverKey: "cultural_offensive", preview: true }
         };
       }

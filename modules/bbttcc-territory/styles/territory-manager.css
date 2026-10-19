@@ -717,12 +717,11 @@
   flex: 0 0 auto;
 }
 
-/* Keep open Foundry windows above the bar */
-.application,
-.app,
-.window-app {
-  z-index: 100 !important;
-}
+/* 2026-10-17 (Dave: "click a sheet and bring it to the front"): the old rule here pinned
+   EVERY window — `.application, .app, .window-app { z-index: 100 !important }` — so the
+   inline z-index Foundry writes in bringToFront()/bringToTop() could never win and every
+   window sat at 100 in DOM order; clicking raised nothing. Foundry already starts windows
+   at --z-index-window (100) and counts up, which is above the bar's 45, so no rule is needed. */
 
 /* On narrower screens, still keep a single-row scroller instead of wrapping */
 @media (max-width: 1100px) {

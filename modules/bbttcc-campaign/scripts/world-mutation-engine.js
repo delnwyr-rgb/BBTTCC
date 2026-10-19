@@ -140,13 +140,15 @@
     const victory = clone(flags.victory || {});
     const rawDark = flags.darkness;
 
-    // Morale/Loyalty are stored as simple numbers (0-100) in this world.
-    const morale  = clampPct((Number(flags.morale  ?? 50)) + Number(opts.moraleDelta   || 0));
+    // Loyalty is stored as a simple number (0-100) in this world.
     const loyalty = clampPct((Number(flags.loyalty ?? 50)) + Number(opts.loyaltyDelta  || 0));
 
-    // Unity/VP live under flags.victory in this world.
-    const unity = clampPct((Number(victory.unity ?? 0)) + Number(opts.unityDelta || 0));
-    const vp    = Math.max(0, (Number(victory.vp ?? 0)) + Number(opts.vpDelta || 0));
+    // Unity/VP retired 2026-10-18 (ruling 18) and Morale retired 2026-10-18 (ruling 19):
+    // unityDelta / vpDelta / moraleDelta are accepted and ignored.
+    if ((Number(opts.unityDelta) || Number(opts.vpDelta) || Number(opts.moraleDelta)) && !_internalApplyDelta.__retiredWarned) {
+      _internalApplyDelta.__retiredWarned = true;
+      console.debug(TAG, "vpDelta/unityDelta (ruling 18) and moraleDelta (ruling 19) are retired (2026-10-18) — ignored");
+    }
 
     // Darkness is historically either:
     // - a simple number (legacy alpha worlds): flags.darkness = 2
@@ -165,12 +167,9 @@
 
     const darkNext = Math.max(0, darkCur + Number(opts.darknessDelta || 0));
 
-    flags.morale  = morale;
     flags.loyalty = loyalty;
 
-    victory.unity = unity;
-    victory.vp    = vp;
-    flags.victory = victory;
+    void victory;   // flags.victory is left untouched (sparks / unityMap / tempCapBonus live there)
 
     // Preserve the existing darkness shape to avoid breaking sheet renderers.
     if (rawDark != null && typeof rawDark === "object") {
@@ -1264,11 +1263,11 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       let factionId = row.factionId;
       if ((!factionId || factionId === "") && defaultFactionId) factionId = defaultFactionId;
 
-      const m  = Number(row.moraleDelta   ?? 0) || 0;
+      const m  = 0;   // row.moraleDelta retired 2026-10-18 (ruling 19) — no effect
       const l  = Number(row.loyaltyDelta  ?? 0) || 0;
-      const u  = Number(row.unityDelta    ?? 0) || 0;
+      const u  = 0;   // row.unityDelta retired 2026-10-18 (ruling 18) — no effect
       const dk = Number(row.darknessDelta ?? 0) || 0;
-      const vp = Number(row.vpDelta ?? 0) || 0;
+      const vp = 0;   // row.vpDelta retired 2026-10-18 (ruling 18) — no effect
       const opD = (row.opDeltas && typeof row.opDeltas === "object") ? row.opDeltas : null;
 
       // Deferred / Recurring OP scheduling (do NOT apply immediately)
@@ -1976,8 +1975,9 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           const fset = new Set(fids.map(x => String(x || "").replace(/^Actor\./, "")));
           const facs = [...fset].map(id => game.actors.get(id)).filter(Boolean);
           const num = (v) => (v && typeof v === "object") ? Number(v.value || 0) : Number(v || 0);
-          const morale = facs.length ? Math.round(facs.reduce((a, f) => a + num(get(f, "flags.bbttcc-factions.morale", 0)), 0) / facs.length) : null;
+          // Faction Morale retired 2026-10-18 (ruling 19): the "mood" band reads Loyalty on both axes now (same bands).
           const loyalty = facs.length ? Math.round(facs.reduce((a, f) => a + num(get(f, "flags.bbttcc-factions.loyalty", 0)), 0) / facs.length) : null;
+          const morale = loyalty;
           let footprint = 0;
           for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) { const t2 = d.flags && d.flags["bbttcc-territory"]; if (!t2 || !fset.has(String(t2.factionId || ""))) continue; const m2 = (Array.isArray(t2.modifiers) ? t2.modifiers : []).map(norm); if (m2.includes("fallout bloom") || m2.includes("damaged infrastructure") || m2.includes("contaminated")) footprint++; }
           const band = (v, hi, mid) => v == null ? "unknown" : v >= hi ? "steady" : v >= mid ? "uneasy" : "strained";
@@ -2130,6 +2130,48 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     }
 
+    // ── openMarket (ALPHA teaching beat 5, 2026-10-17): worldEffects.openMarket = { vendorId?, vendorName?, note?, activate?, closeOnTurnEnd? } ──
+    // Mirrors openTravel: every connected client opens the Market on that vendor (the app itself keeps
+    // players on active vendors and on their own faction). Fires at the beat's tail like any effect.
+    // activate:true (Dave 2026-10-17: "the market activates when the players are in the scene with it") flips the
+    // vendor's player-visibility switch ON first — a travelling vendor (Trade Caravan) can stay inactive between
+    // visits. closeOnTurnEnd:true stages it in `bbttcc-campaign.marketStaging`; the turn-end sweep flips it OFF again.
+    if (we.openMarket && typeof we.openMarket === "object") {
+      try {
+        const vid = _resolveVendorId(we.openMarket);
+        const payload = {
+          vendorId:   vid || String(we.openMarket.vendorId || "").trim(),
+          vendorName: String(we.openMarket.vendorName || "").trim(),
+          note:       String(we.openMarket.note || "").trim()
+        };
+        if (we.openMarket.activate === true) {
+          if (vid) {
+            const stage = we.openMarket.closeOnTurnEnd === true;
+            await _setVendorActive(vid, true, { stage, beatId: beatCtx.beatId });
+            notes.push(`activateVendor:${vid}${stage ? "(closes at turn end)" : ""}`);
+          } else console.warn(TAG, "openMarket.activate: vendor not found", we.openMarket);
+        }
+        try { game.socket?.emit?.("module.bbttcc-campaign", { type: "bbttccOpenMarket", payload }); } catch (_e) {}
+        await _openMarketOnThisClient(payload); // sockets don't echo to the sender
+        changed = true;
+        notes.push("openMarket" + ((payload.vendorId || payload.vendorName) ? `:${payload.vendorId || payload.vendorName}` : ""));
+      } catch (e) { console.warn(TAG, "openMarket failed", e); }
+    }
+
+    // ── closeMarket (2026-10-17): worldEffects.closeMarket = { vendorId?, vendorName? } — the vendor goes inactive for players now ──
+    // The explicit "the convoy rolls on" counterpart of openMarket.activate (the turn-end sweep is the implicit one).
+    if (we.closeMarket && typeof we.closeMarket === "object") {
+      try {
+        const vid = _resolveVendorId(we.closeMarket);
+        if (vid) {
+          await _setVendorActive(vid, false, {});
+          try { game.socket?.emit?.("module.bbttcc-campaign", { type: "bbttccRefreshMarket", payload: {} }); } catch (_e) {}
+          await _refreshMarketOnThisClient();
+          changed = true; notes.push(`closeMarket:${vid}`);
+        } else console.warn(TAG, "closeMarket: vendor not found", we.closeMarket);
+      } catch (e) { console.warn(TAG, "closeMarket failed", e); }
+    }
+
     if (changed) console.log(TAG, "Applied worldEffects", { beatId: beatCtx.beatId, beatType: beatCtx.beatType, notes: notes });
     else console.log(TAG, "No worldEffects applied (no-ops)", { beatId: beatCtx.beatId });
 
@@ -2188,6 +2230,117 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     } catch (e) { console.warn(TAG, "openTravelOnThisClient failed", e); }
   }
 
+  // ── openMarket client-side plumbing (2026-10-17) ───────────────────────────
+  // Point this client's Market context at the vendor (lastContext is client-scoped), then open it.
+  async function _openMarketOnThisClient({ vendorId = "", vendorName = "", note = "" } = {}) {
+    try {
+      const M = game.bbttcc?.api?.market;
+      if (!M?.openMarket) return;
+      let vid = String(vendorId || "").trim();
+      if (!vid && vendorName) {
+        const want = _normHexName(vendorName);
+        const v = (typeof M.listVendors === "function" ? M.listVendors() : []).find(x => _normHexName(x?.name) === want);
+        vid = v?.id || "";
+      }
+      if (vid) {
+        try {
+          const cur = game.settings.get("bbttcc-market", "lastContext") || {};
+          await game.settings.set("bbttcc-market", "lastContext", { ...cur, vendorId: vid, tab: "", q: "" });
+        } catch (_e) {}
+        // openMarket.activate writes the vendors setting on the GM; the socket can beat that write to a player
+        // seat. Wait (≤3 s) for this client's copy to show the vendor active before the app picks a fallback.
+        if (!game.user?.isGM) {
+          for (let i = 0; i < 15; i++) {
+            const v = _vendorList().find(x => String(x.id) === vid);
+            if (!v || v.active !== false) break;
+            await new Promise(r => setTimeout(r, 200));
+          }
+        }
+      }
+      M.openMarket();
+      ui.notifications?.info?.(note || "🛒 The market is open — Standard Issue costs nothing; the rest costs marks.");
+    } catch (e) { console.warn(TAG, "openMarketOnThisClient failed", e); }
+  }
+
+  // ── Market staging (2026-10-17, Dave: "when the Trade Caravan beat hits, the Caravan becomes available") ──
+  // openMarket.activate flips a vendor's `active` switch on; closeOnTurnEnd records it in the world setting
+  // `bbttcc-campaign.marketStaging` { [vendorId]: { closeOnTurnEnd, openedTurn, beatId } } and the
+  // bbttcc:advanceTurn:end sweep (primary GM) flips it off again. closeMarket flips it off now.
+  const MOD_MARKET = "bbttcc-market", SETTING_MARKET_STAGING = "marketStaging";
+  function _registerMarketStaging() {
+    try {
+      if (game.settings.settings.has("bbttcc-campaign." + SETTING_MARKET_STAGING)) return;
+      game.settings.register("bbttcc-campaign", SETTING_MARKET_STAGING, {
+        name: "Market staging", hint: "Internal: vendors a beat activated until the end of the turn.",
+        scope: "world", config: false, type: Object, default: {}
+      });
+    } catch (e) { console.warn(TAG, "marketStaging register failed", e); }
+  }
+  Hooks.once("init", _registerMarketStaging);
+  function _vendorList() {
+    try { const raw = game.settings.get(MOD_MARKET, "vendors") || []; return (Array.isArray(raw) ? raw : Object.values(raw)).filter(Boolean); }
+    catch (_e) { return []; }
+  }
+  /** vendorId wins; else vendorName matched case/space-insensitively; "" when neither resolves to a known vendor. */
+  function _resolveVendorId({ vendorId = "", vendorName = "" } = {}) {
+    const list = _vendorList();
+    const vid = String(vendorId || "").trim();
+    if (vid && list.some(v => String(v.id) === vid)) return vid;
+    if (vendorName) { const want = _normHexName(vendorName); const v = list.find(x => _normHexName(x?.name) === want); if (v) return String(v.id); }
+    return "";
+  }
+  /** GM only. Flip a vendor's player-visibility switch; stage=true remembers to close it at turn end. */
+  async function _setVendorActive(vid, on, { stage = false, beatId = "" } = {}) {
+    if (!game.user?.isGM) return false;
+    const arr = _vendorList().map(v => clone(v));
+    const v = arr.find(x => String(x.id) === String(vid));
+    if (!v) { console.warn(TAG, "setVendorActive: vendor not found", vid); return false; }
+    if ((v.active !== false) !== !!on) { v.active = !!on; await game.settings.set(MOD_MARKET, "vendors", arr); }
+    try {
+      _registerMarketStaging();
+      const st = clone(game.settings.get("bbttcc-campaign", SETTING_MARKET_STAGING) || {});
+      if (on && stage) { st[String(vid)] = { closeOnTurnEnd: true, openedTurn: _readWorldTurn(), beatId: String(beatId || "") }; await game.settings.set("bbttcc-campaign", SETTING_MARKET_STAGING, st); }
+      else if (!on && st[String(vid)]) { delete st[String(vid)]; await game.settings.set("bbttcc-campaign", SETTING_MARKET_STAGING, st); }
+    } catch (e) { console.warn(TAG, "marketStaging write failed", e); }
+    console.log(TAG, `vendor "${v.name}" → ${on ? "ACTIVE" : "inactive"}${on && stage ? " (staged: closes at turn end)" : ""}`);
+    return true;
+  }
+  /** Turn-end: every staged vendor goes inactive again (primary GM only). Returns { closed }. */
+  async function sweepStagedMarkets() {
+    const out = { closed: 0, vendors: [] };
+    try {
+      if (!game.user?.isGM) return out;
+      const gms = game.users.filter(u => u.isGM && u.active).sort((a, b) => a.id.localeCompare(b.id)); if (gms.length && gms[0].id !== game.user.id) return out;
+      _registerMarketStaging();
+      const st = game.settings.get("bbttcc-campaign", SETTING_MARKET_STAGING) || {};
+      for (const [vid, row] of Object.entries(st)) {
+        if (!row || row.closeOnTurnEnd !== true) continue;
+        if (await _setVendorActive(vid, false, {})) { out.closed++; out.vendors.push(vid); }
+      }
+      if (out.closed) {
+        try { game.socket?.emit?.("module.bbttcc-campaign", { type: "bbttccRefreshMarket", payload: {} }); } catch (_e) {}
+        await _refreshMarketOnThisClient();
+        console.log(TAG, "staged markets closed at turn end:", out.vendors);
+      }
+    } catch (e) { console.warn(TAG, "sweepStagedMarkets failed", e); }
+    return out;
+  }
+  function installMarketStagingHook() {
+    if (globalThis.__bbttccMarketStagingHooked) return; globalThis.__bbttccMarketStagingHooked = true;
+    Hooks.on("bbttcc:advanceTurn:end", (tctx) => { try { if (tctx && tctx.apply === false) return; sweepStagedMarkets().catch(() => {}); } catch (_e) {} });
+  }
+  /** Re-render any open Market window on this client so a closed vendor drops out of the picker. */
+  async function _refreshMarketOnThisClient() {
+    try {
+      const apps = Object.values(ui.windows || {});                       // AppV1
+      try { foundry.applications.instances.forEach(a => apps.push(a)); } catch (_e) {}   // AppV2 (BBTTCCMarketApp lives here)
+      for (const w of apps) {
+        const isMarket = /bad eden market/i.test(String(w?.title || "")) || /BBTTCCMarketApp/i.test(String(w?.constructor?.name || ""));
+        if (isMarket) { try { w.render(false); } catch (_e) {} }
+      }
+    } catch (_e) {}
+  }
+
   // Explicit table pull (2026-08-26): Foundry's implicit activation-pull skips
   // clients that were explicitly view()'d onto another scene (the Weather
   // Front stranded the player on the hex map). This is our own reliable pull:
@@ -2215,6 +2368,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       sock.on("module.bbttcc-campaign", (msg) => {
         if (!msg) return;
         if (msg.type === "bbttccOpenTravel") return _openTravelOnThisClient(msg.payload || {});
+        if (msg.type === "bbttccOpenMarket") return _openMarketOnThisClient(msg.payload || {});
+        if (msg.type === "bbttccRefreshMarket") return _refreshMarketOnThisClient();
         if (msg.type === "bbttccPullScene") return _pullSceneOnThisClient(msg.payload || {});
       });
     } catch (_e) {}
@@ -2236,6 +2391,10 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       installOpScheduleTickHook();
       installPartyEffectExpiryHook();
       _installOpenTravelSocket();
+      _registerMarketStaging();
+      installMarketStagingHook();
+      game.bbttcc.api.worldMutation.setVendorActive = _setVendorActive;
+      game.bbttcc.api.worldMutation.sweepStagedMarkets = sweepStagedMarkets;
       try { game.bbttcc.api.opSchedules?.repairAll?.().catch(()=>{}); } catch(_e) {}
       console.log(TAG, "World Mutation API ready:", Object.keys(game.bbttcc.api.worldMutation));
     } catch (e) {

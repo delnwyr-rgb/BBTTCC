@@ -1,4 +1,5 @@
 
+import "./art-picker.js"; // THE ART PICKER (2026-10-17) — game.bbttcc.artPicker; rides this esmodule so module.json stays untouched
 /* ========================================================================== */
 /* Bad Eden Bridge (Manifestation + Backing) — Sacrifice Types + Resource Locks  */
 /* v13-safe UI injection: uses BOTH getActorSheetHeaderButtons and render hook */

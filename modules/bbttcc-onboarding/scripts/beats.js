@@ -490,7 +490,7 @@ const stewardshipClaim = {
       label: "Plant my banner"
     }).then(async () => {
       if (ctx.faction && hexUuid) await _stage()?.claimHex?.(hexUuid, ctx.faction.id);
-      else await ctx.speak("No faction on file to claim under— *bzzt* —waving it through. Lead a faction and the banner's real.");
+      else await ctx.speak("No Domain on file to claim under— *bzzt* —waving it through. Hold a Domain and the banner's real.");
       done();
     });
     return () => { Hooks.off("updateDrawing", onDraw); Hooks.off("bbttcc:territory:hexUpdated", onHex); };
@@ -609,7 +609,7 @@ const outfitting = {
     try { globalThis.game?.bbttcc?.api?.market?.openMarket?.(); }
     catch (e) { console.warn(TAG, "market open failed", e); }
     await _pause(600);
-    await ctx.speak(`This is the LONG MARKET. I've already set the buyer to ${ctx.faction?.name || "your faction"} and the receiver to ${ctx.steward?.name || "you"} — if either box reads "(Select)", pick them yourself or the till refuses you.`);
+    await ctx.speak(`This is the LONG MARKET. I've already set the buyer to ${ctx.faction?.name || "your Domain"} and the receiver to ${ctx.steward?.name || "you"} — if either box reads "(Select)", pick them yourself or the till refuses you.`);
     await _pause(700);
     await ctx.speak("Buy what you can afford and can actually USE — your sheet warns you when a weapon or armor sits beyond your training. Watch the price line: it's in MARKS, and ten marks is one OP. And gear does nothing in a duffel bag: EQUIP it from your sheet once it arrives.");
     ctx.riff({ beat: "outfitting", line: "Player is gearing up at the Market before the finale.", intent: "Quartermaster energy — dry, practical. One line." });
@@ -675,6 +675,39 @@ const crewOccult = {
   scope: "personal",
 
   enter: async (ctx) => {
+    // ALPHA CUT (ruling 15, 2026-10-18): crews and associations are HIRED at the Muster by the turn — nothing is
+    // picked on the sheet, so the slide deck teaches the contract instead and the sheet / Echo panel never open.
+    if (_alphaWorld()) {
+      await ctx.speak("Before you point a weapon at anything — you're not alone out here, and the game knows it. *bzzt* Crews and associations are people you hire. The Muster in Allesh-Gilliam signs them, by the turn.");
+      await _pause(800);
+      await ctx.deck({
+        title: "◇ OPERATOR — Crews & Associations",
+        label: "Understood",
+        slides: [
+          {
+            title: "Hired, not born",
+            speak: "Read these slides. There's a test after, and the test is the rest of your life.",
+            body: `<p>Your Domain does not come with a crew. You <b>sign</b> one. Once the bandit road is yours, <b>the Muster</b> in Allesh-Gilliam lists <b>Crews</b> and <b>Occult Associations</b> as contracts — paid from the treasury, <b>three turns</b> at a time.</p>
+              <p>One Crew and one Association at once. That is the cap, and it always was.</p>
+              <span class="bbttcc-deck-key">Recruit the right people for the mission in front of you, not a favourite for life.</span>`
+          },
+          {
+            title: "What they bring",
+            body: `<p>Raid <b>maneuvers</b> — the special moves in the Raid Console — are gated. Most are locked until something on your side grants them.</p>
+              <p>Three things grant maneuvers: your hired <b>Crew</b>, your hired <b>Association</b>, and the <b>classes</b> in your Domain.</p>
+              <p>While the contract runs, their feats sit on your sheet and a granted maneuver wears a green <b>✦ badge</b> naming who unlocked it. Once a scene you may <b>Invoke</b> one of their people onto the screen.</p>`
+          },
+          {
+            title: "When they walk",
+            body: `<p>On the last turn of a contract you get a card. At Day's End they go, and their maneuvers, bonuses and people go with them.</p>
+              <p>Renew at the Muster, or sign someone else. The <b>Retinue</b> card on your <b>Domain</b> tab shows who rides with you and for how long; the ✂ lets them go early — no refund.</p>
+              <span class="bbttcc-deck-key">Loyalty you rent runs out on schedule. Plan the raid before the contract does.</span>`
+          }
+        ]
+      });
+      ctx.riff({ beat: "crew_occult", line: "Player has just learned crews and associations are hired at the Muster, by the turn.", intent: "One dry line about renting loyalty." });
+      return;
+    }
     await ctx.speak("Before you point a weapon at anything — you're not alone out here, and the game knows it. *bzzt* Two lines on your sheet decide what your whole faction can do.");
     await _pause(800);
 
@@ -746,6 +779,26 @@ const crewOccult = {
     const closeFallback = () => globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
     let spoke = false;
 
+    // ALPHA CUT: nothing to pick here — note it and move on; a hire during the beat still earns the grant report.
+    if (_alphaWorld()) {
+      const onHire = (p) => {
+        if (!p || p.actorId !== ctx.steward?.id || spoke) return;
+        spoke = true;
+        ctx.speak?.(`Signed: ${p.contract?.displayName || "a contract"}. Your Domain just inherited whatever they know.`);
+        _reportGrants(ctx).catch(e => console.warn(TAG, "grant report failed", e));
+      };
+      Hooks.on("bbttcc:contract:hired", onHire);
+      ctx.prompt({
+        title: FALLBACK_TITLE,
+        content:
+          `<p>Crews and Associations are <b>hired at the Muster</b> in Allesh-Gilliam once the bandit road is yours — one Crew and one Association at a time, three turns a contract, paid from your Domain's treasury.</p>` +
+          `<p>Your <b>Domain tab → Retinue</b> shows who rides with you and for how long. Their maneuvers wear a ✦ badge in the Raid Console while the contract runs.</p>` +
+          `<p><i>Nothing to set here yet — continue.</i></p>`,
+        label: "Company noted"
+      }).then(() => done());
+      return () => { Hooks.off("bbttcc:contract:hired", onHire); closeFallback(); };
+    }
+
     // The sheet writes these through bbttcc-character-options; watch the actor
     // rather than guessing at the flag path, so any storage shape trips it.
     const onUpd = (actor) => {
@@ -789,6 +842,9 @@ const crewOccult = {
     await ctx.speak("Good. People are infrastructure, One — the only kind that argues back. One spotlight a scene; spend it on the moment that deserves it.");
   }
 };
+
+/** Alpha Cut world (bbttcc-core setting `alphaCut`): crews / associations are contracts, not sheet picks. */
+function _alphaWorld() { try { return globalThis.game?.bbttcc?.alpha?.enabled?.() === true; } catch (_e) { return false; } }
 
 /** Read the Steward's crew / occult labels. `setActorEchoAssetSlot`
  *  (bbttcc-bridge.js) writes BOTH the identity block and a per-slot shortcut
@@ -840,7 +896,7 @@ const surgeBeat = {
 
     await ctx.deck({
       title: "◇ OPERATOR — Surge",
-      label: "Open my Engagement tab",
+      label: "Open my Conflict tab",
       slides: [
         {
           title: "What Surge is",
@@ -857,14 +913,14 @@ const surgeBeat = {
         },
         {
           title: "How you spend it",
-          body: `<p>Your sheet's <b>Engagement</b> tab has a <b>✦ Surge</b> panel with a <b>Spend</b> button.</p>
+          body: `<p>Your sheet's <b>Conflict</b> tab has a <b>✦ Surge</b> panel with a <b>Spend</b> button.</p>
             <p>It offers universal options plus whatever your class brings — Forge-Weld, Rallying Words, Brace, and the rest. Costs run from cheap tricks to the ones that end an argument.</p>
             <span class="bbttcc-deck-key">And one more use, which the next beat is entirely about: Surge is how you cast <b>above your tier</b>.</span>`
         }
       ]
     });
 
-    // The button promises the Engagement tab — land there, not on whatever tab
+    // The button promises the Conflict tab — land there, not on whatever tab
     // the sheet last had open (trailer shoot 2026-10-09 opened on Inventory).
     try {
       const sheet = ctx.steward?.sheet;
@@ -875,8 +931,8 @@ const surgeBeat = {
     } catch (_) {}
     await _pause(600);
     await ctx.speak(cur > 0
-      ? `Engagement tab, ✦ Surge panel — you're holding ${cur}. Open Spend and read what's on the menu. You don't have to buy anything; just learn where the shop is.`
-      : "Engagement tab, ✦ Surge panel. You're empty right now — the bank fills the moment your dice start exploding. Open Spend anyway and read the menu so you know what you're saving for.");
+      ? `Conflict tab, ✦ Surge panel — you're holding ${cur}. Open Spend and read what's on the menu. You don't have to buy anything; just learn where the shop is.`
+      : "Conflict tab, ✦ Surge panel. You're empty right now — the bank fills the moment your dice start exploding. Open Spend anyway and read the menu so you know what you're saving for.");
     ctx.riff({ beat: "surge", line: "Player is being shown the Surge economy for the first time.", intent: "One line — the daemon is slightly embarrassed it didn't mention this earlier." });
   },
 
@@ -897,7 +953,7 @@ const surgeBeat = {
     ctx.prompt({
       title: FALLBACK_TITLE,
       content:
-        `<p>Sheet → <b>Engagement</b> tab → the <b>✦ Surge</b> panel. Press <b>Spend</b> and read the menu.</p>` +
+        `<p>Sheet → <b>Conflict</b> tab → the <b>✦ Surge</b> panel. Press <b>Spend</b> and read the menu.</p>` +
         `<p>Banked by exploding dice (+1 per explosion). Spent on class powers — and on reaching above your tier, which is next.</p>`,
       label: "I know where it lives"
     }).then(() => done());
@@ -2768,7 +2824,7 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey
         }
       }
 
-      if (!f) { await ctx.speak("No faction on file to raid under— *bzzt* —I can't open a war console without one. Lead a faction, then replay the finale."); return; }
+      if (!f) { await ctx.speak("No Domain on file to raid under— *bzzt* —I can't open a war console without one. Hold a Domain, then replay the finale."); return; }
 
       const hex = fin.hostileHex;
       // Pre-seed the console session (read on first render via the console's session-apply).
@@ -2906,7 +2962,7 @@ const graduation = {
   enter: async (ctx) => {
     await ctx.speak("Three consoles, four anchors, one circle, and something that tried to unmake the whole board and had to sit down at a table instead. Violence, intrigue, presence — you can take ground any way the moment demands. That's a Steward.");
     await _pause(1000);
-    await ctx.speak("Training's done, One. No more sandbox, no more straw adversaries. From here it's the real Bad Eden — your hold, your rig, your faction, live in the weave. Go fix what broke. *bzzt*");
+    await ctx.speak("Training's done, One. No more sandbox, no more straw adversaries. From here it's the real Bad Eden — your hold, your rig, your Domain, live in the weave. Go fix what broke. *bzzt*");
   },
 
   detect: (ctx, done) => {

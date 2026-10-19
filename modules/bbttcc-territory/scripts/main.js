@@ -1738,7 +1738,8 @@ export function hexType(tfLike) { return String(_tfOf(tfLike).type || "settlemen
 export function hexSize(tfLike) { return String(_tfOf(tfLike).size || "none").toLowerCase(); }
 export function hexIntegration(tfLike) { const tf = _tfOf(tfLike); return Math.max(0, Math.min(6, Number(tf.integration?.progress ?? tf.development?.stage ?? 0) || 0)); }
 export function hexLoyalty(tfLike) { return Number(_tfOf(tfLike).mods?.loyalty || 0) || 0; }
-export function hexMorale(tfLike) { return Number(_tfOf(tfLike).mods?.morale || 0) || 0; }
+/** RETIRED 2026-10-18 (ruling 19 ext.): hex Morale (mods.morale) is gone — hex Loyalty is the indicator of how a hex is doing. Kept as an alias of hexLoyaltyScore for old callers; stale mods.morale data is inert. */
+export function hexMorale(tfLike) { return hexLoyaltyScore(tfLike); }
 /** A rival's grip on the population (mods.enemyLoyalty, fed by loyalty_program on a hex you don't hold). Subtracts from the loyalty score (owner ruling 2026-09-12). */
 export function hexEnemyLoyalty(tfLike) { return Number(_tfOf(tfLike).mods?.enemyLoyalty || 0) || 0; }
 export function hexLoyaltyScore(tfLike) {
@@ -1780,7 +1781,7 @@ function _publishHexFacts() {
   try { game.bbttcc ??= {}; game.bbttcc.facts ??= {}; game.bbttcc.facts.hexStates = { catalog: HEX_MODIFIER_CATALOG, unique: WORLD_MODIFIERS }; } catch (_e) {}
   try {
     game.bbttcc ??= { api:{} }; game.bbttcc.facts ??= {};
-    game.bbttcc.facts.hex = { type: hexType, size: hexSize, integration: hexIntegration, loyalty: hexLoyalty, enemyLoyalty: hexEnemyLoyalty, morale: hexMorale, loyaltyScore: hexLoyaltyScore, baseVector: hexBaseVector, resources: hexResources, HEX_MOD_LOYALTY: Object.assign({}, HEX_MOD_LOYALTY), TYPE_BASE, SIZE_MULT };
+    game.bbttcc.facts.hex = { type: hexType, size: hexSize, integration: hexIntegration, loyalty: hexLoyalty, enemyLoyalty: hexEnemyLoyalty, loyaltyScore: hexLoyaltyScore, baseVector: hexBaseVector, resources: hexResources, HEX_MOD_LOYALTY: Object.assign({}, HEX_MOD_LOYALTY), TYPE_BASE, SIZE_MULT };
     game.bbttcc.facts.routes = { trade: factionTradeRoutes, supply: factionSupplyLines };
   } catch (e) { console.warn(`[${MOD}] facts publish failed`, e); }
 }

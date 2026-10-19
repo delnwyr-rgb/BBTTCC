@@ -361,9 +361,8 @@
           const beforeDark = state.darknessNow;
 
           if (successFinal) {
-            Vcur.vp    = Number(Vcur.vp    || 0) + 10;
-            Vcur.unity = Number(Vcur.unity || 0) + 10;
-            await writeVictory(A, Vcur);
+            // vp +10 / unity +10 removed 2026-10-18 (ruling 18): those meters are retired.
+            void Vcur; void writeVictory;
 
             const newDark = clamp(beforeDark - 2, 0, 10);
             state.darknessNow = newDark;
@@ -379,8 +378,6 @@
             await sendChat([
               `<b>${foundry.utils.escapeHTML(A.name)}</b> has completed the Great Work!`,
               `Ritual Score: ${state.ritualScore}`,
-              `Victory VP: ${state.vpBefore} → ${Vcur.vp}`,
-              `Unity: ${state.unityBefore}% → ${Vcur.unity}%`,
               `Darkness: ${beforeDark} → ${state.darknessNow}`
             ], { title: `${label}: Great Work Complete` });
           } else {

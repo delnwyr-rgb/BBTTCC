@@ -3,7 +3,7 @@
 //
 // Adds a dark, neon-edged dashboard row to the Overview tab when the
 // sheet does not already provide a native summary target.
-// Victory, Unity, Morale, Loyalty, Darkness cards with mini-meters.
+// Loyalty, Darkness cards with mini-meters. (Victory / Unity cards removed 2026-10-18, ruling 18; Morale card removed 2026-10-18, ruling 19.)
 //
 // Non-invasive: does not change templates or sheet registration.
 
@@ -102,14 +102,6 @@
         background:linear-gradient(90deg,#14b8a6,#3b82f6);
       }
 
-      .bbttcc-fdash-card.metric-morale {
-        border:1px solid rgba(234,179,8,0.95);
-        color:#facc15;
-      }
-      .bbttcc-fdash-card.metric-morale .fdash-bar-fill {
-        background:linear-gradient(90deg,#facc15,#f97316);
-      }
-
       .bbttcc-fdash-card.metric-loyalty {
         border:1px solid rgba(34,197,94,0.95);
         color:#bbf7d0;
@@ -152,12 +144,9 @@
       return (v === undefined) ? fallback : v;
     };
 
-    const victory  = pick("victory", {})  || {};
     const darkness = pick("darkness", {}) || {};
-    const morale   = pick("morale", 0);
     const loyalty  = pick("loyalty", 0);
 
-    const moraleHome  = pick("moraleHome", null);
     const loyaltyHome = pick("loyaltyHome", null);
 
     const darkVal = (typeof darkness?.global === "number")
@@ -165,12 +154,8 @@
       : (typeof darkness === "number" ? darkness : 0);
 
     return {
-      vp: Number(victory.vp ?? 0),
-      unity: Number(victory.unity ?? 0),
-      morale: Number(morale ?? 0),
       loyalty: Number(loyalty ?? 0),
       darkness: Number(darkVal ?? 0),
-      moraleHome: (typeof moraleHome === "number") ? moraleHome : null,
       loyaltyHome: (typeof loyaltyHome === "number") ? loyaltyHome : null
     };
   }
@@ -188,59 +173,13 @@
   function buildDashboardHTML(vals) {
     const clamp = (n) => Math.max(0, Math.min(100, n));
 
-    const vpPct       = clamp(vals.vp <= 0 ? 0 : (vals.vp / 25) * 100);
-    const unityPct    = clamp(vals.unity);
-    const moralePct   = clamp(vals.morale);
     const loyaltyPct  = clamp(vals.loyalty);
     const darknessPct = clamp(vals.darkness);
 
-    const mTrend = makeTrend(vals.morale, vals.moraleHome);
     const lTrend = makeTrend(vals.loyalty, vals.loyaltyHome);
 
     return `
       <div class="bbttcc-fdash-row" data-bbttcc-fdash="1">
-        <div class="bbttcc-fdash-card metric-victory">
-          <div class="fdash-label">Victory</div>
-          <div class="fdash-main">
-            <span class="fdash-value">${vals.vp}</span>
-            <span class="fdash-unit">VP</span>
-            <div class="fdash-meta">
-              <span>${vpPct.toFixed(0)}%</span>
-            </div>
-          </div>
-          <div class="fdash-bar">
-            <div class="fdash-bar-fill" style="width:${vpPct}%;"></div>
-          </div>
-        </div>
-
-        <div class="bbttcc-fdash-card metric-unity">
-          <div class="fdash-label">Unity</div>
-          <div class="fdash-main">
-            <span class="fdash-value">${vals.unity.toFixed(0)}</span>
-            <span class="fdash-unit">%</span>
-            <div class="fdash-meta">
-              <span>${unityPct.toFixed(0)}%</span>
-            </div>
-          </div>
-          <div class="fdash-bar">
-            <div class="fdash-bar-fill" style="width:${unityPct}%;"></div>
-          </div>
-        </div>
-
-        <div class="bbttcc-fdash-card metric-morale">
-          <div class="fdash-label">Morale</div>
-          <div class="fdash-main">
-            <span class="fdash-value">${vals.morale.toFixed(0)}</span>
-            <span class="fdash-unit">%</span>
-            <div class="fdash-meta">
-              <span class="fdash-trend ${mTrend.cls}">${mTrend.label}</span>
-            </div>
-          </div>
-          <div class="fdash-bar">
-            <div class="fdash-bar-fill" style="width:${moralePct}%;"></div>
-          </div>
-        </div>
-
         <div class="bbttcc-fdash-card metric-loyalty">
           <div class="fdash-label">Loyalty</div>
           <div class="fdash-main">

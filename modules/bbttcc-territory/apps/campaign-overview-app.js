@@ -254,15 +254,11 @@ function computeFactionTotalOPs(faction) {
 
 /* ========= Faction Health reader (shared semantics with faction sheet) ========= */
 function readHealthFlags(actor) {
-  const victory  = actor.getFlag(FACTIONS_MOD, "victory")  || {};
+  // VP / Unity dropped 2026-10-18 (ruling 18) and Morale dropped 2026-10-18 (ruling 19): those meters are retired.
   const darkness = actor.getFlag(FACTIONS_MOD, "darkness") || {};
-  const morale   = actor.getFlag(FACTIONS_MOD, "morale");
   const loyalty  = actor.getFlag(FACTIONS_MOD, "loyalty");
 
   return {
-    vp: Number(victory.vp ?? 0),
-    unity: Number(victory.unity ?? 0),
-    morale: Number(morale ?? 0),
     loyalty: Number(loyalty ?? 0),
     darkness: (typeof darkness.global === "number")
       ? darkness.global
@@ -284,7 +280,7 @@ function readGreatWorkDisplay(faction) {
 
     let status = "Not Ready";
     if (st.ready) status = "Ready";
-    else if (integrated > 0 || (st.metrics && (st.metrics.unity > 0 || st.metrics.vp > 0))) {
+    else if (integrated > 0 || Number(st.sparkCount || 0) > 0) {
       status = "Approaching";
     }
 
@@ -309,8 +305,8 @@ function readGreatWorkDisplay(faction) {
    Style: "Name — what it is. What it does mechanically. When/why you'd use it."
    Numbers are read from the actual engines: this file (STATUS_BANDS,
    SIZE_TABLE, MODS, SEPHIROT, effHexWithAll), bbttcc-tikkun api.tikkun.js
-   (getGreatWorkState thresholds: sparks 3 / VP 10 / Unity 30 / Darkness ≤3,
-   corrupted sparks excluded), and bbttcc-epic repair.js + presence.js
+   (getGreatWorkState thresholds: sparks 3 / Darkness ≤3, corrupted sparks
+   excluded — VP / Unity retired 2026-10-18, ruling 18), and bbttcc-epic repair.js + presence.js
    (World-Health = aligned/total hexes; Reach by Presence band 1/2/3/5). */
 const OVERVIEW_TIPS = {
   // ---- Header / strip ----
@@ -331,14 +327,11 @@ const OVERVIEW_TIPS = {
   rowUnclaimed: "Unclaimed — the aggregate of every hex with no owning faction. Its yields flow to no one until the hexes are claimed.",
 
   // ---- Injected Faction-Health / Great-Work columns ----
-  health:  "Faction Health — VP, Unity, Morale, Loyalty, Darkness, Sparks, and Great Work, read live from each faction actor and the Tikkun engine.",
-  vp:      "VP — Victory Points on the faction's victory track. Great Work readiness requires VP ≥ 10.",
-  unity:   "Unity — the faction's internal cohesion (%). Great Work readiness requires Unity ≥ 30.",
-  morale:  "Morale — the faction's fighting spirit (%), read from the faction sheet's health flags; raids, upkeep, and events move it.",
+  health:  "Faction Health — Loyalty, Darkness, Sparks, and Great Work, read live from each faction actor and the Tikkun engine.",
   loyalty: "Loyalty — how loyal the faction's population and membership are (%), read from the faction sheet's health flags; hex modifiers like Loyal/Hostile Population push it during play.",
   dark:    "Darkness — the faction's global Qliphothic taint. It climbs 1 per turn while the faction owns any Radiated hex, and cleansing Purified territory lowers it. Great Work readiness requires Darkness ≤ 3.",
   sparks:  "Sparks — integrated Holy Sparks toward the Great Work, shown against the threshold of 3. Corrupted sparks do not count until they are repaired and re-deposited.",
-  gw:      "Great Work — the readiness verdict: Ready when Sparks ≥ 3, Unity ≥ 30, VP ≥ 10, Darkness ≤ 3, and no corrupted sparks are held; Approaching when partway there. Hover a row's cell to see the exact blockers."
+  gw:      "Great Work — the readiness verdict: Ready when Sparks ≥ 3, Darkness ≤ 3, and no corrupted sparks are held; Approaching when partway there. Hover a row's cell to see the exact blockers."
 };
 
 // Stamp a registry tooltip onto a JS-built element (skips silently when the
@@ -608,9 +601,6 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
       if (!headRow) throw new Error("Header row not found.");
 
       const HEALTH_COLS = [
-        { key: "vp",      label: "VP" },
-        { key: "unity",   label: "Unity" },
-        { key: "morale",  label: "Morale" },
         { key: "loyalty", label: "Loyalty" },
         { key: "dark",    label: "Darkness" },
         { key: "sparks",  label: "Sparks" },
@@ -636,16 +626,13 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
         const faction = actorId && game.actors?.get(actorId);
 
         let vals = {
-          vp: "—", unity: "—", morale: "—", loyalty: "—", dark: "—",
+          loyalty: "—", dark: "—",
           sparks: "—", gw: "—"
         };
         let gwState = null;
 
         if (faction) {
           const h = readHealthFlags(faction);
-          vals.vp      = String(h.vp ?? 0);
-          vals.unity   = `${Number(h.unity ?? 0)}%`;
-          vals.morale  = `${Number(h.morale ?? 0)}%`;
           vals.loyalty = `${Number(h.loyalty ?? 0)}%`;
           vals.dark    = String(h.darkness ?? 0);
 

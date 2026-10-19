@@ -142,6 +142,7 @@ function axisRow(label, ok, note) {
 function decorateSheet(app, html) {
   try {
     if (!ftActive()) return;
+    if (game.bbttcc?.alpha?.hidden?.("epic")) return;   // ALPHA CUT (2026-10-17)
     const actor = app?.actor;
     if (!actor || actor.type !== "character") return;
     const $html = $wrap(html);

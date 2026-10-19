@@ -1,59 +1,16 @@
-// bbttcc-raid/enhancers/raid-morale.enhancer.js
-// Adjust Morale based on raid outcomes. Defaults attacker {win:+5, stalemate:+2, loss:-5}; defender mirrored.
-// Per-faction overrides: flags['bbttcc-factions'].moraleRules = { win, stalemate, loss }.
+// bbttcc-raid/scripts/raid-morale.enhancer.js
+//
+// RETIRED 2026-10-18 (ruling 19): the faction Morale meter is no longer part of the game.
+// This enhancer used to wrap raid.applyPostRoundEffects to adjust flags['bbttcc-factions'].morale
+// by raid outcome (attacker {win:+5, stalemate:+2, loss:-5}, defender mirrored, per-faction
+// overrides via flags['bbttcc-factions'].moraleRules) and append a "Morale ±N — Raid <outcome>"
+// warLog line. All writes are removed. The file is kept (and still listed in module.json) so
+// nothing that expects it to load breaks; it installs nothing. Stress / Extension / the
+// pressure ladders carry the consequence of a raid outcome now.
+
 (() => {
   const TAG = "[bbttcc-raid/raid-morale]";
-  const MOD = "bbttcc-factions";
-  const clamp = v => Math.max(0, Math.min(100, Number(v||0)));
-  const get = (obj, path, dflt) => { try { return foundry.utils.getProperty(obj, path) ?? dflt; } catch { return dflt; } };
-  const setFlag = async (A, path, value) => { try { await A.update({ [`flags.${path}`]: value }); } catch(e){ console.warn(TAG, "setFlag fail", path, e); } };
-  const DEF = { win:+5, stalemate:+2, loss:-5 };
-
-  async function adjustMorale(actorId, delta, reason){
-    const A = game.actors.get(String(actorId)); if (!A) return;
-    const cur = Number(get(A, `flags.${MOD}.morale`, 0)) || 0;
-    const next = clamp(cur + Number(delta||0));
-    await setFlag(A, `${MOD}.morale`, next);
-    const war = get(A, `flags.${MOD}.warLogs`, []);
-    war.push({ type:"turn", date:(new Date()).toLocaleString(), summary:`Morale ${delta>=0?"+":""}${delta} — ${reason}` });
-    await setFlag(A, `${MOD}.warLogs`, war);
-    if (A.sheet?.rendered) A.sheet.render(false);   // refresh an OPEN sheet only — never pop sheets open over the battle scene
-  }
-  function rulesFor(A){ const custom = get(A, `flags.${MOD}.moraleRules`, null); return custom ? { ...DEF, ...custom } : DEF; }
-
-  function installOnce(){
-    const raid = game.bbttcc?.api?.raid || game.modules.get("bbttcc-raid")?.api?.raid;
-    if (!raid || typeof raid.applyPostRoundEffects !== "function") {
-      // our `ready` runs before the console installs the base — wait on the lifecycle contract (2026-10-08)
-      if (game.bbttcc?.lifecycle?.need && !installOnce.__waiting) { installOnce.__waiting = true; game.bbttcc.lifecycle.need("raid.postRound").then(() => { installOnce.__waiting = false; installOnce(); }); return; }
-      if (!installOnce.__waiting) console.warn(TAG, "raid.applyPostRoundEffects not found");
-      return;
-    }
-    // Idempotent: installOnce also runs on every canvasReady — never stack a second morale layer.
-    if (raid.__moraleWrapped || raid.applyPostRoundEffects.__bbttccMoraleWrapped) return;
-    const orig = raid.applyPostRoundEffects;
-    raid.applyPostRoundEffects = async function wrapped(args={}){
-      const res = await orig(args);
-      try {
-        const attackerId = args?.attackerId ?? args?.attacker ?? args?.attId;
-        const defenderId = args?.defenderId ?? args?.defender ?? args?.defId;
-        const attacker = attackerId ? game.actors.get(String(attackerId)) : null;
-        const defender = defenderId ? game.actors.get(String(defenderId)) : null;
-        let outcome = (args?.outcome || "").toString().toLowerCase();
-        if (!outcome) outcome = (args?.success === true) ? "win" : (args?.success === false) ? "loss" : "";
-        if (!outcome && res && typeof res === "object" && typeof res.outcome === "string") outcome = res.outcome.toLowerCase();
-        if (!outcome) return res;
-        if (outcome === "tie") outcome = "stalemate";
-        if (attacker) { const R = rulesFor(attacker); const d = R[outcome]; if (typeof d === "number" && d) await adjustMorale(attacker.id, d, `Raid ${outcome}`); }
-        if (defender) { const R = rulesFor(defender); let o2 = outcome; if (outcome === "win") o2="loss"; else if (outcome === "loss") o2="win"; const d2 = R[o2]; if (typeof d2 === "number" && d2) await adjustMorale(defender.id, d2, `Raid ${o2}`); }
-      } catch(e){ console.warn(TAG, "morale adjust failed", e); }
-      return res;
-    };
-    raid.applyPostRoundEffects.__bbttccMoraleWrapped = true;
-    raid.__moraleWrapped = true;
-    console.log(TAG, "installed");
-  }
-  Hooks.once("ready", installOnce);
-  if (game?.ready) installOnce();
-  Hooks.on("canvasReady", installOnce);
+  Hooks.once("ready", () => {
+    console.log(TAG, "retired 2026-10-18 (ruling 19): faction Morale rewards disabled; nothing installed.");
+  });
 })();

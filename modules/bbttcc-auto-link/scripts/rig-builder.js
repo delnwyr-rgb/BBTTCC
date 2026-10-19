@@ -827,6 +827,13 @@ export async function openRigBuilder({ seed = null } = {}) {
       <input type="text" data-bbttcc-field="name" required autofocus placeholder="e.g. Hex-Walker MK II"/></div>
     <div class="ft-cast-field"><label>Archetype</label>
       <input type="text" data-bbttcc-field="archetype" placeholder="e.g. Workhorse, Scout, Siege Engine"/></div>
+    <div class="ft-cast-field ft-cast-span-2"><label>Art (portrait + token)</label>
+      <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+        <img data-bbttcc-art-preview src="" alt="" style="width:44px;height:44px;object-fit:contain;border-radius:6px;background:rgba(0,0,0,.35);display:none"/>
+        <button type="button" data-bbttcc-action="pick-art">🖼 Choose art…</button>
+        <span data-bbttcc-art-name style="opacity:.75;font-size:.85em">Default frame icon</span>
+        <input type="hidden" data-bbttcc-field="img" value=""/>
+      </div></div>
     <div class="ft-cast-field ft-cast-span-2"><label>Concept</label>
       <textarea data-bbttcc-field="concept" rows="2" placeholder="What is this rig in plain language? What is it for?"></textarea></div>
     <div class="ft-cast-field"><label>Faction Owner</label>
@@ -987,6 +994,25 @@ export async function openRigBuilder({ seed = null } = {}) {
         const initialCat = (seed?.mobility === "stationary") ? "facility" : "rig";
         const catEl0 = root?.querySelector('[data-bbttcc-field="_category"]');
         if (catEl0) catEl0.value = initialCat;
+        // Art (2026-10-17): Aslı art picker → portrait + token. No Aslı rig art yet,
+        // so the GM seat falls through to a FilePicker and players keep the frame icon.
+        root?.querySelector('[data-bbttcc-action="pick-art"]')?.addEventListener("click", async () => {
+          const artPicker = game.bbttcc?.artPicker;
+          const hidden = root.querySelector('[data-bbttcc-field="img"]');
+          const prev = root.querySelector("[data-bbttcc-art-preview]");
+          const nameEl = root.querySelector("[data-bbttcc-art-name]");
+          let path = null;
+          if (artPicker?.pick) {
+            const sel = await artPicker.pick({ kind: "rig", current: hidden?.value || "", title: "Rig art — portrait + token" });
+            path = sel?.img || null;
+          } else if (game.user?.isGM) {
+            path = await new Promise(res => new FilePicker({ type: "image", current: hidden?.value || "", callback: res }).render(true));
+          }
+          if (!path) return;
+          if (hidden) hidden.value = path;
+          if (prev) { prev.src = path; prev.style.display = ""; }
+          if (nameEl) nameEl.textContent = String(path).split("/").pop();
+        });
         _wireStarterChips(html);
         _wireInfraChips(root);
         _wireCategoryTabs(html);
@@ -1402,6 +1428,7 @@ async function _commit(root) {
     ui.notifications?.warn?.("RFI Rig needs a name.");
     return null;
   }
+  const artImg = String(read("img") || "").trim();   // Art picker (2026-10-17): portrait + token
 
   const bracket = String(read("bracket") || "medium");
   const bracketDef = BRACKETS.find(b => b.key === bracket) ?? BRACKETS[2];
@@ -1482,6 +1509,7 @@ async function _commit(root) {
 
   const data = {
     name,
+    ...(artImg ? { img: artImg } : {}),
     type: "rig",   // rig accessor (2026-10-08): works on dnd5e vehicles too — legacy shape; _createRigFromLegacyData picks the real type
     flags: {
       [MOD]: {
@@ -1525,7 +1553,8 @@ async function _commit(root) {
     },
     prototypeToken: {
       actorLink: true,
-      disposition
+      disposition,
+      ...(artImg ? { texture: { src: artImg } } : {})
     }
   };
 

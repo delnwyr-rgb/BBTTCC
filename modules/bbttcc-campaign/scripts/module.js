@@ -1959,7 +1959,7 @@ function _buildOpChipsHtml(bank, focusKey) {
       const state = (vMarks >= _mpo()) ? "ok" : "empty";
       const focus = (focusKey && String(focusKey) === String(k)) ? " focus" : "";
       const tt = (vMarks >= _mpo())
-        ? ("Faction " + label + " available: " + opDisplay + " marks (a check costs " + _mpo() + ")")
+        ? ("Domain " + label + " available: " + opDisplay + " marks (a check costs " + _mpo() + ")")
         : ("Not enough " + label + " (" + vMarks + " marks; a check costs " + _mpo() + ")");
 
       chips.push(
@@ -1992,7 +1992,7 @@ function _buildOpRollBonusChipsHtml(bonuses, focusKey) {
       const v = _num(bonuses[k], 0);
       const label = _opKeyLabel(k);
       const focus = (focusKey && String(focusKey) === String(k)) ? " focus" : "";
-      const tt = "Faction " + label + " OP roll bonus: +" + v;
+      const tt = "Domain " + label + " OP roll bonus: +" + v;
 
       chips.push(
         `<span class="bbttcc-op-chip roll${focus}" data-op-roll="${_escapeHtml(k)}" title="${_escapeHtml(tt)}">${_escapeHtml(label)}: +${v}</span>`
@@ -2001,7 +2001,7 @@ function _buildOpRollBonusChipsHtml(bonuses, focusKey) {
 
     if (focusKey && !Object.prototype.hasOwnProperty.call(bonuses || {}, focusKey)) {
       const label2 = _opKeyLabel(focusKey);
-      const tt2 = "Faction " + label2 + " OP roll bonus: +0";
+      const tt2 = "Domain " + label2 + " OP roll bonus: +0";
       chips.unshift(
         `<span class="bbttcc-op-chip roll focus" data-op-roll="${_escapeHtml(focusKey)}" title="${_escapeHtml(tt2)}">${_escapeHtml(label2)}: +0</span>`
       );
@@ -2048,7 +2048,7 @@ function _applyOpGatesToDialogButtons(dlg, faction, choices, allowDesperation) {
       if (!gate.ok) {
         $b.prop("disabled", true);
         $b.addClass("bbttcc-roll-blocked");
-        $b.attr("title", "Action Unavailable\nRequires " + _mpo() + " " + _opKeyLabel(opKey) + " marks.\nThe faction cannot support this action.");
+        $b.attr("title", "Action Unavailable\nRequires " + _mpo() + " " + _opKeyLabel(opKey) + " marks.\nThe Domain cannot support this action.");
         return;
       }
 
@@ -2062,7 +2062,7 @@ function _applyOpGatesToDialogButtons(dlg, faction, choices, allowDesperation) {
 
       $b.prop("disabled", false);
       $b.removeClass("bbttcc-roll-blocked bbttcc-roll-desperate");
-      $b.attr("title", "Faction Support Available\nSpending " + _mpo() + " " + _opKeyLabel(opKey) + " marks authorizes this roll.");
+      $b.attr("title", "Domain Support Available\nSpending " + _mpo() + " " + _opKeyLabel(opKey) + " marks authorizes this roll.");
     });
   } catch (e) {
     warn("applyOpGatesToDialogButtons failed:", e);
@@ -2075,7 +2075,7 @@ async function _confirmDesperation(opKey) {
     new Dialog({
       title: "Proceed in Desperation?",
       content:
-        "<p>You are attempting an action without faction support.</p>" +
+        "<p>You are attempting an action without the Domain's support.</p>" +
         "<p><b>This roll is a Desperation Attempt.</b></p>" +
         "<p style='opacity:.85'>No <b>" + label + " marks</b> remain. Consequences are guaranteed.</p>",
       buttons: {
@@ -2171,7 +2171,7 @@ async function _sacrificeHpToFactionOp(actor, faction, opKey, hpCost, reason) {
       await faction.setFlag("bbttcc-factions", "opBank", bank);
     }
 
-    ui.notifications?.info?.("Sacrifice accepted: -" + hpCost + " HP  ->  +" + _mpo() + " " + _opKeyLabel(opKey) + " marks (Faction).");
+    ui.notifications?.info?.("Sacrifice accepted: -" + hpCost + " HP  ->  +" + _mpo() + " " + _opKeyLabel(opKey) + " marks (Domain).");
     return true;
   } catch (e) {
     warn("sacrificeHpToFactionOp failed", e);
@@ -2517,7 +2517,7 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
       <select name="bbttccRosterActor" data-id="rosterActorId" style="width:100%;">
         ${roster.map(r=>`<option value="${_escapeHtml(r.id)}" ${ctx && ctx.rosterActorId && String(ctx.rosterActorId)===String(r.id) ? "selected" : ""}>${_escapeHtml(r.name)}</option>`).join("")}
       </select>
-      <div style="opacity:.75;font-size:12px;">OP checks auto-roll &amp; pay from the selected steward's faction &middot; aptitude checks: the table rolls, GM passes/fails</div>
+      <div style="opacity:.75;font-size:12px;">OP checks auto-roll &amp; pay from the selected steward's Domain &middot; aptitude checks: the table rolls, GM passes/fails</div>
     </div>
   ` : "";
 
@@ -2578,8 +2578,8 @@ ${
 }
       ${desc ? `<div class="bbttcc-campaign-dialog-desc">${_beatDescHtml(desc)}</div>` : ""}
       ${rosterHtml}
-      ${opChipsHtml ? `<div class="bbttcc-muted" style="margin-top:6px;">Faction OP Pools</div>${opChipsHtml}` : ""}
-      ${opRollBonusHtml ? `<div class="bbttcc-muted" style="margin-top:6px;">Faction Roll Bonuses</div>${opRollBonusHtml}` : ""}
+      ${opChipsHtml ? `<div class="bbttcc-muted" style="margin-top:6px;">Domain Pools</div>${opChipsHtml}` : ""}
+      ${opRollBonusHtml ? `<div class="bbttcc-muted" style="margin-top:6px;">Domain Roll Bonuses</div>${opRollBonusHtml}` : ""}
       ${
         choices.length
           ? `<div class="bbttcc-campaign-dialog-choices">
@@ -3438,20 +3438,22 @@ function _choicePoliticalTags(choice) {
 }
 function _prettySeverity(sev) {
   switch (String(sev || "")) {
-    case "affirmation_minor":   return "Minor affirmation";
+    case "affirmation_minor":   return "Held to your convictions";
     case "neutral":             return "Neutral";
-    case "dissonance_minor":    return "Minor dissonance";
-    case "dissonance_major":    return "Major dissonance";
-    case "dissonance_critical": return "Critical dissonance";
+    case "dissonance_minor":    return "A small betrayal of your convictions";
+    case "dissonance_major":    return "A real betrayal of your convictions";
+    case "dissonance_critical": return "A betrayal your people will remember";
     default:                    return String(sev || "Unknown");
   }
 }
 function _consequenceRowForSeverity(sev) {
   switch (String(sev || "")) {
-    case "affirmation_minor":   return { unityDelta: +1, darknessDelta: 0, loyaltyDelta: 0, moraleDelta: 0 };
-    case "dissonance_minor":    return { unityDelta: -1, darknessDelta: +1, loyaltyDelta: 0, moraleDelta: 0 };
-    case "dissonance_major":    return { unityDelta: -2, darknessDelta: +2, loyaltyDelta: 0, moraleDelta: 0 };
-    case "dissonance_critical": return { unityDelta: -4, darknessDelta: +4, loyaltyDelta: -1, moraleDelta: 0 };
+    // ruling 17 (2026-10-18): Unity is retired; the choice itself touches Loyalty (and Darkness when critical).
+    // The band of the accumulated drift bites once per turn in bbttcc-aae/convictions.js. ⚠ defaults, Dave to bless.
+    case "affirmation_minor":   return { darknessDelta: 0,  loyaltyDelta: +1 };
+    case "dissonance_minor":    return null;
+    case "dissonance_major":    return { darknessDelta: 0,  loyaltyDelta: -1 };
+    case "dissonance_critical": return { darknessDelta: +1, loyaltyDelta: -2 };
     default:                    return null; // neutral or unknown => no auto consequence
   }
 }
@@ -4276,19 +4278,24 @@ async function executeBeat(campaign, beat, ctx = {}) {
               const dd = Number(res.driftDelta ?? 0) || 0;
               const dissenters = (res.perActor || []).filter(p =>
                 p.severity === "dissonance_major" || p.severity === "dissonance_critical");
-              const fName = game.actors?.get?.(factionId)?.name || "Faction";
+              const fName = game.actors?.get?.(factionId)?.name || "Domain";
+              // ruling 17 (2026-10-18): the Convictions card reaches the table (tableAnnouncements), in the band's words
+              const conv = game.bbttcc?.api?.convictions;
+              const band = conv?.bandFor ? conv.bandFor(res.driftScoreAfter) : null;
+              const bandLabel = band?.label || String(res.severityState || "stable");
+              const pubCard = (() => { try { return game.settings.get("bbttcc-core", "tableAnnouncements") !== "gm"; } catch (_e) { return true; } })();
               const rows = [
-                `<b>${fName}</b> — ${sevLabel} (drift ${dd >= 0 ? "+" : ""}${dd} → ${res.driftScoreAfter ?? "?"} · ${res.severityState || "stable"})`,
-                res.centerLabel ? `Center: ${res.centerLabel}` : null,
-                tags.length ? `Tags: ${tags.join(", ")}` : null,
+                `<b>${fName}</b> — ${sevLabel}. Convictions: <b>${bandLabel}</b> (${Math.max(0, Number(res.driftScoreBefore) || 0)} → ${Math.max(0, Number(res.driftScoreAfter) || 0)})`,
+                res.centerLabel ? `Sworn to: ${res.centerLabel}` : null,
                 dialogRes?.choice?.label ? `Choice: ${dialogRes.choice.label}` : null,
-                res.minorityPressure ? `<b>⚠ Minority pressure</b> — a dissenting bloc escalates this.` : null,
-                dissenters.length ? `Dissenting stewards: ${dissenters.map(p => `<b>${p.name}</b> (${p.philosophy})`).join(", ")}` : null
+                res.minorityPressure ? `<b>⚠ Dissent in the Domain</b> — a bloc of stewards objects, and that makes it worse.` : null,
+                dissenters.length ? `Objecting stewards: ${dissenters.map(p => `<b>${p.name}</b> (${p.philosophy})`).join(", ")}` : null,
+                (!pubCard && tags.length) ? `Tags: ${tags.join(", ")}` : null
               ].filter(Boolean);
               const gmIds = (game.users?.filter?.(u => u.isGM) || []).map(u => u.id);
               await ChatMessage.create({
-                content: `<div class="bbttcc-aae-pressure"><h3>🗳️ Political Pressure</h3><p>${rows.join("</p><p>")}</p></div>`,
-                whisper: gmIds
+                content: `<div class="bbttcc-aae-pressure"><h3>🧭 Convictions</h3><p>${rows.join("</p><p>")}</p></div>`,
+                whisper: pubCard ? [] : gmIds
               });
             }
           } catch (e) {
@@ -7850,6 +7857,7 @@ async function setActiveCampaignId(id) {
 // UI
 async function openBuilder(campaignId = null) {
   try {
+    if (game.bbttcc?.alpha?.hidden?.("campaignTools")) { ui.notifications?.info("Campaign tools are GM-side."); return null; }   // ALPHA CUT (2026-10-17)
     const mod = await import("../apps/campaign-builder-app.js");
     const App = mod?.BBTTCCCampaignBuilderApp || mod?.default || null;
     if (!App) {

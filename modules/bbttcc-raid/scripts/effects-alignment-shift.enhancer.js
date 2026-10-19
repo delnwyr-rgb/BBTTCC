@@ -1,5 +1,5 @@
 // v1.0.0 — Alignment Shift (Sephirot) — light mechanical, mostly narrative
-// Adds "Sanctified" + "Pilgrimage Site" to the hex, queues +1 Morale, +1 Loyalty,
+// Adds "Sanctified" + "Pilgrimage Site" to the hex, queues +2 Loyalty (was +1 Morale +1 Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)),
 // and flags the faction with a one-turn faith boon.
 
 (() => {
@@ -18,7 +18,7 @@
     if (game?.ready) go(); else Hooks.on("ready", go);
   }
 
-  async function queueAlignmentShift({ actor, targetUuid, moraleDelta=1, loyaltyDelta=1 }) {
+  async function queueAlignmentShift({ actor, targetUuid, loyaltyDelta=1 }) {   // hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.): the old moraleDelta is folded into loyaltyDelta
     if (!targetUuid) return "No target";
     const ref = await fromUuid(targetUuid);
     const doc = ref?.document ?? ref;
@@ -33,7 +33,6 @@
     for (const tag of ["Sanctified","Pilgrimage Site"]) {
       if (!pend.repairs.addModifiers.includes(tag)) pend.repairs.addModifiers.push(tag);
     }
-    pend.moraleDelta  = Number(pend.moraleDelta  || 0) + Number(moraleDelta  || 0);
     pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + Number(loyaltyDelta || 0);
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
 
@@ -46,7 +45,7 @@
       await A.update({ [`flags.${MOD_F}.turn.pending`]: p }, { diff:true, recursive:true });
     }
 
-    return `Queued: Sanctified & Pilgrimage Site • +${moraleDelta} Morale • +${loyaltyDelta} Loyalty • (faction faith boon next turn)`;
+    return `Queued: Sanctified & Pilgrimage Site • +${loyaltyDelta} Loyalty • (faction faith boon next turn)`;
   }
 
   whenRaidReady((api)=>{
@@ -64,11 +63,11 @@
           try { msg = String(await base({ actor, entry })) || ""; }
           catch(e){ console.warn(TAG, "base apply error", e); }
         }
-        const m2 = await queueAlignmentShift({ actor, targetUuid: entry?.targetUuid, moraleDelta: 1, loyaltyDelta: 1 });
+        const m2 = await queueAlignmentShift({ actor, targetUuid: entry?.targetUuid, loyaltyDelta: 1 });
         return [msg, m2].filter(Boolean).join(" • ") || "Alignment Shift queued.";
       }
     });
 
-    console.log(TAG, "installed (Sanctified + Pilgrimage Site, +1 Morale/+1 Loyalty, faithBoon next turn).");
+    console.log(TAG, "installed (Sanctified + Pilgrimage Site, +2 Loyalty, faithBoon next turn).");
   });
 })();

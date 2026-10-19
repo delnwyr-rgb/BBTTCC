@@ -269,9 +269,9 @@
    *
    * ---- factionEffects keys observed (9) ----
    * factionId (required when applying; optional in preview)
-   * moraleDelta
+   * moraleDelta   (retired 2026-10-18, ruling 19 — accepted, no effect)
    * darknessDelta
-   * unityDelta
+   * unityDelta    (retired 2026-10-18, ruling 18 — accepted, no effect)
    * deferred: { when:"nextRound"|..., opDeltas:{...} }
    * recurring: { turns:number, opDeltas:{...} }
    * riskModifiers: { darknessRiskMultiplier?:number, ... }
@@ -292,7 +292,7 @@
   const THROUGHPUT = Object.create(null);
 
   // RETIRED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.C) — radiant_rally merged
-  // into rally_the_line; its +2 Morale / −1 Darkness rider now lives on the
+  // into rally_the_line; its −1 Darkness rider now lives on the
   // rally_the_line handler below. Handler removed so the GM-only stub synthesis
   // in _mansForType doesn't resurrect it.
 
@@ -345,9 +345,8 @@
       factionEffects: [
         {
           factionId: ctx.attackerFactionId || null,
-          moraleDelta: 2,
           darknessDelta: -1,
-          note: "Rally the Line (preview): +2 Morale, −1 Darkness on success."
+          note: "Rally the Line (preview): −1 Darkness on success."   // (+2 Morale retired 2026-10-18, ruling 19)
         }
       ],
       meta: { source: "throughput", maneuverKey: "rally_the_line", preview: true }
@@ -610,7 +609,8 @@
   };
 
   // --- T2 LEARNED: Empathic Surge ---
-  // "Empathy Meter +1 after round; heal morale."
+  // "Empathy Meter +1 after round." (Unity + Morale both retired 2026-10-18 — rulings 18/19; the
+  // row is kept so the maneuver still previews, but its deltas no longer land.)
   THROUGHPUT["empathic_surge"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 
@@ -619,9 +619,8 @@
         {
           factionId: ctx.attackerFactionId || null,
           unityDelta: +1,
-          moraleDelta: +1,
           when: "afterRound",
-          note: "Empathic Surge (preview): +1 Unity (Empathy) after round; +1 Morale on success."
+          note: "Empathic Surge (preview): +1 Unity (Empathy) after round."
         }
       ],
       meta: { source: "throughput", maneuverKey: "empathic_surge", preview: true }
@@ -1785,8 +1784,7 @@
         opBank: normalizeCost(ff?.opBank || {}),
         opCaps: normalizeCost(ff?.opCaps || {}),
         opTotal: sumOP(ff?.opBank || {}),
-        morale: inferFactionTrack(ff, 'morale'),
-        loyalty: inferFactionTrack(ff, 'loyalty'),
+        loyalty: inferFactionTrack(ff, 'loyalty'),   // (morale dropped — retired 2026-10-18, ruling 19)
         darkness: copy(ff?.darkness || null),
         victory: copy(ff?.victory || null),
         logistics: copy(ff?.logistics || null),
@@ -2122,7 +2120,7 @@
         if (/ration|charity|unity|faith/.test(label)) {
           if (moraleNeed > 0) {
             factors.pressureFit += 2;
-            relevanceReasons.push("helps morale/loyalty strain");
+            relevanceReasons.push("helps loyalty strain");
           } else {
             factors.pressureFit -= 0.35;
           }
@@ -2229,7 +2227,6 @@
     const f = observation?.faction || {};
     const p = copy(f?.pressure || {});
     return {
-      morale: Number(f?.morale || 0) || 0,
       loyalty: Number(f?.loyalty || 0) || 0,
       logistics: copy(f?.logistics || null),
       pressure: p
@@ -2322,12 +2319,11 @@
     return need;
   }
 
-  function inferMoraleNeed(observation) {
+  function inferMoraleNeed(observation) {   // name kept for callers; reads Loyalty only (Morale retired 2026-10-18, ruling 19)
     const pressure = summarizePressure(observation) || {};
-    const morale = Number(pressure?.morale || 0) || 0;
     const loyalty = Number(pressure?.loyalty || 0) || 0;
-    // Morale/loyalty are 0–100 tracks where HIGHER is better — the need is when they run low.
-    return (morale < 40 ? 1 : 0) + (loyalty < 40 ? 1 : 0);
+    // Loyalty is a 0–100 track where HIGHER is better — the need is when it runs low.
+    return (loyalty < 40 ? 1 : 0);
   }
 
   function getTravelTraceFrequency(observation) {
@@ -2943,15 +2939,14 @@
 
   function detectStabilityDrift(observation) {
     const pressure = summarizePressure(observation) || {};
-    const morale = Number(pressure.morale || 0) || 0;
     const loyalty = Number(pressure.loyalty || 0) || 0;
     const dark = summarizeDarkness(observation) || {};
     const globalDark = Number(dark.global || 0) || 0;
     let score = 0;
     const signals = [];
-    // Morale/loyalty are 0–100 tracks where HIGHER is better (unrest at loyalty < 30).
-    if (morale <= 20 || loyalty <= 20) { score += 2; signals.push("faction strain is elevated"); }
-    else if (morale <= 40 || loyalty <= 40) { score += 1; signals.push("faction strain is noticeable"); }
+    // Loyalty is a 0–100 track where HIGHER is better (unrest at loyalty < 30). (Morale term retired 2026-10-18, ruling 19.)
+    if (loyalty <= 20) { score += 2; signals.push("faction strain is elevated"); }
+    else if (loyalty <= 40) { score += 1; signals.push("faction strain is noticeable"); }
     if (globalDark >= 10) { score += 2; signals.push("darkness is materially rising"); }
     else if (globalDark >= 5) { score += 1; signals.push("darkness pressure is present"); }
     let band = "stable";

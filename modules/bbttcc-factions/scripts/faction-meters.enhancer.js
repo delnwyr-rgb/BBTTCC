@@ -1,16 +1,18 @@
 // bbttcc-factions/enhancers/faction-meters.enhancer.js
-// Wireframe-aligned Morale/Loyalty meters for the Bad Eden Faction Sheet.
-// Overview-only injector: keeps the meters out of retained/global sheet chrome.
+// Wireframe-aligned Loyalty meter for the Bad Eden Faction Sheet.
+// Overview-only injector: keeps the meter out of retained/global sheet chrome.
+//
+// Faction Morale RETIRED 2026-10-18 (ruling 19): the Morale half of the strip is gone and
+// setMorale / bumpMorale stay on the API only as tolerant no-ops (they return the stored
+// value without writing) so stale callers never throw.
 //
 // Flags read (0–100 clamped):
-// - flags['bbttcc-factions'].morale
 // - flags['bbttcc-factions'].loyalty
 //
 // Helpers exposed:
-// - game.bbttcc.api.factions.setMorale({ factionId, value })
 // - game.bbttcc.api.factions.setLoyalty({ factionId, value })
-// - game.bbttcc.api.factions.bumpMorale({ factionId, delta })
 // - game.bbttcc.api.factions.bumpLoyalty({ factionId, delta })
+// - game.bbttcc.api.factions.setMorale / bumpMorale — retired no-ops (see above)
 //
 (() => {
   const TAG = "[bbttcc-factions/faction-meters]";
@@ -27,22 +29,16 @@
       .bbttcc-ml-label{display:flex;align-items:center;justify-content:space-between;font-size:.95rem;font-weight:700;opacity:.95}
       .bbttcc-ml-bar{position:relative;height:10px;border-radius:999px;background:#e5e7eb;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
       .bbttcc-ml-fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px}
-      .bbttcc-ml-morale .bbttcc-ml-fill{background:linear-gradient(90deg,#fca5a5,#f59e0b,#4ade80)}
       .bbttcc-ml-loyalty .bbttcc-ml-fill{background:linear-gradient(90deg,#93c5fd,#60a5fa,#2563eb)}
       .bbttcc-ml-val{font-weight:700;opacity:.95}
     </style>`;
   }
 
-  function buildStrip({ morale=0, loyalty=0 }={}){
-    morale = clamp01(morale); loyalty = clamp01(loyalty);
-    const mPct = Math.round(morale);
+  function buildStrip({ loyalty=0 }={}){
+    loyalty = clamp01(loyalty);
     const lPct = Math.round(loyalty);
     return /* html */`
       <div class="bbttcc-ml-strip" id="bbttcc-ml-strip" data-bbttcc-overview-meters="true">
-        <div class="bbttcc-ml-meter bbttcc-ml-morale" title="Overall battlefield spirit and willingness to press the attack.">
-          <div class="bbttcc-ml-label"><span>Morale</span><span class="bbttcc-ml-val">${mPct}%</span></div>
-          <div class="bbttcc-ml-bar"><div class="bbttcc-ml-fill" style="width:${mPct}%"></div></div>
-        </div>
         <div class="bbttcc-ml-meter bbttcc-ml-loyalty" title="Population cooperation and internal cohesion.">
           <div class="bbttcc-ml-label"><span>Loyalty</span><span class="bbttcc-ml-val">${lPct}%</span></div>
           <div class="bbttcc-ml-bar"><div class="bbttcc-ml-fill" style="width:${lPct}%"></div></div>
@@ -83,9 +79,6 @@
       const isOurSheet = app?.constructor?.name?.includes?.("BBTTCCFactionSheet") || html?.closest?.(".bbttcc-faction-sheet")?.length;
       if (!isOurSheet) return;
       const A = app.actor;
-      const morale = get(A, `flags.${MOD}.morale`, undefined);
-      const morale2 = get(A, `flags.${MOD}.${MOD}.morale`, undefined);
-      const moraleV = (morale !== undefined) ? morale : (morale2 !== undefined ? morale2 : 0);
       const loyalty = get(A, `flags.${MOD}.loyalty`, undefined);
       const loyalty2 = get(A, `flags.${MOD}.${MOD}.loyalty`, undefined);
       const loyaltyV = (loyalty !== undefined) ? loyalty : (loyalty2 !== undefined ? loyalty2 : 0);
@@ -100,7 +93,7 @@
       const target = findOverviewTarget($html);
       if (!target?.node?.length) return;
 
-      const strip = buildStrip({ morale: moraleV, loyalty: loyaltyV });
+      const strip = buildStrip({ loyalty: loyaltyV });
       if (target.mode === 'anchor') {
         target.node.replaceWith(strip);
       } else if (target.mode === 'after') {
@@ -126,7 +119,7 @@
       const war = get(A, `flags.${MOD}.warLogs`, []);
       war.push({ type:"turn", date:(new Date()).toLocaleString(), summary:`${key.charAt(0).toUpperCase()+key.slice(1)} set to ${v}%` });
       await A.update({ [`flags.${MOD}.warLogs`]: war });
-      if (A.sheet?.rendered) A.sheet.render(false);   // refresh an OPEN sheet only — never pop a closed one on programmatic morale/loyalty changes
+      if (A.sheet?.rendered) A.sheet.render(false);   // refresh an OPEN sheet only — never pop a closed one on programmatic loyalty changes
       return v;
     };
     const bumpVal = async (A, key, delta) => {
@@ -134,18 +127,20 @@
       return setVal(A, key, cur + Number(delta||0));
     };
 
-    game.bbttcc.api.factions.setMorale = async ({ factionId, value }) => {
-      const A = game.actors.get(String(factionId)); if (!A) throw new Error("Bad factionId");
-      return setVal(A, "morale", value);
+    // RETIRED 2026-10-18 (ruling 19): faction Morale is no longer a game meter. These two stay on
+    // the API as tolerant no-ops — no flag write, no warLog line — and return whatever value the
+    // actor still carries (0 if none / unknown faction) so any stale caller keeps working.
+    const retiredMorale = ({ factionId } = {}) => {
+      if (!retiredMorale.__warned) { retiredMorale.__warned = true; console.debug(TAG, "setMorale/bumpMorale are retired (ruling 19, 2026-10-18) — ignored"); }
+      const A = game.actors.get(String(factionId));
+      return clamp01(A ? get(A, `flags.${MOD}.morale`, 0) : 0);
     };
+    game.bbttcc.api.factions.setMorale = async (args) => retiredMorale(args);
     game.bbttcc.api.factions.setLoyalty = async ({ factionId, value }) => {
       const A = game.actors.get(String(factionId)); if (!A) throw new Error("Bad factionId");
       return setVal(A, "loyalty", value);
     };
-    game.bbttcc.api.factions.bumpMorale = async ({ factionId, delta }) => {
-      const A = game.actors.get(String(factionId)); if (!A) throw new Error("Bad factionId");
-      return bumpVal(A, "morale", delta);
-    };
+    game.bbttcc.api.factions.bumpMorale = async (args) => retiredMorale(args);
     game.bbttcc.api.factions.bumpLoyalty = async ({ factionId, delta }) => {
       const A = game.actors.get(String(factionId)); if (!A) throw new Error("Bad factionId");
       return bumpVal(A, "loyalty", delta);

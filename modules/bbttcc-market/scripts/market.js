@@ -270,6 +270,186 @@ async function resolveEntryRarity(entry) {
   return "common";
 }
 
+/* ===================== SELL-BACK (owner ask 2026-10-17) =====================
+   Gear in a character's inventory sells to the selected vendor for a % of list
+   price set by the vendor faction's stance toward the selling faction. Not for
+   sale: anything Standard Issue FOR THE SELLER (free kit is worth nothing),
+   soulbound, artifacts, unpriced. Marks are credited to the seller faction's
+   Economy bank FIRST; a refused credit (bank at cap) leaves the inventory alone.
+*/
+const SELL_RELAY = "market.sell";
+const SELL_RATE_DEFAULT = { allied: 60, friendly: 50, neutral: 40, unfriendly: 25, hostile: 10, at_war: 0 };
+const SELL_GEAR_TYPES = new Set(["weapon", "armor", "gear"]);
+
+function _sellEnabled() {
+  try { return game.settings.get(MODULE_ID, "sellBackEnabled") !== false; } catch { return true; }
+}
+function _sellRate(tier) {
+  const def = SELL_RATE_DEFAULT[tier] ?? SELL_RATE_DEFAULT.neutral;
+  try {
+    const v = Number(game.settings.get(MODULE_ID, `sellRate_${tier}`));
+    return Number.isFinite(v) ? Math.max(0, Math.min(100, v)) : def;
+  } catch { return def; }
+}
+function _normName(s) { return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim(); }
+
+/** The faction that owns a vendor: explicit factionId, else a faction actor of the same name. */
+function vendorFactionFor(vendor) {
+  if (!vendor) return null;
+  if (vendor.factionId) { const a = game.actors.get(vendor.factionId); if (a && isFactionActor(a)) return a; }
+  const n = _normName(vendor.name);
+  return n ? (allFactions().find(a => _normName(a.name) === n) || null) : null;
+}
+
+/** Stance of the vendor's faction toward the seller → { tier, rate, label, vendorFactionId, vendorFactionName }. */
+function vendorStanceFor(vendor, faction) {
+  const vf = vendorFactionFor(vendor);
+  let tier = "neutral";
+  if (vf && faction) {
+    if (vf.id === faction.id) tier = "allied";
+    else {
+      try {
+        const rel = game.bbttcc?.api?.factions?.relations;
+        const t = String(rel?.get?.(vf, faction) || "");
+        if (SELL_RATE_DEFAULT[t] !== undefined) tier = t;
+      } catch {}
+    }
+  }
+  const rate = _sellRate(tier);
+  const tierLabel = tier.replace(/_/g, " ");
+  const label = vf
+    ? (faction ? (vf.id === faction.id ? `${vf.name}'s own market` : `${vf.name} is ${tierLabel} toward ${faction.name}`) : `${vf.name}'s market`)
+    : "no faction ties (neutral)";
+  return { tier, rate, label, vendorFactionId: vf?.id || "", vendorFactionName: vf?.name || "" };
+}
+
+/** Rarity of an owned Item doc — the same floor rule resolveEntryRarity uses for catalog gear. */
+function resolveDocRarity(doc) {
+  try {
+    const sysR = foundry.utils.getProperty(doc, "system.rarity");
+    const altR = foundry.utils.getProperty(doc, "system.traits.rarity") || foundry.utils.getProperty(doc, "flags.dnd5e.rarity");
+    const raw = sysR || altR || "";
+    const native = raw ? normalizeRarity(_normalizeExternalRarity(raw)) : null;
+    const rfiTier = foundry.utils.getProperty(doc, "flags.fourththing.rfi.item.tier") ?? foundry.utils.getProperty(doc, "flags.rfi.item.tier");
+    const tierR = rfiTier ? _tierToRarity(_tierInt(rfiTier)) : null;
+    if (native && tierR) return (RARITY_RANK[tierR] > RARITY_RANK[native]) ? tierR : native;
+    if (native) return native;
+    if (tierR) return normalizeRarity(tierR);
+  } catch {}
+  return "common";
+}
+
+function isSellableGearItem(item) {
+  if (!item || item.documentName !== "Item") return false;
+  if (SELL_GEAR_TYPES.has(String(item.type || "").toLowerCase())) return true;
+  // Anything the RFI item layer priced is gear for market purposes.
+  return !!foundry.utils.getProperty(item, "flags.fourththing.rfi.item.price");
+}
+
+/**
+ * What this vendor would pay for one unit of `item` sold by `faction`.
+ * → { ok, reason, listMarks, rate, payout, qty, rarity, tier, bound, frame, stance }
+ */
+async function sellQuote(item, { faction = null, vendor = null } = {}) {
+  const out = { ok: false, reason: "", listMarks: 0, rate: 0, payout: 0, qty: 1, rarity: "common", tier: "", bound: "free", frame: "tool", stance: null };
+  if (!item) { out.reason = "No item"; return out; }
+  const rfi = foundry.utils.getProperty(item, "flags.fourththing.rfi.item") || {};
+  out.qty = Math.max(1, Number(item.system?.quantity) || 1);
+  out.tier = rfi.tier ? String(rfi.tier) : "";
+  out.bound = String(rfi.bound || rfi.price?.bound || "free");
+  out.frame = String(rfi.frame || "tool");
+  out.rarity = resolveDocRarity(item);
+  if (out.rarity === "artifact") { out.reason = "Artifact — never for sale"; return out; }
+  if (out.bound === "soulbound") { out.reason = "Soulbound — worthless to anyone else"; return out; }
+
+  // List price: the stamped RFI price, else the system's rubric from tier + frame.
+  let marks = Number(rfi.price?.marks);
+  if (!Number.isFinite(marks)) {
+    try {
+      const pr = game.fourththing?.pricing;
+      if (pr?.computeListPrice && out.tier) marks = Number(pr.computeListPrice({ tier: out.tier, frame: out.frame, bound: out.bound }));
+    } catch {}
+  }
+  if (!Number.isFinite(marks) || marks < 0) { out.reason = "Unpriced — ask the GM"; return out; }
+  out.listMarks = Math.round(marks);
+
+  // Standard Issue FOR THE SELLER: free to them, so worth nothing to anyone.
+  if (faction) {
+    const distance = rarityDistance(out.rarity, factionEconomicHorizon(faction));
+    if (isStandardIssue("gear", out.rarity, distance, out.frame)) { out.reason = "Standard Issue — free to you, worthless to them"; return out; }
+  }
+
+  const stance = vendorStanceFor(vendor, faction);
+  out.stance = stance;
+  out.rate = stance.rate;
+  if (!(stance.rate > 0)) { out.reason = `${vendor?.name || "The vendor"} won't deal with ${faction?.name || "you"}`; return out; }
+  out.payout = Math.floor(out.listMarks * stance.rate / 100);
+  if (out.payout <= 0) { out.reason = "Worth less than a mark"; return out; }
+  out.ok = true;
+  return out;
+}
+
+/**
+ * Sell `qty` units of an inventory item to a vendor. Player seats relay to the GM
+ * (gmExec "market.sell", re-validated there). Credit first, then hand over the goods.
+ */
+async function sell({ itemUuid, factionId, vendorId, qty = 1, note = "", _relayed = false } = {}) {
+  if (!game.user?.isGM) {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (gx && typeof gx.call === "function") {
+      return gx.call(SELL_RELAY, { itemUuid, factionId, vendorId, qty, note }, { timeoutMs: 30000 });
+    }
+  }
+  if (!_sellEnabled()) throw new Error("Selling is switched off in the market settings.");
+  const faction = game.actors.get(String(factionId || ""));
+  if (!faction || !isFactionActor(faction)) throw new Error("Seller faction not found.");
+  const vendor = _vendorsArray().map(_normalizeVendor).find(v => v.id === String(vendorId || ""));
+  if (!vendor) throw new Error("Vendor not found.");
+  const item = await fromUuid(String(itemUuid || "")).catch(() => null);
+  if (!item || item.documentName !== "Item" || !item.parent) throw new Error("Item not found in an inventory.");
+  if (!isSellableGearItem(item)) throw new Error(`${item.name} is not gear.`);
+
+  const quote = await sellQuote(item, { faction, vendor });
+  if (!quote.ok) throw new Error(quote.reason || `${item.name} cannot be sold here.`);
+  const n = Math.max(1, Math.min(quote.qty, Math.round(Number(qty) || 1)));
+  const payout = quote.payout * n;
+
+  // 1) Credit first — a refused credit (Economy bank at cap) leaves the inventory untouched.
+  const credit = await spendMarksByPools(faction.id, { economy: payout }, { label: `Market Sale: ${item.name}`, note: String(note || "") });
+  if (!credit.ok) throw new Error(`${faction.name}'s Economy bank refused the credit (at its cap?). Spend some marks first.`);
+
+  // 2) Hand over the goods — peel units off a stack, delete the last one.
+  const owner = item.parent;
+  const itemName = item.name, itemImg = item.img, itemUuidStr = String(itemUuid);
+  if (quote.qty > n) await item.update({ "system.quantity": quote.qty - n });
+  else await item.delete();
+
+  // 3) Receipt (faction war log) + 4) GM whisper.
+  const receipt = {
+    ts: Date.now(), type: "market_sale",
+    summary: `Sold: ${itemName}${n > 1 ? ` ×${n}` : ""} to ${vendor.name} (+${payout} marks at ${quote.rate}%)`,
+    vendorId: vendor.id, vendorFactionId: quote.stance?.vendorFactionId || "",
+    itemUuid: itemUuidStr, itemName, qty: n, listMarks: quote.listMarks, rate: quote.rate,
+    stance: quote.stance?.tier || "neutral", payout, rarity: quote.rarity, sellerActorId: owner.id,
+    note: String(note || "").trim()
+  };
+  await appendFactionReceipt(faction, receipt);
+  try {
+    const gmIds = (game.users ?? []).filter(u => u.isGM).map(u => u.id);
+    if (gmIds.length) {
+      await ChatMessage.create({
+        whisper: gmIds,
+        speaker: { alias: "Bad Eden Market" },
+        content: `<p><b>Market Sale</b></p>
+          <p><b>${esc(owner.name)}</b> (${esc(faction.name)}) sold <b>${esc(itemName)}</b>${n > 1 ? ` ×${n}` : ""} to <b>${esc(vendor.name)}</b> for <code>+${payout} marks</code>.</p>
+          <p class="bbttcc-muted">List ${quote.listMarks} × ${quote.rate}% — ${esc(quote.stance?.label || "neutral")}. Rarity: <code>${esc(quote.rarity)}</code></p>
+          ${receipt.note ? `<p class="bbttcc-muted">Note: ${esc(receipt.note)}</p>` : ""}`
+      });
+    }
+  } catch {}
+  return { ok: true, payout, qty: n, receipt, itemName, itemImg };
+}
+
 function rarityLabelFor(r) {
   const k = normalizeRarity(r);
   if (k === "very_rare") return "Very Rare";
@@ -352,6 +532,27 @@ function allCharacters() {
   return game.actors?.contents?.filter?.(isCharacterActor) ?? [];
 }
 
+/** The steward's Domain (ruling 16, 2026-10-18): the faction actor this character is linked to.
+ *  Link order = the system's own (bbttcc-bridge ftResolveFactionLink): flags.bbttcc-factions.factionId →
+ *  system.faction.id → the faction whose roster lists the character. One steward per Domain is the rule. */
+function domainOf(actor) {
+  try {
+    if (!actor) return null;
+    const direct = String(actor.getFlag?.(MOD_FACTIONS, "factionId") || foundry.utils.getProperty(actor, "system.faction.id") || foundry.utils.getProperty(actor, "system.system.faction.id") || "").replace(/^Actor\./, "");
+    const byId = direct ? game.actors.get(direct) : null;
+    if (byId && isFactionActor(byId)) return byId;
+    const ids = new Set([actor.id, actor.uuid]);
+    for (const f of allFactions()) {
+      const roster = f.getFlag?.(MOD_FACTIONS, "roster") || [];
+      for (const e of (Array.isArray(roster) ? roster : [])) {
+        const k = typeof e === "string" ? e : String(e?.uuid || e?.id || "");
+        if (ids.has(k) || ids.has(k.replace(/^Actor\./, ""))) return f;
+      }
+    }
+  } catch (_e) {}
+  return null;
+}
+
 function esc(s) {
   try { return foundry.utils.escapeHTML(String(s ?? "")); } catch { return String(s ?? ""); }
 }
@@ -374,6 +575,7 @@ function kindLabel(k) {
   if (key === "rig_upgrade") return "Rig Upgrade";
   if (key === "facility_upgrade") return "Facility Upgrade";
   if (key === "actor") return "Actor (Rig/Boss/NPC)";
+  if (key === "contract") return "Contract (crew / association)";
   return "Thing";
 }
 
@@ -460,9 +662,14 @@ function _normalizeVendor(v) {
   const id = String(v?.id || _makeId("vendor"));
   const tags = Array.isArray(v?.tags) ? v.tags : String(v?.tags || "").split(",").map(s=>s.trim()).filter(Boolean);
   const active = (v?.active === false) ? false : true;
-  return { id, name: String(v?.name || id), blurb: String(v?.blurb || ""), tags: tags.map(t=>String(t)), active };
+  // factionId (2026-10-17): the faction that OWNS this market — its stance toward the
+  // seller sets the sell-back rate. Empty = no ties (neutral); resolved by name as a fallback.
+  const factionId = String(v?.factionId || "");
+  return { id, name: String(v?.name || id), blurb: String(v?.blurb || ""), tags: tags.map(t=>String(t)), active, factionId };
 }
 
+
+import "./contracts.js";   // ruling 15 (2026-10-18): hired crews / associations — game.bbttcc.api.contracts
 
 function _normalizeEntry(e) {
   const id = String(e?.id || _makeId("entry"));
@@ -487,6 +694,7 @@ function _normalizeEntry(e) {
   if (kind === "facility") out.facilityPatch = e?.facilityPatch || {};
   if (kind === "hex_asset") out.asset = e?.asset || { key:"", label:"" };
   if (kind === "rig_upgrade" || kind === "facility_upgrade") out.patch = e?.patch || {};
+  if (kind === "contract") out.contract = { family: String(e?.contract?.family || "crew"), docId: String(e?.contract?.docId || ""), pack: String(e?.contract?.pack || ""), turns: Math.max(1, Number(e?.contract?.turns) || 3) };
   return out;
 }
 
@@ -498,6 +706,7 @@ function _entryPayloadString(e) {
   if (kind === "facility") return JSON.stringify(e?.facilityPatch || {}, null, 2);
   if (kind === "hex_asset") return JSON.stringify(e?.asset || {}, null, 2);
   if (kind === "rig_upgrade" || kind === "facility_upgrade") return JSON.stringify(e?.patch || {}, null, 2);
+  if (kind === "contract") return JSON.stringify(e?.contract || {}, null, 2);
   return "";
 }
 
@@ -512,28 +721,28 @@ function _entryPayloadString(e) {
 */
 const MARKET_TIPS = {
   // ---- Market app (player-facing) ----
-  context:   "Context — who is buying and where deliveries land. Vendor + Buyer Faction are required; Buyer Character only matters for gear, the Delivery Hex only for facility/asset purchases. All picks persist per client between sessions.",
+  context:   "Context — who is buying and where deliveries land. Vendor + Buyer Domain are required; Buyer Character only matters for gear, the Delivery Hex only for facility/asset purchases. All picks persist per client between sessions.",
   vendor:    "Vendor — which market you are browsing. Players only see markets the GM has flagged Active; the GM sees inactive ones suffixed '(inactive)'. Your selection is remembered per client.",
-  faction:   "Buyer Faction — the faction whose OP bank pays for every purchase here . Bank and prices are in marks. Players see factions they own; the GM sees all. The purchase receipt is written to this faction's war log.",
+  faction:   "Buyer Domain — the Domain whose treasury pays for every purchase here . Bank and prices are in marks. Players buy as their own steward; the GM sees all. The purchase receipt is written to this faction's war log.",
   character: "Buyer Character — where purchased GEAR lands: a copy of the item is created in this character's inventory, stamped as vendor-bought. Required before buying gear; ignored for rigs, facilities, and hex assets.",
-  hex:       "Delivery Hex — where facility, facility-upgrade, and hex-asset purchases land. The list holds the hexes the Buyer Faction KNOWS: ones it holds and ones it has visited. Each shows its danger score and the delivery fee Furrier's Fixit Farm charges the receiver. Facilities merge onto the hex's primary facility; assets append to its asset list. Those purchases cannot complete without a hex. Gear and rigs ignore this field.",
+  hex:       "Delivery Hex — where facility, facility-upgrade, and hex-asset purchases land. The list holds the hexes the Buyer Domain KNOWS: ones it holds and ones it has visited. Each shows its danger score and the delivery fee Furrier's Fixit Farm charges the receiver. Facilities merge onto the hex's primary facility; assets append to its asset list. Those purchases cannot complete without a hex. Gear and rigs ignore this field.",
   deliveryFee: "Delivery fee — Furrier's Fixit Farm (the Jackalope haulers) deliver; the RECEIVER pays base + per-danger-point, charged on top of the item in the delivery pool. Danger (0–12) counts low development, missing or hostile authority, wasteland/ruins, radiation, darkness, hostile hex modifiers, active conditions, and the holder's stance toward the buyer; your own fortified, well-kept holdings come out cheapest. GM tunes base, per-point rate and pool in module settings.",
-  note:      "Notes — free text stamped onto the purchase receipt (faction war log entry + GM whisper). Use it to record why, or for whom, the purchase was made.",
+  note:      "Notes — free text stamped onto the purchase receipt (the Domain's war log + GM whisper). Use it to record why, or for whom, the purchase was made.",
   manage:    "Manage Catalogs — GM-only editor for vendors and their catalog entries. Add or rename markets, toggle player visibility, drag-drop items in, set costs.",
   catalog:   "Catalog — the selected vendor's stock, filtered by search/category and sorted. Each row shows kind, RFI tier, list cost, and an Economic Horizon chip with the final price your faction actually pays.",
   search:    "Search — live filter on entry name, blurb, and kind text within the selected vendor's catalog.",
-  treasury:  "Treasury — the Buyer Faction's current OP banks, in marks, one pill per pool, plus its Economic Horizon. This is what every price on this page is measured against; pools at zero are dimmed.",
+  treasury:  "Treasury — the Buyer Domain's current OP banks, in marks, one pill per pool, plus its Economic Horizon. This is what every price on this page is measured against; pools at zero are dimmed.",
   tabs:      "Gear-type tabs — the catalog is always split by what the entry is: Weapons / Armor / Gear / Consumables (by the underlying item), then Rigs, Hire, Facilities, Hex Assets, and Upgrades. Counts reflect the search, cost and affordability filters.",
-  costBand:  "Cost band — filter by what the Buyer Faction would actually pay (horizon-scaled; list price when no faction is selected): Standard Issue (free — the Tier I kit), then marks brackets that follow the RFI tier ladder (50 / 150 / 500 / 1500).",
-  affordOnly: "Only what we can afford — hides every entry whose bill exceeds the Buyer Faction's pool balances (split items need every portion covered). Needs a Buyer Faction. Unaffordable rows otherwise stay visible, dimmed, with a 'Short' pill saying how much is missing and in which pool.",
+  costBand:  "Cost band — filter by what the Buyer Domain would actually pay (horizon-scaled; list price when no Domain is selected): Standard Issue (free — the Tier I kit), then marks brackets that follow the RFI tier ladder (50 / 150 / 500 / 1500).",
+  affordOnly: "Only what we can afford — hides every entry whose bill exceeds the Buyer Domain's pool balances (split items need every portion covered). Needs a Buyer Domain. Unaffordable rows otherwise stay visible, dimmed, with a 'Short' pill saying how much is missing and in which pool.",
   category:  "Category — filters the list. Weapons / Armor / Gear / Consumables subdivide gear entries by the underlying item's type (consumables are detected via RFI frame, slot, or tag); the remaining options match the entry kind directly (rig, facility, hex asset, upgrades).",
   sort:      "Sort — Name (A→Z), or RFI Tier (I–IV) ascending/descending. Entries with no tier sort after Tier IV; equal-tier rows stay alphabetized.",
   openDoc:   "Open item sheet — inspect the actual item (stats, description, tier) before you spend marks on it.",
   cost:      "Cost — the list price. RFI flag-priced items show their native pool in marks (e.g. 'Viol 50 marks'); 'Split' items pay each portion to its own pool; legacy entries show catalog Economy OP (1 OP = 10 marks). The Horizon chip shows the final scaled price your faction pays.",
-  chip:      "Economic Horizon — your faction's tier sets its rarity horizon (Tier 0–1→Uncommon, 2→Rare, 3→Very Rare, 4→Legendary). An item's rarity is the higher of its stamped RFI tier (I→Uncommon, II→Rare, III→Very Rare, IV→Legendary) and its native rarity. Tier I kit at or under the horizon is Standard Issue (free) — except rig frames, which always cost their hull price. Anything tiered above that pays list price within the horizon (rigs/facilities/assets always pay base). Above the horizon the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
+  chip:      "Economic Horizon — your Domain's tier sets its rarity horizon (Tier 0–1→Uncommon, 2→Rare, 3→Very Rare, 4→Legendary). An item's rarity is the higher of its stamped RFI tier (I→Uncommon, II→Rare, III→Very Rare, IV→Legendary) and its native rarity. Tier I kit at or under the horizon is Standard Issue (free) — except rig frames, which always cost their hull price. Anything tiered above that pays list price within the horizon (rigs/facilities/assets always pay base). Above the horizon the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
   profChip:  "Untrained — the selected Buyer Character has rank 0 in the skill this weapon or armor is gated on. Armor worn at rank 0 grants NO defensive benefit; weapons are wielded untrained. You can still buy it (stockpiling, training ahead, gifting) — the chip is a warning, not a block.",
-  buy:       "Buy — commits the purchase: confirmation first (flag-priced items let you pay from a non-native pool at ×1.5 friction), then the marks are spent from the Buyer Faction's OP bank and the goods are delivered — gear to the Buyer Character's inventory, rigs to the faction, facilities/assets/upgrades to the Delivery Hex, actor entries cloned into the world under the buying faction. Writes a war-log receipt and whispers the GM.",
-  payFromPool: "Pay from — which OP pool covers the bill. The native pool pays list price; any other pool pays ×1.5 (cross-pool friction). Balances shown are the faction's current opBank, in marks.",
+  buy:       "Buy — commits the purchase: confirmation first (flag-priced items let you pay from a non-native pool at ×1.5 friction), then the marks are spent from the Buyer Domain's OP bank and the goods are delivered — gear to the Buyer Character's inventory, rigs to the faction, facilities/assets/upgrades to the Delivery Hex, actor entries cloned into the world under the buying faction. Writes a war-log receipt and whispers the GM.",
+  payFromPool: "Pay from — which OP pool covers the bill. The native pool pays list price; any other pool pays ×1.5 (cross-pool friction). Balances shown are the Domain's current opBank, in marks.",
   splitPay:  "Split payment — this item's price is divided across multiple OP pools. Each portion is always paid from its native pool; there is no cross-pool override on split items.",
 
   // ---- Catalog editor (GM-facing) ----
@@ -546,10 +755,13 @@ const MARKET_TIPS = {
   vendorName:    "Name — the market's display name, shown in every vendor picker.",
   vendorBlurb:   "Blurb — one line of flavor for this market. Informational only.",
   vendorTags:    "Tags — comma-separated labels stored on the vendor. Informational metadata (readable via the market API); no mechanical effect.",
+  vendorFaction: "Owning Domain — the Domain this market belongs to. Its stance toward the selling faction (relations) sets the sell-back rate: allied / friendly / neutral / unfriendly / hostile / at war, each a % of list price in module settings. Empty = no ties (neutral); a faction whose name matches the vendor's is used automatically.",
+  sell:          "Sell — the ↺ Sell tab lists the Buyer Character's gear with what THIS vendor pays: list price × the stance rate. Not sellable: anything that is Standard Issue for your faction (the Tier I kit is free to you, so it is worthless to them), soulbound items, artifacts, unpriced items. Marks land in the Buyer Domain's Economy bank; a bank at its cap refuses the sale. Stacks sell by the unit.",
+  sellRate:      "Sell-back rate — what the vendor pays as a % of list price, by the vendor Domain's stance toward you: allied 60 · friendly 50 · neutral 40 · unfriendly 25 · hostile 10 · at war refuses (defaults; GM tunes in module settings). Your own faction's market pays the allied rate.",
   dropzone:      "Drop zone — drag Items or whole Folders from the sidebar or a compendium here. Each item becomes a Gear entry with its UUID prefilled and a default cost of 1 Economy OP, saved immediately.",
   editorEntries: "Entries — every catalog row this vendor stocks. Edit fields inline (then Save), or use the row buttons to duplicate / delete.",
   entryName:     "Name — the entry's display name in the player catalog (independent of the underlying item's own name).",
-  entryKind:     "Kind — what the purchase delivers. gear → item copy to the buyer character; rig → new rig on the buying faction; facility → merged onto the delivery hex's primary facility; hex_asset → appended to the hex's asset list; rig_upgrade / facility_upgrade → JSON patch merged onto an existing rig / the hex facility; actor → clones a prebuilt Actor (rig/boss/NPC) into the world, assigned to the buying faction.",
+  entryKind:     "Kind — what the purchase delivers. gear → item copy to the buyer character; rig → new rig on the buying faction; facility → merged onto the delivery hex's primary facility; hex_asset → appended to the hex's asset list; rig_upgrade / facility_upgrade → JSON patch merged onto an existing rig / the hex facility; actor → clones a prebuilt Actor (rig/boss/NPC) into the world, assigned to the buying faction; contract → hires a Crew / Occult Association for the Buyer Character for N turns ({family, docId, pack, turns}).",
   entryCost:     "Economy Cost — the base price, in Economy MARKS (whole numbers). For gear whose item carries a stamped RFI flag price (flags.fourththing.rfi.item.price), the flag price overrides this number. The final charge is scaled by the buyer's Economic Horizon (×1/×2/×4 over-horizon; Standard Issue gear is free).",
   entryBlurb:    "Blurb — one line of flavor shown under the entry in the player catalog.",
   entryPayload:  "Payload — what actually gets delivered. Gear / actor: the source document UUID. Rig: the rigData JSON. Facility: the facilityPatch JSON. Hex asset: {key, label} JSON. Upgrades: a JSON patch (rig upgrades can pick their target via patch.target rigId / name / latest).",
@@ -702,6 +914,22 @@ Hooks.once("init", () => {
     scope: "world", config: true, type: String, default: "economy",
     choices: { economy: "Economy", logistics: "Logistics", violence: "Violence", nonlethal: "Non-Lethal", intrigue: "Intrigue", softpower: "Soft Power", diplomacy: "Diplomacy", culture: "Culture", faith: "Faith" }
   });
+
+  // Sell-back (owner ask 2026-10-17): gear sells for a % of list price set by the
+  // vendor faction's stance toward the seller. Standard Issue (for the seller),
+  // soulbound and artifacts never sell. Rates are world settings so the GM tunes
+  // them without a deploy; proposed defaults 60/50/40/25/10/0.
+  game.settings.register(MODULE_ID, "sellBackEnabled", {
+    name: "Market: allow selling gear back", hint: "Shows the ↺ Sell tab. Gear sells at a % of list price by the vendor faction's stance toward the seller.",
+    scope: "world", config: true, type: Boolean, default: true
+  });
+  for (const [tier, def] of Object.entries(SELL_RATE_DEFAULT)) {
+    game.settings.register(MODULE_ID, `sellRate_${tier}`, {
+      name: `Market: sell-back % when the vendor is ${tier.replace(/_/g, " ")}`,
+      hint: tier === "at_war" ? "0 = the vendor refuses to trade with a faction it is at war with." : "Percent of list price the vendor pays a seller it holds at this stance.",
+      scope: "world", config: true, type: Number, default: def, range: { min: 0, max: 100, step: 5 }
+    });
+  }
 
   game.settings.register(MODULE_ID, "lastContext", {
     name: "Market Context",
@@ -1174,6 +1402,15 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
     const src = String(entry.uuid || "").trim() ? await fromUuid(entry.uuid).catch(() => null) : null;
     if (!src) _abortPurchase(`Actor UUID on "${entry.name}" is missing or could not be resolved.`);
     if (src.documentName !== "Actor") _abortPurchase(`Catalog entry "${entry.name}" UUID does not point to an Actor (got ${src.documentName}).`);
+  } else if (kind === "contract") {
+    // ruling 15: a steward signs; one contract per family at a time
+    if (!characterId) _abortPurchase("Select a Buyer Character — a contract is signed by a steward.");
+    const ch = game.actors.get(characterId); if (!ch) _abortPurchase("Buyer Character not found.");
+    const C = game.bbttcc?.api?.contracts; if (!C) _abortPurchase("Contracts API not available.");
+    const fam = String(entry.contract?.family || ""); if (!C.FAMILIES[fam]) _abortPurchase(`Catalog entry "${entry.name}" has no contract family.`);
+    if (!String(entry.contract?.docId || "").trim()) _abortPurchase(`Catalog entry "${entry.name}" names no crew document.`);
+    const cur = C.get(ch, fam);
+    if (C.isActive(cur)) _abortPurchase(`${ch.name} already holds a ${C.FAMILIES[fam].label.toLowerCase()} contract (${cur.displayName}, ${cur.turnsLeft === Infinity ? "standing" : cur.turnsLeft + " turn(s) left"}). Release it first.`);
   } else if (kind === "rig") {
     if (typeof game.bbttcc?.api?.factions?.addRig !== "function") _abortPurchase("Factions rig API not available — cannot deliver a rig.");
   } else if (kind === "rig_upgrade") {
@@ -1208,7 +1445,12 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
     const adjustedMarks = Math.round(totalMarks * friction);
     payDeltas = { [chosenPool]: -adjustedMarks };
   } else {
-    payDeltas = { economy: -totalMarks };
+    // Legacy (catalog-priced) entries are economy-native; an explicit payFromPool still works, with the same ×1.5
+    // cross-pool friction as flag-priced gear (2026-10-18 — contracts are catalog-priced).
+    const chosenPool = _normPool(payFromPool || "economy");
+    const isCross = chosenPool !== "economy";
+    const friction = isCross ? (game.fourththing?.pricing?.CROSS_POOL_FRICTION ?? 1.5) : 1.0;
+    payDeltas = { [chosenPool]: -Math.round(totalMarks * friction) };
   }
 
   // Every pay key must be one of the nine OP pools: the OP engine silently drops an
@@ -1274,6 +1516,9 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
       // intact for re-purchase.
       const res = await deliverActorByUuid(factionId, entry.uuid);
       delivered = { to: "faction", actorTemplate: true, ...res };
+    } else if (kind === "contract") {
+      const c = await game.bbttcc.api.contracts.hire(characterId, entry.contract.family, entry.contract.docId, { turns: entry.contract.turns, source: "market", entryId: entry.id, vendorId: entry.vendorId });
+      delivered = { to: "character", characterId, contract: { family: entry.contract.family, until: c?.until ?? null } };
     } else {
       throw new Error(`Unsupported kind: ${kind}`);
     }
@@ -1488,6 +1733,7 @@ function _tabKeyFor({ kind, docType, isConsumable }) {
     if (docType === "armor") return "armor";
     return "gear";
   }
+  if (k === "contract") return "actor";   // contracts sit on the Hire tab beside the beast / crew hires
   return MARKET_TABS.some(t => t.key === k && k !== "other") ? k : "other";
 }
 function _costBandFor(charge) {
@@ -1634,12 +1880,26 @@ const vendors = visibleVendors.map(v => ({
 
     const vendorStatusLine = (isGM && vendor && vendor.active === false) ? "Inactive: hidden from players." : "";
 
-    const factions = allFactions()
-      .filter(a => game.user?.isGM || a?.isOwner)
-      .map(a => ({ id: a.id, name: a.name, selected: a.id === ctx.factionId }))
-      .sort((a,b)=>String(a.name).localeCompare(String(b.name)));
-const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected: a.id === ctx.characterId }))
-      .sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+    // Ruling 16 (2026-10-18, steward + faction = one being): a PLAYER buys as their own steward and the
+    // treasury is that steward's Domain — no faction picker. The GM keeps both pickers.
+    const lockedBuyer = !isGM;
+    let factions, characters;
+    if (lockedBuyer) {
+      const owned = allCharacters().filter(a => a?.isOwner).sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+      const ch = owned.find(a => a.id === ctx.characterId) || (game.user?.character && owned.find(a => a.id === game.user.character.id)) || owned[0] || null;
+      if ((ch?.id || "") !== (ctx.characterId || "")) { ctx.characterId = ch?.id || ""; this._saveCtx({ characterId: ctx.characterId }); }
+      const dom = ch ? domainOf(ch) : null;
+      if ((dom?.id || "") !== (ctx.factionId || "")) { ctx.factionId = dom?.id || ""; this._saveCtx({ factionId: ctx.factionId }); }
+      factions = dom ? [{ id: dom.id, name: dom.name, selected: true }] : [];
+      characters = owned.map(a => ({ id: a.id, name: a.name, selected: a.id === ctx.characterId }));
+    } else {
+      factions = allFactions()
+        .filter(a => game.user?.isGM || a?.isOwner)
+        .map(a => ({ id: a.id, name: a.name, selected: a.id === ctx.factionId }))
+        .sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+      characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected: a.id === ctx.characterId }))
+        .sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+    }
 
     // Buyer faction treasury (2026-10-12): every price below is measured against this.
     const buyerFaction = ctx.factionId ? game.actors.get(ctx.factionId) : null;
@@ -1667,10 +1927,10 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
       : null;
     const selectedFreight = selectedHexDoc ? _deliveryFeeFor(selectedHexDoc, { factionId: ctx.factionId }) : null;
     const deliveryNote = !buyerFaction
-      ? "Pick a Buyer Faction to list the hexes it knows."
+      ? "Pick a Buyer Domain to list the hexes it knows."
       : `${DELIVERY_HAULER} hauls it; the receiver pays ${deliveryRate.base} marks + ${deliveryRate.perDanger} per danger point (${poolShortLabel(deliveryRate.pool)}).`
         + (selectedFreight ? ` Selected: danger ${selectedFreight.score}${selectedFreight.breakdown ? ` (${selectedFreight.breakdown})` : ""} → ${selectedFreight.fee ? `${selectedFreight.fee} marks` : "free"}.` : "")
-        + (deliveryOptions.length ? "" : " This faction knows no hexes yet — travel somewhere first.");
+        + (deliveryOptions.length ? "" : " This Domain knows no hexes yet — travel somewhere first.");
     const deliveryFee = selectedFreight?.fee || 0;
 
     let entries = (Array.isArray(catalogRaw) ? catalogRaw : []).filter(e => e?.vendorId === ctx.vendorId);
@@ -1816,11 +2076,46 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
 
     const filteredCounts = {};
     for (const r of entries) filteredCounts[r.tabKey] = (filteredCounts[r.tabKey] || 0) + 1;
-    const visibleTabs = MARKET_TABS.filter(t => (stockCounts[t.key] || 0) > 0);
-    let activeTab = String(ctx.tab || ctx.category || "").toLowerCase();
-    if (!visibleTabs.some(t => t.key === activeTab)) activeTab = visibleTabs[0]?.key || "";
-    const tabs = visibleTabs.map(t => ({ key: t.key, label: t.label, count: filteredCounts[t.key] || 0, active: t.key === activeTab }));
+    // ALPHA CUT (2026-10-17): facilities + hex assets (and their upgrades) wait for Act 2 on player seats.
+    const alphaDrop = new Set();
+    if (game.bbttcc?.alpha?.hidden?.("marketFacilities")) { alphaDrop.add("facility"); alphaDrop.add("facility_upgrade"); }
+    if (game.bbttcc?.alpha?.hidden?.("marketHexAssets")) alphaDrop.add("hex_asset");
+    const visibleTabs = MARKET_TABS.filter(t => (stockCounts[t.key] || 0) > 0 && !alphaDrop.has(t.key));
+    const wantTab = String(ctx.tab || ctx.category || "").toLowerCase();
+    // ↺ Sell tab (2026-10-17): the Buyer Character's gear priced at what THIS vendor pays.
+    const sellEnabled = _sellEnabled();
+    const sellMode = sellEnabled && wantTab === "sell";
+    let activeTab = sellMode ? "" : wantTab;
+    if (!sellMode && !visibleTabs.some(t => t.key === activeTab)) activeTab = visibleTabs[0]?.key || "";
+    const tabs = visibleTabs.map(t => ({ key: t.key, label: t.label, count: filteredCounts[t.key] || 0, active: !sellMode && t.key === activeTab }));
+    let sellRows = [], sellLine = "", sellWarn = "", sellEmpty = "";
+    if (sellEnabled) {
+      const sellerChar = ctx.characterId ? game.actors.get(ctx.characterId) : null;
+      const stance = vendorStanceFor(vendor, buyerFaction);
+      sellLine = `${vendorName} pays ${stance.rate}% of list price — ${stance.label}.`;
+      if (!buyerFaction) sellWarn = "Select a Buyer Domain — it receives the marks.";
+      else if (!sellerChar) sellWarn = "Select a Buyer Character — their inventory is what's for sale.";
+      else if (!(stance.rate > 0)) sellWarn = `${vendorName} refuses to trade with ${buyerFaction.name}.`;
+      if (sellMode && buyerFaction && sellerChar) {
+        const items = (sellerChar.items?.contents ?? []).filter(isSellableGearItem);
+        sellRows = await Promise.all(items.map(async (it) => {
+          const q = await sellQuote(it, { faction: buyerFaction, vendor });
+          const tierLabel = q.tier ? `Tier ${q.tier}` : "";
+          return {
+            uuid: it.uuid, name: it.name, img: it.img || "", kindLabel: kindLabel(it.type === "weapon" || it.type === "armor" ? it.type : "gear"),
+            tierLabel, qty: q.qty, stack: q.qty > 1, qtyLabel: q.qty > 1 ? `×${q.qty}` : "",
+            sellable: q.ok, reason: q.reason, listLabel: q.listMarks ? `${q.listMarks} marks` : "—",
+            rate: q.rate, rateLabel: `${q.rate}%`, rateTitle: q.stance ? `${q.listMarks} × ${q.rate}% — ${q.stance.label}` : "",
+            payout: q.payout
+          };
+        }));
+        sellRows.sort((a, b) => (Number(b.sellable) - Number(a.sellable)) || String(a.name).localeCompare(String(b.name)));
+      }
+      sellEmpty = sellWarn || "Nothing in this inventory can be sold here.";
+      tabs.push({ key: "sell", label: "↺ Sell", count: sellMode ? sellRows.filter(r => r.sellable).length : "", active: sellMode });
+    }
     if (activeTab) entries = entries.filter(r => r.tabKey === activeTab);
+    if (sellMode) entries = [];
 
     // Sort: Name (default) / Tier asc / Tier desc. Tier sort secondaries
     // on name so equal-tier rows stay alphabetized.
@@ -1851,8 +2146,11 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
       note: ctx.note,
       tabs,
       activeTab,
+      sellMode, sellRows, sellLine, sellWarn, sellEmpty,
       treasury,
       hasFaction: !!buyerFaction,
+      lockedBuyer,
+      buyerCharacterName: (characters.find(c => c.selected) || {}).name || "",
       costBands: COST_BANDS.map(b => ({ ...b, selected: b.key === String(ctx.costBand || "") })),
       affordOnly: !!ctx.affordOnly,
       deliveryOptions,
@@ -2037,7 +2335,8 @@ try {
         const sections = [
           ["Buy", tip("buy")], ["Cost", tip("cost")], ["Economic Horizon chip", tip("chip")],
           ["Untrained chip", tip("profChip")], ["Pay from", tip("payFromPool")], ["Split payment", tip("splitPay")],
-          ["Treasury", tip("treasury")], ["Only what we can afford", tip("affordOnly")], ["Cost band", tip("costBand")]
+          ["Treasury", tip("treasury")], ["Only what we can afford", tip("affordOnly")], ["Cost band", tip("costBand")],
+          ["Selling", tip("sell")], ["Sell-back rate", tip("sellRate")]
         ].filter(([, v]) => v);
         const html = `<div class="bbttcc-market-howto-body">${sections.map(([h, v]) => `<p><b>${esc(h)}</b> — ${esc(v)}</p>`).join("")}</div>`;
         const DV2 = foundry.applications.api?.DialogV2;
@@ -2069,6 +2368,40 @@ try {
           console.error(e);
           ui.notifications?.error?.("Could not open item.");
         }
+        return;
+      }
+
+      if (act === "sell") {
+        ev.preventDefault(); ev.stopPropagation();
+        const row = ctl.closest("[data-item-uuid]");
+        const itemUuid = String(row?.dataset?.itemUuid || "");
+        const qty = Math.max(1, Math.round(Number(row?.querySelector?.("[data-role='sellQty']")?.value) || 1));
+        const c = this._loadCtx();
+        const faction = game.actors.get(c.factionId);
+        const vendor = _vendorsArray().map(_normalizeVendor).find(v => v.id === c.vendorId);
+        const item = await fromUuid(itemUuid).catch(() => null);
+        if (!item || !faction || !vendor) { ui.notifications?.warn?.("Pick a Buyer Domain and Buyer Character first."); return; }
+        const quote = await sellQuote(item, { faction, vendor });
+        if (!quote.ok) { ui.notifications?.warn?.(quote.reason || "Not sellable."); return; }
+        const n = Math.min(qty, quote.qty);
+        const total = quote.payout * n;
+        const body = `<p>Sell <b>${esc(item.name)}</b>${n > 1 ? ` ×${n}` : ""} to <b>${esc(vendor.name)}</b> for <b>${total} marks</b>?</p>
+          <p class="bbttcc-muted">List ${quote.listMarks} × ${quote.rate}% (${esc(quote.stance?.label || "neutral")}) → <b>${esc(faction.name)}</b>'s Economy bank.</p>`;
+        const DV2 = foundry.applications.api?.DialogV2;
+        let ok = false;
+        try {
+          if (DV2?.confirm) ok = await DV2.confirm({ window: { title: "Sell" }, content: body, rejectClose: false, yes: { label: "Sell" }, no: { label: "Keep it" } });
+          else ok = await Dialog.confirm({ title: "Sell", content: body });
+        } catch (_e) { ok = false; }
+        if (!ok) return;
+        try {
+          const res = await sell({ itemUuid, factionId: faction.id, vendorId: vendor.id, qty: n, note: c.note });
+          if (res?.ok) ui.notifications?.info?.(`Sold ${res.itemName || item.name}${n > 1 ? ` ×${n}` : ""} for ${res.payout} marks.`);
+          else ui.notifications?.warn?.(res?.error || "Sale did not complete.");
+        } catch (e) {
+          ui.notifications?.error?.(e?.message || String(e));
+        }
+        this.render(false);
         return;
       }
 
@@ -2180,15 +2513,23 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
       isHexAsset: e.kind === "hex_asset",
       isRigUpgrade: e.kind === "rig_upgrade",
       isFacilityUpgrade: e.kind === "facility_upgrade",
-      isActor: e.kind === "actor"
+      isActor: e.kind === "actor",
+      isContract: e.kind === "contract"
     }));
 
     const vendorTagsRaw = Array.isArray(vendor.tags) ? vendor.tags.join(", ") : String(vendor.tags || "");
+    // Owning faction (sell-back stance, 2026-10-17). Shows the name-matched fallback as a hint.
+    const autoFaction = vendor.factionId ? null : vendorFactionFor(vendor);
+    const factionOptions = allFactions()
+      .map(a => ({ id: a.id, name: a.name, selected: a.id === vendor.factionId }))
+      .sort((a, b) => String(a.name).localeCompare(String(b.name)));
 
     return {
       ...context,
       vendors,
       vendor: { ...vendor, tagsRaw: vendorTagsRaw },
+      factionOptions,
+      autoFactionName: autoFaction?.name || "",
       entries
     };
   }
@@ -2261,8 +2602,9 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
     const blurb = root.querySelector("[data-role='vendorBlurb']")?.value || "";
     const tagsRaw = root.querySelector("[data-role='vendorTags']")?.value || "";
     const active = !!root.querySelector("[data-role='vendorActive']")?.checked;
+    const factionId = String(root.querySelector("[data-role='vendorFaction']")?.value || "");
 
-    vendors[idx] = _normalizeVendor({ ...vendors[idx], name, blurb, tags: tagsRaw, active });
+    vendors[idx] = _normalizeVendor({ ...vendors[idx], name, blurb, tags: tagsRaw, active, factionId });
     return { vendors, vendorId: vendors[idx].id };
   }
 
@@ -2296,6 +2638,7 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
       }
 
       if (kind === "gear" || kind === "actor") return _normalizeEntry({ ...base, uuid: payload.trim() });
+      if (kind === "contract") return _normalizeEntry({ ...base, contract: _safeJsonParse(payload, {}) });
       if (kind === "rig") return _normalizeEntry({ ...base, rigData: _safeJsonParse(payload, {}) });
       if (kind === "facility") return _normalizeEntry({ ...base, facilityPatch: _safeJsonParse(payload, {}) });
       if (kind === "hex_asset") return _normalizeEntry({ ...base, asset: _safeJsonParse(payload, {}) });
@@ -2444,6 +2787,26 @@ Hooks.once("ready", () => {
   game.bbttcc?.help?.register?.("market", MARKET_TIPS);
 
   game.bbttcc.api.market.purchase = purchase;
+  game.bbttcc.api.market.sell = sell;
+  game.bbttcc.api.market.sellQuote = sellQuote;
+  game.bbttcc.api.market.vendorStanceFor = vendorStanceFor;
+  game.bbttcc.api.market.domainOf = domainOf;   // ruling 16: a steward's Domain (faction actor), for the Domain tab and friends
+
+  // GM side of the player SELL relay (2026-10-17) — the seat must own both the faction and the seller.
+  try {
+    game.bbttcc?.api?.gmExec?.register?.(SELL_RELAY, async (p, meta) => {
+      const u = game.users?.get?.(meta?.fromUserId);
+      const faction = game.actors?.get?.(String(p?.factionId || ""));
+      if (!u || !faction || !isFactionActor(faction)) throw new Error("Seller faction not found.");
+      if (!u.isGM && !faction.testUserPermission(u, "OWNER")) throw new Error("You can only sell for a faction you own.");
+      const item = await fromUuid(String(p?.itemUuid || "")).catch(() => null);
+      if (!item?.parent) throw new Error("Item not found in an inventory.");
+      if (!u.isGM && !item.parent.testUserPermission(u, "OWNER")) throw new Error("You can only sell from a character you own.");
+      const vendor = _vendorsArray().map(_normalizeVendor).find(v => v.id === String(p?.vendorId || ""));
+      if (!u.isGM && vendor && vendor.active === false) throw new Error("That market is closed.");
+      return sell({ itemUuid: p?.itemUuid, factionId: faction.id, vendorId: p?.vendorId, qty: p?.qty, note: p?.note, _relayed: !meta?.local });
+    });
+  } catch (eReg) { warn("gmExec market.sell registration failed", eReg); }
 
   // GM side of the player purchase relay — re-validate everything the seat could fake.
   try {

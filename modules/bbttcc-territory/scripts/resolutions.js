@@ -29,7 +29,6 @@ window.BBTTCC_RESOLUTIONS = {
       violenceAttritionDelta: -1,
       empathyDelta: +1,
       darknessDelta: -1,
-      moraleDelta: +2,
       loyaltyDelta: +1
     },
 
@@ -39,7 +38,7 @@ window.BBTTCC_RESOLUTIONS = {
       integrationCostMult: 0.75
     },
 
-    // One-time victory/unity bonuses
+    // One-time victory/unity bonuses — retired 2026-10-18 (ruling 18): kept for shape, no effect
     victory: {
       vpOnce: 1,
       unityOnce: 5
@@ -74,7 +73,6 @@ window.BBTTCC_RESOLUTIONS = {
       violenceAttritionDelta: 0,   // still a fight
       empathyDelta: +1,
       darknessDelta: 0,
-      moraleDelta: +2,
       loyaltyDelta: +2
     },
 
@@ -119,7 +117,6 @@ window.BBTTCC_RESOLUTIONS = {
       violenceAttritionDelta: 0,   // still required a fight
       empathyDelta: +1,
       darknessDelta: 0,
-      moraleDelta: +3,
       loyaltyDelta: +3
     },
 
@@ -162,7 +159,6 @@ window.BBTTCC_RESOLUTIONS = {
       violenceAttritionDelta: +1,
       empathyDelta: -1,
       darknessDelta: +1,
-      moraleDelta: -1,
       loyaltyDelta: -2
     },
 
@@ -173,7 +169,7 @@ window.BBTTCC_RESOLUTIONS = {
     },
 
     // Victory: no direct boon; long-term VP is indirectly hurt
-    // via Morale/Loyalty/Darkness, which the VP engine already
+    // via Loyalty/Darkness (Morale retired 2026-10-18 ruling 19), which the VP engine already
     // accounts for.
     victory: {
       vpOnce: 0,
@@ -210,7 +206,6 @@ window.BBTTCC_RESOLUTIONS = {
       violenceAttritionDelta: +1,
       empathyDelta: -1,
       darknessDelta: +2,
-      moraleDelta: -1,
       loyaltyDelta: 0 // population wiped out, loyalty moot
     },
 

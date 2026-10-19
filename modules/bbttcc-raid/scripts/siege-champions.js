@@ -201,6 +201,7 @@
 
   function _injectRosterButton(app, root){
     if (!root || root.querySelector(".ft-siege-champions-btn")) return;
+    if (game.bbttcc?.alpha?.hidden?.("siege")) return;   // ALPHA CUT (2026-10-17)
     const faction = app?.actor;
     if (!faction) return;
     const count = (faction.getFlag(MOD_F, "championRoster") || []).length;

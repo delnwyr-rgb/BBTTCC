@@ -117,10 +117,9 @@
       // OP bank categories: op.bank.violence, op.bank.intrigue, etc.
       "op.bank": { wildcard: true },
 
-      "tracks.morale": true,
       "tracks.loyalty": true,
-      "tracks.unity": true,
-      "tracks.victory": true,
+      // "tracks.unity" / "tracks.victory" removed 2026-10-18 (ruling 18): Unity + VP are retired meters
+      // "tracks.morale" removed 2026-10-18 (ruling 19): faction Morale is a retired meter
       "tracks.darkness": true,
 
       "sparks": { wildcard: true }
@@ -311,18 +310,15 @@
   // no bank, meter or track. Patches now land in the real stores:
   //   op.bank.<channel>  → api.op.commit (MARKS; delta = value − current bank;
   //                        refused over cap unless args.allowOvercap === true)
-  //   tracks.morale/loyalty → api.factions.setMorale / setLoyalty (0–100)
-  //   tracks.unity   → flags.bbttcc-factions.victory.unity  (recomputed by
-  //                    advance-turn.tracks each applied turn — a set lasts until then)
-  //   tracks.victory → flags.bbttcc-factions.victory.vp
+  //   tracks.loyalty → api.factions.setLoyalty (0–100)
   //   tracks.darkness → flags.bbttcc-factions.darkness.global
+  //   (tracks.unity / tracks.victory were retired 2026-10-18, ruling 18 — refused as unmapped;
+  //    tracks.morale retired 2026-10-18, ruling 19 — likewise refused)
   // `sparks.*` is refused: sparks are phased records owned by api.tikkun
   // (markSparkPhase / depositSpark), never a free-form patch. Values are
   // ABSOLUTE (set-to), never deltas; null (clear) is refused for real stores.
   var MODF = "bbttcc-factions";
   var FACTION_TRACK_FLAG = {
-    "tracks.unity": "victory.unity",
-    "tracks.victory": "victory.vp",
     "tracks.darkness": "darkness.global"
   };
 
@@ -384,7 +380,7 @@
         return;
       }
 
-      if (path === "tracks.morale" || path === "tracks.loyalty") {
+      if (path === "tracks.loyalty") {
         var mkey = path.slice("tracks.".length);
         var mv = Math.min(100, Math.max(0, finiteOrDeny(it)));
         var mold = actor.getFlag(MODF, mkey);
@@ -427,7 +423,7 @@
       var chain = Promise.resolve();
       meterOps.forEach(function (m) {
         chain = chain.then(function () {
-          var fn = (m.key === "morale") ? fApi.setMorale : fApi.setLoyalty;
+          var fn = fApi.setLoyalty;
           var p = (typeof fn === "function")
             ? fn({ factionId: actor.id, value: m.value })
             : actor.setFlag(MODF, m.key, m.value);   // meter enhancer not loaded: same flag, same clamp

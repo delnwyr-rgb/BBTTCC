@@ -991,7 +991,9 @@
       const enc = result ? result.encounter : null;
       if (enc && enc.triggered) {
         const hasKey = !!(enc.key || (enc.result && enc.result.key));
-        const requestedTier = clampTier((enc.tier != null ? enc.tier : (result ? result.terrainTier : null)) || 1);
+        let requestedTier = clampTier((enc.tier != null ? enc.tier : (result ? result.terrainTier : null)) || 1);
+        // ALPHA CUT (2026-10-17): tier-1 tables only while the cut is on (world-level, any seat).
+        try { if (game.bbttcc?.alpha?.enabled?.() && !game.bbttcc.alpha.overrides().has("travelHighTier")) requestedTier = 1; } catch (_eA) {}
 
         if (!hasKey) {
           const terrainKey = String(

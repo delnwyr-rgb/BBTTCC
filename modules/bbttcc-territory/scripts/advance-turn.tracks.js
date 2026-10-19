@@ -9,7 +9,7 @@
 //  - Radiation bleed-off for factions resting in Purified hexes
 //  - Darkness track from Radiated hexes
 //  - Darkness thresholds (4/7/10) narrative pings
-//  - Darkness → Morale pressure
+//  - Darkness → Morale pressure  (retired 2026-10-18, ruling 19: faction Morale is gone)
 //  - Loyalty drift + OP stability (Phase 1)
 //  - Loyalty unrest + Defense DC modifiers (Phase 2)
 //  - Integration → Population modifiers
@@ -54,7 +54,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
     if (!nested || typeof nested !== "object") return false;
 
     const updates = {};
-    if (f.morale === undefined && nested.morale !== undefined) updates[`flags.${MODF}.morale`] = Number(nested.morale);
+    // (morale canonicalization dropped — retired 2026-10-18, ruling 19)
     if (f.loyalty === undefined && nested.loyalty !== undefined) updates[`flags.${MODF}.loyalty`] = Number(nested.loyalty);
     if (f.victory === undefined && nested.victory !== undefined) updates[`flags.${MODF}.victory`] = nested.victory;
 
@@ -66,16 +66,15 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
     return true;
   }
 
-  // --- Trend (Morale/Loyalty) warLog reconciliation ---
-  // Some legacy turn pipelines write a fixed "Trend: Morale→1% • Loyalty→1%" summary
+  // --- Trend (Loyalty) warLog reconciliation ---
+  // Some legacy turn pipelines write a fixed "Trend: Loyalty→1%" summary
   // even when the underlying flags did not change (e.g., due to rounding).
   // This pass rewrites (or appends) a Trend entry based on actual stored deltas.
-  async function reconcileTrendWarLog(A, beforeMorale, beforeLoyalty, minIdx = Infinity) {
+  // (Morale dropped from the line — retired 2026-10-18, ruling 19.)
+  async function reconcileTrendWarLog(A, beforeLoyalty, minIdx = Infinity) {
     try {
       if (!A) return;
-      const afterMorale = Number(A.getFlag(MODF, "morale") ?? 0);
       const afterLoyalty = Number(A.getFlag(MODF, "loyalty") ?? 0);
-      const dm = afterMorale - Number(beforeMorale ?? 0);
       const dl = afterLoyalty - Number(beforeLoyalty ?? 0);
 
       const wl = Array.isArray(A.getFlag(MODF, "warLogs")) ? A.getFlag(MODF, "warLogs").slice() : [];
@@ -84,7 +83,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       // Absolute after-values with the track-pass delta labelled (2026-10-01) — the old
       // "Morale→-1%" replaced turn-extensions' absolute line with a bare delta.
       const sg = n => (n > 0 ? `+${n}` : `${n}`);
-      const summary = `Trend: Morale→${afterMorale}% (Δ${sg(dm)}) • Loyalty→${afterLoyalty}% (Δ${sg(dl)})`;
+      const summary = `Trend: Loyalty→${afterLoyalty}% (Δ${sg(dl)})`;
 
       // Find most recent Trend entry near "now" and rewrite it; otherwise append a new one.
       let idx = -1;
@@ -495,43 +494,14 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
   }
 
   // ===========================================================================
-  // DARKNESS → MORALE PRESSURE
+  // DARKNESS → MORALE PRESSURE — RETIRED 2026-10-18 (ruling 19)
   // ===========================================================================
-
-  async function doDarknessMorale() {
-    const facs  = facActors();
-    const gm    = gmIds();
-    const lines = [];
-    const ups   = [];
-
-    for (const A of facs) {
-      const box = A.getFlag(MODF, "darkness") || {};
-      const g   = typeof box.global === "number" ? box.global : 0;
-      let m     = Number(A.getFlag(MODF, "morale") ?? 50);
-
-      const before = m;
-      const shielded = !!(A.getFlag(MODF, "bonuses")?.nextTurn?.noMoraleLoss);   // Crisis Summit (2026-09-09)
-      if (g >= 1 && !shielded) m = clamp(m - 1, 0, 100);
-      else if (g === 0 && m < 50) m = clamp(m + 1, 0, 100);
-
-      if (m !== before) {
-        ups.push(A.update({ [`flags.${MODF}.morale`]: m }));
-        const arrow = m > before ? "↑" : "↓";
-        lines.push(
-          `• <b>${foundry.utils.escapeHTML(A.name)}</b>: Morale ${arrow} ${before}% → ${m}% (Darkness ${g})`
-        );
-      }
-    }
-
-    if (ups.length) await Promise.allSettled(ups);
-    if (lines.length) {
-      await ChatMessage.create({
-        content: `<p><b>Morale Update (Darkness)</b></p>${lines.join("<br/>")}`,
-        whisper: tableAudience(),
-        speaker: { alias: "Bad Eden Darkness" }
-      }).catch(()=>{});
-    }
-  }
+  // Faction Morale is no longer a game meter. This pass used to move
+  // flags.bbttcc-factions.morale −1 per turn under Darkness ≥ 1 (unless
+  // bonuses.nextTurn.noMoraleLoss) and +1 toward 50 at Darkness 0, then whisper a
+  // "Morale Update (Darkness)" card. It did nothing else, so it is now a no-op;
+  // Darkness pressure reaches the table through Stress / Extension instead.
+  async function doDarknessMorale() { /* retired 2026-10-18, ruling 19 */ }
 
   // ===========================================================================
   // LOYALTY PHASE 1 — DRIFT + OP STABILITY
@@ -878,6 +848,8 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
     return best ? { key: best[0], count: best[1] } : { key:null, count:0 };
   }
 
+  // retired 2026-10-18, ruling 18: Unity meter removed; kept for reference, never called.
+  // eslint-disable-next-line no-unused-vars
   async function doUnityRecompute() {
     const tikkun = game.bbttcc?.api?.tikkun;
     const facs = facActors();
@@ -1073,12 +1045,11 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
         // Canonicalize any legacy nested track flags before applying track logic.
         for (const A of facActors()) { try { await normalizeFactionFlags(A); } catch {} }
 
-        // Snapshot morale/loyalty BEFORE this track pass (for truthful Trend logs)
+        // Snapshot loyalty BEFORE this track pass (for truthful Trend logs)
         const __bbttccTrendBefore = new Map();
         for (const A of facActors()) {
           try {
             __bbttccTrendBefore.set(String(A.id), {
-              morale: Number(A.getFlag(MODF, "morale") ?? 0),
               loyalty: Number(A.getFlag(MODF, "loyalty") ?? 0)
             });
           } catch {}
@@ -1091,20 +1062,20 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
         await doDarknessTrack();
         await doLeylinePurityDrift();
         await doDarknessThresholds();
-        await doDarknessMorale();
+        // await doDarknessMorale();  // retired 2026-10-18, ruling 19: faction Morale is no longer a game meter
         await doHexLoyaltyPull();     // territory mood pulls faction loyalty (2026-09-12)
         await doLoyaltyPhase1();
         await doLoyaltyPhase2();
         await doSharingPressure();    // client-state drag after 3 borrowing turns (2026-09-12, T7)
         await doIntegrationPopulationShift();
-        await doUnityRecompute();
+        // await doUnityRecompute();   // retired 2026-10-18, ruling 18: Unity is no longer a game meter
         await doBuildUnitsFromMaterials();
         await doTradeRouteLogisticsBonus();
 
         // Reconcile the per-turn Trend warLog entry based on actual deltas
         for (const A of facActors()) {
-          const b = __bbttccTrendBefore.get(String(A.id)) || { morale: 0, loyalty: 0 };
-          await reconcileTrendWarLog(A, b.morale, b.loyalty, __wlLenBefore.get(String(A.id)) ?? Infinity);
+          const b = __bbttccTrendBefore.get(String(A.id)) || { loyalty: 0 };
+          await reconcileTrendWarLog(A, b.loyalty, __wlLenBefore.get(String(A.id)) ?? Infinity);
         }
 
       } catch (e) {

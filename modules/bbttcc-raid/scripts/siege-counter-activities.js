@@ -164,7 +164,7 @@
     const turn = _turn();
     const r = await _withSiege(S, targetUuid, (state) => {
       state.pendingTerms = { type: "surrender", turn, byFactionId: factionId, resolved: false };
-      S.appendNarrativeBeat(state, { turn, kind: "surrender_demanded", title: "Surrender demanded", description: "The defender must respond: yield (won_surrender) · parley (Buffer +10) · refuse (−1 morale). Resolve via siege.resolveSurrender." });
+      S.appendNarrativeBeat(state, { turn, kind: "surrender_demanded", title: "Surrender demanded", description: "The defender must respond: yield (won_surrender) · parley (Buffer +10) · refuse. Resolve via siege.resolveSurrender." });
     });
     if (!r.ok) return r;
     _relayHook("bbttcc:siege:surrenderDemanded", { hexUuid: targetUuid, siegeId: r.state.siegeId });
@@ -262,7 +262,7 @@
         S.appendNarrativeBeat(state, { turn, kind: "parley", title: "Parley — negotiations stall", description: "No surrender; the besieger renews its commitment (+10 Buffer)." });
       } else {
         state.pendingTerms = null;
-        S.appendNarrativeBeat(state, { turn, kind: "surrender_refused", title: "Defiance — surrender refused", description: "The defender refuses (−1 morale; applied in Phase F)." });
+        S.appendNarrativeBeat(state, { turn, kind: "surrender_refused", title: "Defiance — surrender refused", description: "The defender refuses." });
       }
     });
     if (!r.ok) return r;
@@ -422,8 +422,7 @@
   }
   const _platesStr = (wall) => { const a = game.bbttcc?.api?.structures?.readState?.(wall); return a?.plates ? `${a.plates.current}/${a.plates.max}` : "?"; };
   const _roll = async (f, fb) => { try { const r = new Roll(f); await r.evaluate(); return Math.max(1, Math.floor(Number(r.total) || 0)); } catch (_e) { return fb; } };
-  // factions.bumpMorale takes ONE object ({ factionId, delta }) — positional args threw and every morale +1 here was lost.
-  async function _bumpMorale(factionId, delta, why){ try { const fn = game.bbttcc?.api?.factions?.bumpMorale; if (typeof fn === "function") await fn({ factionId, delta }); } catch (e) { console.warn(TAG, "bumpMorale failed", why, e); } }
+  // (The defender-maneuver / class-boon "+1 faction Morale" riders were retired 2026-10-18, ruling 19.)
 
   async function _attackerWallManeuver({ factionId, targetUuid, S }, { key, title, formula, fallback, damageType, flavor, garrisonStagger = false }){
     const actor = game.actors.get(factionId);
@@ -446,7 +445,7 @@
   const sapper_undermine= (ctx) => _attackerWallManeuver(ctx, { key: "sapperUndermine", title: "Sapper's Undermine",formula: "3d10+12", fallback: 28, damageType: "concussive", flavor: "collapse a tunnel beneath" });
   const ram_gate        = (ctx) => _attackerWallManeuver(ctx, { key: "ramGate",         title: "Ram the Gate",      formula: "2d10+12", fallback: 24, damageType: "concussive", flavor: "drive the ram into the gate of", garrisonStagger: true });
 
-  async function _defenderBufferManeuver({ factionId, targetUuid, S }, { key, title, drain, selfRenewal = 0, morale = 0, vfxHook }){
+  async function _defenderBufferManeuver({ factionId, targetUuid, S }, { key, title, drain, selfRenewal = 0, vfxHook }){
     const actor = game.actors.get(factionId);
     let spent = 0;
     const r = await _withSiege(S, targetUuid, (state) => {
@@ -457,23 +456,22 @@
       S.appendNarrativeBeat(state, { turn: _turn(), kind: key, title, description: `${actor?.name || "The garrison"} — the besiegers' supply scatters (−${spent} Buffer)${selfRenewal ? `; ${selfRenewal < 0 ? "at a cost" : "and rallies"} (Renewal ${selfRenewal > 0 ? "+" : ""}${selfRenewal})` : ""}.` });
     });
     if (!r.ok) return r;
-    if (morale) await _bumpMorale(factionId, morale, `${title} steadies the defenders`);
     _relayHook(`bbttcc:siege:${vfxHook}`, { siegeId: r.state.siegeId, hexUuid: targetUuid, factionName: actor?.name || "The garrison", spent });
-    await _pushWarLog(actor, `${title}: attacker Buffer −${spent}${morale ? `, morale ${morale > 0 ? "+" : ""}${morale}` : ""}.`, { activityKey: key, hexUuid: targetUuid });
+    await _pushWarLog(actor, `${title}: attacker Buffer −${spent}.`, { activityKey: key, hexUuid: targetUuid });
     return { ok: true, summary: `${title} — attacker Buffer −${spent}.` };
   }
-  const boiling_oil  = (ctx) => _defenderBufferManeuver(ctx, { key: "boiling_oil",  title: "Boiling Oil",  drain: 10, morale: +1, vfxHook: "boilingOil" });   // ROI ruling 2026-10-06: 12 clash marks shave 10 (was 2)
+  const boiling_oil  = (ctx) => _defenderBufferManeuver(ctx, { key: "boiling_oil",  title: "Boiling Oil",  drain: 10, vfxHook: "boilingOil" });   // ROI ruling 2026-10-06: 12 clash marks shave 10 (was 2)
   // `sortie` is NOT registered here any more (owner ruling 2026-09-09): the authored
   // threat-vector Sortie in siege-threat-vectors.js (sever Supply Line, Buffer −15,
   // 1d4 holdings at risk) is the one that runs. This generic clash body used to
   // overwrite it because this file loads later.
-  const flaming_pitch= (ctx) => _defenderBufferManeuver(ctx, { key: "flaming_pitch", title: "Flaming Pitch", drain: 10, morale: +1, vfxHook: "flamingPitch" });   // ROI ruling 2026-10-06
+  const flaming_pitch= (ctx) => _defenderBufferManeuver(ctx, { key: "flaming_pitch", title: "Flaming Pitch", drain: 10, vfxHook: "flamingPitch" });   // ROI ruling 2026-10-06
 
   // ── Content Sprint batch 2b (2026-06-13) — class-granted siege maneuvers ─────
   // One per Steward class. grantedByClass gates HUD visibility (siege-hud.js) to
   // when a Steward of that class is participating. Plate-chip ones reuse
   // _attackerWallManeuver; the rest mutate siege levers via this generic boon.
-  async function _classBoon({ factionId, targetUuid, S }, { key, title, bufferDelta = 0, defAnytime = 0, defRenewal = 0, morale = 0, note, vfxHook }) {
+  async function _classBoon({ factionId, targetUuid, S }, { key, title, bufferDelta = 0, defAnytime = 0, defRenewal = 0, note, vfxHook }) {
     const actor = game.actors.get(factionId);
     const r = await _withSiege(S, targetUuid, (state) => {
       // Buffer is an OBJECT of channels (siege-state), never a scalar — a gain lands in
@@ -488,7 +486,6 @@
       S.appendNarrativeBeat(state, { turn: _turn(), kind: key, title, description: `${actor?.name || "A Steward"} — ${note}` });
     });
     if (!r.ok) return r;
-    if (morale) await _bumpMorale(factionId, morale, title);
     _relayHook(`bbttcc:siege:${vfxHook}`, { siegeId: r.state.siegeId, hexUuid: targetUuid, factionName: actor?.name || "A Steward" });
     await _pushWarLog(actor, `${title}.`, { activityKey: key, hexUuid: targetUuid });
     return { ok: true, summary: `${title}.` };
@@ -497,14 +494,14 @@
   const cls_wyrdlens = (ctx) => _attackerWallManeuver(ctx, { key: "clsWyrdRead",     title: "Read the Weak Point", formula: "2d10+14", fallback: 25, damageType: "kinetic", flavor: "strike the revealed weak point of" });
   const cls_courier  = (ctx) => _attackerWallManeuver(ctx, { key: "clsOpenPostern",  title: "Open the Postern",    formula: "3d10+12", fallback: 28, damageType: "kinetic", flavor: "slip the postern and breach" });
   // Attacker boons / control
-  const cls_marshal  = (ctx) => _classBoon(ctx, { key: "clsRally",  title: "Rally the Standard", bufferDelta: +10, morale: +1, note: "the standard rises and the supply train steadies (+10 Buffer).", vfxHook: "clsRally" });   // ROI ruling 2026-10-06
+  const cls_marshal  = (ctx) => _classBoon(ctx, { key: "clsRally",  title: "Rally the Standard", bufferDelta: +10, note: "the standard rises and the supply train steadies (+10 Buffer).", vfxHook: "clsRally" });   // ROI ruling 2026-10-06
   const cls_pact     = (ctx) => _classBoon(ctx, { key: "clsDebt",   title: "Call the Debt",      bufferDelta: +12,            note: "a sworn debt is called in; an ally's supply arrives (+12 Buffer).", vfxHook: "clsDebt" });   // ROI ruling 2026-10-06
   const cls_linguist = (ctx) => _classBoon(ctx, { key: "clsClause", title: "Cite the Clause",    defRenewal: -1,              note: "a binding clause is cited; the defenders' renewal is voided (−1 Renewal).", vfxHook: "clsClause" });
   const cls_aurablade= (ctx) => _classBoon(ctx, { key: "clsMercy",  title: "Mercy's Edge",       defAnytime: -1,              note: "a merciful edge staggers the garrison without a death (−1 Anytime).", vfxHook: "clsMercy" });
   // Defender boons
-  const cls_bulwark  = (ctx) => _classBoon(ctx, { key: "clsBrace",  title: "Brace the Breach",   defAnytime: +2, morale: +1, note: "the breach is braced; the line holds (+2 Anytime).", vfxHook: "clsBrace" });
-  const cls_soulsmith= (ctx) => _classBoon(ctx, { key: "clsRefit",  title: "Field Refit",        defRenewal: +2, morale: +1, note: "a field forge refits the wall under fire (+2 Renewal).", vfxHook: "clsRefit" });
-  const cls_dreamwalker = (ctx) => _defenderBufferManeuver(ctx, { key: "clsPhantom", title: "Phantom Host", drain: 13, morale: +1, vfxHook: "clsPhantom" });   // ROI ruling 2026-10-06: 15 clash marks shave 13
+  const cls_bulwark  = (ctx) => _classBoon(ctx, { key: "clsBrace",  title: "Brace the Breach",   defAnytime: +2, note: "the breach is braced; the line holds (+2 Anytime).", vfxHook: "clsBrace" });
+  const cls_soulsmith= (ctx) => _classBoon(ctx, { key: "clsRefit",  title: "Field Refit",        defRenewal: +2, note: "a field forge refits the wall under fire (+2 Renewal).", vfxHook: "clsRefit" });
+  const cls_dreamwalker = (ctx) => _defenderBufferManeuver(ctx, { key: "clsPhantom", title: "Phantom Host", drain: 13, vfxHook: "clsPhantom" });   // ROI ruling 2026-10-06: 15 clash marks shave 13
 
   // ============================================================
   // Registration

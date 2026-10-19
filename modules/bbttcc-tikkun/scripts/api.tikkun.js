@@ -486,9 +486,11 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
   function readFactionMetrics(faction) {
     const victory  = get(faction, `flags.${MODF}.victory`, {})  || {};
     const darkness = get(faction, `flags.${MODF}.darkness`, {}) || {};
+    // vp / unity retired 2026-10-18 (ruling 18) — keys kept at 0 for shape compatibility only.
+    void victory;
     return {
-      vp:       Number(victory.vp ?? 0),
-      unity:    Number(victory.unity ?? 0),
+      vp:       0,
+      unity:    0,
       darkness: Number(darkness.global ?? 0)
     };
   }
@@ -527,10 +529,11 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
 
   function getGreatWorkState(factionId, {
     sparkThreshold = 3,
-    vpThreshold    = 10,
-    unityThreshold = 30,
+    vpThreshold    = 0,    // retired 2026-10-18 (ruling 18): VP no longer gates the Great Work
+    unityThreshold = 0,    // retired 2026-10-18 (ruling 18): Unity no longer gates the Great Work
     maxDarkness    = 3
   } = {}) {
+    void vpThreshold; void unityThreshold;
     const F = _asFaction(factionId);
     if (!F) throw new Error("getGreatWorkState: faction not found");
 
@@ -552,17 +555,15 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     const corruptedKeys    = Object.keys(corrupted).filter((k) => corrupted[k]);
 
     const haveSparks   = sparkCount >= sparkThreshold || integratedCount >= sparkThreshold;
-    const haveUnity    = metrics.unity    >= unityThreshold;
-    const haveVP       = metrics.vp       >= vpThreshold;
+    const haveUnity    = true;   // retired meter (ruling 18)
+    const haveVP       = true;   // retired meter (ruling 18)
     const darknessOK   = metrics.darkness <= maxDarkness;
     const noCorruption = corruptedKeys.length === 0;
 
-    const ready = !!(haveSparks && haveUnity && haveVP && darknessOK && noCorruption);
+    const ready = !!(haveSparks && darknessOK && noCorruption);
 
     const reasons = [];
     if (!haveSparks)   reasons.push(`Need more Sparks (${sparkCount}/${sparkThreshold})`);
-    if (!haveUnity)    reasons.push(`Unity too low (${metrics.unity}/${unityThreshold})`);
-    if (!haveVP)       reasons.push(`Victory VP too low (${metrics.vp}/${vpThreshold})`);
     if (!darknessOK)   reasons.push(`Darkness too high (${metrics.darkness} > ${maxDarkness})`);
     if (!noCorruption) reasons.push(`Corrupted sparks present: ${corruptedKeys.join(", ")}`);
 
@@ -572,6 +573,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
       ready,
       reasons,
       metrics,
+      haveSparks, haveUnity, haveVP, darknessOK, noCorruption,
       sparkCount,
       integratedCount,
       integratedKeys,

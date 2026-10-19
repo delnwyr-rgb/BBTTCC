@@ -126,8 +126,6 @@ class BBTTCC_RitualConsole extends HBM(AppV2) {
       sparks:          sparkCount,
       sparkThreshold,
       progressPct,
-      unity:           gw?.metrics?.unity    ?? (state.unityBefore ?? 0),
-      vp:              gw?.metrics?.vp       ?? (state.vpBefore    ?? 0),
       darkness:        state.darknessNow ?? state.darknessStart ?? (gw?.metrics?.darkness ?? 0),
       darknessStart:   state.darknessStart ?? 0
     };

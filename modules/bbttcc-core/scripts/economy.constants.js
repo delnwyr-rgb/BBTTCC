@@ -28,14 +28,14 @@ export const RECIPES = {          // alternate fuels — "how the faction got it
   establish_outpost: [
     { label:"hired labour",       cost:{ economy:20, logistics:10 } },
     { label:"work gang",          cost:{ violence:20, logistics:10 },   note:"pressed labour under guard",     fx:{ hex:{ loyaltyDelta:-2 }, faction:{ darknessDelta:1 } } },
-    { label:"pilgrim settlers",   cost:{ faith:15, softpower:10 },      note:"slower, but they came to stay", days:1, fx:{ hex:{ loyaltyDelta:1 }, faction:{ moraleDelta:1 } } },
+    { label:"pilgrim settlers",   cost:{ faith:15, softpower:10 },      note:"slower, but they came to stay", days:1, fx:{ hex:{ loyaltyDelta:1 } } },
     { label:"surveyor's gambit",  cost:{ intrigue:15, logistics:10 },   note:"a claim nobody saw filed",       fx:{ hex:{ loyaltyDelta:-1, darknessDelta:1 } } }
   ],
   establish_trade_route: [
     { label:"bought caravan",     cost:{ economy:30, diplomacy:10, logistics:10 } },
     { label:"treaty road",        cost:{ diplomacy:30, culture:10, logistics:10 }, fx:{ hex:{ loyaltyDelta:1 } } },
     { label:"smugglers' run",     cost:{ intrigue:25, economy:10, logistics:10 }, note:"quiet, and it knows it",     fx:{ hex:{ darknessDelta:1 }, faction:{ darknessDelta:1 } } },
-    { label:"festival circuit",   cost:{ culture:25, diplomacy:10, logistics:10 }, note:"the road follows the music", fx:{ hex:{ moraleDelta:1 }, faction:{ moraleDelta:1 } } }
+    { label:"festival circuit",   cost:{ culture:25, diplomacy:10, logistics:10 }, note:"the road follows the music", fx:{ hex:{ loyaltyDelta:1 } } }   // was moraleDelta:1 — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
   ],
   integration_framework: [
     { label:"diplomatic envoys",  cost:{ diplomacy:10, softpower:10 } },
@@ -52,16 +52,16 @@ export const RECIPES = {          // alternate fuels — "how the faction got it
   develop_outpost_stability: [
     { label:"garrison & grants",  cost:{ diplomacy:20, economy:10 } },
     { label:"show of force",      cost:{ violence:20, nonlethal:10 },    note:"quiet, not calm",               fx:{ hex:{ loyaltyDelta:-2 }, faction:{ darknessDelta:1 } } },
-    { label:"festival of belonging", cost:{ culture:20, softpower:10 }, fx:{ hex:{ moraleDelta:2, loyaltyDelta:1 } } }
+    { label:"festival of belonging", cost:{ culture:20, softpower:10 }, fx:{ hex:{ loyaltyDelta:2 } } }   // was moraleDelta:2 + loyaltyDelta:1 — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
   ],
   upgrade_outpost_settlement: [
     { label:"charter & works",    cost:{ economy:30, softpower:20, logistics:20 } },
-    { label:"festival founding",  cost:{ culture:30, faith:20, logistics:20 }, fx:{ hex:{ loyaltyDelta:1 }, faction:{ moraleDelta:2 } } }
+    { label:"festival founding",  cost:{ culture:30, faith:20, logistics:20 }, fx:{ hex:{ loyaltyDelta:1 } } }
   ],
   build_bridge: [             // crossings (owner ruling 2026-09-25)
     { label:"hired builders",     cost:{ economy:20, logistics:14 } },
     { label:"work gang",          cost:{ violence:20, logistics:14 },   note:"pressed labour under guard",     fx:{ hex:{ loyaltyDelta:-2 }, faction:{ darknessDelta:1 } } },
-    { label:"barn-raising",       cost:{ culture:15, softpower:10, logistics:10 }, note:"the whole valley turned out", days:1, fx:{ hex:{ loyaltyDelta:1 }, faction:{ moraleDelta:1 } } }
+    { label:"barn-raising",       cost:{ culture:15, softpower:10, logistics:10 }, note:"the whole valley turned out", days:1, fx:{ hex:{ loyaltyDelta:1 } } }
   ]
 };
 export const LEDGER_DAY_COST = {   // world-clock days a planned activity funds from the month's unspent days
@@ -175,7 +175,7 @@ export const UPKEEP = {
   MOD_MULT: { "Well-Maintained": 0.9, "Well Maintained": 0.9, "Fortified": 1.1, "Trade Hub": 1.05, "Damaged Infrastructure": 1.2, "Radiation Zone": 1.3, "Cultural Festival": 0.9, "Supply Line": 0.95, "Logistics Hub": 1.05, "Diplomatic Ties": 0.95 },
   COND_MULT: { "Radiated": 1.3, "Purified": 0.9, "Unstable": 1.1, "Sanctified": 0.9 },
   HOSTILITY_MULT: 1.25, LOYALTY_MULT: 0.85,
-  INTEGRATION_BONUS: { short: 1, full: 2 }   // morale + loyalty per paid hex
+  INTEGRATION_BONUS: { short: 1, full: 2 }   // loyalty per paid hex (morale half retired 2026-10-18, ruling 19)
 };
 
 // ── travel (hex-travel TERRAIN_TABLE; PRICE_MULT applies at leg creation) ──────────────────────

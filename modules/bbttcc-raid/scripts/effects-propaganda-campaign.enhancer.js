@@ -1,5 +1,5 @@
 // v1.0.0 — Propaganda Campaign (mechanical)
-// Adds "Propaganda" tag to the target hex and queues +2 Morale, +1 Loyalty.
+// Adds "Propaganda" tag to the target hex and queues +3 Loyalty (was +2 Morale +1 Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.propaganda_campaign.
 
 (() => {
@@ -17,7 +17,7 @@
     if (game?.ready) go(); else Hooks.on("ready", go);
   }
 
-  async function queuePropaganda({ targetUuid, moraleDelta=2, loyaltyDelta=1 }) {
+  async function queuePropaganda({ targetUuid, loyaltyDelta=2 }) {   // hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.): the old moraleDelta is folded into loyaltyDelta
     if (!targetUuid) return "No target";
     const ref = await fromUuid(targetUuid);
     const doc = ref?.document ?? ref;
@@ -35,11 +35,10 @@
     }
 
     // Goodwill bumps
-    pend.moraleDelta  = Number(pend.moraleDelta  || 0) + Number(moraleDelta  || 0);
     pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + Number(loyaltyDelta || 0);
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
-    return `Queued: add "Propaganda" • +${moraleDelta} Morale • +${loyaltyDelta} Loyalty`;
+    return `Queued: add "Propaganda" • +${loyaltyDelta} Loyalty`;
   }
 
   whenRaidReady((api)=>{
@@ -56,11 +55,11 @@
         if (typeof base === "function") {
           try { msg = String(await base({ entry })) || ""; } catch(e){ console.warn(TAG,"base apply error", e); }
         }
-        const m2 = await queuePropaganda({ targetUuid: entry?.targetUuid, moraleDelta: 2, loyaltyDelta: 1 });
+        const m2 = await queuePropaganda({ targetUuid: entry?.targetUuid, loyaltyDelta: 2 });
         return [msg, m2].filter(Boolean).join(" • ") || "Propaganda Campaign queued.";
       }
     });
 
-    console.log(TAG, "installed (Propaganda tag, +2 Morale, +1 Loyalty).");
+    console.log(TAG, "installed (Propaganda tag, +3 Loyalty).");
   });
 })();

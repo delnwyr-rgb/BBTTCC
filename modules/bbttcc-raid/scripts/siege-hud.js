@@ -414,7 +414,7 @@
               <div style="display:flex;gap:5px;">
                 <button type="button" data-act="surrender-yield" data-hex="${esc(entry.hexUuid)}" title="Yield the fortress (won_surrender; holdings preserved)" style="flex:1;padding:3px 6px;background:#15300f;color:#9ae6a0;border:1px solid #4a8a4a;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:600;">🏳 Yield</button>
                 <button type="button" data-act="surrender-parley" data-hex="${esc(entry.hexUuid)}" title="Parley — no surrender; besieger re-commits (+10 Buffer)" style="flex:1;padding:3px 6px;background:#101a2a;color:#88bbff;border:1px solid #4a6a8a;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:600;">Parley</button>
-                <button type="button" data-act="surrender-refuse" data-hex="${esc(entry.hexUuid)}" title="Defiance — refuse (−1 morale)" style="flex:1;padding:3px 6px;background:#301010;color:#e69a9a;border:1px solid #8a4a4a;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:600;">✘ Refuse</button>
+                <button type="button" data-act="surrender-refuse" data-hex="${esc(entry.hexUuid)}" title="Defiance — refuse" style="flex:1;padding:3px 6px;background:#301010;color:#e69a9a;border:1px solid #8a4a4a;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:600;">✘ Refuse</button>
               </div>
             </div>`)
       : "";
@@ -809,6 +809,7 @@
   }
 
   function _renderAll() {
+    if (game.bbttcc?.alpha?.hidden?.("siege")) return _teardown();   // ALPHA CUT (2026-10-17): no siege HUD on player seats
     const sieges = _activeSieges();
     if (!sieges.length) return _teardown();
     const isGM = !!game.user?.isGM;

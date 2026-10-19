@@ -774,7 +774,8 @@
         ? Math.max(0, Math.floor(Number(owner.getFlag("bbttcc-factions", "buildUnits") ?? 0) || 0))
         : 0;
       // Player can spend if they have OWNER permission on the owning faction actor (or are GM).
-      const buCanEngineer = buHasOwner && (isGMUser || !!owner.isOwner);
+      // ALPHA CUT (2026-10-17): hex building (Fortify / Repair / Asset) is GM-side until Act 2.
+      const buCanEngineer = buHasOwner && (isGMUser || !!owner.isOwner) && !game.bbttcc?.alpha?.hidden?.("hexEdit");
       // Blocked states explain the blocker; the affordable state pulls the
       // full mechanical explanation from the central help registry (falling
       // back to the short label when bbttcc-core is unavailable).

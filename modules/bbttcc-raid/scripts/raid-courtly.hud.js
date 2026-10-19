@@ -53,6 +53,47 @@
     return null;
   }
 
+  // PLAYER SEATS (Dave 2026-10-17: "the GM screen has the presence raid info, but the
+  // player's doesn't"). The scenario OBJECT lives only on the committing (GM) client;
+  // every other client only ever sees the relayed `bbttcc:courtly:state` snapshot and
+  // the `courtlyActive` mirror the engine persists on both faction actors. So: any
+  // rendered console whose session holds a courtly round is a valid host, and the
+  // state comes from (1) the freshest relayed snapshot for that pairing, else (2) the
+  // persisted mirror's `state`. Same fallback rescues the GM after a reload.
+  let _relayedState = null;
+  Hooks.on("bbttcc:courtly:state", (payload) => {
+    const st = payload?.state || null;
+    if (st && st.attackerId) _relayedState = st;
+  });
+  function _ftAnyCourtlyConsole() {
+    const set = globalThis.__bbttccRaidOpenConsoles;
+    if (!set?.size) return null;
+    for (const app of set) {
+      if (!app?.rendered) continue;
+      const rounds = Array.isArray(app?.vm?.rounds) ? app.vm.rounds : [];
+      if (rounds.some(r => r?.meta?.scenario?.kind === "courtly")) return app;
+    }
+    return null;
+  }
+  function _mirrorStateFor(app) {
+    const ids = [app?.__courtlyScenarioAtt, app?.vm?.attackerId, app?.vm?.__lockAttackerId, app?.vm?.defenderId]
+      .map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean);
+    let best = null;
+    for (const a of game.actors?.contents ?? []) {
+      const m = a.flags?.[MOD_R]?.courtlyActive;
+      if (!m?.state) continue;
+      if (ids.length && !ids.includes(String(m.attackerId)) && !ids.includes(String(m.defenderId))) continue;
+      if (!best || Number(m.ts || 0) > Number(best.ts || 0)) best = m;
+    }
+    return best?.state || null;
+  }
+  function _fallbackState(app) {
+    const mirror = _mirrorStateFor(app);
+    const rel = _relayedState;
+    if (rel && (!mirror || (rel.attackerId === mirror.attackerId && rel.defenderId === mirror.defenderId))) return rel;
+    return mirror || rel || null;
+  }
+
   function _courtlyMaxFromRow(app) {
     const rounds = Array.isArray(app?.vm?.rounds) ? app.vm.rounds : [];
     for (let i = rounds.length - 1; i >= 0; i--) {
@@ -466,12 +507,18 @@
   }
 
   function _renderAll() {
-    const app = _ftActiveCourtlyConsole();
-    if (!app || !_isTableauEnabled()) return _teardownAll();
-    let state;
-    try { state = app.__courtlyScenario.getState(); }
-    catch (e) { console.warn(TAG, "getState failed", e); return _teardownAll(); }
-    if (!state) return _teardownAll();
+    let app = _ftActiveCourtlyConsole();
+    let state = null;
+    if (app) {
+      try { state = app.__courtlyScenario.getState(); }
+      catch (e) { console.warn(TAG, "getState failed", e); state = null; }
+    }
+    if (!state) {
+      // Player seat (or a reloaded GM): no scenario object here — use the relayed / mirrored state.
+      app = _ftAnyCourtlyConsole();
+      state = app ? _fallbackState(app) : null;
+    }
+    if (!app || !state || !_isTableauEnabled()) return _teardownAll();
 
     // Influence panel (also drop-zone for Phase C secret drag-to-play)
     const infSlot = { get el() { return _infEl; }, set el(v) { _infEl = v; } };
@@ -524,6 +571,7 @@
   });
   Hooks.on("updateActor", (_a, changes) => {
     if (foundry.utils.getProperty(changes, `flags.${MOD_R}.courtFavor`) !== undefined) _scheduleRender();
+    if (foundry.utils.getProperty(changes, `flags.${MOD_R}.courtlyActive`) !== undefined) _scheduleRender();
   });
   Hooks.on("bbttcc:courtly:state", _scheduleRender);
 

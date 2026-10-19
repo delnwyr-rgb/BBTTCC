@@ -96,11 +96,7 @@ export { TIER_CAP_BAND_MARKS, LOGISTICS_CAPACITY_FLOOR_MARKS };   // numbers liv
 export function factionTier(faction) {
   const f = faction?.flags?.[MOD_ID] || {};
   let tier = _safeNum(f.tier, -1);
-  if (!Number.isFinite(tier) || tier < 0) {
-    const snap = f.progression && f.progression.victory ? f.progression.victory : null;
-    const tfb = snap ? _safeNum(snap.tierFromBadge, -1) : -1;
-    tier = (tfb >= 0) ? tfb : 0;
-  }
+  if (!Number.isFinite(tier) || tier < 0) tier = 1;   // retired 2026-10-18, ruling 18: no badge-derived tier; plain default = 1
   return Math.max(0, Math.min(4, Math.floor(tier)));
 }
 export function tierCapBand(tier) { return TIER_CAP_BAND_MARKS[Math.max(0, Math.min(4, Math.floor(Number(tier) || 0)))]; }
@@ -168,13 +164,9 @@ function _readCaps_legacy(faction) {
     }
 
     // Derive from faction tier (authoritative) if present.
-    // Tier is stored at flags.bbttcc-factions.tier; fallback to progression.victory.tierFromBadge.
+    // Tier is stored at flags.bbttcc-factions.tier; missing → 1 (retired 2026-10-18, ruling 18: no badge-derived tier).
     let tier = _safeNum(f.tier, -1);
-    if (!Number.isFinite(tier) || tier < 0) {
-      const snap = f.progression && f.progression.victory ? f.progression.victory : null;
-      const tfb = snap ? _safeNum(snap.tierFromBadge, -1) : -1;
-      tier = (tfb >= 0) ? tfb : 0;
-    }
+    if (!Number.isFinite(tier) || tier < 0) tier = 1;
     tier = Math.max(0, Math.min(4, Math.floor(tier)));
 
     // Cap bands (per bucket), in MARKS. 1 OP = 10 marks.

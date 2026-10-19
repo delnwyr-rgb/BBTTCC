@@ -1461,7 +1461,9 @@
       // the client that created it, which left the faction sheet's secret
       // Play gate reading null on the player side (2026-08-22 playtest).
       async function _persistCourtlyMirror() {
-        const mirror = { attackerId: state.attackerId, defenderId: state.defenderId, outcome: state.outcome, round: state.round, ts: Date.now() };
+        // `state` snapshot added 2026-10-17 so player seats (and a reloaded GM) can draw the
+        // Court HUD from the flag — the scenario object itself never leaves this client.
+        const mirror = { attackerId: state.attackerId, defenderId: state.defenderId, outcome: state.outcome, round: state.round, ts: Date.now(), state: getState() };
         for (const actor of [A, D]) {
           try { await actor.setFlag(MOD_R, "courtlyActive", mirror); } catch (e) { console.warn(TAG, "courtly mirror persist failed", e); }
         }

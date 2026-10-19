@@ -685,6 +685,12 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     this._faculties = null;
     this._chargenAptitudes = ["", "", ""];   // 3 free L1 picks; armor skills excluded; rank-0 only at apply time
     this._characterName = options.actor?.name || "";
+    // Appearance (2026-10-17): the Aslı token picked on the review screen — it is
+    // the portrait AND the map token. Auto-follows the top lineage match until
+    // the player clicks a tile.
+    this._artPath = "";
+    this._artAuto = true;
+    this._artShowAll = undefined;
 
     // Description pane state — what's currently being described in the right column
     this._focusedCategory = null;
@@ -866,11 +872,14 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const treeFinal = this._buildFinalTreeSvg(spec, this._effective("alignment"));
 
     const dnd = isDnd();
+    // ALPHA CUT (ruling 1, 2026-10-17): crew + occult rows leave the player build (finalize already copes with null).
+    const alphaCrew   = game.bbttcc?.alpha?.hidden?.("crew") === true;
+    const alphaOccult = game.bbttcc?.alpha?.hidden?.("associations") === true;
     const buildRows = [
       this._buildRow("archetype",  "Archetype",            sug.build.archetype,  sug.rankings.archetype),
       this._buildRow("ancestry",   "Ancestry",             sug.build.ancestry,   sug.rankings.ancestry),
       this._buildHeritageRow(heritageOptions),
-      this._buildRow("crew",       "Awesome Crew",         sug.build.crew,       sug.rankings.crew),
+      ...(alphaCrew ? [] : [this._buildRow("crew",       "Awesome Crew",         sug.build.crew,       sug.rankings.crew)]),
       this._buildRow("path",       dnd ? "Surge Path" : "Path (Class)", sug.build.path, sug.rankings.path),
       this._buildRow("doctrine",   "Doctrine",             sug.build.doctrine,   this._currentDoctrineRanking(), "(filtered by Path)"),
       // Bad Eden 5E: the D&D class and background are rows of their own — the
@@ -880,7 +889,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
         this._buildRow("background", "Background", null, this._dndOptions.background, "(optional)")
       ] : []),
       this._buildRow("philosophy", "Political Philosophy", sug.build.philosophy, sug.rankings.philosophy),
-      this._buildRow("occult",     "Occult Association",   sug.build.occult,     sug.rankings.occult),
+      ...(alphaOccult ? [] : [this._buildRow("occult",     "Occult Association",   sug.build.occult,     sug.rankings.occult)]),
       this._buildRow("alignment",  "Sephirotic Alignment", sug.build.alignment,  sug.rankings.alignment)
     ].join("");
 
@@ -908,6 +917,11 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
               <div class="bbttcc-twv2-name-row">
                 <label class="bbttcc-twv2-name-label">Operative Name</label>
                 <input type="text" data-character-name class="bbttcc-twv2-name-input" value="${_esc(this._characterName || "")}" placeholder="New Operative"/>
+              </div>
+              <div class="bbttcc-twv2-appearance" data-finalize-section="appearance">
+                <div class="bbttcc-twv2-section-title">Tiphereth — Face and Token</div>
+                <p class="bbttcc-twv2-section-note">Pick your Aslı token. It is your portrait <strong>and</strong> your token on the map. Your lineage's art comes first; tick <strong>Show all lineages</strong> to browse the whole gallery.</p>
+                <div data-art-grid></div>
               </div>
               <div class="bbttcc-twv2-build-table">${buildRows}</div>
               <div class="bbttcc-twv2-faculties" data-finalize-section="faculties">
@@ -1545,6 +1559,24 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
           this._characterName = nameEl.value;
         });
       }
+      // Appearance — the Aslı art grid (bbttcc-core art picker, 2026-10-17). The
+      // token is the portrait (owner ruling). Auto-picks the top lineage match until
+      // the player clicks a tile; ancestry/heritage changes re-rank on re-render.
+      const artEl = root.querySelector("[data-art-grid]");
+      const artPicker = game.bbttcc?.artPicker;
+      if (artEl && artPicker?.renderGrid) {
+        artPicker.renderGrid(artEl, {
+          kind: "character",
+          context: { ancestry: this._effective("ancestry") || "", heritage: this._heritage || this._effective("heritage") || "" },
+          selected: this._artAuto ? "" : this._artPath,
+          autoSelect: true,
+          showAll: this._artShowAll,
+          onShowAll: (v) => { this._artShowAll = v; },
+          onPick: (path, info) => { this._artPath = path || ""; if (!info?.auto) this._artAuto = false; }
+        });
+      } else if (artEl) {
+        artEl.innerHTML = `<p class="bbttcc-twv2-section-note">Art picker unavailable — the default portrait will be used; change it from the sheet.</p>`;
+      }
       // Heritage pick
       const heritageEl = root.querySelector("[data-heritage-pick]");
       if (heritageEl) {
@@ -1628,6 +1660,9 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const CAT_LABELS = { archetype: "Archetype", ancestry: "Ancestry", crew: "Awesome Crew",
       path: "Path", doctrine: "Doctrine", philosophy: "Philosophy", occult: "Occult Association",
       alignment: "Alignment", ...(isDnd() ? { class: "Class" } : {}) };
+    // ALPHA CUT: hidden rows are never required.
+    if (game.bbttcc?.alpha?.hidden?.("crew"))         delete CAT_LABELS.crew;
+    if (game.bbttcc?.alpha?.hidden?.("associations")) delete CAT_LABELS.occult;
     const missingCats = Object.keys(CAT_LABELS).filter(c => !this._effective(c));
     const buildOk = missingCats.length === 0;
 
@@ -2052,6 +2087,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
 
     const payload = {
       name:         this._characterName || this._actor?.name || "New Operative",
+      img:          this._artPath || "",   // Aslı token = portrait + token (review screen, 2026-10-17)
       factionId:    "",
       baseStats:    build.faculties || this._defaultFacultyDistribution(),
       speciesUuid:  await resolveUuid("ancestry",  build.ancestry?.name),
@@ -2506,6 +2542,8 @@ function _injectStylesOnce() {
     .bbttcc-twv2-review-lede { color: rgba(244,240,224,0.72); font-size: 14px; line-height: 1.55; margin: 0 0 22px 0; }
 
     /* Character name input (review) */
+    .bbttcc-twv2-appearance { margin: 0 0 18px 0; }
+    .bbttcc-twv2-appearance .be-art-grid { max-height: 300px; }
     .bbttcc-twv2-name-row {
       display: flex; align-items: center; gap: 14px;
       padding: 12px 14px; margin-bottom: 18px;

@@ -196,9 +196,9 @@ const BEATS_HELP = {
   relNote: "Note — receipt text saved as the row's 'reason'; it shows up in the relationship change receipts/logs.",
 
   // Faction GM Effects (injected)
-  factionGMEffects: "Faction GM Effects — beat-driven faction deltas applied on resolution: Morale/Loyalty (clamped % meters), Unity/Darkness (world victory/darkness), VP, plus per-track OP Bank deltas routed through the OP Engine. Replaces the legacy Faction Effects rows (same storage).",
+  factionGMEffects: "Faction GM Effects — beat-driven faction deltas applied on resolution: Loyalty (clamped % meter; Morale retired 2026-10-18), Unity/Darkness (world victory/darkness), VP, plus per-track OP Bank deltas routed through the OP Engine. Replaces the legacy Faction Effects rows (same storage).",
   fxFaction: "Faction — who takes the deltas. New rows default to the campaign's faction; a row with no faction is skipped on save.",
-  fxMorale: "Morale Δ — clamped percentage meter on the faction; negative erodes it.",
+  // fxMorale removed 2026-10-18 (ruling 19): faction Morale is retired; moraleDelta is accepted-and-ignored by the engine.
   fxLoyalty: "Loyalty Δ — clamped percentage meter on the faction; negative erodes it.",
   fxUnity: "Unity Δ — feeds the world victory ledger for this faction.",
   fxDarkness: "Darkness Δ — feeds world Darkness attributed to this faction. Use for corrupting outcomes.",
@@ -207,9 +207,9 @@ const BEATS_HELP = {
   fxOpBank: "OP Bank Δ — per-track deltas IN MARKS (the one unit; a check costs 10), positive or negative, applied through the OP Engine: underflow refused; overcap refused unless Allow Overcap is on.",
 
   // Casualties (injected)
-  casualties: "Casualties — writes standardized casualties.* tags into the beat's Tags; the Casualty Engine reads them on resolution: hex severity hits the hex's integration/development, attacker/defender severities hit Morale/Loyalty/Victory (war weariness).",
+  casualties: "Casualties — writes standardized casualties.* tags into the beat's Tags; the Casualty Engine reads them on resolution: hex severity hits the hex's integration/development, attacker/defender severities hit Loyalty (war weariness; Morale and Victory retired 2026-10-18).",
   casHex: "Hex Casualties — collateral severity applied to the target hex: Minor → Catastrophic (catastrophic = devastation).",
-  casAttacker: "Attacker Casualties — losses for the attacking faction; Moderate+ starts costing Morale, Major+ Loyalty, Catastrophic also Victory.",
+  casAttacker: "Attacker Casualties — losses for the attacking faction; Major+ costs Loyalty (−1), Catastrophic −2. (Morale / Victory costs retired 2026-10-18.)",
   casDefender: "Defender Casualties — optional symmetry: same ladder applied to the defending faction.",
   casAtrocity: "Atrocity — marks the act as cruelty / massacre / terror tactics; can spike Darkness on Major+ hex casualty outcomes.",
 
@@ -627,9 +627,9 @@ const TAG_CATALOG = [
 ,{ key: "casualties.hex:major",         label: "Casualties — Hex: Major",         hint: "Apply major casualties (integration/dev impact) to the target hex." }
 ,{ key: "casualties.hex:catastrophic",  label: "Casualties — Hex: Catastrophic",  hint: "Apply catastrophic devastation to the target hex." }
 ,{ key: "casualties.attacker:minor",        label: "Casualties — Attacker: Minor",        hint: "Apply minor attacker losses (war weariness)." }
-,{ key: "casualties.attacker:moderate",     label: "Casualties — Attacker: Moderate",     hint: "Apply moderate attacker losses (Morale -1)." }
-,{ key: "casualties.attacker:major",        label: "Casualties — Attacker: Major",        hint: "Apply major attacker losses (Morale/Loyalty)." }
-,{ key: "casualties.attacker:catastrophic", label: "Casualties — Attacker: Catastrophic", hint: "Apply catastrophic attacker losses (Morale/Loyalty/Victory)." }
+,{ key: "casualties.attacker:moderate",     label: "Casualties — Attacker: Moderate",     hint: "Apply moderate attacker losses (war weariness)." }
+,{ key: "casualties.attacker:major",        label: "Casualties — Attacker: Major",        hint: "Apply major attacker losses (Loyalty −1)." }
+,{ key: "casualties.attacker:catastrophic", label: "Casualties — Attacker: Catastrophic", hint: "Apply catastrophic attacker losses (Loyalty −2)." }
 ,{ key: "casualties.defender:minor",        label: "Casualties — Defender: Minor",        hint: "Apply minor defender losses (optional symmetry)." }
 ,{ key: "casualties.defender:moderate",     label: "Casualties — Defender: Moderate",     hint: "Apply moderate defender losses." }
 ,{ key: "casualties.defender:major",        label: "Casualties — Defender: Major",        hint: "Apply major defender losses." }
@@ -1702,7 +1702,8 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
   // - Replaces the simple "Faction Effects" row editor with a GM-style editor that
   //   can also adjust OP Bank (deltas) and VP.
   // - Writes to standard form field arrays so Save parsing stays compatible:
-  //     world-faction-id, world-faction-morale, world-faction-loyalty, world-faction-unity, world-faction-darkness
+  //     world-faction-id, world-faction-loyalty, world-faction-unity, world-faction-darkness
+  //     (world-faction-morale dropped 2026-10-18, ruling 19 — moraleDelta is written as 0)
   //   Plus new arrays:
   //     world-faction-vp
   //     world-faction-op-<key> (9 OP keys)
@@ -1790,7 +1791,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       const normRow = (r) => {
         const out = foundry.utils.deepClone(r || {});
         out.factionId = String(out.factionId || "").replace(/^Actor\./, "").trim();
-        out.moraleDelta = _safeNum(out.moraleDelta, 0);
+        out.moraleDelta = 0;   // retired 2026-10-18 (ruling 19) — kept in the row shape, always 0
         out.loyaltyDelta = _safeNum(out.loyaltyDelta, 0);
         out.unityDelta = _safeNum(out.unityDelta, 0);
         out.darknessDelta = _safeNum(out.darknessDelta, 0);
@@ -1816,7 +1817,6 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
 
       const rowHtml = (fx, idx) => {
         const fId = String(fx?.factionId || "");
-        const m = _safeNum(fx?.moraleDelta, 0);
         const l = _safeNum(fx?.loyaltyDelta, 0);
         const u = _safeNum(fx?.unityDelta, 0);
         const d = _safeNum(fx?.darknessDelta, 0);
@@ -1852,10 +1852,6 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
             </div>
 
             <div class="bbttcc-fxgm-grid">
-              <label class="bbttcc-fxgm-field">
-                <div class="bbttcc-muted" data-help="fxMorale">Morale Δ</div>
-                <input type="number" step="1" name="world-faction-morale" value="${m}"/>
-              </label>
               <label class="bbttcc-fxgm-field">
                 <div class="bbttcc-muted" data-help="fxLoyalty">Loyalty Δ</div>
                 <input type="number" step="1" name="world-faction-loyalty" value="${l}"/>
@@ -3523,18 +3519,17 @@ _syncCoreFromForm() {
 
     // --- Faction effects (fxgm panel rows; the legacy block is disabled → excluded from FormData) ---
     const fxFaction = fd.getAll("world-faction-id").map(v => String(v || "").trim());
-    const fxMorale = fd.getAll("world-faction-morale").map(v => _safeNum(v, 0));
     const fxLoyalty = fd.getAll("world-faction-loyalty").map(v => _safeNum(v, 0));
     const fxUnity = fd.getAll("world-faction-unity").map(v => _safeNum(v, 0));
     const fxDark = fd.getAll("world-faction-darkness").map(v => _safeNum(v, 0));
 
     const factionEffects = [];
-    const fxN = Math.max(fxFaction.length, fxMorale.length, fxLoyalty.length, fxUnity.length, fxDark.length);
+    const fxN = Math.max(fxFaction.length, fxLoyalty.length, fxUnity.length, fxDark.length);
     for (let i = 0; i < fxN; i++) {
       if (forSave && !fxFaction[i]) continue;
       factionEffects.push({
         factionId: fxFaction[i] || "",
-        moraleDelta: fxMorale[i] ?? 0,
+        moraleDelta: 0,   // retired 2026-10-18 (ruling 19): the editor no longer offers a Morale Δ; stale values are zeroed on save
         loyaltyDelta: fxLoyalty[i] ?? 0,
         unityDelta: fxUnity[i] ?? 0,
         darknessDelta: fxDark[i] ?? 0

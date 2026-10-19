@@ -5,8 +5,9 @@
 // D.3 VFX banner). NOTHING changed the campaign world. F.1 closes that gap: it subscribes to
 // bbttcc:siege:outcome (GM-only, single writer) and runs the §8 9-row matrix —
 //   • hex ownership → attacker + "Sacked"/"Treachery" modifiers + improvement-ledger entry
-//   • faction morale deltas (+ DRAIN state.pendingMoraleDeltas[] — the mid-siege deltas E.3/E.4
-//     recorded that have no terminal hook to carry them)
+//   • (faction morale deltas — matrix atkMorale/defMorale + the drained state.pendingMoraleDeltas[]
+//     — RETIRED 2026-10-18, ruling 19: faction Morale is no longer a game meter; the matrix keys
+//     are kept as inert data)
 //   • Buffer refund (% of remainder → op.commit credit; OP→marks ×10, softPower→softpower)
 //   • stockpile theft (won_sack), defender stockpile war-cost (lost_hold)
 //   • intent-driven Holdings handling on a taken hex (capture / destroy / scatter — NON-destructive:
@@ -48,14 +49,8 @@
   };
 
   // ── small guarded helpers ─────────────────────────────────────────────────
-  async function _bumpMorale(factionId, delta, reason){
-    if (!factionId || !delta) return;
-    try {
-      const fn = game.bbttcc?.api?.factions?.bumpMorale;
-      if (typeof fn === "function") await fn({ factionId, delta });
-      else console.warn(TAG, "factions.bumpMorale unavailable; skipped morale", { factionId, delta, reason });
-    } catch (e) { console.warn(TAG, "bumpMorale failed", reason, e); }
-  }
+  // Faction Morale retired 2026-10-18 (ruling 19): the bump is a no-op kept for call-site shape.
+  async function _bumpMorale(_factionId, _delta, _reason){ /* retired 2026-10-18, ruling 19 */ }
 
   async function _refundBuffer(factionId, buffer, pct){
     if (!factionId || !(pct > 0)) return { refunded: 0 };
@@ -279,13 +274,8 @@
         S.appendNarrativeBeat(state, { turn, kind: "butchers_bill", title: "The butcher's bill", description: musterSummary });
       }
 
-      // 1. Drain mid-siege pending morale deltas (E.3 relief −1 / E.4 trojan −2).
-      for (const d of (state.pendingMoraleDeltas || [])) await _bumpMorale(d.factionId, d.delta, d.reason || "pending");
-
-      // 2. Matrix morale.
-      await _bumpMorale(attackerId, cfg.atkMorale, "outcome_attacker");
-      await _bumpMorale(defenderId, cfg.defMorale, "outcome_defender");
-      if (cfg.relieverMorale && payload.callingFactionId) await _bumpMorale(payload.callingFactionId, cfg.relieverMorale, "relieving_faction");
+      // 1–2. Faction morale (pending E.3/E.4 drain + matrix atkMorale/defMorale/relieverMorale):
+      //      RETIRED 2026-10-18, ruling 19 — nothing is written.
 
       // 3. Buffer refund.
       const { refunded } = await _refundBuffer(attackerId, state.buffer, cfg.refundPct);

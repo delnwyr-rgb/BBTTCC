@@ -44,10 +44,65 @@ const OP_BUCKETS = [
 
 const FACTIONS_MOD = "bbttcc-factions";
 
-// Manage rights for a faction/coalition vault: the actor's Foundry owner or a GM.
-// Ownership IS affiliation in this codebase (no separate membership model).
+// Manage rights for a faction/coalition vault: the actor's Foundry owner or a GM —
+// and, since the steward IS the Domain (ruling 16, 2026-10-17), whoever owns one of
+// the Domain's stewards.
 function _canManage(actor) {
-  return !!(game.user?.isGM || actor?.isOwner);
+  if (game.user?.isGM || actor?.isOwner) return true;
+  try { if (_isFactionActor(actor)) return stewardsOf(actor).some(c => c.isOwner); } catch (_e) {}
+  return false;
+}
+
+// ---- Steward ⇄ Domain (ruling 16: one being) ------------------------------
+// domainOf(steward)  → the faction actor this character is linked to (flag factionId →
+//                      system.faction.id → the faction's roster → factionName), or null.
+// stewardsOf(domain) → the character actors linked to this faction (same four paths).
+function _linkId(char) {
+  try {
+    return String(char?.getFlag?.(FACTIONS_MOD, "factionId")
+      || foundry.utils.getProperty(char, "system.faction.id")
+      || foundry.utils.getProperty(char, "system.system.faction.id") || "").replace(/^Actor\./, "");
+  } catch (_e) { return ""; }
+}
+function _linkName(char) {
+  try {
+    return String(char?.getFlag?.(FACTIONS_MOD, "factionName")
+      || foundry.utils.getProperty(char, "system.faction.name")
+      || foundry.utils.getProperty(char, "system.system.faction.name") || "").trim();
+  } catch (_e) { return ""; }
+}
+function _rosterHas(faction, char) {
+  try {
+    const roster = faction.getFlag?.(FACTIONS_MOD, "roster") || [];
+    const ids = new Set([char.id, char.uuid]);
+    for (const e of (Array.isArray(roster) ? roster : [])) {
+      const k = typeof e === "string" ? e : String(e?.uuid || e?.id || "");
+      if (ids.has(k) || ids.has(k.replace(/^Actor\./, ""))) return true;
+    }
+  } catch (_e) {}
+  return false;
+}
+function _linked(char, faction) {
+  const id = _linkId(char);
+  if (id) return id === faction.id;
+  if (_rosterHas(faction, char)) return true;
+  const nm = _linkName(char);
+  return !!nm && nm === String(faction.name || "").trim();
+}
+function domainOf(stewardOrId) {
+  const c = _resolveActor(stewardOrId);
+  if (!c) return null;
+  if (_isFactionActor(c)) return c;
+  const id = _linkId(c);
+  const byId = id ? game.actors?.get(id) : null;
+  if (byId && _isFactionActor(byId)) return byId;
+  const factions = (game.actors?.contents || []).filter(_isFactionActor);
+  return factions.find(f => _rosterHas(f, c)) || (() => { const nm = _linkName(c); return nm ? factions.find(f => String(f.name || "").trim() === nm) : null; })() || null;
+}
+function stewardsOf(domainOrId) {
+  const f = _resolveActor(domainOrId);
+  if (!f || !_isFactionActor(f)) return [];
+  return (game.actors?.contents || []).filter(a => a?.type === "character" && _linked(a, f));
 }
 
 function _isFactionActor(a) {
@@ -415,14 +470,18 @@ async function withdraw(holder, stashId, dest = {}) {
 }
 
 // Read a faction's Marks treasury (current per-bucket marks + caps) via the OP engine.
+// Synchronous on purpose: op.preview() is async, so the old call here always returned an empty
+// object and every bank window read "Treasury empty" (fixed 2026-10-18). The bank IS the opBank flag.
 function factionTreasury(faction) {
   const f = _resolveActor(faction);
   if (!f) return { marks: {}, caps: {}, totals: null };
-  try {
-    const pv = game?.bbttcc?.api?.op?.preview?.(f.id, {}, {});
-    if (pv) return { marks: pv.before || {}, caps: pv.caps || {}, totals: pv.totals || null };
-  } catch (_e) {}
-  return { marks: f.getFlag(FACTIONS_MOD, "opBank") || {}, caps: {}, totals: null };
+  const marks = {}; const raw = f.getFlag(FACTIONS_MOD, "opBank") || {};
+  for (const k of OP_BUCKETS) marks[k] = Math.max(0, Math.round(Number(raw?.[k]) || 0));
+  let caps = {};
+  try { caps = game?.bbttcc?.facts?.faction?.caps?.(f) || {}; } catch (_e) { caps = {}; }
+  const total = Object.values(marks).reduce((a, b) => a + b, 0);
+  const capTotal = OP_BUCKETS.reduce((a, k) => a + (Number(caps?.[k]) || 0), 0);
+  return { marks, caps, totals: { marks: total, cap: capTotal } };
 }
 
 // Factions this user owns (ownership = affiliation).
@@ -457,6 +516,8 @@ function _attach() {
     root.coalitionLeadFactions = coalitionLeadFactions;
     root.setCoalitionLead = setCoalitionLead;
     root.canManage = _canManage;
+    root.domainOf = domainOf;           // ruling 16 (2026-10-17): steward → its Domain (faction actor)
+    root.stewardsOf = stewardsOf;       //                         Domain → its stewards
     root.isFactionActor = _isFactionActor;
     root.isRealManifestation = isRealManifestation;
     root.OP_BUCKETS = OP_BUCKETS.slice();
@@ -474,5 +535,6 @@ try { if (game?.ready) _attach(); } catch (_e) {}
 export {
   transferVault, deposit, withdraw, listVault,
   factionTreasury, accessibleFactions, coalitionLeadFactions, setCoalitionLead,
+  domainOf, stewardsOf,
   MOD_ID,
 };

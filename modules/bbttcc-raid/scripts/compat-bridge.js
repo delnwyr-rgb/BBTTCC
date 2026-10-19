@@ -187,17 +187,17 @@ const OPTION_L2_TEXT = {
   doctrine_force_projection:   "Warlord: your next raid gains initiative advantage.",
   consecrated_alignment:       "Hierophant: aligns the target hex to your steward's own sephirah (a hex already aligned keeps its alignment).",
   administrative_optimization: "Mayor-Administrator: OP income ×1.05 this turn.",
-  arcane_attribution:          "Wizard-Scholar: the target hex is revealed and a full dossier (holder, defense, loyalty, morale, integration, modifiers, alignment) is whispered to you.",
+  arcane_attribution:          "Wizard-Scholar: the target hex is revealed and a full dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to you.",
   dynastic_resonance:          "Ancient Blood: the target hex's holder moves one step warmer toward you on the relations ladder.",
   operational_cohesion:        "Squad Leader: your next raid gets one free maneuver.",
   contract_warfare_doctrine:   "Mercenary Band: Violence cap +10 marks this turn.",
   stability_enforcement:       "Peacekeeper Corps: removes Hostile Population, adds Patrolled, Loyalty +1 on the target hex.",
   deep_cover_network:          "Covert Ops Cell: next turn, the target hex holder's OP pools and plans are whispered to you.",
-  cultural_diffusion:          "Cultural Ambassadors: +Loyal Population and Morale +1 on the target hex.",
+  cultural_diffusion:          "Cultural Ambassadors: +Loyal Population and Loyalty +1 on the target hex.",
   integration_framework:       "Diplomatic Envoys: the target hex you hold gains one Integration step (max 6).",
   never_scattered:             "Survivors' Militia: next turn, infiltration raids against your hexes are refused.",
   guided_ascent:               "Kabbalist: every steward of your faction washes 1 Darkness.",
-  philosophic_exchange:        "Alchemist: Morale (Empathy) +1 now and +10 marks Culture next turn.",
+  philosophic_exchange:        "Alchemist: +10 marks Culture next turn.",
   thread_the_spread:           "Tarot Mage: reveals one fogged hex next to the target and whispers every neighbour's alignment and holder.",
   doctrine_of_clarity:         "Gnostic: faction Darkness −1.",
   ritual_binding:              "Goetic Summoner: integrates the dormant spark seated on the target hex (lights a Lamp; debits your Reach).",
@@ -385,7 +385,7 @@ const EFFECTS = {
    * ============================================================ */
 
   // RETIRED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.C) — Radiant Rally merged
-  // into Rally the Line (which now carries the +2 Morale / −1 Darkness rider).
+  // into Rally the Line (which now carries the −1 Darkness rider; its +2 Morale retired 2026-10-18, ruling 19).
   // EFFECTS entry removed so it no longer surfaces in the raid console picker.
 
   supply_overrun: {

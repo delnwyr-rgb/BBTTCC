@@ -23,6 +23,7 @@ import {
   setActorFaction,
   applyIdentitySlotChange,
   setActorPoliticalPhilosophy,
+  ftLabelForPoliticalPhilosophy,
   setActorEnlightenment,
   setActorEchoAssetSlot,
   applyActorClassChange,
@@ -10096,7 +10097,7 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
         </div>
       </div>
       <div class="ft-cast-field ft-cast-span-2"><label>Signature</label>${_ftWizV2Txt("signature", state.signature, "What tells people this could only have come from you?")}</div>
-      <label class="ft-cast-field ft-cast-span-2" style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">${_ftWizV2Chk("isSignature", state.isSignature)}<span>Signature manifestation <small style="opacity:0.6">— auto-levels its tier in tandem with you whenever you tier up</small></span></label>
+      <label class="ft-cast-field ft-cast-span-2" style="display:flex;align-items:center;gap:0.5rem;cursor:${state._signatureLock ? "default" : "pointer"}">${state._signatureLock ? `<input type="checkbox" name="isSignature" checked disabled/>` : _ftWizV2Chk("isSignature", state.isSignature)}<span>Signature manifestation <small style="opacity:0.6">— ${state._signatureLock ? "this slot is one of your Signatures (ruling 14): it rises with you at every tier" : "auto-levels its tier in tandem with you whenever you tier up"}</small></span></label>
       <div class="ft-cast-field ft-cast-span-2"><label>Third Thing</label>${_ftWizV2Txt("thirdThing", state.thirdThing, "The one eerie detail that makes this more than a stock effect.")}</div>
       <div class="ft-cast-field ft-cast-span-2"><label>Path / Doctrine / Resonance</label>${_ftWizV2Txt("pathResonance", state.pathResonance, "What belief, oath, appetite, wound, or philosophy gives this its logic?")}</div>
     </div>
@@ -10447,7 +10448,63 @@ function _ftWizV2OverlayFromItem(state, item, kind) {
   }
 }
 
-async function openManifestationWizardV2(actor, { kind = "power", starter = "", targetFolder = null, targetPack = null, existingItem = null } = {}) {
+/** ALPHA CUT (2026-10-17) — read the bbttcc-core gate (loaded after the system, so always resolve at call time). */
+function _ftAlphaHidden(key) {
+  try { return game.bbttcc?.alpha?.hidden?.(key) === true; } catch (_e) { return false; }
+}
+function _ftAlphaCtx() {
+  // ruling 15 (2026-10-18): on an Alpha world crews / associations are HIRED (contracts), never picked on the sheet —
+  // the identity dropdowns and the Echo Assets block leave the steward sheet for every seat, GM included.
+  let world = false; try { world = game.bbttcc?.alpha?.enabled?.() === true; } catch (_e) {}
+  return {
+    tabs:   _ftAlphaHidden("sheetTabsExtra"),
+    crew:   _ftAlphaHidden("crew") || world,
+    assoc:  _ftAlphaHidden("associations") || world,
+    wizard: _ftAlphaHidden("manifestationWizard"),
+    world
+  };
+}
+
+/** SIGNATURES (ruling 14, 2026-10-17: "the Manifestation Engine, for players, should be ONLY for signature effects,
+ *  one per tier; they level up with you"). A Signature = a manifestation with system.manifestation.isSignature === true
+ *  (ft-progression already raises its tier with the steward on every tier-up). Slots = the steward's current tier:
+ *  Tier I → 1, Tier II → 2 … Each slot opens the wizard in signature mode; nothing else opens it on an Alpha seat. */
+function ftStewardTier(actor) {
+  const sys = actor?.system?.system ?? actor?.system ?? {};
+  const lvl = Number(sys?.details?.level ?? 1) || 1;
+  return Math.max(1, Math.min(4, Number(tierForLevel(lvl)) || 1));
+}
+const FT_SIG_ROMAN = { 1: "I", 2: "II", 3: "III", 4: "IV" };
+function ftSignatureSlots(actor) {
+  const tier = ftStewardTier(actor);
+  const sigs = (actor?.items?.contents ?? [])
+    .filter(i => i?.system?.manifestation?.isSignature === true)
+    .sort((a, b) => ((Number(a.system?.manifestation?.tier) || 1) - (Number(b.system?.manifestation?.tier) || 1)) || String(a.name ?? "").localeCompare(String(b.name ?? "")));
+  const slots = [];
+  for (let n = 1; n <= tier; n++) {
+    const it = sigs[n - 1] || null;
+    const t = it ? Math.max(1, Math.min(4, Number(it.system?.manifestation?.tier) || 1)) : null;
+    slots.push({ n, roman: FT_SIG_ROMAN[n] || String(n), item: it ? { id: it.id, name: it.name, img: it.img, tier: t, tierLabel: "Tier " + (FT_SIG_ROMAN[t] || t) } : null });
+  }
+  return { tier, max: tier, used: Math.min(sigs.length, tier), free: Math.max(0, tier - sigs.length), extra: Math.max(0, sigs.length - tier), slots };
+}
+
+async function openManifestationWizardV2(actor, { kind = "power", starter = "", targetFolder = null, targetPack = null, existingItem = null, signature = false } = {}) {
+  // ALPHA CUT (rulings 11 + 14, 2026-10-17): on a player seat the 7-step wizard opens ONLY for a Signature —
+  // a free slot (create) or an existing Signature (grow). Everything else comes from the Path or the GM.
+  const sigLock = signature === true;
+  if (_ftAlphaHidden("manifestationWizard") && !sigLock) {
+    ui.notifications?.info("During the Alpha the Manifestation Engine is for your Signatures — use a Signature slot on your sheet.");
+    return null;
+  }
+  if (sigLock && actor) {
+    const slots = ftSignatureSlots(actor);
+    const isSig = existingItem?.system?.manifestation?.isSignature === true;
+    if (!isSig && slots.free <= 0) {
+      ui.notifications?.warn(`${actor.name} has no open Signature slot — the next opens at Tier ${FT_SIG_ROMAN[Math.min(4, slots.tier + 1)]}.`);
+      return null;
+    }
+  }
   // Edit mode (playtest 2026-05-29) — when editing an existing manifestation we
   // bypass the starter gate and key the wizard off the item's own type.
   if (existingItem) { kind = existingItem.type === "weapon" ? "weapon" : "power"; starter = ""; }
@@ -10502,6 +10559,7 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
     try { _ftWizV2OverlayFromItem(state, existingItem, wizardKind); }
     catch (e) { console.warn("Roll for Initiation | wizard edit-overlay failed", e); }
   }
+  if (sigLock) { state.isSignature = true; state._signatureLock = true; }
 
   let STEPS = _ftWizV2Steps(wizardKind);
 
@@ -10582,6 +10640,26 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
         if (action === "back") {
           if (state._currentStep > 0) state._currentStep--;
         } else if (action === "pick-image") {
+          // Art picker first (bbttcc-core, 2026-10-17): no Aslı manifestation art
+          // yet, so this falls through to the same FilePicker for browsing seats.
+          const artPicker = game.bbttcc?.artPicker;
+          if (artPicker?.pick) {
+            const fpCurrent = state.img && state.img !== "icons/svg/aura.svg" && state.img !== "icons/svg/sword.svg" && !/GOTTGAIT/.test(state.img) ? state.img : FT_ICON_LIBRARY_PATH;
+            const fpSource = state.img && !/^icons\//.test(state.img) && !/GOTTGAIT/.test(state.img) ? "data" : "public";
+            artPicker.pick({ kind: "manifestation", current: state.img, title: "Manifestation icon", filePicker: { current: fpCurrent, activeSource: fpSource } })
+              .then(sel => {
+                if (!sel?.img) return;
+                state.img = sel.img;
+                state._touched ??= new Set();
+                state._touched.add("img");
+                const fresh = _ftWizV2RenderShell(actor, state, STEPS);
+                const tmp = document.createElement("div");
+                tmp.innerHTML = fresh;
+                wizRoot.innerHTML = tmp.firstElementChild?.innerHTML ?? "";
+              })
+              .catch(e => console.warn("Manifestation forge | art picker failed:", e));
+            return; // Don't fall through to nav re-render.
+          }
           // FilePicker scoped to the curated Bad Eden icon library. Trusted
           // Player perm gates browse access — players without it will see
           // an empty picker. Picked path stamps onto state.img and triggers
@@ -10637,6 +10715,12 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
             }
           }
           try {
+            if (sigLock && actor) {
+              // A Signature is always a Signature, and never outruns its steward's tier (ruling 14).
+              state.isSignature = true;
+              const cap = ftStewardTier(actor);
+              if ((Number(state.tier) || 1) > cap) state.tier = cap;
+            }
             const itemData = createManifestationItemData(actor, wizardKind, state);
             // Edit mode (2026-05-29) — write back to the existing item in place.
             // Skips all the create branches; preserves the item's _id / location.
@@ -12297,7 +12381,7 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
   </div>`) : "";
 
   const opCostNote = (manTier === 4 && opCost?.value > 0)
-    ? `<div class="ft-prev-align-note"><b>Faction cost:</b> ${opCost.value} ${ftCap(opCost.pool || "op")} marks</div>`
+    ? `<div class="ft-prev-align-note"><b>Domain cost:</b> ${opCost.value} ${ftCap(opCost.pool || "op")} marks</div>`
     : (manTier === 4 ? `<div class="ft-prev-align-note" style="color:#ff8a8a">T4 manifestation has no declared <code>opCost</code>. GM will adjudicate faction cost.</div>` : "");
 
   // Cosmic Linguist — Resonance Channel section. Only renders when the
@@ -12911,7 +12995,7 @@ function buildEchoAssetsManagerHTML(faction, echoAssets = {}, eligible = { crew:
   return `
   <div class="ft-echo-dialog ft-cast-dialog">
     <div class="ft-echo-dialog-note">
-      <b>${ftEscapeHtml(faction?.name ?? "Linked Faction")}</b> — Tier <b>T${tier}</b>.
+      <b>${ftEscapeHtml(faction?.name ?? "Linked Domain")}</b> — Tier <b>T${tier}</b>.
       Crew pool defaults to <b>${echoAssets.defaultCrewSlots ?? 2}</b>, Occult pool defaults to <b>${echoAssets.defaultOccultSlots ?? 2}</b>. Override below if needed.
     </div>
     ${echoAssets.overCapacity ? `<div class="ft-echo-dialog-warning">A pool is currently over capacity. Save is still allowed so you can stage assets while choosing what stays active.</div>` : ""}
@@ -12969,7 +13053,7 @@ function ftUniqueStringsLocal(values = []) {
 
 async function openEchoAssetsManager(actor, sheetApp = null) {
   const faction = getLinkedFaction(actor);
-  if (!faction) return ui.notifications?.warn("No linked faction available for this Steward.");
+  if (!faction) return ui.notifications?.warn("No linked Domain for this Steward.");
 
   // Auto-detect + persist crew/occult from the steward before showing the dialog,
   // so the rows are pre-populated even on the very first open after a
@@ -14158,6 +14242,15 @@ async function openEchoRosterEditor(actor, entryName, kind = "crew") {
             const hiddenInput = row.querySelector("[data-row-field='portrait']");
             const previewImg = row.querySelector("[data-row-portrait]");
             const current = String(hiddenInput?.value ?? "");
+            // Aslı art picker first (bbttcc-core, 2026-10-17): the token is the portrait.
+            const artPicker = game.bbttcc?.artPicker;
+            if (artPicker?.pick) {
+              const memberName = String(row.querySelector("[data-row-field='name']")?.value ?? "").trim();
+              artPicker.pick({ kind: "echo", current, title: `Portrait & Token — ${memberName || "Echo"}` })
+                .then(sel => { if (!sel?.img) return; if (hiddenInput) hiddenInput.value = sel.img; if (previewImg) previewImg.src = sel.img; })
+                .catch(e => console.warn("Echo Roster | art picker failed:", e));
+              return;
+            }
             try {
               new FilePicker({
                 type: "image",
@@ -14386,6 +14479,9 @@ Hooks.once("init", function () {
         if (!actor) return null;
         return openEchoAssetsManager(actor);
       },
+      // ruling 15 (2026-10-18): contracts (modules/bbttcc-market/scripts/contracts.js) set / clear the slot and re-sync the Domain pool
+      setSlot: (actorOrId, family, docId) => { const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId; return setActorEchoAssetSlot(actor, family, docId); },
+      syncSteward: async (actorOrId) => { const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId; const faction = actor ? getLinkedFaction(actor) : null; if (!faction) return null; await ftEnsureEchoAssetsBootstrap(faction, actor); return getFactionEchoAssets(faction, actor); },
       roster: {
         get: (actorOrId, entryName) => {
           const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
@@ -14537,6 +14633,7 @@ Hooks.once("init", function () {
     "systems/fourththing/templates/partials/item-effects.hbs",
     "systems/fourththing/templates/partials/on-use.hbs",
     "systems/fourththing/templates/partials/about-panel.hbs",
+    "systems/fourththing/templates/partials/domain-panel.hbs",
     "systems/fourththing/templates/items/weapon-sheet.hbs",
   ]);
 
@@ -18464,7 +18561,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // threshold card was posted.
     const probe = game.fourththing.bloodDebt.probe(actor, { cost, category });
     if (!probe.faction) {
-      ui.notifications?.error(`${actor.name}: no linked faction — Redemption unavailable.`);
+      ui.notifications?.error(`${actor.name}: no linked Domain — Redemption unavailable.`);
       return { ok: false, reason: "no-faction" };
     }
     if (!probe.canCover) {
@@ -18664,7 +18761,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       ? `<span style="color:#4a90d9">Redemption possible</span> — ${factionName} holds ${probe.available} violence marks.`
       : probe.faction
         ? `<span style="color:#ff8a8a">Redemption blocked</span> — ${factionName} only has ${probe.available} violence marks. Reincarnation required.`
-        : `<span style="color:#ff8a8a">No linked faction</span> — Redemption unavailable. Reincarnation required.`;
+        : `<span style="color:#ff8a8a">No linked Domain</span> — Redemption unavailable. Reincarnation required.`;
 
     const redeemBtn = probe.canCover
       ? `<button class="ft-redeem-btn" data-actor-id="${actor.id}" data-cost="${cost}" data-category="violence"
@@ -20216,6 +20313,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ftLesserManifest: FourthThingCharacterSheet._onFtLesserManifest,
         ftFiat:           FourthThingCharacterSheet._onFtFiat,
         ftManifestCreate: FourthThingCharacterSheet._onFtManifestCreate,
+        ftSignatureMake:  FourthThingCharacterSheet._onFtSignatureMake,   // ruling 14: author a Signature in an open slot
+        ftSignatureEdit:  FourthThingCharacterSheet._onFtSignatureEdit,   //            grow an existing Signature
         ftManifestExport: FourthThingCharacterSheet._onFtManifestExport,
         ftPowerCreate:    FourthThingCharacterSheet._onFtPowerCreate,
         ftManifestDrop:     FourthThingCharacterSheet._onFtManifestDrop,
@@ -20524,6 +20623,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // Form/Working story per row.
       const manifestAll = [...manifestPowers, ...manifestForms]
         .sort((a, b) => (a.tier - b.tier) || String(a.name ?? "").localeCompare(String(b.name ?? "")));
+      // Signature slots (ruling 14): one per tier reached; see ftSignatureSlots.
+      let signatureSlots = null;
+      try { signatureSlots = ftSignatureSlots(actor); } catch (_e) { signatureSlots = null; }
 
       // Active manifestation tracker — resolve back to item info for display.
       const activeRaw = actor.getFlag("fourththing", "activeManifestations") ?? [];
@@ -20834,6 +20936,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       return {
         actor,
         isGM:          !!game.user?.isGM,
+        alpha:         _ftAlphaCtx(),   // ALPHA CUT (2026-10-17): { tabs, crew, assoc, wizard } — true = hide on this player seat
         system:        sysData,
         attributes,
         skills,
@@ -21018,6 +21121,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         manifestPowers,
         manifestForms,
         manifestAll,
+        signatureSlots,
         mundaneEngageWeapons,
         activeManifestations,
         guidanceOpen,
@@ -21470,6 +21574,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         kind: cfg?.kind ?? "power",
         starter
       });
+    }
+
+    static async _onFtSignatureMake(event, target) {
+      return openManifestationWizardV2(this.actor, { kind: "power", signature: true });
+    }
+    static async _onFtSignatureEdit(event, target) {
+      const it = this.actor?.items?.get(target?.dataset?.itemId);
+      if (!it) return ui.notifications?.warn("That Signature is gone.");
+      return openManifestationWizardV2(this.actor, { existingItem: it, signature: true });
     }
 
     static async _onFtPowerCreate(event, target) {
@@ -22113,6 +22226,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
 
     static async _onFtBBTTCCFaction(event, target) {
+      // Ruling 16 (2026-10-18): one being, one sheet. Players go to the Domain tab; the GM gets the record window.
+      if (!game.user?.isGM && game.bbttcc?.alpha?.enabled?.()) {
+        this.tabGroups.primary = "domain";
+        try { this._applyActiveTab(); } catch (_e) {}
+        return;
+      }
       openFactionSheet(this.actor);
     }
 
@@ -22336,6 +22455,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     // #6: Portrait click → file picker
     static async _onFtEditPortrait(event, target) {
+      // Aslı art picker first (bbttcc-core, 2026-10-17) — one pick fills portrait + token.
+      const artPicker = game.bbttcc?.artPicker;
+      if (artPicker?.pick) {
+        const kind = this.actor?.type === "character" ? "character" : "npc";
+        const sel = await artPicker.pick({ kind, context: artPicker.contextForActor?.(this.actor), current: this.actor.img, title: `Portrait & Token — ${this.actor.name}` });
+        if (sel?.img) await this.actor.update({ img: sel.img, "prototypeToken.texture.src": sel.token || sel.img });
+        return;
+      }
       const fp = new FilePicker({
         type:     "image",
         current:  this.actor.img,
@@ -25042,6 +25169,187 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     };
   }
 
+  // ── DOMAIN tab (ruling 16, 2026-10-18): steward + faction are ONE being ─────────────────────────────────
+  // The faction actor stays as the engine's record; the steward sheet shows it as "the Domain": treasury (opBank in
+  // marks, caps from the OP engine facts), how the land feels (Loyalty / Darkness / Momentum, the meters a player
+  // decides on), pressure chips (overextension / unpaid upkeep), holdings, the planned turn, and the doors.
+  const FT_DOMAIN_POOLS = [["violence","Violence"],["nonlethal","Nonlethal"],["intrigue","Intrigue"],["economy","Economy"],["softpower","Softpower"],["diplomacy","Diplomacy"],["logistics","Logistics"],["culture","Culture"],["faith","Faith"]];
+  function _ftDomainLoyaltyBand(v) {
+    if (v < 15) return { key: "bad",  band: "Restive",  hint: "Loyalty under 15: the land works against you — income falls, defences weaken, unrest rises." };
+    if (v < 30) return { key: "warn", band: "Uneasy",   hint: "Loyalty under 30: income and defence suffer. Give the people a reason." };
+    if (v < 70) return { key: "ok",   band: "Steady",   hint: "Loyalty 30–69: the land holds. Above 70 it starts giving back." };
+    if (v < 85) return { key: "good", band: "Devoted",  hint: "Loyalty 70–84: income and defence improve. Above 85 the land answers freely." };
+    return            { key: "best", band: "Fervent",  hint: "Loyalty 85+: the land is yours in every sense — best income, best defence, no unrest." };
+  }
+  function _ftDomainDarknessBand(v) {
+    if (v < 1) return { key: "ok",   band: "Clear",    hint: "No darkness on the land." };
+    if (v < 4) return { key: "warn", band: "Shadowed", hint: "Darkness 1–3: something is wrong out there. It spreads if ignored." };
+    if (v < 7) return { key: "bad",  band: "Dim",      hint: "Darkness 4–6: the land is sickening. Redeem it, or it will redeem itself of you." };
+    return           { key: "worst", band: "Dark",     hint: "Darkness 7+: the land has turned. Everything costs more here." };
+  }
+  /** The hexes that make up the Domain (Dave 2026-10-18: "room for more stuff … like hexes that make up the domain").
+   *  → { count, list:[{uuid, name, kind, hint, here}] } — `here` = on the scene currently on the canvas. */
+  function _ftDomainHexes(faction) {
+    const list = []; const cur = canvas?.scene?.id;
+    const cap = (s) => { s = String(s || "").trim(); return s ? s[0].toUpperCase() + s.slice(1) : ""; };
+    try {
+      for (const sc of (game.scenes?.contents ?? [])) for (const d of (sc.drawings?.contents ?? [])) {
+        const tf = d.flags?.["bbttcc-territory"] ?? {};
+        const isHex = tf.isHex === true || tf.kind === "territory-hex" || (d.shape?.type === "p" && Array.isArray(d.shape?.points) && d.shape.points.length === 12);
+        if (!isHex) continue;
+        const ownerId = tf.factionId || tf.ownerId; const ownerName = tf.faction ?? tf.ownerName;
+        if (!((ownerId && ownerId === faction.id) || (ownerName && String(ownerName).trim() === String(faction.name).trim()))) continue;
+        const name = String(tf.name || d.text || "").replace(/\s+/g, " ").trim() || "Unnamed hex";
+        const type = cap(tf.type || "wilderness"), size = cap(tf.size || ""), terrain = cap(tf.terrain?.key || tf.terrain || "");
+        const kind = [type, size].filter(Boolean).join(" · ");
+        list.push({ uuid: d.uuid, name, kind, here: sc.id === cur, hint: [terrain, sc.name, sc.id === cur ? "on this map — click to jump there" : "click to open the hex"].filter(Boolean).join(" · ") });
+      }
+    } catch (_e) {}
+    list.sort((a, b) => (b.here - a.here) || a.name.localeCompare(b.name));
+    return { count: list.length, list };
+  }
+  function _ftDomainHexCount(faction) { return _ftDomainHexes(faction).count; }
+  function _ftDomainRigCount(faction) {
+    try { const R = game.bbttcc?.rigs; if (!R?.isRig) return 0; return (game.actors?.contents ?? []).filter(a => R.isRig(a) && String(R.ownerOf(a) ?? "").replace(/^Actor\./, "") === faction.id).length; } catch (_e) { return 0; }
+  }
+  /** Hired crews / associations (ruling 15) for the Retinue card. */
+  function _ftDomainRetinue(actor) {
+    try {
+      const C = game.bbttcc?.api?.contracts; if (!C) return [];
+      return C.list(actor).map(c => ({ family: c.family, label: c.familyLabel, name: c.displayName, turnsLeft: c.turnsLeft === Infinity ? "standing" : c.turnsLeft, last: c.turnsLeft === 1 }));
+    } catch (_e) { return []; }
+  }
+  async function ftDomainContext(sheet) {
+    const actor = sheet?.actor; const isGM = !!game.user?.isGM;
+    let faction = null;
+    try { faction = getLinkedFaction(actor); } catch (_e) {}
+    if (!faction) return { linked: false, isGM };
+    const F = faction.flags?.["bbttcc-factions"] ?? {};
+    const facts = game.bbttcc?.facts?.faction ?? {};
+    const bank = F.opBank || {};
+    let caps = {}; try { caps = facts.caps?.(faction) ?? {}; } catch (_e) {}
+    const pools = FT_DOMAIN_POOLS.map(([key, label]) => { const marks = Math.max(0, Math.floor(Number(bank[key]) || 0)); const cap = Math.max(0, Math.floor(Number(caps[key]) || 0)); return { key, label, marks, cap, zero: marks <= 0 }; });
+    const total = pools.reduce((s, p) => s + p.marks, 0), max = pools.reduce((s, p) => s + p.cap, 0);
+    let tier = 1; try { tier = Math.max(1, Math.min(5, Number(facts.tier?.(faction)) || 1)); } catch (_e) {}
+    const tierRoman = ["I","I","II","III","IV","V"][tier] || "I";
+    const tierLabel = ["", "Rooted", "Rising", "Established", "Ascendant", "Transcendent"][tier] || "Rooted";
+    const loyalty = Math.max(0, Number(F.loyalty ?? 0) || 0);
+    const darkRaw = F.darkness; const darkness = Math.max(0, Number((darkRaw && typeof darkRaw === "object") ? darkRaw.global : darkRaw) || 0);
+    const momentum = Math.max(0, Number(F.momentum ?? 0) || 0);
+    const pressure = [];
+    try {
+      const P = F.pressure || {};
+      const band = String(P.overextensionBand || "").toLowerCase();
+      if (band && band !== "stable") pressure.push({ label: `Overextended: ${band}`, hint: "Your Domain holds more than its logistics can carry. Secure the perimeter or supply the line before expanding again." });
+      if (P.unpaidUpkeep === true) pressure.push({ label: "Upkeep unpaid", hint: "A garrison went unpaid last turn. Loyalty and defence slip until it is settled." });
+    } catch (_e) {}
+    const hx = _ftDomainHexes(faction);
+    const warLogs = Array.isArray(F.warLogs) ? F.warLogs : [];
+    const planned = warLogs.filter(e => String(e?.type || "").toLowerCase() === "planned").map(e => ({ label: String(e.label || e.activity || e.name || "Planned action"), costLine: String(e.costLine || ""), targetName: String(e.targetName || "") }));
+    // ruling 17 (2026-10-18): Convictions = the steward's sworn philosophy + the Domain's drift from it (bbttcc-aae)
+    let convictions = "—"; let convictionsMeter = null;
+    try {
+      const own = String(actor?.getFlag?.("bbttcc-aae", "politicalPhilosophy") || "").trim();
+      const CV = game.bbttcc?.api?.convictions; const st = CV?.stateFor?.(faction) || null;
+      const sworn = own ? ftLabelForPoliticalPhilosophy(own) : (st?.center?.label || "");
+      convictions = sworn || "Unsworn";
+      if (st) convictionsMeter = { sworn: sworn || "Unsworn", unsworn: !sworn, drift: st.drift, pct: Math.max(0, Math.min(100, st.drift)), band: st.band, bandLabel: st.bandLabel, css: st.css,
+        hint: `${st.hint} Every choice that carries weight moves this: hold to your convictions and it falls, betray them and it climbs. Steadfast to 15 · Strained to 35 · Fractured to 65 · Rupturing beyond.`,
+        impacts: (st.impacts || []).map(x => String(x).replace(/\s*\[[^\]]*\]\s*$/, "")) };
+    } catch (_e) {}
+    return {
+      linked: true, isGM, id: faction.id, name: faction.name, isOwner: !!faction.isOwner,
+      tier, tierRoman, tierLabel,
+      treasury: { total, max, pools },
+      meters: { loyalty: { value: loyalty, ..._ftDomainLoyaltyBand(loyalty) }, darkness: { value: darkness, ..._ftDomainDarknessBand(darkness) }, momentum: { value: momentum, canSpend: momentum > 0 && (isGM || !!faction.isOwner), hint: "Momentum: banked +1 each time an OP check rolls a 10. Spend it before the turn ends — it resets at Day's End." } },
+      pressure, hexes: hx.count, hexList: hx.list, rigs: _ftDomainRigCount(faction), convictions, convictionsMeter, planned,
+      retinue: _ftDomainRetinue(actor)
+    };
+  }
+  async function _ftDomainAct(sheet, act) {
+    const actor = sheet.actor; let faction = null; try { faction = getLinkedFaction(actor); } catch (_e) {}
+    if (String(act).startsWith("release:")) {   // ruling 15: let a hired crew / association go now
+      const fam = String(act).split(":")[1]; const C = game.bbttcc?.api?.contracts;
+      if (!C) return ui.notifications?.warn?.("Contracts not available.");
+      const cur = C.get(actor, fam); if (!cur) return;
+      const ok = await Dialog.confirm({ title: "Release the contract?", content: `<p><b>${foundry.utils.escapeHTML(cur.displayName)}</b> walk now. Their maneuvers and bonuses go with them. No refund.</p>` });
+      if (!ok) return;
+      await C.release(actor, fam);
+      return sheet.render(false);
+    }
+    if (!faction) return ui.notifications?.info?.("No Domain is linked to this steward yet.");
+    const A = game.bbttcc?.api ?? {};
+    if (String(act).startsWith("hex:")) {        // a hex of the Domain: jump there when it is on this map, and open its sheet
+      const uuid = String(act).slice(4);
+      try {
+        const d = await fromUuid(uuid);
+        if (d && d.parent?.id === canvas?.scene?.id && canvas?.ready) {
+          const w = Number(d.shape?.width) || 0, h = Number(d.shape?.height) || 0;
+          await canvas.animatePan({ x: Number(d.x) + w / 2, y: Number(d.y) + h / 2, duration: 450 });
+          try { d.object?.control?.({ releaseOthers: true }); } catch (_e) {}
+        }
+      } catch (_e) {}
+      const open = A.territory?.openHexSheet;
+      if (typeof open === "function") return open(uuid);
+      return ui.notifications?.warn?.("Hex sheet not available.");
+    }
+    try {
+      switch (act) {
+        case "planner": { if (!A.raid?.openActivityPlanner) return ui.notifications?.warn?.("Planner not available."); return A.raid.openActivityPlanner({ factionId: faction.id, lockFaction: true }); }
+        case "raid":    { const open = A.raid?.openConsole || A.raid?.openRaidConsole; if (typeof open !== "function") return ui.notifications?.warn?.("Raid Console not available."); return open({ factionId: faction.id, mode: "commit" }); }
+        case "quests":  { if (!A.quests?.openQuestLog) return ui.notifications?.warn?.("Quest Log not available."); return A.quests.openQuestLog({ factionId: faction.id }); }
+        case "market":  { try { const cur = game.settings.get("bbttcc-market", "lastContext") || {}; await game.settings.set("bbttcc-market", "lastContext", { ...cur, factionId: faction.id, characterId: actor.id }); } catch (_e) {} return A.market?.openMarket?.(); }
+        case "vault":   { // ruling 16: one Treasury, opened as this steward (falls back to the faction bank on Beta worlds)
+          const fnT = A.banks?.openTreasury, fnF = A.banks?.openFactionBank;
+          if (typeof fnT === "function") return fnT(sheet.actor, { steward: sheet.actor });
+          if (typeof fnF !== "function") return ui.notifications?.warn?.("Vault not available."); return fnF(faction); }
+        case "record":  { if (!game.user?.isGM) return; return openFactionSheet(actor); }
+        case "momentum": {   // the faction sheet's own spend menu (bbttcc-factions _onMomentumSpend) — it needs only the actor, not a rendered sheet
+          if (!(game.user?.isGM || faction.isOwner)) return ui.notifications?.info?.("Only the Domain's steward or the GM can spend Momentum.");
+          const fn = faction.sheet?._onMomentumSpend;
+          if (typeof fn !== "function") return ui.notifications?.warn?.("Momentum spend not available.");
+          await fn.call(faction.sheet);
+          return sheet.render(false); }
+      }
+    } catch (e) { console.warn("[fourththing] domain action failed", act, e); }
+  }
+  {
+    const C = FourthThingCharacterSheet;
+    const _origCtx = C.prototype._prepareContext;
+    C.prototype._prepareContext = async function (options) {
+      const ctx = await _origCtx.call(this, options);
+      try { if (ctx && typeof ctx === "object") ctx.domain = await ftDomainContext(this); } catch (e) { console.warn("[fourththing] domain context failed", e); ctx.domain = { linked: false }; }
+      return ctx;
+    };
+    const _origRender = C.prototype._onRender;
+    C.prototype._onRender = async function (context, options) {
+      await _origRender.call(this, context, options);
+      try {
+        const root = this.element?.querySelector?.(".ft-domain");
+        if (root && !root.dataset.ftDomainBound) {
+          root.dataset.ftDomainBound = "1";
+          root.addEventListener("click", (ev) => { const b = ev.target?.closest?.("[data-domain-act]"); if (!b || !root.contains(b)) return; ev.preventDefault(); ev.stopPropagation(); _ftDomainAct(this, String(b.dataset.domainAct || "")); });
+        }
+      } catch (_e) {}
+    };
+    // The land changed → the steward feels it: re-render open steward sheets whose Domain this is (debounced).
+    const _pending = new Map();
+    Hooks.on("updateActor", (doc, changes) => {
+      try {
+        if (!doc || doc.type === "character" || !doc.flags?.["bbttcc-factions"]?.isFaction) return;
+        for (const app of Object.values(ui.windows || {})) { void app; }
+        const inst = foundry?.applications?.instances; if (!inst?.forEach) return;
+        inst.forEach(app => {
+          if (!(app instanceof FourthThingCharacterSheet) || !app.rendered) return;
+          let f = null; try { f = getLinkedFaction(app.actor); } catch (_e) {}
+          if (!f || f.id !== doc.id) return;
+          if (_pending.has(app.id)) return;
+          _pending.set(app.id, setTimeout(() => { _pending.delete(app.id); try { app.render(false); } catch (_e) {} }, 250));
+        });
+      } catch (_e) {}
+    });
+  }
+
   // ── Register document classes ─────────────────────────────────────────────
   CONFIG.Actor.documentClass  = FourthThingActor;
   CONFIG.Combat.documentClass = FourthThingCombat;
@@ -25336,7 +25644,7 @@ Hooks.on(_chatHook, (message, html) => {
       const costOverride = Number(btn.dataset.cost) || null;
       const category     = btn.dataset.category ?? "violence";
       const result = await game.fourththing.deathMech.redeem(actor, { category, costOverride });
-      if (result?.ok) disableCard(btn, `Resolved: Redeemed (−${result.cost} ${result.category} marks from ${result.faction?.name ?? "faction"}).`, "#4a90d9");
+      if (result?.ok) disableCard(btn, `Resolved: Redeemed (−${result.cost} ${result.category} marks from ${result.faction?.name ?? "the Domain"}).`, "#4a90d9");
       else            disableCard(btn, `Redemption failed: ${result?.reason ?? "unknown"} — falling back to GM discretion.`, "#ff8a8a");
     });
   });
@@ -29174,6 +29482,7 @@ function _ftDrawAffiliationPanel(token) {
   }
   if (_ftSceneIsStrategicMap(canvas?.scene)) return;
   if (!["character", "npc"].includes(token.actor.type)) return;
+  if (_ftAlphaHidden("crew")) return;   // ALPHA CUT: no crew/association hover chips on player seats
 
   const crews  = _ftScanActorAffiliations(token.actor, "crew");
   const assocs = _ftScanActorAffiliations(token.actor, "occult");

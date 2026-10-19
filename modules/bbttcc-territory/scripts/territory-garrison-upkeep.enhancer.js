@@ -261,11 +261,13 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
     const fFlags  = clone(A.flags?.[MODF] || {});
     let bank      = clone(fFlags.opBank || {});
     let fTurnPending = clone(fFlags.turn?.pending || {});
-    // 2026-09-10 (owner ruling): faction morale/loyalty deltas are APPLIED here,
-    // not queued. The old path pushed them into flags.bbttcc-factions.turn.pending
+    // 2026-09-10 (owner ruling): the faction loyalty delta is APPLIED here,
+    // not queued. The old path pushed it into flags.bbttcc-factions.turn.pending
     // — a slot nothing consumed, so the "+6 Morale" this pass logged every turn
-    // never landed (identical 6/6 sat there from turn 1 on). Run-local sums:
-    let dMorale = 0, dLoyalty = 0;
+    // never landed (identical 6/6 sat there from turn 1 on). Run-local sum:
+    // (Morale deltas — unpaid −1, abandoned −1, integration +1/+2 — retired
+    //  2026-10-18, ruling 19: faction Morale is no longer a game meter.)
+    let dLoyalty = 0;
 
     if (!bankHasKnownShape(bank)) {
       console.warn(TAG, `Faction ${A.name} has unexpected opBank shape; upkeep normalization may be incomplete.`, bank);
@@ -275,14 +277,12 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
     const logLines = [];
     let anyUnpaidGlobal = false;
 
-    // morale & loyalty bonus counters from *fully paid* integrated hexes
-    let moraleShortCount  = 0;
-    let moraleFullCount   = 0;
+    // loyalty bonus counters from *fully paid* integrated hexes
     let loyaltyShortCount = 0;
     let loyaltyFullCount  = 0;
 
     // Phase D — aggregate counters so the GM chat card can show a top-line
-    // Holdings-attrition status next to the existing morale/loyalty pills.
+    // Holdings-attrition status next to the existing loyalty pill.
     let neglectedHexCount = 0;
     let abandonedHexCount = 0;
     let abandonedUnitsTotal = 0;
@@ -325,17 +325,15 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
         }
       }
 
-      // Record war log line + morale/loyalty counters
+      // Record war log line + loyalty counters
       const costStr = Object.entries(cost).map(([k,v]) => `${k}:${v}`).join(", ");
       if (!hasUnpaid) {
         logLines.push(`• ${hexName}: Paid garrison upkeep (${phase}) [${costStr}]`);
 
-        // Count for integration morale + loyalty bonus if we're past occupation
+        // Count for integration loyalty bonus if we're past occupation
         if (phase === "short_integration") {
-          moraleShortCount++;
           loyaltyShortCount++;
         } else if (phase === "full_integration") {
-          moraleFullCount++;
           loyaltyFullCount++;
         }
       } else {
@@ -367,8 +365,7 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
           data: { [`flags.${MODT}`]: newTf }
         });
 
-        // Faction-level penalties (morale)
-        dMorale -= 1;
+        // (Faction-level Morale penalty −1 retired 2026-10-18, ruling 19.)
       }
 
       // Holdings Phase D — neglect tracking + abandonment.
@@ -407,8 +404,7 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
             logLines.push(`• ${hexName}: 💔 HOLDINGS ABANDONED — ${totalLost} unit${totalLost===1?"":"s"} defected after ${_HLD_NEGLECT_THRESHOLD} unpaid upkeep turn${_HLD_NEGLECT_THRESHOLD===1?"":"s"}.`);
             abandonedHexCount++;
             abandonedUnitsTotal += totalLost;
-            // Knock morale once more for the loss
-            dMorale -= 1;
+            // (The extra Morale −1 for the loss retired 2026-10-18, ruling 19.)
           } else {
             neglectPatch = {
               turns: nextTurns,
@@ -445,18 +441,6 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
       } catch (eHD) { console.warn(TAG, "Holdings Phase D pass failed for hex", hexName, eHD); }
     }
 
-    // Integration-based morale bonus:
-    // each short_integration hex with paid upkeep: +1 morale
-    // each full_integration hex with paid upkeep: +2 morale
-    const moraleBonus = (moraleShortCount * 1) + (moraleFullCount * 2);
-    if (moraleBonus > 0) {
-      dMorale += moraleBonus;
-      logLines.push(
-        `• Integration morale bonus: +${moraleBonus} Morale ` +
-        `(${moraleShortCount} short-integration, ${moraleFullCount} full-integration hexes with paid upkeep)`
-      );
-    }
-
     // Integration-based loyalty stabilization:
     // each short_integration hex with paid upkeep: +1 loyalty
     // each full_integration hex with paid upkeep: +2 loyalty
@@ -469,16 +453,11 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
       );
     }
 
-    // Apply faction updates — morale/loyalty land NOW (clamped 0..100).
+    // Apply faction updates — loyalty lands NOW (clamped 0..100).
     const updates = {};
     updates[`flags.${MODF}.opBank`] = bank;
     const track = (k) => (fFlags[k] === undefined || fFlags[k] === null) ? 50 : N(fFlags[k]);
     const clamp100 = (v) => Math.max(0, Math.min(100, Math.round(v)));
-    if (dMorale !== 0) {
-      const before = track("morale"), after = clamp100(before + dMorale);
-      updates[`flags.${MODF}.morale`] = after;
-      logLines.push(`• Morale ${before} → ${after} (${dMorale > 0 ? "+" : ""}${dMorale} from upkeep)`);
-    }
     if (dLoyalty !== 0) {
       const before = track("loyalty"), after = clamp100(before + dLoyalty);
       updates[`flags.${MODF}.loyalty`] = after;
@@ -519,9 +498,7 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
         activity: "garrison_upkeep",
         summary: logLines.join(" | "),
         unpaid: anyUnpaidGlobal,
-        moraleBonus,
         loyaltyBonus,
-        moraleDelta: dMorale,
         loyaltyDelta: dLoyalty,
         holdingsNeglected: neglectedHexCount,
         holdingsAbandonedHexes: abandonedHexCount,
@@ -535,10 +512,9 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
         const content = `
           <p><b>Garrison Upkeep — ${foundry.utils.escapeHTML(A.name)}</b></p>
           <p>${logLines.join("<br/>")}</p>
-          ${anyUnpaidGlobal ? `<p style="color:#b91c1c;"><b>Unpaid upkeep detected.</b> Morale penalty applied; hex loyalty penalties queued.</p>` : ""}
+          ${anyUnpaidGlobal ? `<p style="color:#b91c1c;"><b>Unpaid upkeep detected.</b> Hex loyalty penalties queued.</p>` : ""}
           ${neglectedHexCount > 0 ? `<p style="color:#d97706;"><b>⚠ Holdings neglected:</b> ${neglectedHexCount} hex${neglectedHexCount===1?"":"es"} — pay upkeep next turn or units defect.</p>` : ""}
           ${abandonedHexCount > 0 ? `<p style="color:#b91c1c;"><b>💔 Holdings abandoned:</b> ${abandonedUnitsTotal} unit${abandonedUnitsTotal===1?"":"s"} defected from ${abandonedHexCount} hex${abandonedHexCount===1?"":"es"}.</p>` : ""}
-          ${moraleBonus > 0 ? `<p style="color:#15803d;"><b>Integration morale bonus:</b> +${moraleBonus} Morale</p>` : ""}
           ${loyaltyBonus > 0 ? `<p style="color:#15803d;"><b>Integration loyalty bonus:</b> +${loyaltyBonus} Loyalty</p>` : ""}
         `;
         await ChatMessage.create({
@@ -552,7 +528,6 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
     console.log(TAG, `Upkeep processed for faction ${A.name}`, {
       opBank: bank,
       anyUnpaidGlobal,
-      moraleBonus,
       loyaltyBonus
     });
   }

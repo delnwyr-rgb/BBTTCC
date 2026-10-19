@@ -270,7 +270,7 @@ function _bbttccFxPanelForRound(app, idx){
     if (m.costStr) lines.push('<div class="bbttcc-tip-line"><b>Cost:</b> ' + _escapeHtml(m.costStr) + '</div>');
 
     const meta = [];
-    if (m.minFactionTier != null) meta.push("Faction Standing " + String(m.minFactionTier));
+    if (m.minFactionTier != null) meta.push("Domain Standing " + String(m.minFactionTier));
     if (m.tier != null) meta.push("T" + String(m.tier));
     if (m.rarity) meta.push(String(m.rarity));
     if (m.storyOnly) meta.push("Story");
@@ -753,6 +753,7 @@ function _rcFactionStewards(faction) {
 function _rcEchoesManifestingBlock(faction) {
   try {
     if (!faction) return "";
+    if (game.bbttcc?.alpha?.hidden?.("crew")) return "";   // ALPHA CUT (ruling 1): no crew/association echoes on player seats
     // The system publishes this at game.fourththing.echoAssets (not .api.echoAssets).
     const rosterApi = game.fourththing?.echoAssets?.roster ?? game.fourththing?.api?.echoAssets?.roster;
     if (!rosterApi?.list) return "";
@@ -973,7 +974,7 @@ function _rcApplyGateToAddRoundButton(app){
 
     if (!attacker || !app.vm.attackerId) {
       btn.prop("disabled", true);
-      btn.attr("title", "Pick an attacker faction first.");
+      btn.attr("title", "Pick an attacker Domain first.");
       return;
     }
 
@@ -2759,7 +2760,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
 
   async _openSupportFactionPicker(){
     if (!_rcIsGMUser()) return;
-    if (!this.vm.attackerId) return ui.notifications?.warn?.("Pick the lead attacker faction first.");
+    if (!this.vm.attackerId) return ui.notifications?.warn?.("Pick the lead attacker Domain first.");
 
     const leadId = String(this.vm.attackerId || "");
     const selected = new Set(_rcNormFactionIds(this.vm.supportFactionIds || []));
@@ -3750,12 +3751,42 @@ _renderScenarioHUD(host, round){
 
       const EFFECTS = (game.bbttcc?.api?.raid?.EFFECTS) || {};
 
-      const firePreviewAtt = async (_sumA) => {};
-      const firePreviewDef = async (_sumD) => {};
-
-      // NOTE: preview functions were large; keeping your originals is recommended.
-      // We keep the recalc + DC projection logic intact, but omit preview bodies here
-      // to avoid accidentally breaking your existing preview wiring.
+      // "Bank After (Preview)" — these four spans had NO writer since the monorepo import
+      // (the original preview bodies were trimmed and the stubs left as no-ops), so the
+      // lines rendered with nothing after the colon (Dave, Presence raid 2026-10-17).
+      // Now: bank − projected spend per pool, in marks; any pool that would go negative
+      // is called out in the red error line beneath.
+      const _bankAfterFor = (actor, sum) => {
+        if (!actor) return { text: "—", short: [] };
+        const bank = getOPBank(actor) || {};
+        const pools = Object.keys(sum || {}).filter(k => Number(sum[k] || 0) !== 0);
+        if (!pools.length) return { text: "unchanged", short: [] };
+        const short = [];
+        const text = pools.map(k => {
+          const have = Number(bank[k] || 0), spend = Number(sum[k] || 0), after = have - spend;
+          if (after < 0) short.push(`${k} −${_rcOP(-after)}`);
+          return `${k}:${_rcOP(have)}→${_rcOP(after)}`;
+        }).join(", ");
+        return { text, short };
+      };
+      const _writePreview = (selIn, selErr, actor, sum) => {
+        const { text, short } = _bankAfterFor(actor, sum);
+        for (const scope of [host, tr.parentElement]) {
+          const el = scope?.querySelector?.(selIn); if (el) el.textContent = text;
+          const er = selErr ? scope?.querySelector?.(selErr) : null;
+          if (er) er.textContent = short.length ? `Short: ${short.join(" · ")}` : "";
+        }
+      };
+      const firePreviewAtt = async (sumA) => {
+        const a = game.actors.get(round.attackerId || this.vm.attackerId) || null;
+        try { _writePreview("[data-op-after-att]", "[data-op-error-att]", a, sumA); _writePreview("[data-op-after-inline]", "[data-op-error-inline]", a, sumA); } catch (_e) {}
+      };
+      const firePreviewDef = async (sumD) => {
+        if (!_rcIsGMUser()) return;   // players never see defender numbers
+        const did = round.defenderId || round.view?.defenderId || this.vm.defenderId || "";
+        const d = did ? (game.actors.get(did) || null) : null;
+        try { _writePreview("[data-op-after-def]", "[data-op-error-def]", d, sumD); _writePreview("[data-op-after-inline-def]", "[data-op-error-inline-def]", d, sumD); } catch (_e) {}
+      };
 
       const recalc = ()=>{
         const sumA = {}, sumD = {};
@@ -4372,12 +4403,12 @@ r.view = {
     // Add Round: supports hex OR rig
     $root.on("click.bbttccRaid","[data-id='add-round']", async (ev)=>{
       ev.preventDefault();
-      if (!this.vm.attackerId) return ui.notifications?.warn?.("Pick an attacker faction first.");
+      if (!this.vm.attackerId) return ui.notifications?.warn?.("Pick an attacker Domain first.");
 
       if (this.vm.targetType === "creature") {
         if (!this.vm.creatureId) return ui.notifications?.warn?.("Pick a creature first.");
       } else if (this.vm.targetType === "rig") {
-        if (!this.vm.defenderId) return ui.notifications?.warn?.("Pick a defender faction rig first.");
+        if (!this.vm.defenderId) return ui.notifications?.warn?.("Pick a defender Domain's rig first.");
         if (!this.vm.rigId) return ui.notifications?.warn?.("Pick a rig first.");
       } else if (this.vm.targetType === "rig") {
         // handled above
@@ -4681,8 +4712,15 @@ r.view = {
 
     $root.on("click.bbttccRaid","[data-id='commit-staging']", async (ev)=>{
       ev.preventDefault();
-      if (_rcIsGMUser()) return;
-      if (!this.__stagingDirty) return;
+      // Never a silent no-op (Dave 2026-10-17: "the button is dead") — say WHY nothing was sent.
+      if (_rcIsGMUser()) { ui.notifications?.info?.("You're the GM — staging lands directly, nothing to commit."); return; }
+      if (!this.__stagingDirty) {
+        const staged = Object.values(this.vm?.rounds?.at?.(-1)?.localStaged?.att || {}).reduce((n, v) => n + (Number(v) || 0), 0);
+        ui.notifications?.info?.(staged > 0
+          ? "Nothing new to send — the GM already holds what you've staged. Stage more with the +10 / +50 buttons and this lights up."
+          : "Nothing staged yet — add marks with the +10 / +50 buttons first, then commit.");
+        return;
+      }
       this.__stagingDirty = false;
       try {
         await this._saveSessionNow();
@@ -4791,7 +4829,7 @@ r.view = {
         const sfActor = fireFid ? game.actors?.get?.(fireFid) : null;
         if (!sfActor) { try { ui.notifications?.warn?.("Support faction not found."); } catch(_e) {} return; }
         if (!_rcIsGMUser() && !sfActor.isOwner) {
-          try { ui.notifications?.warn?.("You can only fire maneuvers for factions you control."); } catch(_e) {}
+          try { ui.notifications?.warn?.("You can only fire maneuvers for Domains you control."); } catch(_e) {}
           return;
         }
         try { _rcSyncManeuverSelectionsFromDOM(this, idx, r); } catch(_eSyncFire) {}
@@ -4842,7 +4880,7 @@ r.view = {
         const sfid = String(factionId || "").trim();
         const sfActor = sfid ? game.actors?.get?.(sfid) : null;
         if (!sfActor?.isOwner) {
-          try { ui.notifications?.warn?.("You can only stage OP for factions you control."); } catch(_e) {}
+          try { ui.notifications?.warn?.("You can only stage Marks for Domains you control."); } catch(_e) {}
           return;
         }
       }
@@ -4866,7 +4904,7 @@ r.view = {
 
     let actorId = "";
     let bucket = null;
-    let label = "Faction";
+    let label = "Domain";
 
     if (side === "att") {
       actorId = r.attackerId || "";
@@ -5138,7 +5176,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           defender = did ? game.actors.get(did) : null;
         }
       } catch {}
-      if (!defender) return ui.notifications?.warn?.("Scenario modes require a defender faction (hex/facility/rig target).");
+      if (!defender) return ui.notifications?.warn?.("Scenario modes require a defender Domain (hex/facility/rig target).");
       r.defenderId = defender.id || r.defenderId || "";
 
       const raidApi = game.bbttcc?.api?.raid || {};
@@ -5726,7 +5764,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
       facilityOrRigProfile = null;
     } else if (r.targetType === "rig") {
       defender = r.defenderId ? game.actors.get(r.defenderId) : null;
-      if (!defender) return ui.notifications?.warn?.("Defender faction not found (rig target).");
+      if (!defender) return ui.notifications?.warn?.("Defender Domain not found (rig target).");
       facilityOrRigProfile = await getRigRaidProfile(defender, r.rigId);
       if (!facilityOrRigProfile) return ui.notifications?.warn?.("Rig not found on defender.");
     } else {
@@ -7311,6 +7349,8 @@ function bindAPI() {
               const fac  = game.actors?.get?.(factionId) || null;
               const S    = game.bbttcc?.api?.siege;
               if (!user || !fac || !S || !hexUuid) return reply(false, "Siege relay: bad request.");
+              // ALPHA CUT (2026-10-17): defence in depth — judged on the REQUESTING user, not this GM seat.
+              if (game.bbttcc?.alpha?.enabled?.() && !user.isGM && !game.bbttcc.alpha.overrides().has("siege")) return reply(false, "Sieges are not part of the Alpha yet.");
               if (!fac.testUserPermission(user, "OWNER")) {
                 console.warn(TAG, `siegeRequest DENIED — ${user.name} does not own ${fac.name}`);
                 return reply(false, `You don't own ${fac.name}.`);
@@ -8041,7 +8081,7 @@ function _canFactionUseManeuver(factionActor, mKey, { side="att", activityKey=""
   if (!isGMView) {
     const factionTier = _factionTierForActor(factionActor);
     const reqTier = _requiredFactionTierForManeuver(mKey);
-    if (reqTier > factionTier) return { ok:false, reason:`Requires Faction Standing ${reqTier} (current ${factionTier})` };
+    if (reqTier > factionTier) return { ok:false, reason:`Requires Domain Standing ${reqTier} (current ${factionTier})` };
   }
 
   // 0.1) CREW/OCCULT GRANT (survey §7a) — an active crew/association arms the faction with its
@@ -8055,7 +8095,7 @@ function _canFactionUseManeuver(factionActor, mKey, { side="att", activityKey=""
   // 2026-10-09 — ⭐ option-derived maneuvers are gated by the ROSTER (step 3),
   // not by doctrine items; no doctrine item ever owns an opt_* key.
   if (!isGMView && !_isOptionDerivedManeuver(mKey) && !_bbttccDoctrineAllowsManeuver(factionActor, mKey)) {
-    return { ok:false, reason:"Not in faction doctrine." };
+    return { ok:false, reason:"Not in the Domain's doctrine." };
   }
 
   // 2) Availability gating (Standard vs Learned). Learned requires an unlock unless GM.

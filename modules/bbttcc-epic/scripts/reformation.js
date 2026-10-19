@@ -15,7 +15,7 @@
 //      dimmer for SUNDER — Ruling 4's reduced ending honored).
 //   2. THE BOOK OF <faction> — per-faction epilogue cards drawn from what
 //      actually happened: war-log length, each steward's faced fragments and
-//      final Darkness band, the mercy ledger, VP/Unity, the lamps.
+//      final Darkness band, the mercy ledger, the lamps. (VP/Unity retired 2026-10-18, ruling 18.)
 //   3. THE ASCENT LIES OPEN — Act II unlocked: world setting
 //      `bbttcc-epic.ascentUnlocked` + bbttcc:epic:ascentUnlocked (epicBand
 //      already answers "ascent" at L21+; release 2 builds what lives there).
@@ -87,7 +87,6 @@ function lampsLit() {
 async function postFactionEpilogue(faction, outcome) {
   const f = faction.flags?.[FCT] ?? {};
   const warCount = Array.isArray(f.warLogs) ? f.warLogs.length : 0;
-  const V = f.victory ?? {};
   const members = factionMembers(faction.id);
   const lines = members.map(a => {
     let frags = [], band = "clear";
@@ -97,7 +96,7 @@ async function postFactionEpilogue(faction, outcome) {
     return `<b>${foundry.utils.escapeHTML(a.name)}</b> — ${faced}/${frags.length} fragment${frags.length === 1 ? "" : "s"} faced · ends the Work at <b>${cap(band)}</b>`;
   }).join("<br/>");
   await beatCard(`📖 THE BOOK OF ${foundry.utils.escapeHTML(String(faction.name).toUpperCase())}`,
-    `${warCount} entries in the war log. VP ${Number(V.vp) || 0} · Unity ${Number(V.unity) || 0}.<br/><br/>${lines || "<em>No stewards fly this banner — the record stands alone.</em>"}`,
+    `${warCount} entries in the war log.<br/><br/>${lines || "<em>No stewards fly this banner — the record stands alone.</em>"}`,
     `${outcome === "parley" ? "They chose the true answer." : "They chose the answer that works, and paid for it."} · The Great Work`);
 }
 

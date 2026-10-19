@@ -101,7 +101,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     overclock_the_golems: "+3 attack for one construct unit; loses 1 HP.",
     counter_propaganda_wave: "Cancel enemy Soft Power effect this round.",
     sephirotic_intervention: "Auto-win one opposed roll; Darkness −1.",
-    ego_breaker: "Reduce the enemy faction’s Violence cap by 30 marks, permanently.",
+    ego_breaker: "Reduce the enemy Domain’s Violence cap by 30 marks, permanently.",
     reality_hack: "Re-run last round as if it never occurred.",
     unity_surge: "All allies gain +2 to every OP next round.",
     qliphothic_gambit: "+6 to Violence roll; Darkness +2.",
@@ -133,7 +133,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     // Written from what apply() actually does — every line below is a real
     // engine effect, applied at the next Turn Advance unless stated otherwise.
     fortify_hex: "Raise the hex's defences: +Fortified modifier, Defense +2.",
-    patrol_routes: "Put boots on the roads: +Patrolled, Defense +1, Morale +1. A Fortified hex may also gain Well-Maintained.",
+    patrol_routes: "Put boots on the roads: +Patrolled, Defense +1, Loyalty +1. A Fortified hex may also gain Well-Maintained.",
     secure_perimeter: "Stake out the approaches: +Strategic Position, Defense +1.",
     supply_cache: "Lay in stores: +Supply Cache, Defense +1.",
     supply_depot: "Build a depot: +Logistics Hub, Defense +1.",
@@ -143,12 +143,12 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     infrastructure_expansion: "Expand the works: +Expanded Infrastructure, Defense +2, Integration +1.",
     reconstruction_drive_std: "Rebuild after damage: removes Damaged Infrastructure, +Well-Maintained, Defense +2, Integration +1; an occupied or contested hex becomes Claimed.",
     diplomatic_mission_std: "Send envoys: +Diplomatic Ties, Loyalty +1.",
-    defuse_tensions: "Talk the town down: removes Hostile Population, +Loyal Population, Loyalty +2, Morale +2.",
-    loyalty_program: "Win the locals over: +Loyal Population, Loyalty +2, Morale +1.",
-    cultural_festival_std: "Throw a festival: +Cultural Festival, Morale +2.",
-    propaganda_campaign: "Paper the walls: +Propaganda, Morale +2, Loyalty +1 on the target hex.",
-    alignment_shift: "Consecrate the hex to the Tree: +Sanctified, +Pilgrimage Site, Morale +1, Loyalty +1 next turn; +10 marks Faith next turn.",
-    gather_intel: "Send scouts: the hex is revealed now, a dossier (holder, defense, loyalty, morale, integration, modifiers, alignment) is whispered to you, and it carries the Intel tag next turn.",
+    defuse_tensions: "Talk the town down: removes Hostile Population, +Loyal Population, Loyalty +2.",
+    loyalty_program: "Win the locals over: +Loyal Population, Loyalty +2.",
+    cultural_festival_std: "Throw a festival: +Cultural Festival, Loyalty +2.",
+    propaganda_campaign: "Paper the walls: +Propaganda, Loyalty +2 on the target hex.",
+    alignment_shift: "Consecrate the hex to the Tree: +Sanctified, +Pilgrimage Site, Loyalty +1 next turn; +10 marks Faith next turn.",
+    gather_intel: "Send scouts: the hex is revealed now, a dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to you, and it carries the Intel tag next turn.",
     policy_reforms: "Administrative reform: OP income ×1.05 this turn.",
     rite_of_atonement: "Only after a failed Final Ritual: come back to the Great Work and make repair. At turn end the GM is handed the Rite (a scene) — succeed there and the Final Ritual stain lifts.",
     muster_drill: "Drill the Town Militia at the Muster: first drill = DRILLED (+2 defense DC at home, Violence +5 marks/turn); second = STANDING (absorbs the first strike on a home hex each turn; home roads escorted).",
@@ -157,24 +157,24 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     repair_rig: "Field repairs on one of your rigs (pick the rig): recovers one damage step.",
     build_bridge: "Bridge a river, lake or strait hex next to your holdings: you and your allies cross free, the neutral pay a toll (5 marks, yours), the hostile are turned back. A strategic point — it can be cut.",
     cut_bridge: "Cut a bridge (anyone's, even your own): nobody crosses there until its builder rebuilds it.",
-    charter_passage: "Charter another faction's boats, flyers or subs (pick their rig): their domains carry you for 3 turns; the carrier is paid. Needs them at neutral or better with you.",
+    charter_passage: "Charter another Domain's boats, flyers or subs (pick their rig): their domains carry you for 3 turns; the carrier is paid. Needs them at neutral or better with you.",
 
     // Siege clash activities (bbttcc-raid siege-counter-activities)
     bombard: "Siege, attacker: batter the current wall layer — rolled structure damage; a breached layer opens the next.",
     escalade: "Siege, attacker: ladders on the wall — 1d10+10 structure damage to the current layer.",
     sapper_undermine: "Siege, attacker: collapse a tunnel under the wall — 3d10+12 concussive structure damage.",
     ram_gate: "Siege, attacker: drive the ram home — 2d10+12 concussive damage and the garrison staggers.",
-    boiling_oil: "Siege, defender: drain the besiegers' supply buffer by 2; your garrison's morale +1.",
-    flaming_pitch: "Siege, defender: drain the besiegers' supply buffer by 2; your garrison's morale +1.",
-    cls_marshal: "Harmony Marshal, attacker: rally the standard — siege buffer +2, morale +1.",
+    boiling_oil: "Siege, defender: drain the besiegers' supply buffer by 2.",
+    flaming_pitch: "Siege, defender: drain the besiegers' supply buffer by 2.",
+    cls_marshal: "Harmony Marshal, attacker: rally the standard — siege buffer +2.",
     cls_wyrdlens: "Wyrdlens Adept, attacker: read the weak point — 2d10+14 structure damage.",
     cls_courier: "Shadow Courier, attacker: open the postern — 3d10+12 structure damage.",
     cls_aurablade: "Aurablade, attacker: mercy's edge — the defender loses 1 Anytime budget.",
     cls_linguist: "Cosmic Linguist, attacker: cite the clause — the defender loses 1 Renewal.",
     cls_pact: "Pactkeeper, attacker: call the debt — siege buffer +2.",
-    cls_bulwark: "Bulwark, defender: brace the breach — Anytime budget +2, morale +1.",
-    cls_soulsmith: "Soul-Smith, defender: field refit — Renewal +2, morale +1.",
-    cls_dreamwalker: "Dreamwalker, defender: phantom host — besiegers' buffer −2, morale +1."
+    cls_bulwark: "Bulwark, defender: brace the breach — Anytime budget +2.",
+    cls_soulsmith: "Soul-Smith, defender: field refit — Renewal +2.",
+    cls_dreamwalker: "Dreamwalker, defender: phantom host — besiegers' buffer −2."
   };
 
   // ONE authority for fallback prose (2026-09-08): the Raid Console's
@@ -240,7 +240,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     if (model.costStr) lines.push('<div class="bbttcc-tip-line"><b>Cost:</b> ' + _escapeHtml(model.costStr) + '</div>');
 
     const metaParts = [];
-    if (model.minFactionTier != null) metaParts.push("Faction Standing " + String(model.minFactionTier));
+    if (model.minFactionTier != null) metaParts.push("Domain Standing " + String(model.minFactionTier));
     if (model.tier != null) metaParts.push("T" + String(model.tier));
     if (model.rarity) metaParts.push(model.rarity);
     if (model.storyOnly) metaParts.push("Story");
@@ -1331,9 +1331,11 @@ const hasDoctrineItems = doctrineApi
       }
 
       // Apply gating
+const alphaNoSiege = game.bbttcc?.alpha?.hidden?.("siege") === true;   // ALPHA CUT (2026-10-17): sieges hidden until Act 2
 const acts = actsAll.filter(a => {
   const key = String(a.key || "").toLowerCase();
   if (!key) return false;
+  if (alphaNoSiege) { const fx = (game.bbttcc?.api?.raid?.EFFECTS || {})[key]; if (fx && (fx.siege || fx.siegeRequiresTarget)) return false; }
 
   // If doctrine system is active and faction has doctrine items,
   // only allow activities the faction actually owns.
@@ -1465,7 +1467,7 @@ const categories = this._buildCategories(acts);
 // If a factionId was provided on open, freeze the selector to that faction (player-safe).
 if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
   facSel.disabled = true;
-  facSel.title = "Faction context is locked for this window.";
+  facSel.title = "The Domain is locked for this window.";
 }
 
       // Target UI container
@@ -1664,7 +1666,7 @@ if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
       const lockedForUser = !!((this._lockedFactionId || this._lockFaction) && !game.user.isGM);
 
 if (!lockedForUser) {
-  top.appendChild(mkLabel("Faction"));
+  top.appendChild(mkLabel("Domain"));
   top.appendChild(mkLabel(wantsRigTarget ? "Target Rig" : "Target Hex"));
   top.appendChild(facSel);
 } else {
@@ -1875,8 +1877,8 @@ wrap.appendChild(top);
           row.dataset.search = `${a.label || ""} ${a.key || ""}`.toLowerCase();
           if (FACTION_WIDE.has(String(a.key || "").toLowerCase())) {
             const chip = document.createElement("span");
-            chip.textContent = "⚑ faction-wide";
-            chip.title = "Affects the whole faction, not a hex — the hex you pick is only where it's staged. Staging it N times applies it N times.";
+            chip.textContent = "⚑ Domain-wide";
+            chip.title = "Affects the whole Domain, not a hex — the hex you pick is only where it's staged. Staging it N times applies it N times.";
             chip.style.cssText = "margin-left:6px;font-size:0.68rem;font-weight:600;padding:0 5px;border-radius:999px;background:rgba(76,245,255,0.14);color:var(--ft-hud-accent-soft,#bfefff);vertical-align:middle;";
             labelSpan.appendChild(chip);
           }
@@ -2126,7 +2128,7 @@ wrap.appendChild(top);
             const locked = bbttccIsLockedActivity(actObj, factionTier, unlocked);
             const tierReq = bbttccGetActivityRequiredTier(actObj);
             if (locked) {
-              ui?.notifications?.warn?.(`Locked: requires Faction Standing ${tierReq}.`);
+              ui?.notifications?.warn?.(`Locked: requires Domain Standing ${tierReq}.`);
               return;
             }
           }
@@ -2149,7 +2151,7 @@ wrap.appendChild(top);
           const note = noteInput.value || "";
 
           if (!attackerId || !activityKey) {
-            ui.notifications?.warn?.("Select a faction and an activity first.");
+            ui.notifications?.warn?.("Select a Domain and an activity first.");
             return;
           }
 
@@ -2158,13 +2160,13 @@ wrap.appendChild(top);
               const defenderId = this._plannerState.rigFactionId || rigFactionSel.value || "";
               const rigId = this._plannerState.rigId || rigSel.value || "";
               if (!defenderId || !rigId) {
-                ui.notifications?.warn?.("Select a rig faction and rig first.");
+                ui.notifications?.warn?.("Select a Domain and its rig first.");
                 return;
               }
               const def = game.actors.get(defenderId);
               const rigActor = isCharterActivity(activityKey) ? game.actors.get(rigId) : null;
               const rig = rigActor ? { rigId, name: rigActor.name } : listFactionRigs(def).find(r => String(r.rigId) === String(rigId));
-              const targetName = `${def?.name || "Faction"}: ${rig?.name || rigId}`;
+              const targetName = `${def?.name || "Domain"}: ${rig?.name || rigId}`;
               // Plan-time refusal for rig rows (2026-09-25): same contract as the hex branch, no OP on a refusal.
               try {
                 const effR = game.bbttcc?.api?.raid?.EFFECTS?.[String(activityKey)];
@@ -2192,7 +2194,7 @@ wrap.appendChild(top);
               let toHexUuid = null;
               if (wantsRouteTarget) {
                 toHexUuid = String(toSel.value || "");
-                if (!toHexUuid) { ui.notifications?.warn?.("Routes need a TO hex your faction owns."); return; }
+                if (!toHexUuid) { ui.notifications?.warn?.("Routes need a TO hex your Domain holds."); return; }
                 if (toHexUuid === String(targetUuid)) { ui.notifications?.warn?.("A route needs two different hexes."); return; }
               }
               await game.bbttcc.api.raid.planActivity({ attackerId, targetUuid, activityKey, note, toHexUuid, recipe: (wantsRecipe ? String(this._plannerState.recipe || "") : null) || null });

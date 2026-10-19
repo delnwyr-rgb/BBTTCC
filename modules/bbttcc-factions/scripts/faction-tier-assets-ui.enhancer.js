@@ -2,7 +2,7 @@
 // Bad Eden — Tier + Assets + Pressure UI (Hex Chrome injection)
 //
 // Reads:
-// - Tier: flags.bbttcc-factions.tier OR derives from victory badgeKey/badge.key
+// - Tier: flags.bbttcc-factions.tier (missing → 1; badge derivation retired 2026-10-18, ruling 18)
 // - Pressure: flags.bbttcc-factions.pressure (written by faction-pressure.enhancer.js)
 // - Rigs: flags.bbttcc-factions.rigs (canonical)
 // - Facilities: hex.flags.bbttcc-territory.facilities.primary (canonical)
@@ -46,7 +46,7 @@
 
   function readTier(actor) {
     const raw = get(actor, `flags.${MODF}.tier`, null);
-    if (raw === null || raw === undefined) return tierFromVictoryBadge(actor);
+    if (raw === null || raw === undefined) { void tierFromVictoryBadge; return 1; }   // retired 2026-10-18, ruling 18: no badge-derived tier; plain default = 1
     const n = Number(raw);
     if (!Number.isFinite(n)) return tierFromVictoryBadge(actor);
     return Math.max(0, Math.min(4, Math.floor(n)));

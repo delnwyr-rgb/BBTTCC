@@ -190,6 +190,8 @@
 
   /**
    * Record a pending faction-morale delta on the siege state (Phase E.3 → Phase F drains).
+   * RETIRED 2026-10-18 (ruling 19): faction Morale is gone — Phase F no longer drains this list;
+   * the record is kept as inert siege-state data so existing saves / selftests keep their shape.
    * For morale changes that land mid-siege (no terminal outcome hook to carry them).
    * Mutates + returns state. `delta` is signed (−1 = lost a point of morale).
    */

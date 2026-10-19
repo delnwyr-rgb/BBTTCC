@@ -47,7 +47,9 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   async function adjustFactionTrack(A,key,delta){
     if (!A) return { before: 0, after: 0 };
     if (key === "darkness") return adjustFactionDarkness(A, delta);   // the box, never a bare number (audit 2026-09-09)
-    if (key === "unity") key = "morale";   // "Empathy Meter" = faction Morale — victory.unity is recomputed every turn, so bumps there were wiped
+    // "unity" used to alias to faction Morale ("Empathy Meter"); both meters are retired
+    // (Unity ruling 18, Morale ruling 19 — 2026-10-18). Bumps to either are no-ops now.
+    if (key === "unity" || key === "morale" || key === "moraleHome") return { before: 0, after: 0, retired: true };
     const before = Number(A.getFlag(MODF,key)||0);
     const after  = Math.max(0,Math.min(100,before+delta));
     await A.update({ [`flags.${MODF}.${key}`]: after });
@@ -89,8 +91,10 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     box[hexDocId] = Math.max(0, Math.min(DARK_CAP, Number(value || 0)));
     await A.update({ [`flags.${MODF}.darkness`]: box });
   }
-  async function bumpFactionMeter(A, key, delta){   // morale | loyalty, 0..100, no sheet re-render
+  async function bumpFactionMeter(A, key, delta){   // loyalty, 0..100, no sheet re-render
     if (!A) return { before: 0, after: 0 };
+    // Faction Morale retired 2026-10-18 (ruling 19): a morale / moraleHome bump returns without writing.
+    if (key === "morale" || key === "moraleHome") return { before: 0, after: 0, retired: true };
     const before = Number(A.getFlag(MODF, key) ?? 50) || 0;
     const after = Math.max(0, Math.min(100, before + Number(delta || 0)));
     if (after !== before) await A.update({ [`flags.${MODF}.${key}`]: after });
@@ -250,12 +254,13 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     const doc = ref?.document ?? ref;
     if(!doc) return;
     const tf = foundry.utils.duplicate(doc.flags?.[MODT]||{});
-    // loyalty / morale live in the SIGNED running total tf.mods.* — the one authority (territory main.js hexLoyalty,
+    // loyalty lives in the SIGNED running total tf.mods.loyalty — the one authority (territory main.js hexLoyalty,
     // the tracks' loyalty pull). Writing tf.loyalty (2026-09-21 finding) landed nowhere: Ration Distribution,
     // Pilgrimage Route, Propaganda, Psych Ops, Expropriation never moved a hex. Other tracks keep the flat key.
+    // "morale" is accepted as an alias and lands on loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.).
     if (track === "loyalty" || track === "morale") {
       const mods = (tf.mods && typeof tf.mods === "object") ? tf.mods : (tf.mods = {});
-      mods[track] = Number(mods[track] || 0) + Number(delta || 0);
+      mods.loyalty = Number(mods.loyalty || 0) + Number(delta || 0);
       await doc.update({ [`flags.${MODT}.mods`]: mods }, { parent: doc.parent });
       return;
     }
@@ -534,16 +539,15 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await setNextTurnFlag(A, { borderPatrol: 2 });   // ticks down at the end of each Advance: covers the NEXT turn's raids
       await pushWarLog(A,"Border Patrol: infiltration (Intrigue raids) against your hexes is refused next turn.");
     },
+    // Local Festival / Training Parade: their only effect was faction Morale (+1 now / +1 next
+    // turn) — retired 2026-10-18 (ruling 19). They log the activity and nothing else.
     async local_festival(ctx){
       const A = game.actors.get(ctx.factionId);
-      const r = await bumpFactionMeter(A,"morale",+1);
-      await pushWarLog(A,`Local Festival: Morale (Empathy) ${r.before} → ${r.after}.`);
+      await pushWarLog(A,`Local Festival held.`);
     },
     async training_parade(ctx){
       const A = game.actors.get(ctx.factionId);
-      const cur = Number(A?.getFlag(MODF,"bonuses")?.nextTurn?.moraleBonus || 0);
-      await setNextTurnFlag(A, { moraleBonus: cur + 1 });
-      await pushWarLog(A,"Training Parade: +1 Morale next raid.");
+      await pushWarLog(A,"Training Parade held.");
     },
     async pilgrimage_route(ctx){
       const A = game.actors.get(ctx.factionId);
@@ -569,9 +573,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const A = game.actors.get(ctx.factionId);
       if (!ctx.targetUuid) { await pushWarLog(A, "Propaganda: No target hex."); return; }
       await enqueuePendingRepairs(ctx.targetUuid, ["Propaganda"], []);
-      await adjustHexTrack(ctx.targetUuid, "morale", +2);
-      await adjustHexTrack(ctx.targetUuid, "loyalty", +1);
-      await pushWarLog(A, 'Propaganda: +Propaganda; +2 Morale, +1 Loyalty (target hex).');
+      await adjustHexTrack(ctx.targetUuid, "loyalty", +2);   // was +2 Morale +1 Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
+      await pushWarLog(A, 'Propaganda: +Propaganda; +3 Loyalty (target hex).');
     },
     async propaganda_campaign(ctx){ return STRATEGIC_THROUGHPUT.propaganda_tour(ctx); },
     async psych_ops_broadcast(ctx){
@@ -641,12 +644,12 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await pushWarLog(A, `Alliance Summit with ${B.name}: both factions' OP income ×1.15 this turn.`);
       await pushWarLog(B, `Alliance Summit with ${A.name}: both factions' OP income ×1.15 this turn.`);
     },
-    // Crisis Summit — no faction loses Morale to Darkness this turn (advance-turn.tracks consumer).
+    // Crisis Summit — used to shield every faction from the Darkness → Morale tick (noMoraleLoss).
+    // Faction Morale retired 2026-10-18 (ruling 19): the shield has nothing to shield; logs only.
     async crisis_summit(ctx){
       const A = game.actors.get(ctx.factionId);
       const facs = (game.actors?.contents ?? []).filter(a => a?.getFlag?.(MODF, "isFaction") === true || a?.flags?.[MODF]?.opBank);
-      for (const F of facs) await setNextTurnFlag(F, { noMoraleLoss: true });
-      await pushWarLog(A, `Crisis Summit: Darkness costs no faction Morale this turn (${facs.length} factions shielded).`);
+      await pushWarLog(A, `Crisis Summit convened (${facs.length} factions attended).`);
     },
     // Cultural Exchange — copies the target hex's sephirot alignment onto the TO hex (if it has none).
     async cultural_exchange(ctx){
@@ -661,8 +664,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     },
     async justice_tribunal(ctx){
       const A = game.actors.get(ctx.factionId);
-      const d = await adjustFactionDarkness(A,-1); const m = await bumpFactionMeter(A,"morale",+1);
-      await pushWarLog(A, `Justice Tribunal: Darkness ${d.before} → ${d.after}; Morale (Empathy) ${m.before} → ${m.after}.`);
+      const d = await adjustFactionDarkness(A,-1);   // (Morale +1 retired 2026-10-18, ruling 19)
+      await pushWarLog(A, `Justice Tribunal: Darkness ${d.before} → ${d.after}.`);
     },
     // Reconstruction Drive (T2 canon row is retired from the planner; kept for already-planned entries).
     async reconstruction_drive(ctx){
@@ -701,21 +704,21 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await enqueuePendingRepairs(ctx.targetUuid, ["Intel"], []);
       await revealHex(doc);
       const tf = tfOf(doc); const owner = tf.faction || tf.ownerName || (hexOwnerId(doc) ? game.actors.get(hexOwnerId(doc))?.name : "") || "unclaimed";
-      await whisperFaction(A, `Intel — ${hexName(doc)}`, `Held by <b>${esc(owner)}</b> · ${esc(tf.type || "?")} / ${esc(tf.size || "?")} · status ${esc(tf.status || "?")} · defense <b>${Number(tf.defense || 0)}</b> · loyalty ${Number(game.bbttcc?.facts?.hex?.loyaltyScore?.(tf) ?? 0)} · morale ${Number(game.bbttcc?.facts?.hex?.morale?.(tf) ?? 0)} · integration ${Number(tf.integration?.progress || 0)}/6<br>Modifiers: ${(tf.modifiers || []).map(esc).join(", ") || "none"}<br>Alignment: ${esc(tf.sephirotName || tf.sephirotKey || "none")}`);
+      await whisperFaction(A, `Intel — ${hexName(doc)}`, `Held by <b>${esc(owner)}</b> · ${esc(tf.type || "?")} / ${esc(tf.size || "?")} · status ${esc(tf.status || "?")} · defense <b>${Number(tf.defense || 0)}</b> · loyalty ${Number(game.bbttcc?.facts?.hex?.loyaltyScore?.(tf) ?? 0)} · integration ${Number(tf.integration?.progress || 0)}/6<br>Modifiers: ${(tf.modifiers || []).map(esc).join(", ") || "none"}<br>Alignment: ${esc(tf.sephirotName || tf.sephirotKey || "none")}`);
       // Owner-ruled attacker DC shift (−2 on the next raid) — this handler runs INSTEAD of the
       // enhancer apply() that used to write it, so the write lives here now (deferred past the tick).
       _queueAttackDC(A, -2);
       await pushWarLog(A, `Gather Intel: ${hexName(doc)} scouted — dossier whispered; +Intel next turn; next raid DC −2.`);
     },
-    // Alignment Shift (std) — +Sanctified, +Pilgrimage Site, Morale/Loyalty +1 next turn, and the faith boon is real: +10 marks Faith next turn.
+    // Alignment Shift (std) — +Sanctified, +Pilgrimage Site, Loyalty +2 next turn (was Morale/Loyalty +1 — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)), and the faith boon is real: +10 marks Faith next turn.
     async alignment_shift(ctx){
       const A = game.actors.get(ctx.factionId);
       if (!ctx.targetUuid) { await pushWarLog(A, "Alignment Shift: no target hex."); return; }
       await enqueuePendingRepairs(ctx.targetUuid, ["Sanctified", "Pilgrimage Site"], []);
       const doc = await hexDoc(ctx.targetUuid);
-      if (doc) { const f = foundry.utils.duplicate(doc.flags?.[MODT] || {}); const pend = foundry.utils.getProperty(f, "turn.pending") || {}; pend.moraleDelta = Number(pend.moraleDelta || 0) + 1; pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + 1; await patchHex(doc, { [`flags.${MODT}.turn.pending`]: pend }); }
+      if (doc) { const f = foundry.utils.duplicate(doc.flags?.[MODT] || {}); const pend = foundry.utils.getProperty(f, "turn.pending") || {}; pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + 1; await patchHex(doc, { [`flags.${MODT}.turn.pending`]: pend }); }
       await scheduleFactionOP(A, { faith: 10 }, 1);
-      await pushWarLog(A, "Alignment Shift: +Sanctified, +Pilgrimage Site, Morale +1, Loyalty +1 (next turn); +10 marks Faith next turn.");
+      await pushWarLog(A, "Alignment Shift: +Sanctified, +Pilgrimage Site, Loyalty +1 (next turn); +10 marks Faith next turn.");
     },
     // Policy Reforms (std) — OP income ×1.05 this turn (the +5% the copy always promised).
     async policy_reforms(ctx){
@@ -726,13 +729,13 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     },
 
     // ═══════════════════════════ T3 / T4 — THE LEGENDARY BLOCK ═══════════════════════════
-    // World Reformation Council — every faction's Morale (Empathy) +2 now, and its resting point (moraleHome) +2 for good.
+    // World Reformation Council — Darkness −1. (Its "every faction Morale +2 and moraleHome +2 for
+    // good" reward retired 2026-10-18, ruling 19: faction Morale is no longer a game meter.)
     async world_reformation_council(ctx){
       const A = game.actors.get(ctx.factionId);
       const facs = (game.actors?.contents ?? []).filter(a => a?.getFlag?.(MODF, "isFaction") === true || a?.flags?.[MODF]?.opBank);
-      for (const F of facs) { await bumpFactionMeter(F, "morale", +2); const home = Number(F.getFlag(MODF, "moraleHome") ?? 50) || 50; await F.update({ [`flags.${MODF}.moraleHome`]: Math.min(100, home + 2) }); }
       const d = await adjustFactionDarkness(A, -1);
-      await pushWarLog(A, `World Reformation Council: Morale +2 and resting Morale +2 for ${facs.length} faction(s) — permanent; Darkness ${d.before} → ${d.after}.`);
+      await pushWarLog(A, `World Reformation Council convened (${facs.length} faction(s)); Darkness ${d.before} → ${d.after}.`);
     },
     // Enlightenment Congress — every steward of this faction climbs one Enlightenment level (real level Items from the pack).
     async enlightenment_congress(ctx){
@@ -766,15 +769,14 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const d = await adjustFactionDarkness(A, -1);
       await pushWarLog(A, `Inquisition Mandate: ${doc ? `${hexName(doc)} exposed (see whisper); ` : ""}Darkness ${d.before} → ${d.after}.`);
     },
-    // Dark Harvest — burns 1 Darkness for +20 marks Economy now; Morale (Empathy) −1.
+    // Dark Harvest — burns 1 Darkness for +20 marks Economy now. (Morale −1 retired 2026-10-18, ruling 19.)
     async dark_harvest(ctx){
       const A = game.actors.get(ctx.factionId);
       const raw = A?.getFlag(MODF, "darkness"); const g = (raw && typeof raw === "object") ? Number(raw.global || 0) : Number(raw || 0);
       if (g < 1) { await pushWarLog(A, "Dark Harvest: no Darkness to harvest — nothing happens."); return; }
       const d = await adjustFactionDarkness(A, -1);
       await creditOP(A, "economy", 20, "Dark Harvest");
-      const m = await bumpFactionMeter(A, "morale", -1);
-      await pushWarLog(A, `Dark Harvest: Darkness ${d.before} → ${d.after} burned for +20 marks Economy; Morale (Empathy) ${m.before} → ${m.after}.`);
+      await pushWarLog(A, `Dark Harvest: Darkness ${d.before} → ${d.after} burned for +20 marks Economy.`);
     },
     // Great Work Ritual — integrates the dormant spark seated on the target hex (Tikkun Phase C; debits the faction's Reach).
     async great_work_ritual(ctx){
@@ -854,7 +856,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       }
       await pushWarLog(A, `The Final Weave: not yet — Lamps ${Number(daath.lampsCount || 0)}/10${daath.opened ? ", Daath open" : ""}${daath.risen ? "" : ", the Dragon has not risen"}; ${integrated} integrated spark(s), ${(gw?.corruptedKeys || []).length} corrupted.`);
     },
-    // Apocalyptic Weapon Test — the target hex is blasted: Contaminated + Radiation Zone, darkness pips +3, Morale/Loyalty −3, integration reset, contested; your Darkness +3, its holder's +1, your stewards +1.
+    // Apocalyptic Weapon Test — the target hex is blasted: Contaminated + Radiation Zone, darkness pips +3, Loyalty −3 (was Morale/Loyalty −3 — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)), integration reset, contested; your Darkness +3, its holder's +1, your stewards +1.
     async apocalyptic_weapon_test(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid);
@@ -862,8 +864,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const B = await factionOfHex(doc);
       await setHexModifiers(doc, ["Contaminated", "Radiation Zone"], ["Well-Maintained", "Loyal Population", "Trade Hub", "Garden City", "Blessed Ground"], { activity: "apocalyptic_weapon_test", factionId: ctx.factionId });
       const z = await setHexDarkness(doc, { delta: +3 });
-      await adjustHexTrack(ctx.targetUuid, "morale", -3);
-      await adjustHexTrack(ctx.targetUuid, "loyalty", -3);
+      await adjustHexTrack(ctx.targetUuid, "loyalty", -3);   // was Morale −3 + Loyalty −3 — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
       const integ = foundry.utils.duplicate(tfOf(doc).integration || {}); integ.progress = 0;
       await patchHex(doc, { [`flags.${MODT}.integration`]: integ, [`flags.${MODT}.status`]: B ? "contested" : (tfOf(doc).status || "occupied") });
       await setCondition(ctx.targetUuid, "Purified", false);
@@ -871,7 +872,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       if (B && B.id !== A?.id) await adjustFactionDarkness(B, +1);
       const gain = game.fourththing?.darkness?.gain; let bit = 0;
       for (const s of stewardsOf(ctx.factionId)) { try { if (typeof gain === "function" && s.isOwner) { await gain(s, 1, "apocalyptic_weapon_test"); bit++; } } catch (_e) {} }
-      await pushWarLog(A, `APOCALYPTIC WEAPON TEST on ${hexName(doc)}: Contaminated + Radiation Zone, darkness pips ${z.before} → ${z.after}, Morale/Loyalty −3, integration reset${B ? ", contested" : ""}. Your Darkness ${d.before} → ${d.after}; ${bit} steward(s) took Darkness +1.`);
+      await pushWarLog(A, `APOCALYPTIC WEAPON TEST on ${hexName(doc)}: Contaminated + Radiation Zone, darkness pips ${z.before} → ${z.after}, Loyalty −3, integration reset${B ? ", contested" : ""}. Your Darkness ${d.before} → ${d.after}; ${bit} steward(s) took Darkness +1.`);
       if (B && B.id !== A?.id) await pushWarLog(B, `${A.name} detonated a weapon over ${hexName(doc)} — it is Contaminated and contested. Your Darkness +1.`);
     },
     // Dragon's Parley — a 2d10 check (DC 14, +1 per lit Lamp): success = Darkness −3 and stewards wash 1; failure = Darkness +1 and the Adversary stirs.
@@ -930,8 +931,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async optact_cultural_diffusion(ctx){
       const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid); if (!doc) { await pushWarLog(A, "Cultural Diffusion: no target hex."); return; }
       await setHexModifiers(doc, ["Loyal Population"], [], { activity: "optact_cultural_diffusion", factionId: ctx.factionId });
-      await adjustHexTrack(ctx.targetUuid, "morale", +1);
-      await pushWarLog(A, `Cultural Diffusion at ${hexName(doc)}: +Loyal Population; Morale +1.`);
+      await adjustHexTrack(ctx.targetUuid, "loyalty", +1);   // was Morale +1 — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
+      await pushWarLog(A, `Cultural Diffusion at ${hexName(doc)}: +Loyal Population; Loyalty +1.`);
     },
     async optact_integration_framework(ctx){
       const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid);
@@ -947,7 +948,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       for (const s of stewardsOf(ctx.factionId)) { try { if (typeof wash === "function" && s.isOwner) { await wash(s, 1, "guided_ascent"); n++; } } catch (_e) {} }
       await pushWarLog(A, `Guided Ascent: ${n} steward(s) washed 1 Darkness.`);
     },
-    async optact_philosophic_exchange(ctx){ const A = game.actors.get(ctx.factionId); const m = await bumpFactionMeter(A, "morale", +1); await scheduleFactionOP(A, { culture: 10 }, 1); await pushWarLog(A, `Philosophic Exchange: Morale (Empathy) ${m.before} → ${m.after}; +10 marks Culture next turn.`); },
+    async optact_philosophic_exchange(ctx){ const A = game.actors.get(ctx.factionId); await scheduleFactionOP(A, { culture: 10 }, 1); await pushWarLog(A, `Philosophic Exchange: +10 marks Culture next turn.`); },   // (Morale +1 retired 2026-10-18, ruling 19)
     async optact_thread_the_spread(ctx){ return STRATEGIC_THROUGHPUT.recon_sweep(ctx); },
     async optact_doctrine_of_clarity(ctx){ const A = game.actors.get(ctx.factionId); const d = await adjustFactionDarkness(A, -1); await pushWarLog(A, `Doctrine of Clarity: Darkness ${d.before} → ${d.after}.`); },
     async optact_ritual_binding(ctx){ return STRATEGIC_THROUGHPUT.great_work_ritual(ctx); },
@@ -1062,8 +1063,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   // ⚗ Fuel select when a row has ≥2; planActivity stores the chosen {label,cost}
   // on the planned entry and turn-driver payActivityCost bills THAT instead of the
   // row's default. Same multiplier applies. `note` is flavour the planner shows;
-  // fx (owner ruling 2026-09-12): narrative side effects — faction {moraleDelta,loyaltyDelta,
-  // darknessDelta} written directly, hex {loyaltyDelta,moraleDelta,darknessDelta,addModifiers,
+  // fx (owner ruling 2026-09-12): narrative side effects — faction {loyaltyDelta,
+  // darknessDelta} written directly, hex {loyaltyDelta,darknessDelta,addModifiers,
   // removeModifiers} queued on the target's turn.pending; turn-driver applyRecipeSideEffects
   // lands them when the activity resolves. days = extra ledger days (slow fuels).
   // PRICE_MULT + RECIPES live in the economy constants table (item 5, 2026-09-12)

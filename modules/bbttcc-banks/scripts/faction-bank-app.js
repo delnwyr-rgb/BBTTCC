@@ -6,6 +6,8 @@
 // toggle. Deposits flow in from a Steward's Personal Bank destination picker;
 // salvage refines into Marks on the way in (see vault-core transferVault).
 
+import { alphaOneTreasury } from "./treasury-app.js";   // ruling 16 (2026-10-17): one Treasury under the Alpha Cut
+
 const MOD_ID = "bbttcc-banks";
 const TAG    = "[bbttcc-banks]";
 const warn   = (...a) => console.warn(TAG, ...a);
@@ -96,7 +98,8 @@ class FactionBankApp extends ApplicationV2 {
     const stewardOpts = stewards.map(s => `<option value="${_esc(s.id)}">${_esc(s.name)}</option>`).join("")
       || `<option value="">— no owned Steward —</option>`;
 
-    const coalitionToggle = canManage
+    const alphaNoCoalition = game.bbttcc?.alpha?.hidden?.("coalitionBank") === true;   // ALPHA CUT (2026-10-17)
+    const coalitionToggle = alphaNoCoalition ? "" : canManage
       ? `<label class="bbttcc-bank-coalition">
           <input type="checkbox" data-role="coalition-lead" ${isLead ? "checked" : ""}/>
           <span>Host Coalition Treasury <small>(mutually-Allied factions may deposit)</small></span>
@@ -125,7 +128,7 @@ class FactionBankApp extends ApplicationV2 {
 
       <div class="bbttcc-bank-cols">
         ${this._storedHTML("faction", "Faction Vault")}
-        ${isLead ? this._storedHTML("coalition", "Coalition Vault") : ""}
+        ${(isLead && !alphaNoCoalition) ? this._storedHTML("coalition", "Coalition Vault") : ""}
       </div>
     </section>`;
   }
@@ -170,6 +173,8 @@ function openFactionBank(factionOrId) {
   const faction = (factionOrId instanceof Actor) ? factionOrId
     : game.actors?.get(String(factionOrId ?? "").replace(/^Actor\./, ""));
   if (!faction || !_isFaction(faction)) { ui.notifications?.warn?.("Not a faction."); return null; }
+  // Ruling 16 (2026-10-17): one Treasury per Domain. The Faction Bank stays for Beta worlds.
+  if (alphaOneTreasury() && typeof game.bbttcc?.api?.banks?.openTreasury === "function") return game.bbttcc.api.banks.openTreasury(faction);
   let app = _open.get(faction.id);
   const dead = !app || app._state === 0 || (app.element && !app.element.isConnected);
   if (dead) {
@@ -202,7 +207,7 @@ function _injectFactionBankButton(app, html) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.id = "bbttcc-faction-bank-btn";
-    btn.title = "Open Faction Bank";
+    btn.title = alphaOneTreasury() ? "Open the Treasury" : "Open Faction Bank";
     btn.addEventListener("click", (ev) => {
       try { ev.preventDefault(); ev.stopPropagation(); } catch {}
       openFactionBank(actor);

@@ -1,5 +1,5 @@
 // v1.0.0 — Loyalty Program (mechanical)
-// Adds "Loyal Population" to the target hex drawing and queues +2 Loyalty, +1 Morale.
+// Adds "Loyal Population" to the target hex drawing and queues +3 Loyalty (was +2 Loyalty +1 Morale — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.loyalty_program.
 
 (() => {
@@ -17,7 +17,7 @@
     if (game?.ready) go(); else Hooks.on("ready", go);
   }
 
-  async function queueLoyaltyProgram({ targetUuid, loyaltyDelta=2, moraleDelta=1 }) {
+  async function queueLoyaltyProgram({ targetUuid, loyaltyDelta=2 }) {   // hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.): the old moraleDelta is folded into loyaltyDelta
     if (!targetUuid) return "No target";
     const ref = await fromUuid(targetUuid);
     const doc = ref?.document ?? ref;
@@ -36,10 +36,9 @@
 
     // Goodwill bumps
     pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + Number(loyaltyDelta || 0);
-    pend.moraleDelta  = Number(pend.moraleDelta  || 0) + Number(moraleDelta  || 0);
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
-    return `Queued: add "Loyal Population" • +${loyaltyDelta} Loyalty • +${moraleDelta} Morale`;
+    return `Queued: add "Loyal Population" • +${loyaltyDelta} Loyalty`;
   }
 
   whenRaidReady((api)=>{
@@ -56,11 +55,11 @@
         if (typeof base === "function") {
           try { msg = String(await base({ entry })) || ""; } catch(e){ console.warn(TAG,"base apply error", e); }
         }
-        const m2 = await queueLoyaltyProgram({ targetUuid: entry?.targetUuid, loyaltyDelta: 2, moraleDelta: 1 });
+        const m2 = await queueLoyaltyProgram({ targetUuid: entry?.targetUuid, loyaltyDelta: 2 });
         return [msg, m2].filter(Boolean).join(" • ") || "Loyalty Program queued.";
       }
     });
 
-    console.log(TAG, "installed (Loyal Population tag, +2 Loyalty, +1 Morale).");
+    console.log(TAG, "installed (Loyal Population tag, +3 Loyalty).");
   });
 })();

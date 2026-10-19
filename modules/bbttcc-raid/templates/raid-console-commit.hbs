@@ -39,7 +39,7 @@
       <div class="flex1">
         <div style="font-weight:700; letter-spacing:.06em; text-transform:uppercase; opacity:.9;">Raid Commitments</div>
         <div style="font-size:.85rem; opacity:.85;">
-          Your Faction: <b>{{default currentBank.attackerName "(none)"}}</b>
+          Your Domain: <b>{{default currentBank.attackerName "(none)"}}</b>
           {{#if vm.activityKey}} • Mode: <b>{{default vm.activityKey "—"}}</b>{{/if}}
           {{#if vm.targetName}} • Target: <b>{{default vm.targetName "—"}}</b>{{/if}}
         </div>
@@ -83,7 +83,7 @@
         <b>Base DC:</b> {{default currentBank.topDC.base 0}}
         {{#if currentBank.topDC.defProjBonus}} • <b>Defender staged bonus:</b> +{{currentBank.topDC.defProjBonus}}{{/if}}
         {{#if currentBank.topDC.diff}} • <b>Diff:</b> +{{currentBank.topDC.diff}}{{/if}}
-        {{#if currentBank.topDC.facDef}} • <b>Faction:</b> +{{currentBank.topDC.facDef}}{{/if}}
+        {{#if currentBank.topDC.facDef}} • <b>Domain:</b> +{{currentBank.topDC.facDef}}{{/if}}
         {{#if currentBank.topDC.nextB}} • <b>Next-Raid:</b> +{{currentBank.topDC.nextB}}{{/if}}
         {{#if currentBank.topDC.projected}}
           • <b>Projected DC:</b>
@@ -214,7 +214,7 @@
             <td>{{currentBank.attacker.faith}}</td>
           </tr></tbody>
         </table>
-        {{else}}<em>No faction selected.</em>{{/if}}
+        {{else}}<em>No Domain selected.</em>{{/if}}
       </div>
     </section>
   {{/if}}
@@ -297,7 +297,7 @@
 
                     <div class="grid" style="grid-template-columns: {{#if isGM}}1fr 1fr{{else}}1fr{{/if}}; gap:.5rem;">
                       <div>
-                        <h5 style="margin:.25rem 0;">{{#if isGM}}Attacker{{else}}Your Faction{{/if}} — {{r.view.attackerName}}</h5>
+                        <h5 style="margin:.25rem 0;">{{#if isGM}}Attacker{{else}}Your Domain{{/if}} — {{r.view.attackerName}}</h5>
                         <p style="margin:.25rem 0;">
                           Bank: <b>{{lookup r.view.bankAtt r.view.cat}}</b> •
                           Staged: <b>{{default (lookup r.view.staged.att r.view.cat) 0}}</b> •
@@ -337,7 +337,7 @@
                           Base DC: <b>{{r.DC}}</b>
                           {{#if r.view.defProjBonus}} • Defender staged bonus: <b>+{{r.view.defProjBonus}}</b>{{/if}}
                           {{#if r.view.diff}} • Diff: <b>+{{r.view.diff}}</b>{{/if}}
-                          {{#if r.view.facDef}} • Faction: <b>+{{r.view.facDef}}</b>{{/if}}
+                          {{#if r.view.facDef}} • Domain: <b>+{{r.view.facDef}}</b>{{/if}}
                           {{#if r.view.nextB}} • Next-Raid: <b>+{{r.view.nextB}}</b>{{/if}}
                           {{#if r.view.dcProjected}}
                             • <i>Projected DC</i>: <b {{#if r.view.breakdown}}title="{{r.view.breakdown}}"{{/if}}>{{r.view.dcProjected}}</b>
@@ -383,7 +383,7 @@
                   <div class="flex1 card" style="padding:.5rem;">
                     <h4 style="margin:0 0 .25rem 0;">{{#if isGM}}Round Details{{else}}Details{{/if}}</h4>
                     <p style="margin:.25rem 0;"><b>Activity:</b> {{default r.activityLabel (default r.activityKey "—")}} • <b>Primary Key:</b> {{upper r.view.cat}}</p>
-                    <p style="margin:.25rem 0;"><b>Your Faction:</b> {{r.attackerName}}</p>
+                    <p style="margin:.25rem 0;"><b>Your Domain:</b> {{r.attackerName}}</p>
                     <p style="margin:.25rem 0;"><b>Target:</b> {{r.targetName}}</p>
                     {{#if isGM}}
                       <p style="margin:.25rem 0;"><b>Base Bonus:</b> +{{r.attBonus}} • <b>Base DC:</b> {{r.DC}}</p>

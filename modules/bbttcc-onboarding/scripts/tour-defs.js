@@ -58,9 +58,10 @@ const stewardSheetTour = {
       text: "Your three defenses. Guard turns hits aside, Evasion keeps you from being hit at all, Resolve holds the mind together against fear, coercion and the uncanny.\nEach has its own ⚀ roll (2d10 explode + defense) when the world tests you directly. The chips underneath list immunities ⦿, resistances ◑ and vulnerabilities ▲."
     },
     {
-      id: "tabs", title: "The eight tabs",
+      id: "tabs", title: "The tabs",
       selector: ".ft-tabs",
-      text: "Everything else lives behind these: Steward (this overview), Engagement (combat), Aptitudes (trained skills), Manifestations (your powers), Principles (class features), States (active effects), Inventory, and The Work (the long game).\nWe'll hit the important ones now."
+      // ALPHA CUT (2026-10-17): player seats see five tabs; the rest open up later.
+      text: "Everything else lives behind these: Steward (this overview), Engagement (combat), Aptitudes (trained skills), Manifestations (your powers) and Inventory.\nMore tabs open up as you grow. We'll hit the important ones now."
     },
     {
       id: "aptitudes", title: "Aptitudes — trained skill ranks",
@@ -72,12 +73,13 @@ const stewardSheetTour = {
       id: "manifestations", title: "Manifestations — the reality dials",
       pre: '.ft-tabs a[data-tab="powers"]',
       selector: '.ft-body .tab[data-tab="powers"]',
-      text: "Your manifestations live here — cast from this tab, sustained against your Clarity.\nNew ones are authored in the Manifestation Engine (the step-by-step builder); every knob in that wizard has its own hover explanation when you get there."
+      text: "Your manifestations live here — cast from this tab, sustained against your Clarity.\nNew ones come from your Path as you grow; the GM can grant a custom working."
     },
     {
       id: "states", title: "States — what's riding you",
       pre: '.ft-tabs a[data-tab="effects"]',
       selector: '.ft-body .tab[data-tab="effects"]',
+      optional: true,   // ALPHA CUT (2026-10-17): the States tab is hidden on player seats
       text: "Active conditions, buffs, debuffs and lingering effects. Temporary ones list their clock and fall off when it runs out.\nIf something feels wrong with your numbers, look here first — something usually is."
     },
     {
@@ -181,7 +183,7 @@ const factionSheetTour = {
     {
       id: "hero", title: "Identity & vitals",
       selector: "fieldset.bbttcc-card-overview-hero",
-      text: "The faction at a glance: crest, name, power-level status, Total OPs against your budget, and the Victory Points / Unity chip.\nVP runs a 0–25 ladder — 25 triggers a campaign resolution beat."
+      text: "The faction at a glance: crest, name, power-level status, and Total OPs against your budget."
     },
     {
       id: "opbank", title: "The OP Bank — nine kinds of power",
@@ -193,12 +195,12 @@ const factionSheetTour = {
       id: "dashboard", title: "The dashboard tiles",
       selector: ".bbttcc-fdash-row",
       optional: true,
-      text: "Big-number tiles with trend arrows — Victory, Unity, Morale, Loyalty. These update automatically each Turn; the arrows tell you which way the wind is blowing before the numbers get dangerous."
+      text: "Big-number tiles with trend arrows — Loyalty, Darkness. These update automatically each Turn; the arrows tell you which way the wind is blowing before the numbers get dangerous."
     },
     {
       id: "health", title: "Faction health tracks",
       selector: "fieldset.bbttcc-card-health",
-      text: "The internal weather: Unity (cohesion — low invites schism), Morale (fight — modifies OP rolls), Loyalty (adherence — low risks defections), Darkness (Qliphothic taint — corrupts rolls and recruits).\nAll update automatically each Turn. Hover each for the full mechanics."
+      text: "The internal weather: Loyalty (adherence — low risks defections), Darkness (Qliphothic taint — corrupts rolls and recruits).\nAll update automatically each Turn. Hover each for the full mechanics."
     },
     {
       id: "ops", title: "Organization Points — rolling power",
@@ -304,7 +306,7 @@ const factionGmTour = {
           await new Promise(r => setTimeout(r, 500));
         }
       },
-      text: "Direct writes to the canonical flags: OP bank per track (in marks), Morale/Loyalty/Darkness, VP and Unity.\nStage values, add an audit note, then Apply commits everything at once — and logs a gm_adjustment entry in the War Logs. Clear discards. Copy ID grabs the faction's actor id for macros."
+      text: "Direct writes to the canonical flags: OP bank per track (in marks) and Loyalty/Darkness.\nStage values, add an audit note, then Apply commits everything at once — and logs a gm_adjustment entry in the War Logs. Clear discards. Copy ID grabs the faction's actor id for macros."
     },
     {
       id: "politics", title: "Political override & drift nudges",
@@ -324,7 +326,7 @@ const factionGmTour = {
       pre: 'nav.bbttcc-tabs a.item[data-tab="assets"]',
       selector: "button.bbttcc-tier-advance-btn",
       optional: true,
-      text: "Runs the tier-advancement check: the victory-gate report lists anything blocking (capacity, stability, victory conditions) and advances the tier when eligible.\nTier feeds raid gating, asset capacity and Bridge pricing — it's the biggest single dial on a faction."
+      text: "Runs the tier-advancement check: the report lists anything blocking (capacity, stability) and advances the tier when eligible.\nTier feeds raid gating, asset capacity and Bridge pricing — it's the biggest single dial on a faction."
     },
     {
       id: "stockpile", title: "Stockpile adjustments",
@@ -833,10 +835,10 @@ function _resolveStewardForBankTour(ctx) {
 
 const banksTour = {
   id: "banks",
-  title: "Vaults & Treasuries (Banks)",
+  title: "The Treasury",
   audience: "player",
-  intro: "Opening your vault. Rule one of Bad Eden banking: gear is personal, Marks are political. Rule two— *bzzt* —there is no interest rate. The apocalypse ate it.",
-  outro: "Banks toured. Personal vault for your gear, faction treasury for the war chest, coalition stash for trust exercises. Deposit salvage, mint Marks, sleep with receipts.",
+  intro: "Opening the treasury. Rule one of Bad Eden banking: the land's Marks and your stored gear sit in one vault, because you and the land are one being. Rule two— *bzzt* —there is no interest rate. The apocalypse ate it.",
+  outro: "Treasury toured. Marks for the land, a vault for the gear, salvage refined on the way in. Sleep with receipts.",
 
   open: async (ctx) => {
     const banks = game.bbttcc?.api?.banks;
@@ -849,26 +851,27 @@ const banksTour = {
 
   steps: [
     {
-      id: "note", title: "The personal vault",
+      id: "note", title: "One treasury",
       selector: ".bbttcc-bank-note",
-      text: "Your personal bank holds GEAR only — weapons, armor, kit, bound manifestations. Marks (money) live at the faction tier; a steward's pockets aren't a treasury."
+      text: "Marks are the land's energy and the vault holds gear — weapons, armor, kit, bound manifestations. Both are yours, because you and your Domain are one being."
     },
     {
-      id: "dest", title: "Deposit destination",
+      id: "dest", title: "Store to",
       selector: 'select[data-role="bank-dest"]',
-      text: "Where a deposit lands: your personal vault, a faction treasury you can access, or a coalition stash.\nSalvage deposited to a faction gets refined into Marks on the spot — that's the main way loot becomes money."
+      optional: true,
+      text: "Only a Domain that hosts a Coalition chooses where a stored item lands. Everyone else stores into the one vault.\nSalvage refines into Marks on the way in — that's the main way loot becomes money."
     },
     {
       id: "carried", title: "Carried — what can go in",
       selector: 'ul[data-side="carried"]',
       optional: true,
-      text: "Your bankable inventory, with tier badges and ⚡ salvage markers. Deposit moves the item out of your pockets and into the chosen vault."
+      text: "Your bankable inventory, with tier badges and ⚡ salvage markers. Store moves the item out of your hands and into the vault."
     },
     {
       id: "stored", title: "Stored — getting it back",
       selector: 'ul[data-side="stored"]',
       optional: true,
-      text: "The vault's contents. Withdraw puts an item back in your inventory. Nothing decays in here; the vault is the one place the world can't touch."
+      text: "The vault's contents. Take puts an item back in your hands. Nothing decays in here; the vault is the one place the world can't touch."
     },
     {
       id: "treasury", title: "The faction treasury",
@@ -879,7 +882,7 @@ const banksTour = {
         if (f) { try { game.bbttcc?.api?.banks?.openFactionBank?.(f); } catch (_) {} }
         await new Promise(r => setTimeout(r, 500));
       },
-      text: "The faction bank: Marks per OP bucket, shown against their caps (full chips light up). Read-only here — Marks move through the OP engine, the Exchange, and the Market, not by hand.\nBelow it, the faction vault stores shared gear.",
+      text: "The Marks: one chip per pool, shown against its cap (full chips light up). Read-only here — Marks move through the land's turn, the Exchange and the Market, not by hand.",
       speak: "This is the war chest. Everyone can see it. That's a feature."
     },
     {
@@ -1113,9 +1116,9 @@ const overviewTour = {
       text: "One row per faction across ALL scenes: power Status, hex count, which scenes it touches, per-Turn resource yields, and summed defense.\nAn Unclaimed aggregate row appears at the bottom when ownerless hexes exist — that's your expansion frontier." },
     { id: "open",    title: "The Open buttons",        selector: '[data-tour="overview.open"]', help: ["overview", "colOpen"], optional: true },
     { id: "health",  title: "Faction health columns",  selector: '[data-tour="overview.health"]', help: ["overview", "health"], optional: true,
-      text: "VP, Unity, Morale, Loyalty, Darkness — the same tracks as each faction sheet, lined up for comparison. This is where you spot the faction quietly rotting before it ruptures." },
+      text: "Loyalty, Darkness — the same tracks as each faction sheet, lined up for comparison. This is where you spot the faction quietly rotting before it ruptures." },
     { id: "gw",      title: "Sparks & the Great Work", selector: '[data-tour="overview.health"]', help: ["overview", "gw"], optional: true,
-      text: "The endgame columns: Sparks collected (of 3) and Great Work readiness. Ready needs all three sparks, VP 10+, Unity 30+, Darkness 3 or less, and no corrupted sparks.\n'Not Ready' is a to-do list, not a verdict — hover any cell for exactly which requirement is blocking." }
+      text: "The endgame columns: Sparks collected (of 3) and Great Work readiness. Ready needs all three sparks, Darkness 3 or less, and no corrupted sparks.\n'Not Ready' is a to-do list, not a verdict — hover any cell for exactly which requirement is blocking." }
   ]
 };
 

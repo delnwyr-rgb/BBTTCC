@@ -26,9 +26,7 @@
       return (v === undefined) ? fallback : v;
     };
 
-    const victory  = pick("victory", {}) || {};
     const darkness = pick("darkness", {}) || {};
-    const morale   = pick("morale", 0);
     const loyalty  = pick("loyalty", 0);
 
     let darknessValue = 0;
@@ -39,9 +37,6 @@
     }
 
     return {
-      vp: Number(victory && victory.vp !== undefined ? victory.vp : 0),
-      unity: Number(victory && victory.unity !== undefined ? victory.unity : 0),
-      morale: Number(morale || 0),
       loyalty: Number(loyalty || 0),
       darkness: Number(darknessValue || 0)
     };
@@ -67,11 +62,9 @@
     const meters = fs.querySelectorAll(".bbttcc-meter");
     if (!meters || !meters.length) return;
 
-    if (meters[0]) meters[0].textContent = String(vals.vp);
-    if (meters[1]) meters[1].textContent = String(vals.unity) + "%";
-    if (meters[2]) meters[2].textContent = String(vals.morale) + "%";
-    if (meters[3]) meters[3].textContent = String(vals.loyalty) + "%";
-    if (meters[4]) meters[4].textContent = String(vals.darkness);
+    // Meter order after the 2026-10-18 cuts (ruling 18 retired Victory / Unity, ruling 19 retired Morale): Loyalty, Darkness
+    if (meters[0]) meters[0].textContent = String(vals.loyalty) + "%";
+    if (meters[1]) meters[1].textContent = String(vals.darkness);
   }
 
   Hooks.on("renderBBTTCCFactionSheet", (app, html /*, data */) => {

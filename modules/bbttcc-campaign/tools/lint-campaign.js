@@ -750,6 +750,8 @@ for (const b of beats) {
   for (const [i, row] of (Array.isArray(we.factionEffects) ? we.factionEffects : []).entries()) {
     if (!row || typeof row !== "object") { F("E02", "ERROR", b.id, `factionEffects[${i}] not an object`); continue; }
     if (s(row.factionId) && !/^@(coalition|campaign|stewards)$/i.test(s(row.factionId)) && factionIds.size && !factionIds.has(normFid(row.factionId))) { const k = normFid(row.factionId); if (!foreignFactions.has(k)) foreignFactions.set(k, { n: 0, beats: new Set() }); const ff = foreignFactions.get(k); ff.n++; ff.beats.add(b.id); }
+    for (const k of ["unityDelta", "vpDelta"]) if (row[k] != null && row[k] !== "" && isNum(row[k]) && Number(row[k]) !== 0) F("E02", "WARN", b.id, `factionEffects[${i}].${k} — vpDelta/unityDelta are retired (ruling 18, 2026-10-18) — no effect`);
+    if (row.moraleDelta != null && row.moraleDelta !== "" && isNum(row.moraleDelta) && Number(row.moraleDelta) !== 0) F("E02", "WARN", b.id, `factionEffects[${i}].moraleDelta — moraleDelta retired (ruling 19, 2026-10-18) — no effect`);
     for (const k of ["moraleDelta", "loyaltyDelta", "unityDelta", "darknessDelta", "vpDelta"]) if (row[k] != null && row[k] !== "" && !isNum(row[k])) F("E02", "WARN", b.id, `factionEffects[${i}].${k} = ${JSON.stringify(row[k])} not numeric`);
     for (const [ok, ov] of Object.entries(row.opDeltas || {})) {
       const nk = ok.toLowerCase().replace(/[_\s]/g, "");
@@ -758,7 +760,7 @@ for (const b of beats) {
       else if (!Number.isInteger(Number(ov))) F("E02", "ERROR", b.id, `factionEffects[${i}].opDeltas.${ok} = ${ov} is fractional — quantities are whole MARKS (owner ruling 2026-09-06)`);
       // marks are the unit everywhere — small integer opDeltas are intended (Momentum economy).
     }
-    const anyDelta = ["moraleDelta","loyaltyDelta","unityDelta","darknessDelta","vpDelta"].some(k => Number(row[k]) !== 0 && isNum(row[k])) || Object.values(row.opDeltas || {}).some(v => Number(v) !== 0 && isNum(v)) || row.deferred || row.recurring;
+    const anyDelta = ["loyaltyDelta","darknessDelta"].some(k => Number(row[k]) !== 0 && isNum(row[k])) || Object.values(row.opDeltas || {}).some(v => Number(v) !== 0 && isNum(v)) || row.deferred || row.recurring;   // morale/unity/vp deltas no longer count as "an effect" (retired)
     if (!anyDelta) F("E02", "INFO", b.id, `factionEffects[${i}] is all zeros (editor default noise)`);
   }
   for (const [i, r] of (Array.isArray(we.relationshipEffects) ? we.relationshipEffects : []).entries())
@@ -797,6 +799,9 @@ for (const b of beats) {
   }
   if (we.tikkunDelta != null && !isNum(we.tikkunDelta.add)) F("E06", "WARN", b.id, `tikkunDelta.add ${JSON.stringify(we.tikkunDelta?.add)} not numeric — no-op`);
   if (we.openTravel != null && !s(we.openTravel.hexName)) F("E06", "WARN", b.id, `openTravel has no hexName — opens the travel console with no destination`);
+  if (we.openMarket != null && !s(we.openMarket.vendorId) && !s(we.openMarket.vendorName)) F("E06", "WARN", b.id, `openMarket names no vendorId / vendorName — opens whatever market the seat last used`);
+  if (we.openMarket != null && we.openMarket.activate === true && we.openMarket.closeOnTurnEnd !== true) F("E06", "INFO", b.id, `openMarket.activate without closeOnTurnEnd — the vendor stays active for players until a closeMarket beat or the GM unticks it`);
+  if (we.closeMarket != null && !s(we.closeMarket.vendorId) && !s(we.closeMarket.vendorName)) F("E06", "WARN", b.id, `closeMarket names no vendorId / vendorName — no-op`);
   if (Array.isArray(we.purifyHexes) && we.purifyHexes.some(n => !s(n))) F("E06", "WARN", b.id, `purifyHexes contains an empty name`);
   if (we.territoryOutcome != null && !s(we.territoryOutcome)) F("E06", "INFO", b.id, `territoryOutcome is empty`);
 }

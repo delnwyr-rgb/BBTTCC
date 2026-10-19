@@ -1,5 +1,5 @@
 // v1.0.0 — Cultural Festival (mechanical)
-// Adds "Cultural Festival" to the target hex and queues +2 Morale (the trade-yield write is retired).
+// Adds "Cultural Festival" to the target hex and queues +2 Loyalty (was +2 Morale — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.); the trade-yield write is retired).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.cultural_festival_std.
 
 (() => {
@@ -17,7 +17,7 @@
     if (game?.ready) go(); else Hooks.on("ready", go);
   }
 
-  async function queueCulturalFestival({ targetUuid, morale=2, trade=5 }) {
+  async function queueCulturalFestival({ targetUuid, loyalty=2, trade=5 }) {   // hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
     if (!targetUuid) return "No target";
     const ref = await fromUuid(targetUuid);
     const doc = ref?.document ?? ref;
@@ -35,11 +35,11 @@
     }
 
     // Bumps
-    pending.moraleDelta      = Number(pending.moraleDelta      || 0) + Number(morale || 0);
+    pending.loyaltyDelta     = Number(pending.loyaltyDelta     || 0) + Number(loyalty || 0);
     // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader; the tag/route is the bonus
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pending });
-    return `Queued: add "Cultural Festival" • +${morale} Morale`;
+    return `Queued: add "Cultural Festival" • +${loyalty} Loyalty`;
   }
 
   whenRaidReady((api)=>{
@@ -56,11 +56,11 @@
         if (typeof base === "function") {
           try { msg = String(await base({ entry })) || ""; } catch(e){ console.warn(TAG,"base apply error", e); }
         }
-        const m2 = await queueCulturalFestival({ targetUuid: entry?.targetUuid, morale: 2, trade: 5 });
+        const m2 = await queueCulturalFestival({ targetUuid: entry?.targetUuid, loyalty: 2, trade: 5 });
         return [msg, m2].filter(Boolean).join(" • ") || "Cultural Festival queued.";
       }
     });
 
-    console.log(TAG, "installed (Cultural Festival tag, +2 Morale).");
+    console.log(TAG, "installed (Cultural Festival tag, +2 Loyalty).");
   });
 })();

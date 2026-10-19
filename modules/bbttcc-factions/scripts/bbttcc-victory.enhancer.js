@@ -10,7 +10,11 @@
 
 /* bbttcc-factions/scripts/bbttcc-victory.enhancer.js
  *
- * Unified Victory enhancer:
+ * RETIRED 2026-10-18 (ruling 18): Victory (VP + badge) and Unity are no longer game
+ * meters. The advanceTurn wrapper below is a no-op pass-through; victoryPass() is
+ * kept only as dead code for reference and is never called.
+ *
+ * Unified Victory enhancer (historical):
  * - Reads Unity (Spark + Alignment), Morale, Loyalty, Darkness
  * - Computes raw VP gain per Apply
  * - Applies Darkness-based resistance to VP gain
@@ -193,14 +197,10 @@
         return { changed:false, rows:[], error:true };
       });
 
-      try {
-        // Skipped (turn lock) or failed base turns award no VP.
-        if (args?.apply && !res?.skipped && !res?.error) {
-          await victoryPass();
-        }
-      } catch (e) {
-        console.warn(TAG, "Victory pass failed:", e);
-      }
+      // retired 2026-10-18, ruling 18: Victory (VP + badge) is no longer a game meter.
+      // The per-turn victoryPass() is NOT run; the wrapper is a pass-through so
+      // anything that expects territory.advanceTurn to be wrapped keeps working.
+      void victoryPass; // keep the function referenced so linters stay quiet
 
       return res;
     };

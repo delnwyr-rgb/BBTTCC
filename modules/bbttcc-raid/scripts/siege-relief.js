@@ -11,7 +11,7 @@
 //      3. Fire bbttcc:siege:reliefConvene (+ relay) and open the resolution dialog.
 //
 //   resolveRelief({ hexUuid, waveId?, outcome }) — apply the result:
-//      • attacker_won  → wave resolved; Buffer −15; defender −1 morale (pendingMoraleDeltas,
+//      • attacker_won  → wave resolved; Buffer −15; (defender −1 morale retired 2026-10-18 ruling 19 — still recorded in pendingMoraleDeltas,
 //                        drained by Phase F); fires bbttcc:siege:reliefRepulsed. Siege grinds on.
 //      • attacker_lost → status "lost_relieved" + endedTurn; fires bbttcc:siege:outcome
 //                        (D.3 VFX already has the lost_relieved palette). §8 morale
@@ -60,7 +60,7 @@
     state._suggestReliefConvene = next ? next.waveId : null;
   }
 
-  // The besieged faction = the besieged hex's owner (whose morale a repulse dents).
+  // The besieged faction = the besieged hex's owner.
   async function _defenderFactionId(hexUuid){
     const S = globalThis.__bbttccSiegeState;
     try {
@@ -92,7 +92,7 @@
     if (rolls) w.rolls = rolls;
 
     if (outcome === "attacker_won") {
-      // Relief repulsed — the besieger holds the field. Buffer −15; defender −1 morale.
+      // Relief repulsed — the besieger holds the field. Buffer −15. (defender −1 morale retired 2026-10-18, ruling 19; the record is inert)
       const sh = S.shaveBuffer(fresh.buffer, 15);
       bufferShaved = sh.shaved;
       const defenderId = await _defenderFactionId(hexUuid);
@@ -102,7 +102,7 @@
         turn,
         kind: "relief_repulsed",
         title: `Relief from ${_nm(reliever)} is thrown back`,
-        description: `The besieging army holds the open field. Buffer −${bufferShaved} marks; defender −1 morale (applied in Phase F).`,
+        description: `The besieging army holds the open field. Buffer −${bufferShaved} marks.`,
         payload: { waveId: w.waveId, callingFactionId: reliever, bufferShaved, rolls }
       });
       await api.setState(hexUuid, fresh);
@@ -138,7 +138,7 @@
       content: `<div class="bbttcc-siege-relief" style="border:1px solid ${won ? "#d9a441" : "#88bbff"};border-radius:6px;padding:.5rem .7rem;">
         <h3 style="margin:0 0 .25rem;color:${won ? "#d9a441" : "#88bbff"};">🛡 Relief Force — ${_esc(entry.hexName || "Siege")}</h3>
         <div>${won
-          ? `Relief from <b>${_esc(_nm(reliever))}</b> is <b style="color:#d9a441;">REPULSED</b>. Buffer −${bufferShaved} marks; defender −1 morale.`
+          ? `Relief from <b>${_esc(_nm(reliever))}</b> is <b style="color:#d9a441;">REPULSED</b>. Buffer −${bufferShaved} marks.`
           : `Relief from <b>${_esc(_nm(reliever))}</b> <b style="color:#88bbff;">BREAKS THE SIEGE</b>. The besiegers withdraw (<i>lost_relieved</i>).`}</div>
         ${rollLine}
       </div>`
@@ -162,7 +162,7 @@
           <label style="display:block;"><input type="radio" name="mode" value="attacker"> Besiegers hold the field (declared)</label>
           <label style="display:block;"><input type="radio" name="mode" value="relief"> Relief breaks through (declared) — siege collapses</label>
         </fieldset>
-        <div style="font-size:0.78rem;color:#999;">Hold → Buffer −15 + defender −1 morale, siege continues. Break → <i>lost_relieved</i>.</div>
+        <div style="font-size:0.78rem;color:#999;">Hold → Buffer −15, siege continues. Break → <i>lost_relieved</i>.</div>
       </div>`;
 
     new Dialog({

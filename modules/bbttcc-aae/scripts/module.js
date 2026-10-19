@@ -8,6 +8,8 @@
 // NOTE: This file preserves the original Moral Profile generator (POC) and extends the API.
 //       No schema migrations; all writes are safe, additive flags.
 
+import "./convictions.js";   // ruling 17 (2026-10-18): the Convictions monitor — Alpha centre rule + per-turn teeth
+
 const MODULE_ID = "bbttcc-aae";
 const TAG = "[bbttcc-aae]";
 

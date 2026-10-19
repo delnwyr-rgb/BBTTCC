@@ -180,7 +180,7 @@ const FT_ENLIGHTENMENT_ITEM_DATA = {
   qliphothic:   { name: "Enlightenment: Qliphothic",   type: "feat", img: "systems/dnd5e/icons/svg/items/feature.svg", flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { violence: 2, intrigue: 2 } } } }
 };
 
-function ftLabelForPoliticalPhilosophy(key) {
+export function ftLabelForPoliticalPhilosophy(key) {
   return FT_POLITICAL_PHILOSOPHIES.find(p => p.key === String(key ?? ""))?.label ?? String(key ?? "").trim();
 }
 
@@ -1549,7 +1549,7 @@ export function getFactionData(actor) {
     return {
       id: faction.id,
       name: faction.name,
-      morale: fSys?.health?.morale?.value ?? fSys?.morale?.value ?? null,
+      morale: null,   // faction Morale retired 2026-10-18 (ruling 19)
       loyalty: rawSys?.faction?.loyalty ?? 0,
       tier,
       level: tier,
@@ -1783,6 +1783,7 @@ export function openBridge(actor) {
 
 export function openRadiation(actor) {
   if (!bbttccActive()) return ui.notifications?.warn("Bad Eden support module not active.");
+  if (game.bbttcc?.alpha?.hidden?.("radiationApp")) return ui.notifications?.info("Radiation shows on the sheet chip during the Alpha.");
   // Radiation API is data-only — show a simple dialog with current RP and level
   const rawSys  = actor.system?.system ?? actor.system;
   const rp      = rawSys?.radiation?.rp ?? 0;
@@ -1821,6 +1822,7 @@ export function openRadiation(actor) {
 
 export function openTikkunPopup(actor) {
   if (!bbttccActive()) return ui.notifications?.warn("Bad Eden support module not active.");
+  if (game.bbttcc?.alpha?.hidden?.("tikkunApp")) return ui.notifications?.info("Sparks are announced when you earn them during the Alpha.");
   const resolved = ftResolveFactionLink(actor);
   game.bbttcc.api.tikkun.openRitualConsole({ factionId: resolved.id || null });
 }

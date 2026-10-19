@@ -1,6 +1,7 @@
 /* REVIEW NOTE: Turn extensions are retained as engine logic; patched here only to correct victory flag read-path during the sheet cleanup review pass. */
 // bbttcc-factions/scripts/turn-extensions.enhancer.js
-// Post-turn enhancer for Morale/Loyalty trend, Darkness nudge and the per-turn Victory Unity reset.
+// Post-turn enhancer for the Loyalty trend and the Darkness nudge.
+// (Morale trend retired 2026-10-18, ruling 19; Unity reset retired 2026-10-02 / ruling 18.)
 // (Its old Mercy-gated Unity OP payout is retired — territory-unitybonus is the one Unity authority.)
 
 (() => {
@@ -40,29 +41,18 @@
       // doUnityRecompute (10% per aligned hex, gated on the Spark of Mercy), which feeds
       // VP gain (vp-engine) and Great Work readiness (Unity ≥ 30).
 
-      // TREND
-      // Morale buoyancy is PASSIVE recovery for the absence of pressure — it must not
-      // push morale UPWARD against active Darkness (or Darkness loses its teeth and the
-      // homeostasis permanently indemnifies a faction from darkness/radiation danger).
-      // So while Darkness.global >= 1 we suppress only the *upward* lift; downward drift
-      // (morale above home) and all Loyalty behavior are unchanged. When clean (Darkness 0)
-      // buoyancy works normally. Radiation's morale danger flows through Darkness (Radiated
-      // hexes raise Darkness), so gating on Darkness covers both.
-      const darkG=Number((get(A,`flags.${MODF}.darkness`,{})||{}).global ?? 0);
-      const mHome=Number(get(A,`flags.${MODF}.moraleHome`,50));
-      const mStep=Number(get(A,`flags.${MODF}.moraleStep`,1));
+      // TREND (Loyalty only)
+      // Morale buoyancy (trend toward moraleHome by moraleStep, upward lift suppressed under
+      // Darkness ≥ 1) was retired 2026-10-18 (ruling 19): faction Morale is no longer a game
+      // meter. moraleHome / moraleStep flags on existing actors are simply no longer read.
       const lHome=Number(get(A,`flags.${MODF}.loyaltyHome`,50));
       const lStep=Number(get(A,`flags.${MODF}.loyaltyStep`,1));
-      const mCur=Number(get(A,`flags.${MODF}.morale`,0))||0;
       const lCur=Number(get(A,`flags.${MODF}.loyalty`,0))||0;
-      let mNext=clamp(trendNext(mCur,mHome,mStep),0,100);
-      if(darkG>=1) mNext=Math.min(mNext,mCur);   // no upward buoyancy under Darkness pressure
       const lNext=clamp(trendNext(lCur,lHome,lStep),0,100);
-      if(mNext!==mCur){updates["morale"]=mNext;any=true;}
       if(lNext!==lCur){updates["loyalty"]=lNext;any=true;}
-      if(mNext!==mCur||lNext!==lCur)
+      if(lNext!==lCur)
         war.push({type:"turn",date:(new Date()).toLocaleString(),
-          summary:`Trend: Morale→${mNext}% • Loyalty→${lNext}%`});
+          summary:`Trend: Loyalty→${lNext}%`});
 
       // DARKNESS (top ascension level — canonical "enlightened", legacy "transcendent"/"5")
       const lvl=String(get(A,`flags.${MODF}.enlightenmentLevel`,"")).toLowerCase();

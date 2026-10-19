@@ -1,5 +1,6 @@
 // modules/bbttcc-core/scripts/bbttcc-ui-cleanup.enhancer.js
 import "./scene-nav-folders.js";   // Scene Navigation folder tree (2026-10-12) — imported here so no module.json edit is needed
+import "./alpha-cut.js";           // ALPHA CUT (2026-10-17) — one world switch hiding Beta surfaces from player seats; same no-manifest pattern
 // Bad Eden — Remove legacy UI pills/buttons, but KEEP the GM toolbar.
 //
 // This script only removes old floating bits like the pre-HexChrome

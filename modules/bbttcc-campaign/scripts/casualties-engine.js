@@ -10,7 +10,7 @@
 //
 // Applies (canon mapping v1):
 //   Hex: Integration-first; Development drops at Moderate if fragile, always at Major+
-//   Faction (attacker): Morale-first; Loyalty at Major+; VP at Catastrophic
+//   Faction (attacker): Loyalty at Major+ (Morale-first retired 2026-10-18 ruling 19; VP at Catastrophic retired ruling 18)
 //   Darkness: only for extreme circumstances (major+atrocity OR catastrophic)
 //
 (() => {
@@ -226,11 +226,12 @@
 
   function _factionDeltasForN(n) {
     // Returns { moraleDelta, loyaltyDelta, vpDelta, noteKey }
+    // moraleDelta retired 2026-10-18 (ruling 19) — was 0/−1/−2/−3; vpDelta retired 2026-10-18 (ruling 18). Both stay 0.
     if (n <= 0) return null;
-    if (n === 1) return { moraleDelta: 0,  loyaltyDelta: 0,  vpDelta: 0,  noteKey: "fac_minor" };
-    if (n === 2) return { moraleDelta: -1, loyaltyDelta: 0,  vpDelta: 0,  noteKey: "fac_moderate" };
-    if (n === 3) return { moraleDelta: -2, loyaltyDelta: -1, vpDelta: 0,  noteKey: "fac_major" };
-    return { moraleDelta: -3, loyaltyDelta: -2, vpDelta: -1, noteKey: "fac_catastrophic" };
+    if (n === 1) return { moraleDelta: 0, loyaltyDelta: 0,  vpDelta: 0,  noteKey: "fac_minor" };
+    if (n === 2) return { moraleDelta: 0, loyaltyDelta: 0,  vpDelta: 0,  noteKey: "fac_moderate" };
+    if (n === 3) return { moraleDelta: 0, loyaltyDelta: -1, vpDelta: 0,  noteKey: "fac_major" };
+    return { moraleDelta: 0, loyaltyDelta: -2, vpDelta: 0,  noteKey: "fac_catastrophic" };
   }
 
   function _darknessDeltaForHex(n, atrocity) {
@@ -262,8 +263,8 @@
 
     if (kind === "att" || kind === "def") {
       if (sev === "minor") return "You paid a little blood for a little ground. Nobody calls it victory yet.";
-      if (sev === "moderate") return "The cost shows in the eyes. Morale sags. Command starts lying about numbers.";
-      if (sev === "major") return "You can win the hex and still lose the people. Morale cracks. Loyalty follows.";
+      if (sev === "moderate") return "The cost shows in the eyes. Command starts lying about numbers.";
+      if (sev === "major") return "You can win the hex and still lose the people. Loyalty cracks.";
       return "A generation of losses, spent in a night. The faction survives — but it doesn’t feel immortal anymore.";
     }
 

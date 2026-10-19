@@ -6591,3 +6591,55 @@ body.ft-no-watermark .ft-character-sheet::before { display: none; }
   font-weight: 400;
   letter-spacing: 0.04em;
 }
+
+/* ── DOMAIN tab (ruling 16, 2026-10-18): the steward's land on the steward sheet ── */
+.ft-domain { display: flex; flex-direction: column; gap: 0.6rem; }
+.ft-domain .ft-domain-head { display: flex; align-items: center; gap: 0.6rem; }
+.ft-domain .ft-domain-head h3 { margin: 0; }
+.ft-domain .ft-domain-tier { font-size: 0.78rem; opacity: 0.8; }
+.ft-domain .ft-domain-head .ft-chip { margin-left: auto; cursor: pointer; }
+.ft-domain-grid { display: grid; grid-template-columns: 1.4fr 1.2fr; gap: 0.6rem; }
+@media (max-width: 900px) { .ft-domain-grid { grid-template-columns: 1fr; } }
+.ft-domain-card { padding: 0.5rem 0.6rem; border: 1px solid rgba(160,180,255,0.14); border-radius: 6px; background: rgba(255,255,255,0.02); }
+.ft-domain-card-title { font-weight: 700; font-size: 0.85rem; letter-spacing: 0.02em; margin-bottom: 0.35rem; display: flex; align-items: baseline; gap: 0.5rem; }
+.ft-domain-total { margin-left: auto; font-size: 1rem; }
+.ft-domain .ft-muted { opacity: 0.6; font-weight: 400; font-size: 0.8rem; }
+.ft-domain-pools { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.ft-domain-pool { font-size: 0.78rem; padding: 0.15rem 0.45rem; border-radius: 4px; background: rgba(196,122,58,0.12); border: 1px solid rgba(196,122,58,0.25); }
+.ft-domain-pool.is-zero { opacity: 0.45; }
+.ft-domain-meters { flex-direction: column; gap: 0.3rem; margin: 0; }
+.ft-domain-meters .ft-meter-row { display: flex; align-items: center; gap: 0.45rem; }
+.ft-domain-meters .ft-meter-label { min-width: 5.5rem; opacity: 0.85; }
+.ft-domain-band { font-size: 0.72rem; padding: 0.1rem 0.4rem; border-radius: 4px; }
+.ft-domain-band.is-best, .ft-domain-band.is-good { background: rgba(80,180,110,0.18); color: #9fe0b0; }
+.ft-domain-band.is-ok { background: rgba(160,180,255,0.14); }
+.ft-domain-band.is-warn { background: rgba(224,160,60,0.18); color: #f0c070; }
+.ft-domain-band.is-bad, .ft-domain-band.is-worst { background: rgba(200,60,60,0.2); color: #f09090; }
+.ft-domain-pressure { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
+.ft-domain-warn { background: rgba(200,60,60,0.2); color: #f09090; font-size: 0.75rem; }
+.ft-domain-holding-row { display: flex; justify-content: space-between; padding: 0.12rem 0; font-size: 0.85rem; }
+.ft-domain-hexes { display: flex; flex-wrap: wrap; gap: 0.25rem; margin: 0.15rem 0 0.35rem; }
+.ft-domain-hex { cursor: pointer; font-size: 0.78rem; padding: 0.12rem 0.45rem; border-radius: 4px; background: rgba(160,180,255,0.08); border: 1px solid rgba(160,180,255,0.22); }
+.ft-domain-hex.is-here { border-color: rgba(232,200,74,0.55); box-shadow: 0 0 6px rgba(232,200,74,0.25); }
+.ft-domain-hex:hover { background: rgba(160,180,255,0.16); }
+.ft-domain-conv-bar { position: relative; height: 8px; margin: 0.35rem 0 0.3rem; border-radius: 4px; background: rgba(255,255,255,0.06); border: 1px solid rgba(160,180,255,0.18); overflow: hidden; }
+.ft-domain-conv-fill { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(80,180,110,0.55); transition: width 0.3s; }
+.ft-domain-conv-bar.is-warn .ft-domain-conv-fill { background: rgba(224,160,60,0.6); }
+.ft-domain-conv-bar.is-bad .ft-domain-conv-fill { background: rgba(200,60,60,0.6); }
+.ft-domain-conv-bar.is-worst .ft-domain-conv-fill { background: rgba(200,60,60,0.85); }
+.ft-domain-conv-mark { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.35); }
+.ft-domain-conv-impacts { margin: 0.1rem 0 0; padding-left: 1.1rem; font-size: 0.8rem; opacity: 0.85; }
+.ft-domain-planned { margin: 0; padding-left: 1.1rem; font-size: 0.85rem; }
+.ft-domain-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ft-domain-actions .ft-add-btn { cursor: pointer; }
+
+/* ---- SIGNATURES strip (ruling 14, 2026-10-17): one slot per tier reached ---- */
+.ft-sheet .ft-signatures { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0.15rem 0 0.5rem; padding: 0.35rem 0.5rem; border: 1px solid rgba(232, 200, 74, 0.35); border-radius: 8px; background: rgba(232, 200, 74, 0.06); }
+.ft-sheet .ft-signatures-label { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: #e8c84a; margin-right: 0.2rem; }
+.ft-sheet .ft-signatures-label small { opacity: 0.7; margin-left: 0.25rem; text-transform: none; letter-spacing: 0; }
+.ft-sheet .ft-sig-slot { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.22rem 0.55rem; border-radius: 999px; border: 1px solid rgba(232, 200, 74, 0.45); background: rgba(10, 12, 24, 0.55); color: inherit; font-size: 0.8rem; line-height: 1.1; cursor: pointer; }
+.ft-sheet .ft-sig-slot img { width: 20px; height: 20px; border-radius: 50%; border: 1px solid rgba(232, 200, 74, 0.5); object-fit: cover; }
+.ft-sheet .ft-sig-slot .ft-sig-tier { opacity: 0.75; font-size: 0.68rem; }
+.ft-sheet .ft-sig-slot.empty { border-style: dashed; color: #e8c84a; }
+.ft-sheet .ft-sig-slot.empty small { opacity: 0.7; }
+.ft-sheet .ft-sig-slot:hover { box-shadow: 0 0 10px rgba(232, 200, 74, 0.35); }

@@ -64,6 +64,7 @@ function _injectAdvisorButton(app, html) {
     const actor = app?.actor ?? app?.document;
     if (!actor?.getFlag?.("bbttcc-factions", "isFaction")) return;
     if (!(game.user?.isGM || actor.isOwner)) return;
+    if (game.bbttcc?.alpha?.hidden?.("advisors")) return;   // ALPHA CUT (2026-10-17): advisors are GM-side
     const $html = html instanceof jQuery ? html : $(html);
     if ($html.find(".bbttcc-advisor-btn").length) return;
     const header = $html.find(".window-header .window-title").first();

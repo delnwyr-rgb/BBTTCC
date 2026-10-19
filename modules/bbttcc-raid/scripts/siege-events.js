@@ -100,11 +100,7 @@
     return null;
   }
 
-  async function _bumpMorale(factionId, delta){
-    if (!factionId || !delta) return;
-    try { const fn = game.bbttcc?.api?.factions?.bumpMorale; if (typeof fn === "function") await fn({ factionId, delta }); }
-    catch (e) { console.warn(TAG, "bumpMorale failed", e); }
-  }
+  // Faction Morale retired 2026-10-18 (ruling 19): "morale" / "moraleSwing" event effects no longer write anything.
 
   function _woundFrom(roster, n){
     const active = roster.filter(c => c.status === "active");
@@ -153,20 +149,9 @@
         state.defenderAnytimeBudget = Math.max(0, (state.defenderAnytimeBudget || 0) + d);
         return `defender Anytime ${d >= 0 ? "+" : ""}${d}`;
       }
-      case "morale": {
-        if (eff.side === "both") { await _bumpMorale(ctx.attackerFactionId, eff.amount); await _bumpMorale(ctx.defenderFactionId, eff.amount); return `both morale ${eff.amount >= 0 ? "+" : ""}${eff.amount}`; }
-        const fid = _factionForSide(eff.side, ctx);
-        await _bumpMorale(fid, eff.amount);
-        return `${eff.side} morale ${eff.amount >= 0 ? "+" : ""}${eff.amount}`;
-      }
-      case "moraleSwing": {
-        const amt = Number(eff.amount) || 1;
-        const up = Math.random() < 0.5 ? "attacker" : "defender";
-        const down = up === "attacker" ? "defender" : "attacker";
-        await _bumpMorale(_factionForSide(up, ctx), amt);
-        await _bumpMorale(_factionForSide(down, ctx), -amt);
-        return `${up} morale +${amt}, ${down} −${amt}`;
-      }
+      case "morale":
+      case "moraleSwing":
+        return "";   // faction Morale retired 2026-10-18 (ruling 19): accepted, nothing written
       case "championWound": {
         const n = _rollDice(eff.count ?? 1);
         let hit = [];
