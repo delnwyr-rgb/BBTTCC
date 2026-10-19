@@ -55,13 +55,15 @@ const TOUR_OFFERS = {
     {
       tour: "faction-sheet",
       skipIfTaken: true,
-      prompt: "Before the Turn ticks: your faction sheet is where all of this rolls up — OP banks, health tracks, the queue. Guided tour?",
-      label: "Tour the faction",
+      prompt: "Before the Turn ticks: your Domain is where all of this rolls up — the treasury, the land, the queue. Guided tour?",
+      label: "Tour the Domain",
       resume: "Good. That sheet is mission control — everything else reports to it."
     },
     {
       tour: "bridge",
-      prompt: "One more, and nobody finds this one alone: the BRIDGE — the walkway between your Steward's pockets and the faction's treasury. Personal OP, faction OP, and the transfers between them. Sixty seconds?",
+      // ALPHA CUT ruling 16 (2026-10-18): one treasury — the steward and the Domain share a purse, so the Bridge is Beta-only.
+      skipIf: () => game.bbttcc?.alpha?.enabled?.() === true,
+      prompt: "One more, and nobody finds this one alone: the BRIDGE — the walkway between your Steward's pockets and the Domain's treasury. Personal OP, Domain OP, and the transfers between them. Sixty seconds?",
       label: "Tour the Bridge",
       resume: "Bridge crossed. Now feel the heartbeat — run the practice Turn preview when you're ready."
     }
@@ -84,7 +86,7 @@ const TOUR_OFFERS = {
     // maneuver and commit steps have nothing to anchor to and skip (trailer
     // shoot 2026-10-09: the tour ran 1 → 4 → 5 and ended).
     waitFor: (ctx) => _waitForFirstRaidRound(ctx),
-    prompt: "Last classroom, One. Your GM just opened round one — the Raid Console is where factions bleed. Tour it before you stage?",
+    prompt: "Last classroom, One. Your GM just opened round one — the Raid Console is where Domains bleed. Tour it before the round?",
     label: "Tour the Raid Console",
     resume: "Class dismissed. The console's hot and pre-aimed — pick maneuvers, commit a round or two, then conclude."
   },
@@ -178,6 +180,7 @@ async function _offerTour(spec) {
     return false;
   }
   if (spec.skipIfTaken && _toursTaken.has(spec.tour)) return false;
+  if (typeof spec.skipIf === "function") { try { if (spec.skipIf()) return false; } catch (_e) {} }   // Alpha Cut: some tours are Beta-only
   if (!tours.get?.(spec.tour)) {
     console.warn(TAG, `tour "${spec.tour}" not registered — offer skipped`);
     return false;
@@ -224,12 +227,12 @@ async function _offerTour(spec) {
 const FIRST_OPEN_OFFERS = [
   {
     api: () => globalThis.game?.bbttcc?.api?.raid, fn: "openActivityPlanner", tour: "planner-hud",
-    prompt: "First time in the Activity Planner? This is everything your faction can do that isn't hitting someone — and it compounds. Sixty seconds, every dial explained?",
+    prompt: "First time in the Activity Planner? This is everything your Domain can do that isn't hitting someone — and it compounds. Sixty seconds, every dial explained?",
     label: "Tour the Planner"
   },
   {
     api: () => globalThis.game?.bbttcc?.api?.raid, fn: "openConsole", tour: "raid-console",
-    prompt: "Back at the sharp end — want the Raid Console refresher? Stage OP, pick maneuvers, commit the round. Quick walk-through before blood?",
+    prompt: "Back at the sharp end — want the Raid Console refresher? Your Domain brings what it owns, you pick the maneuvers, the GM calls it. Quick walk-through before blood?",
     label: "Refresh me"
   }
 ];

@@ -101,7 +101,7 @@ const stewardSheetTour = {
       text: "The ✎ toggle exposes the raw inputs — direct rank edits, identity fields, the normally-locked plumbing.\nDay to day you leave it off; the sheet plays itself through clicks and rolls."
     },
     {
-      id: "faction", title: "Your faction — the bigger body",
+      id: "faction", title: "Your Domain — the bigger body",
       selector: ".ft-id-faction",
       text: "You aren't just a body — you're a stake in a faction. The → button opens its sheet: OP banks, territory, politics, the strategic layer.\nThat interface has its own tour when you're ready.",
       speak: "Meatsuit: toured. Next size up is the faction — a body made of people. Different manual— *bzzt* —same principle."
@@ -175,8 +175,8 @@ const factionSheetTour = {
   id: "faction-sheet",
   title: "The Bigger Body (Faction Sheet)",
   audience: "player",
-  intro: "Opening your faction — a body made of people, land and leverage. Same idea as the meatsuit, bigger stakes, slower heartbeat. One Turn per beat.",
-  outro: "Faction toured. Your steward acts in scenes; your faction acts in Turns. Keep both alive and the world starts answering to you.",
+  intro: "Opening your Domain — a body made of land, people and leverage. Same idea as the meatsuit, bigger stakes, slower heartbeat. One Turn per beat.",
+  outro: "Domain toured. Your steward acts in scenes; your Domain acts in Turns. Keep both alive and the world starts answering to you.",
   open: _openFactionSheet,
 
   steps: [
@@ -220,10 +220,11 @@ const factionSheetTour = {
       text: "Your people have opinions. The Center is the dominant philosophy; Drift (−100..+100) is pressure against it, escalating the State: Stable → Strained → Fractured → Rupturing.\nRupturing factions can split or flip. Soft-power campaigns, atrocities and succession crises all feed Drift."
     },
     {
-      id: "raid", title: "Activities — the Raid console",
+      id: "raid", title: "Activities — where fights arrive",
       pre: 'nav.bbttcc-tabs a.item[data-tab="activities"]',
       selector: "button[data-open-raid-console]",
-      text: "The Activities tab is where the faction acts. Open Raid stages an assault, infiltration or courtly intrigue against a target hex or faction — you commit OP and maneuvers, the GM resolves rounds.\nThe Raid console has its own tour."
+      optional: true,
+      text: "The Activities tab is where the Domain acts. Battle, Heist and Parley come to you through the story — when one is offered, the Raid console opens here already aimed. Your Domain brings what it owns; the GM resolves the rounds.\nThe Raid console has its own tour."
     },
     {
       id: "planned", title: "The Next Turn queue",
@@ -241,7 +242,7 @@ const factionSheetTour = {
       id: "secrets", title: "Receipts",
       selector: 'tr.bbttcc-doctrine-row[data-kind="secret"]',
       optional: true,
-      text: "Leverage with a shelf life — you hold up to five Secrets, Stolen or Earned.\nThe Play button only lights up during an active Parley: that's when a secret becomes a weapon."
+      text: "Receipts — the leverage a Parley makes for itself. A receipt is named for the table that made it, plays only there, and is spent when that Parley ends.\nThe Play button lights up during that Parley: that's when a receipt becomes a weapon."
     },
     {
       id: "tier", title: "Assets — Tier & capacity",
@@ -489,8 +490,8 @@ const plannerTour = {
   id: "planner-hud",
   title: "The Long Game (Activity Planner)",
   audience: "player",
-  intro: "Opening the Activity Planner — everything your faction can do that isn't hitting someone. Slower than a raid, cheaper than a war, and it compounds.",
-  outro: "Planner toured. Raids win rounds; planned activities win Turns. The factions that scare people run both.",
+  intro: "Opening the Activity Planner — everything your Domain can do that isn't hitting someone. Slower than a Battle, cheaper than a war, and it compounds.",
+  outro: "Planner toured. Fights win rounds; planned activities win Turns. The Domains that scare people do both — and a Domain grows from held ground.",
 
   open: async (ctx) => {
     const openPlanner = game.bbttcc?.api?.raid?.openActivityPlanner;
@@ -505,13 +506,13 @@ const plannerTour = {
     {
       id: "root", title: "The strategic catalog",
       selector: "section.bbttcc-activity-planner",
-      text: "Every strategic activity your faction can run this Turn — espionage, trade plays, propaganda, construction. The three raid types live in the Raid Console; this is everything else.\nFlow: pick a target, pick an activity, Plan it."
+      text: "Every strategic activity your Domain can run this Turn — outposts, trade plays, propaganda, construction. Battle, Heist and Parley come through the story; this is everything else.\nFlow: pick a target, pick an activity, Plan it."
     },
     {
       id: "target", title: "Target hex",
       selector: 'button[data-act="pick"]',
       optional: true,
-      text: "Most activities aim at a hex — pick from the dropdown or click one on the map. The list only offers hexes you control or border; the GM can bypass that.\nRig-repair activities swap this for a rig picker."
+      text: "Most activities aim at a hex — pick from the dropdown or click one on the map. The list offers the hexes you hold and the unclaimed ground next to a hex you hold at level 2: a Domain grows from held ground. The GM can bypass that.\nRig-repair activities swap this for a rig picker."
     },
     {
       id: "categories", title: "Category pills",
@@ -583,8 +584,8 @@ const raidConsoleTour = {
   id: "raid-console",
   title: "The Sharp End (Raid Console)",
   audience: "player",
-  intro: "Opening the Raid Console. Three ways to take what's theirs: Battle, Heist, Parley. Battle and Heist are fought on the battlemap in combat rounds; a Parley is talked out at the table. If there's no live raid I've staged you a practice target— *bzzt* —it won't mind.",
-  outro: "Raid console toured. Remember the shape: stage OP into the contested key, pick maneuvers, commit the round. Parleys swap the dice for the influence engine — different tour, same appetite.",
+  intro: "Opening the Raid Console. Three ways to take what's theirs: Battle, Heist, Parley. Battle and Heist are fought on the battlemap in combat rounds; a Parley is talked out at the table. The story opens the table — a fight comes to you as a choice, you never start one yourself. If there's no live fight I've staged you a practice target— *bzzt* —it won't mind.",
+  outro: "Raid console toured. Remember the shape: the story offers the fight, your Domain brings what it owns, you pick the maneuvers, the GM calls it. No marks change hands in a Battle or Heist; a Parley can sweeten the deal.",
 
   open: async (ctx) => {
     const raidApi = game.bbttcc?.api?.raid;
@@ -641,55 +642,49 @@ const raidConsoleTour = {
     {
       id: "ident", title: "The identity strip",
       selector: ".bbttcc-raid-ident",
-      text: "Who's raiding what: the resolved target, the PRIMARY CONTESTED KEY (the OP track this raid is fought in — gold pill), and portraits of the attacker plus any coalition supporters."
+      text: "Who's fighting over what: the target, the key this fight leans on (gold pill — the strength your Domain brings is read from it), and portraits of the attacker plus any coalition supporters."
     },
     {
       id: "setup", title: "GM setup row",
       selector: 'select[data-id="attacker"]',
       optional: true,
-      text: "GM-only: pick the attacker, the raid type — Battle, Heist or Parley, each with its own maneuver set and math — the difficulty band, and the target (Pick Target grabs a hex off the canvas).\nAdd Round starts the exchange once attacker + target + activity are set."
+      text: "GM-only: the attacker, the raid type — Battle, Heist or Parley, each with its own maneuver set — the difficulty band, and the target (Pick Target grabs a hex off the canvas). The story usually sets all of this; the GM can improvise.\nAdd Round starts the exchange once attacker + target + type are set."
     },
     {
       id: "playerbank", title: "Your bank",
       selector: "section.bbttcc-bank",
-      text: "The OP pools funding this raid. Players see their own bank; the GM sees attacker and defender side by side.\nEverything you stage into a round drains from here — check it before you promise."
+      text: "What your Domain owns. Nothing here is spent in a Battle or a Heist — strength is what the Domain already is: its ops, its people, its allies. The GM sees attacker and defender side by side.\nIn a Parley you may sweeten the deal: marks handed to the other side, in the open."
     },
     {
       id: "coalition", title: "Coalition support",
       selector: ".bbttcc-coalition-bar",
       optional: true,
-      text: "Allied factions backing the raid. Supporters contribute OP, add a coalition bonus to the roll, and fire their OWN eligible maneuvers each round.\nThe GM adds or removes supporters here.",
+      text: "Allied Domains backing the fight. Supporters add their strength to the line and fire their OWN eligible maneuvers each round.\nThe GM adds or removes supporters here.",
       speak: "Friends make the number bigger. That's what friends are for."
     },
     {
       id: "rounds", title: "Rounds — the heartbeat",
       selector: "section.bbttcc-rounds",
       optional: true,
-      text: "A raid is a series of rounds. Open one (Manage) and you get the staging panel: push OP into the contested key with the ± buttons, pick maneuvers, then the GM commits — one roll against the DC, outcome logged in this table.\nYour staged OP only counts once you hit Commit Staging up top."
+      text: "A fight is a series of rounds. Open one and you see the strength line for each side — what the Domain brings, nothing to push — and the stake: open ground is the prize, built ground takes a Siege. Pick your maneuvers; the GM resolves the round and the outcome lands in this table."
     },
     {
       id: "maneuvers", title: "Maneuvers — the knives",
       selector: ".bbttcc-mans-cell",
       optional: true,
-      text: "Per-side maneuver picker inside an open round: each maneuver has an OP cost, a fire-mode badge, and an ⓘ icon with its complete rules.\nThe projected-spend line totals what you've promised before anything rolls. Availability gates on faction tier and Beat grants."
-    },
-    {
-      id: "staging", title: "Commit Staging — sending it to the GM",
-      selector: 'button[data-id="commit-staging"]',
-      optional: true,
-      text: "Player-side: your staged OP and maneuvers are a draft until this button sends them to the GM's round. No commit, no contribution — don't leave the table with a full draft."
+      text: "Per-side maneuver picker inside an open round: each maneuver has a fire-mode badge and an ⓘ icon with its complete rules. Usable only hides what your Domain can't field.\nAvailability gates on Domain tier, your class and Beat grants."
     },
     {
       id: "commit", title: "Commit (Roll) — resolving the round",
       selector: '[data-manage-act="commit"]',
       optional: true,
-      text: "GM-only: locks the round and rolls it — staged OP and maneuvers versus the DC (hover the ⓘ for the DC breakdown). The outcome colors the round log and fires the round-commit hook every listener watches."
+      text: "GM-only: resolves the round. A Battle is fought on the battlemap first, then called here — won, stalemate or lost; open ground changes hands with the field. A Heist runs the alarm; a Parley runs the influence duel at the table. The outcome colors the round log."
     },
     {
       id: "end", title: "Reset & End Raid",
       selector: 'button[data-id="end-raid"]',
       optional: true,
-      text: "GM-only: Reset clears the rounds but keeps the setup; End Raid tears down the whole session — rounds, supporters, target — and propagates the clear to every player's console."
+      text: "GM-only: Reset clears the rounds but keeps the setup; End Raid tears down the whole fight — rounds, supporters, target — and propagates the clear to every player's console."
     }
   ]
 };

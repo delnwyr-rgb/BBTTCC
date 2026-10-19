@@ -24,12 +24,23 @@ const PROGRESS_FLAG = "progress";
 
 const _beats = []; // ordered
 
+// ─── ALPHA CUT ruling 23 (Dave, blessed 2026-10-18): THE THIRTY-MINUTE INDUCTION ───────────────────────────────
+// With the Alpha Cut world setting on, the arc keeps what only a sandbox can teach — incarnate, the dummy, the rig,
+// claim a hex, the Turn preview, the Long Market, the People You Know deck, Surge — and graduates straight into the
+// orientation film. Everything else stays registered (Beta gets the long course back; `start({only})` can still name
+// a cut beat) but is not on the arc: the story offers the first Battle, Heist and Parley (ruling 22), the first
+// Signature comes through the sheet (ruling 14), and the first real fights are the road ambush and the bridge.
+const ALPHA_CUT_BEATS = new Set(["manifestations", "combat_sim", "travel", "raid_violence", "raid_intrigue", "raid_presence", "proving_trials", "final_showdown"]);
+function _alphaOn() { try { return globalThis.game?.bbttcc?.alpha?.enabled?.() === true; } catch (_e) { return false; } }
+function _arcBeats() { return _alphaOn() ? _beats.filter(b => !ALPHA_CUT_BEATS.has(b.id)) : _beats.slice(); }
+
 function registerBeat(beat) {
   if (!beat?.id) return;
   const i = _beats.findIndex(b => b.id === beat.id);
   if (i >= 0) _beats[i] = beat; else _beats.push(beat);
 }
-function listBeats() { return _beats.slice(); }
+function listBeats() { return _arcBeats(); }          // the arc a run walks (Alpha-aware)
+function listAllBeats() { return _beats.slice(); }    // every registered beat, cut ones included
 function getBeat(id) { return _beats.find(b => b.id === id) || null; }
 
 function _ns() { return globalThis.game?.bbttcc?.onboarding; }
@@ -372,7 +383,9 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
 
     // Resolve the playtest selectors against the registered arc order.
     const onlySet = only ? new Set(Array.isArray(only) ? only : [only]) : null;
-    const fromIdx = from ? _beats.findIndex(b => b.id === from) : -1;
+    // Ruling 23: a run walks the Alpha-aware arc; an explicit {only} may still name a cut beat (playtesting).
+    const arcBeats = onlySet ? _beats : _arcBeats();
+    const fromIdx = from ? arcBeats.findIndex(b => b.id === from) : -1;
     if (from && fromIdx < 0) {
       ui.notifications?.warn?.(`Onboarding: no beat "${from}". Known: ${_beats.map(b => b.id).join(", ")}`);
       return;
@@ -391,11 +404,11 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
       return true;
     };
     if (onlySet || fromIdx >= 0) {
-      const names = _beats.filter(selected).map(b => b.id);
+      const names = arcBeats.filter(selected).map(b => b.id);
       console.log(TAG, `playtest run — ${names.length} beat(s): ${names.join(" → ")}`);
     }
 
-    for (const [beatIdx, beat] of _beats.entries()) {
+    for (const [beatIdx, beat] of arcBeats.entries()) {
       if (_abortRun) break;
       if (!selected(beat, beatIdx)) continue;
       p = _progress(steward);
@@ -531,7 +544,7 @@ function status({ user = game.user } = {}) {
 Hooks.once("ready", () => {
   const ns = globalThis.game?.bbttcc?.onboarding;
   if (!ns) return;
-  ns.beats = { register: registerBeat, list: listBeats, get: getBeat };
+  ns.beats = { register: registerBeat, list: listBeats, listAll: listAllBeats, get: getBeat, alphaCut: () => [...ALPHA_CUT_BEATS] };
   ns.ui = Object.assign(ns.ui ?? {}, { raiseDialogByTitle, closeDialogByTitle, closeAllOnboardingPrompts, promptIdFor, PROMPT_POSITION, deck, choose, prompt });
   Object.assign(ns, { start, skip, reset, status, activeRuns, isRunning: () => _running, skipBeat, abortRun, cohortPending });
 

@@ -1356,10 +1356,10 @@ function _registerOps() {
         whisper: game.users.filter(u => u.isGM).map(u => u.id),
         speaker: { alias: "◇ OPERATOR" },
         content: `<p><b>Onboarding raid — you're the table.</b> ${foundry.utils.escapeHTML(playerName || "A student")} has reached the` +
-                 ` <b>${activityKey || "raid"}</b> stage against the Rust Syndicate, attacking as <b>${foundry.utils.escapeHTML(faction.name)}</b>.</p>` +
-                 `<p>Their console is staging-only; round setup and commits are GM-side. I've opened yours on their faction —` +
+                 ` <b>${foundry.utils.escapeHTML(game.bbttcc?.api?.raid?.typeLabel?.(activityKey) || activityKey || "raid")}</b> stage against the Rust Syndicate, attacking as <b>${foundry.utils.escapeHTML(faction.name)}</b>.</p>` +
+                 `<p>Their console shows the strength line and the maneuvers; round setup and the call are GM-side. I've opened yours on their Domain —` +
                  ` run a round or two, then they'll conclude the beat themselves.</p>` +
-                 (court ? `<p><b>Stay on "${foundry.utils.escapeHTML(court.name)}" while you run it</b> — the Courtly engine only engages while` +
+                 (court ? `<p><b>Stay on "${foundry.utils.escapeHTML(court.name)}" while you run it</b> — the Parley engine only engages while` +
                           ` the tableau scene is the one you're viewing.</p>` : "")
       });
       return { ok: true };

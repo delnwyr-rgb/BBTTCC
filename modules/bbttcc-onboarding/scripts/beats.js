@@ -165,7 +165,7 @@ const incarnation = {
       title: "◇ OPERATOR",
       content:
         `<p>Time to put on a body. We're dropping your consciousness into your <b>Steward</b> — your meatsuit for this run.</p>` +
-        `<p>Everything from here uses your <i>real</i> interface: your sheet, your rig, your faction. No training wheels, just guard-rails.</p>` +
+        `<p>Everything from here uses your <i>real</i> interface: your sheet, your rig, your Domain. No training wheels, just guard-rails.</p>` +
         `<p>When you're ready, incarnate.</p>`,
       label: "Drop into my meatsuit"
     }).then(() => done());
@@ -352,7 +352,7 @@ const driving = {
       await _pause(700);
       await ctx.speak("Then the fun part: four dead vehicles squat on your track — real rigs, just nobody's driving them any more. Put every one back into scrap. Cleanest way is the guns: target a wreck and fire. RAM works too — target it, use Ram — but physics bills both parties, so you'll wear half of what you deal. Clear all four before that storm at the far end gets bored.");
     }
-    else await ctx.speak("Couldn't find or mint a rig for your faction. Make sure you lead a faction, then re-run this beat. Skipping the test track for now.");
+    else await ctx.speak("Couldn't find or mint a rig for your Domain. Make sure you lead a Domain, then re-run this beat. Skipping the test track for now.");
 
     ctx.riff({ beat: "driving", line: "Player is about to pilot their rig through a wreck-strewn obstacle course for the first time.", intent: "Gruff driving-instructor daemon. One line." });
   },
@@ -486,7 +486,7 @@ const stewardshipClaim = {
     // Primary path: there is no player-facing claim GUI yet, so the tutorial files the claim.
     ctx.prompt({
       title: "◇ OPERATOR",
-      content: `<p>Plant your banner on <b>Tutelary Hold</b> — claim it for your faction.</p><p><i>(No field UI for this yet, so I'll file the writ for you. One day you'll do it from a map menu.)</i></p>`,
+      content: `<p>Plant your banner on <b>Tutelary Hold</b> — claim it for your Domain.</p><p><i>(No field UI for this yet, so I'll file the writ for you. One day you'll do it from a map menu.)</i></p>`,
       label: "Plant my banner"
     }).then(async () => {
       if (ctx.faction && hexUuid) await _stage()?.claimHex?.(hexUuid, ctx.faction.id);
@@ -839,7 +839,7 @@ const crewOccult = {
   },
 
   exit: async (ctx) => {
-    await ctx.speak("Good. People are infrastructure, One — the only kind that argues back. One spotlight a scene; spend it on the moment that deserves it.");
+    await ctx.speak("Good. People are infrastructure, One — hired by the turn, and the only kind that argues back. One spotlight a scene; spend it on the moment that deserves it.");
   }
 };
 
@@ -866,14 +866,14 @@ async function _reportGrants(ctx) {
   if (!grants?.forFaction || !faction) return;
   const keys = grants.forFaction(faction) ?? [];
   if (!keys.length) {
-    await ctx.speak("No new maneuvers off that pairing yet — the grant shows up once your faction registers the Echo Asset. Your GM can confirm it.");
+    await ctx.speak("No new maneuvers off that pairing yet — the grant shows up once the contract is signed at the Muster. Your GM can confirm it.");
     return;
   }
   const named = keys.slice(0, 6).map(k => {
     const by = grants.grantedBy?.(faction, k);
     return by ? `${k} (${by})` : k;
   });
-  await ctx.speak(`${faction.name} can now attempt ${keys.length} granted maneuver${keys.length === 1 ? "" : "s"}: ${named.join(", ")}${keys.length > 6 ? "…" : ""}. Look for the ✦ badges in the Raid Console.`);
+  await ctx.speak(`${faction.name} can now attempt ${keys.length} granted maneuver${keys.length === 1 ? "" : "s"}: ${named.join(", ")}${keys.length > 6 ? "…" : ""}. Look for the ✦ badges when the story opens a fight.`);
 }
 
 /* ───────────────────────────── SURGE ───────────────────────────── */
@@ -1169,7 +1169,7 @@ const manifestations = {
       ? `${ctx._maniName} is yours now — it goes where you go. Keep it in reach; you're about to need it.`
       : "You can author manifestations whenever the mood takes you. Keep at least one loaded before trouble finds you.");
     await _pause(700);
-    await ctx.speak("Crew at your back, Surge in the bank, something of your own making in your hands. That's a Steward. *bzzt* — Now we find out whether any of it survives contact.");
+    await ctx.speak("Surge in the bank, something of your own making in your hands, and people you can hire when the job needs them. That's a Steward. *bzzt* — Now we find out whether any of it survives contact.");
     // The Peer Reviewer's tenure ends with the classroom.
     try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
     ctx._spawned = [];
@@ -1312,7 +1312,7 @@ const combatSim = {
       finished: false
     };
 
-    await ctx.speak("Gear's bought, crew's behind you, and you're carrying something you built yourself. Now the part the manuals skip: what all of it does when something is trying to end you. Proving Ground, live-fire. *bzzt*");
+    await ctx.speak("Gear's bought, the Muster knows your name, and you're carrying something you built yourself. Now the part the manuals skip: what all of it does when something is trying to end you. Proving Ground, live-fire. *bzzt*");
     await _pause(900);
 
     // Same scene as the meatsuit beat — the owner's Proving Ground art, reused
@@ -2397,7 +2397,7 @@ const finalShowdown = {
     await _pause(900);
     await ctx.speak("Whatever's been pulling at us is going to have to come through in person to finish the job. Good. In person, it can be HIT. *bzzt*");
     await _pause(900);
-    await ctx.speak("You've run all three consoles by now — violence, intrigue, presence. This is where you stop practising. How do you want to go in?");
+    await ctx.speak("You've fought all three ways by now — Battle, Heist, Parley. This is where you stop practising. How do you want to go in?");
 
     // A class (group induction Phase 1) shares ONE circle, ONE set of foes and
     // ONE Combat: the first member here picks the door and stages the fight;
@@ -2588,7 +2588,7 @@ const finalShowdown = {
         if (r?.ok) granted.push(r.name || spec.name);
       }
       if (granted.length) {
-        await ctx.speak(`It hands you ${granted.length === 2 ? "two documents" : "a document"}: ${granted.join(" and ")}. Those are COURTLY SECRETS, One — real ones, in your faction's hand, playable the moment a parley opens.`);
+        await ctx.speak(`It hands you ${granted.length === 2 ? "two documents" : "a document"}: ${granted.join(" and ")}. Those are RECEIPTS, One — real ones, in your Domain's hand, playable the moment the parley opens.`);
       } else {
         await ctx.speak("It hands you its paperwork — though the court's filing system just refused it. Your GM can add the secrets by hand if it matters.");
         console.warn(TAG, "parley secrets not granted — courtlySecrets API unavailable or faction missing");
@@ -2597,7 +2597,7 @@ const finalShowdown = {
       await ctx.speak("So here's the shape of it. You can finish what's in the circle — it's losing, and nobody would blame you. Or you can take the surrender, open the parley, and find out what was so frightened of this place that it tried to unmake it.");
       await _pause(700);
       const camePlain = ctx._fs?.approach === "intrigue" ? "You came in quiet, and it still saw you coming" : "You came in loud, and it heard every step";
-      await ctx.speak(`${camePlain}. Either way it's talking now. Your GM runs the parley from the Raid Console — PRESENCE, not violence. I've pointed it at you.`);
+      await ctx.speak(`${camePlain}. Either way it's talking now. Your GM runs the parley from the Raid Console — a PARLEY, not a Battle. I've pointed it at you.`);
 
       // Raids are GM-driven by design: pre-seed the session and open the GM's
       // console, exactly as the raid_presence finale beat does.
@@ -2861,8 +2861,8 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey
         target: session.targetUuid ? { targetUuid: session.targetUuid, targetName: session.targetName, defenderId: session.defenderId } : null
       });
       if (!globalThis.game?.user?.isGM) {
-        if (gmRes?.ok) await ctx.speak("Your GM's console just lit up on your banner — they run the rounds, you feed them. Stage your OP and pick your maneuvers; they'll roll it.");
-        else await ctx.speak("Heads up: rounds are resolved GM-side, and I couldn't reach one. Stage what you like — you'll need a GM at the table to actually roll this raid.");
+        if (gmRes?.ok) await ctx.speak("Your GM's console just lit up on your banner — they run the rounds. Pick your maneuvers; your Domain brings what it owns, and the GM calls it.");
+        else await ctx.speak("Heads up: rounds are resolved GM-side, and I couldn't reach one. Pick your maneuvers — you'll need a GM at the table to call this one.");
         await _pause(500);
       }
 
@@ -2960,6 +2960,13 @@ const graduation = {
   scope: "shared",
 
   enter: async (ctx) => {
+    if (_alphaWorld()) {
+      // ALPHA CUT ruling 23: the thirty-minute induction ends here — the road teaches the rest.
+      await ctx.speak("A body that works, a rig that moves, a hex with your banner on it, a Turn you've felt tick, gear on your back, people you know how to hire, Surge in the bank. That's a Steward on day one.");
+      await _pause(1000);
+      await ctx.speak("Training's done, One. No more sandbox. Your first fight, your first deal and your first con will come to you on the road — the story opens the table, you decide whether to sit. From here it's the real Bad Eden — your hold, your rig, your Domain, live in the weave. Go fix what broke. *bzzt*");
+      return;
+    }
     await ctx.speak("Three consoles, four anchors, one circle, and something that tried to unmake the whole board and had to sit down at a table instead. Battle, heist, parley — you can take ground any way the moment demands. That's a Steward.");
     await _pause(1000);
     await ctx.speak("Training's done, One. No more sandbox, no more straw adversaries. From here it's the real Bad Eden — your hold, your rig, your Domain, live in the weave. Go fix what broke. *bzzt*");
@@ -3167,7 +3174,7 @@ incarnation.party = {
       title: "◇ OPERATOR",
       content:
         `<p>Time to put on a body. We're dropping your consciousness into your <b>Steward</b> — your meatsuit for this run.</p>` +
-        `<p>Everything from here uses your <i>real</i> interface: your sheet, your rig, your faction.</p>` +
+        `<p>Everything from here uses your <i>real</i> interface: your sheet, your rig, your Domain.</p>` +
         `<p>The class drops in <b>together</b> — when everyone's ready.</p>`,
       label: "Drop into my meatsuit", quorum: "all", forge: true
     }).then(() => done());
@@ -3592,9 +3599,9 @@ finalShowdown.party = {
       }
       // WORDSMITH (Dave): class version.
       await ctx.speakAll(granted
-        ? `It hands every banner here two documents: ${PG_PARLEY_SECRETS.map(s => s.name).join(" and ")}. COURTLY SECRETS — real ones, playable the moment a parley opens.`
+        ? `It hands every banner here two documents: ${PG_PARLEY_SECRETS.map(s => s.name).join(" and ")}. RECEIPTS — real ones, playable the moment the parley opens.`
         : "It hands over its paperwork — though the court's filing system just refused it. Your GM can add the secrets by hand.");
-      await ctx.speakAll("Finish what's in the circle — it's losing, nobody would blame you — or take the surrender and open the parley. Your GM runs it from the Raid Console: PRESENCE, not violence.");
+      await ctx.speakAll("Finish what's in the circle — it's losing, nobody would blame you — or take the surrender and open the parley. Your GM runs it from the Raid Console: a PARLEY, not a Battle.");
       try {
         for (const f of factions) {
           await stage.setRaidSession?.(f.id, { rev: Date.now(), ts: Date.now(), by: "", attackerId: f.id, supportFactionIds: [], activityKey: "presence",
