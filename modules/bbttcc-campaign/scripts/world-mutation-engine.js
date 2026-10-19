@@ -2162,7 +2162,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     // worldEffects.raid = { type: "battle"|"heist"|"parley" (or violence|intrigue|presence), factionId? (default: the party's Domain),
     //   hexName? | hexUuid? (the target hex) | rigId? (+ defenderId?, targetName?), courtScene? (scene id or name — a Parley's tableau),
     //   goal? ("persuade"|"deceive"|"impress"|"unnoticed"), style? (Impress profile key), stake? (one line for the console),
-    //   difficulty? ("normal"), label?, objectiveOnly? (true = never the hex, ruling 21) }. The GM seat writes the attacker's raidSession preset (by:"story"), activates the court
+    //   difficulty? ("normal"), label?, objectiveOnly? (true = never the hex, ruling 21), routes? { win, stalemate, loss } (beat ids run
+    //   once when the fight concludes) }. The GM seat writes the attacker's raidSession preset (by:"story"), activates the court
     //   scene for a Parley, and every seat that owns the Domain opens the console aimed (fromBeat token passes the ruling-22 gate).
     if (we.raid && typeof we.raid === "object" && game.user && game.user.isGM) {
       try {
@@ -2204,7 +2205,10 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           rounds: [], logWar: true, includeDefender: true,
           parley: TYPE === "presence" ? { goal: String(R.goal || "persuade").toLowerCase(), style: String(R.style || "show") } : null,
           stake: String(R.stake || ""), label: String(R.label || ""),
-          objectiveOnly: R.objectiveOnly === true   // ruling 21: the fight is over an objective, never the hex (a road ambush, a room)
+          objectiveOnly: R.objectiveOnly === true,  // ruling 21: the fight is over an objective, never the hex (a road ambush, a room)
+          // routes: where the story goes when the fight concludes — { win, stalemate, loss } beat ids (the console runs ONE of them once).
+          routes: (R.routes && typeof R.routes === "object") ? { win: String(R.routes.win || ""), stalemate: String(R.routes.stalemate || ""), loss: String(R.routes.loss || "") } : null,
+          routeFired: "", campaignId: String(ctx.campaignId || "")
         };
         await A.setFlag("bbttcc-raid", "raidSession", session);
         const payload = { factionId: A.id, type: TYPE, targetName: session.targetName, courtSceneId, stake: session.stake };

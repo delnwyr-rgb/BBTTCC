@@ -443,6 +443,22 @@ async function _rcBattleCallDialog(r, attacker, defender, stake) {
     return (v === "won" || v === "stalemate" || v === "lost" || v === "roll") ? v : null;
   } catch (_e) { return null; }
 }
+/** Ruling 22 — the story said where the fight goes: run routes.win | stalemate | loss ONCE when it concludes (GM seat). */
+async function _rcStoryRoute(app, word, why = "") {
+  try {
+    const vm = app?.vm; const routes = vm?.routes; if (!routes || !_rcIsGMUser()) return null;
+    const w = String(word || "").toLowerCase(); if (!["win", "stalemate", "loss"].includes(w)) return null;
+    if (vm.routeFired) return null;                                    // one ending per offer
+    const beatId = String(routes[w] || "").trim(); if (!beatId) { vm.routeFired = `none:${w}`; return null; }
+    const capi = game.bbttcc?.api?.campaign; const cid = String(vm.campaignId || capi?.getActiveCampaignId?.() || "");
+    if (!capi?.runBeat || !cid) return null;
+    vm.routeFired = `${w}:${beatId}`;
+    try { await app._saveSessionNow?.(); } catch (_e) {}
+    const res = await capi.runBeat(cid, beatId, { source: "raid", force: true, outcome: w, why: String(why || "") });
+    try { Hooks.callAll("bbttcc:raid:routed", { outcome: w, beatId, offeredBy: vm.offeredBy || "", attackerId: vm.attackerId || "" }); } catch (_e) {}
+    return res;
+  } catch (e) { console.warn(TAG, "story route failed", e); return null; }
+}
 /** After the round resolved: open ground changes hands on a won Battle (ruling 21 + 20). */
 async function _rcBattleGroundFlip(r, attacker, defender, hexDoc, opts = {}) {
   if (!_rcNoMarks() || !_rcIsBattleKey(r?.activityKey) || r?.targetType !== "hex" || !hexDoc || !attacker) return null;
@@ -2744,7 +2760,10 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       rounds: foundry.utils.duplicate(this.vm.rounds || []),
       logWar: !!this.vm.logWar,
       includeDefender: !!this.vm.includeDefender,
-      by: String(game.user?.id || "")
+      // Ruling 22 — the story's fields ride the session so a reload (or the player seats) keep them.
+      by: this.vm.offeredBy ? "story" : String(game.user?.id || ""),
+      offeredBy: String(this.vm.offeredBy || ""), stake: String(this.vm.stake || ""), parley: this.vm.parley || null,
+      objectiveOnly: this.vm.objectiveOnly === true, routes: this.vm.routes || null, routeFired: String(this.vm.routeFired || ""), campaignId: String(this.vm.campaignId || "")
     };
   }
 
@@ -2791,6 +2810,9 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       this.vm.stake     = String(s.stake || "");
       this.vm.offeredBy = String(s.offeredBy || "");
       this.vm.objectiveOnly = s.objectiveOnly === true;   // ruling 21: the story says the hex is not the prize
+      this.vm.routes = (s.routes && typeof s.routes === "object") ? s.routes : null;
+      this.vm.routeFired = String(s.routeFired || "");
+      this.vm.campaignId = String(s.campaignId || "");
 
       // Never let a sync re-open a once-per-round fire gate this seat already holds.
       const prevRounds = this.vm.rounds || [];
@@ -5540,6 +5562,8 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         r.total = Number(last?.atkTotal ?? 0);
         r.dcFinal = Number(last?.defTotal ?? 0);
         r.outcome = String(st?.outcome || "ongoing").toUpperCase();
+        // Ruling 22 — a concluded Parley goes where the story said.
+        try { const o = String(st?.outcome || "ongoing"); if (o !== "ongoing") await _rcStoryRoute(this, o === "attackerWin" ? "win" : o === "defenderWin" ? "loss" : "stalemate", st?.outcomeKind || o); } catch (_e) {}
         try { await _rcAutoFireMode(r, "post-commit", attacker, defender, this); } catch (e) { console.warn("[bbttcc-raid] post-commit auto-fire (courtly)", e); }
         r.open = false; r.committed = true; r.committedAt = Date.now();
         r.meta ||= {};
@@ -5751,6 +5775,8 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         r.total = Number(last?.atkTotal ?? 0);
         r.dcFinal = Number(last?.defTotal ?? 0);
         r.outcome = (st?.outcome === "lockdown") ? "LOCKDOWN" : String(last?.band || "ongoing").toUpperCase();
+        // Ruling 22 — a concluded Heist goes where the story said (success = win; detected / lockdown / messy = loss).
+        try { const o = String(st?.outcome || "ongoing").toLowerCase(); if (o && o !== "ongoing") await _rcStoryRoute(this, /success|clean|complete/.test(o) ? "win" : /partial|escape/.test(o) ? "stalemate" : "loss", o); } catch (_e) {}
         try { await _rcAutoFireMode(r, "post-commit", attacker, defender, this); } catch (e) { console.warn("[bbttcc-raid] post-commit auto-fire (infil)", e); }
         r.open = false; r.committed = true;
         r.meta ||= {};
@@ -6635,6 +6661,8 @@ try {
     } catch (e) { warn("post-round effects failed", e); }
     // ALPHA CUT ruling 21 — open ground changes hands on a won Battle (ruling 20 decides whether it can be kept).
     try { await _rcBattleGroundFlip(r, attacker, defender, targetHex, { objectiveOnly: this.vm.objectiveOnly === true }); } catch (eGF) { warn("battle ground flip failed (non-fatal)", eGF); }
+    // Ruling 22 — a Battle concludes in one call (or one roll): go where the story said.
+    try { if (_rcIsBattleKey(r.activityKey)) { const m = Number(r.margin || 0); await _rcStoryRoute(this, m > 0 ? "win" : m < 0 ? "loss" : "stalemate", r.outcome || ""); } } catch (_e) {}
 
 // Legacy fields: keep a Roll object for non-contested raids; contested raids store a friendly string in r.roll.result.
     if (!r.contested) {
