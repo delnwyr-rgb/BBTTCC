@@ -20323,6 +20323,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ftItemEdit:       FourthThingCharacterSheet._onFtItemEdit,
         ftItemDelete:     FourthThingCharacterSheet._onFtItemDelete,
         ftItemEquip:      FourthThingCharacterSheet._onFtItemEquip,
+        ftItemReady:      FourthThingCharacterSheet._onFtItemReady,
         ftConsume:        FourthThingCharacterSheet._onFtConsume,
         ftForge:          FourthThingCharacterSheet._onFtForge,
         ftGather:         FourthThingCharacterSheet._onFtGather,
@@ -20614,15 +20615,27 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           skillLabel: ftCap(skill),
           intentLabel: ftCap(intent),
           rangeText,
-          summary: [dmgF, ftCap(dmgT), rangeText].filter(Boolean).join(" · ")
+          summary: [dmgF, ftCap(dmgT), rangeText].filter(Boolean).join(" · "),
+          equipped: !!it.getFlag?.("fourththing", "equipped")
         };
       }).sort((a, b) => String(a.name ?? "").localeCompare(String(b.name ?? "")));
+      {   // Conflict tab shows the equipped weapons once any weapon is equipped (loadout, 2026-10-18)
+        const eq = mundaneEngageWeapons.filter(w => w.equipped);
+        if (eq.length) mundaneEngageWeapons.splice(0, mundaneEngageWeapons.length, ...eq);   // engageFilter.weapons is derived below
+      }
 
       // Unified manifestation list (grouped by tier) replaces the legacy
       // Motion/Stay split in the cleaned-up tab. Stability chip tells the
       // Form/Working story per row.
       const manifestAll = [...manifestPowers, ...manifestForms]
         .sort((a, b) => (a.tier - b.tier) || String(a.name ?? "").localeCompare(String(b.name ?? "")));
+      // CONFLICT TAB LOADOUT (Dave 2026-10-18): the player chooses what shows on the Conflict tab — weapons marked
+      // ◆ Equipped on the Inventory tab, manifestations marked ⚔ Ready on the Manifestations tab. Until anything is
+      // marked, the tab shows everything (nothing vanishes for an existing steward).
+      for (const m of manifestAll) { try { m.ready = !!actor.items.get(m.id)?.getFlag("fourththing", "ready"); } catch (_e) { m.ready = false; } }
+      const manifestReady = manifestAll.filter(m => m.ready);
+      const manifestEngage = manifestReady.length ? manifestReady : manifestAll;
+      const engageFilter = { manifest: manifestReady.length > 0, weapons: mundaneEngageWeapons.length > 0 && mundaneEngageWeapons.every(w => w.equipped) };
       // Signature slots (ruling 14): one per tier reached; see ftSignatureSlots.
       let signatureSlots = null;
       try { signatureSlots = ftSignatureSlots(actor); } catch (_e) { signatureSlots = null; }
@@ -21121,6 +21134,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         manifestPowers,
         manifestForms,
         manifestAll,
+        manifestEngage,
+        engageFilter,
         signatureSlots,
         mundaneEngageWeapons,
         activeManifestations,
@@ -21642,6 +21657,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         content: `<p>Remove <b>${item.name}</b>? This cannot be undone.</p>`,
         yes:     () => this.actor.deleteEmbeddedDocuments("Item", [id])
       });
+    }
+
+    /** ⚔ Ready — mark a manifestation for the Conflict tab loadout (flag fourththing.ready). */
+    static async _onFtItemReady(event, target) {
+      const id   = target.closest("[data-item-id]")?.dataset.itemId || target.dataset.itemId;
+      const item = id ? this.actor.items.get(id) : null;
+      if (!item) return;
+      const cur = !!item.getFlag("fourththing", "ready");
+      await item.setFlag("fourththing", "ready", !cur);
     }
 
     static async _onFtItemEquip(event, target) {
@@ -23059,6 +23083,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ftGuidanceToggle:      FourthThingCharacterSheet._onFtGuidanceToggle,
         // Inventory + feature actions.
         ftItemEquip:           FourthThingCharacterSheet._onFtItemEquip,
+        ftItemReady:           FourthThingCharacterSheet._onFtItemReady,
         ftConsume:             FourthThingCharacterSheet._onFtConsume,
         ftUseFeature:          FourthThingCharacterSheet._onFtUseFeature,
         ftGather:              FourthThingCharacterSheet._onFtGather,

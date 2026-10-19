@@ -6643,3 +6643,9 @@ body.ft-no-watermark .ft-character-sheet::before { display: none; }
 .ft-sheet .ft-sig-slot.empty { border-style: dashed; color: #e8c84a; }
 .ft-sheet .ft-sig-slot.empty small { opacity: 0.7; }
 .ft-sheet .ft-sig-slot:hover { box-shadow: 0 0 10px rgba(232, 200, 74, 0.35); }
+
+/* ---- CONFLICT TAB LOADOUT (2026-10-18): ⚔ Ready toggle on the Manifestations tab + hints ---- */
+.ft-sheet .ft-ready-btn { background: transparent; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; color: inherit; opacity: 0.55; cursor: pointer; padding: 0 0.35rem; line-height: 1.3; font-size: 0.8rem; margin-left: 0.25rem; }
+.ft-sheet .ft-ready-btn.on { opacity: 1; color: #e8c84a; border-color: rgba(232,200,74,0.55); box-shadow: 0 0 6px rgba(232,200,74,0.25); }
+.ft-sheet .ft-ready-btn:hover { opacity: 1; }
+.ft-sheet .ft-loadout-hint { margin-left: auto; font-size: 0.72rem; opacity: 0.6; font-style: italic; }

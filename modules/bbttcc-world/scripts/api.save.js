@@ -283,7 +283,23 @@
   const sameJson = (a, b) => { try { return JSON.stringify(a) === JSON.stringify(b); } catch (_e) { return false; } };
   const folderOk = (folderId) => !folderId || !!game.folders.get(folderId);
 
-  async function load(id, opts = {}) { try { return await _loadInner(id, opts); } finally { try { game.bbttcc.restoring = false; Hooks.callAll("bbttcc:restore:end", { id }); } catch (_e) {} } }
+  async function load(id, opts = {}) {
+    let res;
+    try { res = await _loadInner(id, opts); }
+    finally { try { game.bbttcc.restoring = false; Hooks.callAll("bbttcc:restore:end", { id }); } catch (_e) {} }
+    // 2026-10-18: a restore re-creates every steward's gear rows exactly as the snapshot held them — a snapshot taken
+    // before stack-on-add (or mid-shopping) resurrects duplicate lines (Marginalia came back with 32 rows for 7 items).
+    // Fold them straight back into ×N lines through the system's own merge.
+    try {
+      const merge = game.fourththing?.stack?.merge;
+      if (game.user?.isGM && typeof merge === "function") {
+        let merged = 0, deleted = 0;
+        for (const a of (game.actors?.contents ?? [])) { if (a.type !== "character") continue; const r = await merge(a); merged += Number(r?.merged) || 0; deleted += Number(r?.deleted) || 0; }
+        if (deleted) console.log("[bbttcc-world] restore: re-stacked", merged, "gear group(s),", deleted, "duplicate row(s) folded");
+      }
+    } catch (e) { console.warn("[bbttcc-world] post-restore re-stack failed", e); }
+    return res;
+  }
   async function replaceEmbedded(parent, type, savedArr) {
     const coll = parent.getEmbeddedCollection(type);
     const cur = coll.map(d => d.toObject());

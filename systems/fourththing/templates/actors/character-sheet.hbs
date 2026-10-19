@@ -830,6 +830,7 @@
       <div class="ft-combat-section">
         <div class="ft-section-header">
           <h3>Weapons</h3>
+          <small class="ft-loadout-hint" data-tooltip="Choose your loadout: ◆ Equip weapons on the Inventory tab and they are the ones shown here.">{{#if engageFilter.weapons}}◆ equipped only{{else}}showing all — ◆ equip on the Inventory tab to choose{{/if}}</small>
         </div>
         <div class="ft-item-list">
           {{#each mundaneEngageWeapons as |w|}}
@@ -875,9 +876,10 @@
           {{/each}}
         </div>
         {{/if}}
-        {{#if manifestAll.length}}
+        {{#if manifestEngage.length}}
+        <small class="ft-loadout-hint" data-tooltip="Choose your loadout: mark manifestations ⚔ Ready on the Manifestations tab and they are the ones shown here.">{{#if engageFilter.manifest}}⚔ ready only{{else}}showing all — mark ⚔ Ready on the Manifestations tab to choose{{/if}}</small>
         <div class="ft-item-list">
-          {{#each manifestAll as |m|}}
+          {{#each manifestEngage as |m|}}
           <details class="ft-item-row" data-item-id="{{m.id}}">
             <summary class="ft-item-summary">
               <img src="{{m.img}}" class="ft-item-art" data-tooltip="{{m.name}}"/>
@@ -1312,7 +1314,7 @@
           <details class="ft-item-row" data-item-id="{{m.id}}">
             <summary class="ft-item-summary">
               <img src="{{m.img}}" class="ft-item-art" data-tooltip="{{m.name}}"/>
-              <span class="ft-item-name">{{m.name}}</span>
+              <span class="ft-item-name">{{m.name}}</span> <button type="button" class="ft-ready-btn{{#if m.ready}} on{{/if}}" data-action="ftItemReady" data-item-id="{{m.id}}" data-tooltip="{{#if m.ready}}Ready — shown on the Conflict tab. Click to stand it down.{{else}}Mark Ready to show it on the Conflict tab.{{/if}}">⚔</button>
               <span class="ft-manifest-chip ft-tier-pill ft-tier-{{m.tier}}" data-tooltip="{{m.tierFootprint}}">{{m.tierLabel}}</span>
               <span class="ft-manifest-chip">{{m.stabilityLabel}}</span>
               <span class="ft-item-meta">{{m.costLabel}}</span>
