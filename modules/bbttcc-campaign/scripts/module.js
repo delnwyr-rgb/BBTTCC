@@ -1459,7 +1459,7 @@ function _buildPlayerFacingDialogHtml(payload) {
       for (var i = 0; i < choices.length; i++) {
         var ch = choices[i] || {};
         var label = _escapeHtml(ch.label || ("Choice " + (i + 1)));
-        var cdesc = _stripGmNotes(String(ch.description || "").trim());   // round 2 E2 (2026-10-20): GM asides never reach the player card
+        var cdesc = _stripGmNotes(_expandStoryTokens(String(ch.description || "").trim()));   // round 2 E2 (2026-10-20): GM asides never reach the player card; story tokens expand (10-20 {{#at}})
         var checkLabel = String(ch.checkLabel || "").trim();
         var checkDC = _num(ch.checkDC, 0);
 
@@ -2453,8 +2453,30 @@ function _expandStoryTokens(text, campaign) {
     try { const cid = campaign?.id || (typeof getActiveCampaignId === "function" ? getActiveCampaignId() : null); played = _storyStateFor(cid)?.played || {}; } catch (_eP) { played = {}; }
     const re = /\{\{#(played|mark)\s+([A-Za-z0-9_.-]+)\s*\}\}([\s\S]*?)(?:\{\{else\}\}([\s\S]*?))?\{\{\/\1\}\}/g;
     for (let pass = 0; pass < 2 && re.test(out); pass++) { re.lastIndex = 0; out = out.replace(re, (m, kind, id, yes, no) => (played[String(id)] ? yes : (no || ""))); }
+    // {{#at Allesh-Gilliam}}…{{else}}…{{/at}} — WHERE the table is (Dave, 2026-10-20: "There is no guarantee that the
+    // players will be away from Allesh Gilliam. The text should know where the stewards are"). True when the ACTIVE
+    // scene belongs to that town: its name, its folder, or a hex whose travel hub it is, matches the name (case,
+    // hyphens and underscores ignored). No active scene → "not at".
+    const reAt = /\{\{#at\s+([^}]+?)\s*\}\}([\s\S]*?)(?:\{\{else\}\}([\s\S]*?))?\{\{\/at\}\}/g;
+    if (reAt.test(out)) { reAt.lastIndex = 0; out = out.replace(reAt, (m, name, yes, no) => (_partyIsAt(name) ? yes : (no || ""))); }
   }
   return out.replace(/\{\{\s*([A-Za-z.]+)\s*\}\}/g, (m, k) => (Object.prototype.hasOwnProperty.call(map, k.toLowerCase()) ? _escapeHtml(map[k.toLowerCase()]) : m));
+}
+
+function _partyIsAt(name) {
+  try {
+    const norm = (x) => String(x || "").toLowerCase().replace(/[\s_\-‑]+/g, " ").trim();
+    const want = norm(name); if (!want) return false;
+    const sc = (typeof canvas !== "undefined" && canvas?.scene) || game.scenes?.active || null; if (!sc) return false;
+    if (norm(sc.name).includes(want)) return true;
+    const folder = sc.folder?.name; if (folder && norm(folder).includes(want)) return true;
+    const uuid = "Scene." + sc.id;
+    for (const s of (game.scenes?.contents || [])) for (const d of (s.drawings?.contents || [])) {
+      const t = d.flags?.["bbttcc-territory"]; if (!t?.isHex) continue;
+      if (d.flags?.["bbttcc-travel"]?.townHubSceneUuid === uuid && norm(t.name).includes(want)) return true;
+    }
+  } catch (_e) {}
+  return false;
 }
 
 async function _runBeatDialog(campaign, beat, ctx={}) {
@@ -2510,7 +2532,7 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
         choices: facChoicesHidden ? [] : choices.map(function (ch, i) {
           return {
             label: ch && ch.label ? ch.label : ('Choice ' + (i + 1)),
-            description: _stripGmNotes(String(ch && ch.description ? ch.description : '').trim()),   // round 2 E2
+            description: _stripGmNotes(_expandStoryTokens(String(ch && ch.description ? ch.description : '').trim())),   // round 2 E2 + story tokens
             checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : '',
             checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0
           };
@@ -2627,7 +2649,7 @@ ${
           ? `<div class="bbttcc-campaign-dialog-choices">
                ${choices.map((ch, i) => {
                  const label = _escapeHtml(ch.label || `Choice ${i + 1}`);
-                 const cdesc = String(ch.description || "").trim();
+                 const cdesc = _expandStoryTokens(String(ch.description || "").trim());   // story tokens in the GM dialog too (2026-10-20)
                  const meta = _choiceHasCheck(ch)
                    ? (() => {
                        const statRaw = String((ch && ch.checkStat) || "").trim().toLowerCase();
@@ -9535,7 +9557,7 @@ Hooks.once("ready", () => {
           pickToken: (pick && pick.beat === beat) ? pick.token : null,
           choices: (pol.choices === "hidden" ? [] : shown).map((ch, i) => ({
             label: (ch && ch.label) || ("Choice " + (i + 1)),
-            description: _stripGmNotes(String((ch && ch.description) || "").trim()),   // round 2 E2
+            description: _stripGmNotes(_expandStoryTokens(String((ch && ch.description) || "").trim())),   // round 2 E2 + story tokens
             checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : "",
             checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0
           }))

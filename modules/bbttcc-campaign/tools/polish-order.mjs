@@ -6,7 +6,11 @@
  *    ARRIVAL steps' beats → script STEPS' beats (each followed, depth-first, by its routed fail / continuation
  *    beats that sit on no step) → DOORS' beats → AFTER → leftovers (walked from roots, grouped by chapter quest).
  *  Beats belong to a script by `beat.story.quest`. Scripts without a script record (offices, valhaulan_*) keep
- *  a root-walk order. Door-exterior cinematics (`*_exterior`) live in the Encounters tab by town, as the
+ *  a root-walk order.
+ *  🪤 2026-10-20: a tab's section headings are the ONLY thing that keeps a script-less quest (the Offices slides)
+ *  ahead of a scripted one that shares its tab. If an export has lost its "## Allesh-Gilliam" heading (the 10-20e rebuild
+ *  did), the Offices chunks become "foreign" to the merged section and sort to its END. Check the output's first
+ *  marker after each rebuild; restore the heading in the input rather than hand-moving chunks. Door-exterior cinematics (`*_exterior`) live in the Encounters tab by town, as the
  *  generator put them.
  *
  *  Usage:
@@ -200,7 +204,8 @@ for (const t of tabs) for (const s of t.parsed.sections) {
 }
 const encountersTab = tabs.find(t => t.name.toLowerCase().startsWith("encounters"));
 const stale = [...docIds.keys()].filter(id => !byId.has(id));
-const missing = beats.filter(b => !docIds.has(b.id));
+// a documented beat whose script lives in ANOTHER tab counts as missing from its home tab (2026-10-20: it leaves the tab it was in, see the rebuild loop)
+const missing = beats.filter(b => { if (!docIds.has(b.id)) return true; const h = keyOf(b) ? home.get(keyOf(b)) : null; return !!(h && docIds.get(b.id).tab !== h.tab && !/_exterior$/.test(b.id)); });
 const placeholders = missing.filter(b => /^evt_/.test(b.id));
 say(`# Beat Polish order report — ${new Date().toISOString().slice(0, 10)}`);
 say(`live beats ${beats.length} · documented ${docIds.size} · in doc but not live ${stale.length}${stale.length ? " (" + stale.join(", ") + ")" : ""} · live but undocumented ${missing.length} (of which ${placeholders.length} evt_ placeholders, skipped)`);
@@ -241,6 +246,9 @@ for (const t of tabs) {
   for (const s of t.parsed.sections) sectionMembers.set(s, []);
   for (const s of t.parsed.sections) for (const c of s.chunks) {
     const k = keyOf(byId.get(c.id)); const h = k ? home.get(k) : null;
+    // 2026-10-20: a chunk whose script lives in ANOTHER tab leaves this one (the home tab adds it from live data) —
+    // before this, a beat that gained a story.quest stayed in "Encounters and strays" AND appeared in its home tab.
+    if (h && h.tab !== t && byId.has(c.id) && !/_exterior$/.test(c.id)) { moved++; say(`left "${t.name}" for ${h.tab.name}: ${c.id}`); continue; }
     const dest = (h && h.tab === t) ? h.section : s;
     if (dest !== s) moved++;
     sectionMembers.get(dest).push(c.id);
