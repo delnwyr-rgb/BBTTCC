@@ -2377,16 +2377,16 @@ async function _storeFactsHtml(campaign, ctx = {}) {
 function _stripGmNotes(text) {
   try {
     let t = String(text == null ? "" : text);
-    if (!t.includes("⚙")) return t;
-    // inline asides: "(⚙ …)" — never span a paragraph
-    t = t.replace(/\s*\((?:<[^>]+>)*\s*⚙[^()\n]*\)/g, "");
+    if (!t.includes("⚙") && !/\(GM:|(^|\n|>)\s*GM:/.test(t)) return t;
+    // inline asides: "(⚙ …)" and "(GM: …)" — never span a paragraph
+    t = t.replace(/\s*\((?:<[^>]+>)*\s*(?:⚙|GM:)[^()\n]*\)/g, "");
     // HTML paragraphs whose text starts with the gear (tags such as <i>/<b> may precede it)
-    t = t.replace(/<p\b[^>]*>(?:\s|<[^>]+>|&nbsp;)*⚙[\s\S]*?<\/p>/gi, "");
+    t = t.replace(/<p\b[^>]*>(?:\s|<[^>]+>|&nbsp;)*(?:⚙|GM:)[\s\S]*?<\/p>/gi, "");
     // plain lines: drop the gear line and any bullet lines that follow it directly
     const lines = t.split(/\r?\n/); const out = []; let inRubric = false;
     for (const ln of lines) {
       const bare = ln.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim();
-      if (/^⚙/.test(bare)) { inRubric = true; continue; }
+      if (/^(⚙|GM:)/.test(bare)) { inRubric = true; continue; }
       if (inRubric && /^[·•\-–]\s/.test(bare)) continue;
       if (bare !== "") inRubric = false;
       out.push(ln);
