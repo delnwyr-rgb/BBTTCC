@@ -1459,7 +1459,7 @@ function _buildPlayerFacingDialogHtml(payload) {
       for (var i = 0; i < choices.length; i++) {
         var ch = choices[i] || {};
         var label = _escapeHtml(ch.label || ("Choice " + (i + 1)));
-        var cdesc = String(ch.description || "").trim();
+        var cdesc = _stripGmNotes(String(ch.description || "").trim());   // round 2 E2 (2026-10-20): GM asides never reach the player card
         var checkLabel = String(ch.checkLabel || "").trim();
         var checkDC = _num(ch.checkDC, 0);
 
@@ -2377,11 +2377,16 @@ async function _storeFactsHtml(campaign, ctx = {}) {
 function _stripGmNotes(text) {
   try {
     let t = String(text == null ? "" : text);
-    if (!t.includes("⚙") && !/\(GM:|(^|\n|>)\s*GM:/.test(t)) return t;
+    if (!t.includes("⚙") && !t.includes("⚠") && !/\(GM:|(^|\n|>|[.!?…"”)\]]\s)\s*GM:/.test(t)) return t;
     // inline asides: "(⚙ …)" and "(GM: …)" — never span a paragraph
-    t = t.replace(/\s*\((?:<[^>]+>)*\s*(?:⚙|GM:)[^()\n]*\)/g, "");
+    t = t.replace(/\s*\((?:<[^>]+>)*\s*(?:⚙|⚠|GM:)[^()\n]*\)/g, "");
     // HTML paragraphs whose text starts with the gear (tags such as <i>/<b> may precede it)
     t = t.replace(/<p\b[^>]*>(?:\s|<[^>]+>|&nbsp;)*(?:⚙|GM:)[\s\S]*?<\/p>/gi, "");
+    // a note glued to the END of a sentence (Story Review Ledger round 2, E1, 2026-10-20): cut from a mid-line "⚙ GM",
+    // "⚠ GM" or " GM:" to the end of that line / paragraph (an open <i>/<b> before the gear is closed by the browser)
+    t = t.replace(/[ \t]*(?:<(?:i|b|em|strong)>\s*)*(?:⚙|⚠)\s*GM\b[^\n]*?(?=<\/p>|<br\s*\/?>|\n|$)/gi, "");
+    t = t.replace(/(?<=[.!?…"”)\]])[ \t]+GM:[^\n]*?(?=<\/p>|<br\s*\/?>|\n|$)/g, "");
+    t = t.replace(/<p\b[^>]*>(?:\s|&nbsp;|<br\s*\/?>)*<\/p>/gi, "");   // paragraphs left empty by the cuts above
     // plain lines: drop the gear line and any bullet lines that follow it directly
     const lines = t.split(/\r?\n/); const out = []; let inRubric = false;
     for (const ln of lines) {
@@ -2505,7 +2510,7 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
         choices: facChoicesHidden ? [] : choices.map(function (ch, i) {
           return {
             label: ch && ch.label ? ch.label : ('Choice ' + (i + 1)),
-            description: String(ch && ch.description ? ch.description : '').trim(),
+            description: _stripGmNotes(String(ch && ch.description ? ch.description : '').trim()),   // round 2 E2
             checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : '',
             checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0
           };
@@ -9530,7 +9535,7 @@ Hooks.once("ready", () => {
           pickToken: (pick && pick.beat === beat) ? pick.token : null,
           choices: (pol.choices === "hidden" ? [] : shown).map((ch, i) => ({
             label: (ch && ch.label) || ("Choice " + (i + 1)),
-            description: String((ch && ch.description) || "").trim(),
+            description: _stripGmNotes(String((ch && ch.description) || "").trim()),   // round 2 E2
             checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : "",
             checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0
           }))

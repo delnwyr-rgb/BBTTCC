@@ -40,7 +40,9 @@ const path = require("path");
 
 // ─── engine facts (keep in sync with module.js) ─────────────────────────────
 const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
-const CHECK_STATS = new Set(["gm","violence","intrigue","presence","body","mind","soul","str","dex","con","int","wis","cha","save.str","save.dex","save.con","save.int","save.wis","save.cha","acr","ani","arc","ath","dec","his","ins","itm","inv","med","nat","prc","prf","per","rel","slt","ste","sur"]);
+const CHECK_STATS = new Set(["gm","violence","intrigue","presence","body","mind","soul","str","dex","con","int","wis","cha","save.str","save.dex","save.con","save.int","save.wis","save.cha","acr","ani","arc","ath","dec","his","ins","itm","inv","med","nat","prc","prf","per","rel","slt","ste","sur",
+  // fourththing skill keys the engine passes straight through (_ftSkillKeyFor; round 2 Encounters row 2, 2026-10-20)
+  "meditation","ritual","occult","insight","intimidation","empathy","investigation","perception","persuasion","streetwise","arcana","athletics","stealth","survival","deception","performance","history","nature","religion","medicine","animal","acrobatics","sleight"]);
 const GATE_FLAGS = {              // name → [min, max] sanity band (null = unbounded)
   storyPhase: [0, 6], wendigoRung: [0, 4], tikkunDividend: [0, 5], hexesClaimed: [0, null], turn: [0, null],
   banditMercy: [0, null], banditFear: [0, null],
