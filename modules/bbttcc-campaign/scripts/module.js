@@ -2370,6 +2370,32 @@ async function _storeFactsHtml(campaign, ctx = {}) {
   return `<details open class="bbttcc-store-facts" style="border-left:3px solid #4db8b0;padding:.35em .6em;margin:0 0 10px 0;background:rgba(77,184,176,.08);font-size:12px;"><summary style="cursor:pointer;"><b>📒 What the story knows</b> <span style="opacity:.7;">(GM only — he's grading energy, you're holding the ledger)</span></summary>${rows.join("")}</details>`;
 }
 
+// ── GM notes stay with the GM (Story Review Ledger, grief-towns row 12, 2026-10-19) ─────────────────────────────
+// Authors mark table-side direction with the gear: "⚙ GM: …" lines / <p>…</p> paragraphs, "(⚙ …)" asides, and the
+// rubric bullets ("· …", "- …", "• …") that follow a gear line. The GM's own dialog keeps them; every PLAYER surface
+// (the player-facing mirror, the public scene-door narration, the NPC voice script) runs its text through this first.
+function _stripGmNotes(text) {
+  try {
+    let t = String(text == null ? "" : text);
+    if (!t.includes("⚙")) return t;
+    // inline asides: "(⚙ …)" — never span a paragraph
+    t = t.replace(/\s*\((?:<[^>]+>)*\s*⚙[^()\n]*\)/g, "");
+    // HTML paragraphs whose text starts with the gear (tags such as <i>/<b> may precede it)
+    t = t.replace(/<p\b[^>]*>(?:\s|<[^>]+>|&nbsp;)*⚙[\s\S]*?<\/p>/gi, "");
+    // plain lines: drop the gear line and any bullet lines that follow it directly
+    const lines = t.split(/\r?\n/); const out = []; let inRubric = false;
+    for (const ln of lines) {
+      const bare = ln.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim();
+      if (/^⚙/.test(bare)) { inRubric = true; continue; }
+      if (inRubric && /^[·•\-–]\s/.test(bare)) continue;
+      if (bare !== "") inRubric = false;
+      out.push(ln);
+    }
+    t = out.join("\n").replace(/\n{3,}/g, "\n\n").replace(/^\s*<br\s*\/?>\s*|\s*<br\s*\/?>\s*$/gi, "").trim();
+    return t;
+  } catch (_e) { return String(text == null ? "" : text); }
+}
+
 // STORY TOKENS (owner ask 2026-10-05: "the number of hexes varies with the number of players, 3–12, never more than half the
 // River Heart") — beat text may carry {{coalition.hexCount}}, {{coalition.hexNames}}, {{riverHeart.hexCount}} and
 // {{riverHeart.claimedCount}}, filled from the River Heart map when the beat plays, so the opening and Joan's speech name the
@@ -6487,7 +6513,7 @@ async function dialogueChoicesFor(actorId, ctx = {}) {
       const shown = new Set(await _visibleChoiceIndices(beat, campaignForGates, ctx));   // D-1/D-2
       // The beat's description is the NPC's authored script for the scene —
       // the dialogue engine plays it in-voice when the conversation arrives.
-      let beatDescription = stripHtml(_expandStoryTokens(beat.description, campaignForGates));
+      let beatDescription = stripHtml(_stripGmNotes(_expandStoryTokens(beat.description, campaignForGates)));
       // The invitation loop closes in-voice: this NPC SENT WORD asking to
       // talk, and the party showing up IS the answer. Tell the model so.
       if (invited[beat.id])
@@ -7293,7 +7319,7 @@ function _bindHandoffButtons(message, root) {
           const sid = String(beat.sceneId || beat.refs?.sceneId || "").replace(/^Scene\./, "");
           const scene = sid ? game.scenes?.get?.(sid) : null;
           if (scene && !scene.active) await scene.activate();
-          const desc = _expandStoryTokens(String(beat.description || "").trim(), campaign);
+          const desc = _stripGmNotes(_expandStoryTokens(String(beat.description || "").trim(), campaign));
           if (desc) await ChatMessage.create({
             speaker: { alias: "Bad Eden" },
             content: `<div class="bbttcc-narration" style="border-left:3px solid #b8974d;padding:.45em .6em;background:rgba(184,151,77,.08);">${desc}</div>`
@@ -9486,7 +9512,7 @@ Hooks.once("ready", () => {
         const pick = __bbttccCurrentBeatDialogPick;
         _broadcastPlayerFacingDialog("show", {
           title: beat.label || beat.id || "Beat",
-          desc: _expandStoryTokens(String(beat.description || "").trim()),
+          desc: _stripGmNotes(_expandStoryTokens(String(beat.description || "").trim())),
           beatId: beat.id || null,
           choicesHidden: pol.choices === "hidden",
           canPick: pol.choices === "playerPick" && !!(pick && pick.beat === beat),
