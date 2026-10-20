@@ -2438,7 +2438,18 @@ function _expandStoryTokens(text, campaign) {
     "riverheart.hexcount": f.rhCount ? String(f.rhCount) : "dozens of",
     "riverheart.claimedcount": f.rhClaimed != null ? String(f.rhClaimed) : "a few"
   };
-  return s.replace(/\{\{\s*([A-Za-z.]+)\s*\}\}/g, (m, k) => (Object.prototype.hasOwnProperty.call(map, k.toLowerCase()) ? _escapeHtml(map[k.toLowerCase()]) : m));
+  // Conditional spans (Story Review Ledger, road row 5, 2026-10-19): the text knows what the table has done.
+  //   {{#played beatId}}…{{else}}…{{/played}}   — the beat has fired for this campaign (story state `played`)
+  //   {{#mark beatId}}…{{else}}…{{/mark}}       — same test; alias for authors who think in marks
+  // Unknown ids read as "not played"; a broken span is left as written. Nesting one level deep is enough.
+  let out = s;
+  if (out.indexOf("{{#") >= 0) {
+    let played = {};
+    try { const cid = campaign?.id || (typeof getActiveCampaignId === "function" ? getActiveCampaignId() : null); played = _storyStateFor(cid)?.played || {}; } catch (_eP) { played = {}; }
+    const re = /\{\{#(played|mark)\s+([A-Za-z0-9_.-]+)\s*\}\}([\s\S]*?)(?:\{\{else\}\}([\s\S]*?))?\{\{\/\1\}\}/g;
+    for (let pass = 0; pass < 2 && re.test(out); pass++) { re.lastIndex = 0; out = out.replace(re, (m, kind, id, yes, no) => (played[String(id)] ? yes : (no || ""))); }
+  }
+  return out.replace(/\{\{\s*([A-Za-z.]+)\s*\}\}/g, (m, k) => (Object.prototype.hasOwnProperty.call(map, k.toLowerCase()) ? _escapeHtml(map[k.toLowerCase()]) : m));
 }
 
 async function _runBeatDialog(campaign, beat, ctx={}) {
