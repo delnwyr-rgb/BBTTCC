@@ -28,7 +28,7 @@ export const STORY_SCRIPTS = {
       { id: "slides", label: "The Ten Slides", line: "Ten slides. Progress the deck.",
         beats: ["fates_and_destinies_1", "fates_and_destinies_2", "fates_and_destinies_3", "fates_and_destinies_4", "fates_and_destinies_5", "fates_and_destinies_6", "fates_and_destinies_7", "fates_and_destinies_8", "fates_and_destinies_9", "fates_and_destinies_10"],
         done: { mark: "fates_and_destinies_10" } },
-      { id: "cold", label: "Cold Open", line: "Watch.", beats: ["thatwards_ho_cold_open"], chapter: "opening" },
+      // 2026-10-20 Dave: the cold open RETIRED from the opening — `ag_tamsin_the_dream` plays the same footage when the Father sets the kettle down.
       { id: "ho", label: "Thatwards Ho!", line: "Read the briefing. Then the Jackalope leaves for Allesh-Gilliam.", beats: ["thatwards_ho_opening_scene"], chapter: "opening" }
     ],
     doors: [], after: [],
