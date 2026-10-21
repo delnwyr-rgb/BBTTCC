@@ -66,7 +66,7 @@ const ENGINE_IDS = {
   "enc_minor_radiation_pocket_go_around": "wendigo rung (travel)", "enc_minor_radiation_pocket_go_around_fail": "wendigo rung (travel)",
   "wendigo_confluence_repair": "wendigo confluence", "wendigo_confluence_redirect": "wendigo confluence", "wendigo_confluence_break": "wendigo confluence",
   "gullywasher_cultural_summit_success": "gullywasher summit", "gullywasher_cultural_summit_failure": "gullywasher summit",
-  "gullywasher_dougan_points_to_confluence": "gullywasher", "fixit_gullywasher_interior_convo": "fixit", "fixit_intro_scene": "fixit",
+  "gullywasher_dougan_points_to_confluence": "gullywasher", "fixit_gullywasher_welcome": "fixit", "fixit_intro_scene": "fixit",
   "bandit_accord_opening": "bandit ledger arms", "bandit_ambush_arms_down": "bandit mercy", "bandit_arms_down_accept": "bandit mercy",
   "bandit_arms_down_violence": "bandit fear", "bandit_summit_humiliation": "bandit summit",
   "spark_geburah_northreach_b_worthy": "geburah earned", "spark_geburah_mountains_q_worthy": "geburah earned", "spark_geburah_mountains_o_worthy": "geburah earned",

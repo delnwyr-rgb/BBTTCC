@@ -8841,7 +8841,7 @@ async function _onBeatResolvedFeudState({ beat } = {}) {
 async function _onBeatResolvedDouganPointer({ beat, campaign } = {}) {
   try {
     if (!game.user?.isGM) return;
-    if (beat?.id !== "fixit_gullywasher_interior_convo") return;
+    if (beat?.id !== "fixit_gullywasher_welcome") return;   // 2026-10-20: the Q&A merged into the welcome (fixit_gullywasher_interior_convo retired)
     if (_wendigoRungGet() < 3) return;
     if (game.settings.get(MOD_ID, SETTING_DOUGAN_POINTED)) return;     // already pointed
     const campaignId = campaign?.id || getActiveCampaignId();

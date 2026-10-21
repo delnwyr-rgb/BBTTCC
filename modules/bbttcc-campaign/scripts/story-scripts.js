@@ -371,7 +371,7 @@ export const STORY_SCRIPTS = {
       { id: "settles", label: "The Farm Settles", line: "The Farm has stopped auditioning you. Load the crate and ride home to Garren.", beats: ["fixit_hex_settles"] }
     ],
     doors: [
-      { id: "gullywasher", label: "The Gullywasher", line: "There's a Chupacabra behind the bar. Oh shit. He's the bartender. Order something before you interrogate him.", beats: ["fixit_saloon_cinematic", "fixit_gullywasher_welcome", "fixit_gullywasher_interior_convo"] },
+      { id: "gullywasher", label: "The Gullywasher", line: "There's a Chupacabra behind the bar. Oh shit. He's the bartender. Order something before you interrogate him.", beats: ["fixit_saloon_cinematic", "fixit_gullywasher_welcome"] },   // 2026-10-20: the Q&A lives on the welcome now
       { id: "counter", label: "The Counter", line: "The Counter quotes weight, not price. Ask Mara what her biggest headache is.", beats: ["fixit_general_store_exterior", "fixit_general_store_coversation"] },
       { id: "pip", label: "Pip and Patter", line: "Pip and Patter move in synch with everything that moves - it's a feature! Ask what's moving near Allesh.", beats: ["fixit_pip_and_patter_convo"] },
       { id: "backstairs", label: "The Back Stairs (allies)", line: "OFF LIMITS. SCRAM. Except Stewards, once the Jackalopes call you allies.", beats: ["fixit_backstairs_exterior"] },
