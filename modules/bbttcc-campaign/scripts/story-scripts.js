@@ -99,6 +99,8 @@ export const STORY_SCRIPTS = {
       { id: "word", label: "Word from Lyrenn", line: "Word from Lyrenn. Elsin and Rowan both wrote. Ride Thatwards-by-Green.", hereLine: "Word from Lyrenn. Elsin and Rowan both wrote. You're already here. Go and see.",
         beats: ["lyrenn_word_channels", "lyrenn_word_treeline", "lyrenn_word_ride"], done: { anyOf: ["lyrenn_word_ride", "lyrenn_quest_acceptance", "lyrenn_quest_scene"] } },
       { id: "second", label: "The Rows, Second Season", line: "Lyrenn is expecting you. Take the rows' measure from the co-op steps.", beats: ["lyrenn_quest_acceptance", "lyrenn_quest_scene"], done: { mark: "lyrenn_quest_scene" } },
+      { id: "choir", label: "The Choir Grades You", line: "The Water Choir is tuning to you. Stand in it, listen, and let the children grade you. Ask which basin is flat. Not why.",
+        beats: ["lyrenn_water_choir", "lyrenn_water_choir_reading", "lyrenn_choir_children"], done: { mark: "lyrenn_choir_children" } },   // 2026-10-20: one chain (live had the hub on a door and the children on this step)
       { id: "pest", label: "The Gentle Pest", group: "threads", chapter: "the_gentle_pest", line: "The east channels. Elsin said patience first. Go and look.",
         beats: ["lyrenn_the_gentle_pest_acceptance", "lyrenn_the_gentle_pest"], done: { chapter: ["lyrenn", "the_gentle_pest"] } },
       { id: "forest", label: "The Forest Will Not Be Fought", group: "threads", chapter: "the_forest_will_not_be_fought", line: "The fence line. The forest will not be fought. Rowan is waiting.",
