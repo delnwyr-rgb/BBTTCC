@@ -1399,6 +1399,23 @@ const CHASSIS_BRACKET_BOM = {
 // matches their tier: T0 personal, T1 light, T2 medium, T3–4 heavy, T5 siege.
 // Reviewed and ruled acceptable by the owner 2026-10-02 (housekeeping) — keep as is.
 const MECHA_TIER_BOM_BRACKET = ["personal", "light", "medium", "heavy", "heavy", "siege"];
+/** Frame-driven max integrity (owner ruling 2026-10-21). Returns the new max, or null when the rig has no frame with a baseIntegrity. */
+function _frameIntegrityMax(actor, tier) {
+  const frame = (actor?.items ?? []).find?.(i => i?.flags?.fourththing?.rigGear?.subtype === "rig-frame" || i?.flags?.fourththing?.rigFrame);
+  const f = frame?.flags?.fourththing?.rigFrame;
+  if (!f || f.baseIntegrity == null) return null;
+  const t = Math.max(1, Number(tier) || 1);
+  return Math.max(1, Number(f.baseIntegrity) + (t - 1) * (Number(f.tierStep) || 0));
+}
+async function _syncIntegrityToFrame(actor, tier) {
+  const max = _frameIntegrityMax(actor, tier);
+  if (max == null) return null;
+  const R = game.bbttcc?.rigs;
+  if (R?.update) await R.update(actor, { "integrity.max": max, "integrity.value": max });
+  else await actor.update({ "system.integrity.max": max, "system.integrity.value": max });
+  return max;
+}
+
 function _rigBracketBOM(bracket, tier = 1) {
   const b = String(bracket || "").toLowerCase();
   if (CHASSIS_BRACKET_BOM[b]) return CHASSIS_BRACKET_BOM[b];
@@ -1616,9 +1633,13 @@ async function _commit(root) {
   // Phase E (2026-05-26) — auto-stamp a structural BOM so the rig has a hardness
   // model out of the box. Bracket-driven; facilities stamp facilityMode. Skips
   // when the bbttcc-structures module is absent or a BOM is already present.
+  // Owner ruling 2026-10-21: NO structure on rigs that move. A mobile/hybrid rig already has integrity, defenses and
+  // plating; the tiny material list was chipped bare in two hits and read as broken, and it made every rig count as a
+  // wall for ram recoil and siege garrisons. Stationary emplacements and facilities keep their structure.
   try {
     const structApi = game.bbttcc?.api?.structures;
-    if (structApi?.stampBOM && !actor.flags?.["bbttcc-structures"]?.hasStructure) {
+    const _wantsStructure = mobility === "stationary" || category === "facility";
+    if (_wantsStructure && structApi?.stampBOM && !actor.flags?.["bbttcc-structures"]?.hasStructure) {
       const bom = _rigBracketBOM(bracket, tier);
       await structApi.stampBOM(actor, bom, { facilityMode: mobility === "stationary", resetCurrentPlates: true });
       console.log("[bbttcc-auto-link/rig-builder] auto-stamped structural BOM", { bracket, materials: bom.length });
@@ -1944,9 +1965,17 @@ export async function mintFromChassis(chassisKey, { factionOwnerId = "", free = 
     try { await _seedLoadout(actor, loadout, { tier }); }
     catch (e) { console.warn("[bbttcc-auto-link/rig-builder] mintFromChassis loadout seed failed (non-fatal):", e); }
   }
+  // Owner ruling 2026-10-21: a minted rig's integrity comes from its FRAME (baseIntegrity + tierStep × (tier − 1),
+  // tier floored at 1), not the size default — every Hexmobile was minted at 10 although its frame says 14. A chassis
+  // that authors an explicit `integrity` keeps it (titans, flagships).
+  if (chassis?.defaults?.integrity == null && mobility !== "stationary") {   // moving rigs only; forts keep their size math
+    try { await _syncIntegrityToFrame(actor, tier); }
+    catch (e) { console.warn("[bbttcc-auto-link/rig-builder] mintFromChassis frame integrity sync failed (non-fatal):", e); }
+  }
   try {
     const structApi = game.bbttcc?.api?.structures;
-    if (structApi?.stampBOM && !actor.flags?.["bbttcc-structures"]?.hasStructure) {
+    // Owner ruling 2026-10-21: no structure on rigs that move (starter Hexmobile / Space Marine included).
+    if (mobility === "stationary" && structApi?.stampBOM && !actor.flags?.["bbttcc-structures"]?.hasStructure) {
       await structApi.stampBOM(actor, _rigBracketBOM(bracket, tier),
         { facilityMode: mobility === "stationary", resetCurrentPlates: true });
     }

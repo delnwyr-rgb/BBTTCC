@@ -106,6 +106,15 @@ export const MOD_RESOURCE = {
 /** lane bonus by hex MODIFIER (LANE_HEX_BONUS.<lane>.byModifier) is DOUBLED on a hex whose leyline flow is `surge` */
 export const LANE_BY_MODIFIER_SURGE_MULT = 2;
 /** hex loyalty score contributions by modifier (facts.hex.loyaltyScore) */
+// ── RIG OUTPUT (owner ruling 2026-10-21: "base output by size") ── what a rig earns its faction per strategic turn,
+// authored in OP (the bank converts to marks with the live ratio — never a literal here). Rigs that MOVE only: a
+// stationary emplacement earns through its output modules. State throttle = the rig sheet's long-promised 100/50/0.
+export const RIG_BASE_OUTPUT_OP = {
+  personal: { logistics: 1 }, light: { logistics: 1 }, medium: { logistics: 2 }, mecha: { logistics: 2 },
+  heavy: { logistics: 3 }, siege: { logistics: 4 }
+};
+export const RIG_OUTPUT_STATE_MULT = { parked: 1, deployed: 0.5, destroyed: 0 };
+
 export const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1, "harmonized grove": 1, "menace": -2 };   // menace: MENACES 2026-10-21
 
 // ── hex STATES (2026-09-13, owner ask: "a place in the beat to apply generic states, and unique states") ──

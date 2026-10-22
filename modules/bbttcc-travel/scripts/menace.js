@@ -39,7 +39,7 @@
   const warn = (...a) => console.warn(TAG, ...a);
   const esc  = (s) => { try { return foundry.utils.escapeHTML(String(s ?? "")); } catch (_e) { return String(s ?? "").replace(/[<>&]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c])); } };
 
-  // ⚠ defaults, Dave to bless (2026-10-21). Loyalty numbers are hex mods.loyalty points (the hex Loyalty score);
+  // ✅ BLESSED by the owner 2026-10-21. Loyalty numbers are hex mods.loyalty points (the hex Loyalty score);
   // darkness is the faction meter; clock is world turns.
   const DEFAULTS = Object.freeze({
     clock: 3,

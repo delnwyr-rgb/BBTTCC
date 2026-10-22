@@ -308,6 +308,17 @@ function injectPanel(app /* html unused — we use app.element */) {
     const R = game.bbttcc?.rigs;
     const isHost = R?.isRig ? (R.isRig(actor) || actor.type === "boss") : ["rig", "boss"].includes(actor.type);
     if (!isHost) return;
+    // Owner ruling 2026-10-21: no structure on rigs that move. A mobile/hybrid rig with no structure gets no panel at all
+    // (players were offered "Stamp Test BOM"); one that still carries a structure keeps the panel so the GM can see/clear it.
+    try {
+      const _isRig = R?.isRig ? R.isRig(actor) : actor.type === "rig";
+      const _mob = String(R?.data?.(actor)?.identity?.mobility ?? actor.system?.identity?.mobility ?? "mobile").toLowerCase();
+      if (_isRig && _mob !== "stationary" && actor.flags?.["bbttcc-structures"]?.hasStructure !== true) {
+        const _el = app.element?.jquery ? app.element[0] : app.element;
+        if (_el) _sweepPriorPanels(_el);
+        return;
+      }
+    } catch (_eMob) {}
 
     // AppV2 sheets expose a DOM element; AppV1 (older dnd5e vehicle sheet) a jQuery wrapper.
     const appEl = app.element?.jquery ? app.element[0] : app.element;

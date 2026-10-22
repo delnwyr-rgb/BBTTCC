@@ -24149,7 +24149,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // token nameplate via _ftEnsureRigStateAE.
       const _rigCmb = this.actor.flags?.fourththing?.combat ?? {};
       const _heatVal = Math.max(0, Number(_rigCmb.heat) || 0);
-      const _heatMax = Math.max(1, _rigTier * 2);
+      // 2026-10-21: the sheet used tier × 2 (2 at T1) while the engine caps at 2 + tier × 2 (_ftRigHeatMax, 4 at T1) —
+      // the sheet cried OVERHEATED at 3/2 while the guns still fired. One authority now.
+      const _heatMax = _ftRigHeatMax(this.actor);
       const combatStates = [];
       if (_rigCmb.holding) combatStates.push({ key: "holding", label: "Holding Position", note: `+${_rigCmb.holdingBonus ?? 1} Guard`, color: "#7ec0ff" });
       if (_rigCmb.evading) combatStates.push({ key: "evading", label: "Evading", note: `+${_rigCmb.evadingBonus ?? 2} Evasion`, color: "#7ec0ff" });
@@ -24203,6 +24205,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         isDeployed:   state === "deployed",
         isDestroyed:  state === "destroyed",
         outputPct:    ({ parked: 100, deployed: 50, destroyed: 0 })[state] ?? 100,
+        // RIG OUTPUT (owner ruling 2026-10-21): what this rig earns per turn parked vs deployed — the opportunity cost.
+        outputPreview: (() => { try { return game.bbttcc?.rigs?.outputPreview?.(this.actor) ?? null; } catch (_e) { return null; } })(),
         gmEdit
       };
     }
@@ -24394,8 +24398,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const f = frameItem.getFlag("fourththing", "rigFrame") ?? {};
         if (f.bracket)        update["system.integrity.bracket"] = f.bracket;
         if (f.baseIntegrity != null) {
-          update["system.integrity.max"]   = Number(f.baseIntegrity);
-          update["system.integrity.value"] = Number(f.baseIntegrity);
+          // 2026-10-21: frame base + tierStep × (tier − 1), tier floored at 1 — the same rule minted rigs use now.
+          const _t = Math.max(1, Number(this.actor.system?.integrity?.tier) || 1);
+          const _max = Math.max(1, Number(f.baseIntegrity) + (_t - 1) * (Number(f.tierStep) || 0));
+          update["system.integrity.max"]   = _max;
+          update["system.integrity.value"] = _max;
         }
         if (f.capacity) update["system.crew.capacity"] = f.capacity;
         if (f.travel)   update["system.travel"]        = { ...this.actor.system.travel, ...f.travel };
@@ -25320,6 +25327,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   function _ftDomainRigCount(faction) {
     try { const R = game.bbttcc?.rigs; if (!R?.isRig) return 0; return (game.actors?.contents ?? []).filter(a => R.isRig(a) && String(R.ownerOf(a) ?? "").replace(/^Actor\./, "") === faction.id).length; } catch (_e) { return 0; }
   }
+  /** RIG OUTPUT (owner ruling 2026-10-21): each owned rig's state + what it earns parked vs deployed, for the Domain tab. */
+  function _ftDomainRigList(faction) {
+    try {
+      const R = game.bbttcc?.rigs; if (!R?.isRig || !faction) return [];
+      const icon = { parked: "🅿️", deployed: "🚚", destroyed: "💥" };
+      return (game.actors?.contents ?? []).filter(a => R.isRig(a) && String(R.ownerOf(a) ?? "").replace(/^Actor\./, "") === faction.id)
+        .map(a => { const p = R.outputPreview?.(a); const st = p?.state ?? String(R.data?.(a)?.identity?.state ?? "parked"); return { name: a.name, state: st, icon: icon[st] || "", produces: !!p?.produces, parked: p?.parkedText ?? "nothing", deployed: p?.deployedText ?? "nothing", lost: p?.lostText ?? "nothing" }; })
+        .sort((x, y) => x.name.localeCompare(y.name));
+    } catch (_e) { return []; }
+  }
   /** Hired crews / associations (ruling 15) for the Retinue card. */
   function _ftDomainRetinue(actor) {
     try {
@@ -25370,7 +25387,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       tier, tierRoman, tierLabel,
       treasury: { total, max, pools },
       meters: { loyalty: { value: loyalty, ..._ftDomainLoyaltyBand(loyalty) }, darkness: { value: darkness, ..._ftDomainDarknessBand(darkness) }, momentum: { value: momentum, canSpend: momentum > 0 && (isGM || !!faction.isOwner), hint: "Momentum: banked +1 each time an OP check rolls a 10. Spend it before the turn ends — it resets at Day's End." } },
-      pressure, hexes: hx.count, hexList: hx.list, rigs: _ftDomainRigCount(faction), convictions, convictionsMeter, planned,
+      pressure, hexes: hx.count, hexList: hx.list, rigs: _ftDomainRigCount(faction), rigList: _ftDomainRigList(faction), convictions, convictionsMeter, planned,
       retinue: _ftDomainRetinue(actor)
     };
   }

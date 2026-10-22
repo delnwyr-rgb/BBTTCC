@@ -138,11 +138,17 @@
         </div>
       </div>
 
-      <div class="ft-rig-stat-tile ft-rig-stat-output ft-rig-stat-output--{{identity.state}}" data-tooltip="Output throughput. Parked 100% · Deployed 50% · Destroyed 0%.">
+      <div class="ft-rig-stat-tile ft-rig-stat-output ft-rig-stat-output--{{identity.state}}" data-tooltip="{{#if outputPreview.produces}}Per turn — Parked: {{outputPreview.parkedText}} · Deployed: {{outputPreview.deployedText}}. Deploying costs {{outputPreview.lostText}} a turn.{{else}}This rig earns nothing per turn. Parked 100% · Deployed 50% · Destroyed 0% of its output.{{/if}}">
         <div class="ft-rig-stat-label">Output</div>
         <div class="ft-rig-stat-row">
           <span class="ft-rig-stat-val">{{outputPct}}<span class="ft-rig-stat-sep">%</span></span>
         </div>
+        {{#if outputPreview.produces}}
+        <div class="ft-rig-output-tradeoff" style="font-size:.68rem;line-height:1.25;opacity:.85;margin-top:.15rem;">
+          <div>🅿️ <b>Parked</b>: {{outputPreview.parkedText}}</div>
+          <div>🚚 <b>Deployed</b>: {{outputPreview.deployedText}}</div>
+        </div>
+        {{/if}}
       </div>
 
     </div>
@@ -458,6 +464,15 @@
     <div class="tab output{{#if (eq activeTab "output")}} active{{/if}}" data-tab="output">
       <section class="ft-rig-output-summary">
         <div class="ft-block-title">Output <span class="ft-output-pct" data-tooltip="100% parked · 50% deployed · 0% destroyed">({{outputPct}}%)</span></div>
+        {{#if outputPreview}}
+        <table class="ft-rig-output-tradeoff-table" style="width:100%;font-size:.8rem;margin:.2rem 0 .5rem;border-collapse:collapse;">
+          <tr><th style="text-align:left;opacity:.7;font-weight:600">Each turn</th><th style="text-align:left;opacity:.7;font-weight:600">Earns the faction</th></tr>
+          <tr{{#if (eq outputPreview.state "parked")}} style="color:#9fe0a8"{{/if}}><td>🅿️ Parked</td><td>{{outputPreview.parkedText}}</td></tr>
+          <tr{{#if (eq outputPreview.state "deployed")}} style="color:#9fe0a8"{{/if}}><td>🚚 Deployed</td><td>{{outputPreview.deployedText}}</td></tr>
+          <tr style="opacity:.7"><td>💥 Destroyed</td><td>nothing</td></tr>
+        </table>
+        {{#if outputPreview.produces}}<div class="ft-rig-output-hint">Taking this rig out costs <b>{{outputPreview.lostText}}</b> every turn it stays deployed. Rigs that move earn a base by size; output modules add their yields (bank channels as marks, the rest to the stockpile). Paid at the end of each turn.</div>{{/if}}
+        {{/if}}
         {{#if gear.outputs.length}}
         <div class="ft-rig-output-modules">
           {{#each gear.outputs as |o|}}
@@ -467,7 +482,6 @@
           </div>
           {{/each}}
         </div>
-        <div class="ft-rig-output-hint">Per-turn yields are read from each module's flag data and applied to the faction owner during turn-tick (Phase 6 wiring).</div>
         {{else}}
         <div class="ft-rig-item-empty">No output modules installed. Drop an `output-module` item to start producing.</div>
         {{/if}}

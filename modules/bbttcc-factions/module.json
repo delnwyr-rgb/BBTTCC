@@ -45,6 +45,7 @@
     "scripts/quest-log-app.js",
     "scripts/faction-tier-advance-button.enhancer.js",
     "scripts/rigs-dnd5e.runtime.js",
+    "scripts/rigs-rfi.output.js",
     "scripts/rigs-dnd5e.actions.js",
     "scripts/rigs-dnd5e.sheet.js",
     "scripts/rigs-dnd5e.gauntlet.js"
