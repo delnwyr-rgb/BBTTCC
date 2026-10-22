@@ -95,6 +95,9 @@
 
     {{!-- IDENTITY TAB --------------------------------------------------- --}}
     <div class="tab identity{{#if (eq activeTab "identity")}} active{{/if}}" data-tab="identity">
+      {{!-- Rig art (owner ask 2026-10-21): the same portrait frame the Steward tab gives a steward, beside the vitals. --}}
+      <div class="ft-sheet-vitals">
+      <div class="ft-sheet-vitals-main">
       <section class="ft-tab-summary ft-rig-tab-summary">
     <div class="ft-rig-summary ft-rig-stat-grid">
 
@@ -171,6 +174,12 @@
         </div>
         {{/if}}
       </section>
+      </div>
+      <div class="ft-steward-art" data-action="ftEditPortrait" data-tooltip="{{actor.name}} — click to change the art">
+        <img src="{{actor.img}}" alt="{{actor.name}}"/>
+        <div class="ft-steward-art-overlay">📷</div>
+      </div>
+      </div>
     </div>
 
     {{!-- CREW TAB ------------------------------------------------------- --}}
