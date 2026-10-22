@@ -1320,6 +1320,15 @@ async function showTextStep(step, ctx) {
       hexFlags.requests  = requests;
       hexFlags.mods      = mods;
 
+      // Radiation = the hex level only (2026-10-22): re-stamp tag + production modifier from it
+      // (this legacy switch adds +1/+2 and a "Radiation Zone (Low)" label).
+      const radApi = game.bbttcc?.api?.territory?.radiation;
+      if (radApi) {
+        const p = radApi.patch(hexFlags, radApi.level({ mods }));
+        hexFlags.mods = p.mods; hexFlags.modifiers = p.modifiers;
+        hexUpdates["flags.bbttcc-territory.conditions"] = p.conditions;
+      }
+
       hexUpdates["flags.bbttcc-territory.modifiers"] = hexFlags.modifiers;
       hexUpdates["flags.bbttcc-territory.requests"]  = hexFlags.requests;
       hexUpdates["flags.bbttcc-territory.mods"]      = hexFlags.mods;

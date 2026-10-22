@@ -40,6 +40,9 @@ const HEX_IMPROVEMENT_CAP = 250;
 //   snake_case names from bbttcc-territory/scripts/resolutions.js outcomes
 // Lookup is case-insensitive and tolerant of underscores/spaces, so callers
 // can pass either form.
+// Radiation's names — set ONLY through the hex Radiation level (api.territory.radiation, 2026-10-22).
+const _isRadModName = (n) => ["radiated", "contaminated", "radiation zone", "radiation zone (low)"].includes(String(n || "").trim().toLowerCase());
+
 const MOD_DESCRIPTIONS = {
   // Title-case canon (faction MODS dict)
   "well-maintained":         "+25% production, +1 defense, +1 loyalty",
@@ -2388,7 +2391,16 @@ async function openHexEditorByUuid(uuid){
     sephirotUuid: f.sephirotUuid || "",
     sephirotList: await buildSephirotList(),
     modifiers: Array.isArray(f.modifiers) ? f.modifiers : [],
-    modifierCatalog: HEX_MODIFIER_CATALOG,
+    // Radiation is one level, not modifiers (2026-10-22): its two production states leave the grid
+    // and the select below writes the level (which stamps them).
+    modifierCatalog: HEX_MODIFIER_CATALOG.filter(m => !_isRadModName(m.name)),
+    radiationLevel: Math.max(0, Math.min(3, Math.round(Number(f.mods?.radiation ?? 0) || 0))),
+    radiationLadder: [
+      { level: 0, label: "0 — Clean" },
+      { level: 1, label: "1 — Radiated (no production hit)" },
+      { level: 2, label: "2 — Contaminated (−50% production)" },
+      { level: 3, label: "3 — Radiation Zone (−75% production)" }
+    ],
     uniqueStates: Object.entries(WORLD_MODIFIERS).map(([key, v]) => ({ key, name: v.label, effect: v.description })),
     notes: f.notes ?? "",
     createdAt: f.createdAt ? new Date(f.createdAt).toLocaleString() : "",
@@ -2576,7 +2588,7 @@ async function openHexEditorByUuid(uuid){
               const storedRaw = dr.flags?.[MOD]?.modifiers ?? f?.modifiers;
               const stored = Array.isArray(storedRaw) ? storedRaw : [];
               const rendered = new Set([
-                ...HEX_MODIFIER_CATALOG.map(m => m.name),
+                ...HEX_MODIFIER_CATALOG.filter(m => !_isRadModName(m.name)).map(m => m.name),
                 ...Object.values(WORLD_MODIFIERS).map(v => v.label)
               ]);
               const checkedLower = new Set(checked.map(m => String(m).toLowerCase()));
@@ -2779,6 +2791,14 @@ async function openHexEditorByUuid(uuid){
               await dr.setFlag(MOD, k, v);
             }
             await dr.update({ text:name }).catch(()=>{});
+
+            // Radiation level — THE switch (2026-10-22). The setter stamps the Radiated tag and the
+            // Contaminated / Radiation Zone production modifier, and recomputes resources if that moved.
+            try {
+              const radRaw = fd.get("bbttcc-radiation-level");
+              const radApi = game.bbttcc?.api?.territory?.radiation;
+              if (radRaw !== null && radRaw !== "" && radApi) await radApi.set(dr, Number(radRaw), { source: "hex_editor_save" });
+            } catch (eRad) { console.warn("[bbttcc-territory] Hex editor radiation level failed", eRad); }
 
             // Hex Dossier — diff old `f` against new `flagsPatch` and emit
             // one ledger entry per meaningful change. The save handler is the
@@ -3981,11 +4001,9 @@ Hooks.on("deleteDrawing", (doc) => {
           const delta = Number(btn.getAttribute("data-delta") || 0) || 0;
           const dr = await this._resolveDrawing();
           if (!dr) return;
-          const tf = dr.flags?.[MOD] ?? {};
-          const cur = Math.max(0, _toInt(tf.mods?.radiation ?? tf.radiation?.value ?? tf.radiation ?? 0, 0));
-          const next = Math.max(0, cur + delta);
-          const mods = Object.assign({}, (tf.mods && typeof tf.mods === "object") ? tf.mods : {}, { radiation: next });
-          await dr.setFlag(MOD, "mods", mods);
+          // THE radiation switch (2026-10-22) — the setter stamps the tag + production modifier.
+          const radApi = game.bbttcc?.api?.territory?.radiation;
+          if (radApi) await radApi.set(dr, radApi.level(dr) + delta, { source: "hex_sheet" });
           this.render({ force: true });
           return;
         }

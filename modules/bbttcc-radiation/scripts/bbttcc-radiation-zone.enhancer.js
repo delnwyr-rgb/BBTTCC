@@ -1,439 +1,203 @@
 // ============================================================================
-// Bad Eden — Radiation Zone Enhancer (Phase C, Option B)
-// Scene-level fallout "weather" that stacks with hex & travel radiation.
+// Bad Eden — Radiation "green screen" (scene tint)
 //
-// Features:
-//   • Scene-level zone config on flags["bbttcc-radiation"].zone
-//       { intensity: "none|low|moderate|high|storm",
-//         drift: "stable|rising|falling",
-//         color: "#A3E635",   // overlay tint
-//         radius: 1.0,        // 0–1, coverage fraction (not fully used yet)
-//         updatedAt: number   // ms
-//       }
+// One switch (owner ruling 2026-10-22): the tint is DERIVED from the hex Radiation
+// level — nothing is set on the scene any more. A scene glows when a hex that leads
+// to it is hot:
+//   • the hex's on-enter beat (flags.bbttcc-territory.campaign.onEnterBeatId) has
+//     this scene as its sceneId, or
+//   • the hex lists this scene among its battle scenes (flags.bbttcc-raid.battleScenes)
+// The hottest such hex wins:  1 Radiated → light · 2 Contaminated → medium ·
+// 3 Radiation Zone → heavy. Hex maps themselves never tint.
 //
-//   • API on game.bbttcc.api.radiation.zone:
-//       getScene(sceneOrId)
-//       setScene(sceneOrId, config)
-//       clearScene(sceneOrId)
+// Retired 2026-10-22: hand-set scene zones (zone.setScene/clearScene), zone drift on
+// Advance Turn, and zone fallout on travel legs — exposure is the hex level only.
 //
-//   • Hooks:
-//       - bbttcc:afterTravel  → zone-based RP gain per travel leg
-//       - bbttcc:advanceTurn:end → zone drift per turn (optional)
-//
-//   • Visual overlay on active scene (tinted fog).
-//
-// Dependencies:
-//   - Turn Driver emits "bbttcc:advanceTurn:begin/end" hooks.  (turn-driver.js)
-//   - Travel engines emit "bbttcc:afterTravel" hooks.          (api.travel.js / hex-travel)
-//   - Radiation core API is installed (game.bbttcc.api.radiation).
+// The GM seat derives it and caches { level, hexes } on flags.bbttcc-radiation.greenScreen so player
+// seats (which can't see other scenes' hexes or the beats) draw the same tint.
+// API: game.bbttcc.api.radiation.zone.{getScene (cached) → { intensity, level, color, hexes } | null, compute, sync, redraw}
 // ============================================================================
 
 (() => {
-  const TAG      = "[bbttcc-radiation/zone]";
-  const MOD_SCN  = "bbttcc-radiation";
+  const TAG     = "[bbttcc-radiation/zone]";
+  const MOD_SCN = "bbttcc-radiation";
+  const MOD_T   = "bbttcc-territory";
+  const NAME    = "bbttcc-radiation-zone-overlay";
+  const COLOR   = "#A3E635";
+  const BY_LEVEL = [
+    { intensity: "none",     alpha: 0 },
+    { intensity: "low",      alpha: 0.18 },
+    { intensity: "moderate", alpha: 0.24 },
+    { intensity: "high",     alpha: 0.32 }
+  ];
 
-  // Intensity ladder for drift
-  const ORDER = ["none", "low", "moderate", "high", "storm"];
-
-  // Default config for a new zone
-  function defaultZone() {
-    return {
-      intensity: "none",
-      drift: "stable",    // stable | rising | falling
-      color: "#A3E635",   // a nice toxic green
-      radius: 1.0,
-      updatedAt: Date.now()
-    };
-  }
-
-  function intensityIndex(key) {
-    const k = String(key || "none").toLowerCase();
-    const i = ORDER.indexOf(k);
-    return i === -1 ? 0 : i;
-  }
-
-  function normalizeIntensity(key) {
-    return ORDER[intensityIndex(key)];
-  }
-
-  function clamp01(v) {
-    const n = Number(v ?? 1);
-    return Math.max(0, Math.min(1, n));
-  }
-
-  // ---------------------------------------------------------------------------
-  // Zone API
-  // ---------------------------------------------------------------------------
+  const bareId = (v) => String(v?.id ?? v ?? "").replace(/^Scene\./, "").trim();
 
   function resolveScene(sceneOrId) {
-    if (!sceneOrId) return game.scenes?.active ?? null;
+    if (!sceneOrId) return canvas?.scene ?? game.scenes?.active ?? null;
     if (sceneOrId instanceof Scene) return sceneOrId;
-    const id = String(sceneOrId);
-    return game.scenes?.get(id) ?? null;
+    return game.scenes?.get(bareId(sceneOrId)) ?? null;
   }
 
-  function getZoneForScene(sceneOrId) {
+  // Beat ids whose scene is this one (active campaigns' beats).
+  function beatIdsForScene(sceneId) {
+    const out = new Set();
+    try {
+      const all = game.bbttcc?.api?.campaign?.getAllCampaigns?.();
+      const list = Array.isArray(all) ? all : Object.values(all || {});
+      for (const c of list) for (const b of (c?.beats || [])) {
+        if (b?.id && b.sceneId && bareId(b.sceneId) === sceneId) out.add(String(b.id));
+      }
+    } catch (e) { console.warn(TAG, "beat scan failed", e); }
+    return out;
+  }
+
+  // GM-side derivation (a player seat cannot see other scenes' hexes or the campaign beats).
+  function computeZoneForScene(sceneOrId, beatMap = null) {
     const sc = resolveScene(sceneOrId);
     if (!sc) return null;
-    const raw = sc.getFlag?.(MOD_SCN, "zone") || null;
-    if (!raw) return null;
-    return {
-      ...defaultZone(),
-      ...raw,
-      intensity: normalizeIntensity(raw.intensity),
-      drift: (raw.drift === "rising" || raw.drift === "falling" || raw.drift === "stable")
-        ? raw.drift
-        : "stable",
-      radius: clamp01(raw.radius),
-      color: raw.color || "#A3E635"
-    };
+    const sid = sc.id;
+    const beats = beatMap ? (beatMap.get(sid) || new Set()) : beatIdsForScene(sid);
+    const radApi = game.bbttcc?.api?.territory?.radiation;
+    let level = 0; const hexes = [];
+    for (const s of game.scenes ?? []) for (const d of s.drawings ?? []) {
+      const tf = d.flags?.[MOD_T];
+      if (!tf || !(tf.isHex === true || tf.kind === "territory-hex")) continue;
+      const lv = radApi ? radApi.level(d) : Math.max(0, Math.min(3, Number(tf.mods?.radiation) || 0));
+      if (lv <= 0) continue;
+      const onEnter = String(tf.campaign?.onEnterBeatId || "");
+      const battles = d.flags?.["bbttcc-raid"]?.battleScenes;
+      const linked = (onEnter && beats.has(onEnter))
+        || (Array.isArray(battles) && battles.some(e => bareId(e?.sceneId ?? e?.uuid ?? e) === sid));
+      if (!linked) continue;
+      hexes.push(tf.name || d.text || d.id);
+      level = Math.max(level, lv);
+    }
+    if (!level) return null;
+    return { intensity: BY_LEVEL[level].intensity, level, color: COLOR, hexes };
   }
 
-  async function setZoneForScene(sceneOrId, cfg = {}) {
+  // The GM derives each scene's level and caches it on the scene (flags.bbttcc-radiation.greenScreen
+  // = { level, hexes }) so every seat — players included — draws the same tint. It is a cache of the
+  // hex Radiation level, never an input: only syncGreenScreens() writes it.
+  function getZoneForScene(sceneOrId) {
     const sc = resolveScene(sceneOrId);
-    if (!sc) throw new Error("RadiationZone: scene not found");
-
-    const prev = getZoneForScene(sc) || defaultZone();
-    const next = {
-      ...prev,
-      ...cfg,
-      intensity: normalizeIntensity(cfg.intensity ?? prev.intensity),
-      drift: (cfg.drift ?? prev.drift) || "stable",
-      color: cfg.color ?? prev.color,
-      radius: clamp01(cfg.radius ?? prev.radius),
-      updatedAt: Date.now()
-    };
-
-    await sc.setFlag(MOD_SCN, "zone", next);
-    if (sc === canvas.scene) {
-      // Refresh overlay immediately on active scene
-      drawZoneOverlay();
-    }
-    return next;
+    const g = sc?.getFlag?.(MOD_SCN, "greenScreen");
+    const level = Math.max(0, Math.min(3, Number(g?.level) || 0));
+    if (!level) return null;
+    return { intensity: BY_LEVEL[level].intensity, level, color: COLOR, hexes: Array.isArray(g.hexes) ? g.hexes : [] };
   }
 
-  async function clearZoneForScene(sceneOrId) {
-    const sc = resolveScene(sceneOrId);
-    if (!sc) return false;
-    await sc.unsetFlag(MOD_SCN, "zone");
-    if (sc === canvas.scene) {
-      removeZoneOverlay();
-    }
-    return true;
-  }
-
-  // Attach API under game.bbttcc.api.radiation.zone
-  function publishAPI() {
-    game.bbttcc ??= { api:{} };
-    game.bbttcc.api ??= game.bbttcc.api || {};
-    game.bbttcc.api.radiation ??= game.bbttcc.api.radiation || {};
-    const z = game.bbttcc.api.radiation.zone ?? {};
-
-    game.bbttcc.api.radiation.zone = {
-      ...z,
-      getScene: getZoneForScene,
-      setScene: setZoneForScene,
-      clearScene: clearZoneForScene
-    };
-
-    console.log(TAG, "Zone API published on game.bbttcc.api.radiation.zone");
-  }
-
-  // ---------------------------------------------------------------------------
-  // Travel Integration — zone exposure on bbttcc:afterTravel
-  // ---------------------------------------------------------------------------
-
-  function zoneExposureAmount(intensityKey) {
-    const key = normalizeIntensity(intensityKey);
-    switch (key) {
-      case "low":      return 0.5;  // 50% chance to gain 1 RP
-      case "moderate": return 1;
-      case "high":     return 2;
-      case "storm":    return 3;
-      case "none":
-      default:         return 0;
-    }
-  }
-
-  async function handleAfterTravel(ctx) {
+  function beatMapByScene() {
+    const map = new Map();
     try {
-      const radApi = game.bbttcc?.api?.radiation;
-      if (!radApi || typeof radApi.add !== "function") return;
-
-      // Encounter re-emits (ctx.encounter) are a second hook for the same leg — expose once.
-      if (ctx?.encounter || ctx?.relayed) return;   // relayed = GM-side re-fire of a leg already handled
-      const actor = ctx.actor;
-      if (!actor) return;
-
-      // Determine scene of the destination hex
-      const toDoc = ctx.to?.doc || ctx.to?.document || null;
-      const sc = toDoc?.parent || canvas?.scene || game.scenes?.active;
-      if (!sc) return;
-
-      const zone = getZoneForScene(sc);
-      if (!zone || normalizeIntensity(zone.intensity) === "none") return;
-
-      let amt = zoneExposureAmount(zone.intensity);
-
-      // Low intensity uses a coin flip
-      if (amt === 0.5) {
-        if (Math.random() < 0.5) amt = 1; else amt = 0;
+      const all = game.bbttcc?.api?.campaign?.getAllCampaigns?.();
+      const list = Array.isArray(all) ? all : Object.values(all || {});
+      for (const c of list) for (const b of (c?.beats || [])) {
+        if (!b?.id || !b.sceneId) continue;
+        const sid = bareId(b.sceneId);
+        if (!map.has(sid)) map.set(sid, new Set());
+        map.get(sid).add(String(b.id));
       }
+    } catch (e) { console.warn(TAG, "beat scan failed", e); }
+    return map;
+  }
 
-      if (amt <= 0) return;
-
-      await radApi.add(actor, amt);
-
-      // GM whisper
-      const name = actor.name ?? "Unknown Faction";
-      const hexName =
-        ctx.toHexName ||
-        toDoc?.name ||
-        toDoc?.text ||
-        ctx.to?.id ||
-        "destination hex";
-
-      const lines = [
-        `<b>Zone Fallout Exposure</b> — ${foundry.utils.escapeHTML(name)}`,
-        `Scene: ${foundry.utils.escapeHTML(sc.name || sc.id)} `,
-        `Zone Intensity: <b>${normalizeIntensity(zone.intensity).toUpperCase()}</b>`,
-        `Location: <i>${foundry.utils.escapeHTML(hexName)}</i>`,
-        `Gained <b>${amt} RP</b> from ambient fallout.`
-      ].join("<br/>");
-
-      await ChatMessage.create({
-        content: `<p>${lines}</p>`,
-        whisper: game.users.filter(u => u.isGM).map(u => u.id),
-        speaker: { alias: "Bad Eden Radiation" }
-      });
-
-      console.log(TAG, `Applied +${amt} RP from zone '${zone.intensity}' to`, name);
-    } catch (err) {
-      console.warn(TAG, "afterTravel zone handler failed:", err);
+  let _syncTimer = null;
+  function scheduleSync() {
+    if (!game.user?.isGM || (game.users?.activeGM && !game.users.activeGM.isSelf)) return;
+    clearTimeout(_syncTimer);
+    _syncTimer = setTimeout(() => syncGreenScreens().catch(e => console.warn(TAG, "sync failed", e)), 400);
+  }
+  async function syncGreenScreens() {
+    if (!game.user?.isGM || (game.users?.activeGM && !game.users.activeGM.isSelf)) return 0;
+    const beatMap = beatMapByScene();
+    let n = 0;
+    for (const sc of game.scenes ?? []) {
+      const z = computeZoneForScene(sc, beatMap);
+      const cur = sc.getFlag(MOD_SCN, "greenScreen");
+      const curLv = Number(cur?.level) || 0;
+      if (!z && !curLv) continue;
+      if (z && curLv === z.level && JSON.stringify(cur?.hexes || []) === JSON.stringify(z.hexes)) continue;
+      if (z) await sc.setFlag(MOD_SCN, "greenScreen", { level: z.level, hexes: z.hexes });
+      else await sc.unsetFlag(MOD_SCN, "greenScreen");
+      n++;
     }
+    if (n) console.log(TAG, `green screen cache updated on ${n} scene(s)`);
+    return n;
   }
 
   // ---------------------------------------------------------------------------
-  // Advance Turn Integration — zone drift on bbttcc:advanceTurn:end
-  // ---------------------------------------------------------------------------
-
-  function nextIntensity(current, drift) {
-    const idx = intensityIndex(current);
-    if (drift === "rising")  return ORDER[Math.min(ORDER.length - 1, idx + 1)];
-    if (drift === "falling") return ORDER[Math.max(0, idx - 1)];
-    return ORDER[idx]; // stable
-  }
-
-  async function handleAdvanceTurnEnd(ctx = {}) {
-    if (!game.user?.isGM) return;   // world-state writes run once, on the GM
-    if (ctx?.apply === false) return; // dry-run / preview — never drift zones
-    const radSettings = game.settings;
-    const enableDrift = radSettings?.get(MOD_SCN, "enableZoneDrift") ?? true;
-
-    if (!enableDrift) return;
-
-    const scenes = game.scenes ?? [];
-    const updates = [];
-    const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
-    const lines = [];
-
-    for (const sc of scenes) {
-      const zone = getZoneForScene(sc);
-      if (!zone) continue;
-
-      const before = normalizeIntensity(zone.intensity);
-      const drift  = zone.drift || "stable";
-      const after  = nextIntensity(before, drift);
-
-      // Optional: random storm spike when high & rising
-      let final = after;
-      if (before === "high" && drift === "rising" && after === "storm") {
-        // 50% chance storm, 50% stay at high
-        if (Math.random() < 0.5) {
-          final = "storm";
-        } else {
-          final = "high";
-        }
-      }
-
-      if (final === before) continue;
-
-      updates.push(
-        sc.setFlag(MOD_SCN, "zone", {
-          ...zone,
-          intensity: final,
-          updatedAt: Date.now()
-        })
-      );
-
-      lines.push(
-        `• <b>${foundry.utils.escapeHTML(sc.name || sc.id)}</b>: `
-        + `Zone intensity ${before.toUpperCase()} → ${final.toUpperCase()} `
-        + `(drift: ${drift})`
-      );
-
-      // If active scene changed, refresh overlay
-      if (sc === canvas.scene) {
-        drawZoneOverlay();
-      }
-    }
-
-    if (updates.length) await Promise.allSettled(updates);
-    if (lines.length && gmIds.length) {
-      await ChatMessage.create({
-        content: `<p><b>Radiation Weather Drift</b></p>${lines.join("<br/>")}`,
-        whisper: gmIds,
-        speaker: { alias: "Bad Eden Radiation" }
-      }).catch(()=>{});
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // Visual Overlay
+  // Overlay
   // ---------------------------------------------------------------------------
 
   function removeZoneOverlay() {
     try {
       const layer = canvas.foreground || canvas.stage;
-      const old = layer.getChildByName?.("bbttcc-radiation-zone-overlay");
+      const old = layer?.getChildByName?.(NAME);
       if (old) old.destroy(true);
-    } catch (e) {
-      console.warn(TAG, "removeZoneOverlay failed", e);
-    }
+    } catch (e) { console.warn(TAG, "removeZoneOverlay failed", e); }
   }
 
   function drawZoneOverlay() {
-  try {
-    // Remove any existing overlay first
-    removeZoneOverlay();
-
-    const sc = canvas.scene;
-    if (!sc) return;
-
-    // --- Safe read of "show overlay" setting -------------------------------
-    let show = true;
     try {
-      // If settings are registered, respect them
-      show = game.settings.get(MOD_SCN, "showZoneOverlay");
-    } catch (e) {
-      // If setting isn't registered yet, default to "true" and keep going
-      // so we never crash drawZoneOverlay.
-      show = true;
-    }
+      removeZoneOverlay();
+      const sc = canvas.scene;
+      if (!sc) return;
+      let show = true;
+      try { show = game.settings.get(MOD_SCN, "showZoneOverlay"); } catch (_e) { show = true; }
+      if (!show) return;
 
-    if (!show) return;
+      const zone = getZoneForScene(sc);
+      if (!zone) return;
+      const layer = canvas.foreground || canvas.stage;
+      if (!layer) return;
 
-    const zone = getZoneForScene(sc);
-    if (!zone || normalizeIntensity(zone.intensity) === "none") return;
+      const g = new PIXI.Graphics();
+      g.name = NAME;
+      g.interactive = false; g.interactiveChildren = false; g.eventMode = "none";   // never eats clicks
 
-    const layer = canvas.foreground || canvas.stage;
-    if (!layer) return;
-
-    const NAME = "bbttcc-radiation-zone-overlay";
-
-    // Create overlay graphic
-    const g = new PIXI.Graphics();
-    g.name = NAME;
-
-    // Make sure it NEVER eats clicks
-    g.interactive = false;
-    g.interactiveChildren = false;
-    // v10+ event model
-    g.eventMode = "none";
-
-    // Intensity → alpha mapping  (slightly stronger for visibility)
-    const intens = normalizeIntensity(zone.intensity);
-    let alpha = 0.18;
-    if (intens === "moderate") alpha = 0.24;
-    if (intens === "high")     alpha = 0.32;
-    if (intens === "storm")    alpha = 0.40;
-
-    const col = PIXI.utils.string2hex(zone.color || "#22C55E");
-
-    // Simple full-scene overlay for now; radius reserved for future falloff
-    const w = canvas.dimensions.width;
-    const h = canvas.dimensions.height;
-
-    g.beginFill(col, alpha);
-    g.drawRect(0, 0, w, h);
-    g.endFill();
-
-    // subtle noise stripes
-    g.lineStyle(1, col, alpha * 0.6);
-    for (let y = 0; y < h; y += 64) {
-      g.moveTo(0, y);
-      g.lineTo(w, y + 32);
-    }
-
-    layer.addChild(g);
-
-    console.log(
-      TAG,
-      "Zone overlay drawn:",
-      intens,
-      "on scene",
-      sc.name,
-      "alpha",
-      alpha
-    );
-  } catch (e) {
-    console.warn("[bbttcc-radiation/zone] drawZoneOverlay failed", e);
+      const alpha = BY_LEVEL[zone.level].alpha;
+      const col = PIXI.utils.string2hex(zone.color);
+      const w = canvas.dimensions.width, h = canvas.dimensions.height;
+      g.beginFill(col, alpha); g.drawRect(0, 0, w, h); g.endFill();
+      g.lineStyle(1, col, alpha * 0.6);   // subtle fallout stripes
+      for (let y = 0; y < h; y += 64) { g.moveTo(0, y); g.lineTo(w, y + 32); }
+      layer.addChild(g);
+      console.log(TAG, `green screen on ${sc.name}: level ${zone.level} (${zone.hexes.join(", ")})`);
+    } catch (e) { console.warn(TAG, "drawZoneOverlay failed", e); }
   }
-}
 
-
-  // ---------------------------------------------------------------------------
-  // Settings & Hook Wiring
-  // ---------------------------------------------------------------------------
+  function publishAPI() {
+    game.bbttcc ??= { api: {} };
+    game.bbttcc.api ??= {};
+    game.bbttcc.api.radiation ??= {};
+    game.bbttcc.api.radiation.zone = { getScene: getZoneForScene, compute: computeZoneForScene, sync: syncGreenScreens, redraw: drawZoneOverlay };
+  }
 
   Hooks.once("init", () => {
-    // World: enable/disable drift
-    game.settings.register(MOD_SCN, "enableZoneDrift", {
-      name: "Radiation Zones: Enable Drift",
-      hint: "If enabled, scene radiation zones will drift according to their 'drift' mode each Advance Turn.",
-      scope: "world",
-      config: true,
-      type: Boolean,
-      default: true
-    });
-
-    // Client: show/hide overlay
     game.settings.register(MOD_SCN, "showZoneOverlay", {
-      name: "Radiation Zones: Show Overlay",
-      hint: "Draw a subtle tinted overlay on scenes with active radiation zones.",
-      scope: "client",
-      config: true,
-      type: Boolean,
-      default: true
+      name: "Radiation: green screen",
+      hint: "Tint a battlemap green when the hex that leads to it is radiated (light / medium / heavy by the hex's Radiation level).",
+      scope: "client", config: true, type: Boolean, default: true
     });
-
-    // 🔹 Register canvasReady early so we don't miss the first render
     Hooks.on("canvasReady", drawZoneOverlay);
   });
 
-    Hooks.once("ready", () => {
+  Hooks.once("ready", () => {
     publishAPI();
-
-    // Zone-based exposure on travel
-    Hooks.on("bbttcc:afterTravel", handleAfterTravel);
-
-    // Zone drift after advance turn (driver emits begin/end hooks)
-    Hooks.on("bbttcc:advanceTurn:end", handleAdvanceTurnEnd);
-
-    // Redraw overlay if active scene's flags change
-    Hooks.on("updateScene", (scene, diff) => {
-      if (scene.id !== canvas.scene?.id) return;
-      if (diff.flags && diff.flags[MOD_SCN] && diff.flags[MOD_SCN].zone !== undefined) {
-        drawZoneOverlay();
-      }
+    // A hex's level or on-enter beat changed → the GM re-derives the cache; every seat redraws
+    // when its scene's cache flag changes.
+    Hooks.on("bbttcc:hexRadiationChanged", scheduleSync);
+    Hooks.on("updateDrawing", (doc, diff) => {
+      const m = diff?.flags?.[MOD_T];
+      if (m && (m.mods !== undefined || m.campaign !== undefined)) scheduleSync();
     });
-
-    console.log(TAG, "Radiation Zone Enhancer ready.");
-
-    // If the canvas is already up by the time ready fires, draw once now.
-    if (canvas?.scene) {
-      drawZoneOverlay();
-    }
+    Hooks.on("updateScene", (scene, diff) => {
+      if (scene.id === canvas?.scene?.id && diff?.flags?.[MOD_SCN] !== undefined) drawZoneOverlay();
+    });
+    scheduleSync();
+    if (canvas?.scene) drawZoneOverlay();
+    console.log(TAG, "green screen ready (derived from hex Radiation level).");
   });
-
 })();

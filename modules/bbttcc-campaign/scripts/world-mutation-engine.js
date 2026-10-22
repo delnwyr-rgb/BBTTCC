@@ -1034,6 +1034,15 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
   }
   async function _applyNamedModifiers(doc, add, remove, { beat = null, beatId = "", via = "beat" } = {}) {
     const MOD_T = "bbttcc-territory";
+    // Radiation names → the hex Radiation level (one switch, 2026-10-22). The setter stamps the
+    // Radiated tag + Contaminated / Radiation Zone production modifier itself.
+    const radApi = get(game, "bbttcc.api.territory.radiation", null);
+    if (radApi) {
+      const r = radApi.fromNames(radApi.level(doc), add, remove);
+      if (r.touched) await radApi.set(doc, r.level, { source: via + ":" + (beatId || "?") });
+      add = (Array.isArray(add) ? add : []).filter(n => !radApi.isRadTag(n));
+      remove = (Array.isArray(remove) ? remove : []).filter(n => !radApi.isRadTag(n));
+    }
     const tf = (doc.flags && doc.flags[MOD_T]) ? clone(doc.flags[MOD_T]) : {};
     const cur = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
     const before = cur.slice();

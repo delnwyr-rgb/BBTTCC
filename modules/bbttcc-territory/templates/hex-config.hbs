@@ -290,6 +290,12 @@
           {{/if}}
         </div>
         <p class="hint">These affect yields (and sometimes Defense/flags). They match the math used by Campaign Overview and the Turn Driver.</p>
+        <div class="form-group" style="margin-top:.5rem;" title="The one radiation switch. Stewards who travel in take this many RP (gear reduces it). Stays until cleaned; at 3 it can spread.">
+          <label>☢ Radiation level</label>
+          <select name="bbttcc-radiation-level">
+            {{#each radiationLadder}}<option value="{{level}}" {{#if (eq level ../radiationLevel)}}selected{{/if}}>{{label}}</option>{{/each}}
+          </select>
+        </div>
       </fieldset>
 
       <fieldset style="margin-bottom:.75rem;">

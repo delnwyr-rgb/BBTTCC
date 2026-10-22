@@ -1052,7 +1052,7 @@ const hexCraftTour = {
       id: "modifiers", title: "Modifiers",
       selector: 'form.bbttcc-hex-config input[name="modifiers"]',
       optional: true,
-      text: "Twelve toggles — Well-Maintained, Fortified, Radiation Zone and friends — each multiplying or adjusting the auto-calculated resources. These are the fast levers for making a hex feel lived-in or ruined."
+      text: "Twelve toggles — Well-Maintained, Fortified, Trade Hub and friends (radiation is its own ☢ level dropdown) — each multiplying or adjusting the auto-calculated resources. These are the fast levers for making a hex feel lived-in or ruined."
     },
     {
       id: "leylines", title: "Leylines & gates",

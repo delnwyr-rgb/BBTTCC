@@ -121,6 +121,14 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   // Immediate modifier write + ledger (the pending sweep is for next-turn effects).
   async function setHexModifiers(doc, add = [], remove = [], meta = {}){
     if (!doc) return { added: [], removed: [] };
+    // Radiation names are the hex Radiation level now (one switch, 2026-10-22): translate them,
+    // let the setter stamp tag + production modifier, and keep them out of the plain list below.
+    const radApi = game.bbttcc?.api?.territory?.radiation;
+    if (radApi) {
+      const r = radApi.fromNames(radApi.level(doc), add, remove);
+      if (r.touched) await radApi.set(doc, r.level, { source: meta.activity || "strategic" });
+      add = add.filter(n => !radApi.isRadTag(n)); remove = remove.filter(n => !radApi.isRadTag(n));
+    }
     const cur = Array.isArray(tfOf(doc).modifiers) ? tfOf(doc).modifiers.slice() : [];
     const low = (s) => String(s || "").toLowerCase();
     const removed = cur.filter(m => remove.some(r => low(r) === low(m)));

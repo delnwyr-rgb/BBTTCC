@@ -1,131 +1,74 @@
 // ============================================================================
-// Bad Eden — Radiation-on-Travel Enhancer (Phase A)
-// Adds Radiation exposure to actors when traveling into radiated terrain.
+// Bad Eden — Radiation-on-Travel Enhancer
+// A travel leg into a hot hex exposes the travelling faction's STEWARDS.
 //
-// Integrates with:
-//   • api.travel.js  (bbttcc:afterTravel hook)  ✔
-//   • hex-travel.js  (same hook)               ✔
-//   • travel console & planner                 ✔
-//   • Wasteland/Radiation terrain keys         ✔
-//   • Hex conditions: "Radiated", "Contaminated"
-//   • Hex mods.radiation                       ✔
-//
-// Applies radiation to the traveling *faction actor* for now.
-// (Phase B will expand this to PC/NPC party tokens.)
+// One switch (owner rulings 2026-10-22):
+//   • the destination hex's Radiation level (0–3, api.territory.radiation) + its active
+//     weather's radiation = the leg's base exposure (api.radiation.hexBase)
+//   • each Steward of the faction takes it through their gear (api.radiation.exposureFor):
+//     Radcloth Hood / Scrubber Harness = one level cooler, a worn Rad Suit halves the rest
+//   • RP lands on the Steward (system.radiation.rp) — the sickness ladder lives there
+//   • one card per leg, to the table (bbttcc-territory.tableAnnouncements)
+// Terrain no longer adds radiation; scene fallout zones are only the green tint now.
 // ============================================================================
 
 (() => {
   const TAG = "[bbttcc-radiation/travel]";
-  const MOD_T = "bbttcc-territory";
 
-  function getTerrainKey(ctx) {
-    try {
-      // api.travel.js path: ctx.to.flags.terrain.key
-      const f = ctx.to?.flags?.terrain?.key;
-      if (f) return String(f).toLowerCase();
+  const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "tableAnnouncements") === "gm") return (game.users ?? []).filter(u => u.isGM).map(u => u.id); } catch (_e) {} return []; };
+  const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
 
-      // hex-travel.js path: ctx.terrainKey
-      if (ctx.terrainKey) return String(ctx.terrainKey).toLowerCase();
-
-      // fallback via drawing flags
-      const tf = ctx.to?.doc?.flags?.[MOD_T] || ctx.to?.document?.flags?.[MOD_T];
-      const k = tf?.terrain?.key || tf?.terrainType || tf?.terrain;
-      return k ? String(k).toLowerCase() : null;
-    } catch(e) {
-      console.warn(TAG, "getTerrainKey failed", e);
-      return null;
-    }
-  }
-
-  function getHexFlags(ctx) {
-    return ctx.to?.flags?.[MOD_T]
-        || ctx.to?.doc?.flags?.[MOD_T]
-        || ctx.to?.document?.flags?.[MOD_T]
-        || {};
-  }
-
-  function computeExposure(ctx) {
-    const terrain = getTerrainKey(ctx);
-    const hf = getHexFlags(ctx);
-
-    let rp = 0;
-    const reasons = [];
-
-    // Terrain-based radiation (Wasteland / Radiation)
-    if (terrain === "wasteland" || terrain === "radiation") {
-      rp += 1;
-      reasons.push("Wasteland terrain");
-    }
-
-    // Condition: Radiated
-    const conds = hf.conditions || [];
-    if (conds.includes("Radiated")) {
-      rp += 1;
-      reasons.push("Hex is Radiated");
-    }
-
-    // Condition: Contaminated
-    if (conds.includes("Contaminated")) {
-      rp += 1;
-      reasons.push("Hex is Contaminated");
-    }
-
-    // Numeric mods.radiation
-    const mods = hf.mods || {};
-    const val = Number(mods.radiation || 0);
-    if (val > 0) {
-      rp += val;
-      reasons.push(`Environmental fallout (+${val})`);
-    }
-
-    return { amount: rp, reasons };
+  function destHexDoc(ctx) {
+    const t = ctx?.to;
+    return t?.document ?? t?.doc ?? t?.obj?.document ?? t?.obj ?? null;
   }
 
   async function applyExposure(ctx) {
     // The encounter re-emits (travel console + GM arbitration relay) carry ctx.encounter and are a second
     // hook for the SAME leg — expose once. The hook is local to the seat that ran the leg; radApi.add relays
-    // to the GM when this seat cannot write the faction.
-    if (ctx?.encounter || ctx?.relayed) return;   // relayed = a GM-side re-fire of a leg this listener already handled on its seat
-    const actor = ctx.actor; // traveling faction actor
-    if (!actor) return;
-
+    // to the GM when this seat cannot write the steward.
+    if (ctx?.encounter || ctx?.relayed) return;
     const radApi = game.bbttcc?.api?.radiation;
-    if (!radApi || typeof radApi.add !== "function") return;
+    if (!radApi?.add || !radApi.hexBase || !radApi.exposureFor) return;
 
-    const { amount, reasons } = computeExposure(ctx);
-    if (amount <= 0) return;
+    const hex = destHexDoc(ctx);
+    if (!hex) return;
+    const { level, weather, weatherLabel, base } = radApi.hexBase(hex);
+    if (base <= 0) return;
 
-    try {
-      await radApi.add(actor, amount);
+    const faction = ctx.actor;
+    const stewards = radApi.stewardsOf(faction ?? ctx.factionId);
+    if (!stewards.length) { console.log(TAG, "hot hex but no stewards on", faction?.name); return; }
 
-      // GM whisper
-      const lines = [
-        `<b>Radiation Exposure</b> — ${foundry.utils.escapeHTML(actor.name)}`,
-        `Travel into hex: <i>${foundry.utils.escapeHTML(String(ctx.toHexName || ctx.to?.doc?.name || ctx.to?.document?.name || ctx.to?.id || ""))}</i>`,
-        `Gained <b>${amount} RP</b>`,
-        `<small>${reasons.join(", ")}</small>`
-      ].join("<br/>");
-
-      await ChatMessage.create({
-        content: `<p>${lines}</p>`,
-        whisper: game.users.filter(u => u.isGM).map(u => u.id),
-        speaker: { alias: "Bad Eden Radiation" }
-      });
-
-      console.log(TAG, `Applied +${amount} RP →`, actor.name, reasons);
-
-    } catch (err) {
-      console.warn(TAG, "Failed to apply radiation:", err);
+    const rows = [];
+    for (const S of stewards) {
+      const ex = radApi.exposureFor(S, base);
+      if (ex.rp > 0) {
+        try { await radApi.add(S, ex.rp); } catch (e) { console.warn(TAG, "add failed", S.name, e); continue; }
+      }
+      const gear = ex.protection.immune ? "immune"
+        : ex.protection.sources.length ? `${ex.protection.sources.join(", ")}` : "";
+      rows.push(`<li><b>${esc(S.name)}</b>: +${ex.rp} RP${gear ? ` <span style="opacity:.7">(${esc(gear)})</span>` : ""} → ${radApi.get(S)} RP</li>`);
     }
+
+    const rung = game.bbttcc?.api?.territory?.radiation?.LADDER?.[level]?.name || `level ${level}`;
+    const hexName = ctx.toHexName || hex?.flags?.["bbttcc-territory"]?.name || hex?.text || hex?.name || "the hex";
+    const why = [`${esc(rung)} (${level})`];
+    if (weather) why.push(`${esc(weatherLabel)} ${weather > 0 ? "+" : ""}${weather}`);
+    await ChatMessage.create({
+      content: `<div class="bbttcc-radiation-card" style="border-left:3px solid #84cc16;padding:.35em .6em;background:rgba(132,204,22,.08);">`
+        + `<b>☢ Radiation Exposure</b> — ${esc(hexName)}<br/><small>${why.join(" · ")}</small>`
+        + `<ul style="margin:.3em 0 0 1em;padding:0;">${rows.join("")}</ul></div>`,
+      whisper: tableAudience(),
+      speaker: { alias: "Bad Eden Radiation" }
+    }).catch(e => console.warn(TAG, "card failed", e));
+    console.log(TAG, `leg into ${hexName}: base ${base}`, rows.length, "steward(s)");
   }
 
-  // -------------------------------------------------------------------------
-  // Hook installation
-  // -------------------------------------------------------------------------
   Hooks.on("bbttcc:afterTravel", async (ctx) => {
     try { await applyExposure(ctx); }
-    catch(e) { console.warn(TAG, "afterTravel handler failed", e); }
+    catch (e) { console.warn(TAG, "afterTravel handler failed", e); }
   });
 
-  console.log(TAG, "Radiation-on-Travel Enhancer installed.");
+  console.log(TAG, "Radiation-on-Travel Enhancer installed (hex level → stewards).");
 })();

@@ -217,13 +217,11 @@
     // MENACES (2026-10-21): a recorded road menace outranks the terrain chip
     if (Array.isArray(hex.menaces) && hex.menaces.length) { const m = hex.menaces[0]; return { type: "menace", icon: "🐺", label: String(m?.label || "Menace") + (m?.overdue ? " (overdue)" : "") }; }
     const key = String(hex.terrainKey || "").toLowerCase();
-    const conds = (Array.isArray(hex.conditions) ? hex.conditions : []).map(c => String(c || "").toLowerCase());
-    const mods  = hex.mods || {};
-    const hasRadiationCond = conds.includes("radiated") || conds.includes("contaminated");
-    const hasRadMod        = Number(mods.radiation || 0) > 0;
-
-    if (key === "wasteland" || key === "radiation" || hasRadiationCond || hasRadMod) {
-      return { type:"radiation", icon:"☢", label:"Radiation" };
+    // Radiation = the hex Radiation level only (one switch, 2026-10-22).
+    const radLv = Math.max(0, Math.min(3, Math.round(Number(hex.mods?.radiation) || 0)));
+    if (radLv > 0) {
+      const rung = game.bbttcc?.api?.territory?.radiation?.LADDER?.[radLv]?.name || "Radiation";
+      return { type:"radiation", icon:"☢", label:`${rung} (${radLv})` };
     }
     if (["desert","ashwastes","ocean","sea","swamp","mire","mountains","highlands","canyons","badlands"].includes(key)) {
       return { type:"terrain", icon:"⚠", label:"Harsh Terrain" };
@@ -1543,35 +1541,25 @@
           return;
         }
 
+        // One switch (2026-10-22): each leg exposes the lead faction's Stewards to the destination
+        // hex's Radiation level (+ weather), through their gear — api.radiation.exposureFor.
+        const radApi = game.bbttcc?.api?.radiation;
+        const stewards = radApi?.stewardsOf?.($fac?.value || "") ?? [];
         let totalRad = 0;
+        const per = new Map();
         for (const L of legs) {
           const h = hexes.find(h => h.id === L.toId);
           if (!h) continue;
-          const terr = String(h.terrainKey || "").toLowerCase();
-          const conds = Array.isArray(h.conditions) ? h.conditions : [];
-          const mods  = h.mods || {};
-          if (terr === "wasteland" || terr === "radiation") totalRad += 1;
-          if (conds.includes("Radiated"))     totalRad += 1;
-          if (conds.includes("Contaminated")) totalRad += 1;
-          const val = Number(mods.radiation || 0);
-          if (val > 0) totalRad += val;
+          const doc = (() => { try { return fromUuidSync(h.uuid || ""); } catch (_e) { return null; } })();
+          const base = radApi?.hexBase ? radApi.hexBase(doc ?? { flags: { "bbttcc-territory": { mods: h.mods || {}, weather: h.weather } } }).base
+                                       : Math.max(0, Math.min(3, Number(h.mods?.radiation) || 0));
+          totalRad += base;
+          for (const S of stewards) per.set(S.name, (per.get(S.name) || 0) + (radApi.exposureFor(S, base).rp));
         }
-
-        try {
-          const radApi = game.bbttcc?.api?.radiation;
-          const zone   = radApi?.zone?.getScene?.();
-          if (zone && zone.intensity) {
-            const key = String(zone.intensity).toLowerCase();
-            let perLeg = 0;
-            if (key === "low")      perLeg = 0.5;
-            else if (key === "moderate") perLeg = 1;
-            else if (key === "high")     perLeg = 2;
-            else if (key === "storm")    perLeg = 3;
-            if (perLeg > 0) totalRad += perLeg * legs.length;
-          }
-        } catch (e) {
-          console.warn(TAG, "Radiation preview failed:", e);
-        }
+        if (per.size) {
+          $rad.setAttribute("data-tooltip", [...per.entries()].map(([n, v]) => `${n}: +${v} RP after gear`).join("<br>"));
+          $rad.setAttribute("data-tooltip-direction", "DOWN");
+        } else $rad.removeAttribute("data-tooltip");
 
         const approx = totalRad;
         let tier = "none";

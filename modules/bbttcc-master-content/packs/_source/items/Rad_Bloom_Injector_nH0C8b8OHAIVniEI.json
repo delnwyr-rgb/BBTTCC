@@ -158,7 +158,19 @@
           "origin": "looted",
           "bound": "free",
           "reach": "self",
-          "footprint": 0
+          "footprint": 0,
+          "consume": {
+            "effects": [
+              {
+                "kind": "track",
+                "op": "set",
+                "track": "radiation",
+                "formula": "0"
+              }
+            ],
+            "decrement": true,
+            "target": "self"
+          }
         }
       }
     },

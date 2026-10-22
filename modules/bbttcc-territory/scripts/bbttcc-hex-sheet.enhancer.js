@@ -57,15 +57,12 @@
     return s;
   }
 
-  // Radiation severity band (mirrors main.js `_radTier` + the HEX_TIPS copy):
-  // I at 1–2, II at 3–5, III at 6–9, IV at 10+; "—" when clean.
+  // Radiation rung name — the hex Radiation level ladder (0–3, owner ruling 2026-10-22):
+  // Clean / Radiated / Contaminated / Radiation Zone.
   function radTier(rad) {
-    const r = Math.max(0, Math.round(Number(rad) || 0));
-    if (r <= 0) return "—";
-    if (r <= 2) return "I";
-    if (r <= 5) return "II";
-    if (r <= 9) return "III";
-    return "IV";
+    const L = game.bbttcc?.api?.territory?.radiation?.LADDER;
+    const r = Math.max(0, Math.min(3, Math.round(Number(rad) || 0)));
+    return r <= 0 ? "—" : (L?.[r]?.name || String(r));
   }
 
   // Canonical pressure stores are flags.bbttcc-territory.mods.radiation and
@@ -158,17 +155,17 @@
     // ---- Tracks & State ----
     tracks:      "Tracks & State — the hex's live gauges: Integration (how developed it is), Radiation, local Darkness, and any active weather.",
     integration: "Integration (0–6) — how thoroughly the owner has absorbed this hex. 0 wild, 1–2 outpost, 3–4 developing, 5 settled, 6 integrated heartland. Higher integration multiplies all production: ×1.05 at 3+, ×1.10 at 5, ×1.20 at 6.",
-    radiation:   "Radiation — this hex's radiation level. It decays 1 per turn on its own, but at 3+ it can spread each turn (25% chance per neighbor, up to the 6 nearest hexes). While a hex is Radiated, its owning faction's global Darkness climbs 1 per turn. Purify the hex to zero it out.",
+    radiation:   "Radiation — this hex's level, 0–3 (Clean · Radiated · Contaminated · Radiation Zone). Each Steward who travels in takes that many RP (gear reduces it). It stays until cleaned (Purify, cleanup maneuvers, the GM). At 3 it can spread each turn (25% chance per neighbor to make it Radiated). While a hex is Radiated, its owning faction's global Darkness climbs 1 per turn. Purify the hex to zero it out.",
     darkness:    "Local Darkness — Qliphothic taint pooled in this hex itself, tracked separately from the owning faction's global Darkness. Faction Darkness rises 1/turn while the faction owns any Radiated hex, and cleansing a Purified hex drops it by 2.",
     weather:     "Weather — active weather on this hex and how many turns it has left. Hover the chip for the full effect breakdown; weather is written by the Travel engine and ticks down each turn.",
 
     // ---- Pressure & Conditions ----
     pressure:      "Pressure & Conditions — radiation severity plus any persistent condition tags on this hex. Conditions are set by GM tools and turn effects (raid fallout, cleansing rituals) and drive the turn engine's radiation/darkness bookkeeping.",
-    radiationTier: "Radiation Tier — severity band from the radiation value: I at 1–2, II at 3–5, III at 6–9, IV at 10+. '—' means no radiation.",
-    conditions:    "Conditions — persistent tags on this hex. Radiated marks active radiation (auto-set when it spreads, auto-cleared when it decays to 0). Purified cleanses this hex AND its ~6 nearest neighbors each turn and lowers the owner's global Darkness by 2. Contaminated and Corrupted mark lasting damage from raids and rituals.",
-    gmRad:         "GM — nudge this hex's radiation up or down (±1 / ±5). It then decays 1 per turn and, at 3+, can spread to neighboring hexes.",
+    radiationTier: "Radiation — the level's name: Radiated (1, no production hit), Contaminated (2, −50% production), Radiation Zone (3, −75% production). '—' means clean.",
+    conditions:    "Conditions — persistent tags on this hex. Radiated follows the Radiation level (set while it is 1+). Purified cleanses radiation on this hex AND its ~6 nearest neighbors each turn and lowers the owner's global Darkness by 2. Corrupted marks lasting damage from raids and rituals.",
+    gmRad:         "GM — THE radiation switch: set this hex's level 0–3. The Radiated tag and the Contaminated / Radiation Zone production modifiers follow it automatically. It does not fade; at 3 it can spread.",
     gmDark:        "GM — nudge this hex's local Darkness up or down by 1.",
-    gmConditions:  "GM — toggle a persistent condition tag on this hex (Radiated, Contaminated, Purified, Corrupted). The turn engine reads these: Purified cleanses each turn; Radiated feeds the owner's Darkness.",
+    gmConditions:  "GM — toggle a persistent condition tag on this hex (Purified, Corrupted). Purified cleanses radiation here and on its neighbors each turn. Radiation itself is the level stepper above.",
     gmCondClear:   "GM — clear every condition tag from this hex at once.",
 
     // ---- Tabs / stage ----
@@ -619,7 +616,7 @@
       const integ = tf.integration || {};
       const integProg = Number((typeof integ.progress !== "undefined") ? integ.progress : 0);
 
-      const rad = readRadiation(tf);
+      const rad = Math.min(3, readRadiation(tf));
       const dark = readDarkness(tf);
 
       // Pressure & Conditions — persistent tags read from the canonical
@@ -892,7 +889,7 @@
         integrationProgress: integProg,
         integrationPips: pips(integProg,6),
         radiation: rad,
-        radiationPips: pips(rad,6),
+        radiationPips: pips(rad,3),
         darkness: dark,
         darknessPips: pips(dark,6),
         radiationTier: radTier(rad),
@@ -1468,11 +1465,10 @@
       }, { capture:true, signal: sig });
 
       // ───────────── Pressure & Conditions — GM controls ─────────────
-      // hex-rad / hex-dark nudge the canonical turn-engine stores
-      // (flags.bbttcc-territory.mods.radiation / .darkness); hex-cond toggles
-      // the named tag in flags.bbttcc-territory.conditions; hex-cond-clear
-      // empties the tag list. Radiation keeps its "Radiated" tag in sync the
-      // same way advance-turn.tracks.js does (tagged while > 0, cleared at 0).
+      // hex-rad sets the hex Radiation level through api.territory.radiation.set (the one
+      // switch — it stamps the Radiated tag + production modifier); hex-dark nudges
+      // mods.darkness; hex-cond toggles Purified / Corrupted; hex-cond-clear empties the
+      // tag list except Radiated, which follows the level.
       root.addEventListener("click", async (ev) => {
         let btn = null;
         try {
@@ -1493,28 +1489,25 @@
         let conds = Array.isArray(tf.conditions) ? tf.conditions.slice() : [];
 
         if (action === "hex-rad") {
+          // THE radiation switch (2026-10-22): the setter stamps the tag + production modifier.
           const delta = Number(btn.getAttribute("data-delta") || 0) || 0;
-          const next = Math.max(0, readRadiation(tf) + delta);
-          mods.radiation = next;
-          if (next > 0 && !conds.includes("Radiated")) conds.push("Radiated");
-          if (next === 0) conds = conds.filter(c => c !== "Radiated");
+          const radApi = game.bbttcc?.api?.territory?.radiation;
+          if (!radApi) { ui.notifications?.warn("Radiation API not ready."); return; }
+          try { await radApi.set(doc, radApi.level(tf) + delta, { source: "hex_sheet" }); this.render({ force: false }); }
+          catch (eR) { warn("radiation set failed", eR); ui.notifications?.error("Radiation update failed — see console."); }
+          return;
         } else if (action === "hex-dark") {
           const delta = Number(btn.getAttribute("data-delta") || 0) || 0;
           mods.darkness = Math.max(0, readDarkness(tf) + delta);
         } else if (action === "hex-cond") {
           const name = String(btn.getAttribute("data-cond") || "").trim();
           if (!name) return;
-          if (conds.includes(name)) {
-            conds = conds.filter(c => c !== name);
-            // Mirror the engine's invariant (Radiated ⇔ radiation > 0).
-            if (name === "Radiated") mods.radiation = 0;
-          } else {
-            conds.push(name);
-            // Spread floors freshly-Radiated hexes at 1 — do the same here.
-            if (name === "Radiated") mods.radiation = Math.max(1, readRadiation(tf));
-          }
+          if (game.bbttcc?.api?.territory?.radiation?.isRadTag?.(name)) return;   // radiation = the level stepper only
+          if (conds.includes(name)) conds = conds.filter(c => c !== name);
+          else conds.push(name);
         } else if (action === "hex-cond-clear") {
-          conds = [];
+          // Radiated follows the level — keep it while the hex is still hot.
+          conds = readRadiation(tf) > 0 ? ["Radiated"] : [];
         } else {
           return;
         }

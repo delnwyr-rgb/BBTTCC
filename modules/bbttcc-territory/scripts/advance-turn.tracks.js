@@ -117,7 +117,6 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
   // RADIATION DECAY + SPREAD
   // ===========================================================================
 
-  const RAD_DECAY_PER_TURN   = 1;
   const RAD_SPREAD_THRESHOLD = 3;
   const RAD_SPREAD_CHANCE    = 0.25;
   const RAD_MAX_NEIGHBORS    = 6;
@@ -158,53 +157,27 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
     const updates = [];
     const lines   = [];
 
+    // One switch (owner ruling 2026-10-22): the hex Radiation level (mods.radiation, 0–3) does NOT
+    // fade on its own — only cleanup (Purify, maneuvers, the GM) lowers it. A level-3 hex still
+    // spreads: each turn, 25% per neighbour to raise a clean neighbour to level 1.
+    const radApi = game.bbttcc?.api?.territory?.radiation;
+    if (!radApi) { console.warn(TAG, "radiation api missing — spread skipped"); return; }
     for (const { sc, hexes } of hexDocsByScene()) {
-      // Working state per hex — the spread pass reads the DECAYED values from here (it used to
-      // re-read stale flags while the decay update was still in flight and undo the decay).
-      const state = new Map();
-      const seeds = [];
-
-      for (const d of hexes) {
-        const tf   = d.flags?.[MODT] || {};
-        const mods = (typeof tf.mods === "object" && tf.mods) ? foundry.utils.duplicate(tf.mods) : {};
-        const conds = Array.isArray(tf.conditions) ? tf.conditions.slice() : [];
-        const name  = d.name ?? d.text ?? d.id;
-        const st = { d, mods, conds, dirty: false };
-        state.set(d.id, st);
-
-        const rPrev = Number(mods.radiation || 0);
-        let rNext = rPrev;
-        if (rPrev > 0) {
-          rNext = Math.max(0, rPrev - RAD_DECAY_PER_TURN);
-          mods.radiation = rNext;
-          st.dirty = true;
-          if (rNext === 0 && conds.includes("Radiated")) {
-            st.conds = conds.filter(c => c !== "Radiated");
-            lines.push(`• <b>${foundry.utils.escapeHTML(name)}</b>: Radiation cleared`);
-          } else {
-            lines.push(`• <b>${foundry.utils.escapeHTML(name)}</b>: Radiation −${RAD_DECAY_PER_TURN} (now ${rNext})`);
-          }
-        }
-        if (rNext >= RAD_SPREAD_THRESHOLD) seeds.push(d);
-      }
-
+      const seeds = hexes.filter(d => radApi.level(d) >= RAD_SPREAD_THRESHOLD);
+      const raised = new Set();
       for (const src of seeds) {
         for (const n of hexNeighborsOf(src, hexes)) {
+          if (raised.has(n.id) || radApi.level(n) >= 1) continue;
           if (Math.random() > RAD_SPREAD_CHANCE) continue;
-          const st = state.get(n.id); if (!st) continue;
-          if (!st.conds.includes("Radiated")) st.conds.push("Radiated");
-          st.mods.radiation = Math.max(1, Number(st.mods.radiation || 0));
-          st.dirty = true;
-          lines.push(`• <b>${foundry.utils.escapeHTML(n.name ?? n.text ?? n.id)}</b>: Radiation spread`);
+          raised.add(n.id);
+          const p = radApi.patch(n.flags?.[MODT] || {}, 1);
+          updates.push(n.update({
+            [`flags.${MODT}.mods`]: p.mods,
+            [`flags.${MODT}.conditions`]: p.conditions,
+            [`flags.${MODT}.modifiers`]: p.modifiers
+          }, { parent: sc }));
+          lines.push(`• <b>${foundry.utils.escapeHTML(n.name ?? n.text ?? n.id)}</b>: Radiation spread (now Radiated)`);
         }
-      }
-
-      for (const st of state.values()) {
-        if (!st.dirty) continue;
-        updates.push(st.d.update({
-          [`flags.${MODT}.mods`]: st.mods,
-          [`flags.${MODT}.conditions`]: [...new Set(st.conds)]
-        }, { parent: sc }));
       }
     }
 
@@ -225,9 +198,17 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
 
   const CLEANUP_DARKNESS_DROP = 2;
 
+  // A level-2/3 hex carried a production modifier; once it is cleaned, resources must follow.
+  async function recomputeCleaned(docs) {
+    const rc = game.bbttcc?.api?.territory?.recomputeHexResources;
+    if (typeof rc !== "function") return;
+    for (const d of docs) { try { await rc(d, { source: "radiation-cleanup" }); } catch (e) { console.warn(TAG, "recompute after cleanup failed", d?.id, e); } }
+  }
+
   async function doCleanupPurified() {
     const cleansedByFaction = new Map();
     const updates = [];
+    const hot = [];
 
     for (const sc of game.scenes ?? []) {
       for (const d of sc.drawings ?? []) {
@@ -238,14 +219,15 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
         const fid = String(tf.factionId || tf.ownerId || "");
         if (!fid) continue;
 
-        const nextConds = conds.filter(c => c !== "Radiated" && c !== "Contaminated");
-        const mods = (typeof tf.mods === "object" && tf.mods) ? foundry.utils.duplicate(tf.mods) : {};
-        if (Number(mods.radiation || 0) !== 0) mods.radiation = 0;
+        // Purified → radiation level 0 (the one switch; its tags + production modifier come off with it).
+        const p = game.bbttcc.api.territory.radiation.patch(tf, 0);
+        if (game.bbttcc.api.territory.radiation.level(tf) >= 2) hot.push(d);
 
         updates.push(
           d.update({
-            [`flags.${MODT}.conditions`]: nextConds,
-            [`flags.${MODT}.mods`]: mods
+            [`flags.${MODT}.conditions`]: p.conditions,
+            [`flags.${MODT}.mods`]: p.mods,
+            [`flags.${MODT}.modifiers`]: p.modifiers
           }, { parent: sc })
         );
 
@@ -256,6 +238,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
     }
 
     if (updates.length) await Promise.allSettled(updates);
+    await recomputeCleaned(hot);
 
     const gm = gmIds();
     const lines = [];
@@ -300,23 +283,22 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       if (!sources.length) continue;
 
       const updates = [];
+      const hot = [];
       for (const src of sources) {
         const nbrs = hexNeighborsOf(src, hexes);
         const cleaned = [];
 
         for (const n of nbrs) {
           const tf = n.flags?.[MODT] || {};
-          const hadConds = Array.isArray(tf.conditions) ? tf.conditions.slice() : [];
-          const willClear = hadConds.includes("Contaminated") || hadConds.includes("Radiated");
-          if (!willClear) continue;
-
-          const nextConds = hadConds.filter(c => c !== "Contaminated" && c !== "Radiated");
-          const mods = (typeof tf.mods === "object" && tf.mods) ? foundry.utils.duplicate(tf.mods) : {};
-          if (Number(mods.radiation || 0) !== 0) mods.radiation = 0;
+          const radApi = game.bbttcc.api.territory.radiation;
+          if (radApi.level(tf) < 1) continue;
+          const p = radApi.patch(tf, 0);
+          if (radApi.level(tf) >= 2) hot.push(n);
 
           updates.push(n.update({
-            [`flags.${MODT}.conditions`]: nextConds,
-            [`flags.${MODT}.mods`]: mods
+            [`flags.${MODT}.conditions`]: p.conditions,
+            [`flags.${MODT}.mods`]: p.mods,
+            [`flags.${MODT}.modifiers`]: p.modifiers
           }, { parent: sc }));
 
           cleaned.push(n.name ?? n.text ?? n.id);
@@ -332,6 +314,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       }
 
       if (updates.length) await Promise.allSettled(updates);
+      await recomputeCleaned(hot);
     }
 
     if (lines.length) {
@@ -406,7 +389,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
 
   const DARK_CAP = 10;
   function ownsHex(fid, tf){ const o = tf?.factionId || tf?.ownerId; return String(o) === String(fid); }
-  function isRadiated(tf){ return Array.isArray(tf?.conditions) && tf.conditions.includes("Radiated"); }
+  function isRadiated(tf){ return Number(tf?.mods?.radiation || 0) > 0; }   // the hex Radiation level (2026-10-22)
 
   async function doDarknessTrack() {
     const facs = facActors();

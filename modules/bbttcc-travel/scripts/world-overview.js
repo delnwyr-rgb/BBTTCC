@@ -205,11 +205,9 @@
     return { name: actor.name || "Unknown", color };
   }
 
+  // Hazard = the hex Radiation level (one switch, 2026-10-22).
   function hexIsHazard(tf) {
-    const rad = Number(tf?.radiation?.value ?? tf?.radiation ?? 0) || 0;
-    if (rad > 0) return true;
-    const c = Array.isArray(tf?.conditions) ? tf.conditions : [];
-    return c.some(x => { const s = String(x).toLowerCase(); return s === "radiated" || s === "contaminated"; });
+    return (Number(tf?.mods?.radiation) || 0) > 0;
   }
 
   // Aggregate one region scene's hexes → { total, revealed, hazard, dom, factions }.

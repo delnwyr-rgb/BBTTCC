@@ -108,6 +108,82 @@
     }
   }
 
+  // ── Exposure: hex level → gear → RP (owner rulings 2026-10-22) ──────────────
+  // ONE function for travel legs, turn-end exposure and the Travel Console preview.
+  //   base     = the hex Radiation level (0–3) + any weather radiation on the leg
+  //   Radcloth Hood / Scrubber Harness (flags.bbttcc.radiation.tierDelta, or hazardResist
+  //            "radiation") → one level cooler. Best one only, no stacking.
+  //   Rad Suit worn (flags.bbttcc.radiationResist / resistances "radiation" on the item or
+  //            the actor) → halve what is left, rounded down.
+  //   Immune to radiation → 0.
+  const _has = (list, k) => {
+    if (!list) return false;
+    if (Array.isArray(list)) return list.some(x => String(x?.type ?? x?.key ?? x).toLowerCase() === k);
+    if (list instanceof Set) return list.has(k);
+    if (typeof list === "object") return !!list[k];
+    return false;
+  };
+  function _worn(item) {
+    // Armor (the suits) must be equipped; gear with no equipped field counts while carried.
+    const eq = item?.system?.equipped;
+    return eq === undefined || eq === null ? true : !!eq;
+  }
+  function protectionFor(actorOrId) {
+    const A = _asActor(actorOrId);
+    const out = { tierDelta: 0, halve: false, immune: false, sources: [] };
+    if (!A) return out;
+    const d = A.system?.defenses || {};
+    if (_has(d.immunities, "radiation")) { out.immune = true; out.sources.push("Radiation immunity"); return out; }
+    if (_has(d.resistances, "radiation")) { out.halve = true; out.sources.push("Radiation resistance"); }
+    let best = null;
+    for (const it of (A.items?.contents ?? [])) {
+      if (!_worn(it)) continue;
+      const bb = it.flags?.bbttcc || {};
+      const td = Number(bb.radiation?.tierDelta ?? (_has(bb.hazardResist, "radiation") ? -1 : 0)) || 0;
+      if (td < 0 && (!best || td < best.td)) best = { td, name: it.name };
+      if (bb.radiationResist === true || _has(it.system?.resistances, "radiation")) {
+        out.halve = true; if (!out.sources.includes(it.name)) out.sources.push(it.name);
+      }
+    }
+    if (best) { out.tierDelta = Math.max(-1, best.td); out.sources.unshift(best.name); }
+    return out;
+  }
+  function exposureFor(actorOrId, base) {
+    const prot = protectionFor(actorOrId);
+    let rp = Math.max(0, Math.round(Number(base) || 0));
+    const raw = rp;
+    if (prot.immune) rp = 0;
+    else {
+      if (prot.tierDelta) rp = Math.max(0, rp + prot.tierDelta);
+      if (prot.halve) rp = Math.floor(rp / 2);
+    }
+    return { raw, rp, protection: prot };
+  }
+  // A hex's base exposure: its Radiation level (0–3) + active weather's radiation (Harmony Rain −1,
+  // Toxic Storm +1, Qliphothic Thunderstorm +2, Ley-Heat Updraft +1 only on a hot hex).
+  function hexBase(hexDocOrFlags) {
+    const doc = hexDocOrFlags?.document ?? hexDocOrFlags;
+    const tf = doc?.flags?.["bbttcc-territory"] ?? doc ?? {};
+    const level = Math.max(0, Math.min(3, Math.round(Number(tf?.mods?.radiation) || 0)));
+    let weather = 0, weatherLabel = "";
+    const w = (tf?.weather && typeof tf.weather === "object") ? tf.weather : null;
+    if (w?.key && Number(w.remainingTurns) > 0) {
+      const arch = game.bbttcc?.api?.travel?.weather?.get?.(w.key);
+      const r = arch?.radiation;
+      if (r && Number.isFinite(Number(r.rpDelta)) && (!r.onlyIfRadiated || level > 0)) { weather = Number(r.rpDelta); weatherLabel = w.label || arch.label || w.key; }
+    }
+    return { level, weather, weatherLabel, base: Math.max(0, level + weather) };
+  }
+
+  // The faction's Stewards — the characters who soak a leg's radiation (owner ruling 2026-10-22).
+  function stewardsOf(factionOrId) {
+    const fid = String(factionOrId?.id ?? factionOrId ?? "").replace(/^Actor\./, "");
+    if (!fid) return [];
+    return (game.actors?.contents ?? []).filter(a =>
+      a?.type === "character" && !a.getFlag?.("bbttcc-factions", "isFaction") &&
+      String(a.flags?.["bbttcc-factions"]?.factionId || "") === fid);
+  }
+
   function install() {
     try {
       // Attach namespace
@@ -120,6 +196,10 @@
       api.set      = RadiationAPI.set.bind(RadiationAPI);
       api.add      = RadiationAPI.add.bind(RadiationAPI);
       api.levelFor = levelFor;
+      api.protectionFor = protectionFor;
+      api.exposureFor   = exposureFor;
+      api.stewardsOf    = stewardsOf;
+      api.hexBase       = hexBase;
       _registerRelay();
 
       // Attach to module API

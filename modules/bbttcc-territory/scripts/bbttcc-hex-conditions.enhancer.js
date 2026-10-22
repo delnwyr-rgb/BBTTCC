@@ -143,6 +143,80 @@
     return out;
   }
 
+  // --- hex Radiation level — THE one switch (owner ruling 2026-10-22) ---------
+  // flags.bbttcc-territory.mods.radiation, 0–3, is the only input. Everything else is
+  // stamped FROM it so the readers that still look at tags keep working:
+  //   1 Radiated        — "Radiated" condition (darkness track, map hazard)
+  //   2 Contaminated    — + the "Contaminated" production modifier (−50%)
+  //   3 Radiation Zone  — + the "Radiation Zone" production modifier (−75%) instead
+  // Nobody sets those tags by hand any more; legacy names written by beats/maneuvers are
+  // translated into a level by fromNames() below.
+  const RAD_MAX = 3;
+  const RAD_LADDER = [
+    { level: 0, name: "Clean" },
+    { level: 1, name: "Radiated" },
+    { level: 2, name: "Contaminated",   modifier: "Contaminated" },
+    { level: 3, name: "Radiation Zone", modifier: "Radiation Zone" }
+  ];
+  const RAD_TAGS = ["radiated", "contaminated", "radiation zone", "radiation zone (low)"];
+  const isRadTag = (s) => RAD_TAGS.includes(String(s || "").trim().toLowerCase());
+
+  function clampRad(n){ return Math.max(0, Math.min(RAD_MAX, Math.round(Number(n) || 0))); }
+
+  // Level of a hex (doc, placeable or its bbttcc-territory flags object).
+  function radiationLevel(x){
+    const doc = x?.document ?? x;
+    const tf = doc?.flags?.[MOD_T] ?? doc ?? {};
+    return clampRad(tf?.mods?.radiation);
+  }
+
+  // Pure: the { mods, conditions, modifiers } a hex should carry at level n.
+  function radiationPatch(tf, n){
+    const level = clampRad(n);
+    const mods = Object.assign({}, (tf?.mods && typeof tf.mods === "object") ? tf.mods : {}, { radiation: level });
+    const conditions = arr(tf?.conditions).filter(c => !isRadTag(c));
+    if (level >= 1) conditions.push("Radiated");
+    const modifiers = arr(tf?.modifiers).filter(m => !isRadTag(m));
+    const rung = RAD_LADDER[level];
+    if (rung.modifier) modifiers.push(rung.modifier);
+    return { level, mods, conditions: dedupe(conditions), modifiers: dedupe(modifiers) };
+  }
+
+  async function setRadiationLevel(uuidOrDoc, n, { source = "" } = {}){
+    const doc = await resolveDoc(uuidOrDoc);
+    if (!doc) return null;
+    const tf = doc.flags?.[MOD_T] ?? {};
+    const before = radiationLevel(tf);
+    const p = radiationPatch(tf, n);
+    await doc.update({
+      [`flags.${MOD_T}.mods`]: p.mods,
+      [`flags.${MOD_T}.conditions`]: p.conditions,
+      [`flags.${MOD_T}.modifiers`]: p.modifiers
+    }, { parent: doc.parent });
+    // The production modifier changed → resources must follow (what regen reads).
+    if ((before >= 2) !== (p.level >= 2) || (before === 3) !== (p.level === 3)) {
+      try { const rc = game.bbttcc?.api?.territory?.recomputeHexResources; if (typeof rc === "function") await rc(doc, { source: source || "radiation" }); } catch (_e) {}
+    }
+    if (before !== p.level) Hooks.callAll("bbttcc:hexRadiationChanged", { doc, before, after: p.level, source });
+    return p.level;
+  }
+
+  // Legacy names → a level. Writers that still add/remove "Contaminated" / "Radiation Zone" /
+  // "Radiated" (beats' hexModifiers, raid maneuvers) call this, then drop those names from
+  // their own lists. Adding raises to that rung; removing any of them cleans the hex.
+  function fromNames(current, add = [], remove = []){
+    const low = (a) => arr(a).map(s => String(s || "").trim().toLowerCase());
+    const A = low(add), R = low(remove);
+    let next = clampRad(current);
+    if (R.some(isRadTag)) next = 0;
+    if (A.includes("radiation zone") || A.includes("radiation zone (low)")) next = Math.max(next, 3);
+    else if (A.includes("contaminated")) next = Math.max(next, 2);
+    else if (A.includes("radiated")) next = Math.max(next, 1);
+    return { level: next, touched: A.some(isRadTag) || R.some(isRadTag) };
+  }
+
+  const radiationApi = { MAX: RAD_MAX, LADDER: RAD_LADDER, level: radiationLevel, patch: radiationPatch, set: setRadiationLevel, fromNames, isRadTag };
+
   // --- queued turn effects → conditions --------------------------------------
 
   // Snapshot of every hex's turn.pending, taken BEFORE the consumer runs (2026-10-01): the
@@ -164,11 +238,11 @@
         if (!pending) continue;
 
         if (Number(pending.radiationRisk || 0) > 0) {
-          await setCondition(doc, "Radiated", true);
+          await setRadiationLevel(doc, Math.max(1, radiationLevel(doc)), { source: "turn:radiationRisk" });
         }
 
         if (pending.cleanseCorruption) {
-          await setCondition(doc, "Radiated", false);
+          await setRadiationLevel(doc, 0, { source: "turn:cleanse" });
           await setCondition(doc, "Purified", true);
         }
 
@@ -219,7 +293,8 @@
       clearAllConditions,
       hasCondition,
       getConditions,
-      listConditionsOnScene
+      listConditionsOnScene,
+      radiation: radiationApi
     });
   }
 

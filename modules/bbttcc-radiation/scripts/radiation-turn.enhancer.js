@@ -1,31 +1,19 @@
 // modules/bbttcc-radiation/scripts/radiation-turn.enhancer.js
 // Bad Eden — Radiation Turn Enhancer (R2)
-// Per-turn RP changes for factions & PCs/NPCs based on scene zone + hex radiation.
+// Per-turn RP for characters standing in radiation on the active scene.
 //
-// Design:
-//  - Factions: full RP from Zone + Hex radiation (stacked).
-//  - PCs/NPCs: half RP (floored). If in a fully safe area, −1 RP (rest/detox).
-//  - No actor↔faction syncing (avoids loops). They both respond to environment.
-//  - Active scene only (matches overlay + most GM focus).
-
+// One switch (owner rulings 2026-10-22):
+//  - Exposure = the Radiation level of the hex under the token (+ its weather), or — on a
+//    battlemap — the green-screen level the scene inherits from the hex that leads to it.
+//  - Through gear (api.radiation.exposureFor): Hood/Harness one level cooler, Rad Suit halves.
+//  - Characters only (Stewards + party). Factions no longer carry RP.
+//  - Fully clean ground: −1 RP (rest/detox).
 (() => {
   const TAG      = "[bbttcc-radiation/turn]";
   const MODF     = "bbttcc-factions";
   const MODT     = "bbttcc-territory";
 
   const gmIds = () => game.users?.filter(u => u.isGM).map(u => u.id) ?? [];
-
-  function zoneIntensityToAmount(intensity) {
-    const k = String(intensity || "none").toLowerCase();
-    switch (k) {
-      case "low":      return 0.5;
-      case "moderate": return 1;
-      case "high":     return 2;
-      case "storm":    return 3;
-      case "none":
-      default:         return 0;
-    }
-  }
 
   function drawingContainsPoint(d, x, y) {
     try {
@@ -61,15 +49,10 @@
         return;
       }
 
-      const zoneApi = game.bbttcc?.api?.radiation?.zone;
-      const scene   = canvas?.scene;
+      const scene = canvas?.scene;
       if (!scene) return;
-
-      const zone   = zoneApi && typeof zoneApi.getScene === "function"
-        ? zoneApi.getScene(scene)
-        : null;
-      const zInt   = zone?.intensity || "none";
-      const zBase  = zoneIntensityToAmount(zInt);
+      // A battlemap inherits its level from the hex that leads to it (the green screen).
+      const zone = game.bbttcc?.api?.radiation?.zone?.getScene?.(scene) || null;
 
       const tokens = canvas.tokens?.placeables ?? [];
       if (!tokens.length) return;
@@ -80,97 +63,50 @@
 
       for (const token of tokens) {
         const actor = token.actor;
-        if (!actor) continue;
+        if (!actor || actor.type !== "character") continue;
+        if (actor.getFlag?.(MODF, "isFaction") === true) continue;
         if (seen.has(actor.uuid)) continue;
         seen.add(actor.uuid);
 
-        const isFaction = actor.getFlag?.(MODF, "isFaction") === true;
-        const isPCOrNPC = !isFaction && (actor.type === "character" || actor.type === "npc");
-        if (!isFaction && !isPCOrNPC) continue;
-
-        // --- Zone exposure ---
-        let zoneAmt = 0;
-        if (zBase > 0) {
-          if (isFaction) {
-            // 'low' (0.5) is a 50% chance of 1 RP, as on the travel path — RP stays an integer.
-            zoneAmt = (zBase === 0.5) ? (Math.random() < 0.5 ? 1 : 0) : zBase;
-          } else if (isPCOrNPC) {
-            // PCs/NPCs get half the exposure (floored).
-            zoneAmt = Math.floor(zBase / 2);
-          }
-        }
-
-        // --- Hex-level exposure ---
         const hex = findHexAtPoint(token.center.x, token.center.y);
-        let hexAmt = 0;
-        const hexSources = [];
-
+        let base = 0, why = "";
         if (hex) {
-          const tf    = hex.document.flags?.[MODT] || {};
-          const conds = Array.isArray(tf.conditions) ? tf.conditions : [];
-          const mods  = (typeof tf.mods === "object" && tf.mods) ? tf.mods : {};
-
-          if (conds.includes("Radiated")) {
-            hexAmt += 1;
-            hexSources.push("Radiated");
-          }
-          if (conds.includes("Contaminated")) {
-            hexAmt += 1;
-            hexSources.push("Contaminated");
-          }
-          const mVal = Number(mods.radiation || 0);
-          if (mVal > 0) {
-            hexAmt += mVal;
-            hexSources.push(`mods.radiation ${mVal}`);
-          }
-
-          if (hexAmt > 0 && isPCOrNPC) {
-            // PCs/NPCs get half of hex exposure (floored).
-            hexAmt = Math.floor(hexAmt / 2);
-          }
+          const hb = radApi.hexBase(hex.document);
+          base = hb.base;
+          if (base > 0) why = `Hex level ${hb.level}${hb.weather ? `, ${hb.weatherLabel} ${hb.weather > 0 ? "+" : ""}${hb.weather}` : ""}`;
+        } else if (zone) {
+          base = zone.level; why = `Fallout (${zone.hexes.join(", ")})`;
         }
 
-        // --- Safe-zone decay for PCs/NPCs ---
-        let decay = 0;
-        const isZoneSafe = (zBase === 0);
-        const isHexSafe  = (!hexAmt && (!hex || !hexSources.length));
-
-        if (isPCOrNPC && isZoneSafe && isHexSafe) {
-          decay = -1; // bleed off 1 RP per turn in fully safe area
+        let delta = 0, gear = "";
+        if (base > 0) {
+          const ex = radApi.exposureFor(actor, base);
+          delta = ex.rp;
+          gear = ex.protection.immune ? "immune" : ex.protection.sources.join(", ");
+          if (!delta) { lines.push(`• <b>${foundry.utils.escapeHTML(actor.name)}</b>: shielded — <i>${foundry.utils.escapeHTML(why)}; ${foundry.utils.escapeHTML(gear)}</i>`); continue; }
+        } else {
+          if (radApi.get(actor) <= 0) continue;
+          delta = -1; why = "Safe Rest";
         }
-
-        // Factions do NOT get decay here; they already have Purified hex → RP cleansing
-        // via doRadiationBleedPurifiedActors in advance-turn.tracks.js. 
-
-        const totalDelta = (zoneAmt + hexAmt + decay);
-        if (!totalDelta) continue;
 
         // The Actor instance, not its id: an unlinked token's synthetic actor must not resolve to the sidebar base actor.
         const before = radApi.get(actor);
-        const after  = await radApi.add(actor, totalDelta);
-
-        const dir  = totalDelta > 0 ? "+" : "−";
-        const abs  = Math.abs(totalDelta);
-        const srcBits = [];
-
-        if (zoneAmt) srcBits.push(`Zone ${String(zInt).toUpperCase()}`);
-        if (hexSources.length) srcBits.push(`Hex ${hexSources.join(", ")}`);
-        if (decay < 0) srcBits.push("Safe Rest");
-
-        const srcStr = srcBits.length
-          ? ` — <i>${srcBits.join(" • ")}</i>`
-          : "";
-
+        const after  = await radApi.add(actor, delta);
+        const bits = [why, gear].filter(Boolean).join(" • ");
         lines.push(
           `• <b>${foundry.utils.escapeHTML(actor.name)}</b>: `
-          + `Radiation ${dir}${abs} RP (${before} → ${after})${srcStr}`
+          + `Radiation ${delta > 0 ? "+" : "−"}${Math.abs(delta)} RP (${before} → ${after})`
+          + (bits ? ` — <i>${foundry.utils.escapeHTML(bits)}</i>` : "")
         );
       }
 
-      if (lines.length && gm.length) {
+      if (lines.length) {
+        // To the table unless bbttcc-territory.tableAnnouncements = "gm".
+        let whisper = [];
+        try { if (game.settings.get("bbttcc-territory", "tableAnnouncements") === "gm") whisper = gm; } catch (_e) {}
         await ChatMessage.create({
-          content: `<p><b>Radiation Turn Update</b></p>${lines.join("<br/>")}`,
-          whisper: gm,
+          content: `<p><b>☢ Radiation Turn Update</b></p>${lines.join("<br/>")}`,
+          whisper,
           speaker: { alias: "Bad Eden Radiation" }
         }).catch(()=>{});
       }

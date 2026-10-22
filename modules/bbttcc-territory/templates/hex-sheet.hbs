@@ -605,12 +605,11 @@
             <div class="bbttcc-muted" style="font-size:.78rem; margin-bottom:6px;" data-tour="hex.gmControls">GM Controls</div>
 
             <div class="bbttcc-row" style="align-items:center;" data-tooltip="{{bbttccTip 'hex' 'gmRad'}}">
-              <span>Radiation</span>
-              <div class="bbttcc-chiprow" style="justify-content:flex-end;">
-                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="-5">-5</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="-1">-1</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="1">+1</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="5">+5</button>
+              <span>Radiation level</span>
+              <div class="bbttcc-chiprow" style="justify-content:flex-end; align-items:center;">
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="-1">−</button>
+                <span class="bbttcc-pill bbttcc-pill-soft">{{radiation}} · {{radiationTier}}</span>
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="1">+</button>
               </div>
             </div>
 
@@ -623,15 +622,13 @@
             </div>
 
             <div class="bbttcc-chiprow" style="margin-top:8px;">
-              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond" data-cond="Radiated" data-tooltip="{{bbttccTip 'hex' 'gmConditions'}}">Toggle Radiated</button>
-              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond" data-cond="Contaminated" data-tooltip="{{bbttccTip 'hex' 'gmConditions'}}">Toggle Contaminated</button>
               <button type="button" class="bbttcc-btn bbttcc-btn-small bbttcc-btn-good" data-action="hex-cond" data-cond="Purified" data-tooltip="{{bbttccTip 'hex' 'gmConditions'}}">Toggle Purified</button>
               <button type="button" class="bbttcc-btn bbttcc-btn-small bbttcc-btn-danger" data-action="hex-cond" data-cond="Corrupted" data-tooltip="{{bbttccTip 'hex' 'gmConditions'}}">Toggle Corrupted</button>
               <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond-clear" data-tooltip="{{bbttccTip 'hex' 'gmCondClear'}}">Clear All</button>
             </div>
 
             <div class="bbttcc-muted" style="font-size:.75rem; margin-top:6px;">
-              These controls edit <b>flags.bbttcc-territory.mods</b> and <b>flags.bbttcc-territory.conditions</b> directly.
+              Radiation is one level (0 Clean · 1 Radiated · 2 Contaminated · 3 Radiation Zone); its tag and production modifier follow it.
             </div>
           {{/if}}
         </div>
