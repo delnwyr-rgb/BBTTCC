@@ -320,7 +320,8 @@ export class BBTTCCCampaignTableEditorApp extends Application {
         weight: (e && e.weight != null && Number.isFinite(Number(e.weight))) ? Number(e.weight) : 1,
         terrain: String(c.terrain || "").trim(),
         tier: String(c.tier || "").trim(),
-        requiredTag: String(c.requiredTag || "").trim()
+        requiredTag: String(c.requiredTag || "").trim(),
+        scale: String(c.scale || "").trim().toLowerCase()   // MENACES (2026-10-21): foot | rig | "" (any)
       };
     });
 
@@ -630,6 +631,7 @@ export class BBTTCCCampaignTableEditorApp extends Application {
     const entryTerrains = fd.getAll("entry-terrain").map(v => String(v || "").trim());
     const entryTiers = fd.getAll("entry-tier").map(v => String(v || "").trim());
     const entryRequiredTags = fd.getAll("entry-required-tag").map(v => String(v || "").trim());
+    const entryScales = fd.getAll("entry-scale").map(v => String(v || "").trim().toLowerCase());   // MENACES (2026-10-21)
 
     const entries = [];
     const n = Math.max(
@@ -659,6 +661,7 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       setCond("terrain", entryTerrains[i]);
       setCond("tier", entryTiers[i]);
       setCond("requiredTag", entryRequiredTags[i]);
+      setCond("scale", ["foot", "rig"].includes(entryScales[i]) ? entryScales[i] : "");
 
       entries.push(Object.assign(prev, {
         campaignId: campaignId,

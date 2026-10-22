@@ -57,7 +57,7 @@ const REL_STATES = new Set(["at_war","hostile","unfriendly","neutral","friendly"
 const QUEST_ACTIONS = new Set(["accept","complete","completed","archive","archived","activate","reopen","beat"]);
 const SPARK_ACTIONS = new Set(["acquire","gather","integrate"]);
 const TIME_SCALES = new Set(["moment","scene","leg","turn","arc","campaign",""]);
-const TABLE_COND_KEYS = new Set(["hexWhitelist","hexBlacklist","tagsAll","tagsAny", "phaseGte", "phaseLte"]);   // phaseGte/phaseLte evaluated since 2026-09-14 (entry `once` honored via the story store)
+const TABLE_COND_KEYS = new Set(["hexWhitelist","hexBlacklist","tagsAll","tagsAny", "phaseGte", "phaseLte", "scale"]);   // scale = MENACES 2026-10-21 (foot | rig | any)   // phaseGte/phaseLte evaluated since 2026-09-14 (entry `once` honored via the story store)
 const PHASE_MAX = 6;
 // Ids the ENGINE holds as string constants (module.js) — must exist in the data.
 const ENGINE_IDS = {
@@ -739,6 +739,16 @@ for (const b of beats) {
 const arrayKeys = ["factionEffects", "relationshipEffects", "worldModifiers", "turnRequests", "purifyHexes", "recipeGrants", "partyEffects", "sparkGrants"];
 const ladder = [];
 for (const b of beats) {
+  // ── E20: MENACES (2026-10-21) — beat.menace shape, judged before the worldEffects guard (a menace beat may carry no effects of its own) ──
+  if (b.menace != null && b.menace !== false) {
+    const m = b.menace;
+    if (m !== true && typeof m !== "object") F("E20", "WARN", b.id, `beat.menace must be true | {label, warning?, speaker?, clock?, helpTags?, declineTags?, declineLoyalty?, billLoyalty?, billDarkness?}`);
+    else if (typeof m === "object") {
+      if (m.enabled !== false && !s(m.label) && !s(b.label)) F("E20", "WARN", b.id, `beat.menace has no label and the beat has none — the card would say "a undefined"`);
+      if (m.clock != null && !(Number(m.clock) >= 1)) F("E20", "WARN", b.id, `beat.menace.clock '${m.clock}' — turns, ≥ 1`);
+      for (const k of ["declineLoyalty", "billLoyalty", "billDarkness"]) if (m[k] != null && !isNum(m[k])) F("E20", "WARN", b.id, `beat.menace.${k} not numeric`);
+    }
+  }
   const we = b.worldEffects;
   if (we == null) continue;
   if (Array.isArray(we)) { if (we.length) F("E03", "ERROR", b.id, `worldEffects is a NON-EMPTY array — WME reads keys off an object; all ${we.length} entries are dropped`); else F("E03", "INFO", b.id, `worldEffects is [] (editor default; harmless)`); continue; }
@@ -789,6 +799,13 @@ for (const b of beats) {
     if (!r || typeof r !== "object" || !s(r.key)) { F("E18", "WARN", b.id, `stageCue[${i}] needs a key — WME skips the row`); continue; }
     if (r.direction != null && !["after", "before"].includes(String(r.direction).toLowerCase())) F("E18", "WARN", b.id, `stageCue[${i}].direction '${r.direction}' — engine knows "after" | "before"`);
     if (!s(r.sceneId) && !s(b.sceneId)) F("E18", "WARN", b.id, `stageCue[${i}] '${r.key}' names no scene and the beat has no sceneId — plays on whatever scene is viewed`);
+  }
+  // ── E19/E20: MENACES (2026-10-21) — worldEffects.hexMenace rows + beat.menace block (bbttcc-travel menace.js) ──
+  for (const [i, r] of (Array.isArray(we.hexMenace) ? we.hexMenace : (we.hexMenace ? [we.hexMenace] : [])).entries()) {
+    if (!r || typeof r !== "object" || !["add", "clear"].includes(String(r.action || "").toLowerCase())) { F("E19", "WARN", b.id, `hexMenace[${i}] needs action "add" | "clear" — WME skips the row`); continue; }
+    if (String(r.action).toLowerCase() === "add" && !s(r.hexName) && !s(r.targetHexUuid) && !s(b.targetHexUuid)) F("E19", "WARN", b.id, `hexMenace[${i}] add names no hex (hexName / targetHexUuid / beat.targetHexUuid) — only a road-fired chain has a ctx hex`);
+    if (r.clock != null && !(Number(r.clock) >= 1)) F("E19", "WARN", b.id, `hexMenace[${i}].clock '${r.clock}' — turns, ≥ 1`);
+    if (r.reward != null && typeof r.reward !== "object") F("E19", "WARN", b.id, `hexMenace[${i}].reward must be {hexLoyalty?, darkness?}`);
   }
   if (we.levelEffects != null) {
     const le = we.levelEffects;

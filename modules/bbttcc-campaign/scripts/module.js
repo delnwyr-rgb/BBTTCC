@@ -965,9 +965,18 @@ function _tagArray(tagStr) {
   return String(tagStr || "").split(/[\s,]+/g).map(s => _canonicalizeCampaignTag(s.trim())).filter(Boolean);
 }
 
-function _passesEntryConditions(entry, { hexUuid = null, tags = "" } = {}) {
+function _passesEntryConditions(entry, { hexUuid = null, tags = "", factionId = null } = {}) {
   const c = entry?.conditions || {};
   const tagList = _tagArray(tags);
+
+  // MENACES (2026-10-21): conditions.scale = foot | rig | any — judged against the drawing faction's party scale
+  // (boarded rig → owned mobile rigs → foot; bbttcc-travel menace.js). No faction in ctx = no scale filter.
+  try {
+    if (c.scale && factionId) {
+      const MN = game.bbttcc?.api?.travel?.menace;
+      if (MN?.entryScaleOk && MN?.partyScale && !MN.entryScaleOk(entry, MN.partyScale(factionId))) return false;
+    }
+  } catch (_eSc) {}
 
   // hex allow/deny
   if (Array.isArray(c.hexWhitelist) && c.hexWhitelist.length && hexUuid) {
@@ -1034,7 +1043,7 @@ async function runRandomTable({ tableId, hexUuid = null, tags = "", ctx = {}, dr
   }
 
   const entries = Array.isArray(table.entries) ? table.entries : [];
-  const prefiltered = entries.filter(ent => _passesEntryConditions(ent, { hexUuid, tags }));
+  const prefiltered = entries.filter(ent => _passesEntryConditions(ent, { hexUuid, tags, factionId: ctx?.factionId || null }));
   // (2026-09-14) a drawn beat must also pass its OWN gates and seals, and an entry marked `once`
   // is spent once the story store has the beat as played — a rung of a ladder is drawn once, in its act.
   const filtered = [];

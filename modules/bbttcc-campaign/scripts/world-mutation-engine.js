@@ -1582,6 +1582,43 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       console.warn(TAG, "hexSpark apply failed", eHS);
     }
 
+    // 2g'') HEX MENACE (2026-10-21, owner ruling "these are the kinds of problems you have on your land"):
+    // worldEffects.hexMenace = { action: add|clear, key?, label?, hexName?|targetHexUuid?, clock?, reward?{hexLoyalty, darkness}, note? }
+    // (or a LIST). Routes to game.bbttcc.api.travel.menace (bbttcc-travel menace.js). `add` records a menace on the hex
+    // (hexName → targetHexUuid → ctx/beat hex) with a clock; `clear` lifts it and PAYS the reward (hex loyalty +2 by default,
+    // darkness relief when authored) — a clear with no key/hex finds the menace that this beat chain's encounter beat
+    // recorded (ctx.__chain.encounter.beatId → ctx.__menace → the beat's own id), so a winning ending needs only {action:"clear"}.
+    try {
+      const hmList = Array.isArray(we.hexMenace) ? we.hexMenace : (we.hexMenace && typeof we.hexMenace === "object" ? [we.hexMenace] : []);
+      const MN = get(game, "bbttcc.api.travel.menace", null);
+      if (hmList.length && !MN) console.warn(TAG, "hexMenace: bbttcc-travel menace API not available — nothing applied", { beatId: beatCtx.beatId });
+      for (const hm of hmList) {
+        if (!MN || !hm || typeof hm !== "object") continue;
+        if (!game.user?.isGM) { notes.push("hexMenace:skipped(not-gm)"); continue; }
+        const action = String(hm.action || "").trim().toLowerCase();
+        if (!["add", "clear"].includes(action)) { console.warn(TAG, "hexMenace: unknown action", hm); continue; }
+        const ctxHex = String((ctx && ctx.hexUuid) ? ctx.hexUuid : (ctx && ctx.__menace && ctx.__menace.hexUuid) ? ctx.__menace.hexUuid : "").trim();
+        const beatHex = String((beat && beat.targetHexUuid) ? beat.targetHexUuid : "").trim();
+        const hexRef = hm.hexName ? { hexName: hm.hexName } : (hm.targetHexUuid || ctxHex || beatHex || null);
+        const chainBeat = String(get(ctx, "__chain.encounter.beatId", "") || get(ctx, "__menace.beatId", "") || "").trim();
+        const factionId = String((ctx && ctx.factionId) || "").replace(/^Actor\./, "") || null;
+        let r = null;
+        try {
+          if (action === "add") {
+            if (!hexRef) { console.warn(TAG, "hexMenace add: no target hex (hexName / targetHexUuid / ctx hex)", { beatId: beatCtx.beatId }); continue; }
+            r = await MN.add(hexRef, { key: hm.key || chainBeat || beatCtx.beatId, label: hm.label || beat?.menace?.label || beat?.label || beatCtx.beatLabel, beatId: chainBeat || beatCtx.beatId, campaignId: (ctx && ctx.campaignId) || "", factionId, clock: hm.clock, source: "beat", note: hm.note || "" });
+          } else {
+            r = await MN.clear(hexRef, { key: hm.key || null, beatId: hm.key ? null : (chainBeat || beatCtx.beatId), reward: hm.reward || null, factionId, why: hm.note || `By beat “${beat?.label || beatCtx.beatId}”.` });
+            if (r && !r.ok && !hm.key && !hexRef) { r = await MN.clear(null, { beatId: beatCtx.beatId, reward: hm.reward || null, factionId, why: hm.note || "" }); }
+          }
+        } catch (eCall) { console.warn(TAG, "hexMenace: API call failed", action, eCall); continue; }
+        if (r && r.ok) { if (!r.already) { changed = true; notes.push(`hexMenace:${action}`); } }
+        else console.warn(TAG, "hexMenace: refused", action, r);
+      }
+    } catch (eHM) {
+      console.warn(TAG, "hexMenace apply failed", eHM);
+    }
+
     // 2g') STAGE CUES (2026-10-15): worldEffects.stageCue = { key, sceneId?, direction? } (or a LIST).
     // Plays a recorded before/after scene state (bbttcc-campaign/scripts/stage-cues.js) — darkness,
     // lights, walls, tiles — animated, on every seat (document updates). Scene resolves sceneId →

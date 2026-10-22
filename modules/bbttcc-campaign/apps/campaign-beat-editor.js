@@ -152,6 +152,8 @@ const BEATS_HELP = {
   worldEffects: "World Effects — applied when the beat resolves, in engine order: Territory Outcome → Faction deltas → Unlocks → Relationship steps → World Modifiers → Radiation → Turn Requests → War Log; Quest Effects and Casualties follow after.",
   territoryOutcome: "Territory Outcome — hands this key to the Territory/Resolution engine against the run-context hex: Justice Reformation, Liberation, Best Friends Integration, Retribution/Subjugation, or Salt the Earth. The outcome mechanics live in the resolution engine, not the beat.",
   factionEffectsLegacy: "Faction Effects (legacy editor) — hidden and disabled once the Faction GM Effects panel below injects; only that panel's rows are harvested on save (this block stays functional only as a fallback if the panel fails to load).",
+  hexMenace: "Menace state — MENACES (2026-10-21). ADD records a menace on a hex (name it, or leave blank on a road beat to use the hex the ride entered) with a clock in turns; CLEAR lifts it and PAYS the reward (hex Loyalty +2 by default; darkness relief if you set one). Put CLEAR on the winning / parley endings of a menace beat — with no hex and no key it finds the menace this very encounter recorded.",
+  menace: "Menace — MENACES (2026-10-21). When ON, this beat is prefaced on the road by the locals' warning card: Help (go in on foot — the beat runs; tags protection + mutual_aid) or Not now (ride on — the hex gets the Menace state with this clock, loses the decline loyalty at once, the steward's Convictions weigh `abandonment`; when the clock runs out the bill lands: hex loyalty + faction darkness). A party in a medium/heavy rig is told the ground is too tight for it. Blank fields = engine defaults (clock 3, −1 / −2 loyalty, +1 darkness).",
   stageCue: "Stage Cue — plays a recorded before/after scene state (🎬 Stage Cues panel on the Lighting controls: darkness, lights, walls, tiles, animated on every seat) when the beat resolves. Scene defaults to this beat's own Scene, then the viewed scene. Direction 'before' plays the cue backwards (undo). Stored at worldEffects.stageCue = {key, sceneId?, direction?}.",
   radiationDelta: "Radiation Delta — a GLOBAL shift: adjusts Radiation Pressure for everyone (radiation.adjustAll), not one hex. Positive = hotter world.",
   sparkLink: "Spark Link — Tikkun progression. On beat resolution the tikkun listener routes into the spark API: Identify marks the spark known, Acquire gains it, Integrate absorbs it personally, Deposit banks it to the faction. Leave Action blank to disable.",
@@ -1187,6 +1189,11 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     const stageCue = (stageCueRaw && typeof stageCueRaw === "object") ? { key: String(stageCueRaw.key || ""), sceneId: String(stageCueRaw.sceneId || ""), direction: String(stageCueRaw.direction || "after") } : { key: "", sceneId: "", direction: "after" };
     let stageCueCatalog = [];
     try { stageCueCatalog = (game.bbttcc?.api?.stage?.catalog?.() || []).map(sc => ({ ...sc, selected: sc.id === stageCue.sceneId })); } catch (_eSC) {}
+    // MENACES (2026-10-21): worldEffects.hexMenace row (first row when a list) + beat.menace block
+    const hmRaw = Array.isArray(worldEffects.hexMenace) ? worldEffects.hexMenace[0] : worldEffects.hexMenace;
+    const hexMenace = (hmRaw && typeof hmRaw === "object") ? { action: String(hmRaw.action || "").toLowerCase(), key: String(hmRaw.key || ""), hexName: String(hmRaw.hexName || ""), clock: hmRaw.clock ?? "", rewardLoyalty: hmRaw.reward?.hexLoyalty ?? "", rewardDarkness: hmRaw.reward?.darkness ?? "" } : { action: "", key: "", hexName: "", clock: "", rewardLoyalty: "", rewardDarkness: "" };
+    const mnRaw = this.beat.menace;
+    const menace = (mnRaw && typeof mnRaw === "object") ? { on: mnRaw.enabled !== false, label: String(mnRaw.label || ""), warning: String(mnRaw.warning || ""), speaker: String(mnRaw.speaker || ""), clock: mnRaw.clock ?? "", declineLoyalty: mnRaw.declineLoyalty ?? "", billLoyalty: mnRaw.billLoyalty ?? "", billDarkness: mnRaw.billDarkness ?? "" } : { on: mnRaw === true, label: "", warning: "", speaker: "", clock: "", declineLoyalty: "", billLoyalty: "", billDarkness: "" };
     // ALPHA CUT ruling 22 (2026-10-18): the story offers every fight — worldEffects.raid row.
     const raidRaw = (worldEffects.raid && typeof worldEffects.raid === "object") ? worldEffects.raid : {};
     const _tNorm = { violence: "battle", intrigue: "heist", presence: "parley", courtly: "parley" };
@@ -1204,6 +1211,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     return {
       stageCue,
       stageCueCatalog,
+      hexMenace, menace,
       raidOffer, raidHexCatalog, raidCourtCatalog, raidStyleCatalog,
       ...data,
       campaignId: this.campaignId,
@@ -3511,6 +3519,40 @@ _syncCoreFromForm() {
       const key = String(scKey || "").trim();
       if (key) we.stageCue = { key, sceneId: String(fd.get("world-stagecue-scene") || "").trim(), direction: String(fd.get("world-stagecue-direction") || "after") === "before" ? "before" : "after" };
       else delete we.stageCue;
+    }
+
+    // MENACES (2026-10-21): worldEffects.hexMenace row + beat.menace block
+    const hmAction = fd.get("world-menace-action");
+    if (hmAction != null) {
+      const action = String(hmAction || "").trim().toLowerCase();
+      if (action === "add" || action === "clear") {
+        const prevList = Array.isArray(we.hexMenace) ? we.hexMenace : (we.hexMenace ? [we.hexMenace] : []);
+        const prev = (prevList[0] && typeof prevList[0] === "object") ? prevList[0] : {};
+        const row = { action };
+        const key = String(fd.get("world-menace-key") || "").trim(); if (key) row.key = key;
+        const hexName = String(fd.get("world-menace-hex") || "").trim(); if (hexName) row.hexName = hexName; else if (prev.targetHexUuid) row.targetHexUuid = prev.targetHexUuid;
+        const clockRaw = fd.get("world-menace-clock"); if (clockRaw != null && String(clockRaw).trim() !== "") row.clock = Math.max(1, Math.floor(_safeNum(clockRaw, 3)));
+        const rl = fd.get("world-menace-reward-loyalty"), rd = fd.get("world-menace-reward-darkness");
+        const reward = {}; if (rl != null && String(rl).trim() !== "") reward.hexLoyalty = _safeNum(rl, 0); if (rd != null && String(rd).trim() !== "") reward.darkness = _safeNum(rd, 0);
+        if (Object.keys(reward).length) row.reward = reward;
+        for (const k of ["label", "note"]) if (prev[k] != null && prev[k] !== "") row[k] = prev[k];
+        we.hexMenace = prevList.length > 1 ? [row].concat(prevList.slice(1)) : row;
+      } else delete we.hexMenace;
+    }
+    const mnOn = fd.get("menace-on");
+    if (fd.has("menace-on") || fd.get("menace-label") != null) {
+      if (mnOn === "on" || mnOn === "true" || mnOn === true) {
+        const prev = (this.beat.menace && typeof this.beat.menace === "object") ? this.beat.menace : {};
+        const m = Object.assign({}, prev, { enabled: true });
+        const label = String(fd.get("menace-label") || "").trim(); if (label) m.label = label; else delete m.label;
+        const warning = String(fd.get("menace-warning") || "").trim(); if (warning) m.warning = warning; else delete m.warning;
+        const speaker = String(fd.get("menace-speaker") || "").trim(); if (speaker) m.speaker = speaker; else delete m.speaker;
+        for (const [field, key] of [["menace-clock", "clock"], ["menace-decline-loyalty", "declineLoyalty"], ["menace-bill-loyalty", "billLoyalty"], ["menace-bill-darkness", "billDarkness"]]) {
+          const v = fd.get(field); if (v == null || String(v).trim() === "") delete m[key]; else m[key] = key === "clock" ? Math.max(1, Math.floor(_safeNum(v, 3))) : _safeNum(v, 0);
+        }
+        this.beat.menace = m;
+      } else if (this.beat.menace && typeof this.beat.menace === "object") this.beat.menace = Object.assign({}, this.beat.menace, { enabled: false });
+      else delete this.beat.menace;
     }
 
     // --- Outcomes (success/failure fallback routing, Choices tab) ---

@@ -102,6 +102,7 @@
               <th>Terrain</th>
               <th>Tier</th>
               <th>Required Tag</th>
+              <th title="MENACES (2026-10-21): foot = on-foot fight (a party in a medium/heavy rig never draws it unless the beat is a menace); rig = rig-scale trouble (never for a foot party); any = both">Scale</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -144,6 +145,14 @@
 
                 <td>
                   <select name="entry-required-tag" data-current="{{e.requiredTag}}"></select>
+                </td>
+
+                <td>
+                  <select name="entry-scale">
+                    <option value="" {{#unless e.scale}}selected{{/unless}}>any</option>
+                    <option value="foot" {{#if (eq e.scale "foot")}}selected{{/if}}>foot</option>
+                    <option value="rig" {{#if (eq e.scale "rig")}}selected{{/if}}>rig</option>
+                  </select>
                 </td>
 
                 <td>

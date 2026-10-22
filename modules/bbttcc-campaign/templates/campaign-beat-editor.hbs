@@ -191,6 +191,35 @@
       </section>
     {{/if}}
 
+    {{!-- MENACES (2026-10-21): the locals' warning card before this beat on the road — beat.menace --}}
+    <section class="bbttcc-beat-section" data-tour="beats.menace">
+      <h3 data-tooltip="{{bbttccTip 'beats' 'menace'}}">🐺 Menace (warning card on the road)</h3>
+      <div class="bbttcc-form-grid bbttcc-form-grid-3">
+        <div class="form-group">
+          <label><input type="checkbox" name="menace-on" {{#if menace.on}}checked{{/if}} /> This beat is a menace</label>
+        </div>
+        <div class="form-group">
+          <label>What it is called</label>
+          <input type="text" name="menace-label" value="{{menace.label}}" placeholder="blank = the beat label (e.g. Apex Predator)" />
+        </div>
+        <div class="form-group">
+          <label>Who warns (blank = the locals of the settled end, else the road)</label>
+          <input type="text" name="menace-speaker" value="{{menace.speaker}}" placeholder="e.g. Etta, from the Long Market" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>The warning (blank = engine default line)</label>
+        <textarea name="menace-warning" rows="2" placeholder="…has been taking stock and people on the north trail. Nobody here can face it. Will you?">{{menace.warning}}</textarea>
+      </div>
+      <div class="bbttcc-form-grid bbttcc-form-grid-4">
+        <div class="form-group"><label>Clock (turns)</label><input type="number" name="menace-clock" value="{{menace.clock}}" min="1" step="1" placeholder="3" /></div>
+        <div class="form-group"><label>Decline: hex loyalty now</label><input type="number" name="menace-decline-loyalty" value="{{menace.declineLoyalty}}" step="1" placeholder="−1" /></div>
+        <div class="form-group"><label>Bill: hex loyalty</label><input type="number" name="menace-bill-loyalty" value="{{menace.billLoyalty}}" step="1" placeholder="−2" /></div>
+        <div class="form-group"><label>Bill: faction darkness</label><input type="number" name="menace-bill-darkness" value="{{menace.billDarkness}}" step="1" placeholder="+1" /></div>
+      </div>
+      <p class="bbttcc-muted">Help = tags <code>protection mutual_aid</code> · Not now = <code>abandonment</code> (Convictions monitor). Rewards for dealing with it go on the winning endings as a 🐺 Menace state <b>Clear</b> row (World Effects tab). Table entries choose their scale (foot / rig / any) in the Table Editor.</p>
+    </section>
+
     <section class="bbttcc-beat-section" data-tour="beats.description">
       <h3>Description</h3>
       <div class="form-group">
@@ -683,6 +712,23 @@
             <option value="after" {{#unless (eq stageCue.direction "before")}}selected{{/unless}}>play (A→B)</option>
             <option value="before" {{#if (eq stageCue.direction "before")}}selected{{/if}}>undo (B→A)</option>
           </select>
+        </div>
+      </div>
+
+      {{!-- MENACES (2026-10-21): worldEffects.hexMenace — add a menace to a hex / clear it and pay the reward. --}}
+      <div class="form-group" data-tour="beats.hexMenace">
+        <label data-tooltip="{{bbttccTip 'beats' 'hexMenace'}}">🐺 Menace state</label>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; flex:1;">
+          <select name="world-menace-action" style="width:auto;">
+            <option value="" {{#unless hexMenace.action}}selected{{/unless}}>— none —</option>
+            <option value="add" {{#if (eq hexMenace.action "add")}}selected{{/if}}>Add — record a menace on the hex</option>
+            <option value="clear" {{#if (eq hexMenace.action "clear")}}selected{{/if}}>Clear — dealt with, pay the reward</option>
+          </select>
+          <input type="text" name="world-menace-hex" list="bbttcc-raid-hexes" value="{{hexMenace.hexName}}" placeholder="hex name (blank = the hex the ride entered)" style="flex:1; min-width:160px;" />
+          <input type="text" name="world-menace-key" value="{{hexMenace.key}}" placeholder="key (blank = this encounter)" style="width:150px;" />
+          <input type="number" name="world-menace-clock" value="{{hexMenace.clock}}" min="1" step="1" placeholder="clock" title="Add: turns until the bill lands (blank = 3)" style="width:70px;" />
+          <input type="number" name="world-menace-reward-loyalty" value="{{hexMenace.rewardLoyalty}}" step="1" placeholder="+loyalty" title="Clear: hex Loyalty paid (blank = +2)" style="width:86px;" />
+          <input type="number" name="world-menace-reward-darkness" value="{{hexMenace.rewardDarkness}}" step="1" placeholder="darkness" title="Clear: faction darkness delta (blank = 0; −1 relieves)" style="width:86px;" />
         </div>
       </div>
 

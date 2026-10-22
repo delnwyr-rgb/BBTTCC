@@ -105,42 +105,52 @@ async function setPoliticalPhilosophy(actor, key) {
 
 // Tag weights (v1)
 const TAG_WEIGHTS = {
+  // MENACES (2026-10-21): `protection` (the party stands between the locals and a menace) / `abandonment` (rides past) —
+  // weighed per centre so walking away is measured against who the steward says they are, never a flat penalty.
   marxist: {
+    protection: +1, abandonment: -2,
     redistributive: +2, collective_ownership: +3, unionized: +2, mutual_aid: +1, anti_exploitation: +3,
     privatization: -2, profit_extraction: -3, austerity: -2, coercive: -1, surveillance: -1, censorship: -1,
     procedural_violation: -1, purge: -2, property_rights: -3, clerical_rule: -2, ethnonationalism: -2
   },
   liberal: {
+    protection: +1, abandonment: -1,
     rights_respected: +3, due_process: +3, consent: +2, repression: -3, transparency: +2, pluralism: +1,
     property_rights: +1, security: -1,
     coercive: -2, surveillance: -2, censorship: -3, procedural_violation: -3, collective_punishment: -3, purge: -2,
     clerical_rule: -2, ethnonationalism: -3
   },
   social_democratic: {
+    protection: +2, abandonment: -3,
     harm_reduction: +3, welfare: +2, redistributive: +2, mutual_aid: +2, regulation: +1,
     austerity: -3, privatization: -2, coercive: -1, surveillance: -1, censorship: -1, procedural_violation: -1,
     ethnonationalism: -2
   },
   libertarian: {
+    protection: 0, abandonment: 0,
     voluntary: +3, deregulation: +2, privatization: +1, consent: +2, decentralize: +1, property_rights: +3,
     coercive: -3, repression: -3, surveillance: -2, censorship: -3, redistributive: -2, regulation: -2, taxation: -2, procedural_violation: -1,
     security: -1, clerical_rule: -2
   },
   authoritarian: {
+    protection: +2, abandonment: -1,
     order: +3, enforcement: +2, coercive: +2, surveillance: +2, censorship: +1, emergency_powers: +2,
     security: +2, repression: +2, ethnonationalism: +1,
     decentralize: -2, civil_disobedience: -3, mutiny: -3, pluralism: -1
   },
   theocratic: {
+    protection: +1, abandonment: -1,
     doctrine: +3, sacred_law: +3, ritual: +2, purification: +2, censorship: +1, enforcement: +1, clerical_rule: +3,
     heresy: -3, profanation: -3, pluralism: -2, secular_compromise: -2
   },
   fascist: {
+    protection: +1, abandonment: 0,
     unity: +3, domination: +2, purge: +3, coercive: +2, surveillance: +2, censorship: +2, scapegoat: +3,
     ethnonationalism: +3, security: +1, repression: +2,
     pluralism: -3, dissent: -3, mercy: -2, compromise: -2
   },
   anarchist: {
+    protection: +2, abandonment: -3,
     mutual_aid: +3, decentralize: +2, voluntary: +2, direct_action: +2, repression: -3, solidarity: +2,
     coercive: -3, surveillance: -3, censorship: -3, hierarchy: -2, enforcement: -2, centralize: -2,
     property_rights: -2, clerical_rule: -2, ethnonationalism: -3, security: -1
@@ -194,7 +204,9 @@ const POLITICAL_TAG_CATALOG = [
   { key: "mercy",                label: "Mercy",            hint: "Clemency, forgiveness, sparing the beaten." },
   { key: "mutual_aid",           label: "Mutual Aid",       hint: "Community self-support outside institutions." },
   { key: "direct_action",        label: "Direct Action",    hint: "Act now, ask no permission — strikes, sabotage." },
-  { key: "decentralize",         label: "Decentralize",     hint: "Local control; dismantle central authority." }
+  { key: "decentralize",         label: "Decentralize",     hint: "Local control; dismantle central authority." },
+  { key: "protection",           label: "Protection",       hint: "Stand between the locals and a menace (MENACES 2026-10-21: the Help answer)." },
+  { key: "abandonment",          label: "Abandonment",      hint: "Ride past people who asked for help (MENACES 2026-10-21: the Not-now answer)." }
 ];
 
 function getPoliticalTagCatalog() {

@@ -165,10 +165,14 @@
     try { return JSON.parse(s); } catch (_e) { return null; }
   }
 
-  function passesTravelConditions(ent, terrainKey) {
+  function passesTravelConditions(ent, terrainKey, scale = null) {
     const condRaw = ent ? ent.conditions : null;
     const cond = parseConditions(condRaw) || (typeof condRaw === "object" ? condRaw : null);
     if (!cond) return true;
+
+    // MENACES (2026-10-21): conditions.scale = foot | rig | any — a party in a medium/heavy rig never draws a
+    // foot-scale fight (and a foot party never draws a rig-scale one). `scale` = partyScale(factionId).scale.
+    try { const MN = game.bbttcc?.api?.travel?.menace; if (scale && MN?.entryScaleOk && !MN.entryScaleOk(ent, scale)) return false; } catch (_eS) {}
 
     const terr = normKey(terrainKey, "");
 
@@ -243,7 +247,7 @@
     return null;
   }
 
-  function pickEncounterFromCampaignTables({ campaignId, terrainKey, tier }) {
+  function pickEncounterFromCampaignTables({ campaignId, terrainKey, tier, scale = null }) {
     const tables = safeGetEncounterTablesSetting();
     const tableId = resolveTravelTableId(tables, terrainKey, tier);
     if (!tableId) return { ok: false, reason: "table_not_found", candidates: { terrainKey, tier } };
@@ -254,7 +258,7 @@
     const entries = Array.isArray(table.entries) ? table.entries : [];
     if (!entries.length) return { ok: false, reason: "no_entries", tableId };
 
-    let eligible = entries.filter(ent => ent && passesTravelConditions(ent, terrainKey));
+    let eligible = entries.filter(ent => ent && passesTravelConditions(ent, terrainKey, scale));
     if (!eligible.length) return { ok: false, reason: "no_eligible", tableId };
 
     // Single-fire entries (2026-09-03, owner ruling): an entry with once:true
@@ -542,11 +546,13 @@
   // mis-authored. Returns the successful pick plus a full escalation trail so
   // the GM can see exactly what was tried. Prevents the "blank Tier N modal"
   // where the engine reported an encounter but carried no beat data.
-  function pickEncounterWithFallback({ campaignId, terrainKey, tier }) {
+  function pickEncounterWithFallback({ campaignId, terrainKey, tier, scale = null, factionId = null }) {
     const startTier = clampTier(tier);
     const trail = [];
+    // MENACES (2026-10-21): resolve the party's scale once per pick (boarded rig → owned rigs → foot)
+    if (!scale && factionId) { try { scale = game.bbttcc?.api?.travel?.menace?.partyScale?.(factionId)?.scale || null; } catch (_eS) { scale = null; } }
     for (let cur = startTier; cur >= 1; cur--) {
-      const pick = pickEncounterFromCampaignTables({ campaignId, terrainKey, tier: cur });
+      const pick = pickEncounterFromCampaignTables({ campaignId, terrainKey, tier: cur, scale });
       trail.push({
         tier: cur,
         ok: !!(pick && pick.ok),
@@ -1031,7 +1037,7 @@
               ]
             });
 
-            const res = pickEncounterWithFallback({ campaignId, terrainKey: terrNorm, tier: requestedTier });
+            const res = pickEncounterWithFallback({ campaignId, terrainKey: terrNorm, tier: requestedTier, factionId: (opts && opts.factionId) || null });
 
             if (res.ok) {
               const pick = res.pick;
@@ -1161,7 +1167,8 @@
               const reRes = pickEncounterWithFallback({
                 campaignId: rerollCampaignId,
                 terrainKey: rerollTerrain,
-                tier: rerollTier
+                tier: rerollTier,
+                factionId: (opts && opts.factionId) || null
               });
               if (!reRes.ok) {
                 try { ui.notifications?.warn?.("Reroll produced no result — keeping original encounter."); } catch(_e){}
@@ -1398,6 +1405,7 @@
     // The canonical phase- and once-aware travel table picker (tier cascade) — the encounters
     // trigger manager's Reroll uses it instead of a duplicate.
     api.travel.pickEncounter = pickEncounterWithFallback;
+    api.travel.getBeat = getBeatFromCampaignStore;   // MENACES (2026-10-21): the launcher + menace gate read a beat by (campaignId, beatId)
 
     // RideSession (Phase 2): the ride as a persisted, seat-safe object.
     api.travel.rideSession = {

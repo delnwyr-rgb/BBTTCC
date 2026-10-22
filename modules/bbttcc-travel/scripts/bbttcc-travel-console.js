@@ -173,6 +173,7 @@
         const conditions = doc.getFlag?.(MOD_TERR, "conditions") ?? flags.conditions ?? [];
         const mods       = doc.getFlag?.(MOD_TERR, "mods")       ?? flags.mods       ?? {};
         const weather    = doc.getFlag?.(MOD_TERR, "weather")    ?? flags.weather    ?? null;
+        const menaces    = Array.isArray(flags.menaces) ? flags.menaces : [];   // MENACES (2026-10-21)
 
         return {
           id:   p.id,
@@ -186,7 +187,8 @@
           owner:   flags.factionId || "",
           conditions,
           mods,
-          weather
+          weather,
+          menaces
         };
       })
       .filter(Boolean);
@@ -212,6 +214,8 @@
 
   function hazardForHex(hex) {
     if (!hex) return null;
+    // MENACES (2026-10-21): a recorded road menace outranks the terrain chip
+    if (Array.isArray(hex.menaces) && hex.menaces.length) { const m = hex.menaces[0]; return { type: "menace", icon: "🐺", label: String(m?.label || "Menace") + (m?.overdue ? " (overdue)" : "") }; }
     const key = String(hex.terrainKey || "").toLowerCase();
     const conds = (Array.isArray(hex.conditions) ? hex.conditions : []).map(c => String(c || "").toLowerCase());
     const mods  = hex.mods || {};
@@ -797,6 +801,7 @@
             }
             .rp-hazard[data-type="radiation"] { border-color: rgba(185,28,28,0.85); color: #fee2e2; }
             .rp-hazard[data-type="unstable"]  { border-color: rgba(75,85,99,0.95); color: #e5e7eb; }
+            .rp-hazard[data-type="menace"]    { border-color: rgba(201,162,39,0.95); color: #fde68a; }
             .rp-weather {
               margin-left: 0.4rem;
               font-size: 0.72rem;

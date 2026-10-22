@@ -67,9 +67,12 @@
     try { return JSON.parse(s); } catch (_e) { return null; }
   }
 
-  function _passesTravelConditions(ent, { terrainKey }) {
+  function _passesTravelConditions(ent, { terrainKey, scale = null }) {
     const cond = _parseConditions(ent?.conditions) || ent?.conditions || null;
     if (!cond) return true;
+
+    // MENACES (2026-10-21): conditions.scale = foot | rig | any against the party's scale (bbttcc-travel menace.js)
+    try { const MN = game.bbttcc?.api?.travel?.menace; if (scale && MN?.entryScaleOk && !MN.entryScaleOk(ent, scale)) return false; } catch (_eS) {}
 
     // Supported: conditions.terrains (array) or conditions.terrain (single)
     const terr = _normKey(terrainKey, "");
@@ -120,14 +123,14 @@
   }
 
   // Roll-only travel table pick for GM reroll
-  function pickEncounterFromCampaignTables({ activeCampaignId, terrainKey, tier, preferredTableId }) {
+  function pickEncounterFromCampaignTables({ activeCampaignId, terrainKey, tier, preferredTableId, scale = null }) {
     const tableId = _resolveTravelTableId({ terrainKey, tier, preferredTableId });
     const tables = _safeGetEncounterTablesSetting();
     const table = tables ? tables[tableId] : null;
     if (!table) return { ok:false, reason:"table_not_found", tableId };
 
     const entries = Array.isArray(table.entries) ? table.entries : [];
-    const eligible = entries.filter(ent => _passesTravelConditions(ent, { terrainKey }));
+    const eligible = entries.filter(ent => _passesTravelConditions(ent, { terrainKey, scale }));
     if (!eligible.length) return { ok:false, reason:"no_entries", tableId };
 
     const pick = _weightedPick(eligible);
@@ -485,11 +488,13 @@
         // Prefer the canonical api.travel picker (phaseGte/phaseLte + once:true aware); the local one is a fallback.
         let picked = null;
         const canon = game.bbttcc?.api?.travel?.pickEncounter;
+        const rerollFactionId = String(ctx?.factionId || ctx?.actor?.id || "").replace(/^Actor\./, "") || null;   // MENACES (2026-10-21): the reroll respects the party's scale too
         if (typeof canon === "function") {
-          const res = canon({ campaignId: activeCampaignId, terrainKey: _normKey(terrainKey, "generic"), tier });
+          const res = canon({ campaignId: activeCampaignId, terrainKey: _normKey(terrainKey, "generic"), tier, factionId: rerollFactionId });
           if (res?.ok && res.pick) picked = res.pick;
         } else {
-          picked = pickEncounterFromCampaignTables({ activeCampaignId, terrainKey, tier, preferredTableId });
+          let scale = null; try { scale = game.bbttcc?.api?.travel?.menace?.partyScale?.(rerollFactionId)?.scale || null; } catch (_eS) {}
+          picked = pickEncounterFromCampaignTables({ activeCampaignId, terrainKey, tier, preferredTableId, scale });
         }
         if (picked?.ok) {
           const newLabel = picked.label || picked.encounterKey;
@@ -532,6 +537,16 @@
     ).trim();
 
     if (canRunBeat && beatId && campaignId) {
+      // MENACES (2026-10-21): a beat that carries `beat.menace` is prefaced by the locals' warning card —
+      // Help runs the beat; Not now records the menace on the hex (clock, loyalty, convictions) and the ride continues.
+      try {
+        const MN = game.bbttcc?.api?.travel?.menace;
+        if (MN?.gateEncounter) {
+          const g = await MN.gateEncounter({ ctx, campaignId, beatId });
+          if (g && g.proceed === false) { log("afterTravel: menace declined — the ride continues", { campaignId, beatId, hexUuid: g.hexUuid, by: g.by }); return; }
+        }
+      } catch (eMN) { warn("menace gate failed (beat runs as before)", eMN); }
+
       log("afterTravel: launching encounter via campaign.runBeat", { campaignId, beatId, encKey });
 
       // Cinematic dive: stash a one-shot dive request so the encounter beat's scene

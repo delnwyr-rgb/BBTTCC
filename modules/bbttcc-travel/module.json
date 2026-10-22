@@ -26,6 +26,7 @@
     "scripts/bbttcc-travel-console.js",
     "scripts/bbttcc-travel-visuals.js",
     "scripts/api.travel.js",
+    "scripts/menace.js",
     "scripts/bbttcc-travel-summary.enhancer.js",
     "scripts/bbttcc-travel-pill-kill.enhancer.js",
     "scripts/bbttcc-weather-tick.enhancer.js",

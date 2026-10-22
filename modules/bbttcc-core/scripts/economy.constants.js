@@ -95,7 +95,8 @@ export const MOD_PRODUCTION = {
   "supply line vulnerable": -0.15,
   "red thread field": 0.10,              // Lyrenn Act 2 reframe (owner ruling 2026-09-13): specialty crop, a holding
   "harmonized grove": 0.05,              // The Forest of Early Tiphareth accepts you (owner ruling 2026-09-13)
-  "out-danced": -0.05                    // The Cadence performs at your border until you answer the floor (STORY FLOW D-5, 2026-09-17): a face-tax on the hex's dealings
+  "out-danced": -0.05,                   // The Cadence performs at your border until you answer the floor (STORY FLOW D-5, 2026-09-17): a face-tax on the hex's dealings
+  "menace": -0.10                        // MENACES (2026-10-21): a road menace the party rode past still works the hex — until someone deals with it
 };
 export const MOD_TRADE = { "trade hub": 0.50 };
 /** per-RESOURCE production modifiers (fractions, ×(1+v) on that resource only) — 2026-09-13 */
@@ -105,7 +106,7 @@ export const MOD_RESOURCE = {
 /** lane bonus by hex MODIFIER (LANE_HEX_BONUS.<lane>.byModifier) is DOUBLED on a hex whose leyline flow is `surge` */
 export const LANE_BY_MODIFIER_SURGE_MULT = 2;
 /** hex loyalty score contributions by modifier (facts.hex.loyaltyScore) */
-export const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1, "harmonized grove": 1 };
+export const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1, "harmonized grove": 1, "menace": -2 };   // menace: MENACES 2026-10-21
 
 // ── hex STATES (2026-09-13, owner ask: "a place in the beat to apply generic states, and unique states") ──
 /** Generic states — THE list the Hex Config grid and the Beat Editor render (was twelve hand-typed labels in the template). */
@@ -121,7 +122,8 @@ export const HEX_MODIFIER_CATALOG = [
   { name:"Hostile Population",     effect:"−25% production, −2 loyalty" },
   { name:"Supply Line Vulnerable", effect:"−15% production" },
   { name:"Difficult Terrain",      effect:"−10% production" },
-  { name:"Radiation Zone",         effect:"−75% production" }
+  { name:"Radiation Zone",         effect:"−75% production" },
+  { name:"Menace",                 effect:"−10% production, −2 loyalty until dealt with (a road menace the party rode past — bbttcc-travel menace.js keeps the clock)" }
 ];
 /** Unique states — a World Modifier row (the chip on the hex sheet) carries these named modifiers into the yield engine's list. */
 export const WORLD_MODIFIERS = {
