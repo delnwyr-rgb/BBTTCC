@@ -1187,7 +1187,7 @@ const activeCampaignId = _getActiveCampaignId();
     b.actors ??= [];
     b.choices ??= [];
     b.encounter ??= { key: "", tier: null, actorName: "" };
-    b.worldEffects ??= { territoryOutcome: null, factionEffects: [], radiationDelta: 0, sparkKey: null, turnRequests: [], warLog: "" };
+    b.worldEffects ??= { territoryOutcome: null, factionEffects: [], sparkKey: null, turnRequests: [], warLog: "" };
     b.description = String(b.description || "").trim();
     return b;
   }

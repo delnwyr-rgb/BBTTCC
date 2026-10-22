@@ -1219,7 +1219,6 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
 
     const resolution = get(game, "bbttcc.api.resolution", null);
     const territory  = get(game, "bbttcc.api.territory", null);
-    const rApi       = get(game, "bbttcc.api.radiation", null);
     const turnAPI    = get(game, "bbttcc.api.turn", null);
     const factions   = get(game, "bbttcc.api.factions", null);
 
@@ -1532,6 +1531,31 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (eHM) {
       console.warn(TAG, "hexModifiers apply failed", eHM);
+    }
+
+    // 2e²) Hex RADIATION (2026-10-22, the one radiation switch): worldEffects.hexRadiation = {level 0–3,
+    // hexName?|targetHexUuid?} or a list. RAISES the hex to that level (never lowers; 0 cleans) through api.territory.radiation.set (which stamps
+    // the Radiated tag + production modifier and lights the green screen). Hex resolves like hexModifiers.
+    try {
+      const hrList = Array.isArray(we.hexRadiation) ? we.hexRadiation : (we.hexRadiation && typeof we.hexRadiation === "object" ? [we.hexRadiation] : []);
+      const radT = get(game, "bbttcc.api.territory.radiation", null);
+      if (hrList.length && !radT) console.warn(TAG, "hexRadiation: api.territory.radiation not available — nothing applied", { beatId: beatCtx.beatId });
+      for (const hr of (radT ? hrList : [])) {
+        if (!hr || hr.level == null || hr.level === "" || !Number.isFinite(Number(hr.level))) continue;
+        if (!game.user?.isGM) { notes.push("hexRadiation:skipped(not-gm)"); continue; }
+        const ctxHex = String((ctx && ctx.hexUuid) ? ctx.hexUuid : "").trim();
+        const beatHex = String((beat && beat.targetHexUuid) ? beat.targetHexUuid : "").trim();
+        const doc = hr.hexName ? _findHexByName(hr.hexName) : (hr.targetHexUuid ? await resolveHexDoc(hr.targetHexUuid) : (ctxHex || beatHex ? await resolveHexDoc(ctxHex || beatHex) : null));
+        if (!doc || !doc.update) { console.warn(TAG, "hexRadiation: target hex not found", { hexName: hr.hexName, targetHexUuid: hr.targetHexUuid, beatId: beatCtx.beatId }); continue; }
+        // A beat RAISES the hex to its level and never lowers it; 0 cleans it (owner ruling 2026-10-22).
+        const before = radT.level(doc);
+        const want = Math.max(0, Math.min(3, Math.round(Number(hr.level))));
+        const after = want === 0 ? await radT.set(doc, 0, { source: "beat:" + (beatCtx.beatId || beat.id || "?") })
+          : (want > before ? await radT.set(doc, want, { source: "beat:" + (beatCtx.beatId || beat.id || "?") }) : before);
+        if (after !== before) { changed = true; notes.push(`hexRadiation:${before}→${after}`); }
+      }
+    } catch (eHR) {
+      console.warn(TAG, "hexRadiation apply failed", eHR);
     }
 
     // 2g) Hex SPARK — sparks live in the world (owner ruling 2026-09-13: "a quest's closing ending
@@ -2057,25 +2081,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       console.warn(TAG, "hexReading failed", eHR);
     }
 
-    // 3) Radiation
-    if (we.radiationDelta && Number(we.radiationDelta) !== 0) {
-      const delta = Number(we.radiationDelta || 0);
-      try {
-        if (rApi && typeof rApi.adjustAll === "function") {
-          await rApi.adjustAll({
-            delta: delta,
-            source: beatCtx.source,
-            campaignId: beatCtx.campaignId,
-            beatId: beatCtx.beatId,
-            sceneId: (beat.sceneId !== undefined ? beat.sceneId : null)
-          });
-        }
-        changed = true;
-        notes.push("radiationDelta:" + delta);
-      } catch (e) {
-        console.warn(TAG, "radiation adjustment failed", delta, e);
-      }
-    }
+    // 3) Radiation — `radiationDelta` RETIRED 2026-10-22: it called api.radiation.adjustAll, which never existed, so it
+    // never applied. Hex radiation is worldEffects.hexRadiation (§2e²); lint E21 flags stale rows.
 
     // 4) Turn requests
     const turnReqs = Array.isArray(we.turnRequests) ? we.turnRequests : [];

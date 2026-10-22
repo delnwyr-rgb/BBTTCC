@@ -692,11 +692,6 @@
         <button type="button" class="bbttcc-btn" data-action="add-faction-effect">+ Add Faction Effect</button>
       </div>
 
-      <div class="form-group" data-tour="beats.radiationDelta">
-        <label data-tooltip="{{bbttccTip 'beats' 'radiationDelta'}}">Radiation Delta (RP)</label>
-        <input type="number" name="world-radiation-delta" value="{{worldEffects.radiationDelta}}" placeholder="0" />
-      </div>
-
       <div class="form-group" data-tour="beats.stageCue">
         <label data-tooltip="{{bbttccTip 'beats' 'stageCue'}}">🎬 Stage Cue</label>
         <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; flex:1;">
@@ -729,6 +724,17 @@
           <input type="number" name="world-menace-clock" value="{{hexMenace.clock}}" min="1" step="1" placeholder="clock" title="Add: turns until the bill lands (blank = 3)" style="width:70px;" />
           <input type="number" name="world-menace-reward-loyalty" value="{{hexMenace.rewardLoyalty}}" step="1" placeholder="+loyalty" title="Clear: hex Loyalty paid (blank = +2)" style="width:86px;" />
           <input type="number" name="world-menace-reward-darkness" value="{{hexMenace.rewardDarkness}}" step="1" placeholder="darkness" title="Clear: faction darkness delta (blank = 0; −1 relieves)" style="width:86px;" />
+        </div>
+      </div>
+
+      {{!-- RADIATION (2026-10-22): worldEffects.hexRadiation — SET a hex's Radiation level (the one switch). --}}
+      <div class="form-group" data-tour="beats.hexRadiation">
+        <label data-tooltip="{{bbttccTip 'beats' 'hexRadiation'}}">☢ Radiation level</label>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; flex:1;">
+          <select name="world-radiation-level" style="width:auto;">
+            {{#each hexRadiation.options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+          </select>
+          <input type="text" name="world-radiation-hex" list="bbttcc-raid-hexes" value="{{hexRadiation.hexName}}" placeholder="hex name (blank = the hex the ride entered)" style="flex:1; min-width:160px;" />
         </div>
       </div>
 

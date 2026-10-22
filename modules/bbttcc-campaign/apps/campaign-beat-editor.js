@@ -155,7 +155,7 @@ const BEATS_HELP = {
   hexMenace: "Menace state — MENACES (2026-10-21). ADD records a menace on a hex (name it, or leave blank on a road beat to use the hex the ride entered) with a clock in turns; CLEAR lifts it and PAYS the reward (hex Loyalty +2 by default; darkness relief if you set one). Put CLEAR on the winning / parley endings of a menace beat — with no hex and no key it finds the menace this very encounter recorded.",
   menace: "Menace — MENACES (2026-10-21). When ON, this beat is prefaced on the road by the locals' warning card: Help (go in on foot — the beat runs; tags protection + mutual_aid) or Not now (ride on — the hex gets the Menace state with this clock, loses the decline loyalty at once, the steward's Convictions weigh `abandonment`; when the clock runs out the bill lands: hex loyalty + faction darkness). A party in a medium/heavy rig is told the ground is too tight for it. Blank fields = engine defaults (clock 3, −1 / −2 loyalty, +1 darkness).",
   stageCue: "Stage Cue — plays a recorded before/after scene state (🎬 Stage Cues panel on the Lighting controls: darkness, lights, walls, tiles, animated on every seat) when the beat resolves. Scene defaults to this beat's own Scene, then the viewed scene. Direction 'before' plays the cue backwards (undo). Stored at worldEffects.stageCue = {key, sceneId?, direction?}.",
-  radiationDelta: "Radiation Delta — a GLOBAL shift: adjusts Radiation Pressure for everyone (radiation.adjustAll), not one hex. Positive = hotter world.",
+  hexRadiation: "Radiation level — RAISES a hex to this Radiation level (the one radiation switch, 2026-10-22; never lowers it — 0 cleans it): 0 Clean · 1 Radiated · 2 Contaminated (−50% production) · 3 Radiation Zone (−75%). Stewards who travel in take that many RP (gear reduces it), its battlemaps go green, and it stays until cleaned. Name the hex, or leave it blank on a road / hex-enter beat to use the hex the ride entered.",
   sparkLink: "Spark Link — Tikkun progression. On beat resolution the tikkun listener routes into the spark API: Identify marks the spark known, Acquire gains it, Integrate absorbs it personally, Deposit banks it to the faction. Leave Action blank to disable.",
   sparkLinkSpark: "Spark — which authored spark (bbttcc-tikkun.sparks pack) this beat advances. Both Spark and Action are required or the link saves as disabled.",
   sparkLinkAction: "Action — what happens to the spark when the beat resolves. Blank disables the whole link.",
@@ -746,7 +746,6 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     this.beat.worldEffects ??= {
       territoryOutcome: null,
       factionEffects: [],
-      radiationDelta: 0,
       turnRequests: [],
       questEffects: [],
       warLog: ""
@@ -1182,7 +1181,6 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     const unlockCatalogStrategics = _effectsCatalog("strategic");
     worldEffects.factionEffects ??= [];
     worldEffects.turnRequests ??= [];
-    worldEffects.radiationDelta ??= 0;
     worldEffects.warLog ??= "";
     // STAGE CUES (2026-10-15): one row — key + scene + direction; catalog = every scene that carries cues
     const stageCueRaw = Array.isArray(worldEffects.stageCue) ? worldEffects.stageCue[0] : worldEffects.stageCue;
@@ -1194,6 +1192,14 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     const hexMenace = (hmRaw && typeof hmRaw === "object") ? { action: String(hmRaw.action || "").toLowerCase(), key: String(hmRaw.key || ""), hexName: String(hmRaw.hexName || ""), clock: hmRaw.clock ?? "", rewardLoyalty: hmRaw.reward?.hexLoyalty ?? "", rewardDarkness: hmRaw.reward?.darkness ?? "" } : { action: "", key: "", hexName: "", clock: "", rewardLoyalty: "", rewardDarkness: "" };
     const mnRaw = this.beat.menace;
     const menace = (mnRaw && typeof mnRaw === "object") ? { on: mnRaw.enabled !== false, label: String(mnRaw.label || ""), warning: String(mnRaw.warning || ""), speaker: String(mnRaw.speaker || ""), clock: mnRaw.clock ?? "", declineLoyalty: mnRaw.declineLoyalty ?? "", billLoyalty: mnRaw.billLoyalty ?? "", billDarkness: mnRaw.billDarkness ?? "" } : { on: mnRaw === true, label: "", warning: "", speaker: "", clock: "", declineLoyalty: "", billLoyalty: "", billDarkness: "" };
+    // RADIATION (2026-10-22): worldEffects.hexRadiation row (first row when a list) — sets the hex Radiation level.
+    const hrRaw = Array.isArray(worldEffects.hexRadiation) ? worldEffects.hexRadiation[0] : worldEffects.hexRadiation;
+    const hrLevel = (hrRaw && typeof hrRaw === "object" && hrRaw.level != null && hrRaw.level !== "") ? String(Math.max(0, Math.min(3, Math.round(Number(hrRaw.level) || 0)))) : "";
+    const hexRadiation = {
+      hexName: String(hrRaw?.hexName || ""),
+      options: [["", "— none —"], ["0", "0 — Clean (cleans it)"], ["1", "1 — Radiated"], ["2", "2 — Contaminated (−50%)"], ["3", "3 — Radiation Zone (−75%)"]]
+        .map(([value, label]) => ({ value, label, selected: value === hrLevel }))
+    };
     // ALPHA CUT ruling 22 (2026-10-18): the story offers every fight — worldEffects.raid row.
     const raidRaw = (worldEffects.raid && typeof worldEffects.raid === "object") ? worldEffects.raid : {};
     const _tNorm = { violence: "battle", intrigue: "heist", presence: "parley", courtly: "parley" };
@@ -1211,7 +1217,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     return {
       stageCue,
       stageCueCatalog,
-      hexMenace, menace,
+      hexMenace, menace, hexRadiation,
       raidOffer, raidHexCatalog, raidCourtCatalog, raidStyleCatalog,
       ...data,
       campaignId: this.campaignId,
@@ -2313,7 +2319,8 @@ _ensureWorldModifiersUI(html) {
       const states = (game.bbttcc && game.bbttcc.facts && game.bbttcc.facts.hexStates) || { catalog: [], unique: {} };
       const slug = (n) => String(n || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
       const entries = []
-        .concat((states.catalog || []).map(c => ({ key: "state_" + slug(c.name), label: c.name, desc: c.effect || "", modifiers: [c.name], group: "Generic states" })))
+        // radiation names leave this panel — radiation is the ☢ Radiation level row (2026-10-22)
+        .concat((states.catalog || []).filter(c => !/^(radiated|contaminated|radiation zone)$/i.test(String(c.name || "").trim())).map(c => ({ key: "state_" + slug(c.name), label: c.name, desc: c.effect || "", modifiers: [c.name], group: "Generic states" })))
         .concat(Object.entries(states.unique || {}).map(([key, v]) => ({ key, label: v.label || key, desc: v.description || "", modifiers: Array.isArray(v.modifiers) ? v.modifiers : [v.label || key], group: "Unique states" })));
       // legacy rows (harmonized_grove written before the registry) map onto the registry key
       // One panel row binds to the FIRST stored row with its key; every other stored row (key not in the
@@ -3490,8 +3497,8 @@ _syncCoreFromForm() {
     const tOut = fd.get("world-territory-outcome");
     if (tOut != null) we.territoryOutcome = String(tOut || "").trim() || null;
 
-    const rad = fd.get("world-radiation-delta");
-    if (rad != null) we.radiationDelta = _safeNum(rad, 0);
+    // Radiation Delta retired 2026-10-22 (it never applied — radiation.adjustAll never existed); the ☢ Radiation level row replaces it.
+    delete we.radiationDelta;
 
     const wl = fd.get("world-warlog");
     if (wl != null) we.warLog = String(wl || "").trim() || "";
@@ -3538,6 +3545,18 @@ _syncCoreFromForm() {
         for (const k of ["label", "note"]) if (prev[k] != null && prev[k] !== "") row[k] = prev[k];
         we.hexMenace = prevList.length > 1 ? [row].concat(prevList.slice(1)) : row;
       } else delete we.hexMenace;
+    }
+    // RADIATION (2026-10-22): worldEffects.hexRadiation row — { level 0–3, hexName? | targetHexUuid? }
+    const hrLv = fd.get("world-radiation-level");
+    if (hrLv != null) {
+      const prevList = Array.isArray(we.hexRadiation) ? we.hexRadiation : (we.hexRadiation ? [we.hexRadiation] : []);
+      const prev = (prevList[0] && typeof prevList[0] === "object") ? prevList[0] : {};
+      if (String(hrLv).trim() !== "") {
+        const row = { level: Math.max(0, Math.min(3, Math.round(_safeNum(hrLv, 0)))) };
+        const hexName = String(fd.get("world-radiation-hex") || "").trim();
+        if (hexName) row.hexName = hexName; else if (prev.targetHexUuid) row.targetHexUuid = prev.targetHexUuid;
+        we.hexRadiation = prevList.length > 1 ? [row].concat(prevList.slice(1)) : row;
+      } else delete we.hexRadiation;
     }
     const mnOn = fd.get("menace-on");
     if (fd.has("menace-on") || fd.get("menace-label") != null) {

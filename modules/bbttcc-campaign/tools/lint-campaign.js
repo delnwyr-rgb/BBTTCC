@@ -807,6 +807,20 @@ for (const b of beats) {
     if (r.clock != null && !(Number(r.clock) >= 1)) F("E19", "WARN", b.id, `hexMenace[${i}].clock '${r.clock}' — turns, ≥ 1`);
     if (r.reward != null && typeof r.reward !== "object") F("E19", "WARN", b.id, `hexMenace[${i}].reward must be {hexLoyalty?, darkness?}`);
   }
+  // ── E21: RADIATION (2026-10-22) — worldEffects.hexRadiation {level 0–3, hexName?|targetHexUuid?}; radiation is ONLY this ──
+  for (const [i, r] of (Array.isArray(we.hexRadiation) ? we.hexRadiation : (we.hexRadiation ? [we.hexRadiation] : [])).entries()) {
+    const lv = Number(r?.level);
+    if (!r || typeof r !== "object" || r.level == null || !Number.isInteger(lv) || lv < 0 || lv > 3) { F("E21", "WARN", b.id, `hexRadiation[${i}].level '${r?.level}' — whole number 0–3; WME skips the row`); continue; }
+    if (!s(r.hexName) && !s(r.targetHexUuid) && !s(b.targetHexUuid))
+      F("E21", "INFO", b.id, `hexRadiation[${i}] names no hex — uses the hex the ride entered; does nothing if the beat fires off-map`);
+  }
+  {
+    const RAD = /^(radiated|contaminated|radiation zone|radiation zone \(low\))$/i;
+    const hm = Array.isArray(we.hexModifiers) ? we.hexModifiers : (we.hexModifiers ? [we.hexModifiers] : []);
+    const named = hm.flatMap(r => [...(r?.add || []), ...(r?.remove || [])]).concat((Array.isArray(we.worldModifiers) ? we.worldModifiers : []).flatMap(m => m?.modifiers || []));
+    for (const n of named) if (RAD.test(String(n || "").trim())) F("E21", "INFO", b.id, `'${n}' set as a hex state — radiation is the ☢ Radiation level row (worldEffects.hexRadiation); the engine translates, but author it there`);
+    if (we.radiationDelta) F("E21", "WARN", b.id, `radiationDelta ${we.radiationDelta} is retired (it never applied) — use worldEffects.hexRadiation (☢ Radiation level row)`);
+  }
   if (we.levelEffects != null) {
     const le = we.levelEffects;
     for (const [k, lo, hi] of [["stewardLevelFloor", 1, 20], ["factionTierFloor", 0, 6]]) {
