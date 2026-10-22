@@ -505,7 +505,10 @@ const FT_RIG_DEFENSE_BY_BRACKET = {
   light:    { guard: 10, evasion: 13, resolve: 10 },
   medium:   { guard: 12, evasion: 11, resolve: 10 },
   heavy:    { guard: 14, evasion:  9, resolve: 10 },
-  siege:    { guard: 15, evasion:  8, resolve: 10 }
+  siege:    { guard: 15, evasion:  8, resolve: 10 },
+  // RIG BALANCE (owner ruling 2026-10-21): mecha had no row and fell back to medium (12/11). A walker is
+  // armoured but light on its feet — between light and medium.
+  mecha:    { guard: 11, evasion: 12, resolve: 10 }
 };
 
 // B12 ramming weight — multiplies tier into the ram damage formula
@@ -516,9 +519,10 @@ const FT_RIG_BRACKET_WEIGHT = {
   // 2026-08-17 — the Rig Builder authors power-armour frames with bracket
   // "mecha", which was never in this table: every mecha collision quietly took
   // the `|| 3` fallback at the call sites. Stated explicitly so the number is a
-  // decision instead of an accident. Value keeps today's behaviour exactly —
-  // retune here if a walker should hit harder than a medium truck.
-  mecha: 3
+  // decision instead of an accident. RIG BALANCE (owner ruling 2026-10-21): 3 → 2. A stomp has no
+  // recoil and knocks the target prone, so at weight 3 every mech out-hit the same-tier medium truck
+  // for free (the T0 Space Marine stomped 3d6 against the Hexmobile's 1d6 ram). 2 = the light row.
+  mecha: 2
 };
 
 // ─── Sail trim (2026-08-17) ──────────────────────────────────────────────────
@@ -26562,7 +26566,8 @@ const _FT_CREW_ACTION_DESC = {
   brace:           "Bonus — soft defense buff.",
   signal:          "Bonus — coordination buff to crew or allies.",
   "hold-on":       "Reaction — reduce damage to self when the rig is hit.",
-  stomp:           "Pilot melee — bring a foot down on a TARGETED token in contact: (tier × bracket)d6 kinetic, no recoil, target is knocked Prone."
+  stomp:           "Pilot melee — bring a foot down on a TARGETED token in contact: (tier × bracket)d6 kinetic, no recoil, target is knocked Prone. Costs 1 Heat (refused when overheated).",
+  "hit-and-run":   "Small rigs only (personal / light) — bonus action after you FIRE this round: peel away for +(2 + Piloting) Evasion until your next pilot turn. Shares the Evading state."
 };
 
 // ─── Crew Action: Active Effect + Heat helpers (2026-05-19) ────────
@@ -26707,6 +26712,28 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
   // which requires OWNER on the rig — players have OBSERVER from the
   // boarding grant. Without this relay, all rig-state changes silently
   // failed for player-driven crews. Same pattern as ftBoardRig.
+  // RIG BALANCE (owner ruling 2026-10-21): "this will hurt" — on the CLICKING seat (before any GM relay), a ram
+  // into a structure whose recoil (Threshold × 3) would cost half or more of the rig's current integrity asks first.
+  if (actionId === "ram" && !initiatorUserId && !_pickThenRelay) {
+    try {
+      const _tgt = (Array.isArray(targetUuids) && targetUuids.length ? (() => { try { return fromUuidSync(targetUuids[0])?.actor; } catch (_e) { return null; } })() : null)
+        ?? (Array.isArray(targetIds) && targetIds.length ? game.actors?.get(targetIds[0]) : null)
+        ?? Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+      if (_tgt?.flags?.["bbttcc-structures"]?.hasStructure) {
+        const _thr = Number(_tgt.getFlag?.("bbttcc-structures", "threshold")) || 0;
+        const _recoil = Math.max(0, Math.round(_thr * 3));
+        const _cur = Number(rig.system?.integrity?.value ?? rig.system?.derived?.integrity?.value) || 0;
+        if (_recoil > 0 && _cur > 0 && _recoil * 2 >= _cur) {
+          const _ok = await foundry.applications.api.DialogV2.confirm({
+            window: { title: "This will hurt" },
+            content: `<p><b>${foundry.utils.escapeHTML(_tgt.name)}</b> is solid (Threshold ${_thr}). Ramming it hands back about <b>${_recoil}</b> damage, and <b>${foundry.utils.escapeHTML(rig.name)}</b> has <b>${_cur}</b> integrity left${_recoil >= _cur ? " — <b>that wrecks the rig</b>" : ""}.</p><p>Ram anyway?</p>`,
+            rejectClose: false, modal: true
+          });
+          if (!_ok) return;
+        }
+      }
+    } catch (eW) { console.warn("[fourththing] ram warning check failed (ram proceeds)", eW); }
+  }
   if (!game.user?.isGM && !rig.isOwner && !_pickThenRelay && !_FT_CREW_LOCAL_ACTIONS.has(actionId)) {
     if (!game.users?.some?.(u => u.isGM && u.active)) {
       ui.notifications?.warn(`No GM online — ${steward.name}'s action couldn't be executed.`);
@@ -27104,6 +27131,9 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
     // dice either, and the payoff is the target flat on the ground.
     case "stomp": {
       if (!requirePilot() || !requirePilotGate() || !requireAction()) return;
+      // RIG BALANCE (owner ruling 2026-10-21): a stomp works the actuators — 1 Heat, refused when overheated.
+      const _stHeat = _ftRigHeatValue(rig), _stHeatMax = _ftRigHeatMax(rig);
+      if (_stHeat >= _stHeatMax) { warn(`${rig.name} is overheated (${_stHeat}/${_stHeatMax}) — vent heat before stomping.`); return; }
       // Same relay-safe target capture Ram uses, so a player pilot's target
       // survives the GM round-trip instead of resolving to the GM's selection.
       const _stompTargets = _resolveTargetTokens();
@@ -27158,10 +27188,11 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       // No hexesMoved: unlike Ram this is not a charge, the rig stays put.
       await setPilotGate();
       await consumeAction();
+      await _ftSetRigHeat(rig, _stHeat + 1);
       await stompRoll.toMessage({
         speaker: cardSpeaker,
         flavor: `<div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9a227">🦶 ${rig.name} stomps ${stompTarget.name}</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem"><b>${stompDice}d6</b> · ${bracket} ×${stompWeight} × T${tier} → <b>${stompDmg}</b> dmg · <span style="opacity:0.7">no recoil</span>${proneNote}</p>
+          <p style="margin:0.2rem 0;font-size:0.82rem"><b>${stompDice}d6</b> · ${bracket} ×${stompWeight} × T${tier} → <b>${stompDmg}</b> dmg · <span style="opacity:0.7">no recoil · heat ${Math.min(_stHeatMax, _stHeat + 1)}/${_stHeatMax}</span>${proneNote}</p>
           <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85">${stompDesc}</p>`
       });
       return;
@@ -27177,6 +27208,27 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
     // Evasive costs your ACTION on your turn; swerve is the same dodge bought
     // with your REACTION off it. Shares the `evading` state so the two can't
     // stack into a double bonus — which is also why it refuses when already set.
+    // RIG BALANCE (owner ruling 2026-10-21): the small-rig skirmisher's move. Bonus action, only after this
+    // pilot fired a rig weapon this round; same Evading state as evasive / swerve, so nothing stacks.
+    case "hit-and-run": {
+      if (!requirePilot() || !requireBonus()) return;
+      if (!["personal", "light"].includes(bracket)) { warn(`${rig.name} is too big to hit and run — that's for personal and light rigs.`); return; }
+      const _fired = Object.values(stCmb.rigWeaponsFiredThisRound ?? {}).some(Boolean);
+      if (_econActive && !_fired) { warn(`${steward.name}: fire a weapon first — hit and run peels away AFTER the shot.`); return; }
+      if (cmb.evading) { warn(`${rig.name} is already evading — peeling away would add nothing.`); return; }
+      const hrBonus = 2 + piloting;
+      await setRigCombat({ evading: true, evadingBonus: hrBonus });
+      await consumeBonus();
+      await _ftEnsureRigStateAE(rig, "evading", { extraDesc: `+${hrBonus} Evasion until next pilot turn (hit and run).` });
+      try { ftPlayCombatVfx(rig, "evade"); } catch (e) { console.warn("[fourththing] hit-and-run VFX", e); }
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9be7ff">🏍 ${rig.name} hits and runs</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Bonus action — shot fired, wheels spinning: <b>+${hrBonus} Evasion</b> until the next pilot turn.${piloting > 0 ? ` <span style="opacity:0.75">(base 2 + Piloting ${piloting})</span>` : ""}</p></div>`
+      });
+      return;
+    }
+
     case "swerve": {
       if (!requirePilot()) return;
       if (cmb.evading) { warn(`${rig.name} is already evading — a swerve would add nothing.`); return; }
@@ -27499,6 +27551,9 @@ function _ftCollectCrewControlsContext(actor) {
   // inject it for pilots so the control surfaces on the banner + HUD without
   // re-stamping every frame (same rationale as the Ram injection above).
   if (flag.role === "pilot" && !frameActions.includes("vent-heat")) frameActions = [...frameActions, "vent-heat"];
+  // RIG BALANCE (owner ruling 2026-10-21): small rigs are the skirmishers — personal and light pilots get
+  // Hit and Run (fire, then peel away) without re-stamping their frames.
+  if (flag.role === "pilot" && !frameActions.includes("hit-and-run") && ["personal", "light"].includes(ftRigBracketFor(rig))) frameActions = [...frameActions, "hit-and-run"];
   // 2026-10-12 — "fire-weapon" is a frame-authored placeholder with no handler:
   // clicking it fell to `default:` and posted a bare card. The per-weapon chips
   // (built from `rigWeapons` below) ARE the fire control, so hide the stub on

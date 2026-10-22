@@ -237,6 +237,45 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
     return list.length ? list : ["land"];
   }
 
+  // RIG BALANCE (2026-10-21): the road-speed scout bonus. Fastest non-destroyed mobile/hybrid rig the faction owns;
+  // speed = equipped frame's travel speed (the sheet's authority) → normalized rig data → system field.
+  function rigTravelSpeed(rig) {
+    try {
+      const frame = (rig?.items ?? []).find?.(i => i?.flags?.fourththing?.rigGear?.subtype === "rig-frame");
+      const fs = Number(frame?.flags?.fourththing?.rigFrame?.travel?.speed);
+      if (Number.isFinite(fs) && fs > 0) return fs;
+      const d = game.bbttcc?.rigs?.data?.(rig);
+      const ds = Number(d?.travel?.speed ?? rig?.system?.travel?.speed ?? rig?.flags?.["bbttcc-factions"]?.rig?.travel?.speed);
+      return Number.isFinite(ds) ? ds : 0;
+    } catch (_e) { return 0; }
+  }
+  // Owner ruling 2026-10-21 (second pass): the RIDDEN rig scouts, not the fastest one parked at home. "Ridden" = the
+  // same authority the menace scale uses (menace.partyScale): a steward's boarded rig, else the faction's largest
+  // mobile rig. No rig → on foot → no bonus. Fastest-owned is only the fallback when the menace layer is absent.
+  function roadSpeedBonus(factionId) {
+    const out = { bonus: 0, speed: 0, rigName: null, via: null };
+    try { if (game.settings.get("bbttcc-travel", "roadSpeedScout") === false) return out; } catch (_e) {}
+    const MN = game.bbttcc?.api?.travel?.menace;
+    if (MN?.partyScale) {
+      const ps = MN.partyScale(factionId);
+      const rig = ps?.rigId ? game.actors.get(ps.rigId) : null;
+      if (!rig) return Object.assign(out, { via: "foot" });
+      const st = String(game.bbttcc?.rigs?.data?.(rig)?.identity?.state ?? rig?.system?.identity?.state ?? "").toLowerCase();
+      if (st === "destroyed") return Object.assign(out, { via: "destroyed", rigName: rig.name });
+      out.speed = rigTravelSpeed(rig); out.rigName = rig.name; out.via = ps.via;
+      out.bonus = Math.max(0, Math.min(2, out.speed - 4));
+      return out;
+    }
+    for (const rig of factionRigs(factionId)) {
+      const st = String(game.bbttcc?.rigs?.data?.(rig)?.identity?.state ?? rig?.system?.identity?.state ?? "").toLowerCase();
+      if (st === "destroyed") continue;
+      const sp = rigTravelSpeed(rig);
+      if (sp > out.speed) { out.speed = sp; out.rigName = rig.name; }
+    }
+    out.bonus = Math.max(0, Math.min(2, out.speed - 4));
+    return out;
+  }
+
   // Rigs a faction can travel with: type:"rig", mobile/hybrid (a stationary
   // emplacement can't ferry the party), linked to the faction via either the
   // identity.factionOwnerId field or the bbttcc-factions.factionId flag.
@@ -842,6 +881,14 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
           scope: "world", config: true, type: Boolean, default: true
         });
       }
+      // RIG BALANCE (owner ruling 2026-10-21) — the road-speed scout bonus
+      if (!game.settings?.settings?.has("bbttcc-travel.roadSpeedScout")) {
+        game.settings.register("bbttcc-travel", "roadSpeedScout", {
+          name: "Travel: Fast Rigs Scout Ahead",
+          hint: "When ON, the rig the party rides (boarded, else its largest mobile rig) adds +1 to the travel check per point of rig speed above 4 (max +2): the Hexmobile (5) gives +1, a flyer (6) +2, the Space Marine and the trucks nothing. Default ON.",
+          scope: "world", config: true, type: Boolean, default: true
+        });
+      }
     } catch (e) {
       console.warn(TAG, "Encounter dial settings registration failed (non-blocking):", e);
     }
@@ -1414,6 +1461,14 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       if (mods.includes("harmonized grove")) { scoutRollMod += 2; ctx.harmonizedGrove = true; console.log(TAG, "Harmonized Grove: +2 on the travel check (the forest vouches for the road)"); }
     } catch (_eG) {}
 
+    // RIG BALANCE (owner ruling 2026-10-21): speed finally counts on the road. The faction's fastest mobile rig scouts
+    // ahead — +1 on the travel check per point of rig speed above 4, max +2 (Hexmobile 5 → +1, flyers 6 → +2; the
+    // Space Marine and every truck → 0). Setting bbttcc-travel.roadSpeedScout (default ON) turns it off.
+    try {
+      const rs = roadSpeedBonus(factionId);
+      if (rs.bonus > 0) { scoutRollMod += rs.bonus; ctx.roadSpeed = rs; console.log(TAG, `Road speed: +${rs.bonus} on the travel check (${rs.rigName}, speed ${rs.speed})`); }
+    } catch (_eRS) {}
+
     // Owner ruling 2026-08-22: travel joins the tactical layer's 2d10 regime
     // (the d20 here was the last holdout of a separate math). Advantage rolls
     // 3d10 keep-high-2, matching strikes/saves everywhere else. Pair with the
@@ -1431,7 +1486,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       if (r2.total > total) { total = r2.total; success = total >= dc; }
     }
     pulseToken(ctx.token ?? canvas.tokens.controlled[0] ?? canvas.tokens.placeables[0], success ? "#00FF66" : "#FF3366");
-    popupText(b, `Travel Check ${total} vs DC ${dc} ${success ? "✅" : "❌"}${ctx.encounterReroll ? " ↻" : ""}`);
+    popupText(b, `Travel Check ${total} vs DC ${dc} ${success ? "✅" : "❌"}${ctx.encounterReroll ? " ↻" : ""}${ctx.roadSpeed ? ` · 🏍 +${ctx.roadSpeed.bonus}` : ""}`);
 
     const travelStub = {
       active: true,
@@ -2299,6 +2354,7 @@ function registerTravelAPI() {
 
   // Movement-domain gating surface — reused by combat (underwater zone detection),
   // the dive transition, and any UI that wants to preview reachability.
+  api.travel.roadSpeedBonus = roadSpeedBonus;   // RIG BALANCE 2026-10-21
   api.travel.domains = {
     terrainMedium,
     requiredDomainsForTerrain,
