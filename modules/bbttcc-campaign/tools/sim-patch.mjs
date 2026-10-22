@@ -3,7 +3,7 @@
  * before the owner applies it live (2026-10-17, built for the Alpha-cut teaching beats).
  *
  *   node modules/bbttcc-campaign/tools/sim-patch.mjs <patch.macro.js> <campaigns-export.json> --out <patched.json>
- *        [--tables <encounterTables-export.json>] [--campaign <id>] [--dry]
+ *        [--tables <encounterTables-export.json>] [--quests <quests-export-or-settings-dump.json>] [--campaign <id>] [--dry]
  *
  * The macro runs inside a tiny Foundry shim: game.settings.get/set over the export(s), foundry.utils.deepClone,
  * ui.notifications → console, saveDataToFile → no-op, game.user.isGM = true, and the active campaign id = the
@@ -20,6 +20,7 @@ for (let i = 0; i < argv.length; i++) {
   const a = argv[i];
   if (a === "--out") opt.out = argv[++i];
   else if (a === "--tables") opt.tables = argv[++i];
+  else if (a === "--quests") opt.quests = argv[++i];   // quests registry export (quests-only dict, or a full settings dump keyed "bbttcc-campaign.quests") — 2026-10-21
   else if (a === "--campaign") opt.campaign = argv[++i];
   else if (a === "--dry") opt.dry = true;
   else opt.files.push(a);
@@ -35,6 +36,7 @@ const settings = {
   "bbttcc-campaign": {
     campaigns: loadJson(exportPath),
     encounterTables: opt.tables ? loadJson(opt.tables) : {},
+    ...(opt.quests ? { quests: (() => { const q = loadJson(opt.quests); return q["bbttcc-campaign.quests"] ?? q; })() } : {}),
     directorState: { firedStoryBeats: {} }
   }
 };
@@ -69,4 +71,5 @@ await Promise.resolve(result);
 
 const out = settings["bbttcc-campaign"].campaigns;
 fs.writeFileSync(opt.out, JSON.stringify(typeof out === "string" ? JSON.parse(out) : out, null, 0));
+if (written["bbttcc-campaign.quests"]) { const q = settings["bbttcc-campaign"].quests; fs.writeFileSync(opt.out.replace(/\.json$/, "") + ".quests.json", JSON.stringify(typeof q === "string" ? JSON.parse(q) : q, null, 0)); }
 console.log(`\n[sim-patch] wrote ${opt.out} · settings written: ${Object.keys(written).join(", ") || "(none — dry run or no changes)"}`);

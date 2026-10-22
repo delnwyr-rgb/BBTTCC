@@ -485,48 +485,76 @@ export const STORY_SCRIPTS = {
 
   // ═══ ACT 2 · THE GRIEF HEXES ═════════════════════════════════════════════════
   chuckle_creek: {
-    giver: "nobody. A road that ends in a painted backdrop",
-    description: "The sky is a painted backdrop and the sun has a face. A man takes an anvil to the skull, flattens to the thickness of a playing card, springs back, and tips his hat. Nothing here can hurt anyone, the pie is mostly steam and enthusiasm, and the creek actually chuckles. Enjoy it. Then ask somebody what last winter was like.",
+    giver: "nobody. A road that ends in a painted backdrop, and a woman who wants you to eat",
+    description: "The sky is a painted backdrop and the sun has a face. A man takes an anvil to the skull, flattens to the thickness of a playing card, springs back, and tips his hat. Nothing here can hurt anyone, the pie is mostly steam and enthusiasm, and the creek actually chuckles. Everyone is in costume and nobody has mentioned it. Enjoy it. They have, since Halloween night, 2077.",
     steps: [
-      { id: "arrive", label: "Everything Is a Bit", line: "Let yourself enjoy it. The delight is the evidence. Ask the diner owner about last winter.", beats: ["chuckle_arrival"] },
-      { id: "r1", label: "There Is No Last Winter", line: "Nobody here has a past tense. There's an extra place set at the corner table.", beats: ["chuckle_rung_1"] },
-      { id: "r2", label: "The Chair at the Table", line: "Her daughter is off-screen. Try to leave town with somebody.", beats: ["chuckle_rung_2"] },
+      { id: "arrive", label: "Everything Is a Bit", line: "Let yourself enjoy it. The delight is the evidence. Pick a door.", beats: ["chuckle_arrival"] },
+      { id: "diner", label: "The Diner", line: "Pearl will feed you whether or not you're hungry. Ask who the corner table is for.", beats: ["cc_diner"], done: {"mark": "cc_table_set"} },
+      { id: "pie", label: "The Pie Is Mostly Steam", line: "The pie is mostly steam and enthusiasm, and you will finish it. Pearl has questions about your hat.", beats: ["chuckle_pie"] },
+      { id: "kid", label: "The Piano Kid", line: "A piano lands on a kid. He gets up laughing. Ask him how many times.", beats: ["chuckle_piano_kid"] },
+      { id: "machine", label: "The Movie Machine", line: "The grange hall has a projector all brass and reels. Ask what it plays. Ask what it plays them ON.", beats: ["chuckle_projector"] },
+      { id: "closing", label: "After Closing", line: "Come back after closing. Three cups, then a fourth. Sit in the fourth chair.", beats: ["cc_corner_table"] },
+      { id: "r2", label: "The Chair at the Table", line: "Winnie is off-screen. Now ask Pearl about Winnie, and watch her face.", beats: ["chuckle_rung_2"] },
+      { id: "r1", label: "There Is No Last Winter", line: "Nobody here has a past tense. Ask the piano kid where he goes when it's not his turn.", beats: ["chuckle_rung_1"] },
       { id: "r3", label: "You Try to Leave With Someone", line: "Nobody leaves Chuckle Creek. Watch the seam where a scene changes.", beats: ["chuckle_rung_3"] },
-      { id: "r4", label: "The Title Card", line: "The title card is a memorial plaque. Find whoever is running this.", beats: ["chuckle_rung_4"] },
-      { id: "showrunner", label: "The Showrunner", line: "Series finale, new episode, or cancelled. Sit with how badly someone had to want this.",
-        beats: ["chuckle_showrunner"], done: { anyOf: ["chuckle_finale", "chuckle_new_episode", "chuckle_cancelled"] } }
+      { id: "r4", label: "The Title Card", line: "The title card is a memorial plaque. Read the names. One of them is on a plate at the diner.", beats: ["chuckle_rung_4"] },
+      { id: "stack", label: "The Stack", line: "Marnie's booth is where the show is made. The tapes are stacked weird — remember how. Find the slip.", beats: ["chuckle_tape_shelf"], done: {"mark": "chuckle_rental_slip"} },
+      { id: "showrunner", label: "The Showrunner", line: "Marnie has the microphone. Ask her what the last thing on the tape was.", beats: ["chuckle_showrunner"] },
+      { id: "credits", label: "Roll Credits", line: "Series finale, new episode, or cancelled. Sit with how badly someone had to want this.", beats: ["chuckle_credits"], done: {"anyOf": ["chuckle_finale", "chuckle_new_episode", "chuckle_cancelled"]} }
     ],
-    doors: [], after: [], chapters: {}
+    doors: [
+      { id: "diner", label: "Pearl's Diner", line: "Pearl will feed you whether or not you're hungry. Ask who the corner table is for.", beats: ["cc_diner"] },
+      { id: "creek", label: "The Creek", line: "The creek actually chuckles. Stand in it and see if it's laughing with you.", beats: ["chuckle_creek_itself"] },
+      { id: "hollis", label: "Hollis Bandy", line: "Hollis will take an anvil for you. He will not take a question.", beats: ["chuckle_hollis"] }
+    ],
+    after: [], chapters: {}
   },
 
   soft_landing: {
-    giver: "nobody. An inflatable arch and two guards with pool noodles",
-    description: "The gate is an inflatable arch and the guards challenge you with pool noodles and immense seriousness. The streets give underfoot, a state function is being conducted on a moon-bounce, and a thrown punch lands in foam that apologises. Nobody can be hurt here. Ask someone where they're from and watch what happens to the question.",
+    giver: "nobody. An inflatable arch, two guards with pool noodles, and a grandmother dressed as a bee",
+    description: "The gate is an inflatable arch and the guards challenge you with pool noodles and immense seriousness. The streets give underfoot, a state function is being conducted on a moon-bounce, and a thrown punch lands in foam that apologises. Nobody can be hurt here. Everyone is in costume and nobody has mentioned it. Find the one who isn't bouncing.",
     steps: [
-      { id: "arrive", label: "Challenged by Pool Noodles", line: "Boing. Let yourself. Then ask somebody where they came from.", beats: ["soft_landing_arrival"] },
-      { id: "g1", label: "The Conversation Bounces", line: "The question bounces, every time, from everyone. Go looking for a grave.", beats: ["soft_landing_give_1"] },
-      { id: "g2", label: "No Graves, No Photographs", line: "There are no graves, no photographs, no archive. Find the one who isn't bouncing.", beats: ["soft_landing_give_2"] },
-      { id: "g3", label: "The Elder Who Isn't Bouncing", line: "The padding is thin around one tired woman. Get someone to say what happened, out loud.", beats: ["soft_landing_give_3"] },
-      { id: "g4", label: "One Held Breath", line: "They built it so they'd never hit the ground. Somebody has to go first.", beats: ["soft_landing_give_4"] },
-      { id: "choice", label: "The Only Weapon Left", line: "Grieve with them, build them a landing ground, or strip the padding. Vulnerability is the only weapon that works here.",
-        beats: ["soft_landing_choice"], done: { anyOf: ["soft_landing_go_first", "soft_landing_practice", "soft_landing_harden"] } }
+      { id: "arrive", label: "Challenged by Pool Noodles", line: "Boing. Let yourself. Declare your edges at the gate.", beats: ["soft_landing_arrival"] },
+      { id: "checkpoint", label: "Form 7-B, Declaration of Edges", line: "Captain Falk needs your edges in triplicate. The stamp goes boing. Ask what happens if somebody lands.", beats: ["soft_landing_checkpoint"] },
+      { id: "session", label: "The State of the Bounce", line: "The Mayor is in session on the moon-bounce. Item one is cake. Ask her where she's from and watch the question go.", beats: ["soft_landing_state_function"] },
+      { id: "castle", label: "The Castle", line: "The bouncy castle is still up and the blower has been running since the party. NO SHOES, the sign says. Count the shoes.", beats: ["soft_landing_castle"] },
+      { id: "g3", label: "The Elder Who Isn't Bouncing", line: "One tired woman is sitting down. Sit down next to her. Don't say anything for a bit.", beats: ["soft_landing_give_3"] },
+      { id: "card", label: "The Card", line: "Adaeze has the birthday card. She hands it to anyone who sits. Everybody at the party signed it. Read it. Then take the name back to the Mayor.", beats: ["soft_landing_card"], done: {"mark": "soft_landing_birthday_card"} },
+      { id: "g1", label: "The Conversation Bounces", line: "Teju's name bounces, every time, from everyone. Go looking for where it's written.", beats: ["soft_landing_give_1"] },
+      { id: "g2", label: "No Graves, No Photographs", line: "No graves, no photographs, no archive. Nothing here has a name written on it. Ask Adaeze what happened.", beats: ["soft_landing_give_2"] },
+      { id: "g4", label: "One Held Breath", line: "Somebody finally says it, badly, in the wrong order. Let them. Somebody has to go first.", beats: ["soft_landing_give_4"] },
+      { id: "choice", label: "The Only Weapon Left", line: "Grieve with them, build them a landing ground, or strip the padding. Vulnerability is the only weapon that works here.", beats: ["soft_landing_choice"], done: {"anyOf": ["soft_landing_go_first", "soft_landing_practice", "soft_landing_harden"]} }
     ],
-    doors: [], after: [], chapters: {}
+    doors: [
+      { id: "checkpoint", label: "The Checkpoint", line: "Captain Falk will take your edges. He will give you a receipt. The receipt is foam.", beats: ["soft_landing_checkpoint"] },
+      { id: "cake", label: "The Cake", line: "Seven candles, still lit. Make a wish and watch where it goes.", beats: ["soft_landing_cake"] },
+      { id: "blower", label: "The Blower", line: "The hum under everything. Put your hand on it. Don't turn it off. Somebody will.", beats: ["soft_landing_blower"] },
+      { id: "houses", label: "The Houses", line: "Foam mantelpieces and no photographs. Ask for the oldest thing in the house.", beats: ["sl_houses"] }
+    ],
+    after: [], chapters: {}
   },
 
   stillwater: {
-    giver: "nobody. A Sunday that doesn't end",
-    description: "Cut grass, percolator coffee, a kid selling lemonade at a card table. People wave, not warily, just waving. It is the most unsettling thing you have felt in a long time, because nothing here is wounded or watching. Somebody hands you today's paper. Check the date.",
+    giver: "nobody. A Sunday that doesn't end, and a boy with a lemonade stand",
+    description: "Cut grass, percolator coffee, a kid selling lemonade at a card table. People wave, not warily, just waving. The band is mid-bar. It is the most unsettling thing you have felt in a long time, because nothing here is wounded or watching. Everyone is in costume and nobody has mentioned it. Somebody hands you today's paper. Check the date.",
     steps: [
-      { id: "arrive", label: "A Sunday That Doesn't End", line: "Exhale first. Then mention the world outside and watch the faces.", beats: ["stillwater_arrival"] },
-      { id: "c1", label: "The Topic Slides Off", line: "It slides off every time. There's a woman on the platform bench waiting for the 4:10.", beats: ["stillwater_crack_1"] },
-      { id: "c2", label: "The Woman at the Station", line: "There hasn't been a train in decades. Show someone a piece of the after.", beats: ["stillwater_crack_2"] },
-      { id: "c3", label: "One of Them Sees It", line: "One of them saw it, and aged. Walk to the edge of town where the road runs out.", beats: ["stillwater_crack_3"] },
-      { id: "c4", label: "The Wall Is Thinning", line: "The bubble is failing on its own schedule. Decide whether anybody gets told first.", beats: ["stillwater_crack_4"] },
-      { id: "choice", label: "What You Do With the News", line: "Ring the bell, keep the covenant, or harvest it. You're carrying the news, and the news is the apocalypse.",
-        beats: ["stillwater_choice"], done: { anyOf: ["stillwater_ring_the_bell", "stillwater_covenant", "stillwater_harvest"] } }
+      { id: "arrive", label: "A Sunday That Doesn't End", line: "Exhale first. Pick a door: the lemonade stand, the bandstand, the man with the paper, the station, the kerb.", beats: ["stillwater_arrival"] },
+      { id: "lemonade", label: "The Lemonade Monopoly", line: "Five cents, exclusive concession, change in buttons. Tell Bucky about the roads, and watch his face.", beats: ["stillwater_lemonade"] },
+      { id: "bandstand", label: "The Downbeat", line: "The band is mid-bar and Cal Pruett's arm is up. Ask what the song is. Then ask what the next word is.", beats: ["stillwater_bandstand"] },
+      { id: "c1", label: "The Topic Slides Off", line: "It slides off every time. Go and sit on the platform bench.", beats: ["stillwater_crack_1"] },
+      { id: "paper", label: "Today's Paper", line: "Amos Teague prints one edition. Read him the date out loud and watch his face try.", beats: ["stillwater_paper"] },
+      { id: "c2", label: "The Woman at the Station", line: "May Farrow has been waiting for the 4:10 for two hundred years. Show Amos something from the after.", beats: ["stillwater_crack_2"] },
+      { id: "c3", label: "One of Them Sees It", line: "Show Amos a piece of the after. Stay with him while it lands. Then read the permit on the bandstand post.", beats: ["stillwater_crack_3"] },
+      { id: "permit", label: "The Permit", line: "The parade permit is nailed to the bandstand post. Read the small print. One day only.", beats: ["stillwater_permit"], done: {"mark": "stillwater_parade_permit"} },
+      { id: "c4", label: "The Wall Is Thinning", line: "Walk out to where the road runs out. Then decide whether anybody gets told first.", beats: ["stillwater_crack_4"] },
+      { id: "choice", label: "What You Do With the News", line: "Ring the bell, keep the covenant, or harvest it. You're carrying the news, and the news is the apocalypse.", beats: ["stillwater_choice"], done: {"anyOf": ["stillwater_ring_the_bell", "stillwater_covenant", "stillwater_harvest"]} }
     ],
-    doors: [], after: [], chapters: {}
+    doors: [
+      { id: "lemonade", label: "The Lemonade Stand", line: "Five cents. He takes marks. He gives change in buttons.", beats: ["stillwater_lemonade"] },
+      { id: "platform", label: "The Platform", line: "One bench, one clock, one board that says ARRIVING. Check your own watch.", beats: ["stillwater_platform"] },
+      { id: "waving", label: "The Waving", line: "Everybody waves. Wave back. See what the third wave does.", beats: ["stillwater_waving"] }
+    ],
+    after: [], chapters: {}
   }
 
   // valhaulan_spine (That One Night): UNSCRIPTED by ruling — a reader quest; its bridge cards fire as the towns resolve.
