@@ -892,19 +892,70 @@ const FT_MANIFESTATION_THIRD_THING_PROMPTS = [
 
 // ─── Core helpers ─────────────────────────────────────────────────────────────
 
+// ─── Sephirotic alignment bonus (rebalanced 2026-10-21, owner ruling) ────────
+// Every sephira grants +1 Align on exactly THREE of the nine Intent·Channel
+// pairs, so no sphere is strictly better than another. Six take a whole line of
+// the grid (one Intent or one Channel); four take a three-cell pattern. Each of
+// the nine pairs is covered three or four times across the Tree. Before this,
+// Keter was +1 on every cast, Chokmah was +0 on every cast, Yesod and Binah had
+// five pairs each and Netzach had one.
+const FT_ALIGNMENT_PAIRS = Object.freeze({
+  gevurah: ["violence.body", "violence.mind", "violence.soul"],    // judgment = force, any channel
+  chesed:  ["presence.body", "presence.mind", "presence.soul"],    // mercy = presence, any channel
+  binah:   ["intrigue.body", "intrigue.mind", "intrigue.soul"],    // understanding = the hidden, any channel
+  hod:     ["violence.mind", "intrigue.mind", "presence.mind"],    // form = mind, any intent
+  tiferet: ["violence.soul", "intrigue.soul", "presence.soul"],    // harmony = soul, any intent
+  malkuth: ["violence.body", "intrigue.body", "presence.body"],    // matter = body, any intent
+  netzach: ["violence.body", "violence.soul", "presence.body"],    // momentum: the charge, the fury, the rally
+  yesod:   ["intrigue.soul", "intrigue.body", "presence.mind"],    // dreams, hidden doors, mirrors
+  keter:   ["violence.body", "intrigue.mind", "presence.soul"],    // unity: intent and channel agree
+  chokmah: ["violence.mind", "intrigue.soul", "presence.body"]     // the founding flash: the crossed pairs
+});
+
 function ftAlignmentMod(sephirah, intent, channel) {
-  const rules = {
-    gevurah: () => intent === "violence"                           ? 1 : 0,
-    chesed:  () => intent === "presence"                           ? 1 : 0,
-    yesod:   () => (intent === "intrigue" || channel === "soul")   ? 1 : 0,
-    netzach: () => (intent === "violence" && channel === "body")   ? 1 : 0,
-    hod:     () => channel === "mind"                              ? 1 : 0,
-    binah:   () => (channel === "mind" || intent === "intrigue")   ? 1 : 0,
-    tiferet: () => channel === "soul"                              ? 1 : 0,
-    malkuth: () => channel === "body"                              ? 1 : 0,
-    keter:   () => 1
+  const pairs = FT_ALIGNMENT_PAIRS[String(sephirah || "").toLowerCase()];
+  return pairs?.includes(`${intent}.${channel}`) ? 1 : 0;
+}
+
+// "Violence·Body, Intrigue·Mind, Presence·Soul" — for the sheet hint + tooltips.
+function ftAlignmentPairsLabel(sephirah) {
+  const pairs = FT_ALIGNMENT_PAIRS[String(sephirah || "").toLowerCase()] ?? [];
+  return pairs.map(p => p.split(".").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join("·")).join(", ");
+}
+
+// The steward's Sephirotic Alignment (identity slot) IS the invoke sephira
+// (owner ruling 2026-10-21). Reads flags/items only, so it is safe inside
+// prepareDerivedData. Order: identity flag → legacy mirror flag → the
+// "Alignment: X" item. Returns a FT.SEPHIROTH key or "" (unaligned: NPCs,
+// pre-identity actors — they keep the free magic.sephirah select).
+function ftStewardSephirah(actor) {
+  if (!actor) return "";
+  const ALIAS = { chokhmah: "chokmah", hokhmah: "chokmah", tiphareth: "tiferet", tipheret: "tiferet", tiphereth: "tiferet",
+                  geburah: "gevurah", gevura: "gevurah", kether: "keter", malkut: "malkuth", netzah: "netzach", binnah: "binah" };
+  const norm = (v) => {
+    const k = String(v || "").toLowerCase().replace(/^alignment[:\-\s]+/, "").replace(/[^a-z]/g, "");
+    const key = ALIAS[k] || k;
+    return FT.SEPHIROTH[key] ? key : "";
   };
-  return (rules[sephirah] ?? (() => 0))();
+  const pick = (slot) => {
+    if (!slot || typeof slot !== "object") return "";
+    return norm(slot.name) || norm(slot.identifier) || norm(slot.optionKey) || norm(slot.key);
+  };
+  try {
+    const cho = actor.flags?.["bbttcc-character-options"] ?? {};
+    const k = pick(cho.identity?.sephirothicAlignment) || pick(cho.sephirot);
+    if (k) return k;
+    const it = (actor.items?.contents ?? []).find(i =>
+      /^alignment[:\-]/i.test(String(i?.name || "")) || i?.flags?.["bbttcc-character-options"]?.category === "sephirothic-alignments");
+    if (it) return norm(it.name) || norm(it.system?.identifier);
+  } catch (_e) {}
+  return "";
+}
+
+// The sephira an invoke actually uses: the steward's alignment when set,
+// else the fallback (item sephira / the sheet's free select).
+function ftEffectiveSephirah(actor, fallback = "tiferet") {
+  return ftStewardSephirah(actor) || fallback || "tiferet";
 }
 
 function ftCap(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ""; }
@@ -7707,7 +7758,7 @@ function ftOpenCastDialog(actor, item) {
   const rawSys  = actor.system?.system ?? actor.system;
   const intent  = item?.system?.intent   ?? "presence";
   const channel = item?.system?.channel  ?? "soul";
-  const seph    = item?.system?.sephirah ?? rawSys?.magic?.sephirah ?? "tiferet";
+  const seph    = ftEffectiveSephirah(actor, item?.system?.sephirah ?? rawSys?.magic?.sephirah ?? "tiferet");
   const label   = item?.name             ?? "Manifestation";
 
   new Dialog({
@@ -9234,7 +9285,7 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
     system: {
       intent: values.intent || "presence",
       channel: values.channel || "soul",
-      sephirah: values.sephirah || (actor?.system?.magic?.sephirah ?? "tiferet"),
+      sephirah: values.sephirah || ftEffectiveSephirah(actor, actor?.system?.magic?.sephirah ?? "tiferet"),
       mode: values.mode || "hermetic",
       clarityRequired,
       noiseGain,
@@ -12491,8 +12542,10 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
       <select name="intent">${mkOpts(FT.INTENTS, intent)}</select></div>
     <div class="ft-cast-field"><label>Channel</label>
       <select name="channel">${mkOpts(FT.CHANNELS, channel)}</select></div>
-    <div class="ft-cast-field"><label>Sephirah</label>
-      <select name="sephirah">${mkOpts(ftSephirothFor(sephirah), sephirah)}</select></div>
+    ${(() => { const _locked = !!ftStewardSephirah(actor);
+      const _tip = `+1 Align on ${ftAlignmentPairsLabel(sephirah)}${_locked ? " — set by your Sephirotic Alignment" : ""}`;
+      return `<div class="ft-cast-field" data-tooltip="${_tip}"><label>Sephirah${_locked ? ' <span style="opacity:0.55;font-weight:400;font-size:0.78em">— your alignment</span>' : ""}</label>
+      <select name="sephirah"${_locked ? " disabled" : ""}>${mkOpts(ftSephirothFor(sephirah), sephirah)}</select></div>`; })()}
     <div class="ft-cast-field" data-tooltip="Tier baseline DC: T1 12 · T2 14 · T3 16 · T4 18. Override for GM scene pressure (cover, ritual aids, hostile resonance).">
       <label>Difficulty (DC) <span style="opacity:0.55;font-weight:400;font-size:0.78em">— T${manTier} baseline ${ftTierCastDC(manTier)}</span></label>
       <input type="number" name="difficulty" value="${ftTierCastDC(manTier)}" min="5" max="30"/></div>
@@ -14680,6 +14733,7 @@ Hooks.once("init", function () {
   Handlebars.registerHelper("ftSephColor",  key    => FT.SEPHIROTH[key]?.color  ?? "#888");
   Handlebars.registerHelper("ftSephLabel",  key    => FT.SEPHIROTH[key]?.label  ?? key);
   Handlebars.registerHelper("ftSephDomain", key    => FT.SEPHIROTH[key]?.domain ?? "");
+  Handlebars.registerHelper("ftSephAlignPairs", key => ftAlignmentPairsLabel(key));
   Handlebars.registerHelper("ftNoiseClass", n      => ftNoiseClass(n));
   // Tooltip lookups for sheet labels — single source of truth
   Handlebars.registerHelper("ftFacultyTip", key => FT_FACULTY_TIPS[key] ?? "");
@@ -15223,6 +15277,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     useOverlay = false,
     rollMode = "normal"
   } = {}) {
+    // The steward's Sephirotic Alignment overrides any passed sephira (owner ruling 2026-10-21).
+    sephirah = ftEffectiveSephirah(actor, sephirah);
     // Item-driven cast: clamp misfire to the item's tier and inherit signature
     // when the caller didn't pass one explicitly.
     if (item && RfiItems.is.isGear(item)) {
@@ -18803,6 +18859,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // Unwrap double-system nesting from template.json "system" wrapper
       const sys = this.system?.system ?? this.system;
 
+      // Invoke sephira follows the steward's Sephirotic Alignment (owner ruling
+      // 2026-10-21). Derived only — the stored magic.sephirah is untouched, so
+      // removing the alignment hands the old free pick back.
+      if (this.type === "character" && sys?.magic) {
+        const _seph = ftStewardSephirah(this);
+        if (_seph) sys.magic.sephirah = _seph;
+      }
+
       // Rig defense derive (B11.A — 2026-05-12). Rigs don't carry attributes,
       // so the standard 10+attr+attr formula doesn't apply. Guard/Evasion come
       // from frame bracket; Resolve is flat. All three +tier on top. Live here
@@ -20458,6 +20522,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       magic.clarity  ??= { value: 3, max: 5 };
       magic.noise    ??= { value: 0, max: 10 };
       magic.sephirah ??= "tiferet";
+      // The steward's Sephirotic Alignment drives the invoke sephira (owner ruling 2026-10-21);
+      // the select becomes a locked read-out. Unaligned actors keep the free select.
+      {
+        const _stewardSeph = ftStewardSephirah(actor);
+        if (_stewardSeph) { magic.sephirah = _stewardSeph; magic.sephLocked = true; }
+      }
 
       // Pre-compute pip state so HBS needs no helpers
       const clarityPips = Array.from({ length: magic.clarity.max ?? 5 }, (_, i) => ({
@@ -21364,7 +21434,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           };
         })(),
         bbttcc,
-        SEPHIROTH:     ftSephirothFor(this.actor?.system?.magic?.sephirah),   // players never see a locked sefirah (Yesod)
+        SEPHIROTH:     ftSephirothFor(ftEffectiveSephirah(this.actor, this.actor?.system?.magic?.sephirah)),   // players never see a locked sefirah (Yesod)
         INTENTS:       FT.INTENTS,
         CHANNELS:      FT.CHANNELS,
         MODES:         FT.MODES,
@@ -24781,7 +24851,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         manifestationFrameChips: ftManifestationFrameChips("power", system),
         manifestationCostLabel: ftManifestationCostLabel("power", system),
         statStrip: ftItemStatStrip(this.item, system),
-        alignMod:   ftAlignmentMod(sephirah, intent, channel),
+        alignMod:   ftAlignmentMod(ftEffectiveSephirah(this.item.actor, sephirah), intent, channel),
         manifestationCoachHtml: buildManifestationCoachHTML(this.item.actor, { kind: "power", system }),
         isEditable: this.isEditable,
         isEditMode: sheetMode === "edit",

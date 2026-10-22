@@ -1224,15 +1224,16 @@
         </span>
         <input type="number" name="system.magic.noise.value" value="{{magic.noise.value}}" min="0" max="10" class="ft-noise-input {{ftNoiseClass magic.noise.value}}"/>
       </div>
-      <div class="ft-magic-row ft-seph-row" data-tooltip="Sephirah — your active sphere on the Tree of Life. Shapes manifestation flavor, eligible disciplines, and sephirotic damage alignment. Switch in narrative beats; some manifestations are gated to a specific sphere.">
+      <div class="ft-magic-row ft-seph-row" data-tooltip="Sephirah — your active sphere on the Tree of Life when you Invoke. It gives +1 Align when the cast's Intent and Channel match one of its three pairs, and shapes manifestation flavor.{{#if magic.sephLocked}} Set by your Sephirotic Alignment; it changes when the alignment does.{{/if}}">
         <label>Sephirah</label>
-        <select name="system.magic.sephirah" class="ft-seph-select" style="border-color: {{ftSephColor magic.sephirah}}44">
+        <select name="system.magic.sephirah" class="ft-seph-select" style="border-color: {{ftSephColor magic.sephirah}}44" {{#if magic.sephLocked}}disabled{{/if}}>
           {{#each SEPHIROTH as |seph key|}}
           <option value="{{key}}" {{#if (eq ../magic.sephirah key)}}selected{{/if}}>{{seph.label}}</option>
           {{/each}}
         </select>
       </div>
-      <div class="ft-seph-domain">{{ftSephDomain magic.sephirah}}</div>
+      <div class="ft-seph-domain">{{ftSephDomain magic.sephirah}}{{#if magic.sephLocked}} · from your alignment{{/if}}</div>
+      <div class="ft-seph-domain ft-seph-pairs">+1 Align: {{ftSephAlignPairs magic.sephirah}}</div>
       <div class="ft-magic-actions">
         <button type="button" data-action="ftMisfire" class="ft-misfire-btn" data-tooltip="Roll a Misfire — clamped to your Steward tier. Use when a manifestation goes sideways (Noise threshold trip, GM call, or voluntary). Posts a misfire chart result to chat.">⚡ Misfire</button>
         {{#if isTCC}}
