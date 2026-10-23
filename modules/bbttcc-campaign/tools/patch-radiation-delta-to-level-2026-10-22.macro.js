@@ -20,7 +20,7 @@
 
   const campsRaw = game.settings.get(NS, "campaigns");
   const campsWasStr = typeof campsRaw === "string";
-  const camps = campsWasStr ? JSON.parse(campsRaw) : foundry.utils.deepClone(campsRaw);
+  const camps = campsWasStr ? JSON.parse(campsRaw) : JSON.parse(JSON.stringify(campsRaw));   // a TRUE copy — deepClone hands back non-plain objects by reference, so an in-place edit can hit the settings cache and settings.set then sees "no change"
   const campaignId = game.bbttcc?.api?.campaign?.getActiveCampaignId?.();
   const camp = camps?.[campaignId];
   if (!camp) return ui.notifications.error(`Active campaign '${campaignId}' not found.`);

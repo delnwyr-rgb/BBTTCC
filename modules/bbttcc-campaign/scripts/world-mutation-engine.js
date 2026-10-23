@@ -1545,7 +1545,12 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         if (!game.user?.isGM) { notes.push("hexRadiation:skipped(not-gm)"); continue; }
         const ctxHex = String((ctx && ctx.hexUuid) ? ctx.hexUuid : "").trim();
         const beatHex = String((beat && beat.targetHexUuid) ? beat.targetHexUuid : "").trim();
-        const doc = hr.hexName ? _findHexByName(hr.hexName) : (hr.targetHexUuid ? await resolveHexDoc(hr.targetHexUuid) : (ctxHex || beatHex ? await resolveHexDoc(ctxHex || beatHex) : null));
+        // Endings don't inherit the arrival's hex (_chainCtxFrom), so a blank hex falls back to where the party
+        // stands: the faction's recorded arrival (flags.bbttcc-factions.travel.atHexUuid, written on every hex enter).
+        const fid = String((ctx && ctx.factionId) || "").replace(/^Actor\./, "");
+        const atHex = fid ? String(get(game.actors.get(fid) || {}, "flags.bbttcc-factions.travel.atHexUuid", "") || "") : "";
+        const ref = ctxHex || beatHex || atHex;
+        const doc = hr.hexName ? _findHexByName(hr.hexName) : (hr.targetHexUuid ? await resolveHexDoc(hr.targetHexUuid) : (ref ? await resolveHexDoc(ref) : null));
         if (!doc || !doc.update) { console.warn(TAG, "hexRadiation: target hex not found", { hexName: hr.hexName, targetHexUuid: hr.targetHexUuid, beatId: beatCtx.beatId }); continue; }
         // A beat RAISES the hex to its level and never lowers it; 0 cleans it (owner ruling 2026-10-22).
         const before = radT.level(doc);

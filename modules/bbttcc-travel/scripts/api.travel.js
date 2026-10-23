@@ -669,6 +669,8 @@
     return out;
   }
 
+  const RADIATION_POCKET_BEAT = "enc_minor_radiation_pocket";   // arrival beat for hot hexes with none of their own (2026-10-22)
+
   const _recent = new Map();
   function dkey(campaignId, beatId, hexUuid, factionId) { return [campaignId || "", beatId || "", hexUuid || "", factionId || ""].join("|"); }
   function seen(key, ms) {
@@ -738,6 +740,15 @@
     } catch (_eFac) {}
 
     const beatIds = readOnEnterBeatIds(campaign, hexUuid, to);
+    // RADIATION (owner ruling 2026-10-22): the Radiation Pocket is not a random encounter — a HOT hex (Radiation
+    // level 1+) with no authored arrival beat plays it (once per hex, like any arrival).
+    if (!beatIds.length) {
+      try {
+        const lv = game.bbttcc?.api?.territory?.radiation?.level?.(to) || 0;
+        const list = Array.isArray(campaign.beats) ? campaign.beats : Object.values(campaign.beats || {});
+        if (lv >= 1 && list.some(b => b && b.id === RADIATION_POCKET_BEAT)) { beatIds.push(RADIATION_POCKET_BEAT); log("Hex enter: hot hex (level " + lv + ") → " + RADIATION_POCKET_BEAT); }
+      } catch (_eRad) {}
+    }
     const beatId = beatIds[0] || null;
 
     if (!beatId) { log("Hex enter: no beat configured", { hexUuid, campaignId }); return; }
