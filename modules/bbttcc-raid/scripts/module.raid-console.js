@@ -4032,7 +4032,7 @@ _renderScenarioHUD(host, round){
               checkbox: el,
               root: host,
               label: (labelMap?.[key]?.label || key)
-            }, { phase: "invoke" });
+            }, { phase: "invoke", broadcast: true });   // the maneuver's title banner reaches every seat (was GM-local, 2026-10-22)
           } catch(_eFx) {}       });
         host.__bbttccDelegated = true;
       }

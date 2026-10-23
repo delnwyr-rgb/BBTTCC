@@ -109,7 +109,7 @@ function patchConsoleClass(api, ConsoleClass) {
       margin,
       label: roundAfter?.raidType || raidType || "Raid Clash",
       targetToken: target
-    }, { raidType, label: roundAfter?.raidType || raidType || "Raid Clash" });
+    }, { raidType, label: roundAfter?.raidType || raidType || "Raid Clash", broadcast: true });   // every seat sees the clash (was GM-local, 2026-10-22)
 
     // Per-maneuver impact/resolve ladder (native commit doesn't play these).
     // raid_outcome / rig_damage / boss_phase_change are owned by native

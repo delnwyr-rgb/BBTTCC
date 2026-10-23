@@ -103,7 +103,7 @@
         attackerTotal: ctx.attackerTotal,
         defenderTotal: ctx.defenderTotal,
         margin: ctx.margin
-      });
+      }, { broadcast: true });   // the scenario lives on the GM seat — relay so players see the exchange (2026-10-22)
     } catch (_e) {}
   }
 
@@ -114,7 +114,7 @@
       await fx.playScenarioShift("courtly_exchange", {
         raidType: "courtly",
         outcome: `Influence ${ctx.beforeA}/${ctx.beforeD} → ${ctx.afterA}/${ctx.afterD}`
-      }, { raidType: "courtly" });
+      }, { raidType: "courtly", broadcast: true });   // every seat sees the influence swing (was GM-local, 2026-10-22)
     } catch (_e) {}
   }
 
