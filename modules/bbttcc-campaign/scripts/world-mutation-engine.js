@@ -2249,11 +2249,11 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           const cs = R.courtScene ? (game.scenes.get(String(R.courtScene)) || game.scenes.find(s => _normHexName(s.name) === _normHexName(R.courtScene))) : null;
           if (cs) {
             courtSceneId = cs.id;
-            // A court scene IS a tableau: switch the Parley engine's gate on if the author forgot (GM write).
-            if (cs.flags?.["bbttcc-raid"]?.tableau?.enabled !== true) { try { await cs.setFlag("bbttcc-raid", "tableau", Object.assign({}, cs.flags?.["bbttcc-raid"]?.tableau || {}, { enabled: true })); } catch (_eT) {} }
+            // A Parley runs on ANY scene (owner ruling 2026-10-22) — no longer switches tableau visuals on (that
+            // forced perspective + 6×6 auto-sizing would wreck a battlemap). Courtiers = api.raid.tableau.courtiers.
             try { await cs.activate(); } catch (_e) { try { await cs.view(); } catch (_e2) {} }
           }
-          else console.warn(TAG, "raid: a Parley with no courtScene — the Parley engine needs a tableau scene viewed", R);
+          else console.warn(TAG, "raid: a Parley with no courtScene — it runs on whatever scene is viewed (courtiers = its NPCs or 🎭-marked tokens)", R);
         }
         const prev = A.getFlag("bbttcc-raid", "raidSession") || {};
         const session = {

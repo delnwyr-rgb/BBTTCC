@@ -1617,14 +1617,17 @@ async function _rcConfirm(title, text) {
 }
 
 // Courtly Intrigue gate. True for the legacy "courtly" key OR for "presence"
-// when the active scene has tableau enabled — see COURTLY_INTRIGUE_SPEC.md §3
+// when the active scene is a tableau or has courtiers (any scene since 2026-10-22) — see COURTLY_INTRIGUE_SPEC.md §3
 // and project_courtly_intrigue_s2_design_memo_2026_05_20. Lets a Presence raid
 // run on a tableau scene route through the courtly engine + HUD without
 // promoting "courtly" back into the canonical three-faculty dropdown.
 function _isCourtlyKey(k) {
   const lk = String(k || "").toLowerCase();
   if (lk === "courtly") return true;
-  if (lk === "presence" && canvas?.scene?.flags?.["bbttcc-raid"]?.tableau?.enabled === true) return true;
+  // A Parley runs on ANY scene (owner ruling 2026-10-22): a tableau, or any map with courtiers on it
+  // (marked tableauActor tokens, else its non-party NPCs — api.raid.tableau.courtiers).
+  if (lk === "presence" && (canvas?.scene?.flags?.["bbttcc-raid"]?.tableau?.enabled === true
+    || (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []).length > 0)) return true;
   return false;
 }
 

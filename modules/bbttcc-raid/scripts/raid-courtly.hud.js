@@ -108,6 +108,10 @@
   function _isTableauEnabled() {
     return canvas?.scene?.flags?.[MOD_R]?.tableau?.enabled === true;
   }
+  // A Parley runs on ANY scene (owner ruling 2026-10-22): the HUD shows wherever there are courtiers.
+  function _isParleyStage() {
+    return _isTableauEnabled() || _tableauTokens().length > 0;
+  }
 
   function _viewerCtx(state) {
     if (game.user?.isGM) return "gm";
@@ -195,7 +199,7 @@
 
   function _tableauTokens() {
     if (!canvas?.tokens?.placeables) return [];
-    return canvas.tokens.placeables.filter(t => t.document?.flags?.[MOD_R]?.tableauActor === true);
+    return game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? canvas.tokens.placeables.filter(t => t.document?.flags?.[MOD_R]?.tableauActor === true);   // courtiers on ANY scene (2026-10-22)
   }
 
   function _favorOf(actor, factionId) {
@@ -524,7 +528,7 @@
       app = _ftAnyCourtlyConsole();
       state = app ? _fallbackState(app) : null;
     }
-    if (!app || !state || !_isTableauEnabled()) return _teardownAll();
+    if (!app || !state || !_isParleyStage()) return _teardownAll();
 
     // Influence panel (also drop-zone for Phase C secret drag-to-play)
     const infSlot = { get el() { return _infEl; }, set el(v) { _infEl = v; } };

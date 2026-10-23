@@ -839,7 +839,7 @@ for (const b of beats) {
     const T = String(R.type || "battle").toLowerCase();
     if (!["battle", "heist", "parley", "violence", "intrigue", "presence", "courtly"].includes(T)) F("E19", "ERR", b.id, `${where}.type '${R.type}' — engine knows battle | heist | parley`);
     if (!s(R.hexName) && !s(R.hexUuid) && !s(R.rigId)) F("E19", "ERR", b.id, `${where} names no target — hexName, hexUuid or rigId`);
-    if (["parley", "presence", "courtly"].includes(T) && !s(R.courtScene)) F("E19", "WARN", b.id, `${where}: a Parley with no courtScene — the Parley engine needs a tableau scene`);
+    if (["parley", "presence", "courtly"].includes(T) && !s(R.courtScene)) F("E19", "INFO", b.id, `${where}: a Parley with no courtScene — it runs on whatever scene is viewed (any scene since 2026-10-22; courtiers = its NPCs or 🎭-marked tokens)`);
     if (R.goal != null && !["persuade", "deceive", "impress", "unnoticed"].includes(String(R.goal).toLowerCase())) F("E19", "WARN", b.id, `${where}.goal '${R.goal}' — engine knows persuade | deceive | impress | unnoticed`);
     if (R.goal != null && !["parley", "presence", "courtly"].includes(T)) F("E19", "WARN", b.id, `${where}.goal is set on a ${T} — goals belong to a Parley`);
     if (R.routes != null) { if (typeof R.routes !== "object") F("E19", "ERR", b.id, `${where}.routes must be { win, stalemate, loss }`); else for (const k of ["win", "stalemate", "loss"]) { const to = s(R.routes[k]); if (to && !byId.has(to)) F("E19", "ERR", b.id, `${where}.routes.${k} → '${to}' is not a beat`); } }

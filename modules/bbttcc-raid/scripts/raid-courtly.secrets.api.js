@@ -216,8 +216,8 @@
   }
 
   async function _pickCourtier(prompt) {
-    const tokens = (canvas?.tokens?.placeables || []).filter(t => t.document?.flags?.[MOD_R]?.tableauActor === true && t.actor);
-    if (tokens.length === 0) { ui.notifications?.warn?.("No tableau courtiers on this scene."); return null; }
+    const tokens = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);   // courtiers on ANY scene (2026-10-22)
+    if (tokens.length === 0) { ui.notifications?.warn?.("No courtiers on this scene — mark one with the 🎭 button on its token HUD."); return null; }
     const opts = tokens.map(t => `<option value="${esc(t.actor.id)}">${esc(t.actor.name)}</option>`).join("");
     return new Promise(resolve => {
       new Dialog({

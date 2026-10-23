@@ -1209,7 +1209,10 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       const seen = new Set();
       for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) { const f = d.flags?.["bbttcc-territory"]; if (!f || !(f.isHex === true || f.kind === "territory-hex")) continue; const nm = String(f.name || d.text || "").trim(); if (!nm || seen.has(nm)) continue; seen.add(nm); const oid = String(f.factionId || f.ownerId || "").replace(/^Actor\./, ""); raidHexCatalog.push({ name: nm, scene: sc.name, owner: oid ? (game.actors.get(oid)?.name || "") : "" }); }
       raidHexCatalog.sort((a, b) => a.name.localeCompare(b.name));
-      raidCourtCatalog = (game.scenes ?? []).filter(s => s.flags?.["bbttcc-raid"]?.tableau?.enabled === true).map(s => ({ id: s.id, name: s.name, selected: s.id === raidOffer.courtScene || s.name === raidOffer.courtScene }));
+      // A Parley runs on ANY scene (2026-10-22): every scene is offered, tableau scenes first and marked 🎭.
+      raidCourtCatalog = (game.scenes ?? []).map(s => ({ id: s.id, tab: s.flags?.["bbttcc-raid"]?.tableau?.enabled === true, s }))
+        .sort((a, b) => (b.tab - a.tab) || a.s.name.localeCompare(b.s.name))
+        .map(({ id, tab, s }) => ({ id, name: (tab ? "🎭 " : "") + s.name, selected: id === raidOffer.courtScene || s.name === raidOffer.courtScene }));
       const prof = game.bbttcc?.api?.raid?.performanceProfiles?.() || {};
       raidStyleCatalog = Object.entries(prof).map(([k, v]) => ({ key: k, label: v?.label || k, selected: k === raidOffer.style }));
     } catch (_eRO) {}

@@ -1230,8 +1230,7 @@
         if (!s) return null;
         const mal = game.bbttcc?.mal?.npc;
         const canConverse = typeof mal?.nudge === "function" && typeof mal?.armedSecretCount === "function";
-        const candidates = !canConverse ? [] : (canvas?.tokens?.placeables || [])
-          .filter(t => t.document?.flags?.[MOD_R]?.tableauActor === true && t.actor)
+        const candidates = !canConverse ? [] : (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? [])   // courtiers on ANY scene (2026-10-22)
           .map(t => ({ actor: t.actor, armed: mal.armedSecretCount(t.actor) }))
           .filter(c => c.armed > 0);
         if (!candidates.length) return drawSecret(s, acquisition);
@@ -1284,8 +1283,7 @@
         const factionId = s === "A" ? state.attackerId : state.defenderId;
         const minFavor = Number(opts.minFavor ?? 2);
         // Find candidate courtiers with favor >= minFavor toward this side.
-        const candidates = (canvas?.tokens?.placeables || [])
-          .filter(t => t.document?.flags?.[MOD_R]?.tableauActor === true && t.actor)
+        const candidates = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? [])   // courtiers on ANY scene (2026-10-22)
           .filter(t => Number(t.actor.flags?.[MOD_R]?.courtFavor?.[factionId] ?? 0) >= minFavor);
         if (!candidates.length) {
           ui.notifications?.warn?.(`No courtier has favor ≥ ${minFavor} toward you. Cannot invoke Patron's Word.`);
@@ -1350,9 +1348,8 @@
               case "favorShift": {
                 // Picker for chosen courtier; favor toward resolved faction.
                 const fid = resolveFaction(eff.side);
-                const tokens = (canvas?.tokens?.placeables || [])
-                  .filter(t => t.document?.flags?.[MOD_R]?.tableauActor === true && t.actor);
-                if (!tokens.length) { ui.notifications?.warn?.("No tableau courtiers on this scene."); break; }
+                const tokens = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);   // courtiers on ANY scene (2026-10-22)
+                if (!tokens.length) { ui.notifications?.warn?.("No courtiers on this scene — mark one with the 🎭 button on its token HUD."); break; }
                 const opts2 = tokens.map(t => `<option value="${esc(t.actor.id)}">${esc(t.actor.name)} (favor ${_favorOf(t.actor, fid)})</option>`).join("");
                 const pick = await new Promise(resolve => {
                   new Dialog({
@@ -1436,8 +1433,7 @@
         const raidId   = `${state.attackerId}::${state.defenderId}::${Date.now()}`;
         const lines = [];
 
-        const courtierTokens = () => (canvas?.tokens?.placeables || [])
-          .filter(t => t.document?.flags?.["bbttcc-raid"]?.tableauActor === true && t.actor);
+        const courtierTokens = () => (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);   // courtiers on ANY scene (2026-10-22)
 
         async function bumpFavor(targetActor, factionId, delta, cap = 3) {
           const cur = foundry.utils.duplicate(targetActor.flags?.["bbttcc-raid"]?.courtFavor || {});

@@ -750,7 +750,7 @@
           </select>
           <input type="text" name="world-raid-hex" list="bbttcc-raid-hexes" value="{{raidOffer.hexName}}" placeholder="target hex (name)" style="flex:1; min-width:140px;" />
           <datalist id="bbttcc-raid-hexes">{{#each raidHexCatalog}}<option value="{{this.name}}">{{this.scene}}{{#if this.owner}} — {{this.owner}}{{/if}}</option>{{/each}}</datalist>
-          <select name="world-raid-court" style="width:auto; max-width:220px;" title="Parley only — the tableau scene the table is pulled to">
+          <select name="world-raid-court" style="width:auto; max-width:220px;" title="Parley only — the scene the table is pulled to: a 🎭 tableau or any battlemap (its NPCs, or the tokens you mark 🎭 on the token HUD, are the courtiers)">
             <option value="" {{#unless raidOffer.courtScene}}selected{{/unless}}>(no court scene)</option>
             {{#each raidCourtCatalog}}<option value="{{this.id}}" {{#if this.selected}}selected{{/if}}>{{this.name}}</option>{{/each}}
           </select>

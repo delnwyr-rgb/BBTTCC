@@ -140,6 +140,26 @@
     return tokenDoc?.flags?.[MOD]?.tableauActor === true;
   }
 
+  // COURTIERS — who a Parley talks to (owner ruling 2026-10-22: a Parley runs on ANY scene, not only a tableau).
+  // A token marked tableauActor:true is a courtier anywhere (the mark only changes how it LOOKS on a tableau scene).
+  // On a plain map with nobody marked, the courtiers are the non-party people present: NPC or character tokens with
+  // no player owner, not structures / factions / rigs, not hidden, and not pinned out (tableauActor:false).
+  function courtiers(scene = canvas?.scene) {
+    if (!scene || scene !== canvas?.scene) return [];
+    const toks = (canvas?.tokens?.placeables || []).filter(t => t?.actor && t.document);
+    const marked = toks.filter(t => isTableauActor(t.document));
+    if (marked.length || getTableau(scene)) return marked;
+    return toks.filter(t => {
+      const a = t.actor, d = t.document;
+      if (d.hidden || d.flags?.[MOD]?.tableauActor === false) return false;
+      if (!["npc", "character"].includes(a.type) || a.hasPlayerOwner) return false;   // GM-run people (staged chairs are often characters)
+      if (a.getFlag?.("bbttcc-factions", "isFaction") === true) return false;
+      if (a.getFlag?.("bbttcc-structures", "hasStructure") === true) return false;
+      if (a.flags?.["bbttcc-rigs"] || /vehicle|rig/i.test(String(a.system?.details?.type?.value || ""))) return false;
+      return true;
+    });
+  }
+
   // Restore vanilla appearance for tokens that previously had spike scale/sort.
   // Don't hardcode mesh.scale to (1,1) — that's only correct if the source
   // texture is exactly the footprint size. For typical tokens with multi-
@@ -405,7 +425,8 @@
       if (!game.user?.isGM) return;
       const doc = hud?.object?.document;
       const scene = doc?.parent ?? canvas?.scene;
-      if (!doc || !getTableau(scene)) return;
+      if (!doc) return;
+      const isStage = !!getTableau(scene);
       // v13+ AppV2 HUD is a <form>, and HTMLFormElement[0] indexes its own
       // inputs — only unwrap [0] for actual jQuery (v11/12), never elements.
       const root = html instanceof HTMLElement ? html : (html?.[0] ?? html);
@@ -415,9 +436,11 @@
       const btn = document.createElement("div");
       btn.className = `control-icon${on ? " active" : ""}`;
       btn.dataset.action = "bbttcc-tableau";
-      btn.title = on
-        ? "Tableau: scales with depth — click to PIN at true size"
-        : "Tableau: pinned at true size — click to scale with depth";
+      btn.title = isStage
+        ? (on ? "Tableau: scales with depth — click to PIN at true size"
+              : "Tableau: pinned at true size — click to scale with depth")
+        : (on ? "Parley courtier — click to take them OUT of the Parley"
+              : "Not marked as a Parley courtier — click to make them one (on a plain map, unmarked NPCs count until you mark someone)");
       btn.innerHTML = `<i class="fa-solid fa-masks-theater"></i>`;
       btn.addEventListener("click", async (ev) => {
         ev.preventDefault(); ev.stopPropagation();
@@ -468,6 +491,7 @@
     game.bbttcc.api.raid.tableau = {
       DEFAULTS,
       readConfig: (scene = canvas?.scene) => getTableau(scene) || { ...DEFAULTS, enabled: false },
+      courtiers,
       enable: async (partial = {}, scene = canvas?.scene) => {
         if (!scene) return ui.notifications?.warn("No active scene.");
         const cur = scene.flags?.[MOD]?.tableau || {};
