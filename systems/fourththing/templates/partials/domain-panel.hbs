@@ -75,7 +75,7 @@
       <div class="ft-domain-card-title">Retinue</div>
       {{#if domain.retinue.length}}
       {{#each domain.retinue}}
-      <div class="ft-domain-holding-row"><span>{{label}}: <b>{{name}}</b></span><span class="ft-muted">{{#if last}}last turn{{else}}{{turnsLeft}} turns{{/if}} <button type="button" class="ft-chip ft-domain-release" data-domain-act="release:{{family}}" data-tooltip="Let them go now.">✂</button></span></div>
+      <div class="ft-domain-holding-row ft-domain-retinue-row"><span class="ft-domain-retinue-who"><button type="button" class="ft-domain-retinue-face" data-domain-act="portrait:{{family}}" data-tooltip="Choose who leads them.">{{#if portrait}}<img src="{{portrait}}" alt="">{{else}}<i class="fas fa-user-plus"></i>{{/if}}</button>{{label}}: <b>{{name}}</b></span><span class="ft-muted">{{#if last}}last turn{{else}}{{turnsLeft}} turns{{/if}} <button type="button" class="ft-chip ft-domain-release" data-domain-act="release:{{family}}" data-tooltip="Let them go now.">✂</button></span></div>
       {{/each}}
       {{else}}
       <p class="ft-hint">No one under contract. Hire a crew or an association at the Muster.</p>

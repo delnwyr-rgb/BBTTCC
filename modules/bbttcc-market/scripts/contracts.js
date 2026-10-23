@@ -13,11 +13,12 @@
 // One contract per family (crew / occult) per steward at a time: that is the cap the identity slots always had.
 //
 // Storage: actor.flags["bbttcc-character-options"].contracts = { crew?: C, occult?: C }
-//   C = { docId, pack, name, displayName, since, until, turns, source, entryId, vendorId, noted? }
+//   C = { docId, pack, name, displayName, since, until, turns, source, entryId, vendorId, portrait?, noted? }
+//   portrait = the face the player chose for the crew at hire (Asli art picker), else the catalog entry's image.
 //   `until` = last world turn the contract covers (inclusive). Turn clock = game.bbttcc.api.world.getState().turn.
 //
 // API: game.bbttcc.api.contracts = { list(actor), get(actor, family), hire(actor, family, docId, opts), release(actor, family, opts),
-//                                    sweep({apply}), turnsLeft(c), FAMILIES }
+//                                    sweep({apply}), turnsLeft(c), setPortrait(actor, family, img), choosePortrait(actor, family), FAMILIES }
 // Hooks fired: "bbttcc:contract:hired" | "bbttcc:contract:released" | "bbttcc:contract:lastTurn" | "bbttcc:contract:ended" ({ actorId, family, contract })
 // Market: catalog kind "contract" ({ contract: { family, docId, pack, turns } }) delivers through hire(). See market.js.
 // Imported from market.js (same module scope) so no module.json edit is needed.
@@ -75,7 +76,7 @@ async function _syncTierFeats(a) {
 }
 
 /** Hire a crew / association for `turns` world turns (default 3). GM-side write (market relays players through gmExec). */
-async function hire(actorOrId, family, docId, { turns = 3, source = "market", entryId = null, vendorId = null, quiet = false } = {}) {
+async function hire(actorOrId, family, docId, { turns = 3, source = "market", entryId = null, vendorId = null, quiet = false, portrait = null } = {}) {
   const a = _actor(actorOrId); if (!a) throw new Error("Steward not found.");
   if (a.type !== "character") throw new Error("Only a steward can hold a contract.");
   const fam = FAMILIES[family]; if (!fam) throw new Error(`Unknown contract family "${family}".`);
@@ -88,12 +89,30 @@ async function hire(actorOrId, family, docId, { turns = 3, source = "market", en
   await setSlot(a, family, doc.id);
   await _syncTierFeats(a);                      // attach the crew's T1..tier feats (bonuses + opt_* unlocks ride on them)
   const t = _turn(); const n = Math.max(1, Math.floor(Number(turns) || 3));
-  const contract = { docId: doc.id, pack: fam.pack, name: doc.name, displayName: _normName(doc.name, family), since: t, until: t + n - 1, turns: n, source, entryId, vendorId, hiredAt: Date.now() };
+  const contract = { docId: doc.id, pack: fam.pack, name: doc.name, displayName: _normName(doc.name, family), since: t, until: t + n - 1, turns: n, source, entryId, vendorId, portrait: portrait ? String(portrait) : null, hiredAt: Date.now() };
   await a.setFlag(CO, `contracts.${family}`, contract);
   try { await _echo().syncSteward?.(a); } catch (_e) {}
   try { Hooks.callAll("bbttcc:contract:hired", { actorId: a.id, family, contract }); } catch (_e) {}
   if (!quiet) _card(a, `✍ Hired: ${_esc(contract.displayName)}`, `${_esc(fam.label)} under contract to ${_esc(a.name)} for <b>${n}</b> turn${n === 1 ? "" : "s"} (through turn ${contract.until}). Their maneuvers, bonuses and people ride with you until then.`);
   return contract;
+}
+
+/** The crew's face — the player picks one at hire (Asli art picker); changeable any time from the Retinue card. */
+async function setPortrait(actorOrId, family, img) {
+  const a = _actor(actorOrId); if (!a) return null;
+  if (!isActive(get(a, family))) return null;
+  await a.setFlag(CO, `contracts.${family}.portrait`, img ? String(img) : null);
+  try { Hooks.callAll("bbttcc:contract:portrait", { actorId: a.id, family, portrait: img || null }); } catch (_e) {}
+  return img || null;
+}
+
+/** Open the art picker for a held contract and store the choice. Resolves to the chosen path, or null. */
+async function choosePortrait(actorOrId, family) {
+  const a = _actor(actorOrId); const c = a ? get(a, family) : null;
+  const picker = game.bbttcc?.artPicker;
+  if (!c || !picker?.pick) return null;
+  const sel = await picker.pick({ kind: "echo", current: c.portrait || "", title: `Who leads ${c.displayName}?` });
+  return sel?.img ? setPortrait(a, family, sel.img) : null;
 }
 
 /** End a contract now: clears the slot, removes the crew's embedded feats, re-syncs the Domain pool. */
@@ -150,7 +169,7 @@ Hooks.on("bbttcc:advanceTurn:end", (ctx) => { sweep({ apply: ctx?.apply !== fals
 function _attach() {
   try {
     game.bbttcc ??= {}; game.bbttcc.api ??= {};
-    game.bbttcc.api.contracts = { list, get, hire, release, sweep, turnsLeft, isActive, FAMILIES };
+    game.bbttcc.api.contracts = { list, get, hire, release, sweep, turnsLeft, isActive, setPortrait, choosePortrait, FAMILIES };
   } catch (e) { console.warn(TAG, "wiring failed", e); }
 }
 Hooks.once("ready", _attach);

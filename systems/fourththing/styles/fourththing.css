@@ -6618,6 +6618,12 @@ body.ft-no-watermark .ft-character-sheet::before { display: none; }
 .ft-domain-pressure { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
 .ft-domain-warn { background: rgba(200,60,60,0.2); color: #f09090; font-size: 0.75rem; }
 .ft-domain-holding-row { display: flex; justify-content: space-between; padding: 0.12rem 0; font-size: 0.85rem; }
+/* Retinue faces (2026-10-22) — the portrait the player picked for a hired crew; click to change it */
+.ft-domain-retinue-row { align-items: center; }
+.ft-domain-retinue-who { display: flex; align-items: center; gap: 0.45rem; }
+button.ft-domain-retinue-face { flex: 0 0 auto; width: 40px; height: 40px; min-height: 0; padding: 0; margin: 0; border-radius: 50%; overflow: hidden; border: 1px solid rgba(214, 178, 106, 0.55); background: rgba(0, 0, 0, 0.35); display: flex; align-items: center; justify-content: center; line-height: 1; cursor: pointer; }
+button.ft-domain-retinue-face img { width: 100%; height: 100%; object-fit: cover; border: 0; }
+button.ft-domain-retinue-face i { font-size: 0.9rem; opacity: 0.7; margin: 0; }
 .ft-domain-hexes { display: flex; flex-wrap: wrap; gap: 0.25rem; margin: 0.15rem 0 0.35rem; }
 .ft-domain-hex { cursor: pointer; font-size: 0.78rem; padding: 0.12rem 0.45rem; border-radius: 4px; background: rgba(160,180,255,0.08); border: 1px solid rgba(160,180,255,0.22); }
 .ft-domain-hex.is-here { border-color: rgba(232,200,74,0.55); box-shadow: 0 0 6px rgba(232,200,74,0.25); }

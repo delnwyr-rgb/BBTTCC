@@ -1342,7 +1342,18 @@ async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" })
 // runs on the primary GM via bbttcc-core gmExec "market.purchase", validated GM-side.
 const PURCHASE_RELAY = "market.purchase";
 
-async function purchase({ entryId, factionId, characterId, hexUuid, note, payFromPool, _relayed = false } = {}) {
+async function purchase(args = {}) {
+  const res = await _purchaseCore(args);
+  // A hired crew gets a face: the BUYER's seat opens the Asli art picker once the purchase settles (purchases relay to
+  // the GM, so this runs here, on the caller, never in delivery). Never blocks or fails the purchase (2026-10-22).
+  try {
+    const fam = (res?.receipt?.delivered ?? res?.delivered)?.contract?.family;
+    if (fam && args.characterId && !args._relayed) setTimeout(() => { try { game.bbttcc?.api?.contracts?.choosePortrait?.(args.characterId, fam); } catch (_eP) {} }, 700);
+  } catch (_e) {}
+  return res;
+}
+
+async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, payFromPool, _relayed = false } = {}) {
   if (!game.user?.isGM) {
     const gx = game.bbttcc?.api?.gmExec;
     if (gx && typeof gx.call === "function") {
@@ -1518,7 +1529,7 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
       const res = await deliverActorByUuid(factionId, entry.uuid);
       delivered = { to: "faction", actorTemplate: true, ...res };
     } else if (kind === "contract") {
-      const c = await game.bbttcc.api.contracts.hire(characterId, entry.contract.family, entry.contract.docId, { turns: entry.contract.turns, source: "market", entryId: entry.id, vendorId: entry.vendorId });
+      const c = await game.bbttcc.api.contracts.hire(characterId, entry.contract.family, entry.contract.docId, { turns: entry.contract.turns, source: "market", entryId: entry.id, vendorId: entry.vendorId, portrait: entry.img || null });
       delivered = { to: "character", characterId, contract: { family: entry.contract.family, until: c?.until ?? null } };
     } else {
       throw new Error(`Unsupported kind: ${kind}`);
@@ -1979,6 +1990,7 @@ const vendors = visibleVendors.map(v => ({
         }
         if (!img && e.img) img = String(e.img);
       }
+      if (kind === "contract" && !img && e.img) img = String(e.img);   // the crew's face (Asli token) — contract rows had no image at all (2026-10-22)
       if (kind === "gear") {
         docUuid = String(e.uuid || "").trim();
         if (docUuid) {
@@ -2043,6 +2055,8 @@ const vendors = visibleVendors.map(v => ({
         kindLabel: kindLabel(e.kind),
         costLabel: costLabelForEntry(e, flagPrice),
         img,
+        // a contract's crew emblem (the compendium item's icon) rides on its face as a badge (2026-10-22)
+        emblem: (() => { if (e.kind !== "contract") return ""; try { const ic = game.packs.get(e.contract?.pack)?.index?.get(e.contract?.docId)?.img || ""; return ic && ic !== img ? ic : ""; } catch (_e) { return ""; } })(),
         docUuid,
         docName,
         docType,

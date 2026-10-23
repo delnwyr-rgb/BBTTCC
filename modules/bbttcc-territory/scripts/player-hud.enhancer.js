@@ -690,7 +690,7 @@
   function contractRows(steward) {
     try {
       const C = game.bbttcc?.api?.contracts; if (!C?.list) return [];
-      return C.list(steward).map(c => ({ label: c.familyLabel, name: c.displayName, clock: c.turnsLeft === Infinity ? "standing" : (c.turnsLeft === 1 ? "last turn" : `${c.turnsLeft} turns`) }));
+      return C.list(steward).map(c => ({ label: c.familyLabel, name: c.displayName, portrait: c.portrait || "", clock: c.turnsLeft === Infinity ? "standing" : (c.turnsLeft === 1 ? "last turn" : `${c.turnsLeft} turns`) }));
     } catch (_e) { return []; }
   }
   function abilitiesTrayHTML(steward) {
@@ -714,7 +714,7 @@
     if (echo.length || contracts.length) {
       // ruling 15 (2026-10-18): the Retinue is hired — name the contract and its clock above the crew's feats
       const contractStrip = contracts.length ? `<div class="bbttcc-retinue-contracts" style="padding:.25rem .4rem .1rem;font-size:.8rem;opacity:.9;">${contracts.map(c =>
-        `<div style="display:flex;justify-content:space-between;gap:.5rem;"><span>${esc(c.label)}: <b>${esc(c.name)}</b></span><span style="opacity:.7;">${esc(c.clock)}</span></div>`).join("")}</div>` : "";
+        `<div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;"><span style="display:flex;align-items:center;gap:.4rem;">${c.portrait ? `<img src="${esc(c.portrait)}" alt="" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(214,178,106,.55);">` : ""}${esc(c.label)}: <b>${esc(c.name)}</b></span><span style="opacity:.7;">${esc(c.clock)}</span></div>`).join("")}</div>` : "";   // faces (2026-10-22)
       const echoInvokeBtns = contractStrip + `<div class="bbttcc-echo-actions" style="display:flex;gap:.35rem;padding:.3rem .4rem .4rem;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:.3rem;">
         <button type="button" data-ft-spotlight="crew" title="Spotlight a member from an active crew — one beat per scene" style="padding:.2rem .55rem;display:flex;align-items:center;gap:.25rem;font-size:.82rem;"><i class="fas fa-star"></i> Invoke Crew</button>
         <button type="button" data-ft-spotlight="occult" title="Spotlight a member from an active association — one beat per scene" style="padding:.2rem .55rem;display:flex;align-items:center;gap:.25rem;font-size:.82rem;"><i class="fas fa-star"></i> Invoke Association</button>

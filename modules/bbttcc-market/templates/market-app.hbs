@@ -199,7 +199,9 @@
             {{/if}}
             {{#each entries}}
               <article class="bbttcc-market-item{{#if affordKnown}}{{#unless canAfford}} is-unaffordable{{/unless}}{{/if}}" data-entry-id="{{id}}">
-                {{#if img}}
+                {{#if emblem}}
+                  <span class="bbttcc-market-item__img bbttcc-market-item__face"><img src="{{img}}" alt=""/><img class="bbttcc-market-item__emblem" src="{{emblem}}" alt=""/></span>
+                {{else if img}}
                   <img class="bbttcc-market-item__img" src="{{img}}" alt=""/>
                 {{else}}
                   <div class="bbttcc-market-item__img bbttcc-market-item__img--empty"></div>

@@ -25341,7 +25341,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   function _ftDomainRetinue(actor) {
     try {
       const C = game.bbttcc?.api?.contracts; if (!C) return [];
-      return C.list(actor).map(c => ({ family: c.family, label: c.familyLabel, name: c.displayName, turnsLeft: c.turnsLeft === Infinity ? "standing" : c.turnsLeft, last: c.turnsLeft === 1 }));
+      return C.list(actor).map(c => ({ family: c.family, label: c.familyLabel, name: c.displayName, turnsLeft: c.turnsLeft === Infinity ? "standing" : c.turnsLeft, last: c.turnsLeft === 1, portrait: c.portrait || "" }));   // portrait: the face the player picked (2026-10-22)
     } catch (_e) { return []; }
   }
   async function ftDomainContext(sheet) {
@@ -25393,6 +25393,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   }
   async function _ftDomainAct(sheet, act) {
     const actor = sheet.actor; let faction = null; try { faction = getLinkedFaction(actor); } catch (_e) {}
+    if (String(act).startsWith("portrait:")) {  // the crew's face — the Asli art picker (2026-10-22)
+      const fam = String(act).split(":")[1]; const C = game.bbttcc?.api?.contracts;
+      if (!C?.choosePortrait) return ui.notifications?.warn?.("Contracts not available.");
+      await C.choosePortrait(actor, fam);
+      return sheet.render(false);
+    }
     if (String(act).startsWith("release:")) {   // ruling 15: let a hired crew / association go now
       const fam = String(act).split(":")[1]; const C = game.bbttcc?.api?.contracts;
       if (!C) return ui.notifications?.warn?.("Contracts not available.");
