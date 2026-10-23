@@ -2135,6 +2135,11 @@ async function _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender)
         } else if (_isCourtlyKey(mode) && app?.__courtlyScenario?.applyEffects) {
           await app.__courtlyScenario.applyEffects(scenarioEffects, { side: String(side) === "def" ? "D" : "A" });
           appliedScenario = true;
+        } else if (_isCourtlyKey(mode) && app) {
+          // No Parley board yet (it opens at the first commit's "Start") — hold the effects and apply
+          // them the moment it does, instead of dropping them (a first-round Read the Room paid nothing, 2026-10-22).
+          (app.__courtlyPendingEffects ||= []).push({ effects: scenarioEffects, side: String(side) === "def" ? "D" : "A" });
+          appliedScenario = true;
         }
       }
     } catch (e) { console.warn("[bbttcc-raid] fire scenarioEffects failed", e); }
@@ -4875,6 +4880,7 @@ r.view = {
       ev.preventDefault();
       if (!(await _rcConfirm("Reset the console", "Clear all rounds in this console?"))) return;
       this.vm.rounds = [];
+      this.__courtlyPendingEffects = [];   // held pre-board Parley effects die with the rounds
       // Propagate the cleared rounds via the session flag so any open player
       // consoles re-render via the updateActor hook below (bindAPI).
       this._queueSaveSession();
@@ -4908,6 +4914,7 @@ r.view = {
       if (!_rcIsGMUser()) return;
       if (!(await _rcConfirm("End Raid", "End the raid? This clears rounds, supporters, and the target for every player."))) return;
       this.vm.rounds = [];
+      this.__courtlyPendingEffects = [];   // held pre-board Parley effects die with the raid
       this.vm.supportFactionIds = [];
       this.vm.targetUuid = "";
       this.vm.targetName = "—";
@@ -5462,6 +5469,13 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
             });
             this.__courtlyScenarioAtt = attacker.id;
             this.__courtlyScenarioDef = defender.id;
+
+            // Maneuvers fired before the board opened (held by the fire path) land now, in order.
+            const pend = Array.isArray(this.__courtlyPendingEffects) ? this.__courtlyPendingEffects.splice(0) : [];
+            for (const p of pend) {
+              try { await this.__courtlyScenario?.applyEffects?.(p.effects, { side: p.side }); }
+              catch (ePend) { console.warn("[bbttcc-raid] pending courtly effects failed", ePend); }
+            }
 
             // Capture initial max Influence for HUD (compact strip)
             try {
@@ -7383,6 +7397,7 @@ function bindAPI() {
           _console.vm.attackerId = "";
           _console.vm.__lockAttackerId = "";
           _console.vm.rounds = [];
+          _console.__courtlyPendingEffects = [];
           _console.vm.supportFactionIds = [];
           _console.vm.targetName = "—";
           _console.vm.targetUuid = "";

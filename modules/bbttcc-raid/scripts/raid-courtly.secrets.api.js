@@ -374,8 +374,22 @@
     if (secretMeta.acquisition === "stolen") {
       try { await scenario.raiseSuspicion(2, `played stolen secret: ${item.name}`); } catch (e) { console.warn(TAG, e); }
     }
+    // What happened, in words (2026-10-22 — the card used to print the raw result object).
+    const _st = (() => { try { return scenario.getState?.() || {}; } catch (_e) { return {}; } })();
+    const _quietSusp = !_st.performance && _st.suspicionEnabled === false;
+    const _line = (r) => {
+      if (!r || typeof r !== "object") return "";
+      let t = EFFECT_INFO[r.effect] || String(r.effect || "");
+      const who = r.courtier || (Array.isArray(r.courtiers) ? r.courtiers.join(" & ") : "");
+      if (who) t += ` — <b>${esc(who)}</b>`;
+      if (r.skipped) t += ` <i>(skipped: ${esc(r.skipped)})</i>`;
+      if (r.errored) t += ` <i>(failed — see console)</i>`;
+      if (_quietSusp && (r.effect === "coverTracks" || r.effect === "stirThePot")) t += ` <i>(no effect — Suspicion isn't in play for this goal)</i>`;
+      return t;
+    };
+    const _lines = (Array.isArray(result?.effects) ? result.effects : [result]).map(_line).filter(Boolean);
     await ChatMessage.create({
-      content: `<p><b>${esc(actor.name)}</b> plays the secret <b>${esc(item.name)}</b> <small style="opacity:.7;">(${esc(secretMeta.acquisition)})</small></p><p>${esc(JSON.stringify(result))}</p>`,
+      content: `<p><b>${esc(actor.name)}</b> plays the secret <b>${esc(item.name)}</b> <small style="opacity:.7;">(${esc(secretMeta.acquisition)})</small></p>${_lines.map(l => `<p>${l}</p>`).join("")}`,
       speaker: { alias: "Bad Eden Parley" }
     }).catch(() => {});
     try { Hooks.callAll("bbttcc:courtly:state", { scenario, state: scenario.getState() }); } catch (_e) {}

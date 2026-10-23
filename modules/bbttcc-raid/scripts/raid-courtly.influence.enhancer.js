@@ -201,13 +201,12 @@
 
   // Phase C — Court Bonus: sum of favors of courtiers aligned with `factionId`
   // (those whose courtFavor[factionId] >= 1), capped to ±5 per spec §4.2.
-  // Reads canvas tokens flagged tableauActor; safe if canvas isn't loaded yet.
+  // Reads the scene's courtiers (api.raid.tableau.courtiers — any scene since 2026-10-22); safe if canvas isn't loaded yet.
   function computeCourtBonus(factionId) {
     try {
       if (!factionId || !canvas?.tokens?.placeables) return 0;
       let total = 0;
-      for (const tk of canvas.tokens.placeables) {
-        if (tk?.document?.flags?.[MOD_R]?.tableauActor !== true) continue;
+      for (const tk of (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? [])) {
         const fav = Number(tk?.actor?.flags?.[MOD_R]?.courtFavor?.[factionId] ?? 0);
         if (fav >= 1) total += fav;
       }
@@ -846,8 +845,7 @@
         if (state.suspicion >= 8 && suspBefore < 8) {
           try {
             const higherSideId = (state.influenceA >= state.influenceD) ? state.attackerId : state.defenderId;
-            const neutralToken = (canvas?.tokens?.placeables || []).find(tk => {
-              if (tk?.document?.flags?.[MOD_R]?.tableauActor !== true) return null;
+            const neutralToken = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []).find(tk => {   // courtiers on ANY scene (2026-10-22)
               const cf = tk.actor?.flags?.[MOD_R]?.courtFavor || {};
               return Number(cf[state.attackerId] || 0) === 0 && Number(cf[state.defenderId] || 0) === 0;
             });
