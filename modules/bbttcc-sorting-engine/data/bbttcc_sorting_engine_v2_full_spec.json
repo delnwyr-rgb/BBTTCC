@@ -1,7 +1,7 @@
 {
   "$comment": "BBTTCC Sorting Engine v2 — Full Spec (Option A: pure Sorting Engine, NOT picker wizard). Approved 2026-04-23. Quiz content from sorting_engine_v2_quiz_draft_v0.md (no edits). REPLACES the picker-era draft schema (schemaVersion 1) with quiz/answer/trait schema (schemaVersion 2). DO NOT deploy until resolver module + wizard are reworked to match — schema change is breaking.",
   "$rebalance": "2026-04-25 — 6-pass Monte Carlo rebalance (tools/sim-distribution.mjs + rebalance-pass-1..6.mjs). Pre-rebalance, uniform-random sim produced Menhirkin 85.66% of ancestries / Theocratic 55% / Malkuth 39%. Post: ancestries spread 4.97–18.42%, alignment top Chokhmah 22%, Aurablade now 2.25% (was 0%). Pass 1 = data-side trait-coverage flatten; Passes 2–6 = resolverWeights tuning for ancestry/path/alignment/occult/philosophy. Backups at *.bak-pre-pass-N. Locked snapshot at *.LOCKED-2026-04-25-rebalanced. Remaining low-frequency outliers (Netzach 0.02%, Yesod 2.91%) are architectural — signals with low question-pool variance resist additive tuning; would need a resolver normalization pass to fix.",
-  "version": "2.1.0-zscore-2026-10-23",
+  "version": "2.1.1-scion-bonus-2026-10-23",
   "schemaVersion": 2,
   "approach": "sorting-engine",
   "issuedDate": "2026-04-23",
@@ -991,7 +991,7 @@
           "Binah",
           "Keter"
         ],
-        "bonus": 3
+        "bonus": 1.5
       }
     ]
   },
