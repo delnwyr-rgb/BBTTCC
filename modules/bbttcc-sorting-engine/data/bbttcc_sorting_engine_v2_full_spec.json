@@ -1,7 +1,7 @@
 {
   "$comment": "BBTTCC Sorting Engine v2 — Full Spec (Option A: pure Sorting Engine, NOT picker wizard). Approved 2026-04-23. Quiz content from sorting_engine_v2_quiz_draft_v0.md (no edits). REPLACES the picker-era draft schema (schemaVersion 1) with quiz/answer/trait schema (schemaVersion 2). DO NOT deploy until resolver module + wizard are reworked to match — schema change is breaking.",
   "$rebalance": "2026-04-25 — 6-pass Monte Carlo rebalance (tools/sim-distribution.mjs + rebalance-pass-1..6.mjs). Pre-rebalance, uniform-random sim produced Menhirkin 85.66% of ancestries / Theocratic 55% / Malkuth 39%. Post: ancestries spread 4.97–18.42%, alignment top Chokhmah 22%, Aurablade now 2.25% (was 0%). Pass 1 = data-side trait-coverage flatten; Passes 2–6 = resolverWeights tuning for ancestry/path/alignment/occult/philosophy. Backups at *.bak-pre-pass-N. Locked snapshot at *.LOCKED-2026-04-25-rebalanced. Remaining low-frequency outliers (Netzach 0.02%, Yesod 2.91%) are architectural — signals with low question-pool variance resist additive tuning; would need a resolver normalization pass to fix.",
-  "version": "2.0.0-rebalanced-2026-04-25",
+  "version": "2.1.0-zscore-2026-10-23",
   "schemaVersion": 2,
   "approach": "sorting-engine",
   "issuedDate": "2026-04-23",
@@ -218,6 +218,20 @@
         "tiltingSeverity": "Tilting Severity"
       },
       "showNumericCounts": false
+    },
+    "traitLean": {
+      "_comment": "Pass 7 (2026-10-23). Untagged answers lean by (mercyTraits − severityTraits); readout = that total vs an average descent, in sd. ±tiltZ ≈ a quarter of descents each way.",
+      "mercyTraits": [
+        "compassion",
+        "mercy",
+        "kinship"
+      ],
+      "severityTraits": [
+        "severity",
+        "discipline",
+        "dread"
+      ],
+      "tiltZ": 0.67
     }
   },
   "pillarTagScheme": {
@@ -510,21 +524,21 @@
         "severity": 1,
         "sacrifice": 2,
         "gevurah_signal": 1,
-        "malkuth_signal": 1,
         "hierarchy": 1
       },
       "Cosmic Linguist": {
         "study": 2,
-        "faith": 1,
+        "speech": 2,
         "ritual": 1,
-        "hod_signal": 2,
+        "hod_signal": 1,
         "binah_signal": 1
       },
       "Dreamwalker": {
-        "study": 2,
+        "study": 1,
         "stealth": 1,
         "faith": 1,
-        "hod_signal": 2
+        "sorrow": 2,
+        "hod_signal": 1
       },
       "Harmony Marshal": {
         "speech": 2,
@@ -2099,5 +2113,9 @@
     "respecFlow": "Own sprint (TODO(identity-swap)).",
     "featAcquisitionSystem": "Own sprint, see Roadmap §10.",
     "usersGuideV2": "Deferred until Sorting Engine v2 ships."
+  },
+  "scoring": {
+    "_comment": "Pass 7 (2026-10-23). 'z' = each option scored as (raw − mean) / sd under uniform answering (engine _optionStats). Remove this block to restore raw scoring.",
+    "normalize": "z"
   }
 }

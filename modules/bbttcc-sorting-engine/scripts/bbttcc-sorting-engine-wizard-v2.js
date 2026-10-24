@@ -988,7 +988,8 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     }).join("");
     const nodesSvg = spec.stations.map(s => {
       const p = TREE_COORDS[s.index];
-      const isAnchor = s.sefirah.english === alignmentName;
+      // Alignment names are the Hebrew sefirot (Keter, Gevurah…); compare normalized so Kether/Geburah spellings match too.
+      const isAnchor = !!alignmentName && _normalizeOptionName(s.sefirah.hebrew) === _normalizeOptionName(alignmentName);
       const stateClass = isAnchor ? "current" : "lit";
       return `
         <g class="bbttcc-twv2-node state-${stateClass}" data-station-index="${s.index}">
@@ -1019,7 +1020,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     if (category === "alignment") ranked = (ranked || []).filter(r => !BBTTCCSortingEngineV2.isAlignmentLocked?.(r.name));
     const optionsHtml = placeholder + (ranked || []).map(r => {
       const sel = r.name === effective ? "selected" : "";
-      const score = (typeof r.score === "number" && r.score > 0) ? ` (${r.score})` : "";
+      const score = (typeof r.score === "number" && r.score > 0) ? ` (${_fmtScore(r.score)})` : "";
       return `<option value="${_esc(r.name)}" ${sel}>${_esc(r.name)}${score}</option>`;
     }).join("");
     return `
@@ -1464,7 +1465,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const bonus = entry.alignmentBonus ? ` (+${entry.alignmentBonus} alignment)` : "";
     return `<div class="bbttcc-twv2-describe-rank">
       <span class="${isSuggested ? "is-top" : ""}">Rank ${rank} of ${total}</span>
-      <span class="bbttcc-twv2-describe-score">Score ${entry.score}${bonus}</span>
+      <span class="bbttcc-twv2-describe-score">Score ${_fmtScore(entry.score)}${bonus}</span>
     </div>`;
   }
 
@@ -2317,6 +2318,11 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
 // ============================================================================
 // Helpers
 // ============================================================================
+
+/** Engine scores are z-scores (decimals) since spec 2.1.0; whole numbers on an older raw spec. */
+function _fmtScore(n) {
+  return Number.isInteger(n) ? String(n) : (n > 0 ? "+" : "") + n.toFixed(1);
+}
 
 function _esc(s) {
   if (s == null) return "";

@@ -96,30 +96,86 @@ export function scoreQuiz(answers, spec = SPEC) {
 // Generic per-category resolver
 // ============================================================================
 
+// ============================================================================
+// Z-scored resolution (2026-10-23)
+// ============================================================================
+//
+// Raw scores favour options with more weights, or weights on traits most answers hand out (discipline,
+// independence, the station signals every answer at a station gives): The World / Bulwark won for being
+// well-fed, Wheel of Fortune / Rosicrucian could never win because a twin scored the same traits plus more.
+// With spec.scoring.normalize === "z", each option is scored as (raw − its mean) / its spread, where mean
+// and spread are exact under uniform answering. Designed weights are untouched; an option wins when YOUR
+// answers favour it more than an average descent does. No `scoring` block = the old raw behaviour.
+
+const _STATS = new WeakMap();   // weightMap object → Map(optionName → { mu, sd })
+
+/** Exact mean / sd of one option's raw score when every question is answered uniformly at random. */
+function _optionStats(spec, weights, signalMult, maxStation = Infinity) {
+  let mu = 0, variance = 0;
+  for (const station of spec.stations) {
+    if (station.index > maxStation) continue;
+    for (const q of station.questions) {
+      const xs = q.answers.map(a => {
+        let x = 0;
+        for (const [trait, w] of Object.entries(weights)) {
+          if (trait.startsWith("_")) continue;
+          let v = a.tags?.[trait] || 0;
+          if (signalMult !== 1 && trait.endsWith("_signal")) v *= signalMult;
+          x += v * w;
+        }
+        return x;
+      });
+      const m = xs.reduce((s, x) => s + x, 0) / xs.length;
+      mu += m;
+      variance += xs.reduce((s, x) => s + (x - m) ** 2, 0) / xs.length;
+    }
+  }
+  return { mu, sd: Math.sqrt(variance) || 1 };
+}
+
+function _statsFor(spec, weightMap, signalMult) {
+  let byName = _STATS.get(weightMap);
+  if (!byName) { byName = new Map(); _STATS.set(weightMap, byName); }
+  return (name) => {
+    const key = `${name}|${signalMult}`;
+    if (!byName.has(key)) byName.set(key, _optionStats(spec, weightMap[name], signalMult));
+    return byName.get(key);
+  };
+}
+
+const _isZ = (spec) => spec?.scoring?.normalize === "z";
+
 /**
  * Score every option in a weight map against the trait pool. Returns ranked list (descending).
  * @param {Record<string, number>} traitMap
  * @param {Record<string, Record<string, number>>} weightMap — { OptionName: { trait: weight } }
  * @param {object} [opts]
  * @param {number} [opts.signalMultiplier=1] — multiplier applied to *_signal traits (alignment uses 2)
- * @returns {Array<{ name: string, score: number }>}
+ * @param {object} [opts.spec] — when its scoring.normalize is "z", scores are z-scored per option
+ * @returns {Array<{ name: string, score: number, raw: number, sd?: number }>}
  */
 export function resolveCategory(traitMap, weightMap, opts = {}) {
   const signalMult = opts.signalMultiplier || 1;
+  const stats = _isZ(opts.spec) ? _statsFor(opts.spec, weightMap, signalMult) : null;
   const ranked = [];
 
   for (const [optName, optWeights] of Object.entries(weightMap || {})) {
     if (optName.startsWith("_")) continue; // skip metadata fields like _comment
     if (!optWeights || typeof optWeights !== "object") continue;
 
-    let score = 0;
+    let raw = 0;
     for (const [trait, weight] of Object.entries(optWeights)) {
       if (trait.startsWith("_")) continue; // skip metadata fields
       let traitValue = traitMap[trait] || 0;
       if (signalMult !== 1 && trait.endsWith("_signal")) traitValue *= signalMult;
-      score += traitValue * weight;
+      raw += traitValue * weight;
     }
-    ranked.push({ name: optName, score });
+    if (stats) {
+      const { mu, sd } = stats(optName);
+      ranked.push({ name: optName, score: (raw - mu) / sd, raw, sd });
+    } else {
+      ranked.push({ name: optName, score: raw, raw });
+    }
   }
 
   ranked.sort((a, b) => b.score - a.score);
@@ -146,7 +202,8 @@ function applyAlignmentBonuses(ranked, category, alignmentBonuses, alignmentResu
     for (const rule of rules) {
       if (rule.ifAlignmentIn?.includes(alignName)) bonus += (rule.bonus || 0);
     }
-    return bonus ? { ...item, score: item.score + bonus, alignmentBonus: bonus } : item;
+    // Bonuses are authored in raw points; on a z-scored item they count in that option's own spread.
+    return bonus ? { ...item, score: item.score + (item.sd ? bonus / item.sd : bonus), alignmentBonus: bonus } : item;
   });
   adjusted.sort((a, b) => b.score - a.score);
   return adjusted;
@@ -165,46 +222,46 @@ export const isAlignmentLocked = (name) => LOCKED_ALIGNMENTS.includes(String(nam
 export function resolveAlignment(traitMap, spec = SPEC) {
   if (!spec) throw new Error(`${MOD_ID}: spec not loaded`);
   // Sefirot signals get ×2 in alignment per trait declaration's weightInAlignmentResolver.
-  const ranked = resolveCategory(traitMap, spec.resolverWeights.alignment, { signalMultiplier: 2 })
+  const ranked = resolveCategory(traitMap, spec.resolverWeights.alignment, { signalMultiplier: 2, spec })
     .filter(r => !isAlignmentLocked(r.name));
   return { best: ranked[0] || null, ranked };
 }
 
 export function resolveAncestry(traitMap, spec = SPEC, alignmentResult = null) {
   if (!spec) throw new Error(`${MOD_ID}: spec not loaded`);
-  let ranked = resolveCategory(traitMap, spec.resolverWeights.ancestry);
+  let ranked = resolveCategory(traitMap, spec.resolverWeights.ancestry, { spec });
   ranked = applyAlignmentBonuses(ranked, "ancestry", spec.alignmentBonuses, alignmentResult);
   return { best: ranked[0] || null, ranked };
 }
 
 export function resolveOccult(traitMap, spec = SPEC, alignmentResult = null) {
   if (!spec) throw new Error(`${MOD_ID}: spec not loaded`);
-  let ranked = resolveCategory(traitMap, spec.resolverWeights.occult);
+  let ranked = resolveCategory(traitMap, spec.resolverWeights.occult, { spec });
   ranked = applyAlignmentBonuses(ranked, "occult", spec.alignmentBonuses, alignmentResult);
   return { best: ranked[0] || null, ranked };
 }
 
 export function resolvePhilosophy(traitMap, spec = SPEC) {
   if (!spec) throw new Error(`${MOD_ID}: spec not loaded`);
-  const ranked = resolveCategory(traitMap, spec.resolverWeights.philosophy);
+  const ranked = resolveCategory(traitMap, spec.resolverWeights.philosophy, { spec });
   return { best: ranked[0] || null, ranked };
 }
 
 export function resolveArchetype(traitMap, spec = SPEC) {
   if (!spec) throw new Error(`${MOD_ID}: spec not loaded`);
-  const ranked = resolveCategory(traitMap, spec.resolverWeights.archetype);
+  const ranked = resolveCategory(traitMap, spec.resolverWeights.archetype, { spec });
   return { best: ranked[0] || null, ranked };
 }
 
 export function resolveCrew(traitMap, spec = SPEC) {
   if (!spec) throw new Error(`${MOD_ID}: spec not loaded`);
-  const ranked = resolveCategory(traitMap, spec.resolverWeights.crew);
+  const ranked = resolveCategory(traitMap, spec.resolverWeights.crew, { spec });
   return { best: ranked[0] || null, ranked };
 }
 
 export function resolveClass(traitMap, spec = SPEC) {
   if (!spec) throw new Error(`${MOD_ID}: spec not loaded`);
-  const ranked = resolveCategory(traitMap, spec.resolverWeights.class);
+  const ranked = resolveCategory(traitMap, spec.resolverWeights.class, { spec });
   return { best: ranked[0] || null, ranked };
 }
 
@@ -219,7 +276,7 @@ export function resolveDoctrine(traitMap, spec = SPEC, classResult = null) {
   if (!classDoctrines || typeof classDoctrines !== "object") {
     return { best: null, ranked: [], note: `no doctrines defined for class ${className}` };
   }
-  const ranked = resolveCategory(traitMap, classDoctrines);
+  const ranked = resolveCategory(traitMap, classDoctrines, { spec });
   return { best: ranked[0] || null, ranked };
 }
 
@@ -299,14 +356,24 @@ export function runFullDescent(answers, spec = SPEC) {
  * Compute pillar tally from a (possibly partial) answer map.
  * Each answered question contributes 1 to mercy/severity/neutral based on its
  * answer's pillarTag (if present) or its sefirah's default pillar.
+ *
+ * TRAIT LEAN (2026-10-23): with spec.pillarReadout.traitLean, an untagged answer leans by what it says
+ * (its mercy-side tags vs its severity-side tags) instead of by which station asked it — station position
+ * alone gave every player mercy 6 / severity 6, so the readout was "Balanced" for everyone. The tally also
+ * carries `lean`: how far the answers' (mercy − severity) total sits from an average descent over the same
+ * questions, in standard deviations. classifyPillarTally reads `lean` when present.
  * @param {Record<string, string>} answers
  * @param {object} [spec=SPEC]
- * @returns {{mercy:number, severity:number, neutral:number}}
+ * @returns {{mercy:number, severity:number, neutral:number, lean?:number}}
  */
 export function computePillarTally(answers, spec = SPEC) {
   if (!spec) throw new Error(`${MOD_ID}: spec not loaded`);
   let mercy = 0, severity = 0, neutral = 0;
   const defaults = spec.pillarTagScheme.defaultsBySefirahPillar;
+  const tl = spec.pillarReadout?.traitLean;
+  const side = (a, traits) => (traits || []).reduce((s, t) => s + (a.tags?.[t] || 0), 0);
+  const tilt = (a) => side(a, tl.mercyTraits) - side(a, tl.severityTraits);
+  let raw = 0, mu = 0, variance = 0;
 
   for (const station of spec.stations) {
     const stationDefault = defaults[station.pillar] || "neutral";
@@ -315,13 +382,21 @@ export function computePillarTally(answers, spec = SPEC) {
       if (!key) continue;
       const answer = q.answers.find(a => a.key === key);
       if (!answer) continue;
-      const tag = answer.pillarTag || stationDefault;
+      let tag = answer.pillarTag;
+      if (!tag && tl) { const t = tilt(answer); tag = t > 0 ? "mercy" : t < 0 ? "severity" : "neutral"; }
+      tag ||= stationDefault;
       if (tag === "mercy") mercy++;
       else if (tag === "severity") severity++;
       else neutral++;
+      if (tl) {
+        const xs = q.answers.map(tilt), m = xs.reduce((s, x) => s + x, 0) / xs.length;
+        raw += tilt(answer); mu += m; variance += xs.reduce((s, x) => s + (x - m) ** 2, 0) / xs.length;
+      }
     }
   }
-  return { mercy, severity, neutral };
+  const tally = { mercy, severity, neutral };
+  if (tl) tally.lean = variance > 0 ? Math.round(((raw - mu) / Math.sqrt(variance)) * 100) / 100 : 0;
+  return tally;
 }
 
 /**
@@ -347,6 +422,12 @@ export function previewPillarTallyAtStep8(answers, spec = SPEC) {
 export function classifyPillarTally(tally, spec = SPEC) {
   if (!spec) throw new Error(`${MOD_ID}: spec not loaded`);
   const { balancedWithin, tiltThreshold, labels } = spec.pillarReadout.classification;
+  const tl = spec.pillarReadout.traitLean;
+  if (tl && typeof tally?.lean === "number") {
+    if (tally.lean >= tl.tiltZ) return labels.tiltingMercy;
+    if (tally.lean <= -tl.tiltZ) return labels.tiltingSeverity;
+    return labels.balanced;
+  }
   const diff = tally.mercy - tally.severity;
   if (Math.abs(diff) <= balancedWithin) return labels.balanced;
   if (diff >= tiltThreshold) return labels.tiltingMercy;
