@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p data-start=\"2120\" data-end=\"2133\"><em data-start=\"2120\" data-end=\"2133\">(6th Level)</em></p><p data-start=\"2135\" data-end=\"2166\">You specialize in interruption.</p><ul data-start=\"2168\" data-end=\"2315\"><li data-start=\"2168\" data-end=\"2246\"><p data-start=\"2170\" data-end=\"2246\">reroll the lowest die on Counterspell, Dispel Magic, and equivalent negation tests.</p></li><li data-start=\"2247\" data-end=\"2315\"><p data-start=\"2249\" data-end=\"2315\">When you successfully negate an effect, you may leave <strong data-start=\"2303\" data-end=\"2314\">Residue</strong>.</p></li></ul><p data-start=\"2317\" data-end=\"2342\">Residue creates friction:</p><ul data-start=\"2344\" data-end=\"2427\"><li data-start=\"2344\" data-end=\"2396\"><p data-start=\"2346\" data-end=\"2396\">Recasting the same effect in this scene is harder.</p></li><li data-start=\"2397\" data-end=\"2427\"><p data-start=\"2399\" data-end=\"2427\">The conceptual scar lingers.</p></li></ul><p data-start=\"2429\" data-end=\"2457\">Residue does not add damage.</p><p data-start=\"2459\" data-end=\"2475\">It adds silence.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>(6th Level)</em></p><p>You specialize in interruption.</p><ul><li><p>reroll the lowest die on negation workings, and equivalent negation tests.</p></li><li><p>When you successfully negate an effect, you may leave <strong>Residue</strong>.</p></li></ul><p>Residue creates friction:</p><ul><li><p>Recasting the same effect in this scene is harder.</p></li><li><p>The conceptual scar lingers.</p></li></ul><p>Residue does not add damage.</p><p>It adds silence.</p>",
       "chat": ""
     },
     "identifier": "redactor_redaction_savant",
@@ -41,6 +41,16 @@
   "flags": {
     "bbttcc": {
       "identifier": "redactor_redaction_savant"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "caster-check",
+          "mode": "reroll-lowest",
+          "vs": "negation workings — Counterspell, Dispel Magic, and equivalents",
+          "note": "Redaction Savant"
+        }
+      ]
     }
   },
   "folder": "pcv0zMJZU8aoEMQc",
@@ -54,11 +64,11 @@
     "compendiumSource": "Item.pLQ1qEff2IhNFCVk",
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1776459923345,
-    "modifiedTime": 1782167240828,
+    "modifiedTime": 1791344264861,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!pLQ1qEff2IhNFCVk"

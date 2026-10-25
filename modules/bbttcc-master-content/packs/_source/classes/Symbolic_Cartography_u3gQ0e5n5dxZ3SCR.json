@@ -30,7 +30,7 @@
       "level": 7
     },
     "properties": [],
-    "requirements": "Dreamwalker (7th level)",
+    "requirements": "Dreamwalker 7",
     "type": {
       "value": "",
       "subtype": ""
@@ -80,8 +80,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!u3gQ0e5n5dxZ3SCR.fDirHd0rBfsA3Crv"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -90,8 +89,7 @@
       "dreamwalker": {
         "symbolicCartography": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

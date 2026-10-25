@@ -1,6 +1,6 @@
 {
   "_id": "ftsurge000000102",
-  "name": "Cite Precedent",
+  "name": "Citation",
   "type": "feature",
   "img": "icons/sundries/books/book-embossed-roots-green.webp",
   "system": {
@@ -31,7 +31,7 @@
     },
     "autoanimations": {
       "id": "ft-ar-precedent",
-      "label": "Cite Precedent",
+      "label": "Citation",
       "macro": {
         "enable": false,
         "playWhen": "0"

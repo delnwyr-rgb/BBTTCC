@@ -70,6 +70,7 @@ export function getDisciplineShifts(actor) {
     out.concurrencyBonus += 1; // The Bargain (Initiation 1)
     if (isModeActive(actor, "pkSealedPact")) {
       out.concurrencyBonus += 2; // Sealed Pact (Initiation 11) while stance ON
+      out.upkeepScale *= 0.5;    // Sealed Pact: upkeep halved (round up) on every active manifestation — ruling PK6, 2026-10-25
     }
   }
 

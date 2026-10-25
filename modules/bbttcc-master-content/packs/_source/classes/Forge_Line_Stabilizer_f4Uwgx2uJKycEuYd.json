@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Forge-Line Stabilizer.</strong> You can tune whole lines of fortifications, roads, and depots so they share the load of stress.</p><ul><li>When your faction maintains a continuous line of <strong>fortified hexes, strongpoints, or infrastructure nodes</strong> that you have personally helped reinforce, their <strong>upkeep costs</strong> (in Economy OP or equivalent) are reduced by a small amount, or their <strong>chance of catastrophic failure</strong> is reduced (GM decides the exact numbers.)</li><li>This effect is active as long as you’re part of the faction and regularly tending the network.</li></ul><p>In fiction, your work shows up as smart bracing, shared load paths, firebreaks, and subtle rituals that let places hold each other up.</p>",
+      "value": "<p><strong>Forge-Line Stabilizer.</strong> You can tune whole lines of fortifications, roads, and depots so they share the load of stress.</p><ul><li>When your Domain maintains a continuous line of <strong>fortified hexes, strongpoints, or infrastructure nodes</strong> that you have personally helped reinforce, their <strong>upkeep costs</strong> (in Economy marks or equivalent) are reduced by a small amount, or their <strong>chance of catastrophic failure</strong> is reduced (GM decides the exact numbers.)</li><li>This effect is active as long as you’re part of the faction and regularly tending the network.</li></ul><p>In fiction, your work shows up as smart bracing, shared load paths, firebreaks, and subtle rituals that let places hold each other up.</p>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 16
     },
     "properties": [],
-    "requirements": "Soul-Smith (16th level)",
+    "requirements": "Soul-Smith 16",
     "type": {
       "value": "",
       "subtype": ""
@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!f4Uwgx2uJKycEuYd.H4tVHxcSUNZLV3yU"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -100,8 +99,7 @@
       "opHooks": {
         "infrastructureUpkeepReduction": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

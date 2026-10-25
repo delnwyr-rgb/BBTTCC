@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“You know exactly how hard to squeeze before something breaks.”</em></p><p>Once per <strong>scene</strong>, when a battle or tense confrontation was clearly on track to become a <strong>rout, massacre, or catastrophic collapse</strong> but is instead stabilized into a <strong>stalemate, surrender, or negotiated withdrawal</strong> because of your actions, you may invoke Steel &amp; Velvet.</p><ul><li>Your faction gains <strong>+1 Soft Power OP</strong> for the next Strategic Turn.</li><li>Your faction also gains <strong>+1 Diplomacy OP</strong> for that turn.</li></ul><p>People remember that you could have crushed them, and chose not to.</p>",
+      "value": "<p><em>“You know exactly how hard to squeeze before something breaks.”</em></p><p>Once per <strong>scene</strong>, when a battle or tense confrontation was clearly on track to become a <strong>rout, massacre, or catastrophic collapse</strong> but is instead stabilized into a <strong>stalemate, surrender, or negotiated withdrawal</strong> because of your actions, you may invoke Steel &amp; Velvet.</p><ul><li>Your Domain gains <strong>+10 Soft Power marks</strong> for the next turn.</li><li>Your Domain also gains <strong>+10 Diplomacy marks</strong> for that turn.</li></ul><p>People remember that you could have crushed them, and chose not to.</p>",
       "chat": ""
     },
     "activities": {},
@@ -39,7 +39,6 @@
   "effects": [],
   "folder": "FLlH96uJfBcVDu4s",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "harmmarshal_resolve",
       "featureKey": "steel_velvet"

@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“You can pull the teeth out of a monster without waking it up.”</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>salvage, demolition, or deconstruction</strong> project you orchestrate would advance the <strong>Darkness Track</strong> (or an equivalent corruption flag) because of collateral harm, spiritual noise, or ecological fallout, you can choose to blunt that blow.</p><ul><li>You may <strong>negate</strong> one such Darkness increase entirely, representing careful rituals, shielding, or ethical disassembly.</li><li>This decision must be made at the moment the Darkness increase would be applied.</li></ul>",
+      "value": "<p><em>“You can pull the teeth out of a monster without waking it up.”</em></p><p>Once per <strong>Soma Break</strong>, when a <strong>salvage, demolition, or deconstruction</strong> project you orchestrate would advance the <strong>Darkness Track</strong> (or an equivalent corruption flag) because of collateral harm, spiritual noise, or ecological fallout, you can choose to blunt that blow.</p><ul><li>You may <strong>negate</strong> one such Darkness increase entirely, representing careful rituals, shielding, or ethical disassembly.</li><li>This decision must be made at the moment the Darkness increase would be applied.</li></ul>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -32,7 +27,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 14
     },
     "properties": [],
     "requirements": "Soul-Smith 14, Forge of the Spark Reclaimer",
@@ -44,7 +39,6 @@
   "effects": [],
   "folder": "BvmSP1PPc1ABT2OO",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "soulsmith_forge_sparkreclaimer",
       "featureKey": "clean_extraction"

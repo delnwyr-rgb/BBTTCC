@@ -1,0 +1,326 @@
+{
+  "name": "Margin Note: Not Yet",
+  "type": "power",
+  "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+  "system": {
+    "intent": "intrigue",
+    "channel": "mind",
+    "sephirah": "binah",
+    "mode": "hermetic",
+    "clarityRequired": 1,
+    "noiseGain": 0,
+    "activation": "action",
+    "target": "single",
+    "range": "near",
+    "damage": "",
+    "damageType": "energy",
+    "damageFlavor": "",
+    "damageRoll": {
+      "op": "none",
+      "number": 0,
+      "die": "d6",
+      "attribute": "",
+      "type": "kinetic",
+      "flavor": "",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "effect": "One target within 6 squares: Mind defense vs Cast DC. On fail: Staggered (movement halved, −2 attacks) for 1 round while causality re-reads the paragraph.",
+    "tags": [
+      "starter-kit",
+      "instant",
+      "cc",
+      "reused",
+      "path:cosmic_linguist",
+      "path-core",
+      "sigil",
+      "command",
+      "event"
+    ],
+    "category": "manifestation",
+    "flavor": "Mal: 'The cosmos respects exactly one thing, and it's a correction politely worded.'",
+    "manifestation": {
+      "tier": 1,
+      "family": "working",
+      "concept": "You jot a small editorial note in the air beside an event that is happening too soon. The universe, embarrassed, agrees to circle back.",
+      "form": "sigil",
+      "function": "command",
+      "stability": "instant",
+      "interactionModel": "event",
+      "costType": "clarity",
+      "costValue": 1,
+      "costText": "",
+      "duration": "instant",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 30,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "Cosmic Linguist",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      },
+      "activation": {
+        "type": "action",
+        "consumePool": true
+      },
+      "save": {
+        "enabled": false,
+        "defense": "evasion",
+        "attribute": "",
+        "dcMode": "derived",
+        "dcFixed": 15
+      },
+      "maintenanceKey": "none",
+      "isSignature": false,
+      "appliedStates": {
+        "states": [
+          "staggered"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "mind",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
+      },
+      "chain": {
+        "enabled": false,
+        "count": 3,
+        "range": 30,
+        "damageFormula": "1d6",
+        "damageType": "",
+        "carryConditions": false,
+        "carryEffects": false
+      },
+      "conditionalDamage": [],
+      "appliedEffects": {
+        "modifiers": [],
+        "resists": [],
+        "immunes": []
+      }
+    },
+    "description": {
+      "value": "<p>One target within 6 squares: Mind defense vs Cast DC. On fail: Staggered (movement halved, −2 attacks) for 1 round while causality re-reads the paragraph.</p>"
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "starterKit": {
+        "path": "cosmic_linguist",
+        "doctrine": "",
+        "core": true
+      }
+    },
+    "autoanimations": {
+      "id": "deba28bc-3262-40b1-83fd-9d2049065591",
+      "label": "Margin Note: Not Yet",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "y8c174msWty2ljyl",
+  "_id": "mxpUg49IkFOxMr4Y",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1788307801462,
+    "modifiedTime": 1788307801463,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!mxpUg49IkFOxMr4Y"
+}

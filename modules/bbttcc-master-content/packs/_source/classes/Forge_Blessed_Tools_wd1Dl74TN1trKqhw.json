@@ -30,7 +30,7 @@
       "level": 2
     },
     "properties": [],
-    "requirements": "Soul-Smith (2nd level)",
+    "requirements": "Soul-Smith 2",
     "type": {
       "value": "",
       "subtype": ""
@@ -80,8 +80,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!wd1Dl74TN1trKqhw.GmMlFvSFe43sJ9Yd"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -91,7 +90,6 @@
         "forgeBlessedTools": true
       }
     },
-    "dnd5e": {},
     "fourththing": {
       "vocabScrub": "2026-05-16"
     }

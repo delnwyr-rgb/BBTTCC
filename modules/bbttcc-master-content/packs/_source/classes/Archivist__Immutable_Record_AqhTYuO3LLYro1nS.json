@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"1855\" data-end=\"1868\"><em data-start=\"1855\" data-end=\"1868\">(3rd Level)</em></p><p data-start=\"1870\" data-end=\"1891\"><em data-start=\"1870\" data-end=\"1891\">“Nice try. Logged.”</em></p><p data-start=\"1893\" data-end=\"1929\">Once per Soma Break, when an effect would:</p><ul data-start=\"1931\" data-end=\"2034\"><li data-start=\"1931\" data-end=\"1949\"><p data-start=\"1933\" data-end=\"1949\">Rewrite memory</p></li><li data-start=\"1950\" data-end=\"1978\"><p data-start=\"1952\" data-end=\"1978\">Alter historical meaning</p></li><li data-start=\"1979\" data-end=\"2000\"><p data-start=\"1981\" data-end=\"2000\">Retcon an outcome</p></li><li data-start=\"2001\" data-end=\"2034\"><p data-start=\"2003\" data-end=\"2034\">Falsify an established record</p></li></ul><p data-start=\"2036\" data-end=\"2052\">You may declare:</p><blockquote data-start=\"2054\" data-end=\"2078\"><p data-start=\"2056\" data-end=\"2078\"><strong data-start=\"2056\" data-end=\"2078\">The record stands.</strong></p></blockquote><p data-start=\"2080\" data-end=\"2209\">The effect may function locally (illusion, altered perception, etc.), but it <strong data-start=\"2157\" data-end=\"2209\">cannot alter Precedent or long-term consequence.</strong></p><h3 data-start=\"2211\" data-end=\"2219\">Cost</h3><p data-start=\"2220\" data-end=\"2259\">No Surge required (limited use).</p><h3 data-start=\"2261\" data-end=\"2273\">Pushback</h3><p data-start=\"2274\" data-end=\"2423\">Using Immutable Record against major narrative forces may accelerate <strong data-start=\"2343\" data-end=\"2370\">Noise</strong>, especially if overused to block organic resolution.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p><em>(3rd Level)</em></p><p><em>“Nice try. Logged.”</em></p><p>Once per Soma Break, when an effect would:</p><ul><li><p>Rewrite memory</p></li><li><p>Alter historical meaning</p></li><li><p>Retcon an outcome</p></li><li><p>Falsify an established record</p></li></ul><p>You may declare:</p><blockquote><p><strong>The record stands.</strong></p></blockquote><p>The effect may function locally (illusion, altered perception, etc.), but it <strong>cannot alter Precedent or long-term consequence.</strong></p><h3>Cost</h3><p>No Surge required (limited use).</p><h3>Pushback</h3><p>Using Immutable Record against major narrative forces may accelerate <strong>Noise</strong>, especially if overused to block organic resolution.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -38,7 +38,184 @@
   },
   "effects": [],
   "flags": {
-    "bbttcc": {}
+    "bbttcc": {},
+    "autoanimations": {
+      "id": "4cbfd39e-6ebc-4abd-8e4b-d1be3b9e158d",
+      "label": "Archivist: Immutable Record",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "shieldfx",
+          "animation": "ice",
+          "variant": "03",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
   },
   "folder": "eNi1uCWJUfkKDdUU",
   "_stats": {

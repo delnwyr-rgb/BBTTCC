@@ -26,8 +26,8 @@ export const AURA_STATES = {
 
 export const BURN_BANDS = [
   { min: 0, max: 1, label: "Controlled", color: "#4fc3ff", desc: "Stable. Full options available." },
-  { min: 2, max: 3, label: "Engaged",    color: "#ffd54f", desc: "+1 damage. Stabilize costs are higher." },
-  { min: 4, max: 99, label: "Overheated", color: "#ff5ac8", desc: "+2 damage. Risk backlash at end of turn." }
+  { min: 2, max: 3, label: "Engaged",    color: "#ffd54f", desc: "Aura riders unlock. Fury: +tier melee damage. Stabilize costs more." },
+  { min: 4, max: 99, label: "Overheated", color: "#ff5ac8", desc: "Overheated riders unlock. Fury's +tier damage holds. Backlash risk at end of turn." }
 ];
 
 export function getBurnBand(burn, bands = BURN_BANDS) {
@@ -53,7 +53,7 @@ export const BURN_CLASSES = {
     // backlashStress formula is rolled and subtracted from Stress when chosen.
     vent: [
       { id: "meditate", label: "Meditate (action)",  reduce: 2,     req: "any",        desc: "Spend your action to reduce Burn by 2" },
-      { id: "rest",     label: "Brief rest (5 min)", reduce: "all", req: "any",        desc: "Clear all Burn on a brief rest" },
+      { id: "rest",     label: "Catch your breath (5 min)", reduce: "all", req: "any",        desc: "Clear all Burn after a five-minute breather" },
       { id: "accept",   label: "Accept backlash",    reduce: 3,     req: "overheated", backlashStress: "1d6", desc: "Take 1d6 Stress to reduce Burn by 3" },
     ],
   },
@@ -190,7 +190,6 @@ export const FEATURE_ROUTER = {
   // Dream Echo Reservoir (L13) — pool display + spend-1d6 dialog
   "dream-echo-reservoir":          "dream_echo_reservoir",
   "dream_echo_reservoir":          "dream_echo_reservoir",
-  "dream_echo_reservoir_spend":    "dream_echo_reservoir_spend",
   // Dreamwalker per-Soma-Break feats — generic activator (clones AE to actor)
   "dream-thread-tuning":           "dw_feat_activate",
   "dream-rite":                    "dw_feat_activate",
@@ -265,6 +264,22 @@ export const FEATURE_ROUTER = {
   "dreamwalker-quiet-solar-stillpoint":     "dreamwalker_solar_stillpoint",
   "dreamwalker-quiet-somnolent-peace":      "dreamwalker_somnolent_peace",
   "dreamwalker-thousand-thousandfold-echo": "dreamwalker_thousandfold_echo",
+  // Dreamwalker route gaps (ruling DW2, 2026-10-25): 1/Soma Break actives + passive cards.
+  "vision-of-the-great-work":               "dreamwalker_destiny_pulse",
+  "dreamwalker-quiet-daybreak":             "dreamwalker_daybreak",
+  "dreamwalker-sapphire-conduction":        "dreamwalker_sapphire_conduction",
+  "dreamwalker-thousand-borrowed-voice":    "dreamwalker_borrowed_voice",
+  "dreamwalker-thousand-mask-accord":       "dreamwalker_mask_accord",
+  "dream-sense":                            "passive_info",
+  "oneiric-pulse":                          "passive_info",
+  "dream-stability":                        "passive_info",
+  "symbolic-cartography":                   "passive_info",
+  "dreamers-poise":                         "passive_info",
+  "dreamwalker-quiet-stillness-between":    "passive_info",
+  "dreamwalker-quiet-quiet-march":          "passive_info",
+  "dreamwalker-sapphire-dream-relay":       "passive_info",
+  "dreamwalker-sapphire-bright-hypnopomp":  "passive_info",
+  "dreamwalker-thousand-crowd-current":     "passive_info",
   // Cross-class shared feats (2026-06-08, fix-on-touch)
   "coordinated-advance":          "ft_coordinated_advance",
   "emissary-of-the-great-accord": "ft_emissary_accord",
@@ -300,13 +315,31 @@ export const FEATURE_ROUTER = {
   "bulwark_spend_frame":           "bulwark_spend_frame",
   "bulwark_frame_pool":            "bulwark_frame_pool",
   "bulwark_ruin":                  "bulwark_ruin",
-  "bulwark_stance_dance":          "bulwark_stance",       // Cataclyst L5
   "bulwark_core":                  "passive_info",
   "bulwark_tier":                  "passive_info",
+  // Bulwark post-fold routes (rulings BW1/BW4, 2026-10-25): the Frame/Ruin feats
+  // re-cut in Surge terms get real handlers; pure riders get the info card.
+  "bulwark_cataclyst_l1_the_exchange":        "bulwark_exchange",
+  "bulwark_cataclyst_l5_stance_dance":        "bulwark_stance_dance",
+  "bulwark_cataclyst_l13_the_third_door":     "bulwark_third_door",
+  "bulwark_cataclyst_l17_both_things_at_once":"passive_info",
+  "bulwark_avalanche_l1_kinetic_inversion":   "passive_info",
+  "bulwark_avalanche_l5_shockwave_arrival":   "bulwark_shockwave_arrival",
+  "bulwark_avalanche_l9_no_terminal_velocity":"passive_info",
+  "bulwark_avalanche_l17_running_theology":   "bulwark_running_theology",
+  "bulwark_mountain_l1_inverted_foundation":  "passive_info",
+  "bulwark_mountain_l5_denial":               "bulwark_denial",
+  "bulwark_mountain_l9_the_hold":             "passive_info",
+  "bulwark_mountain_l13_grave_weight":        "passive_info",
+  "bulwark_mountain_l17_patient_edifice":     "passive_info",
+  "bulwark_tier1_founding_stance":            "passive_info",
+  "bulwark_tier3_polarity_mastery":           "passive_info",
+  "bulwark_tier4_architect_of_certainty":     "passive_info",
   // Bulwark signatures wired 2026-06-07 (Brexit audit) — these survived the
   // Frame/Ruin → Surge fold as their own actions, not Surge spends.
   "bulwark_tier2_anchor_or_advance":   "bulwark_anchor_advance",  // T2: 1/scene stance
   "bulwark_avalanche_l13_the_breach":  "bulwark_breach",          // Avalanche L13: 1/scene line-break
+  "shadow_courier_lastmile_l17_ferrymans_right": "shadow_courier_ferrymans_right",  // Last Mile L17 (ruling SC6, 2026-10-25)
 
   // === Gauntlet fix-pass 1 (2026-06-07) — static-audit B-list routing ===
   // Generic per-use surface: cadence + action economy parsed from the item's
@@ -319,6 +352,54 @@ export const FEATURE_ROUTER = {
   "scion-light-of-harmony":                               "generic_per_use",
   "dreamwalker-sapphire-lucid-step":                      "generic_per_use",
   "dreamwalker-sapphire-gate-anchor":                     "generic_per_use",
+  "wl_lens_read":                                         "passive_info",   // ruling WL2 (2026-10-25): loan retired; Occult/Lore ranks via AE
+  // Cosmic Linguist doctrine routes (ruling CL7, 2026-10-25): cadence/spend feats get the generic
+  // per-use surface; riders get the info card.
+  "annotator_correspondence_mastery":  "generic_per_use",
+  "annotator_great_work_rite":         "generic_per_use",
+  "annotator_ritual_upgrade":          "generic_per_use",
+  "annotator_stored_annotation":       "generic_per_use",
+  "annotator_circle_discipline":       "passive_info",
+  "annotator_ritual_annotation":       "passive_info",
+  "metaphor_archetype_binding":        "generic_per_use",
+  "metaphor_make_it_true":             "generic_per_use",
+  "metaphor_myth_hook":                "generic_per_use",
+  "metaphor_shared_dream":             "generic_per_use",
+  "metaphor_symbolic_substitution":    "generic_per_use",
+  "redactor_name_stripping":           "generic_per_use",
+  "redactor_persistent_deletion":      "generic_per_use",
+  "redactor_redline_the_draft":        "generic_per_use",
+  "redactor_semantic_redaction":       "generic_per_use",
+  "redactor_total_redaction":          "generic_per_use",
+  "redactor_redaction_savant":         "passive_info",
+  "cosmic_linguist_core_features":     "passive_info",
+  "cosmic_linguist_semantic_editor":   "passive_info",
+  "cosmic_linguist_resonance_channel": "passive_info",
+  // Pactkeeper routes (ruling PK3, 2026-10-25): class riders + all doctrine features reach a surface.
+  "pactkeeper_jurisdiction_records_precedent": "passive_info",
+  "pactkeeper_contract_binding_precedent":     "generic_per_use",
+  "pactkeeper_invoke_precedent":               "generic_per_use",
+  "pactkeeper_core_features":                  "passive_info",
+  "archivist_akashic_access":          "generic_per_use",
+  "archivist_immutable_record":        "generic_per_use",
+  "archivist_archival_recall":         "generic_per_use",
+  "archivist_cross_reference_reality": "generic_per_use",
+  "archivist_expectation_gravity":     "generic_per_use",
+  "archivist_redundant_recordkeeping": "passive_info",
+  "archivist_historiographic_authority": "generic_per_use",
+  "archivist_akashic_override":        "generic_per_use",
+  "auditor_forensic_audit":            "generic_per_use",
+  "auditor_compliance_action":         "generic_per_use",
+  "auditor_quarantine_order":          "generic_per_use",
+  "auditor_sanction_protocol":         "generic_per_use",
+  "auditor_deicidal_injunction":       "generic_per_use",
+  "auditor_hard_shutdown":             "generic_per_use",
+  "steward_community_contract":        "generic_per_use",
+  "steward_cohesion_pulse":            "generic_per_use",
+  "steward_public_works_miracle":      "generic_per_use",
+  "steward_mutual_aid_network":        "passive_info",
+  "steward_integration_charter":       "generic_per_use",
+  "steward_civic_apotheosis":          "generic_per_use",
   "harmmarshal-overwatch-overwatch":                      "generic_per_use",
   "harmmarshal-overwatch-signal-boost":                   "generic_per_use",
   "harmmarshal-overwatch-counter-discord":                "generic_per_use",
@@ -332,7 +413,7 @@ export const FEATURE_ROUTER = {
   // was dead. Generic surface parses cadence + action cost from their own
   // text; bespoke automation can supersede any of these by re-routing the id.
   "cl_init1_true_name_touch":                             "generic_per_use",
-  "pk_init1_the_bargain":                                 "generic_per_use",
+  "pk_init1_the_bargain":                                 "pactkeeper_bargain",   // ruling PK3 (2026-10-25): bind card + the L1 skill pick
   "pk_init6_renegotiate":                                 "generic_per_use",
   "dw_t1_oneiric_reservoir":                              "generic_per_use",
   "dw_t2_dream_cache":                                    "generic_per_use",
@@ -445,10 +526,6 @@ export const NAME_ROUTER = [
   ["Breaker: Living",            "bulwark_ruin"],
   ["Breaker: Reinforced",        "bulwark_ruin"],
   // Dreamwalker
-  ["Dream Relay",                "dreamwalker_resonance"],
-  ["Spark Detection",            "dreamwalker_resonance"],
-  ["Dreamwalker: Commune",       "dreamwalker_resonance"],
-  ["Oneiric",                    "dreamwalker_resonance"],
   // Soul-Smith
   // Soul-Smith — canon-aligned (Phase 1.5).
   ["Sanctified Forge Initiate",  "soul_smith_forge_initiate"],
@@ -472,12 +549,12 @@ export const NAME_ROUTER = [
   // Bulwark
   ["Bulwark: Core",              "passive_info"],
   ["Bulwark: Tier",              "passive_info"],
-  ["Kinetic Inversion",          "bulwark_frame_pool"],     // Avalanche L1
-  ["Inverted Foundation",        "bulwark_frame_pool"],     // Mountain L1
-  ["The Exchange",               "bulwark_stance"],         // Cataclyst L1
-  ["Stance Dance",               "bulwark_stance"],         // Cataclyst L5
-  ["Shockwave Arrival",          "bulwark_ruin"],           // Avalanche L5
-  ["Denial",                     "bulwark_frame_pool"],     // Mountain L5
+  ["Kinetic Inversion",          "passive_info"],           // Avalanche L1 (Surge rider, 2026-10-25)
+  ["Inverted Foundation",        "passive_info"],           // Mountain L1 (Surge rider)
+  ["The Exchange",               "bulwark_exchange"],       // Cataclyst L1
+  ["Stance Dance",               "bulwark_stance_dance"],   // Cataclyst L5
+  ["Shockwave Arrival",          "bulwark_shockwave_arrival"], // Avalanche L5
+  ["Denial",                     "bulwark_denial"],         // Mountain L5
   ["Anchor or Advance",          "bulwark_anchor_advance"], // T2 signature (2026-06-07)
   ["The Breach",                 "bulwark_breach"],         // Avalanche L13 (2026-06-07)
   // Gauntlet fix-pass 1 stragglers — NPC items carry no identifiers, so
@@ -499,11 +576,6 @@ export const NAME_ROUTER = [
   // Cosmic Linguist
   ["Cosmic Linguist: Core",      "passive_info"],
   ["Cosmic Linguist: Tier",      "passive_info"],
-  ["Editorial Authority",        "cosmic_linguist_authority"],
-  ["The Margin",                 "cosmic_linguist_annotation"],  // Annotator L1
-  ["Declared Likeness",          "cosmic_linguist_annotation"],  // Metaphor Apostle L1
-  ["The First Strike",           "cosmic_linguist_annotation"],  // Redactor L1
-  ["Annotation",                 "cosmic_linguist_annotation"],
   // Pactkeeper — canon-only (Bargain / Renegotiate / Sealed Pact / Ledger Day).
   // Subclass feats (Read The Ledger, The Examination, The Protected Clause)
   // need their own canon-aligned handlers when those subclasses are refactored;
@@ -757,7 +829,7 @@ export async function openSpendFrameDie(actor) {
         <label>Choose action</label>
         <select name="action">
           <option value="reduce_damage">Reduce damage taken (roll 1d6, subtract from hit)</option>
-          <option value="knockback">Add knockback (push target up to 10 ft)</option>
+          <option value="knockback">Add knockback (push target up to 2 squares)</option>
           <option value="topple">Add topple (Topple DC: 10 + Violence mod)</option>
           <option value="brace">Brace / resist forced movement (immune until your next turn)</option>
           <option value="terrain">Ignore difficult terrain (until end of turn)</option>
@@ -786,7 +858,7 @@ export async function openSpendFrameDie(actor) {
           });
           const labels = {
             reduce_damage: "Reduce Damage — rolling 1d6 to subtract from the hit",
-            knockback: "Knockback — push target up to 10 ft",
+            knockback: "Knockback — push target up to 2 squares",
             topple: "Topple — target must beat your Topple DC",
             brace: "Brace — immune to forced movement until your next turn",
             terrain: "Terrain Ignore — difficult terrain has no effect this turn"
@@ -971,14 +1043,14 @@ const AURABLADE_ACTIONS = {
   fury: [
     { id: "fury_strike",       label: "Strike",                     band: "any",         burnCost: 1, target: false,
       desc: "Aura-enhanced melee strike. +1 damage (passive). Pair with a weapon attack roll." },
-    { id: "fury_press_push",   label: "Press & Push 5 ft",          band: "engaged",     burnCost: 1, target: true,
-      desc: "On a melee hit: +tier damage; shove target 5 ft. Once per turn." },
+    { id: "fury_press_push",   label: "Press & Push 1 square",          band: "engaged",     burnCost: 1, target: true,
+      desc: "On a melee hit: +tier damage; shove target 1 square. Once per turn." },
     { id: "fury_cleave",       label: "Cleave (second target)",     band: "engaged",     burnCost: 1, target: false,
       desc: "On hit: extend the strike to a second creature within reach (deal the same damage). Once per turn." },
-    { id: "fury_dis_attack",   label: "Impose Disadvantage (one attack)", band: "engaged", burnCost: 1, target: true,
+    { id: "fury_dis_attack",   label: "Impose Keep-Lowest (one attack)", band: "engaged", burnCost: 1, target: true,
       desc: "Force one enemy attack this turn to be rolled 3d10kl2 against you or an ally." },
     { id: "fury_knockdown",    label: "Pressing Knockdown — knock prone", band: "overheated", burnCost: 1, target: true,
-      desc: "On hit: target must succeed on a Violence save or fall Prone." },
+      desc: "On hit: target must succeed on a Violence defense or fall Prone." },
     { id: "fury_deny_reacts",  label: "Deny Reactions (target)",    band: "overheated",  burnCost: 1, target: true,
       desc: "Your attacks against the target deny their reactions until the start of your next turn." }
   ],
@@ -987,8 +1059,8 @@ const AURABLADE_ACTIONS = {
       desc: "The next incoming hit this round is halved." },
     { id: "resolve_resist",    label: "Resist one damage type",     band: "engaged",     burnCost: 1, target: false,
       desc: "Gain resistance to one damage type until the start of your next turn." },
-    { id: "resolve_ignore_push", label: "Ignore Forced Movement (10 ft)", band: "engaged", burnCost: 1, target: false,
-      desc: "Ignore forced movement up to 10 ft until end of round." },
+    { id: "resolve_ignore_push", label: "Ignore Forced Movement (2 squares)", band: "engaged", burnCost: 1, target: false,
+      desc: "Ignore forced movement up to 2 squares until end of round." },
     { id: "resolve_auto_save", label: "Auto-Succeed One Save",      band: "overheated",  burnCost: 1, target: false,
       desc: "Automatically succeed on one Violence, Body, or Intrigue save this round." },
     { id: "resolve_lock_pos",  label: "Lock Position",              band: "overheated",  burnCost: 1, target: false,
@@ -998,7 +1070,7 @@ const AURABLADE_ACTIONS = {
     { id: "mercy_nonlethal",   label: "Deal Nonlethal Damage",      band: "any",         burnCost: 1, target: false,
       desc: "Toggle nonlethal on your next damaging hit. No penalty (passive)." },
     { id: "mercy_redirect",    label: "Reduce / Redirect Damage to Ally", band: "engaged", burnCost: 1, target: true,
-      desc: "When an ally within 10 ft takes damage: reduce by your tier OR redirect to yourself. Once per round." },
+      desc: "When an ally within 2 squares takes damage: reduce by your tier OR redirect to yourself. Once per round." },
     { id: "mercy_stabilize",   label: "Stabilize on Touch",         band: "engaged",     burnCost: 1, target: true,
       desc: "Automatically stabilize a dying creature you touch (clears Dying / sets Integrity to 1)." },
     { id: "mercy_prevent_drop",label: "Prevent Ally Dropping below 1 Integrity", band: "overheated", burnCost: 1, target: true,
@@ -1011,7 +1083,7 @@ const AURABLADE_ACTIONS = {
       desc: "On hit: target saves vs Resolve or becomes Shaken until end of its next turn (canon: Engaged+; usable at low Burn as the entry-level effect)." },
     { id: "dread_suppress",    label: "Suppress One Buff / Inspiration", band: "engaged", burnCost: 1, target: true,
       desc: "Suppress one beneficial morale, inspiration, or buff effect on the target (GM adjudicated)." },
-    { id: "dread_dis_saves",   label: "Disadvantage on All Saves",  band: "overheated",  burnCost: 1, target: true,
+    { id: "dread_dis_saves",   label: "Keep-Lowest on All Saves",  band: "overheated",  burnCost: 1, target: true,
       desc: "Target rolls 3d10kl2 on all saves until the start of your next turn." },
     { id: "dread_hesitate",    label: "Hesitation — nearby enemies", band: "overheated", burnCost: 1, target: false,
       desc: "Enemies near the target save or hesitate (lose movement or reactions). GM picks." }
@@ -1048,7 +1120,7 @@ export async function openAurabladeAction(actor) {
     fury:    "+1 melee weapon damage.",
     resolve: "+1 Guard while you haven't moved this turn.",
     mercy:   "Deal nonlethal damage at no penalty.",
-    dread:   "Enemies within 5 ft roll 3d10kl2 on morale checks."
+    dread:   "Enemies within 1 square roll 3d10 keep lowest 2 on nerve checks."
   };
 
   new Dialog({
@@ -1082,10 +1154,26 @@ export async function openAurabladeAction(actor) {
           const actionId  = html.find("[name='action']").val();
           const burnCost  = parseInt(sel.data("cost")) || 1;
           // A Burn lock holds the track; the action still resolves (retired-layer rule).
-          const newBurn   = ftBurnLockInfo(actor).locked ? burn : Math.min(8, burn + burnCost);
+          // Aura Unbound (Surge, ruling AB1): Aura actions cost no Burn for the round it was spent.
+          const unb = actor.flags?.fourththing?.aurablade?.unbound;
+          const unboundNow = !!unb && ((game.combat?.id ?? null) === (unb.combatId ?? null)) && Number(game.combat?.round ?? 0) === Number(unb.round ?? -1);
+          const newBurn   = (ftBurnLockInfo(actor).locked || unboundNow) ? burn : Math.min(8, burn + burnCost);
           const newBand   = getBurnBand(newBurn);
           const action    = available.find(a => a.id === actionId);
           if (!action) return;
+
+          // Cadence guards (ruling AB6): the "Once per turn" / "Once per round" promises.
+          const ONCE_PER_TURN  = new Set(["fury_press_push", "fury_cleave"]);
+          const ONCE_PER_ROUND = new Set(["mercy_redirect", "mercy_prevent_drop"]);
+          if (game.combat?.started && (ONCE_PER_TURN.has(action.id) || ONCE_PER_ROUND.has(action.id))) {
+            const c = game.combat;
+            const perTurn = ONCE_PER_TURN.has(action.id);
+            const stamp = perTurn ? `${c.id}:${c.round}:${c.combatant?.id ?? c.turn}` : `${c.id}:${c.round}`;
+            if (actor.flags?.fourththing?.aurablade?.cadence?.[action.id] === stamp) {
+              return ui.notifications?.warn(`Aurablade ${action.label}: already used this ${perTurn ? "turn" : "round"}.`);
+            }
+            try { await actor.setFlag("fourththing", `aurablade.cadence.${action.id}`, stamp); } catch (e) {}
+          }
 
           // Resolve target if required.
           let targetActor = null;
@@ -1150,12 +1238,12 @@ export async function openAurabladeAction(actor) {
                     x: Math.round(tgtTk.x + (dx / mag) * pushPx),
                     y: Math.round(tgtTk.y + (dy / mag) * pushPx)
                   });
-                  appliedNote = `↗ ${targetActor.name} shoved 5 ft.`;
+                  appliedNote = `↗ ${targetActor.name} shoved 1 square.`;
                 }
               } catch (e) {
                 console.warn("Fury push failed", e);
                 // Player seats can't move a token they don't own — hand it to the GM.
-                appliedNote = `↗ GM: shove ${targetActor.name} 5 ft directly away (not auto-moved).`;
+                appliedNote = `↗ GM: shove ${targetActor.name} 1 square directly away (not auto-moved).`;
               }
               break;
             }
@@ -1180,7 +1268,7 @@ export async function openAurabladeAction(actor) {
             }
             case "resolve_ignore_push": {
               await _ftAurabladeStampOneShot(actor, "ignoreForcedMovement", 10);
-              appliedNote = "⚓ Ignore forced movement up to 10 ft until end of round.";
+              appliedNote = "⚓ Ignore forced movement up to 2 squares until end of round.";
               break;
             }
             case "resolve_auto_save": {
@@ -1253,7 +1341,7 @@ export async function openAurabladeAction(actor) {
               // Owner-or-relay so it lands on foes the player doesn't own.
               try {
                 const mode = await game.fourththing?.applyEffectsToTarget?.(targetActor, [{
-                  name: "Dread — Disadvantage on Saves",
+                  name: "Dread — Keep-Lowest on Saves",
                   icon: "icons/svg/skull.svg",
                   duration: { rounds: 1 },
                   changes: [],
@@ -1324,7 +1412,7 @@ export async function openStabilizeBurn(actor) {
   // any non-registered caller keeps the original behavior.
   const ventDefs = desc?.vent ?? [
     { id: "meditate", label: "Meditate (action)",  reduce: 2,     req: "any",        desc: "Spend your action to reduce Burn by 2" },
-    { id: "rest",     label: "Brief rest (5 min)", reduce: "all", req: "any",        desc: "Clear all Burn on a brief rest" },
+    { id: "rest",     label: "Catch your breath (5 min)", reduce: "all", req: "any",        desc: "Clear all Burn after a five-minute breather" },
     { id: "accept",   label: "Accept backlash",    reduce: 3,     req: "overheated", backlashStress: "1d6", desc: "Take 1d6 Stress to reduce Burn by 3" },
   ];
   const reduceOf = (o) => (o.reduce === "all" ? burn : (Number(o.reduce) || 1));
@@ -1502,7 +1590,7 @@ export async function openBreakerRuin(actor) {
         <select name="action">
           <option value="none">— Just update charges —</option>
           <option value="entry">Catastrophic Entry (ignore structure resistance / sunder foe armor)</option>
-          <option value="siege">Siege Cost Reduction (−10 Violence marks this Siege)</option>
+          <option value="siege">Siege Works (this Siege's buffer costs 25% less)</option>
           <option value="shockwave">Shockwave Footing (resist knockback, push adjacent)</option>
           <option value="renewal">Ruin to Renewal (purify fortification, Faith/Economy DC 15)</option>
         </select>
@@ -1567,7 +1655,7 @@ export async function openBreakerRuin(actor) {
           if (isSpend) {
             const labels = {
               entry:     "Catastrophic Entry — structure resistance ignored",
-              siege:     "Siege Cost Reduced — −10 Violence marks this Siege",
+              siege:     "Siege Works — this Siege's buffer costs 25% less",
               shockwave: "Shockwave Footing — knockback resisted; adjacent pushed",
               renewal:   "Ruin to Renewal — attempting purification (Faith/Economy DC 15)"
             };
@@ -1880,107 +1968,10 @@ export async function openDreamwalkerReservoir(actor) {
   }).render(true);
 }
 
-// LEGACY (pre-2026-08-23 Echo Dice dialogs — unrouted, kept for reference).
-export async function openDreamwalkerEchoReservoir(actor) {
-  const rawSys = actor.system?.system ?? actor.system;
-  const ed = rawSys?.resources?.echoDice ?? { dice: 0, maxDice: 2 };
-  new Dialog({
-    title: "Dreamwalker — Dream Echo Reservoir",
-    content: `<div class="ft-cast-dialog">
-      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
-        <span class="ft-prev-stat"><span class="ft-prev-label">Echo Dice</span>
-          <span class="ft-prev-val" style="color:#a0d8d4">${ed.dice} / ${ed.maxDice} d6</span></span>
-      </div>
-      <p style="font-size:0.72rem;opacity:0.6;margin:0.4rem 0">
-        Bottled fragments of unrealized possibility. Gain 1 die per Soma Break (auto, capped at ${ed.maxDice}). Spend modes: Self-Resonance · Shared Echo · World-Tuning.
-      </p>
-      <div class="ft-cast-grid">
-        <div class="ft-cast-field"><label>Current dice</label>
-          <input type="number" name="dice" value="${ed.dice}" min="0" max="${ed.maxDice}"/></div>
-      </div>
-    </div>`,
-    buttons: {
-      save: {
-        label: "Apply Manual Edit",
-        callback: async (html) => {
-          const dice = Math.max(0, Math.min(ed.maxDice, parseInt(html.find("[name='dice']").val()) || 0));
-          await actor.update({ "system.resources.echoDice.dice": dice });
-        }
-      },
-      close: { label: "Close" }
-    },
-    default: "save"
-  }).render(true);
-}
-
-// Dreamwalker — Spend Echo Die: rolls 1d6, prompts for one of three spend
-// modes (Self-Resonance / Shared Echo / World-Tuning), debits one die on
-// confirm. Per canonical L13 Dream Echo Reservoir feature.
-export async function openDreamwalkerSpendEchoDie(actor) {
-  const rawSys = actor.system?.system ?? actor.system;
-  const ed = rawSys?.resources?.echoDice ?? { dice: 0, maxDice: 2 };
-  if (ed.dice < 1) {
-    return ui.notifications?.warn(`${actor.name}: no Echo Dice to spend (${ed.dice}/${ed.maxDice} d6).`);
-  }
-  const roll = new Roll("1d6");
-  await roll.evaluate();
-  const rolled = roll.total;
-  new Dialog({
-    title: `Dreamwalker — Spend Echo Die (rolled ${rolled} on d6)`,
-    content: `<div class="ft-cast-dialog">
-      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
-        <span class="ft-prev-stat"><span class="ft-prev-label">Roll</span>
-          <span class="ft-prev-val" style="color:#a0d8d4;font-weight:700">${rolled}</span></span>
-        <span class="ft-prev-stat"><span class="ft-prev-label">Pool after spend</span>
-          <span class="ft-prev-val">${ed.dice - 1} / ${ed.maxDice} d6</span></span>
-      </div>
-      <div class="ft-cast-field">
-        <label>Spend mode</label>
-        <select name="mode">
-          <option value="self">Self-Resonance — +${rolled} to your failed attribute check / attack roll / defense check (after seeing the roll)</option>
-          <option value="shared">Shared Echo — +${rolled} to an ally's failed attribute / defense check (within 30 ft)</option>
-          <option value="world">World-Tuning — -${rolled} to an environmental DC against you (Travel hazard, Slippage shift, Qliphothic anomaly, etc.)</option>
-        </select>
-      </div>
-      <div class="ft-cast-field">
-        <label>Target / context (narrative)</label>
-        <input type="text" name="ctx" placeholder="e.g., 'failed Stealth roll vs Hex 7 hazard'"/>
-      </div>
-    </div>`,
-    buttons: {
-      apply: {
-        label: "Spend",
-        callback: async (html) => {
-          const mode = html.find("[name='mode']").val();
-          const ctx  = html.find("[name='ctx']").val()?.trim() || "(unspecified)";
-          await actor.update({ "system.resources.echoDice.dice": Math.max(0, ed.dice - 1) });
-          const labels = {
-            self:   { icon: "◐", title: "Self-Resonance", body: `+<b>${rolled}</b> to your failed check (after seeing the roll).` },
-            shared: { icon: "◑", title: "Shared Echo",    body: `+<b>${rolled}</b> to an ally's failed check (within 30 ft).` },
-            world:  { icon: "◒", title: "World-Tuning",   body: `-<b>${rolled}</b> to an environmental DC against you (hazard / shift / anomaly).` }
-          };
-          const lbl = labels[mode] ?? labels.self;
-          ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor }),
-            content: `<div class="fourththing-roll" style="border-color:#3a8a8a">
-              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0d8d4">${lbl.icon} Echo Die — ${lbl.title}</span></div>
-              <p style="margin:0.3rem 0;font-size:0.82rem">${lbl.body}</p>
-              <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85"><b>Context:</b> ${_ftEscape(ctx)}</p>
-              <p style="margin:0;font-size:0.72rem;opacity:0.55">Pool now ${Math.max(0, ed.dice - 1)}/${ed.maxDice} d6.</p>
-            </div>`,
-            rolls: [roll]
-          });
-        }
-      },
-      cancel: { label: "Cancel (refund die)" }
-    },
-    default: "apply"
-  }).render(true);
-}
 
 // ─── Soul-Smith dialogs ───────────────────────────────────────────────────────
 // Canon (Phase 1.5):
-//   T1 Sanctified Forge Initiate — Faith +1, Plating apt, Economy OP hex repair
+//   T1 Sanctified Forge Initiate — Faith +1, Plating apt, Economy marks hex repair
 //   T2 Atonement Crucible        — 1/arc, purify a Corrupted Spark
 //   T3 Furnace of Renewal        — passive poison+necrotic resist, rest-bonus narrative
 //   T4 Relic of Rebirth          — 1-per-use artifact, restores a corrupted region
@@ -2013,7 +2004,7 @@ export async function openSoulSmithForgeInitiate(actor) {
   new Dialog({
     title: "Soul-Smith · Sanctified Forge Initiate (T1)",
     content: `<div class="ft-cast-dialog">
-      <p style="font-size:0.78rem;margin:0 0 0.4rem">You can spend Economy OP to repair or stabilize damaged hexes more effectively — focal point for infrastructure recovery. (GM adjudicates spend at the table.)</p>
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">You can spend Economy marks to repair or stabilize damaged hexes more effectively — focal point for infrastructure recovery. (GM adjudicates spend at the table.)</p>
       <div class="ft-preview-stats" style="margin-bottom:0.5rem">
         <span class="ft-prev-stat"><span class="ft-prev-label">Faith rank</span>
           <span class="ft-prev-val">${faithRank}</span></span>
@@ -2047,7 +2038,7 @@ export async function openSoulSmithForgeInitiate(actor) {
         callback: async () => {
           ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
-            content: `<div class="fourththing-roll" style="border-color:#8a6a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e8c8a0">⚒ Forge Initiate — Hex Repair</span></div><p style="margin:0.3rem 0;font-size:0.82rem">${_ftEscape(actor.name)} channels Economy OP into repairing / stabilizing a damaged hex. GM tracks the repair budget at the strategic layer.</p></div>`
+            content: `<div class="fourththing-roll" style="border-color:#8a6a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e8c8a0">⚒ Forge Initiate — Hex Repair</span></div><p style="margin:0.3rem 0;font-size:0.82rem">${_ftEscape(actor.name)} channels Economy marks into repairing / stabilizing a damaged hex. GM tracks the repair budget at the strategic layer.</p></div>`
           });
         }
       },
@@ -2993,7 +2984,7 @@ export async function openBulwarkAnchorOrAdvance(actor) {
       title: "Anchor or Advance — declare your inevitability (1/scene)",
       content: `<div class="ft-cast-dialog" style="font-size:0.82rem">
         <p style="margin:0.3rem 0"><b>⚓ Anchor.</b> Until the end of your next turn you cannot be moved against your will — forced movement, knockback, teleport-targeting, banishment, dimensional swap all fail (Heroic-DC 22 push from your size+ is the only exception).</p>
-        <p style="margin:0.3rem 0"><b>🏔 Advance.</b> Declare a destination as part of an action: difficult terrain, speed-halving conditions, opportunity reactions, and zones of control cannot stop you reaching it. You may still take damage on the way.</p>
+        <p style="margin:0.3rem 0"><b>🏔 Advance.</b> Declare a destination as part of an action: difficult terrain, speed-halving conditions, reaction strikes, and zones of control cannot stop you reaching it. You may still take damage on the way.</p>
       </div>`,
       buttons: {
         anchor:  { label: "⚓ Nothing moves me",  callback: () => resolve("anchor") },
@@ -3025,6 +3016,109 @@ export async function openBulwarkAnchorOrAdvance(actor) {
       <p style="margin:0.2rem 0;font-size:0.72rem;opacity:0.6;font-style:italic">1/scene · recovers on Scene/Soma Break.</p>
     </div>`
   });
+}
+
+// ─── Bulwark post-fold handlers (rulings BW1/BW4, 2026-10-25) ────────────────
+const _bwSurge = (actor) => Number((actor.system?.system ?? actor.system)?.resources?.surge?.value) || 0;
+async function _bwSpendSurge(actor, n) {
+  const cur = _bwSurge(actor);
+  if (cur < n) { ui.notifications?.warn(`${actor.name}: needs ${n} Surge (has ${cur}).`); return false; }
+  await actor.update({ "system.resources.surge.value": cur - n });
+  return true;
+}
+const _bwCard = (actor, title, body, color = "#5a7a9a") => ChatMessage.create({
+  speaker: ChatMessage.getSpeaker({ actor }),
+  content: `<div class="fourththing-roll" style="border-color:${color}"><div class="ft-roll-header"><span class="ft-roll-name">${title}</span></div><p style="margin:0.3rem 0;font-size:0.8rem">${body}</p></div>`
+});
+
+// Cataclyst L1 — The Exchange: 1/Soma Break, your next Surge spend costs 1 less.
+export async function openBulwarkTheExchange(actor) {
+  return _openSomaBreakAbility(actor, "bwExchange", "The Exchange",
+    "Bonus action: the hinge swings. Your <b>next Surge spend costs 1 less</b> (minimum 1). Once per Soma Break.",
+    async (actor) => {
+      await actor.setFlag("fourththing", "bulwark.exchangeNext", true);
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#e8c84a">⚖ Primed — the next ◆ spend is 1 cheaper.</p>`;
+    });
+}
+
+// Cataclyst L5 — Stance Dance: start of turn, declare Advance or Anchor for the round.
+export async function openBulwarkStanceDance(actor) {
+  if (!actor) return;
+  const stance = await new Promise((resolve) => {
+    new Dialog({
+      title: "Stance Dance — which way does the hinge swing?",
+      content: `<div class="ft-cast-dialog" style="font-size:0.82rem">
+        <p style="margin:0.3rem 0"><b>🏔 Advance.</b> This round your offensive path spends (Erupt / Shatter / Cataclysm) cost 1 less, and you gain +2 squares of movement.</p>
+        <p style="margin:0.3rem 0"><b>⚓ Anchor.</b> Until the start of your next turn you cannot be moved against your will, and Absorb's cap rises by 1d4.</p>
+        <p style="margin:0.3rem 0;font-size:0.72rem;opacity:0.6">You may switch once during your turn as a free action — just declare again.</p>
+      </div>`,
+      buttons: {
+        advance: { label: "🏔 Advance", callback: () => resolve("advance") },
+        anchor:  { label: "⚓ Anchor",  callback: () => resolve("anchor") },
+        cancel:  { label: "Cancel",    callback: () => resolve(null) }
+      },
+      default: "advance", close: () => resolve(null)
+    }).render(true);
+  });
+  if (!stance) return;
+  const combat = game.combat;
+  await actor.setFlag("fourththing", "bulwark.stanceDance", { stance, round: Number(combat?.round ?? 0), combatId: combat?.id ?? null, at: Date.now() });
+  if (stance === "anchor") {
+    try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Stance Dance: Anchor", img: "icons/svg/anchor.svg", origin: actor.uuid, duration: { rounds: 1, turns: 1 }, changes: [], flags: { fourththing: { surge: { kind: "anchor", ccImmune: true, forcedMoveImmune: true }, stanceDanceAbsorb: "1d4" } } }]); } catch (_e) {}
+  }
+  return _bwCard(actor, `${stance === "advance" ? "🏔 ADVANCE" : "⚓ ANCHOR"} — Stance Dance`,
+    stance === "advance"
+      ? "This round: offensive path spends cost <b>1 less</b>; <b>+2 squares</b> of movement."
+      : "Until the start of your next turn: <b>cannot be moved</b> against your will; Absorb's cap <b>+1d4</b>.");
+}
+
+// Cataclyst L13 — The Third Door: 1/scene, one defensive + one offensive spend in the same action.
+export async function openBulwarkThirdDoor(actor) {
+  return _openPerSceneAbility(actor, "bwThirdDoor", "The Third Door",
+    "As part of a single action on your turn, make <b>one defensive and one offensive Surge spend together</b> — strike (Erupt) and absorb the counter (Absorb) in the same Strike. Pay both costs; they do not compete for action economy. Once per scene.",
+    async () => ` Frame and Ruin take the same step — declare both spends now.`);
+}
+
+// Avalanche L5 — Shockwave Arrival: charge 2+ squares straight, spend 1 Surge on the strike.
+export async function openBulwarkShockwaveArrival(actor) {
+  if (!actor) return;
+  if (!await _bwSpendSurge(actor, 1)) return;
+  const sys = actor.system?.system ?? actor.system ?? {}; const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+  const tgt = Array.from(game.user?.targets ?? [])[0]?.actor;
+  return _bwCard(actor, "⛰ Shockwave Arrival",
+    `${tgt ? `<b>${_ftEscape(tgt.name)}</b> is pushed 2 squares along your charge (no save). ` : ""}The strike's damage also hits every creature and breakable object in the 1-square line behind the target — each makes a <b>Body defense (DC ${12 + tier * 2})</b>: half on a success, full on a failure. <span style="opacity:0.6;font-style:italic">1 Surge spent.</span>`, "#9a6a3a");
+}
+
+// Avalanche L17 — Running Theology: start of turn, spend any Surge for +1 square each.
+export async function openBulwarkRunningTheology(actor) {
+  if (!actor) return;
+  const cur = _bwSurge(actor);
+  const n = await new Promise((resolve) => {
+    new Dialog({
+      title: "Running Theology — how much Surge for speed?",
+      content: `<div class="ft-cast-dialog"><p style="font-size:0.8rem;margin:0 0 0.4rem">Spend any number of Surge (you have <b>${cur}</b>): <b>+1 square</b> of movement each this turn. While you hold ≥1 Surge you are immune to forced movement, Staggered and stun/paralysis effects, and you pass through creatures and soft objects without stopping or provoking.</p>
+        <div class="ft-cast-field"><label>Surge to spend</label><input type="number" name="n" min="0" max="${cur}" value="${Math.min(2, cur)}"/></div></div>`,
+      buttons: { go: { label: "Run", callback: (html) => resolve(Number(html.find("[name='n']").val())) }, cancel: { label: "Cancel", callback: () => resolve(null) } },
+      default: "go", close: () => resolve(null)
+    }).render(true);
+  });
+  if (n === null || !Number.isFinite(n) || n < 0) return;
+  if (n > 0 && !await _bwSpendSurge(actor, n)) return;
+  const left = _bwSurge(actor);
+  return _bwCard(actor, "🏃 Running Theology", `+<b>${n}</b> square${n === 1 ? "" : "s"} of movement this turn. ${left >= 1 ? "Holding Surge — immune to forced movement, Staggered and stun; you pass through creatures without stopping or provoking." : "No Surge left — the immunities lapse until you bank again."}`, "#9a6a3a");
+}
+
+// Mountain L5 — Denial: reaction, spend 1 Surge; a creature within 1 square trying to pass you stops. 1/target/encounter.
+export async function openBulwarkDenial(actor) {
+  if (!actor) return;
+  const foe = Array.from(game.user?.targets ?? [])[0]?.actor;
+  if (!foe) return ui.notifications?.warn("Denial: target the creature trying to move past you.");
+  const combatId = game.combat?.id ?? "none";
+  const used = actor.flags?.fourththing?.bulwark?.denied?.[foe.id];
+  if (used && used === combatId) return ui.notifications?.warn(`Denial: ${foe.name} has already been Denied this encounter.`);
+  if (!await _bwSpendSurge(actor, 1)) return;
+  try { await actor.setFlag("fourththing", `bulwark.denied.${foe.id}`, combatId); } catch (_e) {}
+  return _bwCard(actor, `⛔ Denial → ${_ftEscape(foe.name)}`, `<b>${_ftEscape(foe.name)}</b>'s movement ends in its current square — no attack roll, no defense check. It has not spent the movement and may retreat or take another path next turn. <span style="opacity:0.6;font-style:italic">1 Surge spent · once per target per encounter.</span>`, "#4a6a8a");
 }
 
 // ─── Bulwark / Avalanche L13 — The Breach (wired 2026-06-07, Brexit audit) ────
@@ -3240,7 +3334,7 @@ export async function openShadowCourierSpendPace(actor) {
     <div class="ft-cast-field">
       <label>Spend mode</label>
       <select name="mode">
-        <option value="move">+5 ft movement this turn</option>
+        <option value="move">+1 square of movement this turn</option>
         <option value="reroll">Reroll a skill check (Stealth / Acrobatics / Streetwise / Intrigue)</option>
         <option value="dodge">Ignore one reaction strike against you this turn</option>
         ${routeLabel ? `<option value="route">${_ftEscape(routeLabel)} route — ${_ftEscape(routeBody)}</option>` : ""}
@@ -4088,7 +4182,7 @@ export async function openDreamwalkerMode(actor) {
 
 export async function openPactkeeperMode(actor) {
   return _openSignatureMode(actor, "pkSealedPact", "Pactkeeper — Sealed Pact",
-    "While the Seal holds: concurrent-manifestation cap +2; cannot voluntarily drop a manifestation sustained on a pact-bound subject. Pays ongoing upkeep (pilot: GM-set).");
+    "While the Seal holds: concurrent-manifestation cap +2; cannot voluntarily drop a manifestation sustained on a pact-bound subject. Pays 1 Clarity per turn while held.");
 }
 
 // Factory for the Clarity-spend onUse callback used by the cadence helpers.
@@ -4411,7 +4505,7 @@ export async function openMenhirkinHexRecognition(actor) {
 export async function openEchoDiverTemporalFlinch(actor) {
   return _openPerSceneAbility(actor, "echoDiverTemporalFlinch",
     "Temporal Flinch (Echo-Diver Core)",
-    "Reaction. When you or an ally within 10 ft would be hit by an attack you can see, shift them 5 ft. If that moves them out of range or line of sight, the attack misses.",
+    "Reaction. When you or an ally within 2 squares would be hit by an attack you can see, shift them 5 ft. If that moves them out of range or line of sight, the attack misses.",
     // Shift the flinch target (a targeted ally token, else self) 5 ft directly
     // away from the nearest hostile token (the likely attacker). The miss itself
     // stays GM-adjudicated per canon ("if that moves them out of range or LoS").
@@ -5232,7 +5326,7 @@ export const CHAR_OPT_ABILITIES = {
   "occult-association-alchemist-t1": {
     type: "strategic-turn",
     label: "Alchemist — Production Reliability (Tier 1)",
-    body: "Strategic: Once per Strategic Turn, when your faction spends Economy OP on production, infrastructure, or supply stabilization, reduce that spend by 1 (minimum 1)."
+    body: "Strategic: Once per Strategic Turn, when your faction spends Economy marks on production, infrastructure, or supply stabilization, reduce that spend by 1 (minimum 1)."
   },
   "occult-association-alchemist-t2": {
     type: "strategic-turn",
@@ -5660,7 +5754,7 @@ export const CHAR_OPT_ABILITIES = {
   "human-neanderthal-protective_instinct": {
     type: "soma-break-tier", level: 5,
     label: "Protective Instinct (tier uses / Soma Break)",
-    body: "Reaction — when an ally within 10 ft is hit, reduce the damage by 1d6 + your tier."
+    body: "Reaction — when an ally within 2 squares is hit, reduce the damage by 1d6 + your tier."
   },
 
   // ── D&D-vocab scrub Phase 3 — Oldenborn ancestry (2026-04-29) ─────────────
@@ -5814,8 +5908,8 @@ export const CHAR_OPT_ABILITIES = {
     label: "Forge of Victory",
     abilities: [
       { key: "standardOfWill", type: "scene",     level: 3,  label: "Standard of Will (L3)",
-        body: "Action: raise a standard. Allies within 15 ft gain +1 vs. fear. At scene end → +1 Unity/VP. (1/scene.)" },
-      { key: "victoryForge",   type: "soma-break", level: 14, label: "Victory Forge (L14)",
+        body: "Action: raise a standard. Allies within 15 ft gain +1 vs. fear. At scene end → +10 Soft Power marks. (1/scene.)" },
+      { key: "victoryForge",   type: "soma-break", level: 10, label: "Victory Forge (L10)",
         body: "1/Soma Break after a peaceful objective: convert 10 Intrigue marks → 10 Diplomacy OR 10 Soft Power marks." }
     ]
   },
@@ -5852,55 +5946,9 @@ export const CHAR_OPT_ABILITIES = {
   // Wyrdlens refractions (3) — Lens Charge ladder consolidated onto Clarity
   // 2026-05-18. Each ladder ability now carries a `clarityCost` field that
   // the dispatcher deducts via _makeClaritySpendCallback.
-  "bbttcc-wyrdlens-adept-foresight": {
-    label: "Refraction of Foresight",
-    abilities: [
-      { key: "anticipationL1",      type: "soma-break",   level: 1,  label: "The Anticipation (L1)",         clarityCost: 1,
-        body: "1/Soma Break — at the start of each combat or significant scene, spend 1 Clarity to gain a Foreseen Action: narrate a specific event about to occur. Advantage / +5 [TBD:balance] on your first reaction to it. May grant the Foreseen Action to an ally instead." },
-      { key: "forceEnemyReroll",    type: "strategic-turn", level: 3, label: "Force Enemy Reroll (L3)",
-        body: "Strategic: Once per Strategic Turn, spend 10 Intrigue marks to force an enemy strategic reroll." },
-      { key: "slowedInstantL5",     type: "clarity-only", level: 5,  label: "The Slowed Instant (L5)",       clarityCost: 1,
-        body: "Reaction (intent: 1/round) — when an ally within 30 ft is targeted by an attack, effect, or hostile action, spend 1 Clarity to briefly slow the moment: the ally may take a bonus reaction (dodge, parry, counter, reposition) before the action resolves." },
-      { key: "readTheFieldL9",      type: "clarity-only", level: 9,  label: "Read The Field (L9)",           clarityCost: 2,
-        body: "Start of a round — spend 2 Clarity to have the GM reveal, in broad terms, the intended actions of all hostile creatures in the scene this round. Accurate at moment of reading; can be changed by intervening actions." },
-      { key: "stoppedStrikeL13",    type: "scene",        level: 13, label: "The Stopped Strike (L13)",      clarityCost: 3,
-        body: "1/scene — reaction when a creature within range takes an action. Spend 3 Clarity to undo the action before it resolves; turn consumed but no effect. Target may attempt a Soul save [TBD:balance DC] to retain; success acts at keep-lowest." }
-    ]
-  },
-  "bbttcc-wyrdlens-adept-mercy": {
-    label: "Refraction of Mercy",
-    abilities: [
-      { key: "softReadingL1",     type: "clarity-only", level: 1,  label: "The Soft Reading (L1)",         clarityCost: 1,
-        body: "Trigger — when you perceive hostile intent in a creature, spend 1 Clarity to learn what they want (motivation) instead of just what they will do. GM reveals the underlying motive. You may use this knowledge to attempt diplomatic / de-escalation actions with advantage and a Presence-check bonus [TBD:balance]." },
-      { key: "mercyRefraction",   type: "scene",        level: 3,  label: "Mercy Refraction (L3)",
-        body: "1/scene, convert a lethal hit you witness into non-lethal. If it forces surrender, +10 Diplomacy marks." },
-      { key: "preventedBlowL5",   type: "clarity-only", level: 5,  label: "The Prevented Blow (L5)",       clarityCost: 2,
-        body: "Reaction — when an ally would take damage from a deliberate attack, spend 2 Clarity to insert a preemptive action (shove, distraction, prevention). The attack's damage is halved / reduced [TBD:balance]; the attacker suffers no retaliation penalty." },
-      { key: "redirectedHarmL9",  type: "clarity-only", level: 9,  label: "The Redirected Harm (L9)",      clarityCost: 3,
-        body: "Reaction — when you perceive a harmful effect about to befall a living creature (trap, curse, ongoing manifestation), spend 3 Clarity to redirect the harm to a non-living target (wall, window, object you carry). Works on enemies too." },
-      { key: "openHandL13",       type: "scene",        level: 13, label: "The Open Hand (L13)",           clarityCost: 5,
-        body: "1/scene — when you are present at the moment a conflict might turn lethal, spend 5 Clarity to declare The Open Hand: all creatures in the scene are offered a genuine chance to disengage without penalty. Acceptors lose no resources, face, or progress. Refusers proceed normally." },
-      { key: "sephiroticBloom",   type: "soma-break",   level: 14, label: "Sephirothic Bloom (L14)",
-        body: "1/Soma Break, after a non-lethal victory you led: Darkness −1 and shift Hex one step toward a beneficial Sephirah." }
-    ]
-  },
-  "bbttcc-wyrdlens-adept-truth": {
-    label: "Refraction of Truth",
-    abilities: [
-      { key: "readingEyeL1",      type: "clarity-only", level: 1,  label: "The Reading Eye (L1)",                          clarityCost: 1,
-        body: "After focusing on a creature, object, location, or ongoing situation for 1 minute, spend 1 Clarity to perceive one concealed truth: a recent lie, hidden motive, secret identity, disguise, false document, or active Stealth. GM picks one if multiple apply." },
-      { key: "truthRefraction",   type: "info",         level: 3,  label: "Truth Refraction (L3) — Spend 10 Intrigue marks",
-        body: "Spend 10 Intrigue marks to treat one Spark Identification roll ≤9 as a 10 this Turn. No daily cap; OP-cost only." },
-      { key: "unconcealedWordL5", type: "clarity-only", level: 5,  label: "The Unconcealed Word (L5)",                     clarityCost: 1,
-        body: "Reaction — when a creature in your presence lies aloud, spend 1 Clarity to perceive the truth they are lying about. You know it; you do not automatically speak it. Other creatures do not perceive your use of this ability." },
-      { key: "forcedClarityL9",   type: "scene",        level: 9,  label: "The Forced Clarity (L9)",                       clarityCost: 3,
-        body: "1/scene — spend 3 Clarity to create a Zone of Clarity: a 30-ft radius around you for 1 minute. No creature in the zone may successfully lie, conceal, or obscure intentions through speech. Mental concealment (occluded thoughts, non-verbal Stealth) unaffected." },
-      { key: "exposureL13",       type: "scene",        level: 13, label: "The Exposure (L13)",                            clarityCost: 5,
-        body: "1/scene — spend 5 Clarity to publicly reveal one concealed truth about a creature, faction, or institution present in the scene. Revelation cannot be unspoken; mechanical consequences (Morale penalty, Political Drift shift, social cascade) appropriate to severity." },
-      { key: "unshatter",         type: "soma-break",   level: 14, label: "Unshatter (L14)",
-        body: "1/Soma Break, purify a Corrupted Spark step via short penance: Darkness −1." }
-    ]
-  },
+  "bbttcc-wyrdlens-adept-foresight": { type: "info", label: "Wyrdlens — Refraction of Foresight", body: "Subclass card. Your Refraction spends live in the ◆ Surge menu (2026-10-24: the old Clarity ladder here was retired — it duplicated the Surge spends with different numbers)." },
+  "bbttcc-wyrdlens-adept-mercy": { type: "info", label: "Wyrdlens — Refraction of Mercy", body: "Subclass card. Your Refraction spends live in the ◆ Surge menu (2026-10-24: the old Clarity ladder here was retired — it duplicated the Surge spends with different numbers)." },
+  "bbttcc-wyrdlens-adept-truth": { type: "info", label: "Wyrdlens — Refraction of Truth", body: "Subclass card. Your Refraction spends live in the ◆ Surge menu (2026-10-24: the old Clarity ladder here was retired — it duplicated the Surge spends with different numbers)." },
 
   // Harmony Marshal mandates (3)
   "bbttcc-harmony-marshal-marshal-accord": {
@@ -5909,7 +5957,7 @@ export const CHAR_OPT_ABILITIES = {
       { key: "accordEngine",  type: "info",      level: 3,  label: "Accord Engine (L3) — Spend 10 Diplomacy marks",
         body: "During Parley, spend 10 Diplomacy marks to treat an opposing roll of 9 or lower as a 10 if the outcome moves toward peace. No daily cap; OP-cost only." },
       { key: "unityCadence",  type: "scene",     level: 6,  label: "Unity Cadence (L6)",
-        body: "1/scene, end a scene you lead with zero fatalities → +1 Unity/VP." },
+        body: "1/scene, end a scene you lead with zero fatalities → +10 Soft Power marks to your Domain (GM's discretion)." },
       { key: "resonantTruce", type: "soma-break", level: 10, label: "Resonant Truce (L10)",
         body: "1/Soma Break, for 1 minute: enemies in 15 ft have disadvantage to attack non-hostiles; advantage on saves to end fear/charm." }
     ]
@@ -5942,6 +5990,7 @@ export const CHAR_OPT_ABILITIES = {
   "cosmic_linguist":                { type: "info", label: "Cosmic Linguist (Class)", body: "Trad Caster Class. Manifestation as accurate sentence. (Class card — active mechanics live on Initiation feats and Mode/Authority/Annotation/Word-That-Was per-uses.)" },
   "bbttcc-aurablade-blood-hymn":    { type: "info", label: "Aurablade — Blood Hymn", body: "Subclass card. Wound = prayer. Active mechanics live on Blood Hymn feature feats (Final Crescendo etc.)." },
   "bbttcc-aurablade-stillheart":    { type: "info", label: "Aurablade — Stillheart", body: "Subclass card. Calm = discipline. Active mechanics live on Stillheart feature feats (Emotional Lock etc.)." },
+  "bbttcc-aurablade-void-edge":     { type: "info", label: "Aurablade — Void Edge", body: "Subclass card. Absence = authority. Active mechanics ride your Aura actions; your doctrine features are on the Features tab." },
   "bbttcc-pactkeeper-archivist-of-precedent": { type: "info", label: "Pactkeeper — Archivist of Precedent", body: "Subclass card. Historical enforcement. Active mechanics live on Archivist Initiation feats." },
   "bbttcc-shadow-courier-courier-last-mile":  { type: "info", label: "Shadow Courier — Route of the Last Mile", body: "Subclass card. Psychopomp drift. Active mechanics live on Last Mile feats (Quiet Voyage etc.)." },
 
@@ -6061,17 +6110,17 @@ export const CHAR_OPT_ABILITIES = {
   "negotiated-advantage": {
     type: "soma-break",
     label: "Negotiated Advantage (1/Soma Break)",
-    body: "Reaction — when a creature you can see within 30 feet makes an attack roll or attribute check against you or an ally, you may force them to roll 3d10 keep lowest 2."
+    body: "Reaction — when a creature you can see within 6 squares makes an attack roll or attribute check against you or an ally, you may force them to roll 3d10 keep lowest 2."
   },
   "bulwark_cataclyst_l9_decide_the_weather": {
     type: "scene", level: 9,
     label: "Cataclyst L9: Decide The Weather (1/scene)",
-    body: "Action — spend 2 Frame Dice and 2 Ruin Charges. Choose Wall (raise a wall of force, 30×10 ft) or Storm (15-ft radius lightning strike, exploding 2d10)."
+    body: "Action — spend 4 Surge. Choose Wall (raise a wall, 6×2 squares) or Rubble (a 3-square-radius collapse: 2d10 kinetic, targets inside are knocked Prone)."
   },
   "bulwark_mountain_l5_denial": {
-    type: "soma-break-tier", level: 5,
-    label: "Mountain L5: Denial (tier/Soma Break)",
-    body: "Reaction — when a creature within 5 feet attempts to move past you, spend 1 Frame Die to stop them; they must make a Body check vs your Resolve or their movement is wasted."
+    type: "scene", level: 5,
+    label: "Mountain L5: Denial (1/target per scene)",
+    body: "Reaction — when a creature within 1 square attempts to move past you, spend 1 Surge to stop them; their movement is wasted. Once per target per scene."
   },
   "rallying-words": {
     type: "soma-break",
@@ -6119,14 +6168,14 @@ export const CHAR_OPT_ABILITIES = {
     body: "Action — declare a single threshold within reach (door, wall, ward, alarm, divination). The membrane chooses you instead: pass through or bypass it cleanly."
   },
   "shadow_courier_tier4_unfound_route": {
-    type: "scenario", level: 17, travel: true,
+    type: "scenario", level: 16, travel: true,
     label: "Shadow Courier — Tier 4: Unfound Route (1/session)",
-    body: "Action — name two thresholds you have personally crossed earlier in this campaign and link them. For 1 minute, the route exists and may be travelled by anyone in your party."
+    body: "Action — name two thresholds you have personally crossed earlier in this campaign and link them. For one hour, the route exists and may be travelled by you and up to four allies."
   },
   "shadow_courier_lastmile_l13_quiet_voyage": {
     type: "scene", level: 13,
-    label: "Last Mile L13: The Quiet Voyage (1/scene)",
-    body: "Action — while carrying a Soul, become temporarily insubstantial for up to your Initiation tier rounds. You can move through creatures and solid objects and cannot be targeted by attacks."
+    label: "Last Mile L13: The Quiet Voyage (Tier rounds per scene)",
+    body: "Bonus action — while carrying a Soul, become insubstantial for up to your Initiation tier rounds per scene. You pass through non-magical barriers and crowds, reaction strikes cannot touch you, and only the death-attuned see you."
   },
   "wyrdlens-refraction-foresight-convergence-horizon": {
     type: "soma-break",
@@ -6168,7 +6217,7 @@ export const CHAR_OPT_ABILITIES = {
   "bbttcc_feat_pressure_transference": {
     type: "soma-break",
     label: "Pressure Transference (1/Soma Break)",
-    body: "Reaction — when you would take damage, give an ally within 10 ft reroll-lowest on their next roll before the end of their next turn (you still take the damage; the trade is the boon, not avoidance)."
+    body: "Reaction — when you would take damage, give an ally within 2 squares reroll-lowest on their next roll before the end of their next turn (you still take the damage; the trade is the boon, not avoidance)."
   },
   "bbttcc_feat_threatening_silence": {
     type: "soma-break",
@@ -6297,7 +6346,7 @@ async function _checkAndDebitActionEconomy(actor, ab, { debit = true } = {}) {
   }
   if (cost === "bonus") {
     if (a.bonusUsed) {
-      ui.notifications?.warn(`${ab.label}: bonus action already used this turn.`);
+      ui.notifications?.warn(`${ab.label}: bonus action already used this round (refreshes at the start of your turn).`);
       return false;
     }
     if (debit) await actor.update({ "system.actions.bonusUsed": true });
@@ -6704,6 +6753,11 @@ const LEGACY_ACTION_COST = {
   "dreamwalker_solar_stillpoint": "action",   // 30-ft golden aura
   "dreamwalker_somnolent_peace": "reaction",  // 1/scene prevent-death (sleep)
   "dreamwalker_thousandfold_echo":"bonus",    // 1-min persona-flux buff
+  "dreamwalker_destiny_pulse":   "action",    // Vision of the Great Work — 1/Soma Break thread
+  "dreamwalker_daybreak":        "free",      // 1/Soma Break after a no-fatalities win
+  "dreamwalker_sapphire_conduction": "free",  // 1/Soma Break after a Spark Step
+  "dreamwalker_borrowed_voice":  "action",    // 1/Soma Break mimicry
+  "dreamwalker_mask_accord":     "reaction",  // 1/Soma Break social intervention
   // Cross-class shared feats
   "ft_coordinated_advance":     "free",       // free move rider
   "ft_emissary_accord":         "action",     // scene-tipping declaration
@@ -6752,7 +6806,6 @@ const LEGACY_ACTION_COST = {
   "pactkeeper_bind_subject":            "free",
   "counter_manifestation":              "action",
   "dream_echo_reservoir":               "free",
-  "dream_echo_reservoir_spend":         "reaction",
   "dw_feat_activate":                   "free",
   "shadow_courier_passive":     "free",
   "menhirkin_hex_recognition":  "free",
@@ -7260,31 +7313,85 @@ export async function openSoulSmithTriumphWeave(actor) {
 
 // ─── Dreamwalker — Sapphire/Quiet/Thousand techniques (build-out 2026-06-08) ─────
 
-// Blue Meridian (Sapphire) — 1/Soma-Break action: open a 1-minute teleport corridor (self).
+// ─── Dreamwalker route gaps (ruling DW2, 2026-10-25) ─────────────────────────────
+// Vision of the Great Work — Destiny Thread Pulse: 1/Soma Break, a chosen creature gets one thread for 1 hour.
+export async function openDreamwalkerDestinyPulse(actor) {
+  const tgt = Array.from(game.user?.targets ?? [])[0]?.actor;
+  return _openSomaBreakAbility(actor, "dwDestinyPulse", "Vision of the Great Work — Destiny Thread Pulse",
+    "Choose one creature you can see. For 1 hour it gains one thread of your choice: <b>+2 to all defense checks</b>, <b>enemies −2 to attack it</b>, or <b>+2 to Insight (Soul), Diplomacy (Presence) and Perception (Mind)</b>. (Faction Trajectory — ask the GM what a faction or key NPC will attempt next — is a separate 1/Soma Break question; just ask.)",
+    async (actor) => {
+      if (!tgt) { ui.notifications?.warn("Destiny Thread Pulse: target the creature first."); return false; }
+      const pick = await new Promise((resolve) => new Dialog({ title: "Destiny Thread — which thread?", content: `<p style="font-size:0.8rem">Thread for <b>${_ftEscape(tgt.name)}</b>, 1 hour.</p>`, buttons: {
+        def:  { label: "+2 defenses", callback: () => resolve("def") },
+        foes: { label: "Enemies −2 to hit", callback: () => resolve("foes") },
+        soc:  { label: "+2 Insight / Diplomacy / Perception", callback: () => resolve("soc") } }, default: "def", close: () => resolve(null) }).render(true));
+      if (!pick) return false;
+      const changes = pick === "def" ? ["guard", "evasion", "resolve"].map(k => ({ key: `system.derived.${k}.aeBonus`, mode: 2, value: "2", priority: 20 }))
+        : pick === "soc" ? ["insight", "diplomacy", "perception"].map(k => ({ key: `system.skills.${k}.value`, mode: 2, value: "2", priority: 20 })) : [];
+      const label = pick === "def" ? "+2 to all defense checks" : pick === "foes" ? "enemies −2 to attack rolls against them (GM applies)" : "+2 Insight / Diplomacy / Perception";
+      await _ftAEOn(tgt, { name: `Destiny Thread (${label})`, img: "icons/magic/perception/third-eye-blue-red.webp", origin: actor.uuid, duration: { seconds: 3600, rounds: 600 }, changes, flags: { fourththing: { destinyThread: pick } } });
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#9ad0ff">⟁ A thread of the Great Work settles on <b>${_ftEscape(tgt.name)}</b> — ${label}, 1 hour.</p>`;
+    });
+}
+// Daybreak (Quiet Sun L14) — 1/Soma Break after a no-fatalities win: Darkness −1, Domain +10 Diplomacy marks next turn.
+export async function openDreamwalkerDaybreak(actor) {
+  return _openSomaBreakAbility(actor, "dwDaybreak", "Daybreak",
+    "When you lead or anchor a conflict that ends with <b>no fatalities</b> (surrender, rout, incapacitation, social resolution): reduce an appropriate <b>Darkness Track by 1</b> (GM picks the scale) and your Domain gains <b>+10 Diplomacy marks</b> for the next turn.",
+    async () => ` People remember when you could have made a graveyard and chose a dawn instead. <span style="opacity:0.7">GM: Darkness −1 on the chosen track; +10 Diplomacy marks to the Domain next turn.</span>`);
+}
+// Sapphire Conduction (Sapphire Gate L14) — 1/Soma Break after a Spark Step: Darkness −1 + banked reroll vs Spark backlash.
+export async function openDreamwalkerSapphireConduction(actor) {
+  return _openSomaBreakAbility(actor, "dwSapphireConduction", "Sapphire Conduction",
+    "When your party completes a <b>Spark Step</b> (stabilization, purification, negotiation, containment or conversion): reduce an appropriate <b>Darkness Track by 1</b>, and you reroll the lowest die on your first defense or skill check against Spark falloff or backlash in the next 24 hours.",
+    async (actor) => {
+      try { const b = actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "sapphire-conduction" }); await actor.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+      return ` You ground the metaphysical heat — the region is a touch brighter. <span style="opacity:0.7">GM: Darkness −1. Reroll-lowest banked for the Spark-backlash check.</span>`;
+    });
+}
+// Borrowed Voice (Thousand Faces L10) — 1/Soma Break: perfect mimicry of a heard voice for 1 minute.
+export async function openDreamwalkerBorrowedVoice(actor) {
+  return _openSomaBreakAbility(actor, "dwBorrowedVoice", "Borrowed Voice",
+    "Perfectly mimic the voice, accent and speech patterns of a creature you have heard for at least 1 minute, for up to <b>1 minute</b>. Creatures who know the voice may make an Insight (Soul) check against your Stealth (Intrigue) to notice something is off. Sound only — not their knowledge.",
+    async () => ` <i>“Oh, that wasn't me; that was who you needed to hear.”</i>`);
+}
+// Mask of Accord (Thousand Faces L14) — 1/Soma Break reaction: an ally's keep-lowest social roll becomes a normal roll, with a fallback reroll.
+export async function openDreamwalkerMaskOfAccord(actor) {
+  const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+  return _openSomaBreakAbility(actor, "dwMaskOfAccord", "Mask of Accord",
+    "Reaction: when an ally within 6 squares makes a critical negotiation, Parley or social check while rolling <b>3d10 keep lowest 2</b>, they roll normally instead. If it still fails, they may immediately <b>reroll</b> the same check with your persona guidance, keeping the new result.",
+    async (actor) => {
+      if (!ally) { ui.notifications?.warn("Mask of Accord: target the ally first."); return false; }
+      const r = await _ftForeignWrite(actor, ally, "bankAid", { entries: [{ from: actor.name, kind: "reroll-lowest", source: "mask-of-accord" }] });
+      if (!r?.ok) ui.notifications?.warn(`Mask of Accord: couldn't bank the fallback reroll on ${ally.name} (no GM online?).`);
+      return ` <b>${_ftEscape(ally.name)}</b> borrows one of your faces — the keep-lowest is lifted for this roll (GM applies) and a fallback reroll is banked.`;
+    });
+}
+
+// Blue Meridian (Sapphire) — 1/Soma-Break action: lucid teleport corridor for 1 minute.
 export async function openDreamwalkerBlueMeridian(actor) {
   return _openSomaBreakAbility(actor, "dwBlueMeridian", "Blue Meridian",
-    "Spend an action: open the Blue Meridian for 1 minute. You may <b>teleport up to 30 ft</b> as part of any movement or bonus action, and teleport to any <b>Gate Anchor</b> within 300 ft (doors fine, walls not). Allies within 10 ft of an Anchor you reach may teleport to it (reaction, once each).",
+    "Spend an action: open the Blue Meridian for 1 minute. You may <b>teleport up to 6 squares</b> as part of any movement or bonus action, and teleport to any <b>Gate Anchor</b> within 60 squares (doors fine, walls not). Allies within 2 squares of an Anchor you reach may teleport to it (reaction, once each).",
     async (actor) => {
       try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Blue Meridian (open)", img: "icons/magic/movement/portal-vortex-blue.webp", origin: actor.uuid, duration: { rounds: 10, seconds: 60 }, changes: [], flags: { fourththing: { blueMeridian: true } } }]); } catch (e) {}
-      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#7db8ff">⟁ The lucid corridor is open for 1 minute — teleport 30 ft on any move/bonus, or to a Gate Anchor within 300 ft.</p>`;
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#7db8ff">⟁ The lucid corridor is open for 1 minute — teleport 6 squares on any move/bonus, or to a Gate Anchor within 60 squares.</p>`;
     });
 }
 
 // Solar Stillpoint (Quiet) — 1/Soma-Break action, 30-ft golden aura (+1 Guard AE).
 export async function openDreamwalkerSolarStillpoint(actor) {
   return _openSomaBreakAbility(actor, "dwSolarStillpoint", "Solar Stillpoint",
-    "Spend an action: a <b>30-ft aura of quiet golden light</b> (1 minute, moves with you). Allies inside gain <b>+1 Guard</b> and advantage (reroll-lowest) vs Shaken/charmed; you may react to soften a killing blow inside the aura.",
+    "Spend an action: a <b>6-square aura of quiet golden light</b> (1 minute, moves with you). Allies inside gain <b>+1 Guard</b> and reroll the lowest die vs Shaken/Charmed; you may react to soften a killing blow inside the aura.",
     async (actor) => {
       const r = await _ftAuraApply(actor, { radiusFt: 30, markerName: "Solar Stillpoint (aura)", markerImg: "icons/magic/light/explosion-star-glow-yellow.webp", markerFlag: "solarStillpoint", aidSource: "solar-stillpoint", allyChanges: [{ key: "system.derived.guard.aeBonus", mode: 2, value: "1", priority: 20 }] });
       if (!r) return false;
-      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem"><p style="margin:0.15rem 0">⟁ <b>Solar Stillpoint invoked</b> — 30 ft, 1 minute.</p><p style="margin:0.15rem 0;color:#78c88c">Allies stilled (+1 Guard, reroll vs Shaken/charmed): <b>${r.allyNames.join(", ") || "—"}</b></p></div>`;
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem"><p style="margin:0.15rem 0">⟁ <b>Solar Stillpoint invoked</b> — 6 squares, 1 minute.</p><p style="margin:0.15rem 0;color:#78c88c">Allies stilled (+1 Guard, reroll vs Shaken/charmed): <b>${r.allyNames.join(", ") || "—"}</b></p></div>`;
     });
 }
 
 // Somnolent Peace (Quiet) — 1/scene reaction: refract a killing blow to dream-sleep (stabilize at 1).
 export async function openDreamwalkerSomnolentPeace(actor) {
   return _openPerSceneAbility(actor, "dwSomnolentPeace", "Somnolent Peace",
-    "Reaction: when a <b>targeted</b> creature within 30 ft would be reduced to 0 Integrity, it instead drops to <b>1 Integrity and falls unconscious</b> (dream-sleep, non-magical).",
+    "Reaction: when a <b>targeted</b> creature within 6 squares would be reduced to 0 Integrity, it instead drops to <b>1 Integrity and falls unconscious</b> (dream-sleep, non-magical).",
     async (actor) => {
       const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
       if (!ally) { ui.notifications?.warn("Somnolent Peace: target the falling creature first."); return false; }
@@ -7301,30 +7408,39 @@ export async function openDreamwalkerSomnolentPeace(actor) {
 
 // Lull the Riot (Quiet) — at-will action: suppress targeted hostiles' aggression (20-ft sphere).
 export async function openDreamwalkerLullTheRiot(actor) {
+  // Ruling DW3 (2026-10-25): handler follows the feature text — 4-square sphere placed within
+  // 12 squares, Soul check DC 8 + tier + your Soul or Presence value, 1 round of suppressed
+  // aggression (no Attack action / damaging casts, may not close on your allies).
   const sys  = actor.system?.system ?? actor.system ?? {};
   const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
-  const dc   = 8 + tier * 2;
+  const soul = Number(sys?.attributes?.soul?.value) || 0, pres = Number(sys?.attributes?.presence?.value) || 0;
+  const dc   = 8 + tier + Math.max(soul, pres);
   let foes = Array.from(game.user?.targets ?? []).filter((t) => t?.actor);
   if (!foes.length) {
     const myToken = actor.getActiveTokens?.()?.[0];
     if (myToken) {
       const scene = myToken.scene ?? canvas.scene; const grid = scene?.grid?.size ?? canvas.grid?.size ?? 100;
-      const rangePx = (20 / (scene?.grid?.distance ?? 5)) * grid;
+      const rangePx = (60 / (scene?.grid?.distance ?? 5)) * grid; // 12 squares from you (sphere point unplaced → nearest foes)
       const ctr = (t) => ({ x: t.x + ((t.document?.width || 1) * grid) / 2, y: t.y + ((t.document?.height || 1) * grid) / 2 });
       const me  = ctr(myToken);
       foes = (canvas.tokens?.placeables ?? []).filter((t) => t?.actor && (t.document?.disposition ?? 0) < 0 && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rangePx + grid / 2);
     }
   }
-  if (!foes.length) return ui.notifications?.warn("Lull the Riot: target hostile creatures (or stand within 20 ft of them).");
+  if (!foes.length) return ui.notifications?.warn("Lull the Riot: target the hostile creatures in the 4-square sphere (within 12 squares of you).");
+  const combat = game.combat;
+  const dur = combat ? { rounds: 1, startRound: combat.round, startTurn: combat.turn, combat: combat.id } : { rounds: 1 };
   const names = [];
-  for (const t of foes) { if ((await _ftDisAttackOn(actor, t.actor)).ok) names.push(t.actor.name); }
-  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">🌊 Lull the Riot</span></div><p style="margin:0.2rem 0;font-size:0.8rem">A dream of quiet spreads (20-ft sphere). Affected hostiles must Soul-save (DC ${dc}) or have their aggression suppressed (no Attack / damaging cast, halved movement) for 1 round — applied as attack disadvantage: <b>${names.join(", ") || "—"}</b></p></div>` });
+  for (const t of foes) {
+    const ok = await _ftAEOn(t.actor, { name: `Lulled (Soul DC ${dc} negates)`, img: "icons/magic/control/sleep-bubble-purple.webp", origin: actor.uuid, duration: dur, changes: [], flags: { fourththing: { lulled: { dc, by: actor.uuid } } } });
+    if (ok) names.push(t.actor.name);
+  }
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">🌊 Lull the Riot</span></div><p style="margin:0.2rem 0;font-size:0.8rem">A dream of how this ends quietly fills a 4-square sphere. Each hostile inside makes a <b>Soul check (DC ${dc})</b>; on a failure its aggression is suppressed for 1 round — no Attack action, no damaging manifestations, and it cannot move closer to your allies. The effect ends on a creature that is attacked or damaged. Lulled: <b>${names.join(", ") || "—"}</b> <span style="opacity:0.6;font-style:italic">(GM removes the marker from any that pass.)</span></p></div>` });
 }
 
 // Mirror Read (Thousand) — action: contested Insight (Soul) read of a targeted creature.
 export async function openDreamwalkerMirrorRead(actor) {
   const target = Array.from(game.user?.targets ?? [])[0]?.actor;
-  if (!target) return ui.notifications?.warn("Mirror Read: target a creature within 30 ft first.");
+  if (!target) return ui.notifications?.warn("Mirror Read: target a creature within 6 squares first.");
   const sys  = actor.system?.system ?? actor.system ?? {};
   const soul = Number(sys?.attributes?.soul?.value) || 0;
   const roll = new Roll(`${game.fourththing?.rolls?.checkFormula?.() || "2d10x10"} + ${soul}`); await roll.evaluate();
@@ -7333,8 +7449,18 @@ export async function openDreamwalkerMirrorRead(actor) {
 
 // Persona Cache (Thousand) — at-will bonus action (10 Soft Power marks): slip into a cached persona.
 export async function openDreamwalkerPersonaCache(actor) {
+  // Ruling DW4 (2026-10-25): the 10 Soft Power marks are debited from the Dreamwalker's Domain.
+  const factionId = actor.getFlag?.("bbttcc-factions", "factionId");
+  const op = game.bbttcc?.api?.op;
+  let paid = "";
+  if (!factionId || typeof op?.commit !== "function") return ui.notifications?.warn("Persona Cache: no Domain assigned (or marks API unavailable) — nothing to spend the 10 Soft Power marks from.");
+  try {
+    const r = await op.commit(factionId, { softpower: -10 }, { source: "persona-cache", label: "Persona Cache", reason: "Persona Cache" });
+    if (r && r.ok === false) return ui.notifications?.warn(`Persona Cache: your Domain can't cover 10 Soft Power marks (${r.error ?? r.reason ?? "refused"}).`);
+    paid = " <span style=\"opacity:0.7\">10 Soft Power marks debited from your Domain.</span>";
+  } catch (e) { return ui.notifications?.warn(`Persona Cache: marks debit failed — ${String(e?.message ?? e).slice(0, 80)}`); }
   try { const b = actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "persona-cache" }); await actor.setFlag("fourththing", "aidBanked", b); } catch (e) {}
-  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9b8ff">🎭 Persona Cache</span></div><p style="margin:0.2rem 0;font-size:0.8rem">You slip into a cached persona (spend 10 Soft Power marks) — advantage (reroll-lowest) banked on your next Stealth or Diplomacy check.</p></div>` });
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9b8ff">🎭 Persona Cache</span></div><p style="margin:0.2rem 0;font-size:0.8rem">You slip into a cached persona — reroll the lowest die, banked on your next Stealth or Diplomacy check.${paid}</p></div>` });
 }
 
 // Thousandfold Echo (Thousand) — 1/Soma-Break bonus action: 1-minute persona-flux self buff.
@@ -7491,7 +7617,7 @@ export async function openFtUnbrokenLine(actor) {
 // Blood Hymn: Final Crescendo (Aurablade capstone) — 1/Soma-Break bonus: max-damage turn.
 export async function openBloodHymnFinalCrescendo(actor) {
   return _openSomaBreakAbility(actor, "bhFinalCrescendo", "Final Crescendo",
-    "Bonus action: enter <b>Burn 4</b>. For the rest of this turn all your attacks deal <b>maximum damage</b> and you may cleave freely. Aftermath: Burn → 0, disadvantage (3d10kl2) on attacks/saves, and speed 0 until the end of your next turn.",
+    "Bonus action: enter <b>Burn 4</b>. For the rest of this turn all your attacks deal <b>maximum damage</b> and you may cleave freely. Aftermath: Burn → 0, 3d10 keep lowest 2 on attacks/saves, and speed 0 until the end of your next turn.",
     async (actor) => {
       try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Final Crescendo (max damage)", img: "icons/magic/fire/explosion-fireball-large-red.webp", origin: actor.uuid, duration: { rounds: 1, seconds: 6 }, changes: [], flags: { fourththing: { finalCrescendo: true } } }]); } catch (e) {}
       return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#ff5544">⟁ The hymn burns to its peak — <b>Burn 4</b>, all attacks <b>max damage</b>, free cleave this turn. Then silence: Burn 0, disadvantage on attacks/saves, speed 0 next turn.</p>`;
@@ -7541,9 +7667,14 @@ export async function openArchivistAkashicAccess(actor) {
 }
 
 // Stillheart: Emotional Lock (Aurablade) — bonus action: freeze your Aura/Burn until next turn.
+// Once per Soma Break (ruling AB4) — the card promised it, the handler never guarded it.
 export async function openStillheartEmotionalLock(actor) {
-  try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Emotional Lock", img: "icons/magic/control/buff-flight-wings-blue.webp", origin: actor.uuid, duration: { rounds: 1, seconds: 6 }, changes: [], flags: { fourththing: { emotionalLock: true } } }]); } catch (e) {}
-  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7db8ff">🔒 Emotional Lock</span></div><p style="margin:0.2rem 0;font-size:0.8rem">Your Aura cannot be forcibly changed and your Burn is <b>frozen</b> until the start of your next turn. At Burn 3+ you may ignore one backlash trigger.</p></div>` });
+  return _openSomaBreakAbility(actor, "shEmotionalLock", "Emotional Lock",
+    "Bonus action: your Aura cannot be forcibly changed and your Burn is <b>frozen</b> until the start of your next turn. At Burn 3+ you may ignore one backlash trigger.",
+    async (actor) => {
+      try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Emotional Lock", img: "icons/magic/control/buff-flight-wings-blue.webp", origin: actor.uuid, duration: { rounds: 1, seconds: 6 }, changes: [], flags: { fourththing: { emotionalLock: true } } }]); } catch (e) {}
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#7db8ff">🔒 The heart goes still — Aura and Burn locked until your next turn.</p>`;
+    });
 }
 
 // Auditor: Forensic Audit — action: mark a targeted creature Out of Compliance for the scene.
@@ -7591,15 +7722,87 @@ export async function openShadowCourierStairNeverEnds(actor) {
     { flagNamespace: "scenario", cadenceText: "at scenario end", resetLabel: "Reset (New Scenario)" });
 }
 
-// The Quiet Voyage (Last Mile L13, bonus action) — become insubstantial for tier rounds.
+// Pactkeeper Initiation 1 — The Bargain (ruling PK3, 2026-10-25): the bind card plus the L1 skill pick
+// (+1 rank in two of Diplomacy / Insight / Intimidation / Lore) that had a handler but no way to reach it.
+export async function openPactkeeperBargain(actor, item) {
+  if (!actor) return;
+  const picked = actor.getFlag("fourththing", "pactkeeper.l1SkillsPicked");
+  return new Dialog({
+    title: "The Bargain — Initiation 1",
+    content: `<div class="ft-cast-dialog" style="font-size:0.82rem">
+      <p style="margin:0.3rem 0">Bind your <b>Pact Subject</b> from the sheet chip; sustain it and every manifestation you hold banks you Surge at the start of your turn (max +2). Your concurrency rises by 1.</p>
+      <p style="margin:0.3rem 0"><b>Skill ranks:</b> +1 in two of Diplomacy, Insight, Intimidation, Lore${picked ? ` — <span style="opacity:0.7">already chosen (${Array.isArray(picked) ? picked.join(", ") : "done"})</span>` : ""}.</p>
+    </div>`,
+    buttons: {
+      card:   { label: "Show the feature card", callback: () => openGenericPerUse(actor, item) },
+      skills: { label: picked ? "Review skill picks" : "Pick the two skills", callback: () => openPactkeeperPickL1Skills(actor) },
+      close:  { label: "Close" }
+    },
+    default: picked ? "card" : "skills"
+  }).render(true);
+}
+
+// The Quiet Voyage (Last Mile L13, bonus action) — ruling SC2 (2026-10-25): a per-scene pool of
+// Tier rounds; each activation spends some of them (AE lasts that many rounds). Resets on Scene/Soma Break.
 export async function openShadowCourierQuietVoyage(actor) {
-  return _openSomaBreakAbility(actor, "scQuietVoyage", "The Quiet Voyage",
-    "Bonus action (while carrying a Soul): become insubstantial for up to your tier rounds this scene — pass through creatures and barriers, immune to non-magical physical harm. Deactivate as a free action.",
-    async (actor) => {
-      const sys = actor.system?.system ?? actor.system ?? {}; const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
-      try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "The Quiet Voyage (insubstantial)", img: "icons/magic/movement/trail-streak-pink.webp", origin: actor.uuid, duration: { rounds: tier, seconds: tier * 6 }, changes: [], flags: { fourththing: { quietVoyage: true } } }]); } catch (e) {}
-      return ` You step half-out of the world — insubstantial for up to <b>${tier}</b> rounds.`;
-    });
+  if (!actor) return;
+  const sys = actor.system?.system ?? actor.system ?? {}; const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+  const sceneKey = `${canvas?.scene?.id ?? "none"}`;
+  const pool = actor.flags?.fourththing?.scQuietVoyagePool ?? {};
+  const used = pool.scene === sceneKey ? (Number(pool.used) || 0) : 0;
+  const left = Math.max(0, tier - used);
+  if (left <= 0) return ui.notifications?.warn(`${actor.name}: The Quiet Voyage has no rounds left this scene (${tier} per scene; refreshes on Scene/Soma Break).`);
+  const n = await new Promise((resolve) => {
+    new Dialog({
+      title: "The Quiet Voyage — how many rounds?",
+      content: `<div class="ft-cast-dialog"><p style="font-size:0.8rem;margin:0 0 0.4rem">Bonus action (while carrying a Soul): become <b>insubstantial</b> — pass through non-magical barriers and crowds, immune to reaction strikes, unseen by anyone not attuned to death or transition. Deactivate as a free action on your turn.</p>
+        <p style="font-size:0.78rem;opacity:0.75;margin:0 0 0.4rem">Rounds left this scene: <b>${left}</b> of ${tier}.</p>
+        <div class="ft-cast-field"><label>Rounds to spend</label><input type="number" name="n" min="1" max="${left}" value="${left}"/></div></div>`,
+      buttons: { go: { label: "Step half out", callback: (html) => resolve(Number(html.find("[name='n']").val())) }, cancel: { label: "Cancel", callback: () => resolve(null) } },
+      default: "go", close: () => resolve(null)
+    }).render(true);
+  });
+  if (!n || !Number.isFinite(n) || n < 1) return;
+  const rounds = Math.min(left, Math.max(1, Math.floor(n)));
+  await actor.setFlag("fourththing", "scQuietVoyagePool", { scene: sceneKey, used: used + rounds });
+  try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "The Quiet Voyage (insubstantial)", img: "icons/magic/movement/trail-streak-pink.webp", origin: actor.uuid, duration: { rounds, seconds: rounds * 6 }, changes: [], flags: { fourththing: { quietVoyage: true } } }]); } catch (e) {}
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">✶ The Quiet Voyage</span></div><p style="margin:0.2rem 0;font-size:0.8rem">${_ftEscape(actor.name)} steps half out of the world — <b>insubstantial for ${rounds} round${rounds === 1 ? "" : "s"}</b> (${left - rounds} left this scene). Barriers and crowds part; reaction strikes cannot touch them; only the death-attuned see them.</p></div>` });
+}
+
+// The Ferryman's Right (Last Mile L17, 1/session) — ruling SC6 (2026-10-25): carry a Soul the world would not
+// release; pay 1 permanent Stress max (stacks) or +25 Radiation.
+export async function openShadowCourierFerrymansRight(actor) {
+  if (!actor) return;
+  if (actor.getFlag("fourththing", "scenario.scFerrymansRight")) {
+    return ui.notifications?.warn(`${actor.name}: The Ferryman's Right is spent this scenario.`);
+  }
+  const choice = await new Promise((resolve) => {
+    new Dialog({
+      title: "The Ferryman's Right — what does the carry cost you?",
+      content: `<div class="ft-cast-dialog" style="font-size:0.82rem">
+        <p style="margin:0.3rem 0">You may carry <b>one Soul the world would not otherwise release</b> — a prisoner from a place that releases none, a dying ally, a refugee from a sealed hex, a ghost its haunting cannot end, a name Lore has tried to forget. It arrives at a destination you declare, alive and as whole as the journey permits.</p>
+        <p style="margin:0.3rem 0"><b>Choose the cost now.</b> It is non-negotiable.</p>
+      </div>`,
+      buttons: {
+        stress: { label: "1 permanent Stress max (stacks)", callback: () => resolve("stress") },
+        rad:    { label: "+25 Radiation (a minor threshold)", callback: () => resolve("rad") },
+        cancel: { label: "Cancel", callback: () => resolve(null) }
+      },
+      default: "stress", close: () => resolve(null)
+    }).render(true);
+  });
+  if (!choice) return;
+  let costTxt = "";
+  if (choice === "stress") {
+    try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "The Ferryman's Right (Stress max −1)", img: "icons/magic/death/skull-horned-worn-fire-blue.webp", origin: actor.uuid, changes: [{ key: "system.derived.stress.aeBonus", mode: 2, value: "-1", priority: 20 }], flags: { fourththing: { ferrymansRight: true } } }]); } catch (e) {}
+    costTxt = "Your Stress maximum is <b>reduced by 1, permanently</b>.";
+  } else {
+    const cur = Number(foundry.utils.getProperty(actor, "system.radiation.rp")) || 0;
+    try { await actor.update({ "system.radiation.rp": cur + 25 }); } catch (e) {}
+    costTxt = `<b>+25 Radiation</b> (${cur} → ${cur + 25}) — one minor threshold, until cleansed.`;
+  }
+  await actor.setFlag("fourththing", "scenario.scFerrymansRight", true);
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll" style="border-color:#4a3a6a"><div class="ft-roll-header"><span class="ft-roll-name">⚰ The Ferryman's Right</span></div><p style="margin:0.2rem 0;font-size:0.8rem">${_ftEscape(actor.name)} accepts the carry. ${costTxt} Declare the Soul and the destination; the river does the rest. <span style="opacity:0.6;font-style:italic">1/session — resets at scenario end.</span></p></div>` });
 }
 
 // ─── Main dispatch function ───────────────────────────────────────────────────
@@ -7656,7 +7859,6 @@ export async function dispatchFeatureAction(actor, item) {
     // release at no base cost — its own vessel, separate from the retired
     // Echo Dice (whose old dialogs these keys used to open).
     case "dream_echo_reservoir":       return openDreamwalkerReservoir(actor);
-    case "dream_echo_reservoir_spend": return openDreamwalkerReservoir(actor);
     case "dw_feat_activate":           return openDreamwalkerFeatActivate(actor, item);
     // Soul-Smith — canon-aligned (Phase 1.5): one handler per tier feature
     case "soul_smith_forge_initiate":      return openSoulSmithForgeInitiate(actor);
@@ -7701,6 +7903,11 @@ export async function dispatchFeatureAction(actor, item) {
     case "dreamwalker_solar_stillpoint":      return openDreamwalkerSolarStillpoint(actor);
     case "dreamwalker_somnolent_peace":       return openDreamwalkerSomnolentPeace(actor);
     case "dreamwalker_thousandfold_echo":     return openDreamwalkerThousandfoldEcho(actor);
+    case "dreamwalker_destiny_pulse":         return openDreamwalkerDestinyPulse(actor);
+    case "dreamwalker_daybreak":              return openDreamwalkerDaybreak(actor);
+    case "dreamwalker_sapphire_conduction":   return openDreamwalkerSapphireConduction(actor);
+    case "dreamwalker_borrowed_voice":        return openDreamwalkerBorrowedVoice(actor);
+    case "dreamwalker_mask_accord":           return openDreamwalkerMaskOfAccord(actor);
     case "ft_coordinated_advance":            return openFtCoordinatedAdvance(actor);
     case "ft_emissary_accord":                return openFtEmissaryAccord(actor);
     case "ft_initiate_great_work":            return openFtInitiateGreatWork(actor);
@@ -7733,6 +7940,14 @@ export async function dispatchFeatureAction(actor, item) {
     case "bulwark_stance":         return openBulwarkStance(actor);
     case "bulwark_anchor_advance": return openBulwarkAnchorOrAdvance(actor);  // T2 signature (2026-06-07)
     case "bulwark_breach":         return openBulwarkTheBreach(actor);        // Avalanche L13 (2026-06-07)
+    case "bulwark_exchange":          return openBulwarkTheExchange(actor);       // Cataclyst L1 (2026-10-25)
+    case "bulwark_stance_dance":      return openBulwarkStanceDance(actor);       // Cataclyst L5
+    case "bulwark_third_door":        return openBulwarkThirdDoor(actor);         // Cataclyst L13
+    case "bulwark_shockwave_arrival": return openBulwarkShockwaveArrival(actor);  // Avalanche L5
+    case "bulwark_running_theology":  return openBulwarkRunningTheology(actor);   // Avalanche L17
+    case "bulwark_denial":            return openBulwarkDenial(actor);            // Mountain L5
+    case "shadow_courier_ferrymans_right": return openShadowCourierFerrymansRight(actor);  // Last Mile L17
+    case "pactkeeper_bargain":        return openPactkeeperBargain(actor, item);     // Initiation 1 (ruling PK3)
     case "generic_per_use":        return openGenericPerUse(actor, item);     // Gauntlet fix-pass 1 (2026-06-07)
     case "technique_use":          return openTechnique(actor, item);         // Techniques audit R1–R6 (2026-09-21)
     // Shadow Courier (Pace pool replaces legacy Access Dice — no spend/pool dialogs)

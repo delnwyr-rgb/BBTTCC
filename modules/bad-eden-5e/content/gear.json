@@ -3,7 +3,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-14",
+    "at": "2026-10-25",
     "overridesApplied": 0
   },
   "items": [
@@ -469,6 +469,188 @@
         }
       },
       "folder": "Consumables"
+    },
+    {
+      "slug": "gear-anvil-stance",
+      "name": "Anvil Stance",
+      "type": "weapon",
+      "img": "icons/tools/smithing/anvil.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>The hammer isn't the important part. The hammer was never the important part. Don't tell the hammer.</em></p><p>Melee attack: 1d6 bludgeoning (integrity), ground-driven. On hit: Constitution defense vs Cast DC or slowed (speed halved, −2 to attack rolls) for 1 round.</p>",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "common",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "bludgeoning"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "2826e2a19b7e0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "adeqtUzWCMozPCkI",
+            "pack": "items",
+            "identifier": "",
+            "hash": "ca76085eccf3"
+          }
+        }
+      },
+      "folder": "Gear"
     },
     {
       "slug": "gear-apology-knife-mass-produced",
@@ -1531,6 +1713,188 @@
             "pack": "items",
             "identifier": "",
             "hash": "1c2424e8579b"
+          }
+        }
+      },
+      "folder": "Gear"
+    },
+    {
+      "slug": "gear-borrowed-bastion",
+      "name": "Borrowed Bastion",
+      "type": "weapon",
+      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Somewhere a building is missing this. The building has learned to live with loss. Your enemies won't.</em></p><p>Melee attack: 2d6 bludgeoning (integrity). On hit: Constitution defense vs Cast DC or slowed (speed halved, −2 to attack rolls) for 1 round.</p>",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "common",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 2,
+            "denomination": 6,
+            "types": [
+              "bludgeoning"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "bd32a13e745e0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "eXQbdUDycN4QAC7X",
+            "pack": "items",
+            "identifier": "",
+            "hash": "0084318389e0"
           }
         }
       },
@@ -9332,6 +9696,188 @@
       "folder": "BBTTCC Weapons"
     },
     {
+      "slug": "gear-mercy-s-edge",
+      "name": "Mercy's Edge",
+      "type": "weapon",
+      "img": "icons/skills/melee/blade-tip-energy-green.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>The most upsetting thing you can do to some people is decline to kill them. Loudly.</em></p><p>Melee attack with Charisma: 1d6 psychic (stress). On hit: Wisdom defense vs Cast DC or Frightened for 1 round. Leaves no wound — only the memory of having been spared.</p>",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "common",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "psychic"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "52b182cd23cc0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Gd5SpbOXwbAxdac4",
+            "pack": "items",
+            "identifier": "",
+            "hash": "251ee3c9bc91"
+          }
+        }
+      },
+      "folder": "Gear"
+    },
+    {
       "slug": "gear-mirrorface-pavise",
       "name": "Mirrorface Pavise",
       "type": "equipment",
@@ -12028,7 +12574,7 @@
             "id": "nH0C8b8OHAIVniEI",
             "pack": "items",
             "identifier": "radbloom-injector",
-            "hash": "4ccb4ac91608"
+            "hash": "589e6cebf7ec"
           }
         }
       },
@@ -17745,6 +18291,188 @@
       "folder": "Warding & Shields"
     },
     {
+      "slug": "gear-victory-s-down-payment",
+      "name": "Victory's Down Payment",
+      "type": "weapon",
+      "img": "icons/tools/smithing/anvil.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>It's not a trophy if you take it before the win. Except this one. The paperwork went through.</em></p><p>Melee attack: 2d6 sephirotic (integrity). On hit: Wisdom defense vs Cast DC or Frightened for 1 round — the target glimpses how this ends.</p>",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "common",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 2,
+            "denomination": 6,
+            "types": [
+              "sephirotic"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "a6dc2ae9651f0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "DmqoSrV7bfU5igzL",
+            "pack": "items",
+            "identifier": "",
+            "hash": "790893c4db0f"
+          }
+        }
+      },
+      "folder": "Gear"
+    },
+    {
       "slug": "gear-vow-bone",
       "name": "Vow-Bone",
       "type": "loot",
@@ -18943,6 +19671,188 @@
         }
       },
       "folder": "Armor"
+    },
+    {
+      "slug": "gear-wrath-brand",
+      "name": "Wrath-Brand",
+      "type": "weapon",
+      "img": "icons/skills/melee/blade-tip-energy-green.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Mercy has a sibling. The sibling does not get invited to things, for reasons about to be demonstrated.</em></p><p>Melee attack: 2d6 fire (integrity). On hit: Constitution defense vs Cast DC or Burning for 1 round.</p>",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "common",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 2,
+            "denomination": 6,
+            "types": [
+              "fire"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "bf6e42e95c940000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "BXz1x62kqpdcPKHN",
+            "pack": "items",
+            "identifier": "",
+            "hash": "1ea5d3d76733"
+          }
+        }
+      },
+      "folder": "Gear"
     },
     {
       "slug": "gear-yesodic-edge",

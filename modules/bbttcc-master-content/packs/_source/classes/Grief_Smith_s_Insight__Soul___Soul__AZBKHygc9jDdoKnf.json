@@ -1,5 +1,5 @@
 {
-  "name": "Grief-Smith's Insight (Soul) (Soul)",
+  "name": "Grief-Smith's Insight",
   "type": "feat",
   "img": "icons/magic/unholy/strike-body-life-soul-green.webp",
   "system": {
@@ -30,7 +30,7 @@
       "level": 4
     },
     "properties": [],
-    "requirements": "Soul-Smith (4th level)",
+    "requirements": "Soul-Smith 4",
     "type": {
       "value": "",
       "subtype": ""
@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!AZBKHygc9jDdoKnf.R09Q3Y69WuKjBQrL"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -97,8 +96,7 @@
       "soulSmith": {
         "griefSmithInsight": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

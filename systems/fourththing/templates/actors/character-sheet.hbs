@@ -737,13 +737,13 @@
         <div class="ft-action-track">
           <button type="button" data-action="ftActionToggle" data-action-key="actionUsed"
                   class="ft-action-btn {{#if actions.actionUsed}}used{{/if}}">Action</button>
-          <button type="button" data-action="ftActionToggle" data-action-key="bonusUsed"
+          <button type="button" data-action="ftActionToggle" data-action-key="bonusUsed" data-tooltip="Bonus action — one per round, taken on your turn or at any point off it (a Steward's legendary action). Refreshes at the start of your turn."
                   class="ft-action-btn {{#if actions.bonusUsed}}used{{/if}}">Bonus</button>
           <button type="button" data-action="ftActionToggle" data-action-key="reactionUsed"
                   class="ft-action-btn {{#if actions.reactionUsed}}used{{/if}}">Reaction</button>
           {{#if ftFlags.bonusActionAvailable}}
           <button type="button" data-action="ftActAgain" class="ft-action-btn ft-act-again"
-                  data-tooltip="Both base dice rolled 10 — take a full bonus action this turn.">⚡ Act Again</button>
+                  data-tooltip="A freed bonus action — take it now, on your turn or anyone else's. Click once your round's bonus is spent.">⚡ Act Again</button>
           {{/if}}
         </div>
 

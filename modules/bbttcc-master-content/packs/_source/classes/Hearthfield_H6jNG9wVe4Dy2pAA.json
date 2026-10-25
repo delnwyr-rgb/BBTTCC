@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“Anywhere you set the anvil down becomes a home.”</em></p><p>When you lead or host a <strong>a Soma Break</strong>, you can shape the space around you into a temporary hearth.</p><ul><li>Each ally who spends one or more Body dice to heal during that rest regains an additional <strong>1d6 Integrity</strong>.</li><li>If the rest occurs in a reclaimed ruin, hex under your faction’s control, or within sight of a banner, sigil, or emblem you forged, the GM may allow the bonus to increase to <strong>2d6</strong> for particularly on-theme scenes.</li></ul><p><em>There are campfires, and there are places people tell stories about years later. You build the second kind.</em></p>",
+      "value": "<p><em>“Anywhere you set the anvil down becomes a home.”</em></p><p>When you lead or host a <strong>a Soma Break</strong>, you can shape the space around you into a temporary hearth.</p><ul><li>Each ally who spends one or more Body dice to heal during that rest regains an additional <strong>1d6 Integrity</strong>.</li><li>If the rest occurs in a reclaimed ruin, hex under your Domain’s control, or within sight of a banner, sigil, or emblem you forged, the GM may allow the bonus to increase to <strong>2d6</strong> for particularly on-theme scenes.</li></ul><p><em>There are campfires, and there are places people tell stories about years later. You build the second kind.</em></p>",
       "chat": ""
     },
     "activities": {},
@@ -27,7 +27,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 10
     },
     "properties": [],
     "requirements": "Soul-Smith 10, Forge of Bound Light",
@@ -39,10 +39,186 @@
   "effects": [],
   "folder": "JaASOItbL0tB8Z9y",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "soulsmith_forge_boundlight",
       "featureKey": "hearthfield"
+    },
+    "autoanimations": {
+      "id": "020abfa8-9a2a-48a6-bf12-aa7deddcab68",
+      "label": "Hearthfield",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "_stats": {

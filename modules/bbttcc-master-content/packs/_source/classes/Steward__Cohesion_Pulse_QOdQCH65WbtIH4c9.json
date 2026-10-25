@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"2161\" data-end=\"2174\"><em data-start=\"2161\" data-end=\"2174\">(6th Level)</em></p><p data-start=\"2176\" data-end=\"2244\">You emit a stabilizing surge through a panicked or collapsing scene.</p><h3 data-start=\"2246\" data-end=\"2256\">Effect</h3><ul data-start=\"2257\" data-end=\"2409\"><li data-start=\"2257\" data-end=\"2290\"><p data-start=\"2259\" data-end=\"2290\">Reduce fear or morale collapse.</p></li><li data-start=\"2291\" data-end=\"2310\"><p data-start=\"2293\" data-end=\"2310\">Stabilize unrest.</p></li><li data-start=\"2311\" data-end=\"2409\"><p data-start=\"2313\" data-end=\"2409\">Convert part of the fallout into a small faction benefit (Unity, Soft Power, morale equivalent).</p></li></ul><h3 data-start=\"2411\" data-end=\"2419\">Cost</h3><p data-start=\"2420\" data-end=\"2445\">Spend 1 Surge.</p><h3 data-start=\"2447\" data-end=\"2464\">Clarification</h3><p data-start=\"2465\" data-end=\"2516\">This does not erase conflict. It prevents fracture.</p><h3 data-start=\"2518\" data-end=\"2530\">Pushback</h3><p data-start=\"2531\" data-end=\"2612\">If used to suppress legitimate dissent repeatedly, Noise increases.</p><p data-start=\"2614\" data-end=\"2651\"></p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p><em>(6th Level)</em></p><p>You emit a stabilizing surge through a panicked or collapsing scene.</p><h3>Effect</h3><ul><li><p>Reduce fear or Loyalty collapse.</p></li><li><p>Stabilize unrest.</p></li><li><p>Convert part of the fallout into a small Domain benefit (Soft Power or Loyalty).</p></li></ul><h3>Cost</h3><p>Spend 1 Surge.</p><h3>Clarification</h3><p>This does not erase conflict. It prevents fracture.</p><h3>Pushback</h3><p>If used to suppress legitimate dissent repeatedly, Noise increases.</p><p></p>",
       "chat": ""
     },
     "identifier": "steward_cohesion_pulse",
@@ -41,6 +41,183 @@
   "flags": {
     "bbttcc": {
       "identifier": "steward_cohesion_pulse"
+    },
+    "autoanimations": {
+      "id": "cc70e9ee-3ecb-406d-b9bf-153b01d86de4",
+      "label": "Steward: Cohesion Pulse",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "b7c5HgxxTfcVph6r",

@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“What was lost remembers you.”</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>construct, vehicle, drone, or mech</strong> within <strong>12 squares</strong> of you is reduced to 0 Integrity, you can use your <strong>reaction</strong> to drag its pattern back through the wires.</p><ul><li>The target is immediately restored to <strong>half its Integrity maximum</strong>.</li><li>It can immediately take a <strong>full turn</strong> (move, action, and bonus action) as part of this reaction, acting on the current initiative.</li><li>It gains <strong>temporary Integrity equal to your Soul-Smith level</strong> and a bonus of <strong>+tier to all damage rolls</strong> it deals for 1 minute.</li><li>Allies within 2 squares of it deal <strong>+1 damage</strong> on their weapon attacks and have <strong>advantage</strong> on defense check against being <strong>stunned</strong> or <strong>paralyzed</strong> for the same duration.</li></ul><p><strong>OP Echo.</strong> If the resurrected construct contributes to completing a strategic or tactical goal before this aura ends, your faction gains <strong>+1 Economy OP</strong> and <strong>+1 Intrigue OP</strong> for the next strategic turn.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“What was lost remembers you.”</em></p><p>Once per <strong>Soma Break</strong>, when a <strong>construct, vehicle, drone, or mech</strong> within <strong>12 squares</strong> of you is reduced to 0 Integrity, you can use your <strong>reaction</strong> to drag its pattern back through the wires.</p><ul><li>The target is immediately restored to <strong>half its Integrity maximum</strong>.</li><li>It can immediately take a <strong>full turn</strong> (move, action, and bonus action) as part of this reaction, acting on the current initiative.</li><li>It gains <strong>temporary Integrity equal to your Soul-Smith level</strong> and a bonus of <strong>+tier to all damage rolls</strong> it deals for 1 minute.</li><li>Allies within 2 squares of it deal <strong>+1 damage</strong> on their weapon attacks and reroll the lowest die on defense checks against being <strong>stunned</strong> or <strong>paralyzed</strong> for the same duration.</li></ul><p><strong>Domain Echo..</strong> If the resurrected construct contributes to completing a strategic or tactical goal before this aura ends, your Domain gains <strong>+10 Economy marks</strong> and <strong>+10 Intrigue marks</strong> for the next turn.</p>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -32,7 +27,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 18
     },
     "properties": [],
     "requirements": "Soul-Smith 18, Forge of the Spark Reclaimer",
@@ -44,7 +39,6 @@
   "effects": [],
   "folder": "BvmSP1PPc1ABT2OO",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "soulsmith_forge_sparkreclaimer",
       "featureKey": "spark_resurrection"

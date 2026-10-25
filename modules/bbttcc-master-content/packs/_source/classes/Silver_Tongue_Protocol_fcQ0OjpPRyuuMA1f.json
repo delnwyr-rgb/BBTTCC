@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Silver Tongue Protocol.</strong> You have rehearsed, iterated, and field-tested the art of getting people to <em>actually</em> talk.</p><ul><li>Whenever you make a <strong>Diplomacy (Presence)</strong> or <strong>Stealth (Intrigue)</strong> check, you can treat a rolled result of 8 or lower on the 2d10x10 as a 9 instead. You can use this feature a number of times per Soma Break equal to your Presence modifier (minimum once).</li><li>In Courtly Intrigue, you can spend one use of this feature to reroll the lowest die on a single Influence roll.</li></ul><p>(The Active Effect below also gives you a small numeric edge on Diplomacy (Presence) and Stealth (Intrigue) checks as a quality-of-life bonus.)</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Silver Tongue Protocol.</strong> You have rehearsed, iterated, and field-tested the art of getting people to <em>actually</em> talk.</p><ul><li>Whenever you make a <strong>Diplomacy (Presence)</strong> or <strong>Stealth (Intrigue)</strong> check, you can treat a rolled result of 8 or lower on the 2d10 as a 9 instead. You can use this feature a number of times per Soma Break equal to your Presence value (minimum once).</li><li>In Parley, you can spend one use of this feature to reroll the lowest die on a single Influence roll.</li></ul><p>(The Active Effect below also gives you a small numeric edge on Diplomacy (Presence) and Stealth (Intrigue) checks as a quality-of-life bonus.)</p>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 1
     },
     "properties": [],
-    "requirements": "Harmony Marshal (1st level)",
+    "requirements": "Harmony Marshal 1",
     "type": {
       "value": "",
       "subtype": ""
@@ -94,8 +94,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!fcQ0OjpPRyuuMA1f.4jWUiJmOxNvIv9jZ"
+      "folder": null
     }
   ],
   "folder": "6ELe0FPqgC58OzKS",
@@ -104,19 +103,18 @@
       "harmonyMarshal": {
         "silverTongue": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776467816704,
-    "modifiedTime": 1782167240825,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792884642598,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

@@ -1,6 +1,6 @@
 {
   "_id": "ftsurge000000032",
-  "name": "Relic of Rebirth",
+  "name": "Rebirth Ward",
   "type": "feature",
   "img": "icons/tools/hand/hammer-maul-wood.webp",
   "system": {
@@ -31,7 +31,7 @@
     },
     "autoanimations": {
       "id": "ft-relic-rebirth",
-      "label": "Relic of Rebirth",
+      "label": "Rebirth Ward",
       "macro": {
         "enable": false,
         "playWhen": "0"

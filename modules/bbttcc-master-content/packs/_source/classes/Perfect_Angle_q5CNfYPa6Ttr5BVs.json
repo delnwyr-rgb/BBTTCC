@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>You don’t just get lucky—you wait until the universe lines up.</em></p><p>Once per <strong>a Soma Break</strong>, when you make an attack roll, attribute check, or defense check, you can treat the 2d10x10 result as a <strong>natural 20</strong>.</p><ul><li>You must declare that you are using Perfect Angle <strong>before</strong> the dice are rolled.</li><li>This applies only to the 2d10x10 roll; other parts of the effect (damage, additional rolls) are resolved normally.</li></ul><p><strong>Strategic Layer.</strong> If this Perfect Angle is used to successfully complete a <strong>Spark step</strong>, advance The Great Work, or resolve a <strong>Parley</strong> or major conflict <strong>without bloodshed</strong>, the GM may reduce the regional or campaign <strong>Darkness Track by 1</strong>, as reality briefly remembers its kinder geometry.</p>",
+      "value": "<p><em>You don’t just get lucky—you wait until the universe lines up.</em></p><p>Once per <strong>Soma Break</strong>, when you make an attack roll, attribute check, or defense check, you can treat the 2d10 result as a <strong>double 10</strong>.</p><ul><li>You must declare that you are using Perfect Angle <strong>before</strong> the dice are rolled.</li><li>This applies only to the 2d10 roll; other parts of the effect (damage, additional rolls) are resolved normally.</li></ul><p><strong>Strategic Layer.</strong> If this Perfect Angle is used to successfully complete a <strong>Spark step</strong>, advance The Great Work, or resolve a <strong>Parley</strong> or major conflict <strong>without bloodshed</strong>, the GM may reduce the regional or campaign <strong>Darkness Track by 1</strong>, as reality briefly remembers its kinder geometry.</p>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -47,8 +42,7 @@
     "bbttcc": {
       "subclassKey": "wyrdlens_refraction_foresight",
       "featureKey": "perfect_angle"
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

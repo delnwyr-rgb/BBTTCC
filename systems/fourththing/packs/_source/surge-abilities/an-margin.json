@@ -1,6 +1,6 @@
 {
   "_id": "ftsurge000000129",
-  "name": "Marginalia",
+  "name": "Side Note",
   "type": "feature",
   "img": "icons/magic/symbols/rune-sigil-green.webp",
   "system": {
@@ -31,7 +31,7 @@
     },
     "autoanimations": {
       "id": "ft-an-margin",
-      "label": "Marginalia",
+      "label": "Side Note",
       "macro": {
         "enable": false,
         "playWhen": "0"

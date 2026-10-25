@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“You’ve noticed that mercy has a shape. You help the world remember it.”</em></p><ul><li>When your party resolves a conflict via <strong>Parley</strong>, surrender, negotiation, or other peaceful means where you had meaningful narrative involvement, you can, once per Soma Break, trigger a soft power realignment.</li><li>After that resolution, you may convert <strong>1 Economy OP</strong> into <strong>1 Soft Power OP</strong> for your faction, or vice versa, representing the quiet reshaping of reputations, rumors, and supply lines.</li><li>This conversion must be applied to the strategic turn most closely associated with that scenario (GM adjudicates exact timing).</li></ul>",
+      "value": "<p><em>“You’ve noticed that mercy has a shape. You help the world remember it.”</em></p><ul><li>When your party resolves a conflict via <strong>Parley</strong>, surrender, negotiation, or other peaceful means where you had meaningful narrative involvement, you can, once per Soma Break, trigger a soft power realignment.</li><li>After that resolution, you may convert <strong>10 Economy marks</strong> into <strong>10 Soft Power marks</strong> for your Domain, or vice versa, representing the quiet reshaping of reputations, rumors, and supply lines.</li><li>This conversion must be applied to the turn most closely associated with that scenario (GM adjudicates exact timing).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -27,7 +27,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 14
     },
     "properties": [],
     "requirements": "Soul-Smith 14, Forge of Bound Light",
@@ -39,7 +39,6 @@
   "effects": [],
   "folder": "JaASOItbL0tB8Z9y",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "soulsmith_forge_boundlight",
       "featureKey": "pattern_of_mercy"

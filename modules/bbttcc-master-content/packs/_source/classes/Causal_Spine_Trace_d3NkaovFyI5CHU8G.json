@@ -30,7 +30,7 @@
       "level": 16
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (16th level)",
+    "requirements": "Wyrdlens Adept 16",
     "type": {
       "value": "",
       "subtype": ""
@@ -80,8 +80,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!d3NkaovFyI5CHU8G.SPmg6pZDbzF6EJRv"
+      "folder": null
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -91,7 +90,6 @@
         "causalSpineTrace": true
       }
     },
-    "dnd5e": {},
     "fourththing": {
       "vocabScrub": "2026-05-16"
     }

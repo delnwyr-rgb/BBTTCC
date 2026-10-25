@@ -13,7 +13,7 @@ Every actor — PC, NPC, Elite, Boss — has the same baseline each turn:
 | Slot          | Count | Notes                                                    |
 | ------------- | ----- | -------------------------------------------------------- |
 | Action        | 1     | Buys 1 Strike OR 1 Invocation (see §2).                  |
-| Bonus Action  | 1     | Only spendable on abilities tagged `activation:"bonus"`. |
+| Bonus Action  | 1 / round | Only spendable on abilities tagged `activation:"bonus"`. **Taken on your turn OR at any point off it** (see §1a). |
 | Reaction      | 1     | Triggered (see §3).                                      |
 | Movement      | walk speed (ft) | Already wired via `system.actions.movementBudgetFt`. |
 
@@ -22,6 +22,25 @@ Slots reset on `FourthThingCharacterSheet._onFtNewTurn` (`module.js:10553`).
 **Tier does NOT scale action count.** Extra strikes / extra invocations come from class features, not free tier scaling.
 
 ---
+
+## 1a. The Bonus Action is a Steward's legendary action (ruling U4, 2026-10-25)
+
+Owner ruling: *"Bonus Action is an action you take any time, whether it's your turn or not. It is basically a
+legendary action for Stewards."*
+
+- **Timing:** one per round. Spend it on your own turn, or at any point during someone else's — after a creature's
+  action resolves, the way a legendary action is taken. No trigger is needed (that is what separates it from a Reaction).
+- **Refresh:** `system.actions.bonusUsed` clears at the start of YOUR turn (Combat-tracker turn hook + `_onFtNewTurn`),
+  so a bonus action spent off-turn in round N is back when your round N+1 turn starts. The tracker never gated it to
+  your own turn — the gate is only "already used this round".
+- **Freed bonus actions** (`flags.fourththing.bonusActionAvailable` — the double-10 roll, and the Surge grants that say
+  "a freed bonus action": Group Turn, Gate-Touched, Sapphire Step, Refract, The Slowed Instant, Rally to Me) show the
+  ⚡ Act Again chip on the sheet. Clicking it clears `bonusUsed` so the ally can act immediately, off-turn included.
+  Click it after the round's bonus is spent — it refreshes the slot, it does not stack a second one. The flag survives
+  the combat turn-start reset (so an off-turn grant keeps until used) and clears on the sheet's ↺ New Turn and on
+  Soma Break.
+- **Reactions are unchanged:** still triggered, still one per round, still refresh at the start of your turn.
+- **Rigs:** `requireBonus` in the rig action gate reads the same slot; the wording says "this round".
 
 ## 2. What 1 Action Buys
 

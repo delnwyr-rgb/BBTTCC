@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Extra Attack.</strong> Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.</p>",
+      "value": "<p><strong>Extra Attack.</strong> When you spend your action to Strike, you may Strike twice instead of once.</p>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 5
     },
     "properties": [],
-    "requirements": "Harmony Marshal (5th level)",
+    "requirements": "Harmony Marshal 5",
     "type": {
       "value": "",
       "subtype": ""
@@ -90,8 +90,7 @@
       "harmonyMarshal": {
         "extraAttack": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

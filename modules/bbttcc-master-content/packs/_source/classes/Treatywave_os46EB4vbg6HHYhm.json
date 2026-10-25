@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“You don’t just sign treaties. You make the world ready to honor them.”</em></p><p>Once per <strong>a Soma Break</strong>, you can ride a crest of goodwill that ripples out into factionspace.</p><ul><li>When your faction next spends <strong>Diplomacy OP</strong> as part of a major negotiation, alliance, or crisis-resolution action during the current strategic turn, reduce that specific Diplomacy OP cost by <strong>2</strong> (to a minimum of 1).</li><li>You must declare that you are invoking Treatywave <strong>before</strong> the OP expenditure is finalized.</li><li>This represents groundwork, secret rehearsals, and a thousand small kindnesses you set in motion beforehand.</li></ul>",
+      "value": "<p><em>“You don’t just sign treaties. You make the world ready to honor them.”</em></p><p>Once per <strong>Soma Break</strong>, you can ride a crest of goodwill that ripples out into the Domain map.</p><ul><li>When your Domain next spends <strong>Diplomacy marks</strong> as part of a major negotiation, alliance, or crisis-resolution action during the current turn, reduce that specific Diplomacy cost by <strong>20 marks</strong> (to a minimum of 10).</li><li>You must declare that you are invoking Treatywave <strong>before</strong> the spend is finalized.</li><li>This represents groundwork, secret rehearsals, and a thousand small kindnesses you set in motion beforehand.</li></ul>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -44,7 +39,6 @@
   "effects": [],
   "folder": "w8AbiDc92Mb4wLnR",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "harmmarshal_mandate_accord",
       "featureKey": "treatywave"

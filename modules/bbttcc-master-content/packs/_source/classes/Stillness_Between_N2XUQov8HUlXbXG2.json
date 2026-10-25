@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>You move in the pauses no one else hears.</em></p><p>You gain a subtle control over the tempo of danger:</p><ul><li>You gain a <strong>+1 bonus to initiative</strong>.</li><li>When you are not surprised, the first attack made against you each combat is made with <strong>disadvantage</strong>, as the attacker slips on the quiet you’ve already stepped into.</li></ul><p>Things start, but they rarely start <em>before</em> you’re ready.</p>",
+      "value": "<p><em>You move in the pauses no one else hears.</em></p><p>You gain a subtle control over the tempo of danger:</p><ul><li>You gain a <strong>+1 bonus to initiative</strong>.</li><li>When you are not surprised, the first attack made against you each combat is made rolling 3d10 and keeping the lowest 2, as the attacker slips on the quiet you’ve already stepped into.</li></ul><p>Things start, but they rarely start <em>before</em> you’re ready.</p>",
       "chat": ""
     },
     "activities": {},
@@ -42,8 +42,7 @@
     "bbttcc": {
       "subclassKey": "dreamwalker_quiet_sun",
       "featureKey": "stillness_between"
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

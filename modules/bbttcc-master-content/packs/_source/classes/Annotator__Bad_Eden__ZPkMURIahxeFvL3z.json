@@ -8,15 +8,11 @@
     "source": "Bad Eden Originals — Sprint F (2026 rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>\"See below. It changes everything above.\"</em></p>\n<p><strong>Doctrine:</strong> Prefer surgical changes with precise scope — a small note that produces a large consequence. You are strongest when the edit looks modest.</p>\n<p>The Annotator wins in the margins. Your Surge spends are footnotes with teeth: shore up an ally's roll, pin a foe with marginalia it cannot ignore, and revise the whole passage at once.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Footnote</strong> (1) — an ally banks a reroll-lowest (a small note, a large consequence).</li>\n  <li><strong>Marginalia</strong> (2) — a foe is Staggered and rolls its saves at disadvantage.</li>\n  <li><strong>Revision</strong> (5) — allies within 6 squares each bank a reroll-lowest (the whole passage, corrected).</li>\n</ul>",
+      "value": "<p><em>\"See below. It changes everything above.\"</em></p>\n<p><strong>Doctrine:</strong> Prefer surgical changes with precise scope — a small note that produces a large consequence. You are strongest when the edit looks modest.</p>\n<p>The Annotator wins in the margins. Your Surge spends are footnotes with teeth: shore up an ally's roll, pin a foe with marginalia it cannot ignore, and revise the whole passage at once.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Footnote</strong> (1) — an ally banks a reroll-lowest (a small note, a large consequence).</li>\n  <li><strong>Marginalia</strong> (2) — a foe is Staggered and rolls its saves rolling 3d10 and keeping the lowest 2.</li>\n  <li><strong>Revision</strong> (5) — allies within 6 squares each bank a reroll-lowest (the whole passage, corrected).</li>\n</ul>",
       "chat": ""
     },
     "identifier": "bbttcc-cosmic-linguist-linguist-annotator",
-    "advancement": [],
-    "spellcasting": {
-      "progression": "none",
-      "preparation": {}
-    }
+    "advancement": []
   },
   "effects": [],
   "folder": "7fCEbHBaAKFkEuHN",

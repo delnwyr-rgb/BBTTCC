@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>Declare the line. The line happens.</em></p><p><strong>The Breach — 1/scene (recovers on Soma Break).</strong> On your turn, declare a straight-line path to a destination within your maximum movement for the turn. You move to that destination, and any physical barrier in your way breaks open as you pass:</p><ul><li><p>Wooden walls, doors, panes, and fortifications up to <strong>Hard hardness (DC 18)</strong> are broken open.</p></li><li><p>Stone walls and reinforced doors require a Violence attribute check vs Heroic DC 22 to pass through; on failure you stop adjacent to the barrier and lose the rest of the movement.</p></li><li><p>Any creature of size huge or smaller occupying a space along the line takes <strong>(Violence value + Bulwark Initiation) kinetic damage, damageFlavor: bludgeoning</strong>, and is knocked <strong>prone</strong>. They do not block your path.</p></li></ul><p>You arrive upright, in your normal initiative slot, with whatever debris a person carries when they have just opened a wall.</p>",
+      "value": "<p><em>Declare the line. The line happens.</em></p><p><strong>The Breach — 1/scene (recovers on Soma Break).</strong> On your turn, declare a straight-line path to a destination within your maximum movement for the turn. You move to that destination, and any physical barrier in your way breaks open as you pass:</p><ul><li><p>Wooden walls, doors, panes, and fortifications up to <strong>Hard hardness (DC 18)</strong> are broken open.</p></li><li><p>Stone walls and reinforced doors require a Violence attribute check vs Heroic DC 22 to pass through; on failure you stop adjacent to the barrier and lose the rest of the movement.</p></li><li><p>Any creature of size huge or smaller occupying a space along the line takes <strong>(Violence value + Bulwark Initiation) kinetic (bludgeoning) damage</strong>, and is knocked <strong>prone</strong>. They do not block your path.</p></li></ul><p>You arrive upright, in your normal initiative slot, with whatever debris a person carries when they have just opened a wall.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -20,22 +20,13 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "sr",
-          "type": "recoverAll",
-          "formula": ""
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "activities": {}
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "bulwark",

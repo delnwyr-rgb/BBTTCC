@@ -1,0 +1,326 @@
+{
+  "name": "Clause Lantern",
+  "type": "power",
+  "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+  "system": {
+    "intent": "presence",
+    "channel": "soul",
+    "sephirah": "hod",
+    "mode": "hermetic",
+    "clarityRequired": 1,
+    "noiseGain": 0,
+    "activation": "action",
+    "target": "area",
+    "range": "near",
+    "damage": "",
+    "damageType": "energy",
+    "damageFlavor": "",
+    "damageRoll": {
+      "op": "none",
+      "number": 0,
+      "die": "d6",
+      "attribute": "",
+      "type": "kinetic",
+      "flavor": "",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "effect": "6 squares zone for the scene (1 Clarity/scene upkeep). Enemies in the light: Soul defense vs Cast DC or Shaken for 1 round as their fine print becomes public.",
+    "tags": [
+      "starter-kit",
+      "zone",
+      "aoe",
+      "reused",
+      "path:pactkeeper",
+      "path-core",
+      "tool",
+      "reveal",
+      "sustained"
+    ],
+    "category": "manifestation",
+    "flavor": "Mal: 'Ambiance AND discovery. Every restaurant should have one. No restaurant would survive one.'",
+    "manifestation": {
+      "tier": 1,
+      "family": "working",
+      "concept": "A lantern that burns the terms of every deal in the room. Hidden costs curl up out of it as smoke, in a legible font.",
+      "form": "tool",
+      "function": "reveal",
+      "stability": "sustained",
+      "interactionModel": "zone",
+      "costType": "clarity",
+      "costValue": 1,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "scene",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 30,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "Pactkeeper",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 30
+      },
+      "activation": {
+        "type": "action",
+        "consumePool": true
+      },
+      "save": {
+        "enabled": false,
+        "defense": "evasion",
+        "attribute": "",
+        "dcMode": "derived",
+        "dcFixed": 15
+      },
+      "maintenanceKey": "1-clarity-scene",
+      "isSignature": false,
+      "appliedStates": {
+        "states": [
+          "shaken"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
+      },
+      "chain": {
+        "enabled": false,
+        "count": 3,
+        "range": 30,
+        "damageFormula": "1d6",
+        "damageType": "",
+        "carryConditions": false,
+        "carryEffects": false
+      },
+      "conditionalDamage": [],
+      "appliedEffects": {
+        "modifiers": [],
+        "resists": [],
+        "immunes": []
+      }
+    },
+    "description": {
+      "value": "<p>6 squares zone for the scene (1 Clarity/scene upkeep). Enemies in the light: Soul defense vs Cast DC or Shaken for 1 round as their fine print becomes public.</p>"
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "starterKit": {
+        "path": "pactkeeper",
+        "doctrine": "",
+        "core": true
+      }
+    },
+    "autoanimations": {
+      "id": "6a51276f-4a4c-4a22-840b-ce16615b3d65",
+      "label": "Clause Lantern",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "y8c174msWty2ljyl",
+  "_id": "ipLiOetKOzRmIYb6",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1788307802512,
+    "modifiedTime": 1788307802512,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ipLiOetKOzRmIYb6"
+}

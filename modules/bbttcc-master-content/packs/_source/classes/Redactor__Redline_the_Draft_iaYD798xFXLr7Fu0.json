@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"3023\" data-end=\"3037\"><em data-start=\"3023\" data-end=\"3037\">(14th Level)</em></p><p data-start=\"3039\" data-end=\"3057\"><em data-start=\"3039\" data-end=\"3057\">“No. Remove it.”</em></p><p data-start=\"3059\" data-end=\"3143\">When you cast a removal or negation manifestation, you may massively enhance its scope once.</p><p data-start=\"3145\" data-end=\"3153\">You may:</p><ul data-start=\"3155\" data-end=\"3306\"><li data-start=\"3155\" data-end=\"3203\"><p data-start=\"3157\" data-end=\"3203\">Bypass one immunity or resistance to negation.</p></li><li data-start=\"3204\" data-end=\"3256\"><p data-start=\"3206\" data-end=\"3256\">Extend the removal across multiple linked effects.</p></li><li data-start=\"3257\" data-end=\"3306\"><p data-start=\"3259\" data-end=\"3306\">Force the suppression through layered defenses.</p></li></ul><p data-start=\"3308\" data-end=\"3330\">Immediate consequence:</p><ul data-start=\"3332\" data-end=\"3379\"><li data-start=\"3332\" data-end=\"3354\"><p data-start=\"3334\" data-end=\"3354\">risk the misfire ladder.</p></li><li data-start=\"3355\" data-end=\"3379\"><p data-start=\"3357\" data-end=\"3379\">a misfire at the top of the ladder is guaranteed.</p></li></ul><p data-start=\"3381\" data-end=\"3408\">This is not clever editing.</p><p data-start=\"3410\" data-end=\"3453\">This is tearing a paragraph out of reality.</p><p data-start=\"3455\" data-end=\"3481\">The universe will respond.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p><em>(14th Level)</em></p><p><em>“No. Remove it.”</em></p><p>When you cast a removal or negation manifestation, you may massively enhance its scope once.</p><p>You may:</p><ul><li><p>Bypass one immunity or resistance to negation.</p></li><li><p>Extend the removal across multiple linked effects.</p></li><li><p>Force the suppression through layered defenses.</p></li></ul><p>Immediate consequence:</p><ul><li><p>risk the misfire ladder.</p></li><li><p>a misfire at the top of the ladder is guaranteed.</p></li></ul><p>This is not clever editing.</p><p>This is tearing a paragraph out of reality.</p><p>The universe will respond.</p>",
       "chat": ""
     },
     "identifier": "redactor_redline_the_draft",
@@ -41,6 +41,183 @@
   "flags": {
     "bbttcc": {
       "identifier": "redactor_redline_the_draft"
+    },
+    "autoanimations": {
+      "id": "e4740667-6aff-44ab-a854-bcbc9fd69bed",
+      "label": "Redactor: Redline the Draft",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "pcv0zMJZU8aoEMQc",

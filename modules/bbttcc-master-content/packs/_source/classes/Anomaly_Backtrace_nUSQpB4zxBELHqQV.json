@@ -30,7 +30,7 @@
       "level": 8
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (8th level)",
+    "requirements": "Wyrdlens Adept 8",
     "type": {
       "value": "",
       "subtype": ""
@@ -80,8 +80,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!nUSQpB4zxBELHqQV.hOoLg1pB3dR5LEKG"
+      "folder": null
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -90,8 +89,7 @@
       "wyrdlensAdept": {
         "anomalyBacktrace": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

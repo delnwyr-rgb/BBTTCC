@@ -30,7 +30,7 @@
       "level": 4
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (4th level)",
+    "requirements": "Wyrdlens Adept 4",
     "type": {
       "value": "",
       "subtype": ""
@@ -66,17 +66,10 @@
       "system": {
         "changes": [
           {
-            "key": "system.abilities.dex.bonuses.save",
-            "value": "+1",
+            "key": "system.derived.evasion.aeBonus",
+            "value": "1",
             "priority": 20,
             "type": "add",
-            "phase": "initial"
-          },
-          {
-            "key": "flags.bbttcc.wyrdlensAdept.hazardPredictionMatrix",
-            "value": true,
-            "priority": 20,
-            "type": "custom",
             "phase": "initial"
           }
         ]
@@ -88,7 +81,7 @@
       "start": null,
       "showIcon": 1,
       "folder": null,
-      "_key": "!items.effects!5Ol7xTa7nbHAorK1.slNTO4rUEcAesafT"
+      "changes": null
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -97,8 +90,7 @@
       "wyrdlensAdept": {
         "hazardPredictionMatrix": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

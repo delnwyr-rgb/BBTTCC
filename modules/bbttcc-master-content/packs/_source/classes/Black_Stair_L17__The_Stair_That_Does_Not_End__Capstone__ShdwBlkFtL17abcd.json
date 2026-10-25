@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>You are trained in a metaphysical route — the Black Stair itself — connecting every threshold you have ever crossed.</em></p><p><strong>The Stair That Does Not End — 1/session.</strong> As an action, step through any door, arch, gate, or marked threshold within reach. You exit through any other threshold you have personally used in this campaign.</p><ul><li><p>You may bring up to <strong>4 willing allies</strong> with you.</p></li><li><p>The journey takes <strong>one hour of subjective time</strong> regardless of physical distance, planar boundary, or hostile interference between origin and destination.</p></li><li><p>Allies who travel report that the stair is <strong>steep, dim, and strangely familiar</strong>. (Track this. It will matter.)</p></li><li><p>This shares a 1/session pool with the class's Tier 4 Unfound Route — you can use one or the other per session, not both.</p></li></ul>",
+      "value": "<p><em>You are trained in a metaphysical route — the Black Stair itself — connecting every threshold you have ever crossed.</em></p><p><strong>The Stair That Does Not End — 1/session.</strong> As an action, step through any door, arch, gate, or marked threshold within reach. You exit through any other threshold you have personally used in this campaign.</p><ul><li><p>You may bring up to <strong>4 willing allies</strong> with you.</p></li><li><p>The journey takes <strong>one hour of subjective time</strong> regardless of physical distance, planar boundary, or hostile interference between origin and destination.</p></li><li><p>Allies who travel report that the stair is <strong>steep, dim, and strangely familiar</strong>. (Track this. It will matter.)</p></li><li><</p></li></ul>",
       "chat": ""
     },
     "advancement": {},
@@ -20,22 +20,13 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll",
-          "formula": ""
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "activities": {}
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "shadow_courier",

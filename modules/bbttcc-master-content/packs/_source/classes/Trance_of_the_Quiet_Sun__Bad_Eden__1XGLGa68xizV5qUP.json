@@ -12,15 +12,11 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>\"Stillness is the loudest thing.\"</em></p>\n<p><strong>Mode:</strong> Contemplative</p>\n<p>The Quiet Sun is the dreamer who stops the room by going still. Your Surge spends turn perception and patience into mechanics — seeing clearly, refusing a death, and forcing a beat of peace into a fight that didn't ask for one.</p>\n<h3>Trance (spent via Surge)</h3>\n<ul>\n  <li><strong>Still Attention</strong> (1) — you and allies within 6 squares bank a reroll-lowest.</li>\n  <li><strong>Somnolent Peace</strong> (2) — the next lethal blow against an ally drops them to 1 Integrity (unconscious), not dead.</li>\n  <li><strong>Radiant Pause</strong> (3) — nearby enemies are Calmed: a contemplative beat where violence stalls.</li>\n</ul>\n<p><em>Out-of-combat:</em> The Revelation (ask the GM one true thing), The Unhurried Word, and the Sun-That-Does-Not-Set capstone (no lie holds in your presence) remain the oracle's quiet powers.</p>",
+      "value": "<p><em>\"Stillness is the loudest thing.\"</em></p>\n<p><strong>Mode:</strong> Contemplative</p>\n<p>The Quiet Sun is the dreamer who stops the room by going still. Your Surge spends turn perception and patience into mechanics — seeing clearly, refusing a death, and forcing a beat of peace into a fight that didn't ask for one.</p>\n<h3>Trance (spent via Surge)</h3>\n<ul>\n  <li><strong>Still Attention</strong> (1) — you and allies within 6 squares bank a reroll-lowest.</li>\n  <li><strong>Somnolent Peace</strong> (2) — the next lethal blow against an ally drops them to 1 Integrity (unconscious), not dead.</li>\n  <li><strong>Radiant Pause</strong> (3) — nearby enemies are Calmed: a contemplative beat where violence stalls.</li>\n</ul>\n<p><em>Out-of-combat:</em> Somnolent Peace, Stillness Between, Lull the Riot, Quiet March, Daybreak and Solar Stillpoint remain the strategic flourishes.</p>",
       "chat": ""
     },
     "identifier": "bbttcc-dreamwalker-quiet-sun",
-    "advancement": [],
-    "spellcasting": {
-      "progression": "none",
-      "preparation": {}
-    }
+    "advancement": []
   },
   "effects": [],
   "folder": "11soLvLsTohdUQFT",
@@ -36,11 +32,11 @@
   "sort": 500000,
   "_stats": {
     "systemId": "fourththing",
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "createdTime": 1776459469161,
-    "modifiedTime": 1782167240797,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
-    "systemVersion": "0.6.1",
+    "modifiedTime": 1792441189693,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "systemVersion": "0.6.35",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

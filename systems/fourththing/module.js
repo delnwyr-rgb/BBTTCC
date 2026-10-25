@@ -104,6 +104,7 @@ import {
   getBurnBand,
   ftBurnClassFor,
   ftAddBurn,
+  ftGetBurn,
   openSpendFrameDie,
   openFrameDiePool,
   openAurabladeAction,
@@ -115,8 +116,6 @@ import {
   openBreakerRuin,
   openDreamwalkerResonance,
   openDreamwalkerDeployCache,
-  openDreamwalkerEchoReservoir,
-  openDreamwalkerSpendEchoDie,
   openSoulSmithForge,
   openSoulSmithForgeInitiate,
   openSoulSmithAtonementCrucible,
@@ -472,7 +471,7 @@ const FT_SKILL_MASTER = [
 // Vanguard = front-line bodies; Mid = versatile/skirmisher; Caster = TCC + recon.
 // Per-level boost = bracket base + ⌊Body/2⌋. Default bracket is "mid".
 const FT_INTEGRITY_BRACKETS = {
-  vanguard: { base: 4, classes: ["bulwark", "titanbound", "breaker", "aurablade", "harmony_marshal", "harmony-marshal"] },
+  vanguard: { base: 4, classes: ["bulwark", "titanbound", "breaker", "aurablade", "harmony_marshal", "harmony-marshal", "harmonymarshal"] },
   mid:      { base: 3, classes: ["shadowjack", "shadow_courier", "shadow-courier", "soul_smith", "soul-smith", "phantom_courier", "phantom-courier"] },
   caster:   { base: 2, classes: ["dreamwalker", "wyrdlens_adept", "wyrdlens-adept", "cosmic_linguist", "cosmic-linguist", "pactkeeper"] }
 };
@@ -2903,7 +2902,9 @@ async function _ftPostMisfireConversionCard(actor, item, misfireData, { castDc, 
   const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
   const hasWL = actor.items?.some(it => it.type === "class" && (it.system?.identifier === "wyrdlens-adept" || it.system?.identifier === "wyrdlens_adept"));
   const hasPK = actor.items?.some(it => it.type === "class" && it.system?.identifier === "pactkeeper");
-  const wlReady = hasWL && tier >= 4 && !actor.flags?.fourththing?.disciplineUsed?.wlTikkunSight;
+  // Ruling WL4 (2026-10-25): Tikkun Sight gates on the L17 feat itself, not on tier 4.
+  const hasTikkun = actor.items?.some(it => String(it.system?.identifier ?? "") === "wl_tikkun_sight");
+  const wlReady = hasWL && hasTikkun && !actor.flags?.fourththing?.disciplineUsed?.wlTikkunSight;
   const pkReady = hasPK && tier >= 2;
   if (!wlReady && !pkReady) return null;
 
@@ -4135,7 +4136,53 @@ function _ftSurgeCap(actor) {
     if (Number.isFinite(ovr) && ovr > 0) return Math.floor(ovr);
   }
   const t = _ftCasterTier(actor);
-  return ({ 1: 4, 2: 6, 3: 8, 4: 10 })[t] ?? 10;
+  const base = ({ 1: 4, 2: 6, 3: 8, 4: 10 })[t] ?? 10;
+  // Bulwark / Cataclyst L17 Both Things At Once (ruling BW1, 2026-10-25): Surge cap +2.
+  const bothThings = Array.from(actor.items ?? []).some(i => String(i.system?.identifier ?? "") === "bulwark_cataclyst_l17_both_things_at_once");
+  return base + (bothThings ? 2 : 0);
+}
+
+// ─── Bulwark spend discounts (ruling BW1, 2026-10-25) ────────────────────────
+// Effective Surge cost of a menu entry for this actor. Stacks, floor 1:
+//   • Cataclyst L1 The Exchange — flags.fourththing.bulwark.exchangeNext: the next
+//     spend costs 1 less (1/Soma Break; the flag is consumed in _ftSurgeExecute).
+//   • Cataclyst L17 Both Things At Once — every path spend (cl-/av-/mt-) costs 1 less.
+//   • Cataclyst L5 Stance Dance, Advance stance — offensive path spends cost 1 less
+//     this round (flags.fourththing.bulwark.stanceDance = {round, combatId, stance}).
+function _ftSurgeEffectiveCost(actor, entry) {
+  const base = Number(entry?.cost) || 0;
+  if (!actor || base <= 0) return base;
+  const ff = actor.flags?.fourththing?.bulwark ?? {};
+  let d = 0;
+  if (ff.exchangeNext) d += 1;
+  const isPath = _FT_BULWARK_PATH_KEYS.has(entry.key);
+  if (isPath) {
+    const has = (id) => Array.from(actor.items ?? []).some(i => String(i.system?.identifier ?? "") === id);
+    if (has("bulwark_cataclyst_l17_both_things_at_once")) d += 1;
+    const sd = ff.stanceDance;
+    if (sd?.stance === "advance" && entry.bucket === "off"
+        && (game.combat?.id ?? null) === (sd.combatId ?? null) && Number(game.combat?.round ?? 0) === Number(sd.round ?? -1)) d += 1;
+  }
+  return d ? Math.max(1, base - d) : base;
+}
+// Polarity Mastery, Cataclyst voice: bank +1 Surge (1/round) when a defensive and an
+// offensive spend land in the same round, in either order.
+async function _ftBulwarkPolarityCataclyst(actor, entry) {
+  try {
+    if (!actor || !["off", "def"].includes(entry?.bucket)) return "";
+    const has = (id) => Array.from(actor.items ?? []).some(i => String(i.system?.identifier ?? "") === id);
+    if (!has("bulwark_tier3_polarity_mastery") || _ftBulwarkPath(actor) !== "cataclyst") return "";
+    const round = Number(game.combat?.round ?? 0);
+    const combatId = game.combat?.id ?? null;
+    const prev = actor.flags?.fourththing?.bulwark?.polarityCata ?? {};
+    const same = prev.combatId === combatId && Number(prev.round) === round;
+    const swung = same && prev.bucket && prev.bucket !== entry.bucket;
+    const banked = same && prev.banked === true;
+    let got = 0;
+    if (swung && !banked) got = await _ftBankSurge(actor, 1);
+    await actor.setFlag("fourththing", "bulwark.polarityCata", { round, combatId, bucket: entry.bucket, banked: banked || got > 0 });
+    return got > 0 ? `<p style="margin:0.25rem 0;font-size:0.74rem;color:#e8c84a">⚖ Polarity Mastery (Cataclyst) — defense and offense in one round: +1 Surge banked.</p>` : "";
+  } catch (e) { return ""; }
 }
 
 // Bank surge for an actor with tier-scaled cap. Returns the *actual* amount
@@ -4357,7 +4404,8 @@ function _ftSurgeAvailableFor(actor) {
     (!e.courierRoute || _ftCourierRoute(actor) === e.courierRoute) &&
     (!e.pactDoctrine || _ftPactDoctrine(actor) === e.pactDoctrine) &&
     (!e.wlRefraction || _ftWyrdlensRefraction(actor) === e.wlRefraction) &&
-    (!e.clDoctrine || _ftClDoctrine(actor) === e.clDoctrine));
+    (!e.clDoctrine || _ftClDoctrine(actor) === e.clDoctrine) &&
+    (!e.auraDoctrine || _ftAurabladeDoctrine(actor) === e.auraDoctrine));
 }
 
 const _FT_SURGE_MENU = [
@@ -4438,7 +4486,7 @@ const _FT_SURGE_MENU = [
   { cost: 6, key: "bulwark-stance", tier: 2, bucket: "def", classFilter: ["bulwark"],
     label: "Bulwark Stance — adjacent allies share your defenses till next turn",
     fiction: "You become the wall they fight from behind.",
-    wired: false },
+    wired: true },
   // Cost 7
   { cost: 7, key: "crowning-blow", tier: 3, bucket: "off",
     label: "Crowning Blow — next Strike is a max-die critical hit",
@@ -4447,7 +4495,7 @@ const _FT_SURGE_MENU = [
   { cost: 5, key: "anchor", tier: 3, bucket: "def", classFilter: ["bulwark"],
     label: "Anchor — you + one ally immune to forced move / CC till next round",
     fiction: "You both refuse the verbs they're trying to apply.",
-    wired: false },
+    wired: true },
   { cost: 7, key: "rallying-cry", tier: 1, bucket: "heal",
     label: "Rallying Cry — heal all allies within Tier squares for 1d6 + Tier",
     fiction: "Your voice carries the Soma back into them.",
@@ -4460,7 +4508,7 @@ const _FT_SURGE_MENU = [
   { cost: 8, key: "mass-aegis", tier: 3, bucket: "def", classFilter: ["bulwark"],
     label: "Mass Aegis — +Tier to all defenses for allies within Tier squares this round",
     fiction: "Every nearby stance straightens at once.",
-    wired: false },
+    wired: true },
   // Cost 9
   { cost: 9, key: "cinderwake", tier: 4, bucket: "off",
     label: "Cinderwake — every d10 in next roll explodes on 8+",
@@ -4469,7 +4517,7 @@ const _FT_SURGE_MENU = [
   { cost: 9, key: "sanctum", tier: 4, bucket: "def", classFilter: ["bulwark"],
     label: "Sanctum — immune to one damage type for one round",
     fiction: "A category of harm forgets your name.",
-    wired: false },
+    wired: true },
   // Cost 10 — cap-spending capstones
   { cost: 10, key: "final-argument", tier: 4, bucket: "off",
     label: "Final Argument — next Strike auto-hits, max damage, counts +1 Tier",
@@ -4478,36 +4526,35 @@ const _FT_SURGE_MENU = [
   { cost: 10, key: "mythic-stand", tier: 4, bucket: "def", classFilter: ["bulwark"],
     label: "Mythic Stand — invulnerable until start of your next turn",
     fiction: "The world allows it. You decide for one breath.",
-    wired: false },
+    wired: true },
   { cost: 10, key: "phoenix", tier: 1, bucket: "heal",
     label: "Phoenix — restore self/ally from defeated to half integrity (1 / raid)",
     fiction: "Remember what you were before the wound. Be that now.",
     wired: true },
 
   // ─── Soul-Smith class-exclusive entries (Burn archetype, Phase 2) ──────────
-  // Shown only to Soul-Smiths (classFilter). Forge-Weld is fully wired and scales
-  // with the Smith's Burn band; the other three stamp a one-shot flag + chat card
-  // the GM enforces (deeper wiring is a Phase 2.1 polish pass).
+  // Shown only to Soul-Smiths (classFilter). All four are wired in _ftSoulSmithSurge
+  // (2026-10-24: the old "three are flag-and-card" note was stale).
   { cost: 1, key: "forge-weld", tier: 1, bucket: "heal", classFilter: ["soul-smith"],
     label: "Forge-Weld — repair an ally (1d8+tier, scales with forge heat)",
     fiction: "You lay hands on the breakage and will it whole.",
     wired: true },
   { cost: 2, key: "atonement", tier: 2, bucket: "heal", classFilter: ["soul-smith"],
-    label: "Atonement Crucible — cleanse a condition + temper an ally into armor (DR)",
+    label: "Crucible Cleanse — cleanse a condition + temper an ally into armor (DR)",
     fiction: "Whatever was done can be unmade — and made into a shield.",
     wired: true },
   { cost: 3, key: "share-furnace", tier: 3, bucket: "heal", classFilter: ["soul-smith"],
-    label: "Furnace of Renewal — heal allies within 30 ft + share poison/qliphothic resist",
+    label: "Share the Furnace — heal allies within 6 squares + share poison/qliphothic resist",
     fiction: "Stand near the forge. Let it burn the rot out of you.",
     wired: true },
   { cost: 5, key: "relic-rebirth", tier: 4, bucket: "heal", classFilter: ["soul-smith"],
-    label: "Relic of Rebirth — ward an ally vs dropping (Overheated: reforge a fallen ally)",
+    label: "Rebirth Ward — ward an ally vs dropping (Overheated: reforge a fallen ally)",
     fiction: "Not yet. I forged you something to hold the line.",
     wired: true },
 
   // ─── Harmony Marshal class-exclusive entries (Pool archetype, Phase 3) ─────
-  // Generation = "harvest the party's surges" (see _ftHarmonyHarvest). Rallying
-  // Words + Ease Attrition are wired; the rest stamp a one-shot flag + chat card.
+  // Generation = "harvest the party's surges" (see _ftHarmonyHarvest). All five are
+  // wired in _ftHarmonySurge (2026-10-24: the stale wired:false flags hid that).
   { cost: 1, key: "rallying-words", tier: 1, bucket: "narr", classFilter: ["harmony-marshal"],
     label: "Rallying Words — ally banks a reroll on their next roll",
     fiction: "A word at the right moment. They find the line again.",
@@ -4519,15 +4566,15 @@ const _FT_SURGE_MENU = [
   { cost: 2, key: "rally-to-me", tier: 2, bucket: "narr", classFilter: ["harmony-marshal"],
     label: "Rally to Me — an ally acts or reacts out of turn",
     fiction: "They move because you asked. That's all it takes.",
-    wired: false },
+    wired: true },
   { cost: 3, key: "unity-flourish", tier: 3, bucket: "def", classFilter: ["harmony-marshal"],
-    label: "Unity Flourish — allies within 30 ft +1 to checks till your next turn",
+    label: "Unity Flourish — allies within 6 squares +1 to checks till your next turn",
     fiction: "Every nearby stance straightens at once.",
-    wired: false },
+    wired: true },
   { cost: 5, key: "conductors-crescendo", tier: 4, bucket: "heal", classFilter: ["harmony-marshal"],
     label: "Conductor's Crescendo — allies reroll all 1s + clear a condition (1/scene)",
     fiction: "The whole line moves as one body.",
-    wired: false },
+    wired: true },
 
   // ─── Soul-Smith FORGE (subclass) entries — gated by `forge`, all cost a Spark ──
   // Forge of Victory (Sparks from fallen foes → offense):
@@ -4567,10 +4614,10 @@ const _FT_SURGE_MENU = [
     label: "Shared Breath — name an Accord Partner: you + they bank a reroll, they free a reaction",
     fiction: "Act as one.", wired: true },
   { cost: 3, key: "acc-sync", tier: 2, bucket: "off", mandate: "accord",
-    label: "Synchronized Advance — allies within 30 ft bank a reroll on their next attack",
+    label: "Synchronized Advance — allies within 6 squares bank a reroll on their next attack",
     fiction: "Strike together; the second blow lands on the opening the first made.", wired: true },
   { cost: 5, key: "acc-group", tier: 4, bucket: "narr", mandate: "accord",
-    label: "Group Turn — allies within 30 ft each gain a freed bonus action",
+    label: "Group Turn — allies within 6 squares each gain a freed bonus action",
     fiction: "One breath, one motion, the whole line moving at once.", wired: true },
   // Mandate of Overwatch — defensive/reactive:
   { cost: 1, key: "ovw-covered", tier: 1, bucket: "def", mandate: "overwatch",
@@ -4580,7 +4627,7 @@ const _FT_SURGE_MENU = [
     label: "Counter-Discord — cleanse a debuff off an ally + they bank a reroll",
     fiction: "The lie is seen; it stops working.", wired: true },
   { cost: 4, key: "ovw-perimeter", tier: 3, bucket: "def", mandate: "overwatch",
-    label: "Locked Perimeter — allies within 30 ft gain DR",
+    label: "Locked Perimeter — allies within 6 squares gain DR",
     fiction: "A line drawn that the enemy crosses at a price.", wired: true },
   // Mandate of Resolve — morale/anti-death:
   { cost: 1, key: "res-hold", tier: 1, bucket: "def", mandate: "resolve",
@@ -4601,39 +4648,39 @@ const _FT_SURGE_MENU = [
     label: "Dream Ward — an ally drifts into a protective dreamstate: DR + a reroll",
     fiction: "Sleep is the safest place there is, briefly.", wired: true },
   { cost: 3, key: "dw-shared", tier: 3, bucket: "heal", classFilter: ["dreamwalker"],
-    label: "Shared Dream — allies within 30 ft bank a reroll + draw 1 Clarity",
+    label: "Dreamshare — allies within 6 squares bank a reroll + draw 1 Clarity",
     fiction: "Pull them into the dream; they wake up sharper.", wired: true },
   { cost: 5, key: "dw-reality", tier: 4, bucket: "off", classFilter: ["dreamwalker"],
-    label: "Reality Hack — party banks a reroll + one enemy rerolls its next attack at disadvantage",
+    label: "Reality Hack — party banks a reroll + one enemy rolls its next attack keeping the lowest 2 of 3d10",
     fiction: "Rewrite the moment. The world barely notices.", wired: true },
 
   // ─── Dreamwalker TRANCE (subclass) entries — gated by `trance`; Resonance → Surge ──
   // Trance of the Quiet Sun — perception / de-escalation / non-lethal:
   { cost: 1, key: "qs-attention", tier: 1, bucket: "narr", trance: "quiet-sun",
-    label: "Still Attention — you + allies within 30 ft bank a reroll (the stillness sees)",
+    label: "Still Attention — you + allies within 6 squares bank a reroll (the stillness sees)",
     fiction: "Stillness is the loudest thing.", wired: true },
   { cost: 2, key: "qs-peace", tier: 2, bucket: "def", trance: "quiet-sun",
-    label: "Somnolent Peace — the next lethal blow against an ally drops them to 1, not dead",
+    label: "Gentle Sleep — the next lethal blow against an ally drops them to 1, not dead",
     fiction: "Sleep, not death. There's a difference, and you keep it.", wired: true },
   { cost: 3, key: "qs-pause", tier: 3, bucket: "narr", trance: "quiet-sun",
     label: "Radiant Pause — nearby enemies are Calmed (a contemplative beat)",
     fiction: "For one round, everyone remembers they'd rather not.", wired: true },
   // Trance of the Sapphire Gate — reposition / movement:
   { cost: 1, key: "sg-touched", tier: 1, bucket: "def", trance: "sapphire-gate",
-    label: "Gate-Touched — carry an ally to safety: DR + a freed reaction",
+    label: "Gate-Touched — carry an ally to safety: DR + a freed bonus action",
     fiction: "Every threshold is also a doorway.", wired: true },
   { cost: 2, key: "sg-step", tier: 2, bucket: "narr", trance: "sapphire-gate",
-    label: "Sapphire Step — you + an ally reposition: each banks a reroll + a freed reaction",
+    label: "Sapphire Step — you + an ally reposition: each banks a reroll + a freed bonus action",
     fiction: "In one door, out another you remember.", wired: true },
   { cost: 3, key: "sg-held", tier: 3, bucket: "def", trance: "sapphire-gate",
-    label: "Gate Held Open — allies within 30 ft bank a reroll + gain DR",
+    label: "Gate Held Open — allies within 6 squares bank a reroll + gain DR",
     fiction: "Hold the way open; nobody falls through the cracks.", wired: true },
   // Trance of the Thousand Faces — misdirection / social:
   { cost: 1, key: "tf-face", tier: 1, bucket: "def", trance: "thousand-faces",
-    label: "Borrowed Face — misdirection: you gain DR + bank a reroll",
+    label: "Misremembered Face — misdirection: you gain DR + bank a reroll",
     fiction: "Identity is negotiable.", wired: true },
   { cost: 2, key: "tf-mirror", tier: 2, bucket: "off", trance: "thousand-faces",
-    label: "Mirror Read — a foe rolls its next attack at disadvantage + you bank a reroll",
+    label: "Reflected Tell — a foe rolls its next attack keeping the lowest 2 of 3d10 + you bank a reroll",
     fiction: "You wear their tell back at them.", wired: true },
   { cost: 3, key: "tf-shared", tier: 3, bucket: "def", trance: "thousand-faces",
     label: "Shared Face — you + an ally blur behind borrowed identities: both gain DR",
@@ -4663,7 +4710,7 @@ const _FT_SURGE_MENU = [
     label: "Catastrophic Entry — sunder a foe's armor (all attackers ignore it 1 rd) / breach a structure",
     fiction: "Doors are a courtesy. You declined.", wired: true },
   { cost: 2, key: "bw-siege", tier: 3, bucket: "narr", classFilter: ["bulwark"],
-    label: "Siege Works — −1 Violence OP cost on this Siege (GM applies)",
+    label: "Siege Works — this Siege's buffer costs 25% less (GM applies)",
     fiction: "You read the load-bearing truth of the place and lean on it.", wired: true },
   { cost: 3, key: "bw-renewal", tier: 3, bucket: "narr", classFilter: ["bulwark"],
     label: "Ruin to Renewal — purify / restore a fortification (Faith or Economy DC 15)",
@@ -4695,8 +4742,8 @@ const _FT_SURGE_MENU = [
     label: "Root — you + adjacent allies gain DR equal to Tier and cannot be forcibly moved",
     fiction: "You belong here now. Argue with the mountain.", wired: true },
   { cost: 2, key: "mt-deny", tier: 2, bucket: "def", bulwarkPath: "mountain",
-    label: "Deny — you or an ally becomes immune to forced-move/CC + gains DR this round",
-    fiction: "No. That is the whole spell.", wired: true },
+    label: "Refuse — you or an ally becomes immune to forced-move/CC + gains DR this round",
+    fiction: "No. That is the whole manifestation.", wired: true },
   { cost: 5, key: "mt-bastion", tier: 4, bucket: "def", bulwarkPath: "mountain",
     label: "Bastion — allies within Tier squares gain DR equal to Tier; you cannot be moved",
     fiction: "Stand behind me. Everything does, eventually.", wired: true },
@@ -4711,7 +4758,7 @@ const _FT_SURGE_MENU = [
     label: "Ghoststep — DR equal to Tier till your next turn; reposition out of danger",
     fiction: "Hard to hit a thing that won't hold still.", wired: true },
   { cost: 5, key: "sc-flank", tier: 3, bucket: "off", classFilter: ["shadow_courier"],
-    label: "Flank & Strike — reposition, then your next Strike has advantage and +Tier d6",
+    label: "Flank & Strike — reposition, then your next Strike rerolls its lowest die and gains +Tier d6",
     fiction: "You arrive from the side they forgot they had.", wired: true },
   { cost: 8, key: "sc-nodoor", tier: 4, bucket: "def", classFilter: ["shadow_courier"],
     label: "No Such Door — allies within Tier squares each gain a freed reaction + a reroll",
@@ -4730,7 +4777,7 @@ const _FT_SURGE_MENU = [
 
   // ─── Shadow Courier BLACK STAIR (route) — weaponized thresholds / denial ──────
   { cost: 1, key: "bs-ambush", tier: 1, bucket: "off", courierRoute: "black-stair",
-    label: "Ambush — your next Strike +Tier d6; the target's next attack is at disadvantage",
+    label: "Ambush — your next Strike +Tier d6; the target's next attack keeps the lowest 2 of 3d10",
     fiction: "You came through a door that wasn't for them.", wired: true },
   { cost: 2, key: "bs-cutoff", tier: 2, bucket: "off", courierRoute: "black-stair",
     label: "Cut Off — a foe is Staggered and cannot take reactions until your next turn",
@@ -4744,7 +4791,7 @@ const _FT_SURGE_MENU = [
     label: "Shoulder the Weight — heal an ally Tier d6; you take half as Stress; they bank a reroll",
     fiction: "Give it to me. I carry things.", wired: true },
   { cost: 2, key: "lm-quiet", tier: 2, bucket: "def", courierRoute: "last-mile",
-    label: "Quiet Voyage — an ally gains DR equal to Tier + the next hit that would drop them holds at 1",
+    label: "Quiet Road — an ally gains DR equal to Tier + the next hit that would drop them holds at 1",
     fiction: "Sleep. I've got the road from here.", wired: true },
   { cost: 5, key: "lm-delivered", tier: 4, bucket: "heal", courierRoute: "last-mile",
     label: "Delivered — restore a fallen/hurt ally to half integrity and clear a condition",
@@ -4754,27 +4801,27 @@ const _FT_SURGE_MENU = [
   // Generation = sustaining manifestations (see _ftPactkeeperGen). Base kit = the
   // enforcer's toolkit: bind, enforce terms, shelter the parties, impose the law.
   { cost: 1, key: "pk-clause", tier: 1, bucket: "off", classFilter: ["pactkeeper"],
-    label: "Invoke Clause — name a clause on a foe: its next attack is at disadvantage",
+    label: "Invoke Clause — name a clause on a foe: its next attack keeps the lowest 2 of 3d10",
     fiction: "Read the fine print back to them. It binds.", wired: true },
   { cost: 3, key: "pk-writ", tier: 2, bucket: "off", classFilter: ["pactkeeper"],
-    label: "Binding Writ — a foe is Staggered and rolls its saves at disadvantage till your next turn",
+    label: "Binding Writ — a foe is Staggered and rolls its saves keeping the lowest 2 of 3d10 till your next turn",
     fiction: "The terms are not negotiable. Neither are you.", wired: true },
   { cost: 5, key: "pk-shelter", tier: 3, bucket: "def", classFilter: ["pactkeeper"],
     label: "Shelter the Bound — you + an ally gain DR equal to Tier; the next hit that would drop them holds at 1",
     fiction: "The pact protects its parties. That is the whole point of a pact.", wired: true },
   { cost: 8, key: "pk-sovereign", tier: 4, bucket: "off", classFilter: ["pactkeeper"],
-    label: "Sovereign Writ — a foe cannot take reactions and rolls its next attack + saves at disadvantage",
+    label: "Sovereign Writ — a foe cannot take reactions and rolls its next attack and saves keeping the lowest 2 of 3d10",
     fiction: "You do not argue with the law. You are the clerk who files it.", wired: true },
 
   // ─── Pactkeeper ARCHIVIST OF PRECEDENT (doctrine) — history-as-leverage ───────
   { cost: 1, key: "ar-precedent", tier: 1, bucket: "narr", pactDoctrine: "archivist",
-    label: "Cite Precedent — you and an ally each bank a reroll (the record supports you)",
+    label: "Citation — you and an ally each bank a reroll (the record supports you)",
     fiction: "This was already decided. Long ago. In your favor.", wired: true },
   { cost: 2, key: "ar-staredecisis", tier: 2, bucket: "off", pactDoctrine: "archivist",
-    label: "Stare Decisis — a foe's next attack and its saves are at disadvantage (bound by precedent)",
+    label: "Stare Decisis — a foe's next attack and its saves keep the lowest 2 of 3d10 (bound by precedent)",
     fiction: "It is settled. The ruling holds, and so do you.", wired: true },
   { cost: 5, key: "ar-resjudicata", tier: 4, bucket: "off", pactDoctrine: "archivist",
-    label: "Res Judicata — a foe cannot take reactions and rolls its saves at disadvantage (the matter is closed)",
+    label: "Res Judicata — a foe cannot take reactions and rolls its saves keeping the lowest 2 of 3d10 (the matter is closed)",
     fiction: "The matter is closed. There is no appeal.", wired: true },
 
   // ─── Pactkeeper AUDITOR (doctrine) — expose debt / punish ─────────────────────
@@ -4782,7 +4829,7 @@ const _FT_SURGE_MENU = [
     label: "Expose the Debt — your next Strike or manifestation deals +Tier d6 (the hidden cost comes due)",
     fiction: "I've seen the real ledger. You're overdrawn.", wired: true },
   { cost: 2, key: "au-levy", tier: 2, bucket: "off", pactDoctrine: "auditor",
-    label: "Levy — a foe is Staggered and its next attack is at disadvantage (the penalty lands)",
+    label: "Levy — a foe is Staggered and its next attack keeps the lowest 2 of 3d10 (the penalty lands)",
     fiction: "Payment is due. Now.", wired: true },
   { cost: 5, key: "au-foreclose", tier: 4, bucket: "off", pactDoctrine: "auditor",
     label: "Foreclose — your next Strike is a max-die crit and ignores resistances (the debt is called in full)",
@@ -4796,7 +4843,7 @@ const _FT_SURGE_MENU = [
     label: "Keep the Agreement — heal an ally; the next hit that would drop them holds at 1",
     fiction: "No one falls while the terms still stand.", wired: true },
   { cost: 5, key: "st-sanctuary", tier: 4, bucket: "def", pactDoctrine: "steward",
-    label: "Sanctuary — allies within 30 ft gain DR equal to Tier and a freed reaction",
+    label: "Sanctuary — allies within 6 squares gain DR equal to Tier and a freed reaction",
     fiction: "This ground is under contract. Nothing crosses it uninvited.", wired: true },
 
   // ─── Wyrdlens Adept (Pool) class-exclusive entries — perception as force ──────
@@ -4806,13 +4853,13 @@ const _FT_SURGE_MENU = [
     label: "Foresight — you or an ally banks a reroll on their next roll (you saw the thread)",
     fiction: "The future is just a diagram you already read.", wired: true },
   { cost: 2, key: "wl-expose", tier: 2, bucket: "off", classFilter: ["wyrdlens-adept"],
-    label: "Expose — a foe's next attack and its saves are at disadvantage (read the seam)",
+    label: "Expose — a foe's next attack and its saves keep the lowest 2 of 3d10 (read the seam)",
     fiction: "Every structure has a flaw. You only have to look at it correctly.", wired: true },
   { cost: 3, key: "wl-refract", tier: 3, bucket: "def", classFilter: ["wyrdlens-adept"],
-    label: "Refract — an ally gains DR equal to Tier and a freed reaction (harm bends aside)",
+    label: "Refract — an ally gains DR equal to Tier and a freed bonus action (harm bends aside)",
     fiction: "Aim it somewhere that isn't them.", wired: true },
   { cost: 5, key: "wl-revelation", tier: 4, bucket: "narr", classFilter: ["wyrdlens-adept"],
-    label: "Revelation — allies within 30 ft bank a reroll; a foe's next attack is at disadvantage",
+    label: "Revelation — allies within 6 squares bank a reroll; a foe's next attack is keeping the lowest 2 of 3d10",
     fiction: "For one moment, everyone sees the whole board.", wired: true },
 
   // ─── Wyrdlens REFRACTION OF FORESIGHT (subclass) — anticipation / temporal ────
@@ -4820,10 +4867,10 @@ const _FT_SURGE_MENU = [
     label: "Anticipation — you and an ally each bank a reroll (foreseen)",
     fiction: "You already know how this goes.", wired: true },
   { cost: 2, key: "fs-slow", tier: 2, bucket: "def", wlRefraction: "foresight",
-    label: "The Slowed Instant — an ally gains a freed reaction and DR equal to Tier",
+    label: "The Slowed Instant — an ally gains a freed bonus action and DR equal to Tier",
     fiction: "Time gives them just enough room.", wired: true },
   { cost: 5, key: "fs-stop", tier: 4, bucket: "off", wlRefraction: "foresight",
-    label: "The Stopped Strike — a foe is Staggered and its next attack is at disadvantage",
+    label: "The Stopped Strike — a foe is Staggered and its next attack keeps the lowest 2 of 3d10",
     fiction: "The instant simply… declines to proceed.", wired: true },
 
   // ─── Wyrdlens REFRACTION OF MERCY (subclass) — protection / de-escalation ─────
@@ -4839,13 +4886,13 @@ const _FT_SURGE_MENU = [
 
   // ─── Wyrdlens REFRACTION OF TRUTH (subclass) — exposure / lockdown ────────────
   { cost: 1, key: "tr-read", tier: 1, bucket: "off", wlRefraction: "truth",
-    label: "The Reading Eye — a foe rolls its saves at disadvantage (you read it true)",
+    label: "The Reading Eye — a foe rolls its saves keeping the lowest 2 of 3d10 (you read it true)",
     fiction: "I see what you actually are.", wired: true },
   { cost: 2, key: "tr-unconceal", tier: 2, bucket: "off", wlRefraction: "truth",
-    label: "The Unconcealed Word — a foe is Staggered and its next attack is at disadvantage",
+    label: "The Unconcealed Word — a foe is Staggered and its next attack keeps the lowest 2 of 3d10",
     fiction: "The lie stops working the moment it is named.", wired: true },
   { cost: 5, key: "tr-exposure", tier: 4, bucket: "off", wlRefraction: "truth",
-    label: "The Exposure — a foe cannot take reactions and rolls its saves at disadvantage",
+    label: "The Exposure — a foe cannot take reactions and rolls its saves keeping the lowest 2 of 3d10",
     fiction: "Laid bare. There is nowhere left to hide a single intention.", wired: true },
 
   // ─── Cosmic Linguist (Pool) class-exclusive entries — reality as editable text ─
@@ -4855,24 +4902,24 @@ const _FT_SURGE_MENU = [
     label: "Emphasis — your next Strike or manifestation hits for +Tier d6 (the word, underlined)",
     fiction: "Some words simply matter more. You decide which.", wired: true },
   { cost: 2, key: "cl-stabilize", tier: 2, bucket: "def", classFilter: ["cosmic_linguist"],
-    label: "Stabilize — you gain DR equal to Tier; your next cast resists counter / dispel",
+    label: "Stabilize — you gain DR equal to Tier; your next cast explodes on 9–10 (the sentence holds)",
     fiction: "The sentence is load-bearing now. Try to move it.", wired: true },
   { cost: 3, key: "cl-impose", tier: 2, bucket: "off", classFilter: ["cosmic_linguist"],
-    label: "Impose a Reading — a foe's next attack and its saves are at disadvantage",
+    label: "Impose a Reading — a foe's next attack and its saves keep the lowest 2 of 3d10",
     fiction: "There is only one correct interpretation. Yours.", wired: true },
   { cost: 5, key: "cl-rewrite", tier: 4, bucket: "off", classFilter: ["cosmic_linguist"],
-    label: "Rewrite the Sentence — a foe loses its reactions + rolls saves at disadvantage; allies near you bank a reroll",
+    label: "Rewrite the Sentence — a foe loses its reactions + rolls saves keeping the lowest 2 of 3d10; allies near you bank a reroll",
     fiction: "Strike the clause. Insert your own. Reality reads from the top.", wired: true },
 
   // ─── Cosmic Linguist ANNOTATOR (doctrine) — footnote / reroll / precision ─────
   { cost: 1, key: "an-footnote", tier: 1, bucket: "narr", clDoctrine: "annotator",
-    label: "Footnote — an ally banks a reroll-lowest (a small note, a large consequence)",
+    label: "Gloss — an ally banks a reroll-lowest (a small note, a large consequence)",
     fiction: "See below. It changes everything above.", wired: true },
   { cost: 2, key: "an-margin", tier: 2, bucket: "off", clDoctrine: "annotator",
-    label: "Marginalia — a foe is Staggered and rolls its saves at disadvantage",
+    label: "Side Note — a foe is Staggered and rolls its saves keeping the lowest 2 of 3d10",
     fiction: "A note in the margin that the text cannot ignore.", wired: true },
   { cost: 5, key: "an-revision", tier: 4, bucket: "narr", clDoctrine: "annotator",
-    label: "Revision — allies within 30 ft each bank a reroll-lowest (the whole passage, corrected)",
+    label: "Revision — allies within 6 squares each bank a reroll-lowest (the whole passage, corrected)",
     fiction: "The draft was wrong. This is the draft now.", wired: true },
 
   // ─── Cosmic Linguist METAPHOR APOSTLE (doctrine) — declared likeness ──────────
@@ -4880,10 +4927,10 @@ const _FT_SURGE_MENU = [
     label: "Declared Likeness — an ally gains DR equal to Tier ('you are a wall')",
     fiction: "Say what counts as what now. Reality is listening.", wired: true },
   { cost: 2, key: "mp-frailty", tier: 2, bucket: "off", clDoctrine: "metaphor",
-    label: "Declared Frailty — a foe's next attack and its saves are at disadvantage ('their armor is paper')",
+    label: "Declared Frailty — a foe's next attack and its saves keep the lowest 2 of 3d10 ('their armor is paper')",
     fiction: "It was always paper. You just said so out loud.", wired: true },
   { cost: 5, key: "mp-apotheosis", tier: 4, bucket: "def", clDoctrine: "metaphor",
-    label: "Apotheosis — allies within 30 ft gain DR equal to Tier and a reroll ('you are all giants')",
+    label: "Apotheosis — allies within 6 squares gain DR equal to Tier and a reroll ('you are all giants')",
     fiction: "Stand up. You were always this tall.", wired: true },
 
   // ─── Cosmic Linguist REDACTOR (doctrine) — omission / strip / deny ────────────
@@ -4894,20 +4941,77 @@ const _FT_SURGE_MENU = [
     label: "Silence — a foe cannot take reactions until your next turn (its options, omitted)",
     fiction: "[ redacted ]", wired: true },
   { cost: 5, key: "rd-erasure", tier: 4, bucket: "off", clDoctrine: "redactor",
-    label: "Erasure — a foe is Staggered, cannot take reactions, and rolls saves at disadvantage",
-    fiction: "Struck from the sentence. The room forgets it was ever a threat.", wired: true }
+    label: "Erasure — a foe is Staggered, cannot take reactions, and rolls saves keeping the lowest 2 of 3d10",
+    fiction: "Struck from the sentence. The room forgets it was ever a threat.", wired: true },
+
+  // ─── Aurablade class-exclusive entries (Burn archetype — ruling AB1, 2026-10-25) ──
+  // The original Burn template finally gets its own spends. Generation stays as
+  // built (Aura switch / Aura action → +1 Surge, landed hit → +1 Burn); the spends
+  // trade Surge for heat control and blade riders. All wired in _ftAurabladeSurge.
+  { cost: 1, key: "ab-stoke", tier: 1, bucket: "off", classFilter: ["aurablade"],
+    label: "Stoke the Blade — your next Strike +tier d6; you take +1 Burn",
+    fiction: "You feed the aura and it feeds the edge.", wired: true },
+  { cost: 2, key: "ab-shift", tier: 2, bucket: "def", classFilter: ["aurablade"],
+    label: "Aura Shift — change your Aura at no Burn cost + DR equal to Tier this round",
+    fiction: "The colour of you changes between one breath and the next.", wired: true },
+  { cost: 3, key: "ab-vent", tier: 3, bucket: "off", classFilter: ["aurablade"],
+    label: "Vent Through the Blade — Burn −2; your next Strike +tier d6 and ignores resistances",
+    fiction: "All that heat has to go somewhere. It goes through them.", wired: true },
+  { cost: 5, key: "ab-unbound", tier: 4, bucket: "def", classFilter: ["aurablade"],
+    label: "Aura Unbound — enter Overheated (Burn 4); your Aura actions cost no Burn this round; allies within 2 squares gain DR equal to Tier",
+    fiction: "You stop holding it in. Everyone nearby feels the warmth.", wired: true },
+
+  // ─── Aurablade BLOOD HYMN (doctrine) — wound = prayer; gated by `auraDoctrine` ──
+  { cost: 1, key: "bh-tithe", tier: 2, bucket: "off", auraDoctrine: "blood-hymn",
+    label: "Crimson Tithe — pay Integrity equal to Tier; your next Strike lands as a max-die crit",
+    fiction: "The hymn wants blood first. Yours will do.", wired: true },
+  { cost: 2, key: "bh-hymn", tier: 3, bucket: "heal", auraDoctrine: "blood-hymn",
+    label: "Hymn of the Open Wound — heal an ally 1d8+tier (Overheated: ×2); you take +1 Burn",
+    fiction: "You sing the wound shut and keep the ache yourself.", wired: true },
+  { cost: 4, key: "bh-terror", tier: 4, bucket: "off", auraDoctrine: "blood-hymn",
+    label: "Scarlet Terror — a foe is Shaken and rolls its next attack keeping the lowest 2 of 3d10; you take +1 Burn",
+    fiction: "They see what the hymn has made of you.", wired: true },
+
+  // ─── Aurablade STILLHEART (doctrine) — calm = discipline ─────────────────────
+  { cost: 1, key: "sh-breath", tier: 2, bucket: "def", auraDoctrine: "stillheart",
+    label: "Settled Breath — Burn −1 and DR equal to Tier this round",
+    fiction: "In. Hold. The fire waits for you.", wired: true },
+  { cost: 2, key: "sh-still", tier: 3, bucket: "def", auraDoctrine: "stillheart",
+    label: "Still Point — auto-pass your next save; a targeted ally within 2 squares gains DR equal to Tier",
+    fiction: "Nothing moves you. Nothing moves them while you stand there.", wired: true },
+  { cost: 4, key: "sh-storm", tier: 4, bucket: "def", auraDoctrine: "stillheart",
+    label: "Storm's Heart — your Aura and Burn are locked till your next turn; foes within 2 squares are Calmed for 1 round",
+    fiction: "The eye is the quietest place in the storm.", wired: true },
+
+  // ─── Aurablade VOID EDGE (doctrine) — absence = authority ────────────────────
+  { cost: 1, key: "ve-null", tier: 2, bucket: "off", auraDoctrine: "void-edge",
+    label: "Null Cut — a foe cannot take reactions until your next turn",
+    fiction: "You cut the moment they would have moved in.", wired: true },
+  { cost: 2, key: "ve-hush", tier: 3, bucket: "off", auraDoctrine: "void-edge",
+    label: "Hush — a foe is Staggered and rolls its next attack keeping the lowest 2 of 3d10",
+    fiction: "The will goes out of them like a held note ending.", wired: true },
+  { cost: 4, key: "ve-erase", tier: 4, bucket: "off", auraDoctrine: "void-edge",
+    label: "Erasure Stroke — a foe loses its banked rerolls and is Shaken; your next Strike ignores resistances",
+    fiction: "Whatever they were counting on, it isn't there now.", wired: true }
 ];
 
 // Slugs (normalized) → does this actor have a matching class/feat item? Gates the
 // class-exclusive Surge menu entries (classFilter).
 function _ftActorMatchesClass(actor, slugs) {
-  const ids = (Array.isArray(slugs) ? slugs : [slugs]).map(s => String(s).toLowerCase().replace(/[\s-]/g, "_"));
+  // Separator-agnostic (2026-10-24): pack identifiers drift between "soul-smith",
+  // "shadow_courier" and "harmonymarshal" — compare with every non-alphanumeric
+  // stripped so one class is never silently locked out of its own Surge menu.
+  const ids = (Array.isArray(slugs) ? slugs : [slugs]).map(s => _ftClassSlug(s));
   return Array.from(actor?.items ?? []).some(i => {
     if (i.type !== "class" && i.type !== "feat") return false;
-    const id = String(i.system?.identifier ?? "").toLowerCase().replace(/-/g, "_");
-    return !!id && ids.some(s => id === s || id.startsWith(s + "_"));
+    const id = _ftClassSlug(i.system?.identifier);
+    return !!id && ids.some(s => id === s || id.startsWith(s));
   });
 }
+// Normalised class slug: lower-case, every non-alphanumeric dropped ("harmony-marshal",
+// "harmony_marshal" and "harmonymarshal" all → "harmonymarshal").
+function _ftClassSlug(s) { return String(s ?? "").toLowerCase().replace(/[^a-z0-9]/g, ""); }
+function _ftIsHarmonyMarshalId(id) { return _ftClassSlug(id) === "harmonymarshal"; }
 
 // Soul-Smith Surge spend keys — routed to _ftSoulSmithSurge before generic dispatch.
 const _FT_SOUL_SMITH_KEYS = new Set(["forge-weld", "atonement", "share-furnace", "relic-rebirth"]);
@@ -4963,6 +5067,18 @@ const _FT_BULWARK_PATH_KEYS = new Set([
 // Path spends that target SELF / an aura (no single target needed). av-unstoppable
 // is here too — its core is self CC-immunity; the Prone just applies if a foe is targeted.
 const _FT_BULWARK_PATH_SELF_KEYS = new Set(["cl-cataclysm", "av-unstoppable", "mt-root", "mt-deny", "mt-bastion"]);
+
+// Aurablade class-exclusive Surge keys — routed to _ftAurabladeSurge (all self).
+const _FT_AURABLADE_KEYS = new Set(["ab-stoke", "ab-shift", "ab-vent", "ab-unbound"]);
+// Aurablade doctrine Surge keys — routed to _ftAuraDoctrineSurge; gated by which
+// Aura doctrine the actor's subclass is (see _ftAurabladeDoctrine).
+const _FT_AURA_DOCTRINE_KEYS = new Set([
+  "bh-tithe", "bh-hymn", "bh-terror",
+  "sh-breath", "sh-still", "sh-storm",
+  "ve-null", "ve-hush", "ve-erase"
+]);
+// Doctrine spends that target SELF / an aura (sh-still's ally target is optional).
+const _FT_AURA_DOCTRINE_SELF_KEYS = new Set(["bh-tithe", "sh-breath", "sh-still", "sh-storm"]);
 
 // Shadow Courier base class-exclusive Surge keys — routed to _ftCourierSurge.
 const _FT_COURIER_KEYS = new Set(["sc-step", "sc-ghost", "sc-flank", "sc-nodoor"]);
@@ -5091,6 +5207,11 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     ui.notifications?.warn(`Surge: unknown effect "${effectKey}"`);
     return;
   }
+  // Bulwark discounts (ruling BW1): Exchange / Both Things At Once / Stance Dance.
+  const _baseCost = Number(cost) || 0;
+  const _effCost = _ftSurgeEffectiveCost(actor, entry);
+  const _discounted = _effCost < _baseCost;
+  if (_discounted) cost = _effCost;
 
   // Special-case: reposition-init has its own wired handler from the original
   // menu — keep using it. It pays cost itself.
@@ -5226,6 +5347,12 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
     return;
   }
+  // Aurablade doctrine spends — the foe/ally-targeted ones need a target.
+  if (_FT_AURA_DOCTRINE_KEYS.has(effectKey) && !_FT_AURA_DOCTRINE_SELF_KEYS.has(effectKey)
+      && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+    return;
+  }
   // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
   if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
     const t = Array.from(game.user?.targets ?? [])[0];
@@ -5252,6 +5379,9 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
 
   // Pay the cost.
   await actor.update({ "system.resources.surge.value": Math.max(0, curSurge - cost) });
+  let _bwNote = _discounted ? `<p style="margin:0.25rem 0;font-size:0.72rem;opacity:0.75">◆ Cost reduced ${_baseCost} → ${cost}${actor.flags?.fourththing?.bulwark?.exchangeNext ? " (The Exchange)" : ""}.</p>` : "";
+  if (actor.flags?.fourththing?.bulwark?.exchangeNext) { try { await actor.unsetFlag("fourththing", "bulwark.exchangeNext"); } catch (e) {} }
+  _bwNote += await _ftBulwarkPolarityCataclyst(actor, entry);
 
   // Spend-time AEs: brace / mythic-stand / steel-veil / sanctum apply
   // immediately via short-duration Active Effects + flag markers that the
@@ -5295,6 +5425,10 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     chatExtra = await _ftCosmicLinguistSurge(actor, effectKey, tier);
   } else if (_FT_CL_DOCTRINE_KEYS.has(effectKey)) {
     chatExtra = await _ftClDoctrineSurge(actor, effectKey, tier);
+  } else if (_FT_AURABLADE_KEYS.has(effectKey)) {
+    chatExtra = await _ftAurabladeSurge(actor, effectKey, tier);
+  } else if (_FT_AURA_DOCTRINE_KEYS.has(effectKey)) {
+    chatExtra = await _ftAuraDoctrineSurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
     chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
   } else if (SPEND_TIME_AE.has(effectKey)) {
@@ -5337,6 +5471,7 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   const GM_DEFERRED_KEYS = new Set([
     "narrative-refund", "narrative-fiction"
   ]);
+  chatExtra = `${chatExtra ?? ""}${_bwNote}`;
   let footerHint = "";
   if (entry.wired || SPEND_TIME_AE.has(effectKey) || ALLY_AE.has(effectKey)) {
     footerHint = ""; // immediate effect, no further enforcement needed
@@ -5613,6 +5748,177 @@ async function _ftSpendSparks(actor, n) {
 }
 // ─── Harmony Marshal Mandate (subclass) detection + Surge spends ──────────────
 // Which Mandate is this actor? Flexible match on subclass identifier OR name.
+// ─── Aurablade Surge template (ruling AB1, 2026-10-25) ───────────────────────
+// Doctrine detector: which Aura doctrine the actor's subclass is. Matches the
+// subclass identifier `bbttcc-aurablade-<doctrine>` or its display name.
+function _ftAurabladeDoctrine(actor) {
+  for (const i of (actor?.items ?? [])) {
+    if (i.type !== "subclass") continue;
+    const id = String(i.system?.identifier ?? "").toLowerCase();
+    const nm = String(i.name ?? "").toLowerCase();
+    if (id.includes("blood-hymn") || id.includes("blood_hymn") || nm.includes("blood hymn")) return "blood-hymn";
+    if (id.includes("stillheart") || nm.includes("stillheart")) return "stillheart";
+    if (id.includes("void-edge") || id.includes("void_edge") || nm.includes("void edge")) return "void-edge";
+  }
+  return null;
+}
+const _ftAbDrAE = (actor, name, tier) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+async function _ftAbOneShot(actor, k, tier) { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} }
+// Tokens within `ft` of the actor's token: allies (disposition ≥ 0, not self) or foes (< 0). null = no token.
+function _ftAbTokensWithin(actor, ft, foes = false) {
+  const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+  if (!myTok) return null;
+  return (canvas.tokens?.placeables ?? []).filter(t => t?.actor && t.actor.id !== actor.id
+    && (foes ? (t.document?.disposition ?? 0) < 0 : (t.document?.disposition ?? 0) >= 0)
+    && _ftDistanceBetweenTokens(myTok, t) <= ft);
+}
+const _ftAbP = (c, s) => `<p style="margin:0.25rem 0;font-size:0.78rem;color:${c}">${s}</p>`;
+const _ftAbWarn = (label) => `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ ${label} needs a target. Surge spent — GM may refund.</p>`;
+
+// Timed condition (2026-10-25): set a condition now and clear it when the combat
+// round reaches `until`. Stamp = flags.fourththing.tempConditions.<key> =
+// { until, combatId }; the active GM's updateCombat sweep (below the Burn timer
+// tick) clears it. Out of combat the condition simply applies (GM clears). Used by
+// Storm's Heart and the Dreamwalker Radiant Pause (ruling DW6). Seat-safe: goes
+// through _ftApplyEffectsToTarget (conditions + flags relay to the GM).
+async function _ftTempCondition(target, key, rounds = 1) {
+  if (!target) return false;
+  const s = target.system?.system ?? target.system ?? {};
+  const immune = s?.derived?.defenses?.conditionImmunities ?? [];
+  if (immune.includes(key)) return false;
+  const conds = s?.conditions?.[key] === true ? [] : [key];
+  const combat = game.combat;
+  const flags = combat?.started ? { [`tempConditions.${key}`]: { until: Number(combat.round) + rounds, combatId: combat.id } } : null;
+  if (!conds.length && !flags) return true;
+  const mode = await _ftApplyEffectsToTarget(target, [], conds, { flags });
+  if (mode === "direct" && conds.length) { try { await _ftSyncConditionAE(target, key, true); } catch (e) {} }
+  return mode !== "none";
+}
+
+async function _ftAurabladeSurge(actor, effectKey, tier) {
+  const burn = ftGetBurn(actor);
+  if (effectKey === "ab-stoke") {
+    await _ftAbOneShot(actor, "doomstrike", tier);
+    const nb = await ftAddBurn(actor, 1);
+    return _ftAbP("#dc5050", `🔥 Stoke the Blade — your next Strike blazes (+${tier}d6). Burn ${burn} → ${nb}.`);
+  }
+  if (effectKey === "ab-shift") {
+    const res = (actor.system?.system ?? actor.system)?.resources ?? {};
+    const cur = String(res.aura?.state ?? "fury");
+    const pick = await new Promise(resolve => {
+      const btns = {};
+      for (const k of ["fury", "resolve", "mercy", "dread"]) {
+        const av = AURA_STATES[k];
+        btns[k] = { label: (k === cur ? "● " : "") + (av?.label ?? k), callback: () => resolve(k) };
+      }
+      new Dialog({ title: "Aura Shift — which Aura?", content: `<p style="font-size:0.8rem;margin:0 0 0.3rem">Change your Aura at no Burn cost. Current: <b>${AURA_STATES[cur]?.label ?? cur}</b>.</p>`, buttons: btns, default: cur, close: () => resolve(null) }).render(true);
+    });
+    const next = pick ?? cur;
+    if (next !== cur) { try { await actor.update({ "system.resources.aura.state": next }); } catch (e) {} }
+    try { await actor.createEmbeddedDocuments("ActiveEffect", [_ftAbDrAE(actor, `Aura Shift (DR ${tier})`, tier)]); } catch (e) {}
+    const lbl = (k) => AURA_STATES[k]?.label ?? k;
+    return _ftAbP("#78a0dc", `🔄 Aura Shift — ${next === cur ? `you hold <b>${lbl(cur)}</b>` : `<b>${lbl(cur)}</b> → <b>${lbl(next)}</b>`} (no Burn) and gain DR ${tier} this round.`);
+  }
+  if (effectKey === "ab-vent") {
+    const nb = await ftAddBurn(actor, -2);
+    await _ftAbOneShot(actor, "doomstrike", tier);
+    await _ftAbOneShot(actor, "sundering-blow", tier);
+    return _ftAbP("#dc5050", `♨ Vent Through the Blade — Burn ${burn} → ${nb}; your next Strike +${tier}d6 and ignores resistances.`);
+  }
+  if (effectKey === "ab-unbound") {
+    const nb = burn < 4 ? await ftAddBurn(actor, 4 - burn) : burn;
+    const combat = game.combat;
+    try { await actor.setFlag("fourththing", "aurablade.unbound", { round: Number(combat?.round ?? 0), combatId: combat?.id ?? null, at: Date.now() }); } catch (e) {}
+    const allies = _ftAbTokensWithin(actor, 10) ?? [];
+    const names = [];
+    for (const t of allies) { if (await _ftCreateAllyAE(t.actor, _ftAbDrAE(actor, `Aura Unbound (DR ${tier})`, tier))) names.push(t.actor.name); }
+    return _ftAbP("#ff5ac8", `☀ Aura Unbound — Burn ${burn} → ${nb} (Overheated); your Aura actions cost no Burn this round${names.length ? `; DR ${tier} to <b>${names.join(", ")}</b>` : ""}.`);
+  }
+  return "";
+}
+
+async function _ftAuraDoctrineSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname  = target?.name ?? "the target";
+  const burn   = ftGetBurn(actor);
+  const setCond = async (a, k) => {
+    const s = a.system?.system ?? a.system ?? {};
+    if (s?.conditions?.[k] === true) return true;
+    try { await game.fourththing?.toggleCondition?.(a, k); return true; } catch (e) { return false; }
+  };
+  const keepLowest = async (a) => { try { await _ftSetFlagSeatSafe(a, "aurablade.disAttackOnce", true); } catch (e) {} };
+  switch (effectKey) {
+    // ── Blood Hymn ──
+    case "bh-tithe": {
+      const s = actor.system?.system ?? actor.system ?? {};
+      const cur = Number(s?.derived?.integrity?.value ?? 0);
+      const nxt = Math.max(1, cur - tier);
+      try { await actor.update({ "system.derived.integrity.value": nxt }); } catch (e) {}
+      await _ftAbOneShot(actor, "crowning-blow", tier);
+      return _ftAbP("#dc5050", `🩸 Crimson Tithe — you pay ${cur - nxt} Integrity (${cur} → ${nxt}); your next Strike lands as a max-die critical.`);
+    }
+    case "bh-hymn": {
+      if (!target) return _ftAbWarn("Hymn of the Open Wound");
+      const r = new Roll(`1d8 + ${tier}`); await r.evaluate(); _ftSurgeRoll(r);
+      const mult = burn >= 4 ? 2 : 1;
+      const h = await _ftHealTarget(target, Math.max(0, Math.round((Number(r.total) || 0) * mult)));
+      const nb = await ftAddBurn(actor, 1);
+      return _ftAbP("#78c88c", `🎶 Hymn of the Open Wound — <b>${tname}</b> +${h.healed} Integrity (1d8+${tier}${mult > 1 ? " ×2 Overheated" : ""}) → ${h.next}.${h.tag} Burn ${burn} → ${nb}.`);
+    }
+    case "bh-terror": {
+      if (!target) return _ftAbWarn("Scarlet Terror");
+      await setCond(target, "shaken");
+      await keepLowest(target);
+      const nb = await ftAddBurn(actor, 1);
+      return _ftAbP("#9b59b6", `😱 Scarlet Terror — <b>${tname}</b> is Shaken and rolls its next attack keeping the lowest 2 of 3d10. Burn ${burn} → ${nb}.`);
+    }
+    // ── Stillheart ──
+    case "sh-breath": {
+      const nb = await ftAddBurn(actor, -1);
+      try { await actor.createEmbeddedDocuments("ActiveEffect", [_ftAbDrAE(actor, `Settled Breath (DR ${tier})`, tier)]); } catch (e) {}
+      return _ftAbP("#4a90d9", `🫁 Settled Breath — Burn ${burn} → ${nb}; DR ${tier} this round.`);
+    }
+    case "sh-still": {
+      await _ftAbOneShot(actor, "iron-word", tier);
+      let extra = "";
+      if (target && target.id !== actor.id) { if (await _ftCreateAllyAE(target, _ftAbDrAE(actor, `Still Point (DR ${tier})`, tier))) extra = ` <b>${tname}</b> gains DR ${tier}.`; }
+      return _ftAbP("#4a90d9", `◎ Still Point — you auto-pass your next save.${extra}`);
+    }
+    case "sh-storm": {
+      try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Emotional Lock", img: "icons/magic/control/buff-flight-wings-blue.webp", origin: actor.uuid, duration: { rounds: 1, seconds: 6 }, changes: [], flags: { fourththing: { emotionalLock: true } } }]); } catch (e) {}
+      const foes = _ftAbTokensWithin(actor, 10, true) ?? [];
+      const names = [];
+      for (const t of foes) { if (await _ftTempCondition(t.actor, "calmed", 1)) names.push(t.actor.name); }
+      return _ftAbP("#4a90d9", `🌀 Storm's Heart — your Aura and Burn are locked till your next turn${names.length ? `; <b>${names.join(", ")}</b> Calmed for 1 round` : "; no foes within 2 squares"}.`);
+    }
+    // ── Void Edge ──
+    case "ve-null": {
+      if (!target) return _ftAbWarn("Null Cut");
+      const combat = game.combat;
+      const dur = combat ? { rounds: 1, startRound: combat.round, startTurn: combat.turn, combat: combat.id } : { rounds: 1 };
+      try { await _ftApplyEffectsToTarget(target, [{ name: "Reactions Denied", img: "icons/svg/net.svg", origin: actor.uuid, duration: dur, changes: [], flags: { fourththing: { reactionsDenied: true, source: actor.uuid } } }], []); } catch (e) {}
+      return _ftAbP("#8090a0", `∅ Null Cut — <b>${tname}</b> cannot take reactions until your next turn.`);
+    }
+    case "ve-hush": {
+      if (!target) return _ftAbWarn("Hush");
+      await setCond(target, "staggered");
+      await keepLowest(target);
+      return _ftAbP("#8090a0", `… Hush — <b>${tname}</b> is Staggered and rolls its next attack keeping the lowest 2 of 3d10.`);
+    }
+    case "ve-erase": {
+      if (!target) return _ftAbWarn("Erasure Stroke");
+      const had = (target.getFlag?.("fourththing", "aidBanked") ?? []).length;
+      let wiped = false;
+      if (had && (game.user?.isGM || target.isOwner)) { try { await target.setFlag("fourththing", "aidBanked", []); wiped = true; } catch (e) {} }
+      await setCond(target, "shaken");
+      await _ftAbOneShot(actor, "sundering-blow", tier);
+      const rr = had ? (wiped ? `loses ${had} banked reroll${had === 1 ? "" : "s"} and ` : `loses its ${had} banked reroll${had === 1 ? "" : "s"} (GM clears) and `) : "";
+      return _ftAbP("#8090a0", `▭ Erasure Stroke — <b>${tname}</b> ${rr}is Shaken; your next Strike ignores resistances.`);
+    }
+  }
+  return "";
+}
+
 function _ftHarmonyMandate(actor) {
   for (const i of (actor?.items ?? [])) {
     if (i.type !== "subclass") continue;
@@ -5673,7 +5979,7 @@ async function _ftTranceSurge(actor, effectKey, tier) {
       const allies = alliesInAura(30) ?? [];
       await bankReroll(actor, "quiet-sun");
       for (const t of allies) if (t.actor.id !== actor.id) await bankReroll(t.actor, "quiet-sun");
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8d8a0">☀ Still Attention — you and allies within 30 ft bank a reroll-lowest (the stillness sees clearly).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8d8a0">☀ Still Attention — you and allies within 6 squares bank a reroll-lowest (the stillness sees clearly).</p>`;
     }
     case "qs-peace": {
       if (!target) return needTarget("Somnolent Peace");
@@ -5684,8 +5990,9 @@ async function _ftTranceSurge(actor, effectKey, tier) {
       const foes = foesInAura(30);
       if (!foes) return needToken("Radiant Pause");
       const n = [];
-      for (const t of foes) { try { await game.fourththing?.toggleCondition?.(t.actor, "calmed"); n.push(t.actor.name); } catch (e) {} }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8d8a0">☀ Radiant Pause — ${n.length ? `<b>${n.join(", ")}</b> are` : "nearby enemies are"} Calmed: a contemplative beat where violence stalls.</p>`;
+      // Ruling DW6 (2026-10-25): Calmed for ONE round — the timed-condition sweep clears it.
+      for (const t of foes) { try { if (await _ftTempCondition(t.actor, "calmed", 1)) n.push(t.actor.name); } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8d8a0">☀ Radiant Pause — ${n.length ? `<b>${n.join(", ")}</b> are` : "nearby enemies are"} Calmed for 1 round: a contemplative beat where violence stalls.</p>`;
     }
     // ── Trance of the Sapphire Gate ──
     case "sg-touched": {
@@ -5706,7 +6013,7 @@ async function _ftTranceSurge(actor, effectKey, tier) {
       if (!allies) return needToken("Gate Held Open");
       const names = [];
       for (const t of allies) { await bankReroll(t.actor, "sapphire-gate"); await _ftCreateAllyAE(t.actor, drAE(`Gate Held (DR ${tier})`)); names.push(t.actor.name); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Gate Held Open — ${names.length ? `<b>${names.join(", ")}</b>` : "allies within 30 ft"} bank a reroll and gain DR ${tier}.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Gate Held Open — ${names.length ? `<b>${names.join(", ")}</b>` : "allies within 6 squares"} bank a reroll and gain DR ${tier}.</p>`;
     }
     // ── Trance of the Thousand Faces ──
     case "tf-face": {
@@ -5718,7 +6025,7 @@ async function _ftTranceSurge(actor, effectKey, tier) {
       if (!target) return needTarget("Mirror Read");
       try { await _ftSetFlagSeatSafe(target, "aurablade.disAttackOnce", true); } catch (e) {}
       await bankReroll(actor, "thousand-faces");
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0ff">🎭 Mirror Read — you wear <b>${tname}</b>'s tell back at them: it rolls its next attack at disadvantage, and you bank a reroll.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0ff">🎭 Mirror Read — you wear <b>${tname}</b>'s tell back at them: it rolls its next attack keeping the lowest 2 of 3d10, and you bank a reroll.</p>`;
     }
     case "tf-shared": {
       if (!target) return needTarget("Shared Face");
@@ -5781,13 +6088,13 @@ async function _ftDreamwalkerSurge(actor, effectKey, tier) {
       if (!allies) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Shared Dream needs your token on the scene. Surge spent — GM may refund.</p>`;
       const lines = [];
       for (const t of allies) { await bankReroll(t.actor, "dreamwalker-shared"); const c = await grantClarity(t.actor, 1); lines.push(`${t.actor.name}${c > 0 ? " +1 Clarity" : ""}`); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0ff">🌌 Shared Dream — ${lines.length ? `<b>${lines.join(", ")}</b>` : "allies within 30 ft"} bank a reroll and draw Clarity from the dream.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0ff">🌌 Shared Dream — ${lines.length ? `<b>${lines.join(", ")}</b>` : "allies within 6 squares"} bank a reroll and draw Clarity from the dream.</p>`;
     }
     case "dw-reality": {
       const allies = alliesInAura(30);
       for (const t of (allies ?? [])) await bankReroll(t.actor, "dreamwalker-reality");
       if (target) { try { await _ftSetFlagSeatSafe(target, "aurablade.disAttackOnce", true); } catch (e) {} }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0ff;font-weight:600">✶ Reality Hack — the dream rewrites the moment: allies within 30 ft bank a reroll${target ? `, and <b>${tname}</b> rolls its next attack at disadvantage` : ""}.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0ff;font-weight:600">✶ Reality Hack — the dream rewrites the moment: allies within 6 squares bank a reroll${target ? `, and <b>${tname}</b> rolls its next attack keeping the lowest 2 of 3d10` : ""}.</p>`;
     }
   }
   return "";
@@ -5825,14 +6132,14 @@ async function _ftMandateSurge(actor, effectKey, tier) {
       if (!allies) return needToken;
       const names = [];
       for (const t of allies) { await bankReroll(t.actor, "accord"); names.push(t.actor.name); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Synchronized Advance — ${names.length ? `<b>${names.join(", ")}</b>` : "allies within 30 ft"} bank a reroll-lowest on their next attack.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Synchronized Advance — ${names.length ? `<b>${names.join(", ")}</b>` : "allies within 6 squares"} bank a reroll-lowest on their next attack.</p>`;
     }
     case "acc-group": {
       const allies = alliesInAura(30);
       if (!allies) return needToken;
       let n = 0;
       for (const t of allies) { try { await _ftSetFlagSeatSafe(t.actor, "bonusActionAvailable", true); n++; } catch (e) {} }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🤝 Group Turn — ${n} ${n === 1 ? "ally" : "allies"} within 30 ft each gain a freed bonus action.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🤝 Group Turn — ${n} ${n === 1 ? "ally" : "allies"} within 6 squares each gain a freed bonus action.</p>`;
     }
     // ── Mandate of Overwatch (defensive/reactive) ──
     case "ovw-covered": {
@@ -5854,7 +6161,7 @@ async function _ftMandateSurge(actor, effectKey, tier) {
       if (!allies) return needToken;
       const names = [];
       for (const t of allies) { await _ftCreateAllyAE(t.actor, drAE(`Perimeter (DR ${tier})`)); names.push(t.actor.name); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Locked Perimeter — ${names.length ? `<b>${names.join(", ")}</b>` : "allies within 30 ft"} gain DR ${tier} this round.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Locked Perimeter — ${names.length ? `<b>${names.join(", ")}</b>` : "allies within 6 squares"} gain DR ${tier} this round.</p>`;
     }
     // ── Mandate of Resolve (morale / anti-death) ──
     case "res-hold": {
@@ -6090,7 +6397,7 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
       if (next > cur) lines.push(`<b>${a.name}</b> +${next - cur}`);
     }
     const healTxt = lines.length ? `healed ${lines.join(", ")} and ` : "";
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🔥 Furnace of Renewal — ${healTxt}warded allies within 30 ft vs poison/qliphothic (3 rds). <span style="opacity:0.6">[${heatTag}]</span></p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🔥 Furnace of Renewal — ${healTxt}warded allies within 6 squares vs poison/qliphothic (3 rds). <span style="opacity:0.6">[${heatTag}]</span></p>`;
   }
 
   // ── T4: Relic of Rebirth — Overheated: reforge a fallen ally to half; else forge a ward ──
@@ -6264,6 +6571,17 @@ Hooks.on("updateCombat", async (combat, change) => {
     const a = c?.actor;
     if (!a || seen.has(a.uuid)) continue;
     seen.add(a.uuid);
+    // Timed conditions (_ftTempCondition): clear once the round has reached `until`.
+    const tc = a.flags?.fourththing?.tempConditions;
+    if (tc && typeof tc === "object") {
+      for (const [k, v] of Object.entries(tc)) {
+        if (!v || v.combatId !== combat.id || Number(combat.round) < Number(v.until)) continue;
+        try {
+          if ((a.system?.system ?? a.system)?.conditions?.[k] === true) await game.fourththing.toggleCondition(a, k);
+          await a.unsetFlag("fourththing", `tempConditions.${k}`);
+        } catch (e) { console.warn("[fourththing] timed condition clear failed", a?.name, k, e); }
+      }
+    }
     const bt = a.flags?.fourththing?.burnTimer;
     if (!bt || bt.combatId !== combat.id) continue;
     try { await _ftBurnTimerTick(a, bt, now); }
@@ -6467,7 +6785,9 @@ async function _ftBulwarkSurge(actor, effectKey, tier) {
 
   // ── Folded Frame/Ruin abilities (one-shot flags the existing consumers read) ──
   if (effectKey === "bw-absorb") {
-    const r = new Roll("1d8"); await r.evaluate(); _ftSurgeRoll(r);
+    // Cataclyst L5 Stance Dance, Anchor stance: Absorb's cap +1d4 (ruling BW1).
+    const _sdAnchor = (actor.appliedEffects ?? actor.effects ?? []).some(e => !e.disabled && e.flags?.fourththing?.stanceDanceAbsorb);
+    const r = new Roll(_sdAnchor ? "1d8 + 1d4" : "1d8"); await r.evaluate(); _ftSurgeRoll(r);
     try { await actor.setFlag("fourththing", "bulwark.frameOneShot.absorb", { roll: Number(r.total) || 0, ts: Date.now() }); } catch (e) {}
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Absorb — your next incoming hit is <b>capped at ${r.total}</b> (you take the wall, not the blow). Consumed by the next hit that deals damage.</p>`;
   }
@@ -6501,7 +6821,14 @@ async function _ftBulwarkSurge(actor, effectKey, tier) {
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚒ Catastrophic Entry — structure breach armed: your next hit ignores structure resistance (no target → it lands on the structure you strike).</p>`;
   }
   if (effectKey === "bw-siege") {
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🏛 Siege Works — <b>−1 Violence OP</b> cost on this Siege. <span style="opacity:0.65;font-style:italic">(GM applies on the siege ledger.)</span></p>`;
+    // Ruling BW2 (2026-10-25): arm the structures module's siegeCostDiscount on the
+    // Bulwark's Domain, the same TRIGGERABLE route Shockwave / Renewal already use.
+    const bw = game.bbttcc?.api?.structures?.bulwark;
+    let armed = false;
+    if (typeof bw?.trigger === "function") {
+      try { armed = !!(await bw.trigger(actor, "siege")); } catch (e) { console.warn("[fourththing] Siege Works arm failed", e); }
+    }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🏛 Siege Works — <b>buffer costs 25% less</b> on this Siege. <span style="opacity:0.65;font-style:italic">(${armed ? "Discount armed on your Domain's siege ledger." : "GM applies on the siege ledger."})</span></p>`;
   }
   if (effectKey === "bw-renewal") {
     // Ruling 2026-10-02: the Surge Renewal opens the same reclamation as the Breaker
@@ -6672,6 +6999,8 @@ async function _ftCourierSurge(actor, effectKey, tier) {
 
   if (effectKey === "sc-step") {
     const half = await selfMove(); await freeReaction(actor);
+    // Ruling SC4 (2026-10-25): "no provoke" — set the disengaged flag the reaction-strike suppressor reads.
+    try { await actor.setFlag("fourththing", "combat", { ...(actor.flags?.fourththing?.combat ?? {}), disengaged: true }); } catch (e) {}
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0b8e8">🏃 Courier's Step — +${half} ft movement (no provoke) and a freed reaction.</p>`;
   }
   if (effectKey === "sc-ghost") {
@@ -6733,7 +7062,7 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
     case "bs-ambush": {
       await oneShot("doomstrike");
       if (target) await disAdv(target);
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🗡 Ambush — your next Strike +${tier}d6${target ? `, and <b>${tname}</b>'s next attack is at disadvantage` : ""}.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🗡 Ambush — your next Strike +${tier}d6${target ? `, and <b>${tname}</b>'s next attack is keeping the lowest 2 of 3d10` : ""}.</p>`;
     }
     case "bs-cutoff": {
       if (target) {
@@ -6806,7 +7135,7 @@ function _ftPactDoctrine(actor) {
 
 // Shared Pactkeeper spend helpers — enforcement chokepoints reused from the wider
 // system (no new consumers): disAttackOnce (attack disadvantage), disSavesAll AE
-// (saves at disadvantage), reactionsDenied AE, aegis-DR AE, relicWard (hold-at-1),
+// (saves keep lowest 2 of 3d10), reactionsDenied AE, aegis-DR AE, relicWard (hold-at-1),
 // toggleCondition, integrity heal, aidBanked reroll, bonusActionAvailable, strike
 // one-shots (doomstrike / crowning-blow / sundering-blow).
 // Owner-or-GM-relay (2026-10-01): the foe is almost never the spender's own
@@ -6828,11 +7157,11 @@ async function _ftPactkeeperSurge(actor, effectKey, tier) {
 
   if (effectKey === "pk-clause") {
     if (target) await _ftPactDisAttack(target);
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">§ Invoke Clause — <b>${tname}</b>'s next attack is at disadvantage (the terms bind).</p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">§ Invoke Clause — <b>${tname}</b>'s next attack is keeping the lowest 2 of 3d10 (the terms bind).</p>`;
   }
   if (effectKey === "pk-writ") {
-    if (target) { await setCond(target, "staggered"); await _ftPactDisSavesAE(actor, target, "Binding Writ (saves at disadvantage)"); }
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">§ Binding Writ — <b>${tname}</b> is Staggered and rolls its saves at disadvantage till your next turn.</p>`;
+    if (target) { await setCond(target, "staggered"); await _ftPactDisSavesAE(actor, target, "Binding Writ (saves keep lowest 2 of 3d10)"); }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">§ Binding Writ — <b>${tname}</b> is Staggered and rolls its saves keeping the lowest 2 of 3d10 till your next turn.</p>`;
   }
   if (effectKey === "pk-shelter") {
     const names = [];
@@ -6842,8 +7171,8 @@ async function _ftPactkeeperSurge(actor, effectKey, tier) {
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Shelter the Bound — ${names.map(n => `<b>${n}</b>`).join(" + ")} gain DR ${tier}; the next hit that would drop ${target && target.id !== actor.id ? `<b>${tname}</b>` : "you"} holds at 1.</p>`;
   }
   if (effectKey === "pk-sovereign") {
-    if (target) { await _ftPactNoReactAE(actor, target, "Sovereign Writ (reactions denied)"); await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Sovereign Writ (saves at disadvantage)"); }
-    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">§ Sovereign Writ — <b>${tname}</b> cannot take reactions and rolls its next attack + saves at disadvantage.</p>`;
+    if (target) { await _ftPactNoReactAE(actor, target, "Sovereign Writ (reactions denied)"); await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Sovereign Writ (saves keep lowest 2 of 3d10)"); }
+    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">§ Sovereign Writ — <b>${tname}</b> cannot take reactions and rolls its next attack + saves keeping the lowest 2 of 3d10.</p>`;
   }
   return "";
 }
@@ -6874,12 +7203,12 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">📚 Cite Precedent — you bank a reroll (the record supports you).</p>`;
     }
     case "ar-staredecisis": {
-      if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Stare Decisis (saves at disadvantage)"); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">⚖ Stare Decisis — <b>${tname}</b>'s next attack and its saves are at disadvantage (bound by precedent).</p>`;
+      if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Stare Decisis (saves keep lowest 2 of 3d10)"); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">⚖ Stare Decisis — <b>${tname}</b>'s next attack and its saves are keeping the lowest 2 of 3d10 (bound by precedent).</p>`;
     }
     case "ar-resjudicata": {
-      if (target) { await _ftPactNoReactAE(actor, target, "Res Judicata (reactions denied)"); await _ftPactDisSavesAE(actor, target, "Res Judicata (saves at disadvantage)"); }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">⚖ Res Judicata — <b>${tname}</b> cannot take reactions and rolls its saves at disadvantage. The matter is closed.</p>`;
+      if (target) { await _ftPactNoReactAE(actor, target, "Res Judicata (reactions denied)"); await _ftPactDisSavesAE(actor, target, "Res Judicata (saves keep lowest 2 of 3d10)"); }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">⚖ Res Judicata — <b>${tname}</b> cannot take reactions and rolls its saves keeping the lowest 2 of 3d10. The matter is closed.</p>`;
     }
     // ── Auditor — expose debt / punish ──
     case "au-expose": {
@@ -6888,7 +7217,7 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
     }
     case "au-levy": {
       if (target) { await setCond(target, "staggered"); await _ftPactDisAttack(target); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🧾 Levy — <b>${tname}</b> is Staggered and its next attack is at disadvantage (payment is due).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🧾 Levy — <b>${tname}</b> is Staggered and its next attack is keeping the lowest 2 of 3d10 (payment is due).</p>`;
     }
     case "au-foreclose": {
       await oneShot("crowning-blow"); await oneShot("sundering-blow");
@@ -6908,7 +7237,7 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
       const allies = myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= 30 / (canvas.scene?.grid?.distance ?? 5) * grid + grid / 2) : [];
       const names = [];
       for (const t of allies) { if (await _ftCreateAllyAE(t.actor, drAE(`Sanctuary (DR ${tier})`))) { await freeReaction(t.actor); names.push(t.actor.name); } }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78a0dc;font-weight:600">⛪ Sanctuary — ${names.length ? `<b>${names.join(", ")}</b> each gain` : "allies within 30 ft gain"} DR ${tier} and a freed reaction.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78a0dc;font-weight:600">⛪ Sanctuary — ${names.length ? `<b>${names.join(", ")}</b> each gain` : "allies within 6 squares gain"} DR ${tier} and a freed reaction.</p>`;
     }
   }
   return "";
@@ -6917,6 +7246,35 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
 // ─── Wyrdlens Adept (Pool archetype) — "every revelation feeds the lens" ──────
 // Bank +1 Surge on a successful manifestation cast (cap +2/round, foe-gated). Called
 // from the castSuccess point in castManifestation alongside the Dreamwalker hook.
+// Cosmic Linguist — the Surge alignment casting engine (ruling CL6, 2026-10-25). Five Annotator /
+// Metaphor features promise that casting "in alignment" banks extra Surge; nothing did it. Rule:
+// when the caster holds any of those features and the cast's Sephirah/intent/channel alignment
+// modifier is positive (ftAlignmentMod > 0), bank +1 Surge — cap +2 a round in combat, on top of
+// the class's turn-start generation. Each feature deepens the vocabulary, not the number.
+const _FT_CL_ALIGNED_FEATS = new Set([
+  "annotator_correspondence_mastery", "annotator_ritual_annotation",
+  "metaphor_shared_dream", "metaphor_symbolic_substitution", "metaphor_myth_hook"
+]);
+async function _ftClAlignedCastGen(actor, { sephirah, intent, channel } = {}) {
+  if (!actor || !_ftActorMatchesClass(actor, ["cosmic_linguist"])) return 0;
+  if (!_ftSurgeAllowed(actor)) return 0;
+  const feats = Array.from(actor.items ?? []).filter(i => _FT_CL_ALIGNED_FEATS.has(String(i.system?.identifier ?? "")));
+  if (!feats.length) return 0;
+  const mod = Number(ftAlignmentMod(ftEffectiveSephirah(actor, sephirah), intent, channel)) || 0;
+  if (mod <= 0) return 0;
+  const inCombat = !!game.combat?.started;
+  const round = Number(game.combat?.round ?? 0);
+  const f = actor.flags?.fourththing?.cosmicLinguist?.alignedGen ?? {};
+  const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
+  if (inCombat && count >= 2) return 0;
+  const got = await _ftBankSurge(actor, 1);
+  if (got > 0) {
+    await actor.setFlag("fourththing", "cosmicLinguist.alignedGen", { round, count: count + 1 });
+    try { ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p style="font-size:0.78rem;color:#9ad0ff">✎ Aligned casting (${feats[0].name.replace(/^.*?: /, "")}) — <b>+1 Surge</b> banked.</p>` }); } catch (e) {}
+  }
+  return got;
+}
+
 async function _ftWyrdlensCastGen(actor) {
   if (!_ftActorMatchesClass(actor, "wyrdlens-adept")) return;
   if (!_ftSurgeAllowed(actor)) return;
@@ -6961,8 +7319,8 @@ async function _ftWyrdlensSurge(actor, effectKey, tier) {
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0c8d8">🔭 Foresight — <b>${who.name}</b> banks a reroll-lowest on their next roll (you saw the thread).</p>`;
   }
   if (effectKey === "wl-expose") {
-    if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Exposed (saves at disadvantage)"); }
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">🔍 Expose — <b>${tname}</b>'s next attack and its saves are at disadvantage (you read the seam).</p>`;
+    if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Exposed (saves keep lowest 2 of 3d10)"); }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">🔍 Expose — <b>${tname}</b>'s next attack and its saves are keeping the lowest 2 of 3d10 (you read the seam).</p>`;
   }
   if (effectKey === "wl-refract") {
     if (target) { await _ftCreateAllyAE(target, drAE(`Refracted (DR ${tier})`)); try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {} }
@@ -6973,7 +7331,7 @@ async function _ftWyrdlensSurge(actor, effectKey, tier) {
     const names = [];
     for (const t of allies) { await bankReroll(t.actor); names.push(t.actor.name); }
     if (target && (target.getActiveTokens?.()?.[0]?.document?.disposition ?? 0) < 0) await _ftPactDisAttack(target);
-    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#a0c8d8;font-weight:600">✨ Revelation — ${names.length ? `<b>${names.join(", ")}</b> each bank` : "allies within 30 ft bank"} a reroll${target ? `; <b>${tname}</b>'s next attack is at disadvantage` : ""}.</p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#a0c8d8;font-weight:600">✨ Revelation — ${names.length ? `<b>${names.join(", ")}</b> each bank` : "allies within 6 squares bank"} a reroll${target ? `; <b>${tname}</b>'s next attack is keeping the lowest 2 of 3d10` : ""}.</p>`;
   }
   return "";
 }
@@ -7001,7 +7359,7 @@ async function _ftWlRefractionSurge(actor, effectKey, tier) {
     }
     case "fs-stop": {
       if (target) { await _ftPactDisAttack(target); await setCond(target, "staggered"); }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">⏳ The Stopped Strike — <b>${tname}</b> is Staggered and its next attack is at disadvantage (the instant freezes).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">⏳ The Stopped Strike — <b>${tname}</b> is Staggered and its next attack is keeping the lowest 2 of 3d10 (the instant freezes).</p>`;
     }
     // ── Refraction of Mercy — protection / de-escalation ──
     case "mc-soft": {
@@ -7025,16 +7383,16 @@ async function _ftWlRefractionSurge(actor, effectKey, tier) {
     }
     // ── Refraction of Truth — exposure / lockdown ──
     case "tr-read": {
-      if (target) await _ftPactDisSavesAE(actor, target, "The Reading Eye (saves at disadvantage)");
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">👁 The Reading Eye — <b>${tname}</b> rolls its saves at disadvantage (you read it true).</p>`;
+      if (target) await _ftPactDisSavesAE(actor, target, "The Reading Eye (saves keep lowest 2 of 3d10)");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">👁 The Reading Eye — <b>${tname}</b> rolls its saves keeping the lowest 2 of 3d10 (you read it true).</p>`;
     }
     case "tr-unconceal": {
       if (target) { await setCond(target, "staggered"); await _ftPactDisAttack(target); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">👁 The Unconcealed Word — <b>${tname}</b> is Staggered and its next attack is at disadvantage.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">👁 The Unconcealed Word — <b>${tname}</b> is Staggered and its next attack is keeping the lowest 2 of 3d10.</p>`;
     }
     case "tr-exposure": {
-      if (target) { await _ftPactNoReactAE(actor, target, "The Exposure (reactions denied)"); await _ftPactDisSavesAE(actor, target, "The Exposure (saves at disadvantage)"); }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">👁 The Exposure — <b>${tname}</b> cannot take reactions and rolls its saves at disadvantage (laid bare).</p>`;
+      if (target) { await _ftPactNoReactAE(actor, target, "The Exposure (reactions denied)"); await _ftPactDisSavesAE(actor, target, "The Exposure (saves keep lowest 2 of 3d10)"); }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">👁 The Exposure — <b>${tname}</b> cannot take reactions and rolls its saves keeping the lowest 2 of 3d10 (laid bare).</p>`;
     }
   }
   return "";
@@ -7081,14 +7439,14 @@ async function _ftCosmicLinguistSurge(actor, effectKey, tier) {
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">⌖ Stabilize — you gain DR ${tier}; your next cast resists counter / dispel (the sentence holds).</p>`;
   }
   if (effectKey === "cl-impose") {
-    if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Imposed Reading (saves at disadvantage)"); }
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">✎ Impose a Reading — <b>${tname}</b>'s next attack and its saves are at disadvantage.</p>`;
+    if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Imposed Reading (saves keep lowest 2 of 3d10)"); }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">✎ Impose a Reading — <b>${tname}</b>'s next attack and its saves are keeping the lowest 2 of 3d10.</p>`;
   }
   if (effectKey === "cl-rewrite") {
-    if (target) { await _ftPactNoReactAE(actor, target, "Rewritten (reactions denied)"); await _ftPactDisSavesAE(actor, target, "Rewritten (saves at disadvantage)"); }
+    if (target) { await _ftPactNoReactAE(actor, target, "Rewritten (reactions denied)"); await _ftPactDisSavesAE(actor, target, "Rewritten (saves keep lowest 2 of 3d10)"); }
     const allies = myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= 30 / (canvas.scene?.grid?.distance ?? 5) * grid + grid / 2) : [];
     const names = []; for (const t of allies) { await bankReroll(t.actor); names.push(t.actor.name); }
-    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8c8ff;font-weight:600">✦ Rewrite the Sentence — ${target ? `<b>${tname}</b> cannot take reactions and rolls saves at disadvantage; ` : ""}${names.length ? `nearby allies (<b>${names.join(", ")}</b>) each bank a reroll` : "allies near you bank a reroll"}.</p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8c8ff;font-weight:600">✦ Rewrite the Sentence — ${target ? `<b>${tname}</b> cannot take reactions and rolls saves keeping the lowest 2 of 3d10; ` : ""}${names.length ? `nearby allies (<b>${names.join(", ")}</b>) each bank a reroll` : "allies near you bank a reroll"}.</p>`;
   }
   return "";
 }
@@ -7115,11 +7473,11 @@ async function _ftClDoctrineSurge(actor, effectKey, tier) {
     }
     case "an-margin": {
       if (target) { await _ftPactDisSavesAE(actor, target, "Marginalia (saves at disadvantage)"); await setCond(target, "staggered"); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">📝 Marginalia — <b>${tname}</b> is Staggered and rolls its saves at disadvantage (annotated into a corner).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">📝 Marginalia — <b>${tname}</b> is Staggered and rolls its saves keeping the lowest 2 of 3d10 (annotated into a corner).</p>`;
     }
     case "an-revision": {
       const names = []; for (const t of aura()) { await bankReroll(t.actor); names.push(t.actor.name); }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#e8c84a;font-weight:600">📝 Revision — ${names.length ? `<b>${names.join(", ")}</b> each bank` : "allies within 30 ft bank"} a reroll-lowest (the whole passage, corrected).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#e8c84a;font-weight:600">📝 Revision — ${names.length ? `<b>${names.join(", ")}</b> each bank` : "allies within 6 squares bank"} a reroll-lowest (the whole passage, corrected).</p>`;
     }
     // ── Metaphor Apostle — declared likeness / transform ──
     case "mp-likeness": {
@@ -7128,11 +7486,11 @@ async function _ftClDoctrineSurge(actor, effectKey, tier) {
     }
     case "mp-frailty": {
       if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Declared Frailty (saves at disadvantage)"); }
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">🜂 Declared Frailty — "<b>${tname}</b>'s armor is paper." Its next attack and saves are at disadvantage.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">🜂 Declared Frailty — "<b>${tname}</b>'s armor is paper." Its next attack and saves are keeping the lowest 2 of 3d10.</p>`;
     }
     case "mp-apotheosis": {
       const names = []; for (const t of aura()) { await _ftCreateAllyAE(t.actor, drAE(`Apotheosis (DR ${tier})`)); await bankReroll(t.actor); names.push(t.actor.name); }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78a0dc;font-weight:600">🜂 Apotheosis — "you are all giants." ${names.length ? `<b>${names.join(", ")}</b>` : "Allies within 30 ft"} gain DR ${tier} and a reroll.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78a0dc;font-weight:600">🜂 Apotheosis — "you are all giants." ${names.length ? `<b>${names.join(", ")}</b>` : "Allies within 6 squares"} gain DR ${tier} and a reroll.</p>`;
     }
     // ── Redactor — omission / strip / deny ──
     case "rd-redact": {
@@ -7146,7 +7504,7 @@ async function _ftClDoctrineSurge(actor, effectKey, tier) {
     }
     case "rd-erasure": {
       if (target) { await setCond(target, "staggered"); await _ftPactNoReactAE(actor, target, "Erasure (reactions denied)"); await _ftPactDisSavesAE(actor, target, "Erasure (saves at disadvantage)"); }
-      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">⌫ Erasure — <b>${tname}</b> is Staggered, cannot take reactions, and rolls saves at disadvantage (struck from the sentence).</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">⌫ Erasure — <b>${tname}</b> is Staggered, cannot take reactions, and rolls saves keeping the lowest 2 of 3d10 (struck from the sentence).</p>`;
     }
   }
   return "";
@@ -7203,7 +7561,7 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
     if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Rally to Me needs a target ally. Surge spent — GM may refund.</p>`;
     await bankReroll(target, "rally-to-me");
     try { await _ftSetFlagSeatSafe(target, "bonusActionAvailable", true); } catch (e) {}
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🤝 Rally to Me — <b>${target.name}</b> banks a reroll-lowest and may immediately take a reaction (bonus action freed).</p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🤝 Rally to Me — <b>${target.name}</b> banks a reroll-lowest and may immediately take a bonus action — on their turn or off it (bonus action freed).</p>`;
   }
 
   // ── Unity Flourish — the whole line: every ally within 30 ft banks a reroll ──
@@ -7212,11 +7570,16 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
     if (!allies) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Unity Flourish needs your token on the scene. Surge spent — GM may refund.</p>`;
     const names = [];
     for (const t of allies) { await bankReroll(t.actor, "unity-flourish"); names.push(t.actor.name); }
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🎼 Unity Flourish — ${names.length ? `<b>${names.join(", ")}</b> each bank` : "allies within 30 ft bank"} a reroll-lowest on their next roll.</p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🎼 Unity Flourish — ${names.length ? `<b>${names.join(", ")}</b> each bank` : "allies within 6 squares bank"} a reroll-lowest on their next roll.</p>`;
   }
 
   // ── Conductor's Crescendo — capstone: party banks a reroll + clears a condition ──
   if (effectKey === "conductors-crescendo") {
+    // 1/scene guard (2026-10-24): the label promises it; key = scene + combat so a new fight on the same map re-arms it.
+    const sceneKey = `${canvas?.scene?.id ?? "none"}:${game.combat?.id ?? "none"}`;
+    if (actor.flags?.fourththing?.harmonyMarshal?.crescendoScene === sceneKey) {
+      return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Conductor's Crescendo already played this scene.</p>`;
+    }
     const allies = alliesInAura(30);
     if (!allies) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Conductor's Crescendo needs your token on the scene. Surge spent — GM may refund.</p>`;
     const lines = [];
@@ -7229,7 +7592,8 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
       if (k) { try { await game.fourththing?.toggleCondition?.(a, k); cl = ` (−${FT?.CONDITIONS?.[k]?.label ?? k})`; } catch (e) {} }
       lines.push(`${a.name}${cl}`);
     }
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🎺 Conductor's Crescendo — ${lines.length ? `<b>${lines.join(", ")}</b>` : "allies within 30 ft"} each bank a reroll-lowest and clear a condition.</p>`;
+    try { await actor.setFlag("fourththing", "harmonyMarshal.crescendoScene", sceneKey); } catch (e) {}
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🎺 Conductor's Crescendo — ${lines.length ? `<b>${lines.join(", ")}</b>` : "allies within 6 squares"} each bank a reroll-lowest and clear a condition.</p>`;
   }
   return "";
 }
@@ -7243,7 +7607,7 @@ async function _ftHarmonyHarvest(explodingActor, n) {
   const exTok = explodingActor.getActiveTokens?.()?.[0];
   if (!exTok) return;
   const isMarshal = (a) => !!a?.items?.find?.(it => it.type === "class" &&
-    (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
+    _ftIsHarmonyMarshalId(it.system?.identifier));
   const exDisp = exTok.document?.disposition ?? 0;
   for (const tok of (canvas?.tokens?.placeables ?? [])) {
     const a = tok?.actor;
@@ -7453,6 +7817,7 @@ const _FT_RELAY_FLAG_PATHS = new Set([
   "aurablade.autoPassLastStand",
   "bonusActionAvailable",
   "soulSmith.relicWard",
+  "tempConditions.calmed", "tempConditions.staggered", "tempConditions.shaken", "tempConditions.prone",
   // crew actions (2026-10-01): signal / suppression on targets, cycle-power
   // re-arming a crewmate's per-round gates (false only — see the handler).
   "combat.signalBonus",
@@ -8026,7 +8391,9 @@ async function castManifestation(actor, item, {
       if (poolKey === "actionUsed" && isElite && !bonusManiUsed) {
         _useEliteBonusMani = true;
       } else {
-        ui.notifications?.warn(`${actor.name}: ${mf.activation.type} already used this turn.`);
+        ui.notifications?.warn(mf.activation.type === "bonus"
+          ? `${actor.name}: bonus action already used this round (it refreshes at the start of your turn).`
+          : `${actor.name}: ${mf.activation.type} already used this turn.`);
         return false;
       }
     }
@@ -8171,6 +8538,9 @@ async function castManifestation(actor, item, {
     // Wyrdlens Adept — "every revelation feeds the lens": cast → Surge.
     try { await _ftWyrdlensCastGen(actor); }
     catch (e) { console.warn("[ft] wyrdlens cast-gen failed", e); }
+    // Cosmic Linguist — aligned casting banks Surge (ruling CL6, 2026-10-25).
+    try { await _ftClAlignedCastGen(actor, { sephirah, intent, channel }); }
+    catch (e) { console.warn("[ft] cosmic-linguist aligned cast-gen failed", e); }
   }
   if (item && castSuccess) {
     // Phase B 2026-05-19 — Action economy debit (elite bonus mani / standard
@@ -14632,7 +15002,7 @@ Hooks.once("init", function () {
       openSpendFrameDie, openFrameDiePool,
       openAurabladeAction, openChangeAura, openStabilizeBurn, openBurnState,
       openSpendAccessDie, openAccessPool,
-      openBreakerRuin, openDreamwalkerResonance, openDreamwalkerDeployCache, openDreamwalkerEchoReservoir, openDreamwalkerSpendEchoDie, openSoulSmithForge, openSoulSmithForgeInitiate, openSoulSmithAtonementCrucible, openSoulSmithFurnaceOfRenewal, openSoulSmithRelicOfRebirth,
+      openBreakerRuin, openDreamwalkerResonance, openDreamwalkerDeployCache, openSoulSmithForge, openSoulSmithForgeInitiate, openSoulSmithAtonementCrucible, openSoulSmithFurnaceOfRenewal, openSoulSmithRelicOfRebirth,
       openHarmonyMarshalInitiate, openHarmonyMarshalAttritionEaser, openHarmonyMarshalLoyaltySteward, openHarmonyMarshalUnityConductor, openHarmonyMarshalRallyingWords,
       openPassiveClassInfo,
       // Sprint F
@@ -17370,6 +17740,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       "flags.fourththing.bulwark.-=anchorAdvanceUsedScene": null,
       "flags.fourththing.bulwark.-=breachUsedScene":        null,
       "flags.fourththing.-=grimPersistenceUsed":            null,
+      // Bulwark T2 Anchor/Advance stance flag (2026-10-24): nothing cleared it, so Anchor refused every
+      // later forced move and Advance kept its +10 ft for the whole campaign. Both rests clear it.
+      "flags.fourththing.-=bulwarkStance":                  null,
       // Generic per-use feats (Gauntlet fix-pass 1) — Soma Break is the
       // deepest reset: everything recovers.
       "flags.fourththing.-=perUse":                         null
@@ -17396,15 +17769,6 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
     // Imposed (R5) is combat-scoped — it never survives a Soma Break.
     if (sys.conditions?.imposed) updates["system.conditions.imposed"] = false;
-
-    // Dreamwalker — Dream Echo Reservoir gains 1 die per Soma Break (capped
-    // at maxDice=2 per canonical L13 feature). prepareDerivedData clamps later;
-    // we just push current up by 1 here.
-    if (sys.resources?.echoDice?.maxDice > 0) {
-      const _curEcho = Number(sys.resources.echoDice.dice ?? 0) || 0;
-      const _maxEcho = Number(sys.resources.echoDice.maxDice ?? 0) || 0;
-      updates["system.resources.echoDice.dice"] = Math.min(_maxEcho, _curEcho + 1);
-    }
 
     // Reset all item uses (feats, features, weapon/power ability slots).
     const itemUpdates = [];
@@ -17544,6 +17908,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (actor.getFlag?.("fourththing", "bulwark.breachUsedScene")) {
       updates["flags.fourththing.bulwark.-=breachUsedScene"] = null;
       deltas.push("The Breach refreshed");
+    }
+    if (actor.getFlag?.("fourththing", "bulwarkStance")) {
+      updates["flags.fourththing.-=bulwarkStance"] = null;
+      deltas.push("Anchor/Advance stance cleared");
     }
     // Generic per-use feats — scene/round cadences refresh at the scene
     // boundary; soma/day cadences hold until their own reset.
@@ -18955,6 +19323,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (this.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_grim_persistence")) {
         sys.derived.integrity.max += 2 * charLevel;
       }
+      // Soul-Smith Hardened Frame (ruling SS2, 2026-10-25): +2 max Integrity per level. Its
+      // imported AE carried a dead 5E key (system.bonuses.hp) — wired id-keyed like Grim Persistence.
+      if (this.items?.some?.(i => String(i.system?.identifier ?? "") === "hardened-frame")) {
+        sys.derived.integrity.max += 2 * charLevel;
+      }
       // STRIKES PER ROUND (owner ruling 2026-09-21): striker paths make Tier strikes per round (T1 1 · T2 2 · T3 3 ·
       // T4 4); everyone else makes one. The Combat Tracker keeps the count — this is the number the sheet shows.
       try {
@@ -19213,31 +19586,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         sys.resources            ??= {};
         sys.resources.dreamCache ??= { name: "", tier: 0, itemId: "", banked: false };
 
-        // Dream Echo Reservoir — L13 Dreamwalker feature (canonical compendium
-        // item tAsGXgZrgFdpNyVi). Pool of d6 Echo Dice, max 2, gain 1 per
-        // Soma Break. Three spend modes: Self-Resonance (+1d6 to own failed
-        // check after seeing the roll), Shared Echo (+1d6 to ally's failed
-        // check within 30 ft), World-Tuning (-1d6 to environmental DC vs you).
-        // Pool surfaces only when the actor carries the feat.
-        const _hasEchoFeat = this.items?.some?.(it => it.type === "feat" && it.system?.identifier === "dream-echo-reservoir");
-        if (_hasEchoFeat) {
-          sys.resources.echoDice ??= { dice: 0, maxDice: 2 };
-          sys.resources.echoDice.maxDice = 2;
-          sys.resources.echoDice.dice    = Math.min(Number(sys.resources.echoDice.dice ?? 0), 2);
-        } else if (sys.resources?.echoDice) {
-          sys.resources.echoDice.dice = 0;
-          sys.resources.echoDice.maxDice = 0;
-        }
+        // Echo Dice retired (ruling DW5, 2026-10-25): the Reservoir is the store/release
+        // feature on the sheet; the d6 pool no longer derives.
       } else {
         if (sys.resources?.dreamCache) {
           sys.resources.dreamCache.banked = false;
           sys.resources.dreamCache.name   = "";
           sys.resources.dreamCache.tier   = 0;
           sys.resources.dreamCache.itemId = "";
-        }
-        if (sys.resources?.echoDice) {
-          sys.resources.echoDice.dice = 0;
-          sys.resources.echoDice.maxDice = 0;
         }
       }
 
@@ -19984,7 +20340,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
     if (!apply || !game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
     for (const actor of game.actors?.contents ?? []) {
-      const hasHM = actor.items?.some?.(it => it.type === "class" && (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
+      const hasHM = actor.items?.some?.(it => it.type === "class" && _ftIsHarmonyMarshalId(it.system?.identifier));
       if (!hasHM) continue;
       const flags = actor.flags?.fourththing?.harmonyMarshal ?? {};
       if (flags.attritionEaserUsedThisTurn) {
@@ -20825,17 +21181,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       } : null;
 
       const _dwCls = Array.from(actor.items).find(it => it.type === "class" && it.system?.identifier === "dreamwalker");
-      const _hasEchoFeat = _dwCls && Array.from(actor.items).some(it => it.type === "feat" && it.system?.identifier === "dream-echo-reservoir");
       const dreamwalkerState = _dwCls ? {
         cache: {
           banked: resources.dreamCache?.banked === true,
           name:   resources.dreamCache?.name   ?? "",
           tier:   Number(resources.dreamCache?.tier ?? 0)
         },
-        echo: _hasEchoFeat ? {
-          dice:    resources.echoDice?.dice    ?? 0,
-          maxDice: resources.echoDice?.maxDice ?? 2
-        } : null
+        echo: null
       } : null;
 
       // Sig Mode stance pills (Phase D 2026-05-08). One pill per active stance,
@@ -20888,7 +21240,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       } : null;
 
       // Harmony Marshal state (Phase 1.5 canon).
-      const _hmClsItem = Array.from(actor.items).find(it => it.type === "class" && (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
+      const _hmClsItem = Array.from(actor.items).find(it => it.type === "class" && _ftIsHarmonyMarshalId(it.system?.identifier));
       const _hmTier = Math.max(1, Math.min(4, Number(sysData?.details?.tier) || 1));
       const _hmFlags = actor.flags?.fourththing?.harmonyMarshal ?? {};
       const harmonyMarshalState = _hmClsItem ? {
@@ -22073,7 +22425,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         content: `<div class="fourththing-roll">
           <div class="ft-roll-header"><span class="ft-roll-name">⚡ ${this.actor.name} acts again</span></div>
           <p style="margin:0.2rem 0;font-size:0.82rem;opacity:0.8">
-            Both base dice showed 10 — the moment folds back on itself. Bonus action regained.
+            The moment folds back on itself. Bonus action regained — take it now, on your turn or anyone else's (ruling U4, 2026-10-25).
           </p>
         </div>`
       });
@@ -22510,8 +22862,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         dreamwalker_deploy_cache:     (a) => mod.openDreamwalkerDeployCache(a),
         // DEPRECATED 2026-05-14 — singular kept for macro BC; live key is
         // dream_echo_reservoir_spend (plural — wired to Spend button).
-        dream_echo_reservoir:         (a) => mod.openDreamwalkerEchoReservoir(a),
-        dream_echo_reservoir_spend:   (a) => mod.openDreamwalkerSpendEchoDie(a),
+        dream_echo_reservoir:         (a) => mod.openDreamwalkerReservoir(a),   // the live store/release Reservoir (Echo Dice retired 2026-10-25)
         soul_smith_forge:                 (a) => mod.openSoulSmithForge(a),
         soul_smith_forge_initiate:        (a) => mod.openSoulSmithForgeInitiate(a),
         soul_smith_atonement_crucible:    (a) => mod.openSoulSmithAtonementCrucible(a),
@@ -23022,7 +23373,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           Confirm delivery of <b>${foundry.utils.escapeHTML(pkg.type || "Package")}</b>${pkg.id ? `: <em>${foundry.utils.escapeHTML(pkg.id)}</em>` : ""}.
         </p>
         <label style="display:flex;flex-direction:column;gap:0.2rem">
-          <span style="opacity:0.7;font-size:0.74rem">Recipient faction (optional, for chat note)</span>
+          <span style="opacity:0.7;font-size:0.74rem">Recipient Domain (optional, for chat note)</span>
           <input type="text" name="recv-faction" placeholder="e.g. The Cantor's Guild" style="padding:0.3rem"/>
         </label>
         <label style="display:flex;flex-direction:column;gap:0.2rem">
@@ -23056,17 +23407,21 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
               // Build per-route effect bullets for the chat card.
               const lines = [];
-              const recv = recvFaction ? `<b>${foundry.utils.escapeHTML(recvFaction)}</b>` : "the recipient faction";
+              const recv = recvFaction ? `<b>${foundry.utils.escapeHTML(recvFaction)}</b>` : "the recipient Domain";
               const hex  = recvHex     ? `<b>${foundry.utils.escapeHTML(recvHex)}</b>`     : "the recipient hex";
               lines.push(`<li>Surge banked${banked > 0 ? ` <b>+${banked}</b>` : ""} (to ${surgeCap} cap).</li>`);
               if (route === "wayfarer") {
-                lines.push(`<li>${recv} gains <b>+1 Intrigue OP</b> (apply on faction sheet).</li>`);
-                if (hasMastery) lines.push(`<li><em>Package Mastery:</em> ${recv} gains an additional <b>+1 Intrigue OP</b>.</li>`);
+                lines.push(`<li>${recv} gains <b>+10 Intrigue marks</b> — committed automatically by The Tongue That Does Not Lie.</li>`);
+                if (hasMastery) lines.push(`<li><em>Package Mastery:</em> ${recv} gains an additional <b>+10 Intrigue marks</b> (apply on the Domain tab).</li>`);
               } else if (route === "blackstair") {
                 lines.push(`<li>Base Black Stair delivery resolves narratively (no on-actor mechanical effect).</li>`);
-                if (hasMastery) lines.push(`<li><em>Package Mastery:</em> route doctrine bonus — GM/player adjudicate the narrative twist.</li>`);
+                if (hasMastery) {
+                  // Ruling SC7 (2026-10-25): Package Mastery, Black Stair — delivering banks +1 Surge.
+                  let _bsBanked = 0; try { _bsBanked = await _ftBankSurge(actor, 1); } catch (e) {}
+                  lines.push(`<li><em>Package Mastery:</em> ${_bsBanked > 0 ? "banked <b>+1 Surge</b>" : "Surge already at cap — no bank"}.</li>`);
+                }
               } else if (route === "lastmile") {
-                lines.push(`<li>${recv} gains <b>+1 Morale OP</b> (apply on faction sheet).</li>`);
+                lines.push(`<li>${recv} gains <b>+10 Loyalty marks</b> (apply on the Domain tab).</li>`);
                 lines.push(`<li>Reduce <b>Darkness</b> in ${hex} by <b>1 point</b>.</li>`);
                 if (hasMastery) lines.push(`<li><em>Package Mastery:</em> Reduce Darkness in ${hex} by an additional <b>1 point</b>.</li>`);
               } else {
@@ -23552,17 +23907,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // feat) bottles 2 d6 per Soma Break for Self-Resonance / Shared Echo
       // / World-Tuning spends. Echo block is null when the feat isn't present.
       const _dwCls = classItems.find(i => i.type === "class" && i.system?.identifier === "dreamwalker");
-      const _hasEchoFeat = _dwCls && items.some(i => i.type === "feat" && i.system?.identifier === "dream-echo-reservoir");
       const dreamwalkerState = _dwCls ? {
         cache: {
           banked: resources.dreamCache?.banked === true,
           name:   resources.dreamCache?.name   ?? "",
           tier:   Number(resources.dreamCache?.tier ?? 0)
         },
-        echo: _hasEchoFeat ? {
-          dice:    resources.echoDice?.dice    ?? 0,
-          maxDice: resources.echoDice?.maxDice ?? 2
-        } : null
+        echo: null
       } : null;
 
       // NPC Parity Sprint B (2026-05-14) — Aurablade class panel state.
@@ -23613,7 +23964,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       } : null;
 
       // Harmony Marshal state for NPC sheet.
-      const _hmClsItem2 = classItems.find(i => i.type === "class" && (i.system?.identifier === "harmony-marshal" || i.system?.identifier === "harmony_marshal"));
+      const _hmClsItem2 = classItems.find(i => i.type === "class" && _ftIsHarmonyMarshalId(i.system?.identifier));
       const _hmTier2 = Math.max(1, Math.min(4, Number(sysData?.details?.tier) || 1));
       const _hmFlags2 = actor.flags?.fourththing?.harmonyMarshal ?? {};
       const harmonyMarshalState = _hmClsItem2 ? {
@@ -26844,7 +27195,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
   const requireEngineer = () => role === "engineer" || warn(`${steward.name}: only the Engineer can repair (role: ${role}).`);
   const requirePilotGate = () => !_econActive || !stCmb.pilotActionUsedThisRound || warn(`${steward.name}: pilot action already taken this round.`);
   const requireAction    = () => !_econActive || !sysActs.actionUsed              || warn(`${steward.name}: action already used this turn.`);
-  const requireBonus     = () => !_econActive || !sysActs.bonusUsed               || warn(`${steward.name}: bonus action already used this turn.`);
+  const requireBonus     = () => !_econActive || !sysActs.bonusUsed               || warn(`${steward.name}: bonus action already used this round (refreshes at the start of your turn).`);
   // Patch ONLY the changed keys (2026-10-01): re-writing the entry-time spread
   // reverted any heat / hexesMoved / operatedModules change made while a
   // picker dialog was open.
@@ -28413,6 +28764,16 @@ Hooks.on("updateItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCr
 // re-render via the updateActor hook on the rig flag.)
 Hooks.on("createActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("deleteActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRenderCrewHud(); });
+// Bulwark T2 Anchor or Advance: the stance flag lives exactly as long as its AE (2026-10-25).
+Hooks.on("deleteActiveEffect", async (ae) => {
+  try {
+    const a = ae?.parent;
+    if (!a || a.documentName !== "Actor" || !a.isOwner) return;
+    const nm = String(ae.name ?? "");
+    if (!/^Bulwark: (Anchor|Advance)/.test(nm)) return;
+    if (a.flags?.fourththing?.bulwarkStance) await a.unsetFlag("fourththing", "bulwarkStance");
+  } catch (e) {}
+});
 Hooks.on("updateActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("canvasReady", () => _ftRenderCrewHud());
 // REGIMEN step 3 (2026-10-06): `per-scene-start` resource grants fire once per scene per actor (actor flag remembers the scene).
@@ -30013,7 +30374,7 @@ function _ftRelayHandlerExtra(msg) {
     if (_ftRelaySeenRecently(`harmonyHarvest:${msg.marshalUuid}`)) return;
     _ftRelayActor(msg.marshalUuid).then(a => {
       const isMarshal = !!a?.items?.find?.(it => it.type === "class" &&
-        (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
+        _ftIsHarmonyMarshalId(it.system?.identifier));
       if (isMarshal) return _ftHarmonyHarvestBank(a);
     }).catch(err => console.warn("[fourththing] GM-relay harmony harvest failed", err));
   } else if (msg?.t === "ft-trackUpdate") {

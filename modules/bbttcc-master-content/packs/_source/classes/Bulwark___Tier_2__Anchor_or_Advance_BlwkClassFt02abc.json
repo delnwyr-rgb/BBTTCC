@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>Signature move. Once a scene, you choose which kind of inevitability you are.</em></p><p><strong>Anchor or Advance — 1/scene (recovers on Soma Break).</strong> As part of any action on your turn, declare a stance. The chosen stance lasts until the end of your next turn:</p><ul><li><p><strong>Anchor.</strong> You cannot be moved against your will by any effect short of a Heroic-DC (22) push from a creature of your size or larger. Forced movement, knockback, teleportation targeting you, banishment, and dimensional swap effects all fail.</p></li><li><p><strong>Advance.</strong> You cannot be prevented from reaching a destination you declare on the same action. Difficult terrain, conditions that halve speed, opportunity reactions, and zone-of-control effects do not stop your movement toward that point. You may still take damage along the way.</p></li></ul><p>Doctrine features at L5+ extend or modify which stance you favor.</p>",
+      "value": "<p><em>Signature move. Once a scene, you choose which kind of inevitability you are.</em></p><p><strong>Anchor or Advance — 1/scene (recovers on Soma Break).</strong> As part of any action on your turn, declare a stance. The chosen stance lasts until the end of your next turn:</p><ul><li><p><strong>Anchor.</strong> You cannot be moved against your will by any effect short of a Heroic-DC (22) push from a creature of your size or larger. Forced movement, knockback, teleportation targeting you, banishment, and dimensional swap effects all fail.</p></li><li><p><strong>Advance.</strong> You cannot be prevented from reaching a destination you declare on the same action. Difficult terrain, conditions that halve speed, reaction strikes, and zone-of-control effects do not stop your movement toward that point. You may still take damage along the way.</p></li></ul><p>Doctrine features at L5+ extend or modify which stance you favor.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -20,22 +20,13 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "sr",
-          "type": "recoverAll",
-          "formula": ""
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "activities": {}
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "classfeat",
       "classIdentifier": "bulwark",
@@ -46,6 +37,183 @@
     },
     "fourththing": {
       "grants": {}
+    },
+    "autoanimations": {
+      "id": "806cbcf0-0648-4169-89ab-a2529cfac28d",
+      "label": "Bulwark — Tier 2: Anchor or Advance",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "shieldfx",
+          "animation": "ice",
+          "variant": "03",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "rWwlRrTVc3OdPSZA",

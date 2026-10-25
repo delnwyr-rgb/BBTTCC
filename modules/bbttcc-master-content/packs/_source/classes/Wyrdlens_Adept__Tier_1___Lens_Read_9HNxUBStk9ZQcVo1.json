@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Lens Read.</strong> You read the cracks in the world's algorithm. Your manifestation misfire band is lowered by 1 (a result that would misfire instead lands as the next-lower outcome). Once per scene, an adjacent ally borrows the reduction by spending 1 of your Clarity.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Misfire shift −1.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Strategic carryover: scenes resolved through your Refraction count as one tier of Identification already paid for the directing faction's next strategic action (GM call). Skill rank +1 in Occult and Lore.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Lens Read</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene (loan) &nbsp;·&nbsp; <strong>Action:</strong> Free (loan) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Your manifestation misfire band is lowered by 1 always. Once per scene, an adjacent ally borrows the reduction by spending 1 of your Clarity.</div>\n</div>",
+      "value": "<p><strong>Tier 1 — Lens Read.</strong> You read the cracks in the world's algorithm. Your manifestation misfire band is lowered by 1 (a result that would misfire instead lands as the next-lower outcome).</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Misfire shift −1.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Skill rank +1 in Occult and Lore.</p>",
       "chat": ""
     },
     "activities": {},
@@ -30,13 +30,65 @@
       "level": 1
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (1st level)",
+    "requirements": "Wyrdlens Adept 1",
     "type": {
       "value": "",
       "subtype": ""
     }
   },
   "effects": [
+    {
+      "name": "Class L1: Fitting +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Wyrdlens Adept: Tier 1 — Lens Read at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Wyrdlens Adept: Tier 1 — Lens Read",
+          "aptitudeKind": "fitting"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.fitting.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "1l4oFlF10Qxi6pN8",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374409,
+        "modifiedTime": 1791864374409,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
     {
       "name": "Shattered Algorithm Initiate (ID Intrigue Discount)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_12.png",
@@ -94,8 +146,94 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
+      "folder": null
+    },
+    {
+      "name": "Class L1: Brawl +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Wyrdlens Adept: Tier 1 — Lens Read at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Wyrdlens Adept: Tier 1 — Lens Read",
+          "aptitudeKind": "brawl"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.brawl.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "pDxzubSjxOrrRoJh",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
       "folder": null,
-      "_key": "!items.effects!9HNxUBStk9ZQcVo1.597gsNEa91G844ZK"
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374408,
+        "modifiedTime": 1791864374408,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Lens Read (Occult +1, Lore +1)",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_id": "wlLensReadRanks1",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.occult.value",
+            "value": "1",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.skills.lore.value",
+            "value": "1",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "changes": null
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -109,7 +247,6 @@
         "shatteredAlgorithmInitiate": true
       }
     },
-    "dnd5e": {},
     "fourththing": {
       "discipline": {
         "passive": {
@@ -117,6 +254,183 @@
         }
       },
       "vocabScrub": "2026-05-16"
+    },
+    "autoanimations": {
+      "id": "1f0b6e0c-c5d1-4dd9-8840-ac28bbb415b1",
+      "label": "Wyrdlens Adept: Tier 1 — Lens Read",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "_stats": {

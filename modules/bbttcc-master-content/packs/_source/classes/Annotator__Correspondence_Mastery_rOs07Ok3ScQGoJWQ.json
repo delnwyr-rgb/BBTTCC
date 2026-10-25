@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"2353\" data-end=\"2391\">You master one correspondence channel.</p><p data-start=\"2393\" data-end=\"2417\">Choose one manifestation school.</p><p data-start=\"2419\" data-end=\"2503\">Once per Soma Break (or for one casting), treat that school as aligned for timing purposes.</p><p data-start=\"2505\" data-end=\"2510\">This:</p><ul data-start=\"2511\" data-end=\"2570\"><li data-start=\"2511\" data-end=\"2547\"><p data-start=\"2513\" data-end=\"2547\">Generates Surge as if aligned.</p></li><li data-start=\"2548\" data-end=\"2570\"><p data-start=\"2550\" data-end=\"2570\">Reduces misfire risk risk.</p></li></ul><p data-start=\"2572\" data-end=\"2659\">You have internalized that channel’s grammar so completely that it answers when called.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p>(10th Level) You master one correspondence channel.</p><p>Choose one manifestation school.</p><p>Once per Soma Break (or for one casting), treat that school as aligned for timing purposes.</p><p>This:</p><ul><li><p>Generates Surge as if aligned.</p></li><li><p>Reduces misfire risk.</p></li></ul><p>You have internalized that channel’s grammar so completely that it answers when called.</p>",
       "chat": ""
     },
     "identifier": "annotator_correspondence_mastery",
@@ -28,10 +28,10 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 10
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Cosmic Linguist 10, Annotator",
     "type": {
       "value": "",
       "subtype": ""
@@ -41,6 +41,183 @@
   "flags": {
     "bbttcc": {
       "identifier": "annotator_correspondence_mastery"
+    },
+    "autoanimations": {
+      "id": "f2159b6c-fdd3-48f0-9822-baad3390999e",
+      "label": "Annotator: Correspondence Mastery",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "7fCEbHBaAKFkEuHN",

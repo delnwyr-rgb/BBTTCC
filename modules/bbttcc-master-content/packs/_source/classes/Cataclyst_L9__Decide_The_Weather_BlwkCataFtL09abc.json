@@ -13,7 +13,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>One. Or the other. Not both. Decide.</em></p><p><strong>Decide The Weather — 1/scene (recovers on Soma Break).</strong> As an action, spend <strong>2 Frame Dice and 2 Ruin Charges</strong> simultaneously. Choose one of the two effects:</p><ul><li><strong>Wall.</strong> Raise a wall of hardened debris in a 6 squares long, 2 squares high line on a contiguous surface within 1 square of you. The wall is <strong>impassable</strong> until the end of your next turn (it absorbs damage normally; treat as Hard hardness DC 18). Creatures occupying the line at the moment of casting are pushed 1 square to one side and may make a Body defense check (DC 15 + Initiation tier) — failure leaves them prone.</li><li><strong>Rubble.</strong> Collapse a standing structure within 6 squares (door-sized to building-segment-sized — GM call) into rubble. The resulting rubble field grants your allies <strong>cover</strong> when within it. Enemies attempting to move through the rubble field roll <strong>3d10 keep lowest 2</strong> on movement-related attribute checks until the rubble is cleared (1 minute of dedicated work or another action with sufficient force).</li></ul>",
+      "value": "<p><em>One. Or the other. Not both. Decide.</em></p><p><strong>Decide The Weather — 1/scene (recovers on Soma Break).</strong> As an action, spend <strong>4 Surge</strong>. Choose one of the two effects:</p><ul><li><strong>Wall.</strong> Raise a wall of hardened debris in a 6 squares long, 2 squares high line on a contiguous surface within 1 square of you. The wall is <strong>impassable</strong> until the end of your next turn (it absorbs damage normally; treat as Hard hardness DC 18). Creatures occupying the line at the moment of casting are pushed 1 square to one side and may make a Body defense check (DC 15 + Initiation tier) — failure leaves them prone.</li><li><strong>Rubble.</strong> Collapse a standing structure within 6 squares (door-sized to building-segment-sized — GM call) into rubble. The resulting rubble field grants your allies <strong>cover</strong> when within it. Enemies attempting to move through the rubble field roll <strong>3d10 keep lowest 2</strong> on movement-related attribute checks until the rubble is cleared (1 minute of dedicated work or another action with sufficient force).</li></ul>",
       "chat": ""
     },
     "advancement": {},
@@ -26,22 +26,13 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "sr",
-          "type": "recoverAll",
-          "formula": ""
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "activities": {}
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "bulwark",

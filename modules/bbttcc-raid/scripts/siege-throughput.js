@@ -286,6 +286,16 @@
     // The buffer is paid — NOW the one-shot discount is spent.
     if (bulwark.applied) await _consumeBulwarkSiegeDiscount(attackerFactionActor);
 
+    // Free siege works (Bulwark Founding Stance, ruling BW3 2026-10-25): a member steward's
+    // domainCapBonus.siege lands in the buffer as Violence marks the lead never pays for.
+    let siegeBonus = 0;
+    try { siegeBonus = Math.max(0, Math.floor(Number(game.bbttcc?.facts?.faction?.siegeBonus?.(attackerFactionActor)) || 0)); } catch (_e) { siegeBonus = 0; }
+    if (siegeBonus > 0) {
+      buffer.violence = (Number(buffer.violence) || 0) + siegeBonus;
+      await _pushWarLog(attackerFactionActor, `Siege works: +${siegeBonus} marks folded into the buffer for free (Bulwark Founding Stance).`, { activityKey: "begin_siege", hexUuid });
+    }
+    const bufferTotalMarks = bufferStartingTotal + siegeBonus;
+
     // Build state
     const state = S.makeSiegeState({
       attackerFactionId: attackerId,
@@ -294,7 +304,7 @@
       layers,
       sizeProfile: noteCfg.sizeProfile || "standard",
       buffer,
-      bufferStartingTotal,
+      bufferStartingTotal: bufferTotalMarks,
       supplyOriginHexId: depotHexUuid,
       supplyOriginType: (S.hexModifiers(depotDoc) || []).includes("Beached Camp") ? "beached_camp" : "owned_hex",
       supplyPathHexIds: pathResult.path || [],
@@ -327,7 +337,7 @@
       turn: state.startedTurn,
       kind: "siege_declared",
       title: `Siege declared on ${hexDoc?.flags?.[MOD_T]?.name || hexDoc?.id || "hex"}`,
-      description: `${attackerFactionActor.name} commits ${bufferStartingTotal} marks to siege. Size: ${state.sizeProfile}. Depot: ${depotHexUuid}. Bulwark discount: ${bulwark.applied ? "applied (×0.75)" : "none"}.`,
+      description: `${attackerFactionActor.name} commits ${bufferTotalMarks} marks to siege${siegeBonus > 0 ? ` (${siegeBonus} of them free siege works)` : ""}. Size: ${state.sizeProfile}. Depot: ${depotHexUuid}. Bulwark discount: ${bulwark.applied ? "applied (×0.75)" : "none"}.`,
       payload: { bulwarkDiscount: bulwark.applied }
     });
 
@@ -365,7 +375,7 @@
 
     // War log
     await _pushWarLog(attackerFactionActor,
-      `Begin Siege: ${state.siegeId} on target. Buffer ${bufferStartingTotal} marks committed. Size=${state.sizeProfile}. ${layers.length} layer(s). ${bulwark.applied ? "Bulwark discount applied. " : ""}(Phase B will tick.)`,
+      `Begin Siege: ${state.siegeId} on target. Buffer ${bufferTotalMarks} marks committed. Size=${state.sizeProfile}. ${layers.length} layer(s). ${bulwark.applied ? "Bulwark discount applied. " : ""}(Phase B will tick.)`,
       { activityKey: "begin_siege", siegeId: state.siegeId, hexUuid, depotHexUuid }
     );
 

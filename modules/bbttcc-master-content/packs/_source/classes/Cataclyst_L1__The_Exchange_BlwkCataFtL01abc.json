@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>Polarity is a pose. The hinge is what does the work.</em></p><p><strong>Mode: Hinge / drift: Sideways.</strong></p><p>As a <strong>bonus action</strong>, you may convert <strong>1 Frame Die into 1 Ruin Charge</strong> or <strong>1 Ruin Charge into 1 Frame Die</strong>. You may use this conversion up to <strong>your Initiation tier</strong> times per Soma Break (1 at T1, 2 at T2, 3 at T3, 4 at T4).</p><p><strong>Charged.</strong> When you convert this way, the resulting die or charge becomes <em>charged</em> until spent. The next time it's used:</p><ul><li><p><strong>Frame Die (charged) spent on absorption:</strong> grants +1 die step on the absorption roll (d8 → d10).</p></li><li><p><strong>Ruin Charge (charged) spent on damage:</strong> deals +1 die step of damage (replace one d6 with a d8, or one d8 with a d10, in the spending feature's damage expression).</p></li></ul><p>Charged status is consumed by the spend whether the spend produces a roll or a flat effect.</p>",
+      "value": "<p><em>Polarity is a pose. The hinge is what does the work.</em></p><p><strong>Mode:</strong> Hinge / <strong>drift:</strong> Sideways.</p><p>Once per Soma Break, as a bonus action, you prime the hinge: your <strong>next Surge spend costs 1 less</strong> (minimum 1), defensive or offensive. Use the ▶ button; the discount applies to whatever you spend next.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -27,9 +27,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "bulwark",
@@ -41,6 +38,183 @@
     },
     "fourththing": {
       "grants": {}
+    },
+    "autoanimations": {
+      "id": "35d15732-e84d-478e-b069-c61ea8d37588",
+      "label": "Cataclyst L1: The Exchange",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "HmbujXzEJL7v48Q9",

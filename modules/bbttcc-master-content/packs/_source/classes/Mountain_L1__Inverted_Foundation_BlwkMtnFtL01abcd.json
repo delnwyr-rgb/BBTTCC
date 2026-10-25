@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>Nothing that stands can be moved. Your inevitability is the kind that absorbs.</em></p><p><strong>Mode: Immovable Object / drift: Away.</strong></p><p>You generate <strong>Ruin Charges</strong> by absorbing damage rather than by breaking things. Each time you take damage <strong>≥ Violence value + Bulwark Initiation</strong> in a single instance and remain upright (Integrity &gt; 0), gain <strong>1 Ruin Charge</strong>. Maximum 1 Ruin Charge generated per turn from this feature.</p><p><strong>End-of-scene conversion.</strong> Any Ruin Charges still in your pool when the scene ends convert <strong>1-for-1 into Frame Dice</strong> on your next Soma Break (replacing the Frame Dice that would otherwise refill from the pool maximum, up to your Frame max).</p>",
+      "value": "<p><em>Nothing that stands can be moved. Your inevitability is the kind that absorbs.</em></p><p><strong>Mode: Immovable Object / drift: Away.</strong></p><p>You bank <strong>Surge</strong> by absorbing damage rather than by breaking things: each Integrity hit you take banks +1 Surge (max +2 a round, +3 once Polarity Mastery arrives).</p>",
       "chat": ""
     },
     "advancement": {},
@@ -27,9 +27,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "bulwark",
@@ -40,27 +37,7 @@
       "rfiNative": true
     },
     "fourththing": {
-      "grants": {},
-      "triggers": [
-        {
-          "event": "on-damage-taken",
-          "predicate": {
-            "amountMin": 5
-          },
-          "limit": {
-            "window": "scene",
-            "uses": 3
-          },
-          "effect": {
-            "kind": "grant-resource",
-            "args": {
-              "resource": "ruin-charge",
-              "amount": 1,
-              "target": "self"
-            }
-          }
-        }
-      ]
+      "grants": {}
     }
   },
   "folder": "By8SiTcVi3AfmZUU",

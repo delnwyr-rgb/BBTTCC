@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Wake bearing good news from the other side.</em></p><p>When you finish a <strong>a Soma Break</strong>, choose up to <strong>tier allies</strong> who rested with you.</p><ul><li>They each gain <strong>temporary Integrity equal to your tier</strong>.</li><li>They may each remove the <strong>Shaken</strong> condition if they are suffering from it.</li></ul><p>You return from dreams carrying a little morning light for everyone.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Wake bearing good news from the other side.</em></p><p>When you finish a Soma Break, choose up to <strong>tier allies</strong> who rested with you.</p><ul><li>They each gain <strong>temporary Integrity equal to your tier</strong>.</li><li>They may each remove the <strong>Shaken</strong> condition if they are suffering from it.</li></ul><p>You return from dreams carrying a little morning light for everyone.</p>",
       "chat": ""
     },
     "activities": {},
@@ -42,8 +42,7 @@
     "bbttcc": {
       "subclassKey": "dreamwalker_sapphire_gate",
       "featureKey": "bright_hypnopomp"
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

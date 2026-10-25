@@ -1,6 +1,6 @@
 {
   "_id": "ftsurge000000058",
-  "name": "Shared Dream",
+  "name": "Dreamshare",
   "type": "feature",
   "img": "icons/magic/time/day-night-sun-moon.webp",
   "system": {
@@ -31,7 +31,7 @@
     },
     "autoanimations": {
       "id": "ft-dw-shared",
-      "label": "Shared Dream",
+      "label": "Dreamshare",
       "macro": {
         "enable": false,
         "playWhen": "0"

@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Loyalty Steward.</strong> Your work doesn’t just win moments; it sticks.</p><ul><li>When you succeed at a major Diplomacy check, Courtly Intrigue, or equivalent social operation that resolves a conflict tied to a specific hex (such as ending an uprising, brokering a pact, or incorporating a new ally), you may choose that hex. <strong>Loyalty in the chosen hex increases by 1</strong>, up to the maximum the GM allows for the current campaign state.</li><li>This effect can apply once per such operation and requires your visible or known involvement.</li></ul>",
+      "value": "<p><strong>Loyalty Steward.</strong> Your work doesn’t just win moments; it sticks.</p><ul><li>When you succeed at a major Diplomacy check, Parley, or equivalent social operation that resolves a conflict tied to a specific hex (such as ending an uprising, brokering a pact, or incorporating a new ally), you may choose that hex. <strong>Loyalty in the chosen hex increases by 1</strong>, up to the maximum the GM allows for the current campaign state.</li><li>This effect can apply once per such operation and requires your visible or known involvement.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 11
     },
     "properties": [],
-    "requirements": "Harmony Marshal (11th level)",
+    "requirements": "Harmony Marshal 11",
     "type": {
       "value": "",
       "subtype": ""
@@ -100,8 +100,7 @@
       "hexHooks": {
         "loyaltyIncreaseEvents": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

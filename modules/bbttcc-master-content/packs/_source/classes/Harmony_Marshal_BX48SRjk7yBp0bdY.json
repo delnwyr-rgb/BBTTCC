@@ -1,7 +1,7 @@
 {
   "name": "Harmony Marshal",
   "type": "class",
-  "img": "icons/skills/movement/figure-running-gray.webp",
+  "img": "icons/skills/social/diplomacy-unity-alliance.webp",
   "system": {
     "category": "path",
     "identifier": "harmonymarshal",
@@ -70,7 +70,7 @@
         },
         "value": {},
         "level": 2,
-        "title": "Read the Room & Rallying Words",
+        "title": "Read the Room & Rallying Speech",
         "flags": {},
         "hint": ""
       },
@@ -588,30 +588,14 @@
       "spent": 0
     },
     "levels": 1,
-    "primaryAbility": {
-      "value": [
-        "cha"
-      ],
-      "all": false
-    },
     "properties": [],
-    "spellcasting": {
-      "progression": "half",
-      "ability": "cha",
-      "preparation": {
-        "formula": "@cha.mod + floor(@classes.harmony_marshal.levels/2)"
-      }
-    },
     "wealth": ""
   },
   "effects": [],
   "folder": "mQYT3fNbgXWO2BTF",
   "flags": {
     "bbttcc": {
-      "primary": "charisma",
-      "opBonus": {
-        "softPower": 3
-      }
+      "primary": "charisma"
     }
   },
   "_stats": {

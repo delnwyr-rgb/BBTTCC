@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You hum the frequency where killing each other feels wrong.”</em></p><p>Once per <strong>a Soma Break</strong>, you can spend an <strong>action</strong> to establish a brief field of enforced hesitation.</p><ul><li>You create a <strong>3 squares-radius aura</strong> centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>Hostile creatures in the aura have <strong>disadvantage</strong> on attack rolls against creatures who have not made an attack since the start of their last turn (non-hostiles, negotiators, civilians, etc.).</li><li>Allies in the aura have <strong>reroll the lowest die on defense checks</strong> to end the <strong>charmed</strong> or <strong>Shaken</strong> conditions.</li></ul><p><em>The world doesn’t stop being dangerous. It just remembers, briefly, that it could be kind.</em></p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You hum the frequency where killing each other feels wrong.”</em></p><p>Once per <strong>Soma Break</strong>, you can spend an <strong>action</strong> to establish a brief field of enforced hesitation.</p><ul><li>You create a <strong>3 squares-radius aura</strong> centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>Hostile creatures in the aura roll 3d10 and keep the lowest 2 on attack rolls against creatures who have not made an attack since the start of their last turn (non-hostiles, negotiators, civilians, etc.).</li><li>Allies in the aura <strong>reroll the lowest die on defense checks</strong> to end the <strong>charmed</strong> or <strong>Shaken</strong> conditions.</li></ul><p><em>The world doesn’t stop being dangerous. It just remembers, briefly, that it could be kind.</em></p>",
       "chat": ""
     },
     "activities": {
@@ -66,12 +66,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -93,7 +88,6 @@
   "effects": [],
   "folder": "w8AbiDc92Mb4wLnR",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "harmmarshal_mandate_accord",
       "featureKey": "resonant_truce"

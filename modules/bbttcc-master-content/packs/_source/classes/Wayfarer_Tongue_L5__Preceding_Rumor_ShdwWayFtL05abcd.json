@@ -13,7 +13,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>Your name travels.</em></p><p>When you enter a new location while <strong>carrying a Message</strong>, the first reaction check made by any NPC in that location toward you is rolled with <strong>reroll-lowest</strong>. NPCs are predisposed to acknowledge you, even if they do not yet know what you carry.</p><p>In any scene where your arrival is <strong>expected</strong> (the recipient or someone allied with them anticipates you), enemies present must succeed on a <strong>Soul defense check vs DC 12 + your Initiation tier × 2</strong> at the start of the scene, or <strong>their hostile intent toward you becomes obvious</strong> before they can act on it. Their first concealed action against you in the scene is automatically detected by you and your immediate allies.</p>",
+      "value": "<p><em>Your name travels.</em></p><p>When you enter a new location while <strong>carrying a Message</strong>, the first reaction check made by any NPC in that location toward you is rolled with <strong>reroll-lowest</strong>. NPCs are predisposed to acknowledge you, even if they do not yet know what you carry.</p><p>In any scene where your arrival is <strong>expected</strong> (the recipient or someone allied with them anticipates you), enemies present must succeed on a <strong>Soul defense checks against DC 12 + your Initiation tier × 2</strong> at the start of the scene, or <strong>their hostile intent toward you becomes obvious</strong> before they can act on it. Their first concealed action against you in the scene is automatically detected by you and your immediate allies.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -33,9 +33,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "shadow_courier",
@@ -47,17 +44,7 @@
     },
     "fourththing": {
       "grants": {},
-      "triggers": [
-        {
-          "event": "on-scene-start",
-          "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "resent must succeed on a Soul defense check vs DC 12 + your Initiation tier × 2 at the start of the scene, or their hostile intent toward you becomes obvious before they can act on it"
-            }
-          }
-        }
-      ]
+      "triggers": []
     }
   },
   "folder": "W1e3ZXUelQ4D70io",
@@ -65,11 +52,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.3",
     "createdTime": 1777005233955,
-    "modifiedTime": 1781116156516,
+    "modifiedTime": 1791412969315,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

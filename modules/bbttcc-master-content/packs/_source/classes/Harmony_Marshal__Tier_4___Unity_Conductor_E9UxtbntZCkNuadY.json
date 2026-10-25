@@ -7,7 +7,7 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Unity Conductor.</strong> You have become a living routing node for collective will.</p><ul><li><p>As long as you are alive, active, and in communication with your faction’s leadership, your faction gains <strong>+2 Soft Power OP per strategic turn</strong>. This stacks with any other Soft Power modifiers.</p></li><li><p>If you are Staggered, missing, or clearly not participating in operations for an extended period, the GM may temporarily suspend this benefit until you are back in play.</p></li></ul>",
+      "value": "<p><strong>Unity Conductor.</strong> You have become a living routing node for collective will.</p><ul><li><p>As long as you are alive, active, and in communication with your Domain’s leadership, your Domain gains <strong>+20 Soft Power marks per turn</strong>. This stacks with any other Soft Power modifiers.</p></li><li><p>If you are Staggered, missing, or clearly not participating in operations for an extended period, the GM may temporarily suspend this benefit until you are back in play.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -26,7 +26,7 @@
       "level": 17
     },
     "properties": [],
-    "requirements": "Harmony Marshal (17th level)",
+    "requirements": "Harmony Marshal 17",
     "type": {
       "value": "",
       "subtype": ""
@@ -96,8 +96,7 @@
       "opHooks": {
         "softPowerFlatBonus": 2
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

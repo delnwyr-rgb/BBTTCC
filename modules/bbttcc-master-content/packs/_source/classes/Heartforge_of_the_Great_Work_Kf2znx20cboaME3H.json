@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Heartforge of the Great Work.</strong> You have become less of a person and more of a walking repair script for reality.</p><ul><li>Once per <strong>strategic turn</strong>, when your faction undertakes a major operation centered on <strong>repair, healing, cleansing, or reconstruction</strong> (hex restoration, rebuilding a bastion, reclaiming a corrupted site, mending a shattered community), you may invoke this feature.</li><li>The operation automatically <strong>avoids catastrophic failure</strong>. A failure becomes a partial success; a partial success becomes a full success; or a full success gains an additional <strong>restorative rider</strong> (such as an extra point of Darkness reduction, Loyalty gain, or hex status improvement), at the GM’s discretion.</li><li>On the world scale, your presence gradually leaves regions you work in with a baseline bias toward <strong>stability and healing</strong>. People start saying things like, “If the Soul-Smith sets up shop here, this place is going to make it.”</li></ul>",
+      "value": "<p><strong>Heartforge of the Great Work.</strong> You have become less of a person and more of a walking repair script for reality.</p><ul><li>Once per <strong>turn</strong>, when your Domain undertakes a major operation centered on <strong>repair, healing, cleansing, or reconstruction</strong> (hex restoration, rebuilding a bastion, reclaiming a corrupted site, mending a shattered community), you may invoke this feature.</li><li>The operation automatically <strong>avoids catastrophic failure</strong>. A failure becomes a partial success; a partial success becomes a full success; or a full success gains an additional <strong>restorative rider</strong> (such as an extra point of Darkness reduction, Loyalty gain, or hex status improvement), at the GM’s discretion.</li><li>On the world scale, your presence gradually leaves regions you work in with a baseline bias toward <strong>stability and healing</strong>. People start saying things like, “If the Soul-Smith sets up shop here, this place is going to make it.”</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 20
     },
     "properties": [],
-    "requirements": "Soul-Smith (20th level)",
+    "requirements": "Soul-Smith 20",
     "type": {
       "value": "",
       "subtype": ""
@@ -94,8 +94,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!Kf2znx20cboaME3H.OwqMqwCf0sgF9riC"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -108,8 +107,7 @@
       "opHooks": {
         "repairAutoUpliftPerTurn": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

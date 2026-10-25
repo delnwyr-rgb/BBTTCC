@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Voice of the Mandate.</strong> Your voice now carries not just your own authority, but the weight of your faction’s mandate.</p><ul><li>Allies within 6 squares of you who can hear you gain a +1 bonus to defense check against being <strong>Shaken</strong> or <strong>charmed</strong>, and to <strong>last stand check</strong>.</li><li>On the strategic layer, once per turn when you personally participate in a Courtly Intrigue, Raid, or other opposed faction operation, you can grant your side a +1 bonus to one opposed roll representing speeches, appeals, or visible leadership.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Voice of the Mandate.</strong> Your voice now carries not just your own authority, but the weight of your Domain’s mandate.</p><ul><li>Allies within 6 squares of you who can hear you gain a +1 bonus to defense checks against being <strong>Shaken</strong> or <strong>charmed</strong>, and to <strong>last stand checks</strong>.</li><li>On the strategic layer, once per turn when you personally participate in a Parley, Battle, Heist, or other opposed Domain operation, you can grant your side a +1 bonus to one opposed roll representing speeches, appeals, or visible leadership.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 10
     },
     "properties": [],
-    "requirements": "Harmony Marshal (10th level)",
+    "requirements": "Harmony Marshal 10",
     "type": {
       "value": "",
       "subtype": ""
@@ -91,7 +91,6 @@
         "voiceOfTheMandate": true
       }
     },
-    "dnd5e": {},
     "autoanimations": {
       "id": "6202d55a-78f1-46b4-ac67-0729a3e57de9",
       "label": "Voice of the Mandate",

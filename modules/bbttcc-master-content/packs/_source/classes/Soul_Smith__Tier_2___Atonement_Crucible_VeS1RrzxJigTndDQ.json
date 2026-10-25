@@ -30,7 +30,7 @@
       "level": 5
     },
     "properties": [],
-    "requirements": "Soul-Smith (5th level)",
+    "requirements": "Soul-Smith 5",
     "type": {
       "value": "",
       "subtype": ""
@@ -47,8 +47,7 @@
       "tikkunHooks": {
         "sparkPurificationPerArc": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

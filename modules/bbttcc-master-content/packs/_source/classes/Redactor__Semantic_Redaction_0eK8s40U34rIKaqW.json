@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"862\" data-end=\"875\"><em data-start=\"862\" data-end=\"875\">(3rd Level)</em></p><p data-start=\"877\" data-end=\"929\"><em data-start=\"877\" data-end=\"929\">“If it shouldn’t be there, I remove the sentence.”</em></p><p data-start=\"931\" data-end=\"978\">Your Subtractive Editing Mode becomes enhanced.</p><p data-start=\"980\" data-end=\"1007\">When you cast a manifestation that:</p><ul data-start=\"1009\" data-end=\"1087\"><li data-start=\"1009\" data-end=\"1021\"><p data-start=\"1011\" data-end=\"1021\">Banishes</p></li><li data-start=\"1022\" data-end=\"1033\"><p data-start=\"1024\" data-end=\"1033\">Dispels</p></li><li data-start=\"1034\" data-end=\"1047\"><p data-start=\"1036\" data-end=\"1047\">Restrains</p></li><li data-start=\"1048\" data-end=\"1060\"><p data-start=\"1050\" data-end=\"1060\">Silences</p></li><li data-start=\"1061\" data-end=\"1072\"><p data-start=\"1063\" data-end=\"1072\">Negates</p></li><li data-start=\"1073\" data-end=\"1087\"><p data-start=\"1075\" data-end=\"1087\">Suppresses</p></li></ul><p data-start=\"1089\" data-end=\"1128\">You may apply <strong data-start=\"1103\" data-end=\"1127\">one Redaction Effect</strong>:</p><ol data-start=\"1130\" data-end=\"1447\"><li data-start=\"1130\" data-end=\"1245\"><p data-start=\"1133\" data-end=\"1245\"><strong data-start=\"1133\" data-end=\"1151\">Erase Presence</strong> — Target becomes partially removed (treat as invisible or untargetable) until your next turn.</p></li><li data-start=\"1246\" data-end=\"1343\"><p data-start=\"1249\" data-end=\"1343\"><strong data-start=\"1249\" data-end=\"1270\">Revoke Permission</strong> — Target loses access to one ability/manifestation/feature until your next turn.</p></li><li data-start=\"1344\" data-end=\"1447\"><p data-start=\"1347\" data-end=\"1447\"><strong data-start=\"1347\" data-end=\"1365\">Cut Continuity</strong> — One ongoing effect ends immediately (Clarity hold snaps; summons destabilize).</p></li></ol><p data-start=\"1449\" data-end=\"1502\"><strong data-start=\"1449\" data-end=\"1458\">Cost:</strong><br data-start=\"1458\" data-end=\"1461\" />Spend 1 Surge and gain +1 misfire risk.</p><p data-start=\"1504\" data-end=\"1540\">This is not damage.<br data-start=\"1523\" data-end=\"1526\" />It is absence.</p><p data-start=\"1542\" data-end=\"1579\"></p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p><em>(3rd Level)</em></p><p><em>“If it shouldn’t be there, I remove the sentence.”</em></p><p>Your Subtractive Editing Mode becomes enhanced.</p><p>When you cast a manifestation that:</p><ul><li><p>Banishes</p></li><li><p>Dispels</p></li><li><p>Restrains</p></li><li><p>Silences</p></li><li><p>Negates</p></li><li><p>Suppresses</p></li></ul><p>You may apply <strong>one Redaction Effect</strong>:</p><ol><li><p><strong>Erase Presence</strong> — Target becomes partially removed (treat as invisible or untargetable) until your next turn.</p></li><li><p><strong>Revoke Permission</strong> — Target loses access to one ability/manifestation/feature until your next turn.</p></li><li><p><strong>Cut Continuity</strong> — One ongoing effect ends immediately (Clarity hold snaps; summons destabilize).</p></li></ol><p><strong>Cost:</strong><br />Spend 1 Surge and gain +1 misfire risk.</p><p>This is not damage.<br />It is absence.</p><p></p>",
       "chat": ""
     },
     "identifier": "redactor_semantic_redaction",
@@ -41,6 +41,183 @@
   "flags": {
     "bbttcc": {
       "identifier": "redactor_semantic_redaction"
+    },
+    "autoanimations": {
+      "id": "91481ae9-aac4-4c71-a114-6c6657942c46",
+      "label": "Redactor: Semantic Redaction",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "pcv0zMJZU8aoEMQc",

@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"909\" data-end=\"922\"><em data-start=\"909\" data-end=\"922\">3rd Level)</em></p><p><strong>Noise:</strong> +3</p><p data-start=\"924\" data-end=\"1012\">You identify unstable divinity: feral tulpas, corrupted contracts, rogue manifestations.</p><p data-start=\"1014\" data-end=\"1079\">As an action, mark a target <strong data-start=\"1042\" data-end=\"1063\">Out of Compliance</strong> for this scene.</p><h3 data-start=\"1081\" data-end=\"1109\">While Out of Compliance:</h3><ul data-start=\"1110\" data-end=\"1321\"><li data-start=\"1110\" data-end=\"1249\"><p data-start=\"1112\" data-end=\"1162\">Your suppression, banishment, and disable effects:</p><ul data-start=\"1165\" data-end=\"1249\"><li data-start=\"1165\" data-end=\"1188\"><p data-start=\"1167\" data-end=\"1188\">reroll the lowest die <strong data-start=\"1182\" data-end=\"1188\">or</strong></p></li><li data-start=\"1191\" data-end=\"1249\"><p data-start=\"1193\" data-end=\"1249\">Add your Surge result to the DC (your choice)</p></li></ul></li><li data-start=\"1250\" data-end=\"1321\"><p data-start=\"1252\" data-end=\"1321\">Violations of contracts or major precedents trigger Auditor features.</p></li></ul><p data-start=\"1323\" data-end=\"1376\">Only one creature may be Out of Compliance at a time.</p><h3 data-start=\"1378\" data-end=\"1386\">Cost</h3><p data-start=\"1387\" data-end=\"1420\">No Surge required to mark.</p><h3 data-start=\"1422\" data-end=\"1434\">Pushback</h3><p data-start=\"1435\" data-end=\"1496\">Marking politically protected entities may generate backlash.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p><em>(3rd Level)</em></p><p><strong>Noise:</strong> +3</p><p>You identify unstable divinity: feral tulpas, corrupted contracts, rogue manifestations.</p><p>As an action, mark a target <strong>Out of Compliance</strong> for this scene.</p><h3>While Out of Compliance:</h3><ul><li><p>Your suppression, banishment, and disable effects:</p><ul><li><p>reroll the lowest die <strong>or</strong></p></li><li><p>Add your Tier to the DC (your choice)</p></li></ul></li><li><p>Violations of contracts or major precedents trigger Auditor features.</p></li></ul><p>Only one creature may be Out of Compliance at a time.</p><h3>Cost</h3><p>No Surge required to mark.</p><h3>Pushback</h3><p>Marking politically protected entities may generate backlash.</p>",
       "chat": ""
     },
     "identifier": "auditor_forensic_audit",
@@ -28,10 +28,10 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 3
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Pactkeeper 3, Auditor",
     "type": {
       "value": "",
       "subtype": ""
@@ -48,6 +48,183 @@
         "_taggedBy": "bbttcc-pressure-tagger",
         "_ts": 1770862584506
       }
+    },
+    "autoanimations": {
+      "id": "6cbf9498-e634-4399-ac30-884df4d23496",
+      "label": "Auditor: Forensic Audit",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "Z0Kl38HLbgyB7iFl",

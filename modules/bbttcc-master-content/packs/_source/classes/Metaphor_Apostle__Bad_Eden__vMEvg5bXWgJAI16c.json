@@ -8,15 +8,11 @@
     "source": "Bad Eden Originals — Sprint F (2026 rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>\"Say what counts as what now. Reality is listening.\"</em></p>\n<p><strong>Doctrine:</strong> Reality bends when likeness is declared and believed — your workings hinge on symbolic equivalence.</p>\n<p>The Metaphor Apostle rules by declaration. Your Surge spends rewrite what things are: an ally becomes a wall, a foe's armor becomes paper, and your whole line becomes giants.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Declared Likeness</strong> (1) — \"you are a wall\": an ally gains DR equal to Tier.</li>\n  <li><strong>Declared Frailty</strong> (2) — \"their armor is paper\": a foe's next attack and its saves are at disadvantage.</li>\n  <li><strong>Apotheosis</strong> (5) — \"you are all giants\": allies within 6 squares gain DR equal to Tier and a reroll.</li>\n</ul>",
+      "value": "<p><em>\"Say what counts as what now. Reality is listening.\"</em></p>\n<p><strong>Doctrine:</strong> Reality bends when likeness is declared and believed — your workings hinge on symbolic equivalence.</p>\n<p>The Metaphor Apostle rules by declaration. Your Surge spends rewrite what things are: an ally becomes a wall, a foe's armor becomes paper, and your whole line becomes giants.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Declared Likeness</strong> (1) — \"you are a wall\": an ally gains DR equal to Tier.</li>\n  <li><strong>Declared Frailty</strong> (2) — \"their armor is paper\": a foe's next attack and its saves are rolling 3d10 and keeping the lowest 2.</li>\n  <li><strong>Apotheosis</strong> (5) — \"you are all giants\": allies within 6 squares gain DR equal to Tier and a reroll.</li>\n</ul>",
       "chat": ""
     },
     "identifier": "bbttcc-cosmic-linguist-linguist-metaphor-apostle",
-    "advancement": [],
-    "spellcasting": {
-      "progression": "none",
-      "preparation": {}
-    }
+    "advancement": []
   },
   "effects": [],
   "folder": "kW6Z4Tf29UMVg49o",

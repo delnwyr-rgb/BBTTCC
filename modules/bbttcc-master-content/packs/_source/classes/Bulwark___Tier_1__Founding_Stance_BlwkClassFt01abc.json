@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>The world has two ways of saying no to change. You learn one of them today.</em></p><p><strong>On gaining Bulwark Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Athletics (Violence)</strong>.</p></li><li><p>Skill rank +1 in <strong>one tool of your choice</strong> (any single tool tracked as a skill on your sheet).</p></li><li><p><strong>Violence OP cap +3</strong> and <strong>Siege OP cap +2</strong> on the faction your character belongs to.</p></li><li><p>Your <strong>Frame Dice</strong> pool comes online (persistence — d8 dice, spend to absorb hits or fuel doctrine effects). Pool max = max(2, ceil((Violence value + Bulwark Initiation) / 3)), capped at 8.</p></li><li><p>Your <strong>Ruin Charges</strong> pool comes online (inevitability — single-use charges, spend to fuel offensive doctrine effects). Same pool-size formula.</p></li></ul><p>Both pools refill on a Soma Break. How you generate them depends on your chosen Path; see your doctrine's L1 feature.</p>",
+      "value": "<p><em>The world has two ways of saying no to change. You learn one of them today.</em></p><p><strong>On gaining Bulwark Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Athletics (Violence)</strong>.</p></li><li><p>Skill rank +1 in <strong>Melee</strong> and <strong>Plating</strong>.</p></li><li><p><strong>+30 Violence marks</strong> to your Domain's cap, and <strong>20 marks of free siege works</strong> folded into the buffer every time your Domain opens or joins a Siege.</p></li><li><p>You bank <strong>Surge</strong> by eating the blow: +1 Surge each time you take Integrity damage (max +2 a round). Spend it from the ◆ Surge menu.</p></li></ul><p>Your Path's L1 feature shapes how you bank it.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -26,6 +26,58 @@
     "activities": {}
   },
   "effects": [
+    {
+      "name": "Class L1: Plating +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Bulwark — Tier 1: Founding Stance at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Bulwark — Tier 1: Founding Stance",
+          "aptitudeKind": "plating"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.plating.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "OwTD0TqHMTv9E9YP",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864373836,
+        "modifiedTime": 1791864373836,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
     {
       "name": "Founding Stance: Athletics +1",
       "img": "icons/skills/melee/shield-block-bash-yellow.webp",
@@ -81,14 +133,62 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Class L1: Melee +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Bulwark — Tier 1: Founding Stance at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Bulwark — Tier 1: Founding Stance",
+          "aptitudeKind": "melee"
+        }
       },
-      "_key": "!items.effects!BlwkClassFt01abc.WRxpkdXH7WzavuRw"
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.melee.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "hfnX6zQacRYfHexT",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864373834,
+        "modifiedTime": 1791864373834,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "classfeat",
       "classIdentifier": "bulwark",
@@ -104,7 +204,11 @@
       }
     },
     "fourththing": {
-      "grants": {}
+      "grants": {},
+      "domainCapBonus": {
+        "violence": 30,
+        "siege": 20
+      }
     }
   },
   "folder": "rWwlRrTVc3OdPSZA",

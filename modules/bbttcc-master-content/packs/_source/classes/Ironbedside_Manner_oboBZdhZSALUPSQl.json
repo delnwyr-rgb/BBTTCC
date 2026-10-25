@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Ironbedside Manner.</strong> You have learned to be calm, precise, and a little terrifying when things are bad.</p><ul><li>You gain a small mechanical bonus on <strong>Faith (Soul) checks</strong> to stabilize, treat injuries, or assess physical trauma.</li><li>When you attempt to <strong>stabilize a dying creature</strong>, a roll of 9 or lower on the 2d10x10 counts as a 10 for that attempt (once per creature per Soma Break).</li></ul>",
+      "value": "<p><strong>Ironbedside Manner.</strong> You have learned to be calm, precise, and a little terrifying when things are bad.</p><ul><li>You gain a small mechanical bonus on <strong>Faith (Soul) checks</strong> to stabilize, treat injuries, or assess physical trauma.</li><li>When you attempt to <strong>stabilize a dying creature</strong>, a roll of 9 or lower on the 2d10 counts as a 10 for that attempt (once per creature per Soma Break).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 3
     },
     "properties": [],
-    "requirements": "Soul-Smith (3rd level)",
+    "requirements": "Soul-Smith 3",
     "type": {
       "value": "",
       "subtype": ""
@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!oboBZdhZSALUPSQl.8QjtS5FmDnV0b29h"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -97,8 +96,7 @@
       "soulSmith": {
         "ironbedsideManner": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

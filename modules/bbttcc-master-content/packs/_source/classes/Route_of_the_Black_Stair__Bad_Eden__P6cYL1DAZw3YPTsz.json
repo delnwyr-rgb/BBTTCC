@@ -8,15 +8,11 @@
     "source": "Bad Eden Originals — Sprint F (2026 rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>\"You came through a door that wasn't for them.\"</em></p><p><strong>Doctrine:</strong> Thresholds weaponized — covert, predatory; who gets through and who really, really doesn't.</p><p>The Black Stair is the courier as ambush. Your Surge spends turn crossings into kills: strike from where they weren't watching, slam the threshold shut on a foe, and spring the stair that does not end.</p><h3>Route (spent via Surge)</h3><ul><li><p><strong>Ambush</strong> (1) — your next Strike +Tier d6; the target's next attack is at disadvantage.</p></li><li><p><strong>Cut Off</strong> (2) — a foe is Staggered and cannot take reactions until your next turn.</p></li><li><p><strong>Stair-Trap</strong> (5) — your next Strike lands as a max-die crit and knocks the target Prone; if it drops them, you regain a freed action.</p></li></ul>",
+      "value": "<p><em>\"You came through a door that wasn't for them.\"</em></p><p><strong>Doctrine:</strong> Thresholds weaponized — covert, predatory; who gets through and who really, really doesn't.</p><p>The Black Stair is the courier as ambush. Your Surge spends turn crossings into kills: strike from where they weren't watching, slam the threshold shut on a foe, and spring the stair that does not end.</p><h3>Route (spent via Surge)</h3><ul><li><p><strong>Ambush</strong> (1) — your next Strike +Tier d6; the target's next attack is rolling 3d10 and keeping the lowest 2.</p></li><li><p><strong>Cut Off</strong> (2) — a foe is Staggered and cannot take reactions until your next turn.</p></li><li><p><strong>Stair-Trap</strong> (5) — your next Strike lands as a max-die crit and knocks the target Prone; if it drops them, you regain a freed action.</p></li></ul>",
       "chat": ""
     },
     "identifier": "bbttcc-shadow-courier-courier-black-stair",
-    "advancement": [],
-    "spellcasting": {
-      "progression": "none",
-      "preparation": {}
-    }
+    "advancement": []
   },
   "effects": [],
   "folder": "eQl1GnJxLhG4BD19",

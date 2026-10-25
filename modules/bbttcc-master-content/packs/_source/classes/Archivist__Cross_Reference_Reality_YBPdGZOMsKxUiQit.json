@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h1 data-start=\"3012\" data-end=\"3042\">📚 Cross-Reference Reality</h1><p data-start=\"3043\" data-end=\"3056\"><em data-start=\"3043\" data-end=\"3056\">(6th Level)</em></p><p><strong>Noise:</strong> +1</p><p data-start=\"3058\" data-end=\"3089\"><em data-start=\"3058\" data-end=\"3089\">“This pattern is documented.”</em></p><p data-start=\"3091\" data-end=\"3157\">You may link two or more active Precedents as supporting evidence.</p><p data-start=\"3159\" data-end=\"3197\">By spending <strong data-start=\"3171\" data-end=\"3187\">Surge</strong>, you may:</p><ul data-start=\"3199\" data-end=\"3380\"><li data-start=\"3199\" data-end=\"3256\"><p data-start=\"3201\" data-end=\"3256\">Extend a Precedent’s influence to an analogous target</p></li><li data-start=\"3257\" data-end=\"3324\"><p data-start=\"3259\" data-end=\"3324\">Impose roll 3d10 keep lowest 2 on actions that contradict multiple records</p></li><li data-start=\"3325\" data-end=\"3380\"><p data-start=\"3327\" data-end=\"3380\">Propagate a recorded aspect into a similar scenario</p></li></ul><p data-start=\"3382\" data-end=\"3441\">The more aligned the pattern, the stronger the enforcement.</p><h3 data-start=\"3443\" data-end=\"3451\">Cost</h3><p data-start=\"3452\" data-end=\"3477\">Spend 1 Surge.</p><h3 data-start=\"3479\" data-end=\"3491\">Pushback</h3><p data-start=\"3492\" data-end=\"3637\">Aggressive cross-referencing increases <strong data-start=\"3531\" data-end=\"3558\">Noise</strong>, especially when used to override player agency or freeze evolving situations.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h1>📚 Cross-Reference Reality</h1><p><em>(6th Level)</em></p><p><strong>Noise:</strong> +1</p><p><em>“This pattern is documented.”</em></p><p>You may link two or more active Precedents as supporting evidence.</p><p>By spending <strong>Surge</strong>, you may:</p><ul><li><p>Extend a Precedent’s influence to an analogous target</p></li><li><p>Impose roll 3d10 keep lowest 2 on actions that contradict multiple records</p></li><li><p>Propagate a recorded aspect into a similar scenario</p></li></ul><p>The more aligned the pattern, the stronger the enforcement.</p><h3>Cost</h3><p>Spend 1 Surge.</p><h3>Pushback</h3><p>Aggressive cross-referencing increases <strong>Noise</strong>, especially when used to override player agency or freeze evolving situations.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -46,6 +46,183 @@
         "_taggedBy": "bbttcc-pressure-tagger",
         "_ts": 1770862583400
       }
+    },
+    "autoanimations": {
+      "id": "d5974240-0b59-4b72-91bf-d8b722c0c71b",
+      "label": "Archivist: Cross-Reference Reality",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "eNi1uCWJUfkKDdUU",

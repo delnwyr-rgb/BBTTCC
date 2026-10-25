@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Mnemonic Spillway.</strong> Your thoughts overflow into the world, leaving echoes others can feel.</p><p>At the end of each short or a Soma Break, choose one Spillway:</p><ul><li><strong>Memory Marker:</strong> You leave a metaphysical imprint at your rest site. You and allies gain +2 on checks to retrace steps to this location, and you faintly sense when a hostile creature passes through it.</li><li><strong>Symbol Trace:</strong> You leave a dream-symbol on a creature you interacted with. You reroll the lowest die on Insight (Soul) checks toward that creature for 24 hours, and you subtly sense deceit or emotional tension.</li><li><strong>Pathway Echo:</strong> You attune to the next hex you plan to travel to. The next Travel hazard is treated as one tier lower, or ignored if already minor.</li><li><strong>Faction Ripple:</strong> If you interacted with a faction, you gain +1 Soft Power OP or +1 Intrigue OP the next time you make an OP test against that faction.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Mnemonic Spillway.</strong> Your thoughts overflow into the world, leaving echoes others can feel.</p><p>At the end of each Soma Break, choose one Spillway:</p><ul><li><strong>Memory Marker:</strong> You leave a metaphysical imprint at your rest site. You and allies gain +2 on checks to retrace steps to this location, and you faintly sense when a hostile creature passes through it.</li><li><strong>Symbol Trace:</strong> You leave a dream-symbol on a creature you interacted with. You reroll the lowest die on Insight (Soul) check toward that creature for 24 hours, and you subtly sense deceit or emotional tension.</li><li><strong>Pathway Echo:</strong> You attune to the next hex you plan to travel to. The next Travel hazard is treated as one tier lower, or ignored if already minor.</li><li><strong>Faction Ripple:</strong> If you interacted with a faction, you gain +10 Soft Power marks or +10 Intrigue marks the next time you make an Domain action against that faction.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 14
     },
     "properties": [],
-    "requirements": "Dreamwalker (14th level)",
+    "requirements": "Dreamwalker 14",
     "type": {
       "value": "",
       "subtype": ""
@@ -80,8 +80,7 @@
       "flags": {},
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!rvfPQwQq6rYBE1EG.ZJ2NnqfUT2YdUp0h"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -91,7 +90,183 @@
         "mnemonicSpillway": true
       }
     },
-    "dnd5e": {}
+    "autoanimations": {
+      "id": "4d59f6cc-a774-47ba-8c06-d2605e08efb9",
+      "label": "Mnemonic Spillway",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
   },
   "_stats": {
     "compendiumSource": null,

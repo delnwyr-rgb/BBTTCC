@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"1004\" data-end=\"1017\"><em data-start=\"1004\" data-end=\"1017\">(3rd Level)</em></p><p data-start=\"1019\" data-end=\"1059\">You anchor manifestations to declared metaphors.</p><p data-start=\"1061\" data-end=\"1134\">When you cast illusion or enchantment, you may declare a symbolic anchor:</p><ul data-start=\"1136\" data-end=\"1210\"><li data-start=\"1136\" data-end=\"1145\"><p data-start=\"1138\" data-end=\"1145\">Crown</p></li><li data-start=\"1146\" data-end=\"1155\"><p data-start=\"1148\" data-end=\"1155\">Chain</p></li><li data-start=\"1156\" data-end=\"1166\"><p data-start=\"1158\" data-end=\"1166\">Mirror</p></li><li data-start=\"1167\" data-end=\"1176\"><p data-start=\"1169\" data-end=\"1176\">Storm</p></li><li data-start=\"1177\" data-end=\"1185\"><p data-start=\"1179\" data-end=\"1185\">Fire</p></li><li data-start=\"1186\" data-end=\"1194\"><p data-start=\"1188\" data-end=\"1194\">Mask</p></li><li data-start=\"1195\" data-end=\"1203\"><p data-start=\"1197\" data-end=\"1203\">Hunt</p></li><li data-start=\"1204\" data-end=\"1210\"><p data-start=\"1206\" data-end=\"1210\">Etc.</p></li></ul><p data-start=\"1212\" data-end=\"1266\">If the metaphor is meaningfully relevant in the scene:</p><ul data-start=\"1268\" data-end=\"1285\"><li data-start=\"1268\" data-end=\"1285\"><p data-start=\"1270\" data-end=\"1285\">Bank Surge.</p></li></ul><p data-start=\"1287\" data-end=\"1319\">If the metaphor is contradicted:</p><ul data-start=\"1321\" data-end=\"1347\"><li data-start=\"1321\" data-end=\"1347\"><p data-start=\"1323\" data-end=\"1347\">Immediately gain misfire risk.</p></li></ul><p data-start=\"1349\" data-end=\"1368\">This is not flavor.</p><p data-start=\"1370\" data-end=\"1402\">The metaphor must be maintained.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p><em>(3rd Level)</em></p><p>You anchor manifestations to declared metaphors.</p><p>When you cast illusion or enchantment, you may declare a symbolic anchor:</p><ul><li><p>Crown</p></li><li><p>Chain</p></li><li><p>Mirror</p></li><li><p>Storm</p></li><li><p>Fire</p></li><li><p>Mask</p></li><li><p>Hunt</p></li><li><p>Etc.</p></li></ul><p>If the metaphor is meaningfully relevant in the scene:</p><ul><li><p>Bank Surge.</p></li></ul><p>If the metaphor is contradicted:</p><ul><li><p>Immediately gain misfire risk.</p></li></ul><p>This is not flavor.</p><p>The metaphor must be maintained.</p>",
       "chat": ""
     },
     "identifier": "metaphor_symbolic_substitution",
@@ -41,6 +41,183 @@
   "flags": {
     "bbttcc": {
       "identifier": "metaphor_symbolic_substitution"
+    },
+    "autoanimations": {
+      "id": "39af6b47-a148-41a9-9313-0eeec49fa5f2",
+      "label": "Metaphor Apostle: Symbolic Substitution",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "kW6Z4Tf29UMVg49o",

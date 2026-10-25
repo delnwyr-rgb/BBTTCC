@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Workshop Demi-Sanctum.</strong> Given time and materials, you can turn a workshop into a minor holy site of repair.</p><ul><li>When you have at least a week of downtime in a single location with access to tools and materials, you can establish a <strong>Demi-Sanctum Workshop</strong>.</li><li>Creatures who take a Soma Break while you are actively maintaining this workshop may recover one additional <strong>level of Stress</strong> (GM’s discretion for stacking with other effects) and reroll the lowest die on <strong>Soul check</strong> against despair or hopelessness for the next day.</li><li>On the campaign layer, this location becomes a <strong>key asset</strong>: your faction may gain small bonuses to repair, healing, or Tikkun-related projects done there.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Workshop Demi-Sanctum.</strong> Given time and materials, you can turn a workshop into a minor holy site of repair.</p><ul><li>When you have at least a week of downtime in a single location with access to tools and materials, you can establish a <strong>Demi-Sanctum Workshop</strong>.</li><li>Creatures who take a Soma Break while you are actively maintaining this workshop may recover one additional <strong>level of Stress</strong> (GM’s discretion for stacking with other effects) and reroll the lowest die on <strong>Soul check</strong> against despair or hopelessness for the next day.</li><li>On the campaign layer, this location becomes a <strong>key asset</strong>: your Domain may gain small bonuses to repair, healing, or Tikkun-related projects done there.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 15
     },
     "properties": [],
-    "requirements": "Soul-Smith (15th level)",
+    "requirements": "Soul-Smith 15",
     "type": {
       "value": "",
       "subtype": ""
@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!Y5FmTZirpltzNl0B.pgnC2au7FWu60fYV"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -100,8 +99,7 @@
       "hexHooks": {
         "workshopSanctumBonus": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

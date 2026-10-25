@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p>You conjure a scene-long metaphor entity.</p><p><strong>Effect:</strong> Create an allegorical manifestation (Judge, Mirror, Choir, Hungry Crown). It provides control, distraction, and leverage without direct damage (GM adjudication).</p>",
+      "value": "<p>(14th Level) You conjure a scene-long metaphor entity.</p><p><strong>Effect:</strong> Create an allegorical manifestation (Judge, Mirror, Choir, Hungry Crown). It provides control, distraction, and leverage without direct damage (GM adjudication).</p>",
       "chat": ""
     },
     "identifier": "metaphor_living_allegory",
@@ -28,10 +28,10 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 14
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Cosmic Linguist 14, Metaphor Apostle",
     "type": {
       "value": "",
       "subtype": ""

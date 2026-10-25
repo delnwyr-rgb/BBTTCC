@@ -1,6 +1,6 @@
 {
   "_id": "ftsurge000000128",
-  "name": "Footnote",
+  "name": "Gloss",
   "type": "feature",
   "img": "icons/sundries/documents/document-symbol-circle-gold-red.webp",
   "system": {
@@ -31,7 +31,7 @@
     },
     "autoanimations": {
       "id": "ft-an-footnote",
-      "label": "Footnote",
+      "label": "Gloss",
       "macro": {
         "enable": false,
         "playWhen": "0"

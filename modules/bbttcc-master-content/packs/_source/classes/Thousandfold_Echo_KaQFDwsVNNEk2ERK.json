@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You become a living archive of possible selves.</em></p><p>Once per <strong>a Soma Break</strong>, as a <strong>bonus action</strong>, you manifest the Thousandfold Echo for <strong>1 minute</strong>:</p><ul><li>You may switch between your prepared personas as a <strong>free interaction</strong> (no action) on your turn.</li><li>Whenever you switch personas, you gain a <strong>+1 bonus</strong> to your next Stealth (Intrigue), Diplomacy (Presence), or Performance (Presence) check before the end of your turn (stacking up to a maximum of +3).</li><li>During this time, creatures attempting to recall your true identity or appearance have <strong>disadvantage</strong> on such checks or saves.</li></ul><p><strong>Strategic Echo.</strong> If a major intrigue, Parley, or Courtly Intrigue scenario concluded under Thousandfold Echo ends in a <strong>Best Friends / Integration</strong> or <strong>Justice / Reformation</strong> style outcome, your faction gains <strong>+1 Soft Power OP</strong> and <strong>+1 Intrigue OP</strong> as the legend of your many faces spreads.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You become a living archive of possible selves.</em></p><p>Once per <strong>Soma Break</strong>, as a <strong>bonus action</strong>, you manifest the Thousandfold Echo for <strong>1 minute</strong>:</p><ul><li>You may switch between your prepared personas as a <strong>free interaction</strong> (no action) on your turn.</li><li>Whenever you switch personas, you gain a <strong>+1 bonus</strong> to your next Stealth (Intrigue), Diplomacy (Presence), or Performance (Presence) check before the end of your turn (stacking up to a maximum of +3).</li><li>During this time, creatures attempting to recall your true identity or appearance roll 3d10 and keep the lowest 2 on such checks or saves.</li></ul><p><strong>Strategic Echo.</strong> If a major intrigue, or Parley scenario concluded under Thousandfold Echo ends in a <strong>Best Friends / Integration</strong> or <strong>Justice / Reformation</strong> style outcome, your Domain gains <strong>+10 Soft Power marks</strong> and <strong>+10 Intrigue marks</strong> as the legend of your many faces spreads.</p>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -48,7 +43,183 @@
       "subclassKey": "dreamwalker_thousand_faces",
       "featureKey": "thousandfold_echo"
     },
-    "dnd5e": {}
+    "autoanimations": {
+      "id": "d8f35e20-d205-4f1f-9191-c4d41482b51d",
+      "label": "Thousandfold Echo",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "music",
+          "animation": "notes",
+          "variant": "01",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
   },
   "_stats": {
     "compendiumSource": null,

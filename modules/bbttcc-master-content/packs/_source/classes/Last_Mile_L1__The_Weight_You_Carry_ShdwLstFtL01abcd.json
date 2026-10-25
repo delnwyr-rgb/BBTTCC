@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> — a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics — just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient faction gains <strong>+1 Morale OP</strong> and <strong>Darkness in the recipient's hex is reduced by 1 point</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
+      "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> — a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics — just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient Domain gains <strong>+1 Loyalty marks</strong> and <strong>Darkness in the recipient's hex is reduced by 1 point</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -27,9 +27,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "shadow_courier",
@@ -45,12 +42,35 @@
       "triggers": [
         {
           "event": "on-delivery",
+          "predicate": {
+            "tag": [
+              "soul"
+            ]
+          },
           "effect": {
             "kind": "chat-prompt",
             "args": {
-              "body": "On delivery: When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipie..."
+              "body": "The Weight You Carry. You delivered a Soul to safety (GM confirms the destination counts as safety): the recipient faction gains +1 Morale OP and Darkness in the recipient's hex is reduced by 1 point."
             }
           }
+        }
+      ],
+      "rerolls": [
+        {
+          "context": "check",
+          "skill": "stealth",
+          "mode": "reroll-lowest",
+          "when": "carryingSoul",
+          "vs": "protecting or concealing the Soul",
+          "note": "The Weight You Carry — while carrying a Soul"
+        },
+        {
+          "context": "check",
+          "skill": "athletics",
+          "mode": "reroll-lowest",
+          "when": "carryingSoul",
+          "vs": "protecting or concealing the Soul",
+          "note": "The Weight You Carry — while carrying a Soul"
         }
       ]
     },
@@ -237,11 +257,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.3",
     "createdTime": 1777005233927,
-    "modifiedTime": 1782167240820,
+    "modifiedTime": 1791412952022,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

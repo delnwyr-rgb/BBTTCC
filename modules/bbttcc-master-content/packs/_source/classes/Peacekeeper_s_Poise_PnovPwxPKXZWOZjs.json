@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Peacekeeper's Poise.</strong> Your presence steadies people at the exact moment everything could go sideways.</p><ul><li>When initiative is rolled, you can choose up to a number of creatures equal to your Presence modifier (minimum one) within 6 squares of you. Each gains temporary Integrity equal to your Presence modifier + your tier.</li><li>You can use this feature a number of times per Soma Break equal to your tier.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Peacekeeper's Poise.</strong> Your presence steadies people at the exact moment everything could go sideways.</p><ul><li>When initiative is rolled, you can choose up to a number of creatures equal to your Presence value (minimum one) within 6 squares of you. Each gains temporary Integrity equal to your Presence value + your tier.</li><li>You can use this feature a number of times per Soma Break equal to your tier.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 1
     },
     "properties": [],
-    "requirements": "Harmony Marshal (1st level)",
+    "requirements": "Harmony Marshal 1",
     "type": {
       "value": "",
       "subtype": ""
@@ -90,8 +90,7 @@
       "harmonyMarshal": {
         "peacekeepersPoise": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

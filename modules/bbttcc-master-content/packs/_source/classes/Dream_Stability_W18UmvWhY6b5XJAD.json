@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Dream Stability.</strong> Repeated exposure to dream-currents and metaphysical imagery has toughened your inner life.</p><ul><li>You gain a +1 bonus to Soul check.</li><li>When confronted with illusions, psychic assaults, or overwhelming symbolism, the GM may grant you reroll the lowest die on defense checks against being charmed or Shaken.</li><li>Bad Eden systems may treat you as an anchor for sanity and cohesion in high-weirdness hexes, Sparks, and encounters.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Dream Stability.</strong> Repeated exposure to dream-currents and metaphysical imagery has toughened your inner life.</p><ul><li>You gain a +1 bonus to Soul check.</li><li>When confronted with illusions, psychic assaults, or overwhelming symbolism, the GM may let you reroll the lowest die on defense checks against being charmed or Shaken.</li><li>Bad Eden systems may treat you as an anchor for sanity and cohesion in high-weirdness hexes, Sparks, and encounters.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 6
     },
     "properties": [],
-    "requirements": "Dreamwalker (6th level)",
+    "requirements": "Dreamwalker 6",
     "type": {
       "value": "",
       "subtype": ""
@@ -38,7 +38,7 @@
   },
   "effects": [
     {
-      "name": "Dream Stability (Wis Save Edge)",
+      "name": "Dream Stability (Soul Check Edge)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_symbolism.png",
       "origin": null,
       "transfer": true,
@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!W18UmvWhY6b5XJAD.VwoORGVg9Ly53qOT"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -97,8 +96,7 @@
       "dreamwalker": {
         "stability": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

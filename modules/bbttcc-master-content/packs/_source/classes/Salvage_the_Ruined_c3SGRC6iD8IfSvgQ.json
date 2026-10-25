@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Salvage the Ruined.</strong> You can look at wreckage and see a parts list instead of a tragedy.</p><ul><li>When you spend at least 10 minutes working on a destroyed structure, vehicle, or fortification after a scene (combat, raid, disaster), you can make an appropriate check (typically <strong>the Plating aptitude</strong>, <strong>Investigation (Mind)</strong>, or <strong>Faith (Soul)</strong> if it was sacred).</li><li>On a success (DC set by GM), your faction gains a small narrative resource bump—typically <strong>+1 Economy OP</strong>, rare materials, or a discount on upcoming repairs in that hex.</li></ul><p>This feature doesn’t conjure resources from nowhere; it lets you recover value from places other people would simply abandon.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Salvage the Ruined.</strong> You can look at wreckage and see a parts list instead of a tragedy.</p><ul><li>When you spend at least 10 minutes working on a destroyed structure, vehicle, or fortification after a scene (combat, raid, disaster), you can make an appropriate check (typically <strong>the Plating aptitude</strong>, <strong>Investigation (Mind)</strong>, or <strong>Faith (Soul)</strong> if it was sacred).</li><li>On a success (DC set by GM), your Domain gains a small narrative resource bump—typically <strong>+10 Economy marks</strong>, rare materials, or a discount on upcoming repairs in that hex.</li></ul><p>This feature doesn’t conjure resources from nowhere; it lets you recover value from places other people would simply abandon.</p>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 2
     },
     "properties": [],
-    "requirements": "Soul-Smith (2nd level)",
+    "requirements": "Soul-Smith 2",
     "type": {
       "value": "",
       "subtype": ""
@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!c3SGRC6iD8IfSvgQ.ejUcX1S7LjlzrfWG"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -101,7 +100,6 @@
         "salvageEconomyBonus": 1
       }
     },
-    "dnd5e": {},
     "fourththing": {
       "vocabScrub": "2026-05-16"
     }

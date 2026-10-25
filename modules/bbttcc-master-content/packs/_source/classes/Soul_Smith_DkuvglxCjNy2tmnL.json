@@ -133,7 +133,7 @@
         },
         "value": {},
         "level": 4,
-        "title": "Harmonic Heat-Treat & Grief-Smith's Insight (Soul) (Soul)",
+        "title": "Harmonic Heat-Treat & Grief-Smith's Insight",
         "flags": {},
         "hint": ""
       },
@@ -688,30 +688,14 @@
       "additional": ""
     },
     "levels": 1,
-    "primaryAbility": {
-      "value": [
-        "con"
-      ],
-      "all": false
-    },
     "properties": [],
-    "spellcasting": {
-      "progression": "half",
-      "ability": "con",
-      "preparation": {
-        "formula": "@con.mod + floor(@classes.soul_smith.levels/2)"
-      }
-    },
     "wealth": ""
   },
   "effects": [],
   "folder": "e0QBxXMScwOJA8aO",
   "flags": {
     "bbttcc": {
-      "primary": "constitution",
-      "opBonus": {
-        "economy": 3
-      }
+      "primary": "constitution"
     },
     "fourththing": {
       "vocabScrub": "2026-05-16"

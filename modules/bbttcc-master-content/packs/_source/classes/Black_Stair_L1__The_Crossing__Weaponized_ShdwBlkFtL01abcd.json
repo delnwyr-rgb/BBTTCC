@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>A locked door is a suggestion.</em></p><p><strong>Mode: Thief / drift: Toward.</strong></p><p>Your default Package type is either a <strong>Blade</strong> or a <strong>Key</strong>. Declare which you are carrying at the start of each scene; you may switch on a Soma Break.</p><ul><li><p><strong>Blade.</strong> A single opportunistic strike, deployable once. While carrying a Blade, your <strong>first attack from concealment or surprise</strong> in the scene deals an extra <strong>+1d10x10 kinetic damage</strong> with <strong>damageFlavor: blade</strong>. The damage explodes on 10s and banks Surge as normal. Using the strike consumes the Blade.</p></li><li><p><strong>Key.</strong> A single-use access bypass. While carrying a Key, you may bypass <strong>one non-magical lock, ward, or password challenge</strong> without rolling, once per scene. Using the Key consumes it.</p></li></ul><p><strong>On delivery</strong> (resolving the Blade strike on its intended target, or using the Key on its intended barrier): no Pace refill from this base feature — see Class Tier 3 Package Mastery for the Black Stair delivery bonus.</p><p>You may designate a new Package on your next Soma Break or on entering a new scene if your slot is empty.</p>",
+      "value": "<p><em>A locked door is a suggestion.</em></p><p><strong>Mode: Thief / drift: Toward.</strong></p><p>Your default Package type is either a <strong>Blade</strong> or a <strong>Key</strong>. Declare which you are carrying at the start of each scene; you may switch on a Soma Break.</p><ul><li><p><strong>Blade.</strong> A single opportunistic strike, deployable once. While carrying a Blade, your <strong>first attack from concealment or surprise</strong> in the scene deals an extra <strong>+1d10 kinetic damage</strong> with <strong>(blade)</strong>. The damage explodes on 10s and banks Surge as normal. Using the strike consumes the Blade.</p></li><li><p><strong>Key.</strong> A single-use access bypass. While carrying a Key, you may bypass <strong>one non-magical lock, ward, or password challenge</strong> without rolling, once per scene. Using the Key consumes it.</p></li></ul><p><strong>On delivery</strong> (resolving the Blade strike on its intended target, or using the Key on its intended barrier): — see Class Tier 3 Package Mastery for the Black Stair delivery bonus.</p><p>You may designate a new Package on your next Soma Break or on entering a new scene if your slot is empty.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -27,9 +27,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "shadow_courier",
@@ -42,21 +39,184 @@
     },
     "fourththing": {
       "grants": {},
-      "triggers": [
-        {
-          "event": "on-delivery",
-          "limit": {
-            "window": "soma-break",
-            "uses": 1
-          },
-          "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "Using the Key consumes it. On delivery (resolving the Blade strike on its intended target, or using the Key on its intended barrier): no Pace refill from this base f..."
-            }
-          }
+      "triggers": []
+    },
+    "autoanimations": {
+      "id": "cc03f31f-4601-4522-8594-59ff8f14519f",
+      "label": "Black Stair L1: The Crossing, Weaponized",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "sword",
+          "variant": "01",
+          "color": "white",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
         }
-      ]
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "eQl1GnJxLhG4BD19",
@@ -64,11 +224,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1777005233904,
-    "modifiedTime": 1781116150678,
+    "modifiedTime": 1791344283441,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

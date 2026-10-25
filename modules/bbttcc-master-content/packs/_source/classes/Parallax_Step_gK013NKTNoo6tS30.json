@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>You move in half-seen gaps between possible positions.</em></p><p>At the start of each of your turns, choose <strong>one creature</strong> you can see.</p><ul><li>Until the start of your next turn, your movement <strong>does not provoke opportunity attacks</strong> from that creature.</li><li>This effect ends early if you become <strong>Staggered</strong> or your movement is reduced to 0.</li></ul><p>You don’t dodge them; you simply walk where their memory of you isn’t.</p>",
+      "value": "<p><em>You move in half-seen gaps between possible positions.</em></p><p>At the start of each of your turns, choose <strong>one creature</strong> you can see.</p><ul><li>Until the start of your next turn, your movement <strong>does not provoke reaction strikes</strong> from that creature.</li><li>This effect ends early if you become <strong>Staggered</strong> or your movement is reduced to 0.</li></ul><p>You don’t dodge them; you simply walk where their memory of you isn’t.</p>",
       "chat": ""
     },
     "activities": {},
@@ -42,8 +42,7 @@
     "bbttcc": {
       "subclassKey": "wyrdlens_refraction_foresight",
       "featureKey": "parallax_step"
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

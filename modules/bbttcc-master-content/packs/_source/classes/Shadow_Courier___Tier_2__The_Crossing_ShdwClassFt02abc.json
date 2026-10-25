@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>Signature move. Once a scene, the membrane chooses you instead of the wall.</em></p><p><strong>The Crossing — 1/scene (recovers on Soma Break).</strong> As an action, declare a single threshold within reach: a door, wall, ward, alarm, divination perimeter, hex boundary, or similar barrier. You cross it. Resolution depends on the barrier:</p><ul><li><p><strong>Mundane barriers</strong> (locked doors, sealed walls, alarmed corridors, password gates) <strong>simply fail to register</strong> your passage. No roll. The barrier remains intact for everyone else.</p></li><li><p><strong>Magical wards or alarms</strong> (alarm manifestations, divination perimeters, scrying screens, hex-warded boundaries) require an <strong>Intrigue defense check</strong> against DC <strong>12 + (the ward source's Initiation tier × 2)</strong>. On a success you cross without triggering the ward; on a failure you still cross, but the ward fires normally and the source is alerted.</p></li></ul><p>Several Route doctrines extend or modify The Crossing — see your doctrine's L5 feature.</p>",
+      "value": "<p><em>Signature move. Once a scene, the membrane chooses you instead of the wall.</em></p><p><strong>The Crossing — 1/scene (recovers on Soma Break).</strong> As an action, declare a single threshold within reach: a door, wall, ward, alarm, divination perimeter, hex boundary, or similar barrier. You cross it. Resolution depends on the barrier:</p><ul><li><p><strong>Mundane barriers</strong> (locked doors, sealed walls, alarmed corridors, password gates) <strong>simply fail to register</strong> your passage. No roll. The barrier remains intact for everyone else.</p></li><li><p><strong>Magical wards or alarms</strong> (alarm manifestations, divination perimeters, scrying screens, hex-warded boundaries) require an <strong>Intrigue defense check</strong> against DC <strong>12 + (the ward source's Initiation tier × 2)</strong>. On a success you cross without triggering the ward; on a failure you still cross, but the ward fires normally and the source is alerted.</p></li></ul><p>The Black Stair's L5 feature extends The Crossing.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -20,22 +20,13 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "sr",
-          "type": "recoverAll",
-          "formula": ""
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "activities": {}
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "classfeat",
       "classIdentifier": "shadow_courier",

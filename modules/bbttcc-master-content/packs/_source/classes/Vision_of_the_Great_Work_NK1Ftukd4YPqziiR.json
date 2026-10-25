@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Vision of the Great Work.</strong> You pierce the veil of narrative and probability, perceiving the hidden scaffolding of the world.</p><ul><li><strong>Hex Alignment:</strong> You instinctively sense Sephirotic or Qliphothic tilt within 10 miles.</li><li><strong>Faction Trajectory:</strong> Once per Soma Break, you may ask the GM what a faction or important NPC is likely to attempt next if unopposed.</li><li><strong>Destiny Thread Pulse:</strong> Once per Soma Break, choose one creature you see. For 1 hour, they gain one of the following of your choice:<ul><li>+2 to all defense check</li><li>Enemies have –2 to attack rolls against them</li><li>+2 to Insight (Soul), Diplomacy (Presence), and Perception (Mind) checks</li></ul></li><li><strong>Spark Resonance:</strong> You sense the presence and Sephirah-type of any active Spark within several hexes.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Vision of the Great Work.</strong> You pierce the veil of narrative and probability, perceiving the hidden scaffolding of the world.</p><ul><li><strong>Hex Alignment:</strong> You instinctively sense Sephirotic or Qliphothic tilt within 10 miles.</li><li><strong>Faction Trajectory:</strong> Once per Soma Break, you may ask the GM what a faction or important NPC is likely to attempt next if unopposed.</li><li><strong>Destiny Thread Pulse:</strong> Once per Soma Break, choose one creature you see. For 1 hour, they gain one of the following of your choice:<ul><li>+2 to all defense checks</li><li>Enemies have –2 to attack rolls against them</li><li>+2 to Insight (Soul), Diplomacy (Presence), and Perception (Mind) checks</li></ul></li><li><strong>Spark Resonance:</strong> You sense the presence and Sephirah-type of any active Spark within several hexes.</li></ul>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -35,7 +30,7 @@
       "level": 11
     },
     "properties": [],
-    "requirements": "Dreamwalker (11th level)",
+    "requirements": "Dreamwalker 11",
     "type": {
       "value": "",
       "subtype": ""
@@ -85,8 +80,7 @@
       "flags": {},
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!NK1Ftukd4YPqziiR.R3v1qjQwVx5ZeFtl"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -96,7 +90,183 @@
         "vision": true
       }
     },
-    "dnd5e": {}
+    "autoanimations": {
+      "id": "8efaa6b7-6d6b-418c-a029-232fc843bb92",
+      "label": "Vision of the Great Work",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
   },
   "_stats": {
     "compendiumSource": null,

@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You can stitch courage into the air itself.”</em></p><p>When you or an ally you can see within <strong>6 squares</strong> succeeds on an attack roll, defense check, or attribute check by <strong>5 or more</strong>, you can use your <strong>reaction</strong> to declare a surge of momentum.</p><ul><li>Allies of your choice within <strong>3 squares</strong> gain <strong>temporary Integrity equal to your tier</strong>.</li><li>Those allies also gain a <strong>+2 squares bonus</strong> to their speed until the end of their next turn.</li><li>The next <strong>Diplomacy (Presence)</strong> or <strong>Intimidation (Presence)</strong> check made by any one of the affected creatures before the end of the scene has <strong>advantage</strong>.</li></ul><p>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</p><p><strong>OP Echo.</strong> If a Triumph Weave directly helps resolve a conflict without lethal force, your faction gains <strong>+1 Diplomacy OP</strong> for the next strategic turn.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You can stitch courage into the air itself.”</em></p><p>When you or an ally you can see within <strong>6 squares</strong> succeeds on an attack roll, defense check, or attribute check by <strong>5 or more</strong>, you can use your <strong>reaction</strong> to declare a surge of momentum.</p><ul><li>Allies of your choice within <strong>3 squares</strong> gain <strong>temporary Integrity equal to your tier</strong>.</li><li>Those allies also gain a <strong>+2 squares bonus</strong> to their speed until the end of their next turn.</li><li>The next <strong>Diplomacy (Presence)</strong> or <strong>Intimidation (Presence)</strong> check made by any one of the affected creatures before the end of the scene rerolls its lowest die.</li></ul><p>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</p><p><strong>Domain Echo..</strong> If a Triumph Weave directly helps resolve a conflict without lethal force, your Domain gains <strong>+10 Diplomacy marks</strong> for the next turn.</p>",
       "chat": ""
     },
     "activities": {
@@ -66,13 +66,8 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
-      "max": "@prof"
+      "recovery": [],
+      "max": ""
     },
     "advancement": {},
     "identifier": "soulsmith-forge-victory-triumph-weave",
@@ -81,7 +76,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 14
     },
     "properties": [],
     "requirements": "Soul-Smith 14, Forge of Victory",
@@ -93,7 +88,6 @@
   "effects": [],
   "folder": "dsO4fBFdVXDt6vRA",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "soulsmith_forge_victory",
       "featureKey": "triumph_weave"

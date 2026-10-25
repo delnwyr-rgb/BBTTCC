@@ -117,7 +117,44 @@ export function factionBaseCaps(faction) {
 /** Effective per-bucket caps in MARKS: base caps + cap adjustments (below). */
 export function factionCaps(faction) {
   const out = factionBaseCaps(faction);
+  try { _withMemberCapBonuses(faction, out); } catch (_e) { /* non-fatal */ }
   try { return _withCapAdjustments(faction?.flags?.[MOD_ID] || {}, out); } catch (_e) { return out; }
+}
+// Member cap bonuses in MARKS (ruling BW3, 2026-10-25): a steward assigned to this Domain
+// (flags.bbttcc-factions.factionId) whose items carry flags.fourththing.domainCapBonus
+// { <opKey>: marks } raises the Domain's caps by that much — Bulwark Founding Stance
+// (+30 violence / +20 siege) is the first. Only caps that are already > 0 move (0 = uncapped).
+/** Free siege marks (ruling BW3 follow-up, 2026-10-25): the Domain has no "siege" cap channel, so a
+ *  member's `domainCapBonus.siege` is read as marks of siege works the Domain gets for free every
+ *  time it commits to a siege buffer (Begin Siege as lead, Join Siege as supporter). Consumers:
+ *  bbttcc-raid siege-throughput.js + siege-state.js via game.bbttcc.facts.faction.siegeBonus. */
+export function factionSiegeBonusMarks(faction) {
+  if (!faction?.id || !globalThis.game?.actors) return 0;
+  let total = 0;
+  for (const a of game.actors) {
+    if (a.type !== "character") continue;
+    if (a.getFlag?.(MOD_ID, "factionId") !== faction.id) continue;
+    for (const it of (a.items ?? [])) {
+      const v = _safeNum(it.flags?.fourththing?.domainCapBonus?.siege, 0);
+      if (v > 0) total += v;
+    }
+  }
+  return Math.floor(total);
+}
+function _withMemberCapBonuses(faction, out) {
+  if (!faction?.id || !globalThis.game?.actors) return out;
+  const add = {};
+  for (const a of game.actors) {
+    if (a.type !== "character") continue;
+    if (a.getFlag?.(MOD_ID, "factionId") !== faction.id) continue;
+    for (const it of (a.items ?? [])) {
+      const b = it.flags?.fourththing?.domainCapBonus;
+      if (!b || typeof b !== "object") continue;
+      for (const k of OP_KEYS) { const v = _safeNum(b[k], 0); if (v) add[k] = (add[k] || 0) + v; }
+    }
+  }
+  for (const k of OP_KEYS) if (add[k] && out[k] > 0) out[k] = Math.max(1, Math.floor(out[k] + add[k]));
+  return out;
 }
 // Cap adjustments in MARKS (owner rulings 2026-10-02), each `{ all?, <opKey>? }`:
 //   opCapDelta             — PERMANENT (raid world effect permanentCapDelta, e.g. Ego Breaker −30 violence)
@@ -525,7 +562,7 @@ function _attach() {
     apiRoot.runMarksMigration = _runMarksMigration;
     // Facts layer (2026-09-12): one home per faction fact.
     game.bbttcc.facts ??= {};
-    game.bbttcc.facts.faction = { tier: factionTier, caps: factionCaps, baseCaps: factionBaseCaps, capBand: tierCapBand, logisticsCapMarks: factionLogisticsCapMarks, CAP_BAND: TIER_CAP_BAND_MARKS.slice(), LOGI_CAP_FLOOR: LOGISTICS_CAPACITY_FLOOR_MARKS.slice() };
+    game.bbttcc.facts.faction = { tier: factionTier, caps: factionCaps, baseCaps: factionBaseCaps, siegeBonus: factionSiegeBonusMarks, capBand: tierCapBand, logisticsCapMarks: factionLogisticsCapMarks, CAP_BAND: TIER_CAP_BAND_MARKS.slice(), LOGI_CAP_FLOOR: LOGISTICS_CAPACITY_FLOOR_MARKS.slice() };
 
     log(`OP Engine API ready (marks unit, 1 OP = ${_marksPerOp()} marks) → game.bbttcc.api.op.{preview, commit, KEYS, OP_TO_MARKS, marksPerOp, fmt, fmtNum} — every quantity is MARKS`);
   } catch (e) {

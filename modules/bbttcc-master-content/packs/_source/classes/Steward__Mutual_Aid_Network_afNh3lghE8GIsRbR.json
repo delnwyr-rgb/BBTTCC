@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>Godhood as social work.</em></p><p><strong>Effect:</strong> Allies can contribute to your Surge through cooperation. Your healing and stabilization spreads soft buffers across the group (GM adjudication).</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p>(10th Level) <em>Godhood as social work.</em></p><p><strong>Effect:</strong> Allies can contribute to your Surge through cooperation. Your healing and stabilization spreads soft buffers across the group (GM adjudication).</p>",
       "chat": ""
     },
     "identifier": "steward_mutual_aid_network",
@@ -28,10 +28,10 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 10
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Pactkeeper 10, Steward of Living Communities",
     "type": {
       "value": "",
       "subtype": ""

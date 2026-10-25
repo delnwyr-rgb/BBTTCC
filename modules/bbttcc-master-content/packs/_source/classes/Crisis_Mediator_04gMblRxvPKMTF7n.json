@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Crisis Mediator.</strong> You specialize in talking people down from the brink.</p><ul><li>When you resolve a significant scene that could have become a combat encounter (or escalated to violence) using primarily Diplomacy, Performance (Presence), Insight (Soul), or other nonviolent means, you may apply one of the following effects, as appropriate to the fiction:</li><li><strong>• Darkness –1</strong> in the affected hex or faction (to a campaign-appropriate minimum).</li><li><strong>• Soft Power +1 OP</strong> to your faction at the end of the strategic turn.</li></ul><p>You can apply this feature once per scene, and a number of times per Soma Break equal to your tier.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Crisis Mediator.</strong> You specialize in talking people down from the brink.</p><ul><li>When you resolve a significant scene that could have become a combat encounter (or escalated to violence) using primarily Diplomacy, Performance (Presence), Insight (Soul), or other nonviolent means, you may apply one of the following effects, as appropriate to the fiction:</li><li><strong>• Darkness –1</strong> in the affected hex or faction (to a campaign-appropriate minimum).</li><li><strong>• +10 Soft Power marks</strong> to your Domain at the end of the turn.</li></ul><p>You can apply this feature once per scene, and a number of times per Soma Break equal to your tier.</p>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 9
     },
     "properties": [],
-    "requirements": "Harmony Marshal (9th level)",
+    "requirements": "Harmony Marshal 9",
     "type": {
       "value": "",
       "subtype": ""
@@ -100,8 +100,7 @@
       "opHooks": {
         "darknessReductionEvents": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

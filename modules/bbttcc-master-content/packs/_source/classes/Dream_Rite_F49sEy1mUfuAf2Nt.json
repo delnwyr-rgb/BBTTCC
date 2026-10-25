@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Dream Rite.</strong> You learn a formalized way to question the Great Work itself.</p><p><strong>Once per Soma Break</strong>, after at least 10 minutes of quiet trance or sleep, you may perform a Dream Rite. Choose one mode when you begin the rite:</p><ul><li><strong>Route Rite (Travel):</strong> You focus on a planned route or upcoming travel leg. The Dream shows you an omen about its dangers or opportunities. You reroll the lowest die on the next hazard-avoidance roll for that route, or your GM may allow you to ignore the first minor hazard triggered on that route.</li><li><strong>Hex Rite (World-State):</strong> You focus on a single hex. The Dream reveals its Sephirotic/Qliphothic tilt and one major unseen factor. You gain a +2 bonus on the next roll or OP test to influence that hex (such as shifting alignment, stabilizing, exploiting, or cleansing).</li><li><strong>Faction Rite (Intent):</strong> You focus on a faction or key NPC. The Dream shows you their immediate agenda and symbolic trajectory. You gain a +2 bonus on the next social, intrigue, or Soft Power OP action targeting that faction or NPC.</li><li><strong>Spark Rite (Metaphysics):</strong> You focus on a known Spark, relic, or metaphysical event. The Dream offers guidance or warning. You gain a +1d4 bonus on the next roll directly related to handling that Spark or object, and the GM may soften the first minor mishap if your approach fits the omen.</li></ul><p>The Dream never lies, but its answers are often symbolic, incomplete, or framed in imagery. Mechanical bonuses apply to one relevant roll or test as agreed at the table.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Dream Rite.</strong> You learn a formalized way to question the Great Work itself.</p><p><strong>Once per Soma Break</strong>, after at least 10 minutes of quiet trance or sleep, you may perform a Dream Rite. Choose one mode when you begin the rite:</p><ul><li><strong>Route Rite (Travel):</strong> You focus on a planned route or upcoming travel leg. The Dream shows you an omen about its dangers or opportunities. You reroll the lowest die on the next hazard-avoidance roll for that route, or your GM may allow you to ignore the first minor hazard triggered on that route.</li><li><strong>Hex Rite (World-State):</strong> You focus on a single hex. The Dream reveals its Sephirotic/Qliphothic tilt and one major unseen factor. You gain a +2 bonus on the next roll or Domain action to influence that hex (such as shifting alignment, stabilizing, exploiting, or cleansing).</li><li><strong>Faction Rite (Intent):</strong> You focus on a faction or key NPC. The Dream shows you their immediate agenda and symbolic trajectory. You gain a +2 bonus on the next social, intrigue, or Soft Power marks action targeting that Domain or NPC or NPC.</li><li><strong>Spark Rite (Metaphysics):</strong> You focus on a known Spark, relic, or metaphysical event. The Dream offers guidance or warning. You gain a +1d4 bonus on the next roll directly related to handling that Spark or object, and the GM may soften the first minor mishap if your approach fits the omen.</li></ul><p>The Dream never lies, but its answers are often symbolic, incomplete, or framed in imagery. Mechanical bonuses apply to one relevant roll or test as agreed at the table.</p>",
       "chat": ""
     },
     "activities": {
@@ -64,12 +64,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -82,7 +77,7 @@
       "level": 5
     },
     "properties": [],
-    "requirements": "Dreamwalker (5th level)",
+    "requirements": "Dreamwalker 5",
     "type": {
       "value": "",
       "subtype": ""
@@ -90,8 +85,8 @@
   },
   "effects": [
     {
-      "name": "Dream Rite (Route Rite Flag)",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_moon_gate.png",
+      "name": "Dream Rite (Spark Rite Flag)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
       "origin": null,
       "transfer": false,
       "disabled": true,
@@ -103,7 +98,7 @@
       },
       "flags": {
         "bbttcc": {
-          "dreamRiteMode": "route"
+          "dreamRiteMode": "spark"
         }
       },
       "_stats": {
@@ -117,12 +112,12 @@
         "createdTime": 1776459927031,
         "modifiedTime": 1777346198200
       },
-      "_id": "aZMswprYd0QN8gmL",
+      "_id": "GSZRFg3Lasu8vEgW",
       "type": "base",
       "system": {
         "changes": [
           {
-            "key": "flags.bbttcc.dreamwalker.dreamRiteRoute",
+            "key": "flags.bbttcc.dreamwalker.dreamRiteSpark",
             "value": 1,
             "priority": 20,
             "type": "custom",
@@ -136,8 +131,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!F49sEy1mUfuAf2Nt.aZMswprYd0QN8gmL"
+      "folder": null
     },
     {
       "name": "Dream Rite (Hex Rite Flag)",
@@ -186,8 +180,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!F49sEy1mUfuAf2Nt.UXSjVCoQ1KMGMTpn"
+      "folder": null
     },
     {
       "name": "Dream Rite (Faction Rite Flag)",
@@ -236,12 +229,11 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!F49sEy1mUfuAf2Nt.ZSH1HMdJXSxKcbmL"
+      "folder": null
     },
     {
-      "name": "Dream Rite (Spark Rite Flag)",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
+      "name": "Dream Rite (Route Rite Flag)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_moon_gate.png",
       "origin": null,
       "transfer": false,
       "disabled": true,
@@ -253,7 +245,7 @@
       },
       "flags": {
         "bbttcc": {
-          "dreamRiteMode": "spark"
+          "dreamRiteMode": "route"
         }
       },
       "_stats": {
@@ -267,12 +259,12 @@
         "createdTime": 1776459927031,
         "modifiedTime": 1777346198200
       },
-      "_id": "GSZRFg3Lasu8vEgW",
+      "_id": "aZMswprYd0QN8gmL",
       "type": "base",
       "system": {
         "changes": [
           {
-            "key": "flags.bbttcc.dreamwalker.dreamRiteSpark",
+            "key": "flags.bbttcc.dreamwalker.dreamRiteRoute",
             "value": 1,
             "priority": 20,
             "type": "custom",
@@ -286,8 +278,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!F49sEy1mUfuAf2Nt.GSZRFg3Lasu8vEgW"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -297,7 +288,183 @@
         "dreamRite": true
       }
     },
-    "dnd5e": {}
+    "autoanimations": {
+      "id": "4b2c65eb-621a-428d-b382-9eb051844ec2",
+      "label": "Dream Rite",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
   },
   "_stats": {
     "compendiumSource": null,

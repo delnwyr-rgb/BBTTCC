@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"1567\" data-end=\"1580\"><em data-start=\"1567\" data-end=\"1580\">(3rd Level)</em></p><p><strong>Noise:</strong> +1</p><p data-start=\"1582\" data-end=\"1697\">Once per scene, when an <strong data-start=\"1606\" data-end=\"1627\">Out of Compliance</strong> target violates a binding contract or established precedent, you may:</p><ul data-start=\"1699\" data-end=\"1788\"><li data-start=\"1699\" data-end=\"1749\"><p data-start=\"1701\" data-end=\"1749\">Force a reroll (taking the worse result), <strong data-start=\"1743\" data-end=\"1749\">or</strong></p></li><li data-start=\"1750\" data-end=\"1788\"><p data-start=\"1752\" data-end=\"1788\">Cause the target to lose its action.</p></li></ul><p data-start=\"1790\" data-end=\"1839\">This represents procedural enforcement—not anger.</p><h3 data-start=\"1841\" data-end=\"1849\">Cost</h3><p data-start=\"1850\" data-end=\"1865\">Free (1/scene).</p><h3 data-start=\"1867\" data-end=\"1881\">Escalation</h3><p data-start=\"1882\" data-end=\"2006\">If paired with a Surge spend, the action loss cannot be mitigated by legendary or divine resistance (GM adjudicated).</p><h3 data-start=\"2008\" data-end=\"2020\">Pushback</h3><p data-start=\"2021\" data-end=\"2070\">Repeated public enforcement increases visibility.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p><em>(3rd Level)</em></p><p><strong>Noise:</strong> +1</p><p>Once per scene, when an <strong>Out of Compliance</strong> target violates a binding contract or established precedent, you may:</p><ul><li><p>Force a reroll (taking the worse result), <strong>or</strong></p></li><li><p>Cause the target to lose its action.</p></li></ul><p>This represents procedural enforcement—not anger.</p><h3>Cost</h3><p>Free (1/scene).</p><h3>Escalation</h3><p>If paired with a Surge spend, the action loss cannot be mitigated by Boss immunity (GM adjudicated) (GM adjudicated).</p><h3>Pushback</h3><p>Repeated public enforcement increases visibility.</p>",
       "chat": ""
     },
     "identifier": "auditor_compliance_action",
@@ -48,6 +48,202 @@
         "_taggedBy": "bbttcc-pressure-tagger",
         "_ts": 1770862582670
       }
+    },
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "who": "targets",
+            "do": {
+              "impose": true,
+              "prompt": "Compliance Action — or the target loses its action (GM's call)."
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            }
+          }
+        ]
+      }
+    },
+    "autoanimations": {
+      "id": "d6141e3d-cc6f-46c9-b36e-3c97a7c21934",
+      "label": "Auditor: Compliance Action",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "Z0Kl38HLbgyB7iFl",
@@ -61,11 +257,11 @@
     "compendiumSource": "Item.Fk2oPWk2GDeDEVls",
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.3",
     "createdTime": 1776481562684,
-    "modifiedTime": 1781116131510,
+    "modifiedTime": 1791412957834,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!Fk2oPWk2GDeDEVls"

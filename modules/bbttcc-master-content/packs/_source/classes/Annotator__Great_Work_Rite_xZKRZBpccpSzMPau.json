@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"3156\" data-end=\"3170\"><em data-start=\"3156\" data-end=\"3170\">(18th Level)</em></p><p data-start=\"3172\" data-end=\"3266\">You undertake a scene-long ritual capable of altering a place, hex, or community meaningfully.</p><p data-start=\"3268\" data-end=\"3287\">This is not damage.</p><p data-start=\"3289\" data-end=\"3312\">This is transformation.</p><p data-start=\"3314\" data-end=\"3323\">Examples:</p><ul data-start=\"3324\" data-end=\"3509\"><li data-start=\"3324\" data-end=\"3377\"><p data-start=\"3326\" data-end=\"3377\">Rewriting the ambient correspondence of a location.</p></li><li data-start=\"3378\" data-end=\"3413\"><p data-start=\"3380\" data-end=\"3413\">Stabilizing a corrupted district.</p></li><li data-start=\"3414\" data-end=\"3459\"><p data-start=\"3416\" data-end=\"3459\">Rebalancing a fractured symbolic structure.</p></li><li data-start=\"3460\" data-end=\"3509\"><p data-start=\"3462\" data-end=\"3509\">Shifting the long-term identity of a community.</p></li></ul><h3 data-start=\"3511\" data-end=\"3519\">Cost</h3><p data-start=\"3520\" data-end=\"3533\">Once per arc.</p><p data-start=\"3535\" data-end=\"3572\">the misfire ladder applies. Backlash is possible.</p><p data-start=\"3574\" data-end=\"3630\">But when completed properly, the world does not explode.</p><p data-start=\"3632\" data-end=\"3667\">It changes quietly—and permanently.</p><p data-start=\"3669\" data-end=\"3706\"></p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p><em>(18th Level)</em></p><p>You undertake a scene-long ritual capable of altering a place, hex, or community meaningfully.</p><p>This is not damage.</p><p>This is transformation.</p><p>Examples:</p><ul><li><p>Rewriting the ambient correspondence of a location.</p></li><li><p>Stabilizing a corrupted district.</p></li><li><p>Rebalancing a fractured symbolic structure.</p></li><li><p>Shifting the long-term identity of a community.</p></li></ul><h3>Cost</h3><p>Once per arc.</p><p>the misfire ladder applies. Backlash is possible.</p><p>But when completed properly, the world does not explode.</p><p>It changes quietly—and permanently.</p><p></p>",
       "chat": ""
     },
     "identifier": "annotator_great_work_rite",
@@ -41,6 +41,183 @@
   "flags": {
     "bbttcc": {
       "identifier": "annotator_great_work_rite"
+    },
+    "autoanimations": {
+      "id": "317f33bf-a879-4ba6-bf4e-5b5d2f3e25a7",
+      "label": "Annotator: Great Work Rite",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "7fCEbHBaAKFkEuHN",

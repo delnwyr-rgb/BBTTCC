@@ -1,6 +1,6 @@
 {
   "_id": "ftsurge000000067",
-  "name": "Mirror Read",
+  "name": "Reflected Tell",
   "type": "feature",
   "img": "icons/sundries/books/book-eye-red.webp",
   "system": {
@@ -31,7 +31,7 @@
     },
     "autoanimations": {
       "id": "ft-tf-mirror",
-      "label": "Mirror Read",
+      "label": "Reflected Tell",
       "macro": {
         "enable": false,
         "playWhen": "0"

@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>\"The future is just memory pointed the other way.\"</em></p>\n<p>The Dreamwalker reads the Tree and works manifestations — and that work <em>is</em> the fuel. You run on <strong>Surge</strong> like everyone, but yours arrives when you <strong>cast a manifestation</strong> (bank +1, max +2/round). The old sprawl folds into this: the old Echo Dice fold into Surge, the eight soma-break feats live on as four tier powers — and the <strong>Dream Echo Reservoir</strong> endures as its own vessel: store a manifestation, release it later at no base cost.</p>\n<h3>The Oracle (spent via Surge)</h3>\n<ul>\n  <li><strong>Omen</strong> (1) — you or an ally saw the thread coming: banks a reroll-lowest.</li>\n  <li><strong>Dream Ward</strong> (2) — an ally drifts into a protective dreamstate: DR + a reroll.</li>\n  <li><strong>Shared Dream</strong> (3) — allies within 6 squares bank a reroll and draw 1 Clarity (refuels their casting).</li>\n  <li><strong>Reality Hack</strong> (5) — rewrite the moment: the party banks a reroll and one enemy rolls its next attack at disadvantage.</li>\n</ul>\n<p>The <strong>Dream-Cache</strong> endures — bank a manifestation between scenes, deploy it next scene without paying Clarity. And the oracle's quiet work stays out of combat: Dream Resonance still senses a hex's Sephirah, and you still Commune with the Great Work for a true answer.</p>",
+      "value": "<p><em>\"The future is just memory pointed the other way.\"</em></p>\n<p>The Dreamwalker reads the Tree and works manifestations — and that work <em>is</em> the fuel. You run on <strong>Surge</strong> like everyone, but yours arrives when you <strong>cast a manifestation</strong> (bank +1, max +2/round).</p>\n<h3>The Oracle (spent via Surge)</h3>\n<ul>\n  <li><strong>Omen</strong> (1) — you or an ally saw the thread coming: banks a reroll-lowest.</li>\n  <li><strong>Dream Ward</strong> (2) — an ally drifts into a protective dreamstate: DR + a reroll.</li>\n  <li><strong>Shared Dream</strong> (3) — allies within 6 squares bank a reroll and draw 1 Clarity (refuels their casting).</li>\n  <li><strong>Reality Hack</strong> (5) — rewrite the moment: the party banks a reroll and one enemy rolls its next attack rolling 3d10 and keeping the lowest 2.</li>\n</ul>\n<p>The <strong>Dream-Cache</strong> endures — bank a manifestation between scenes, deploy it next scene without paying Clarity. And the oracle's quiet work stays out of combat: Dream-Sense still reads a hex's Sephirah, and you still put your one question to the Great Work (Initiate of the Great Work) for a true answer.</p>",
       "chat": ""
     },
     "advancement": {
@@ -672,31 +672,14 @@
       "spent": 0
     },
     "levels": 1,
-    "primaryAbility": {
-      "value": [
-        "wis"
-      ],
-      "all": false
-    },
     "properties": [],
-    "spellcasting": {
-      "progression": "full",
-      "ability": "wis",
-      "preparation": {
-        "formula": "@wis.mod + @classes.dreamwalker.levels"
-      }
-    },
     "wealth": ""
   },
   "effects": [],
   "folder": "Jnvq4R9WS9xhsS3k",
   "flags": {
     "bbttcc": {
-      "primary": "wisdom",
-      "opBonus": {
-        "faith": 2,
-        "softPower": 1
-      }
+      "primary": "wisdom"
     },
     "fourththing": {
       "vocabScrub": "2026-05-16"
@@ -706,11 +689,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.367",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1776459927037,
-    "modifiedTime": 1782167240832,
+    "modifiedTime": 1787544464214,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

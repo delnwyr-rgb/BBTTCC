@@ -611,7 +611,12 @@
     // Fold the marks into the shared buffer + roster the participant.
     state.buffer = state.buffer || {};
     for (const [b, m] of Object.entries(marks)) state.buffer[b] = (Number(state.buffer[b]) || 0) + m;
-    state.bufferStartingTotal = (Number(state.bufferStartingTotal) || 0) + total;
+    // Free siege works (Bulwark Founding Stance, ruling BW3 2026-10-25): a member steward's
+    // domainCapBonus.siege rides along as Violence marks the supporter never pays for.
+    let siegeBonus = 0;
+    try { siegeBonus = Math.max(0, Math.floor(Number(game.bbttcc?.facts?.faction?.siegeBonus?.(fac)) || 0)); } catch (_e) { siegeBonus = 0; }
+    if (siegeBonus > 0) { state.buffer.violence = (Number(state.buffer.violence) || 0) + siegeBonus; marks.violence = (Number(marks.violence) || 0) + siegeBonus; }
+    state.bufferStartingTotal = (Number(state.bufferStartingTotal) || 0) + total + siegeBonus;
     const turn = (() => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch { return 0; } })();
     const contribution = Object.assign({}, prior?.contribution || {});
     for (const [b, m] of Object.entries(marks)) contribution[b] = (Number(contribution[b]) || 0) + m;
@@ -625,7 +630,7 @@
     appendNarrativeBeat(state, {
       turn, kind: "supporter_joined",
       title: `${fac.name} marches to the siege`,
-      description: `${fac.name} commits ${total} marks of its own to the shared buffer (now ${bufferTotal(state.buffer)} marks).`,
+      description: `${fac.name} commits ${total} marks of its own${siegeBonus > 0 ? ` plus ${siegeBonus} marks of free siege works` : ""} to the shared buffer (now ${bufferTotal(state.buffer)} marks).`,
       payload: { factionId, marks, total }
     });
     await setSiegeState(hexUuid, state);

@@ -8,15 +8,11 @@
     "source": "Bad Eden Originals — Sprint F (2026 rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>\"I see what you actually are.\"</em></p>\n<p><strong>Refraction:</strong> Truth — perception bent toward exposure; lies, concealment, the thing that does not want to be named.</p>\n<p>The Refraction of Truth makes hiding impossible. Your Surge spends strip cover: read a foe true so its defenses fail, name the lie so it stops working, and lay an enemy so bare it has nowhere left to put a single intention.</p>\n<h3>Refraction (spent via Surge)</h3>\n<ul>\n  <li><strong>The Reading Eye</strong> (1) — a foe rolls its saves at disadvantage (you read it true).</li>\n  <li><strong>The Unconcealed Word</strong> (2) — a foe is Staggered and its next attack is at disadvantage.</li>\n  <li><strong>The Exposure</strong> (5) — a foe cannot take reactions and rolls its saves at disadvantage.</li>\n</ul>",
+      "value": "<p><em>\"I see what you actually are.\"</em></p>\n<p><strong>Refraction:</strong> Truth — perception bent toward exposure; lies, concealment, the thing that does not want to be named.</p>\n<p>The Refraction of Truth makes hiding impossible. Your Surge spends strip cover: read a foe true so its defenses fail, name the lie so it stops working, and lay an enemy so bare it has nowhere left to put a single intention.</p>\n<h3>Refraction (spent via Surge)</h3>\n<ul>\n  <li><strong>The Reading Eye</strong> (1) — a foe rolls its saves rolling 3d10 and keeping the lowest 2 (you read it true).</li>\n  <li><strong>The Unconcealed Word</strong> (2) — a foe is Staggered and its next attack is rolling 3d10 and keeping the lowest 2.</li>\n  <li><strong>The Exposure</strong> (5) — a foe cannot take reactions and rolls its saves rolling 3d10 and keeping the lowest 2.</li>\n</ul>",
       "chat": ""
     },
     "identifier": "bbttcc-wyrdlens-adept-truth",
-    "advancement": [],
-    "spellcasting": {
-      "progression": "none",
-      "preparation": {}
-    }
+    "advancement": []
   },
   "effects": [],
   "folder": "4SZvMbYoYLB4LZnj",

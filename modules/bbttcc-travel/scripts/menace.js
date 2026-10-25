@@ -166,8 +166,8 @@
   }
   async function bumpHexLoyalty(doc, delta, why) {
     const d = Number(delta) || 0; if (!d) return 0;
-    const tf = hexFlags(doc); const before = Number(tf.mods?.loyalty || 0) || 0; const after = before + d;
-    await doc.update({ [`flags.${MODT}.mods.loyalty`]: after }, { parent: doc.parent });
+    const tf = hexFlags(doc); const before = Number(tf.mods?.loyalty || 0) || 0; const after = before + d;   // facts-ok: delta WRITE (read-modify-write of the raw mod), not a loyalty read
+    await doc.update({ [`flags.${MODT}.mods.loyalty`]: after }, { parent: doc.parent });   // facts-ok: the write
     await ledger(doc, { kind: "menace_loyalty", label: `Loyalty ${d > 0 ? "+" : ""}${d}`, description: why, before: { loyalty: before }, after: { loyalty: after } });
     return d;
   }

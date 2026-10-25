@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"2743\" data-end=\"2820\">You may convert certain manifestations into rituals with sufficient preparation time.</p><h3 data-start=\"2822\" data-end=\"2832\">Effect</h3><p data-start=\"2833\" data-end=\"2852\">With careful setup:</p><ul data-start=\"2854\" data-end=\"2978\"><li data-start=\"2854\" data-end=\"2883\"><p data-start=\"2856\" data-end=\"2883\">Cast the manifestation as a ritual.</p></li><li data-start=\"2884\" data-end=\"2931\"><p data-start=\"2886\" data-end=\"2931\">Gain increased stability, reach, or duration.</p></li><li data-start=\"2932\" data-end=\"2978\"><p data-start=\"2934\" data-end=\"2978\">Reduce volatility compared to rapid casting.</p></li></ul><p data-start=\"2980\" data-end=\"2991\">Costs time.</p><p data-start=\"2993\" data-end=\"3016\">Prevents panic-casting.</p><p data-start=\"3018\" data-end=\"3037\">Rewards discipline.</p><p data-start=\"3039\" data-end=\"3087\">Annotators trade speed for structural dominance.</p>",
+      "value": "<p>(14th Level) You may convert certain manifestations into rituals with sufficient preparation time.</p><h3>Effect</h3><p>With careful setup:</p><ul><li><p>Cast the manifestation as a ritual.</p></li><li><p>Gain increased stability, reach, or duration.</p></li><li><p>Reduce volatility compared to rapid casting.</p></li></ul><p>Costs time.</p><p>Prevents panic-casting.</p><p>Rewards discipline.</p><p>Annotators trade speed for structural dominance.</p>",
       "chat": ""
     },
     "identifier": "annotator_ritual_upgrade",
@@ -28,10 +28,10 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 14
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Cosmic Linguist 14, Annotator",
     "type": {
       "value": "",
       "subtype": ""
@@ -41,6 +41,183 @@
   "flags": {
     "bbttcc": {
       "identifier": "annotator_ritual_upgrade"
+    },
+    "autoanimations": {
+      "id": "77280a5f-115d-4083-bd51-aad8ada40eff",
+      "label": "Annotator: Ritual Upgrade",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "7fCEbHBaAKFkEuHN",

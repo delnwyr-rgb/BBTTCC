@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"3798\" data-end=\"3812\"><em data-start=\"3798\" data-end=\"3812\">(18th Level)</em></p><p data-start=\"3814\" data-end=\"3893\">You temporarily elevate your community into minor civic-deity mode for a scene.</p><p data-start=\"3895\" data-end=\"3912\">For the duration:</p><ul data-start=\"3914\" data-end=\"4054\"><li data-start=\"3914\" data-end=\"3943\"><p data-start=\"3916\" data-end=\"3943\">Broad stabilization occurs.</p></li><li data-start=\"3944\" data-end=\"3966\"><p data-start=\"3946\" data-end=\"3966\">Panic cannot spread.</p></li><li data-start=\"3967\" data-end=\"4003\"><p data-start=\"3969\" data-end=\"4003\">Cooperative actions are amplified.</p></li><li data-start=\"4004\" data-end=\"4054\"><p data-start=\"4006\" data-end=\"4054\">Protection and solidarity increase dramatically.</p></li></ul><p data-start=\"4056\" data-end=\"4115\">This is not a damage spike.<br data-start=\"4083\" data-end=\"4086\" />It is communal transcendence.</p><h3 data-start=\"4117\" data-end=\"4125\">Cost</h3><p data-start=\"4126\" data-end=\"4173\">Significant Surge expenditure (2+ dice).</p><h3 data-start=\"4175\" data-end=\"4192\">Clarification</h3><p data-start=\"4193\" data-end=\"4247\">The power flows from the community—not from you alone.</p><h3 data-start=\"4249\" data-end=\"4261\">Pushback</h3><p data-start=\"4262\" data-end=\"4393\">Apotheosis risks Dependence.<br data-start=\"4290\" data-end=\"4293\" />If communities begin believing they require divine elevation to function, long-term autonomy erodes.</p><p data-start=\"4395\" data-end=\"4432\"><span class=\"relative inline-flex items-center\">fvtt-Item-steward_-civic-apothe…</span></p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p><em>(18th Level)</em></p><p>You temporarily elevate your community into minor civic-deity mode for a scene.</p><p>For the duration:</p><ul><li><p>Broad stabilization occurs.</p></li><li><p>Panic cannot spread.</p></li><li><p>Cooperative actions are amplified.</p></li><li><p>Protection and solidarity increase dramatically.</p></li></ul><p>This is not a damage spike.<br />It is communal transcendence.</p><h3>Cost</h3><p>Spend 2+ Surge.</p><h3>Clarification</h3><p>The power flows from the community—not from you alone.</p><h3>Pushback</h3><p>Apotheosis risks Dependence.<br />If communities begin believing they require divine elevation to function, long-term autonomy erodes.</p><p><span class=\"relative inline-flex items-center\">fvtt-Item-steward_-civic-apothe…</span></p>",
       "chat": ""
     },
     "identifier": "steward_civic_apotheosis",
@@ -41,6 +41,183 @@
   "flags": {
     "bbttcc": {
       "identifier": "steward_civic_apotheosis"
+    },
+    "autoanimations": {
+      "id": "47b9941c-7ae5-479e-8cbf-251884850645",
+      "label": "Steward: Civic Apotheosis",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "b7c5HgxxTfcVph6r",

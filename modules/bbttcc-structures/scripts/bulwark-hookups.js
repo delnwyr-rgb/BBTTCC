@@ -557,7 +557,7 @@ function _registerSourceRelay() {
 // primary GM from a player seat); the GM side checks the caller owns the actor.
 
 const RUIN_RELAY = "structures.bulwark.ruinAction";
-const TRIGGERABLE = { shockwave: _onShockwave, renewal: _onRenewal };
+const TRIGGERABLE = { shockwave: _onShockwave, renewal: _onRenewal, siege: _onSiegeCost };  // siege: Surge Siege Works (ruling BW2, 2026-10-25)
 
 export async function triggerRuinAction(actor, action) {
   if (!actor?.uuid || !TRIGGERABLE[action]) return false;

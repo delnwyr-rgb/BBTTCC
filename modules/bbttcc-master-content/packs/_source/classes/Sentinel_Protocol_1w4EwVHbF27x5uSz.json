@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You become a mobile inter-faction early warning system.</em></p><p>Once per <strong>a Soma Break</strong>, you can activate Sentinel Protocol as an <strong>action</strong>:</p><ul><li>Create a <strong>6 squares-radius awareness field</strong> lasting <strong>1 minute</strong>.</li><li>You and allies in the field cannot be <strong>surprised</strong>.</li><li>Hostile creatures entering the field must make a <strong>Soul check</strong> (DC = 8 + tier + PRE) or be <strong>revealed</strong> in full—no invisibility, illusions, disguises, or misinformation can hide their true position or identity from your party for the duration.</li><li>Allies have <strong>advantage</strong> on Insight (Soul) checks and defense check vs charm, fear, or Stealth.</li></ul><p><strong>OP Echo:</strong> If a strategic operation, rebellion defused, or diplomatic crisis prevented via Sentinel Protocol avoids a battle entirely, your faction gains <strong>+1 Soft Power OP</strong> and may convert <strong>1 Intrigue OP → 1 Diplomacy OP</strong> as the message spreads.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You become a mobile inter-faction early warning system.</em></p><p>Once per <strong>Soma Break</strong>, you can activate Sentinel Protocol as an <strong>action</strong>:</p><ul><li>Create a <strong>6 squares-radius awareness field</strong> lasting <strong>1 minute</strong>.</li><li>You and allies in the field cannot be <strong>surprised</strong>.</li><li>Hostile creatures entering the field must make a <strong>Soul check</strong> (DC = your Resolve DC) or be <strong>revealed</strong> in full—no invisibility, illusions, disguises, or misinformation can hide their true position or identity from your party for the duration.</li><li>Allies reroll the lowest die on Insight (Soul) checks and defense checks against charm, fear, or Stealth.</li></ul><p><strong>Domain Echo.</strong> If a strategic operation, rebellion defused, or diplomatic crisis prevented via Sentinel Protocol avoids a battle entirely, your Domain gains <strong>+10 Soft Power marks</strong> and may convert <strong>10 Intrigue marks → 10 Diplomacy marks</strong> as the message spreads.</p>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -44,7 +39,6 @@
   "effects": [],
   "folder": "2lNXuSAY9vKC4tM0",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "harmmarshal_overwatch",
       "featureKey": "sentinel_protocol"

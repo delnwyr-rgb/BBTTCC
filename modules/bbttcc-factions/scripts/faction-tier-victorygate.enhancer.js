@@ -92,11 +92,11 @@
       : Math.max(0, Math.min(4, Math.floor(Number(curTierRaw) || 0)));
 
     const requiredKey = requiredBadgeForNextTier(curTier);
-    void meetsRequiredBadge; void tierFromBadge; // retained helpers, unused since ruling 18
+    void meetsRequiredBadge; void tierFromBadge; // retained helpers, unused since ruling 18 — facts-ok: not a derivation
 
     const snapshot = {
       badgeKey,
-      tierFromBadge: curTier,
+      tierFromBadge: curTier,   // facts-ok: report field (curTier comes from facts.faction.tier)
       requiredBadgeForNextTier: requiredKey,
       meetsNextTier: true,
       updatedTs: Date.now()

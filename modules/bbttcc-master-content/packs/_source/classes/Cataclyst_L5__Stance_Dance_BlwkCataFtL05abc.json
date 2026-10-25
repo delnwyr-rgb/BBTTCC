@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>The hinge swings either way. You decide which way every turn.</em></p><p>At the start of each of your turns, declare a stance for that turn — <strong>Advance</strong> or <strong>Anchor</strong>. The chosen stance ends at the start of your next turn.</p><ul><li><p><strong>Advance.</strong> All Ruin Charge spends made this turn are reduced by <strong>1 (minimum 1)</strong>. You also gain <strong>+2 squares of movement</strong> on this turn.</p></li><li><p><strong>Anchor.</strong> Each Frame Die spent on absorption this turn grants an additional <strong>1d4</strong> of conversion value (added to the d8 base). You cannot be moved against your will until the start of your next turn (no defense check required by you).</p></li></ul><p>You may change stance once during your turn as a free action; the new stance applies retroactively to spends made this turn (refunds the cost difference if applicable).</p>",
+      "value": "<p><em>The hinge swings either way. You decide which way every turn.</em></p><p>At the start of each of your turns, declare a stance for the round — <strong>Advance</strong> or <strong>Anchor</strong>.</p><ul><li><p><strong>Advance.</strong> Your offensive path spends (Erupt, Shatter, Cataclysm) cost <strong>1 less</strong> this round (minimum 1), and you gain <strong>+2 squares</strong> of movement.</p></li><li><p><strong>Anchor.</strong> You cannot be moved against your will until the start of your next turn, and Absorb's cap rises by <strong>1d4</strong>.</p></li></ul><p>You may change stance once during your turn as a free action — declare again.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -27,9 +27,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "bulwark",
@@ -47,11 +44,188 @@
           "effect": {
             "kind": "chat-prompt",
             "args": {
-              "body": "The hinge swings either way. You decide which way every turn. At the start of each of your turns, declare a stance for that turn"
+              "body": "Stance Dance. Start of your turn: declare Advance (offensive path spends cost 1 less this round; +2 squares movement) or Anchor (cannot be moved until your next turn; Absorb's cap +1d4). ▶ Stance Dance on your sheet. You may switch once during your turn as a free action."
             }
           }
         }
       ]
+    },
+    "autoanimations": {
+      "id": "7401a89a-cf97-41a1-afb6-99b38fb46715",
+      "label": "Cataclyst L5: Stance Dance",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "HmbujXzEJL7v48Q9",
@@ -59,11 +233,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1777004380778,
-    "modifiedTime": 1782167240811,
+    "modifiedTime": 1791344283275,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

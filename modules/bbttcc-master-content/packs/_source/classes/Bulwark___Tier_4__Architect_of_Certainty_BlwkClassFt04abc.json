@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>You no longer push against the world's resistances. They simply do not apply to you.</em></p><p><strong>At Bulwark Initiation 16</strong>, both poles of your inevitability harden:</p><ul><li><p><strong>Ruin bypass.</strong> Damage you deal as part of any feature that explicitly spends a Ruin Charge ignores all <em>kinetic</em>-type resistance and any cover/structure damage-reduction the target would otherwise apply. (Energy/Sephirotic/etc. resistances still apply.)</p></li><li><p><strong>Frame absorption.</strong> When a Frame Die you spend reduces incoming damage (per a doctrine feature or Tier 2 Anchor stance), reduce the incoming damage by an additional <strong>Violence value</strong> points before the Frame Die roll is added.</p></li></ul>",
+      "value": "<p><em>You no longer push against the world's resistances. They simply do not apply to you.</em></p><p>At <strong>Bulwark Initiation 16</strong>, both poles of your inevitability harden:</p><ul><li><p><strong>Ruin bypass.</strong> Damage from your offensive Surge spends (Erupt, Shatter, Cataclysm, Catastrophic Entry) ignores all <strong>kinetic</strong> resistance and any cover or structure damage reduction the target would otherwise apply. Energy and sephirotic resistances still apply.</p></li><li><p><strong>Frame absorption.</strong> When Absorb or Brace Wall reduces incoming damage, reduce it by your <strong>Violence value</strong> first. (GM applies.)</p></li></ul>",
       "chat": ""
     },
     "advancement": {},
@@ -27,9 +27,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "classfeat",
       "classIdentifier": "bulwark",

@@ -133,7 +133,7 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   await roll.evaluate();
   const baseDice = (roll.terms[0]?.results ?? []).map(r => r.result);
 
-  // Double-ten on base dice = "act again this turn" bonus action.
+  // Double-ten on base dice = a freed bonus action (usable on your turn or off it — ruling U4, 2026-10-25).
   const baseTenCount = baseDice.filter(v => v === 10).length;
   const doubleTen    = baseTenCount >= 2;
 
@@ -1581,7 +1581,12 @@ const _TIER_PATTERNS = [
 const _LEVEL_PATTERNS = [
   /\bL\s*0*(\d{1,2})\b(?!\w)/,
   /_l\s*0*(\d{1,2})(?:_|\b)/i,
-  /\bLevel\s*0*(\d{1,2})\b/i
+  /\bLevel\s*0*(\d{1,2})\b/i,
+  // "Soul-Smith 18, Forge of Victory" / "Harmony Marshal 6, Mandate of Resolve" — the doctrine-feat
+  // requirements form (2026-10-24: every forge/mandate/route feat was importing at subclass pick
+  // because none of the patterns above read it). A capitalised class name, a space, the level,
+  // then a comma or the end of the string.
+  /^\s*[A-Z][A-Za-z'’\- ]*?\s(\d{1,2})\s*(?:,|$|\()/
 ];
 const _DESC_LEVEL_PATTERNS = [
   /\(\s*(\d{1,2})\s*(?:st|nd|rd|th)?\s*level\s*\)/i,

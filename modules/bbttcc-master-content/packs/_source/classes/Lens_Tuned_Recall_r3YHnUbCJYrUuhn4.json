@@ -30,7 +30,7 @@
       "level": 1
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (1st level)",
+    "requirements": "Wyrdlens Adept 1",
     "type": {
       "value": "",
       "subtype": ""
@@ -67,24 +67,17 @@
         "changes": [
           {
             "key": "system.skills.occult.value",
+            "value": "1",
+            "priority": 20,
             "type": "add",
-            "value": "+1",
-            "phase": "initial",
-            "priority": 20
+            "phase": "initial"
           },
           {
             "key": "system.skills.lore.value",
+            "value": "1",
+            "priority": 20,
             "type": "add",
-            "value": "+1",
-            "phase": "initial",
-            "priority": 20
-          },
-          {
-            "key": "flags.bbttcc.wyrdlensAdept.lensTunedRecall",
-            "type": "custom",
-            "value": true,
-            "phase": "initial",
-            "priority": 20
+            "phase": "initial"
           }
         ]
       },
@@ -95,7 +88,7 @@
       "start": null,
       "showIcon": 1,
       "folder": null,
-      "_key": "!items.effects!r3YHnUbCJYrUuhn4.K60OQYURktly52Nu"
+      "changes": null
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -104,8 +97,7 @@
       "wyrdlensAdept": {
         "lensTunedRecall": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

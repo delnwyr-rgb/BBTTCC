@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>You walk in ways that don’t wake monsters.</em></p><p>When you <strong>lead travel</strong> for the party:</p><ul><li>The chance of an encounter triggered by that travel is reduced by <strong>10%</strong> (GM applies this as a flat reduction to whatever table they’re using).</li><li>Once per in-world day, you may ignore the <strong>first Logistics OP surcharge</strong> applied to travel you lead, treating it as if the route were slightly kinder than expected.</li></ul><p>Some roads are quieter simply because you were the one who chose them.</p>",
+      "value": "<p><em>You walk in ways that don’t wake monsters.</em></p><p>When you <strong>lead travel</strong> for the party:</p><ul><li>The chance of an encounter triggered by that travel is reduced by <strong>10%</strong> (GM applies this as a flat reduction to whatever table they’re using).</li><li>Once per in-world day, you may ignore the <strong>first Logistics marks surcharge</strong> applied to travel you lead, treating it as if the route were slightly kinder than expected.</li></ul><p>Some roads are quieter simply because you were the one who chose them.</p>",
       "chat": ""
     },
     "activities": {},
@@ -42,8 +42,7 @@
     "bbttcc": {
       "subclassKey": "dreamwalker_quiet_sun",
       "featureKey": "quiet_march"
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

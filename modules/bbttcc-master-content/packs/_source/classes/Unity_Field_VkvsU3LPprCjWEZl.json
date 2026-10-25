@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Unity Field.</strong> Your conviction radiates outward like a stabilizing field.</p><ul><li>While you are conscious, you emit a 2 squares aura. Allies in the aura (including you) reroll the lowest die on defense checks against being <strong>charmed</strong> or <strong>Shaken</strong>.</li><li>Once per turn when a creature starts its turn in your aura, you can grant it temporary Integrity equal to your Presence modifier (no action required).</li></ul><p>(The Active Effect marks you as projecting the Unity Field aura; GMs and scripts can key off this flag.)</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Unity Field.</strong> Your conviction radiates outward like a stabilizing field.</p><ul><li>While you are conscious, you emit a 2 squares aura. Allies in the aura (including you) reroll the lowest die on defense checks against being <strong>charmed</strong> or <strong>Shaken</strong>.</li><li>Once per turn when a creature starts its turn in your aura, you can grant it temporary Integrity equal to your Presence value (no action required).</li></ul><p>(The Active Effect marks you as projecting the Unity Field aura; GMs and scripts can key off this flag.)</p>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 6
     },
     "properties": [],
-    "requirements": "Harmony Marshal (6th level)",
+    "requirements": "Harmony Marshal 6",
     "type": {
       "value": "",
       "subtype": ""
@@ -91,7 +91,6 @@
         "unityFieldAura": true
       }
     },
-    "dnd5e": {},
     "autoanimations": {
       "id": "9dc9ce44-c6ef-4d7a-a35a-22c76b3de5ac",
       "label": "Unity Field",

@@ -1,5 +1,5 @@
 {
-  "name": "Counter-Discord",
+  "name": "Jam the Signal",
   "type": "feat",
   "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
   "system": {
@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>You silence manipulation mid-note.</em></p><p>When a creature within <strong>12 squares</strong> uses a deceit-based tactic—such as imposing disadvantage through misinformation, illusions, fear propaganda, or a charm-adjacent mental effect—you may use your <strong>reaction</strong> to nullify that interference.</p><ul><li>The disadvantage or imposed reroll is <strong>canceled</strong>.</li><li>You can use this feature <strong>once per Soma Break</strong>.</li></ul><p>In Bad Eden terms: you jam the signal.</p>",
+      "value": "<p><em>You silence manipulation mid-note.</em></p><p>When a creature within <strong>12 squares</strong> uses a deceit-based tactic—such as imposing a keep-lowest roll through misinformation, illusions, fear propaganda, or a charm-adjacent mental effect—you may use your <strong>reaction</strong> to nullify that interference.</p><ul><li>The imposed penalty or forced reroll is <strong>canceled</strong>.</li><li>You can use this feature <strong>once per Soma Break</strong>.</li></ul><p>In Bad Eden terms: you jam the signal.</p>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "sr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -44,7 +39,6 @@
   "effects": [],
   "folder": "2lNXuSAY9vKC4tM0",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "harmmarshal_overwatch",
       "featureKey": "counter_discord"

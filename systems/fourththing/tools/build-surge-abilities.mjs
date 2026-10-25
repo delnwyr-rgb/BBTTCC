@@ -42,7 +42,7 @@ const BUCKET_IMG = {
 const BUCKET_LABEL = { off: "Offense", def: "Defense", heal: "Heal", narr: "Narrative" };
 
 const CLASS_TAGS = ["classFilter", "forge", "mandate", "trance", "bulwarkPath",
-  "courierRoute", "pactDoctrine", "wlRefraction", "clDoctrine"];
+  "courierRoute", "pactDoctrine", "wlRefraction", "clDoctrine", "auraDoctrine"];
 const pretty = (s) => String(s ?? "").replace(/[-_]+/g, " ").replace(/\b\w/g, c => c.toUpperCase()).trim();
 function classLabel(e) {
   if (e.classFilter)  return pretty(Array.isArray(e.classFilter) ? e.classFilter[0] : e.classFilter);
@@ -54,6 +54,7 @@ function classLabel(e) {
   if (e.pactDoctrine) return `Doctrine ▸ ${pretty(e.pactDoctrine)}`;
   if (e.wlRefraction) return `Refraction ▸ ${pretty(e.wlRefraction)}`;
   if (e.clDoctrine)   return `Doctrine ▸ ${pretty(e.clDoctrine)}`;
+  if (e.auraDoctrine) return `Aura ▸ ${pretty(e.auraDoctrine)}`;
   return "";
 }
 const isClass = (e) => CLASS_TAGS.some(t => e[t] != null);

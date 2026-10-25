@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You are where several futures agree to meet.</em></p><p>Once per <strong>a Soma Break</strong>, as an <strong>action</strong>, you can unfold a Convergence Horizon for <strong>1 minute</strong>.</p><ul><li>Whenever a creature within <strong>6 squares</strong> of you makes an attack roll, attribute check, or defense check, you may use your reaction to let them <strong>roll an additional 2d10x10</strong> and choose which result to use.</li><li>You can do this a number of times equal to your <strong>tier</strong> during the duration.</li><li>In addition, enemies within 6 squares that <strong>critically succeed</strong> on an attack or check against your party must reroll the 2d10x10 and take the second result instead, as their best-case outcomes slide away from them.</li></ul><p><strong>OP / Campaign Echo.</strong> If a major battle, Spark operation, or faction crisis resolved under the Convergence Horizon ends with a <strong>Justice/Reformation</strong> or <strong>Liberation</strong> style outcome instead of Subjugation or Ruin, your faction may gain <strong>+1 Unity OP</strong>, <strong>+1 Intrigue OP</strong>, and reduce <strong>Darkness</strong> by 1 as word spreads of “the day everything could have gone wrong and didn’t.”</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You are where several futures agree to meet.</em></p><p>Once per <strong>Soma Break</strong>, as an <strong>action</strong>, you can unfold a Convergence Horizon for <strong>1 minute</strong>.</p><ul><li>Whenever a creature within <strong>6 squares</strong> of you makes an attack roll, attribute check, or defense check, you may use your reaction to let them <strong>roll an additional 2d10</strong> and choose which result to use.</li><li>You can do this a number of times equal to your <strong>tier</strong> during the duration.</li><li>In addition, enemies within 6 squares that <strong>critically succeed</strong> on an attack or check against your party must reroll the 2d10 and take the second result instead, as their best-case outcomes slide away from them.</li></ul><p><strong>Domain / Campaign Echo.</strong> If a major battle, Spark operation, or faction crisis resolved under the Convergence Horizon ends with a <strong>Justice/Reformation</strong> or <strong>Liberation</strong> style outcome instead of Subjugation or Ruin, your Domain may gain <strong>+10 Soft Power marks</strong>, <strong>+10 Intrigue marks</strong>, and reduce <strong>Darkness</strong> by 1 as word spreads of “the day everything could have gone wrong and didn’t.”</p>",
       "chat": ""
     },
     "activities": {
@@ -66,12 +66,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -97,7 +92,6 @@
       "subclassKey": "wyrdlens_refraction_foresight",
       "featureKey": "convergence_horizon"
     },
-    "dnd5e": {},
     "autoanimations": {
       "id": "d6f2e417-95f0-4e67-85d6-bec602f6eb2d",
       "label": "Convergence Horizon",

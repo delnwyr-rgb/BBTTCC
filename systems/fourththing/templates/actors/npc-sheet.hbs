@@ -108,10 +108,10 @@
     <button type="button" class="ft-npc-tool" data-action="ftNpcSurgeInit" data-tooltip="2d10x10 + Intrigue + init bonus"><i class="fas fa-bolt"></i> Surge Init</button>
     <div class="ft-action-economy">
       <button type="button" class="ft-econ-chip {{#if actionEconomy.actionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="actionUsed">Action</button>
-      <button type="button" class="ft-econ-chip {{#if actionEconomy.bonusUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="bonusUsed">Bonus</button>
+      <button type="button" class="ft-econ-chip {{#if actionEconomy.bonusUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="bonusUsed" data-tooltip="Bonus action — one per round, taken on your turn or at any point off it (a Steward's legendary action). Refreshes at the start of your turn.">Bonus</button>
       <button type="button" class="ft-econ-chip {{#if actionEconomy.reactionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="reactionUsed">Reaction</button>
       {{#if ftFlags.bonusActionAvailable}}
-      <button type="button" data-action="ftActAgain" class="ft-econ-chip ft-act-again" data-tooltip="Both base dice rolled 10 — take a full bonus action this turn.">⚡ Act Again</button>
+      <button type="button" data-action="ftActAgain" class="ft-econ-chip ft-act-again" data-tooltip="A freed bonus action — take it now, on your turn or anyone else's. Click once your round's bonus is spent.">⚡ Act Again</button>
       {{/if}}
       <button type="button" class="ft-npc-tool" data-action="ftNewTurn" data-tooltip="Reset action economy">↻ New Turn</button>
     </div>
@@ -427,14 +427,6 @@
       <span class="ft-chip" style="color:#e8c84a;font-size:0.72rem;" data-tooltip="Per-rest Insight available — one bonus beat from communing this rest.">Insight ready</span>
     {{/if}}
 
-    {{!-- Echo Reservoir (L13 feat-gated) --}}
-    {{#if dreamwalkerState.echo}}
-    <span class="ft-chip ft-chip-echo" data-tooltip="Dream Echo Reservoir (L13 feat) — gain 1 Echo Die (d6) per Soma Break, store up to maxDice. Spend modes: Self-Resonance (+1d6 your failed check) · Shared Echo (+1d6 to an ally within 30 ft) · World-Tuning (-1d6 to environmental DC vs you)." style="background:#1a3a3a;color:#a0d8d4;border:1px solid #3a8a8a;padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;display:inline-flex;align-items:center;gap:0.25rem;">◐ Echo
-      <input type="number" name="system.resources.echoDice.dice" value="{{dreamwalkerState.echo.dice}}" min="0" max="{{dreamwalkerState.echo.maxDice}}" style="width:28px;background:transparent;color:inherit;border:1px solid #3a8a8a;border-radius:2px;text-align:center;font-size:0.76rem;padding:0;"/>
-      / {{dreamwalkerState.echo.maxDice}} d6
-    </span>
-    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="dream_echo_reservoir_spend" data-tooltip="Roll an Echo Die and apply: Self-Resonance / Shared Echo / World-Tuning.">Spend</button>
-    {{/if}}
   </section>
   {{/if}}
 

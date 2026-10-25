@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You don’t just hold the line—you redefine “breaking” as “bending gracefully.”</em></p><p>Once per <strong>a Soma Break</strong>, you can use your <strong>action</strong> to invoke an Unbreakable Front.</p><ul><li>You create a <strong>6 squares-radius aura</strong> centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>Allies in the aura gain <strong>advantage</strong> on defense check against being <strong>Shaken</strong> or <strong>charmed</strong>.</li><li>Allies in the aura gain a <strong>+1 bonus to Guard</strong>.</li><li>When an ally in the aura succeeds on a check against being Shaken or charmed, they gain temporary Integrity equal to your <strong>tier</strong>.</li></ul><p><strong>OP Echo.</strong> If a major conflict or uprising is weathered under the Unbreakable Front without your side losing a hex or unit to outright collapse, your faction may reduce <strong>Attrition</strong> by 1 and gains <strong>+1 Diplomacy OP</strong> as the story becomes “we bent, but we did not break.”</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You don’t just hold the line—you redefine “breaking” as “bending gracefully.”</em></p><p>Once per <strong>Soma Break</strong>, you can use your <strong>action</strong> to invoke an Unbreakable Front.</p><ul><li>You create a <strong>6 squares-radius aura</strong> centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>Allies in the aura reroll the lowest die on defense checks against being <strong>Shaken</strong> or <strong>charmed</strong>.</li><li>Allies in the aura gain a <strong>+1 bonus to Guard</strong>.</li><li>When an ally in the aura succeeds on a check against being Shaken or charmed, they gain temporary Integrity equal to your <strong>tier</strong>.</li></ul><p><strong>Domain Echo.</strong> If a major conflict or uprising is weathered under the Unbreakable Front without your side losing a hex or unit to outright collapse, your Domain may reduce <strong>Attrition</strong> by 1 and gains <strong>+10 Diplomacy marks</strong> as the story becomes “we bent, but we did not break.”</p>",
       "chat": ""
     },
     "activities": {
@@ -66,12 +66,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -93,7 +88,6 @@
   "effects": [],
   "folder": "FLlH96uJfBcVDu4s",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "harmmarshal_resolve",
       "featureKey": "unbreakable_front"

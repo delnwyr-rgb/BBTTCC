@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Harmony Initiate.</strong> You are a designated Harmony asset for your faction.</p><ul><li>You gain a skill rank in <strong>Diplomacy (Presence)</strong> and <strong>Insight (Soul)</strong> (handled by the Harmony Marshal class traits).</li><li>When you are the active Harmony Marshal for a faction, that faction’s <strong>Soft Power generation increases by 10%</strong> (rounding in your favor). The GM can apply this as a +10% modifier or as a small bonus whenever it would meaningfully matter for the current campaign scale.</li><li>This feature is Bad Eden-only and interacts with your faction sheet’s Soft Power track and OP pipeline.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Harmony Initiate.</strong> You are a designated Harmony asset for your Domain.</p><ul><li>You gain a skill rank in <strong>Diplomacy (Presence)</strong> and <strong>Insight (Soul)</strong> (handled by the Harmony Marshal class traits).</li><li>When you are the active Harmony Marshal for a Domain, that Domain’s <strong>Soft Power generation increases by 10%</strong> (rounding in your favor). The GM can apply this as a +10% modifier or as a small bonus whenever it would meaningfully matter for the current campaign scale.</li><li>This feature is Bad Eden-only and interacts with your Domain sheet’s Soft Power channel.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 1
     },
     "properties": [],
-    "requirements": "Harmony Marshal (1st level)",
+    "requirements": "Harmony Marshal 1",
     "type": {
       "value": "",
       "subtype": ""
@@ -100,8 +100,7 @@
       "opHooks": {
         "softPowerMultiplier": 1.1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

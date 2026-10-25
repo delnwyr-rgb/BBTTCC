@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Apotheosis of the Oneiric.</strong> You shed the last barrier between waking and dreaming, moving through the world as a sovereign of narrative possibility.</p><ul><li><strong>Limitless Tuning:</strong> You may use Dream-Thread Tuning any number of times.</li><li><strong>Expanded Dream Rites:</strong> You may perform two Dream Rites per Soma Break, and one may be performed without trance, even in combat (1 action).</li><li><strong>True Dreamstride:</strong> Once per Soma Break, as an action, you and up to six willing creatures may shift through the symbolic layer to appear anywhere within 24 squares or in an adjacent overworld hex.</li><li><strong>World-Bent Aura (10 minutes):</strong> You gain +2 Guard and reroll the lowest die on all Mind, Soul, and Presence checks. Allies within 6 squares gain +1 to all defense check.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Apotheosis of the Oneiric.</strong> You shed the last barrier between waking and dreaming, moving through the world as a sovereign of narrative possibility.</p><ul><li><strong>Limitless Tuning:</strong> You may use Dream-Thread Tuning any number of times.</li><li><strong>Expanded Dream Rites:</strong> You may perform two Dream Rites per Soma Break, and one may be performed without trance, even in combat (1 action).</li><li><strong>True Dreamstride:</strong> Once per Soma Break, as an action, you and up to six willing creatures may shift through the symbolic layer to appear anywhere within 24 squares or in an adjacent overworld hex.</li><li><strong>World-Bent Aura (10 minutes):</strong> You gain +2 Guard and reroll the lowest die on all Mind, Soul, and Presence checks. Allies within 6 squares gain +1 to all defense checks.</li></ul>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -35,7 +30,7 @@
       "level": 20
     },
     "properties": [],
-    "requirements": "Dreamwalker (20th level)",
+    "requirements": "Dreamwalker 20",
     "type": {
       "value": "",
       "subtype": ""
@@ -92,8 +87,7 @@
       "flags": {},
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!4imbYyUj1RKPkgNh.sIHDQW2bfOFHeZ3m"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -103,7 +97,183 @@
         "apotheosis": true
       }
     },
-    "dnd5e": {}
+    "autoanimations": {
+      "id": "46f83690-1c2f-4b8d-98c4-fef9c4838d07",
+      "label": "Apotheosis of the Oneiric",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
   },
   "_stats": {
     "compendiumSource": null,

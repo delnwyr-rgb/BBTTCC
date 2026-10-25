@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“You know how to wake dead metal just a little too well.”</em></p><p>When you finish a <strong>a Soma Break</strong>, you may choose one <strong>construct, device, vehicle, or weapon</strong> you repaired, salvaged, or forged during or before the rest.</p><ul><li>For the next <strong>hour</strong>, it gains <strong>+1 to attack rolls</strong> (if it makes attacks) and <strong>+1 to Guard</strong> (if it can be targeted and has an Guard).</li><li>Once per round, the first time it hits or successfully completes a relevant action, it deals an extra <strong>1d8 lightning or sephirotic damage (radiant)</strong> (your choice when you apply the overcharge).</li><li>If the item or construct is destroyed while overcharged, you immediately gain <strong>advantage</strong> on your next tool check and salvage action this scene, as the feedback pours a blueprint directly into your hands.</li></ul><p><strong>OP Echo.</strong> If you successfully reclaim at least one meaningful Material, Component, or OP via salvage during the hour, your faction gains <strong>+1 Economy OP</strong> for the next strategic turn (once per scenario).</p>",
+      "value": "<p><em>“You know how to wake dead metal just a little too well.”</em></p><p>When you finish a Soma Break, you may choose one <strong>construct, device, vehicle, or weapon</strong> you repaired, salvaged, or forged during or before the rest.</p><ul><li>For the next <strong>hour</strong>, it gains <strong>+1 to attack rolls</strong> (if it makes attacks) and <strong>+1 to Guard</strong> (if it can be targeted and has a Guard).</li><li>Once per round, the first time it hits or successfully completes a relevant action, it deals an extra <strong>1d8 lightning or sephirotic damage</strong> (your choice when you apply the overcharge).</li><li>If the item or construct is destroyed while overcharged, you immediately reroll the lowest die on your next tool check and salvage action this scene, as the feedback pours a blueprint directly into your hands.</li></ul><p><strong>Domain Echo..</strong> If you successfully reclaim at least one meaningful Material, Component, or marks via salvage during the hour, your Domain gains <strong>+10 Economy marks</strong> for the next turn (once per scenario).</p>",
       "chat": ""
     },
     "activities": {},
@@ -27,7 +27,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 15
     },
     "properties": [],
     "requirements": "Soul-Smith 15, Forge of the Spark Reclaimer",
@@ -39,10 +39,186 @@
   "effects": [],
   "folder": "BvmSP1PPc1ABT2OO",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "soulsmith_forge_sparkreclaimer",
       "featureKey": "overcharge_cycle"
+    },
+    "autoanimations": {
+      "id": "e0dc3e32-3cee-427a-b175-528a8271973e",
+      "label": "Overcharge Cycle",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "_stats": {

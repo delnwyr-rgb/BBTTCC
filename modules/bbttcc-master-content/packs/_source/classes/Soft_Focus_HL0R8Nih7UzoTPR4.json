@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You blur the sharpest edges of malice.</em></p><p>As an <strong>action</strong>, you can project a softening field of presence that lasts for <strong>1 minute</strong> and moves with you.</p><ul><li>During this time, any <strong>Intimidation (Presence) checks made against you or your allies</strong> within <strong>6 squares</strong> are made with <strong>disadvantage</strong>.</li><li>Creatures that begin their turn within 6 squares of you must succeed on a <strong>Soul check</strong> (DC = 8 + your tier + your Soul or Presence modifier, your choice when you gain this feature) or treat all hostile creatures as having <strong>half cover</strong> against their attacks until the start of their next turn, as their aggression slips.</li></ul><p>Soft Focus doesn’t end danger, but it makes cruelty harder to aim.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You blur the sharpest edges of malice.</em></p><p>As an <strong>action</strong>, you can project a softening field of presence that lasts for <strong>1 minute</strong> and moves with you.</p><ul><li>During this time, any <strong>Intimidation (Presence) checks made against you or your allies</strong> within <strong>6 squares</strong> are made rolling 3d10 and keeping the lowest 2.</li><li>Creatures that begin their turn within 6 squares of you must succeed on a <strong>Soul check</strong> (DC = 8 + your tier + your Soul or Presence value, your choice when you gain this feature) or treat all hostile creatures as having <strong>half cover</strong> against their attacks until the start of their next turn, as their aggression slips.</li></ul><p>Soft Focus doesn’t end danger, but it makes cruelty harder to aim.</p>",
       "chat": ""
     },
     "activities": {
@@ -66,12 +66,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -97,7 +92,6 @@
       "subclassKey": "wyrdlens_refraction_mercy",
       "featureKey": "soft_focus"
     },
-    "dnd5e": {},
     "autoanimations": {
       "id": "ba69a645-97d6-4d47-afc1-6e12185b5f37",
       "label": "Soft Focus",

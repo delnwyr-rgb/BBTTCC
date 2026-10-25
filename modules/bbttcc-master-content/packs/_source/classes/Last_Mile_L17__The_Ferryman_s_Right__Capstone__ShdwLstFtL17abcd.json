@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>This ability is not for escape. It is for people who cannot escape themselves.</em></p><p><strong>The Ferryman's Right — 1/session.</strong> You may carry one Soul that the world <em>would not otherwise release</em>:</p><ul><li><p>A prisoner from a place that does not release prisoners</p></li><li><p>A dying ally whose time has come</p></li><li><p>A refugee from a destroyed or sealed hex</p></li><li><p>A ghost from a haunting that the haunting cannot end on its own</p></li><li><p>A name that Lore has tried to forget</p></li></ul><p>The carry costs you. Choose at the moment of acceptance:</p><ul><li><p><strong>1 permanent point of Stress maximum</strong> (your Stress max is reduced by 1 forever; this stacks across multiple uses), <strong>OR</strong></p></li><li><p><strong>25 Radiation points</strong> added to your <code>system.radiation.rp</code> (one full minor threshold, permanent until cleansed).</p></li></ul><p>The Soul arrives at <strong>a destination you declare</strong>, alive and whole — or as whole as the journey permits. Some Souls become more themselves on the journey. Some become less. The cost paid by the Ferryman is non-negotiable.</p><p>This ability cannot be used to remove a creature from an ongoing combat round. It cannot be used to escape your own death. It cannot be repeated for the same Soul on the same session.</p>",
+      "value": "<p><em>This ability is not for escape. It is for people who cannot escape themselves.</em></p><p><strong>The Ferryman's Right — 1/session.</strong> You may carry one Soul that the world <em>would not otherwise release</em>:</p><ul><li><p>A prisoner from a place that does not release prisoners</p></li><li><p>A dying ally whose time has come</p></li><li><p>A refugee from a destroyed or sealed hex</p></li><li><p>A ghost from a haunting that the haunting cannot end on its own</p></li><li><p>A name that Lore has tried to forget</p></li></ul><p>The carry costs you. Choose at the moment of acceptance:</p><ul><li><p><strong>1 permanent point of Stress maximum</strong> (your Stress max is reduced by 1 forever; this stacks across multiple uses), <strong>OR</strong></p></li><li><p><strong>25 Radiation points</strong> added to your <code>Radiation</code> (one full minor threshold, permanent until cleansed).</p></li></ul><p>The Soul arrives at <strong>a destination you declare</strong>, alive and whole — or as whole as the journey permits. Some Souls become more themselves on the journey. Some become less. The cost paid by the Ferryman is non-negotiable.</p><p>This ability cannot be used to remove a creature from an ongoing combat round. It cannot be used to escape your own death. It cannot be repeated for the same Soul on the same session.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -20,22 +20,13 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll",
-          "formula": ""
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "activities": {}
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "shadow_courier",
@@ -49,6 +40,183 @@
     "fourththing": {
       "grants": {},
       "vocabScrub": "2026-05-16"
+    },
+    "autoanimations": {
+      "id": "8429d5d7-2e34-477f-b108-2ed42584eeb1",
+      "label": "Last Mile L17: The Ferryman's Right (Capstone)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "NYwTsnPu4JjS5QE0",

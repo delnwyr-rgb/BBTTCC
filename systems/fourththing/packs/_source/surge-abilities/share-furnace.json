@@ -1,6 +1,6 @@
 {
   "_id": "ftsurge000000031",
-  "name": "Furnace of Renewal",
+  "name": "Share the Furnace",
   "type": "feature",
   "img": "icons/commodities/tech/furnace-modern.webp",
   "system": {
@@ -31,7 +31,7 @@
     },
     "autoanimations": {
       "id": "ft-share-furnace",
-      "label": "Furnace of Renewal",
+      "label": "Share the Furnace",
       "macro": {
         "enable": false,
         "playWhen": "0"

@@ -30,7 +30,7 @@
       "level": 9
     },
     "properties": [],
-    "requirements": "Dreamwalker (9th level)",
+    "requirements": "Dreamwalker 9",
     "type": {
       "value": "",
       "subtype": ""
@@ -38,7 +38,7 @@
   },
   "effects": [
     {
-      "name": "Dreamer’s Poise (Con Save + Mental Stability)",
+      "name": "Dreamer’s Poise (Body Check + Mental Stability)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_2.png",
       "origin": null,
       "transfer": true,
@@ -87,8 +87,7 @@
       "flags": {},
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!TSWbYDz9nlW0dIQT.fl3jY8B70klbRz0i"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -97,8 +96,7 @@
       "dreamwalker": {
         "poise": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

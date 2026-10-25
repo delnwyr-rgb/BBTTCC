@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>Delivery is a sacrament now.</em></p><p><strong>At Shadow Courier Initiation 11</strong>, your Route's signature Package type gains an additional benefit each time you successfully deliver it (in addition to the L1 doctrine delivery effect):</p><ul><li><p><strong>Route of the Wayfarer Tongue (Message).</strong> Delivering grants the recipient faction <strong>+1 Intrigue OP</strong> in addition to the L1 effect.</p></li><li><p><strong>Route of the Black Stair (Blade or Key).</strong> Delivering recovers <strong>1 Pace</strong> for you in addition to the L1 effect.</p></li><li><p><strong>Route of the Last Mile (Soul).</strong> Delivering reduces <strong>Darkness</strong> in the recipient's hex by an additional <strong>1 point</strong> in addition to the L1 effect.</p></li></ul><p>If you ever change Routes (which the campaign should not normally permit), this feature retunes itself to the new doctrine on your next Soma Break.</p>",
+      "value": "<p><em>Delivery is a sacrament now.</em></p><p><strong>At Shadow Courier Initiation 11</strong>, your Route's signature Package type gains an additional benefit each time you successfully deliver it (in addition to the L1 doctrine delivery effect):</p><ul><li><p><strong>Route of the Wayfarer Tongue (Message).</strong> Delivering grants the recipient Domain <strong>+10 Intrigue marks</strong> in addition to the L1 effect.</p></li><li><p><strong>Route of the Black Stair (Blade or Key).</strong> Delivering banks <strong>+1 Surge</strong> for you in addition to the L1 effect.</p></li><li><p><strong>Route of the Last Mile (Soul).</strong> Delivering reduces <strong>Darkness</strong> in the recipient's hex by an additional <strong>1 point</strong> in addition to the L1 effect.</p></li></ul><p>If you ever change Routes (which the campaign should not normally permit), this feature retunes itself to the new doctrine on your next Soma Break.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -27,9 +27,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "classfeat",
       "classIdentifier": "shadow_courier",
@@ -46,7 +43,7 @@
           "effect": {
             "kind": "chat-prompt",
             "args": {
-              "body": "Initiation 11 , your Route's signature Package type gains an additional benefit each time you successfully deliver it (in addition to the L1 doctrine delivery effect): Route of the Wayfarer Tongue (Message)"
+              "body": "Package Mastery. Wayfarer Tongue (Message): the recipient Domain gains an additional +10 Intrigue marks. Black Stair (Blade/Key): you bank +1 Surge. Last Mile (Soul): Darkness in the recipient's hex drops by an additional 1."
             }
           }
         }
@@ -58,11 +55,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1777005233893,
-    "modifiedTime": 1781116153607,
+    "modifiedTime": 1791344284115,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

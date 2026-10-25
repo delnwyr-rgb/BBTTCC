@@ -7,7 +7,7 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Ascension Layer.</strong> When you move in service of the Great Work, reality bends to keep the story alive.</p><ul><li><p><strong>Ascension Aura:</strong> While you are pursuing an active Spark quest or directly working a Great Work objective, you and allies within 6 squares gain a +2 bonus to all defense check.</p></li><li><p><strong>Fate Catch (1/a Soma Break):</strong> While Ascension Aura is active, when you or an ally within 6 squares fails a defense check, you may use your reaction to treat that failure as a success instead.</p></li><li><p><strong>World-Tuned:</strong> Bad Eden travel, encounter, and hex/faction systems may treat catastrophic outcomes related to the current Spark quest as reduced in severity—fumbles become partial failures, disasters become hard lessons instead of dead ends.</p></li></ul>",
+      "value": "<p><strong>Ascension Layer.</strong> When you move in service of the Great Work, reality bends to keep the story alive.</p><ul><li><p><strong>Ascension Aura:</strong> While you are pursuing an active Spark quest or directly working a Great Work objective, you and allies within 6 squares gain a +2 to all defense checks.</p></li><li><p><strong>Fate Catch (1/Soma Break):</strong> While Ascension Aura is active, when you or an ally within 6 squares fails a defense check, you may use your reaction to treat that failure as a success instead.</p></li><li><p><strong>World-Tuned:</strong> Bad Eden travel, encounter, and hex/faction systems may treat catastrophic outcomes related to the current Spark quest as reduced in severity—fumbles become partial failures, disasters become hard lessons instead of dead ends.</p></li></ul>",
       "chat": ""
     },
     "activities": {
@@ -60,12 +60,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -78,7 +73,7 @@
       "level": 17
     },
     "properties": [],
-    "requirements": "Dreamwalker (17th level)",
+    "requirements": "Dreamwalker 17",
     "type": {
       "value": "",
       "subtype": ""
@@ -170,8 +165,7 @@
       "flags": {},
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!RQhSgy0Ps39BucuM.GANgvbod3WwDNyRO"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -181,7 +175,6 @@
         "ascensionLayer": true
       }
     },
-    "dnd5e": {},
     "autoanimations": {
       "id": "e710063e-dbab-46e4-b9f4-020097a70638",
       "label": "Ascension Layer",

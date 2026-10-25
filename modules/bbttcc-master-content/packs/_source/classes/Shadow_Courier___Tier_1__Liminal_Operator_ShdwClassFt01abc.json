@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>You cross what isn't supposed to be crossed — and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue OP cap +2</strong> and <strong>Logistics OP cap +2</strong> on the faction your character belongs to.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online — one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check — keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
+      "value": "<p><em>You cross what isn't supposed to be crossed — and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>+20 Intrigue marks</strong> and <strong>+20 Logistics marks</strong> to your Domain's caps.</p></li><li><p>You bank <strong>Surge</strong> by moving: 6 squares on your turn banks +1, again at 12 (max +2 a round).</p></li><li><p><strong>Package</strong> slot comes online — one Package at a time, type set by your chosen Route at L1.</p></li></ul><p>Spend Surge from the ◆ Surge menu: Snap Strike, Flank &amp; Strike, Clear Road, Quiet Voyage and your Route's spends.</p><p><strong>Liminal Sense.</strong> Once a scene, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -26,6 +26,58 @@
     "activities": {}
   },
   "effects": [
+    {
+      "name": "Class L1: Fitting +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Shadow Courier — Tier 1: Liminal Operator at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Shadow Courier — Tier 1: Liminal Operator",
+          "aptitudeKind": "fitting"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.fitting.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "EdrFshBq4aeLH5AM",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374457,
+        "modifiedTime": 1791864374457,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
     {
       "name": "Liminal Operator: Tinkering +1",
       "img": "icons/tools/smithing/anvil.webp",
@@ -81,8 +133,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!ShdwClassFt01abc.NY2BDWuBBR9JOQSn"
+      }
     },
     {
       "name": "Liminal Operator: Stealth +1",
@@ -139,14 +190,62 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Class L1: Brawl +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Shadow Courier — Tier 1: Liminal Operator at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Shadow Courier — Tier 1: Liminal Operator",
+          "aptitudeKind": "brawl"
+        }
       },
-      "_key": "!items.effects!ShdwClassFt01abc.QmS7XNQZJGpbqJaM"
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.brawl.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "qtY1KH7x8kY5ABTH",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374456,
+        "modifiedTime": 1791864374456,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "classfeat",
       "classIdentifier": "shadow_courier",
@@ -162,27 +261,7 @@
       }
     },
     "fourththing": {
-      "grants": {},
-      "triggers": [
-        {
-          "event": "on-move",
-          "predicate": {
-            "amountMin": 30
-          },
-          "limit": {
-            "window": "turn",
-            "uses": 1
-          },
-          "effect": {
-            "kind": "grant-resource",
-            "args": {
-              "resource": "pace",
-              "amount": 1,
-              "target": "self"
-            }
-          }
-        }
-      ]
+      "grants": {}
     }
   },
   "folder": "i2DrP0h8cZ7UFXpy",

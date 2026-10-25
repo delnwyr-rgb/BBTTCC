@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“You know how to turn ‘we did it’ into policy.”</em></p><p>Once per <strong>a Soma Break</strong>, when your party achieves a <strong>peaceful objective</strong> (successful negotiation, retreat, extraction, or surrender) where your symbolism, banners, or presence clearly mattered, you can formalize that victory into factionspace.</p><ul><li>After that scene resolves, you may convert <strong>1 Intrigue OP</strong> into either <strong>1 Diplomacy OP</strong> or <strong>1 Soft Power OP</strong> for your faction.</li><li>This represents codifying rumors, agreements, and personal heroics into actual structural leverage.</li></ul>",
+      "value": "<p><em>“You know how to turn ‘we did it’ into policy.”</em></p><p>Once per <strong>Soma Break</strong>, when your party achieves a <strong>peaceful objective</strong> (successful negotiation, retreat, extraction, or surrender) where your symbolism, banners, or presence clearly mattered, you can formalize that victory into the Domain ledger.</p><ul><li>After that scene resolves, you may convert <strong>10 Intrigue marks</strong> into either <strong>10 Diplomacy marks</strong> or <strong>10 Soft Power marks</strong> for your Domain.</li><li>This represents codifying rumors, agreements, and personal heroics into actual structural leverage.</li></ul>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -32,7 +27,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 10
     },
     "properties": [],
     "requirements": "Soul-Smith 10, Forge of Victory",
@@ -44,7 +39,6 @@
   "effects": [],
   "folder": "dsO4fBFdVXDt6vRA",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "soulsmith_forge_victory",
       "featureKey": "victory_forge"

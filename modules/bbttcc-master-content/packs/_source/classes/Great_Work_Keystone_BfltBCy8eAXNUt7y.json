@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Great Work Keystone.</strong> You can design a project whose whole is kinder than the sum of its parts.</p><ul><li>Once per strategic arc, you may designate a multi-hex project (fortification belt, canal, transit line, shrine network, etc.) as a <strong>Great Work Keystone Project</strong>.</li><li>While this project is underway and you are actively involved, <strong>hex-level improvements</strong> made as part of it (Loyalty bumps, Darkness reduction, infrastructure upgrades) are slightly more efficient: they may cost 1 fewer OP, grant +1 additional benefit, or resolve one step faster (GM sets the exact expression).</li><li>This feature narratively and mechanically ties several Soul-Smith actions into a single, named piece of the Great Work.</li></ul>",
+      "value": "<p><strong>Great Work Keystone.</strong> You can design a project whose whole is kinder than the sum of its parts.</p><ul><li>Once per arc, you may designate a multi-hex project (fortification belt, canal, transit line, shrine network, etc.) as a <strong>Great Work Keystone Project</strong>.</li><li>While this project is underway and you are actively involved, <strong>hex-level improvements</strong> made as part of it (Loyalty bumps, Darkness reduction, infrastructure upgrades) are slightly more efficient: they may cost 10 fewer marks, grant +1 additional benefit, or resolve one step faster (GM sets the exact expression).</li><li>This feature narratively and mechanically ties several Soul-Smith actions into a single, named piece of the Great Work.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 17
     },
     "properties": [],
-    "requirements": "Soul-Smith (17th level)",
+    "requirements": "Soul-Smith 17",
     "type": {
       "value": "",
       "subtype": ""
@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!BfltBCy8eAXNUt7y.70V3vwai1zEJaOOA"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -100,8 +99,7 @@
       "hexHooks": {
         "keystoneProjectBonus": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

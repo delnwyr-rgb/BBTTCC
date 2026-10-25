@@ -12,247 +12,29 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>\"Every structure has a flaw. You only have to look at it correctly.\"</em></p>\n<p>The Wyrdlens Adept turns perception into force. You run on <strong>Surge</strong> like everyone, and yours arrives when you <strong>land a manifestation</strong> (bank +1, max +2/round) — every revelation feeds the lens. The free <strong>Probability Overlay</strong> (1/round reroll-lowest, refreshes at the start of your turn) stays as your innate edge.</p>\n<h3>The Lens (spent via Surge)</h3>\n<ul>\n  <li><strong>Foresight</strong> (1) — you or an ally banks a reroll-lowest (you saw the thread).</li>\n  <li><strong>Expose</strong> (2) — a foe's next attack and its saves are at disadvantage (you read the seam).</li>\n  <li><strong>Refract</strong> (3) — an ally gains DR equal to Tier and a freed reaction (harm bends aside).</li>\n  <li><strong>Revelation</strong> (5) — allies within 6 squares bank a reroll; a foe's next attack is at disadvantage.</li>\n</ul>\n<p><strong>Tikkun Sight</strong> endures — once per Soma Break, treat a misfire as a base-tier success (the Tree pays in Clarity instead).</p>",
+      "value": "<p><em>\"Every structure has a flaw. You only have to look at it correctly.\"</em></p>\n<p>The Wyrdlens Adept turns perception into force. You run on <strong>Surge</strong> like everyone, and yours arrives when you <strong>land a manifestation</strong> (bank +1, max +2/round) — every revelation feeds the lens. The free <strong>Probability Overlay</strong> (1/round reroll-lowest, refreshes at the start of your turn) stays as your innate edge.</p>\n<h3>The Lens (spent via Surge)</h3>\n<ul>\n  <li><strong>Foresight</strong> (1) — you or an ally banks a reroll-lowest (you saw the thread).</li>\n  <li><strong>Expose</strong> (2) — a foe's next attack and its saves are rolling 3d10 and keeping the lowest 2 (you read the seam).</li>\n  <li><strong>Refract</strong> (3) — an ally gains DR equal to Tier and a freed reaction (harm bends aside).</li>\n  <li><strong>Revelation</strong> (5) — allies within 6 squares bank a reroll; a foe's next attack is rolling 3d10 and keeping the lowest 2.</li>\n</ul>\n<p><strong>Tikkun Sight</strong> endures — once per Soma Break, treat a misfire as a base-tier success (the Tree pays in Clarity instead).</p>",
       "chat": ""
     },
     "advancement": [
       {
-        "_id": "WA00000000000001",
-        "type": "HitPoints",
-        "configuration": {},
-        "value": {},
-        "flags": {},
-        "hint": ""
-      },
-      {
-        "_id": "WA00000000000005",
-        "type": "AbilityScoreImprovement",
+        "_id": "WA00000000000002",
+        "type": "ItemGrant",
         "configuration": {
-          "points": 2,
-          "fixed": {
-            "str": 0,
-            "dex": 0,
-            "con": 0,
-            "int": 0,
-            "wis": 0,
-            "cha": 0
-          },
-          "cap": 2,
-          "locked": [],
-          "recommendation": null
-        },
-        "value": {
-          "type": "asi"
-        },
-        "level": 4,
-        "title": "",
-        "flags": {},
-        "hint": ""
-      },
-      {
-        "_id": "WA00000000000008",
-        "type": "AbilityScoreImprovement",
-        "configuration": {
-          "points": 2,
-          "fixed": {
-            "str": 0,
-            "dex": 0,
-            "con": 0,
-            "int": 0,
-            "wis": 0,
-            "cha": 0
-          },
-          "cap": 2,
-          "locked": [],
-          "recommendation": null
-        },
-        "value": {
-          "type": "asi"
-        },
-        "level": 8,
-        "title": "",
-        "flags": {},
-        "hint": ""
-      },
-      {
-        "_id": "WA00000000000011",
-        "type": "AbilityScoreImprovement",
-        "configuration": {
-          "points": 2,
-          "fixed": {
-            "str": 0,
-            "dex": 0,
-            "con": 0,
-            "int": 0,
-            "wis": 0,
-            "cha": 0
-          },
-          "cap": 2,
-          "locked": [],
-          "recommendation": null
-        },
-        "value": {
-          "type": "asi"
-        },
-        "level": 12,
-        "title": "",
-        "flags": {},
-        "hint": ""
-      },
-      {
-        "_id": "WA00000000000016",
-        "type": "AbilityScoreImprovement",
-        "configuration": {
-          "points": 2,
-          "fixed": {
-            "str": 0,
-            "dex": 0,
-            "con": 0,
-            "int": 0,
-            "wis": 0,
-            "cha": 0
-          },
-          "cap": 2,
-          "locked": [],
-          "recommendation": null
-        },
-        "value": {
-          "type": "asi"
-        },
-        "level": 16,
-        "title": "",
-        "flags": {},
-        "hint": ""
-      },
-      {
-        "_id": "WA00000000000019",
-        "type": "AbilityScoreImprovement",
-        "configuration": {
-          "points": 2,
-          "fixed": {
-            "str": 0,
-            "dex": 0,
-            "con": 0,
-            "int": 0,
-            "wis": 0,
-            "cha": 0
-          },
-          "cap": 2,
-          "locked": [],
-          "recommendation": null
-        },
-        "value": {
-          "type": "asi"
-        },
-        "level": 19,
-        "title": "",
-        "flags": {},
-        "hint": ""
-      },
-      {
-        "_id": "WA00000000000028",
-        "type": "Subclass",
-        "configuration": {},
-        "value": {
-          "document": null,
-          "uuid": null
-        },
-        "level": 3,
-        "title": "",
-        "hint": "",
-        "flags": {}
-      },
-      {
-        "_id": "WA00000000000029",
-        "type": "Trait",
-        "configuration": {
-          "mode": "default",
-          "allowReplacements": false,
-          "grants": [
-            "saves:int",
-            "saves:wis"
-          ],
-          "choices": []
-        },
-        "value": {
-          "chosen": []
-        },
-        "level": 1,
-        "title": "defense check Proficiencies",
-        "hint": "",
-        "classRestriction": "primary",
-        "flags": {}
-      },
-      {
-        "_id": "WA00000000000030",
-        "type": "Trait",
-        "configuration": {
-          "mode": "default",
-          "allowReplacements": false,
-          "grants": [
-            "skills:arc",
-            "skills:his"
-          ],
-          "choices": [
+          "items": [
             {
-              "count": 2,
-              "pool": [
-                "skills:ins",
-                "skills:inv",
-                "skills:rel",
-                "skills:prc"
-              ]
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.r3YHnUbCJYrUuhn4",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.9HNxUBStk9ZQcVo1",
+              "optional": false
             }
-          ]
-        },
-        "value": {
-          "chosen": []
-        },
-        "level": 1,
-        "title": "Skill Proficiencies",
-        "hint": "Gain Occult (Mind) and Lore (Mind) automatically, then choose two from Insight (Soul) (Soul), Investigation (Mind) (Mind), Faith (Soul), Perception (Mind) (Mind).",
-        "classRestriction": "primary",
-        "flags": {}
-      },
-      {
-        "_id": "WA00000000000031",
-        "type": "Trait",
-        "configuration": {
-          "mode": "default",
-          "allowReplacements": false,
-          "grants": [
-            "weapon:sim"
           ],
-          "choices": []
+          "optional": false
         },
-        "value": {
-          "chosen": []
-        },
+        "value": {},
         "level": 1,
-        "title": "Weapon Proficiencies",
-        "hint": "",
-        "classRestriction": "primary",
-        "flags": {}
-      },
-      {
-        "_id": "WA00000000000032",
-        "type": "Trait",
-        "configuration": {
-          "mode": "default",
-          "allowReplacements": false,
-          "grants": [
-            "armor:lgt"
-          ],
-          "choices": []
-        },
-        "value": {
-          "chosen": []
-        },
-        "level": 1,
-        "title": "Armor Training",
-        "hint": "",
-        "classRestriction": "primary",
-        "flags": {}
+        "title": "Wyrdlens Adept Core Features"
       },
       {
         "_id": "WA00000000000033",
@@ -273,67 +55,6 @@
         "flags": {}
       },
       {
-        "_id": "WA00000000000034",
-        "type": "Trait",
-        "configuration": {
-          "mode": "default",
-          "allowReplacements": false,
-          "grants": [
-            "weapon:sim"
-          ],
-          "choices": []
-        },
-        "value": {
-          "chosen": []
-        },
-        "level": 1,
-        "title": "Weapon Proficiencies",
-        "hint": "",
-        "classRestriction": "secondary",
-        "flags": {}
-      },
-      {
-        "_id": "WA00000000000035",
-        "type": "Trait",
-        "configuration": {
-          "mode": "default",
-          "allowReplacements": false,
-          "grants": [
-            "armor:lgt"
-          ],
-          "choices": []
-        },
-        "value": {
-          "chosen": []
-        },
-        "level": 1,
-        "title": "Armor Training",
-        "hint": "",
-        "classRestriction": "secondary",
-        "flags": {}
-      },
-      {
-        "_id": "WA00000000000002",
-        "type": "ItemGrant",
-        "configuration": {
-          "items": [
-            {
-              "uuid": "Compendium.bbttcc-master-content.classes.Item.r3YHnUbCJYrUuhn4",
-              "optional": false
-            },
-            {
-              "uuid": "Compendium.bbttcc-master-content.classes.Item.9HNxUBStk9ZQcVo1",
-              "optional": false
-            }
-          ],
-          "optional": false,
-          "spell": null
-        },
-        "value": {},
-        "level": 1,
-        "title": "Wyrdlens Adept Core Features"
-      },
-      {
         "_id": "WA00000000000003",
         "type": "ItemGrant",
         "configuration": {
@@ -347,8 +68,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 2,
@@ -368,12 +88,24 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 3,
         "title": "Wyrdlens Adept: Level 3 Features"
+      },
+      {
+        "_id": "WA00000000000028",
+        "type": "Subclass",
+        "configuration": {},
+        "value": {
+          "document": null,
+          "uuid": null
+        },
+        "level": 3,
+        "title": "",
+        "hint": "",
+        "flags": {}
       },
       {
         "_id": "WA00000000000006",
@@ -389,8 +121,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 4,
@@ -410,8 +141,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 5,
@@ -427,8 +157,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 6,
@@ -444,8 +173,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 7,
@@ -461,8 +189,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 8,
@@ -478,8 +205,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 9,
@@ -499,8 +225,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 10,
@@ -512,16 +237,11 @@
         "configuration": {
           "items": [
             {
-              "uuid": "Compendium.bbttcc-master-content.classes.Item.ee9slWH77dKvdyXi",
-              "optional": false
-            },
-            {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.8DQbUpylbqTBzkl0",
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 11,
@@ -535,82 +255,37 @@
             {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.dbmGJcTgEiHCiFe4",
               "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ee9slWH77dKvdyXi",
+              "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 12,
-        "title": "Predictive Convergence Map"
+        "title": "Wyrdlens Adept: Level 12 Features"
       },
       {
-        "_id": "WA00000000000018",
+        "_id": "WA00000000000026",
         "type": "ItemGrant",
         "configuration": {
           "items": [
             {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.JClBHQVOqzC452it",
               "optional": false
-            }
-          ],
-          "optional": false,
-          "spell": null
-        },
-        "value": {},
-        "level": 13,
-        "title": "Global Symbol Index"
-      },
-      {
-        "_id": "WA00000000000020",
-        "type": "ItemGrant",
-        "configuration": {
-          "items": [
+            },
             {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.d3NkaovFyI5CHU8G",
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
-        },
-        "value": {},
-        "level": 14,
-        "title": "Causal Spine Trace"
-      },
-      {
-        "_id": "WA00000000000021",
-        "type": "ItemGrant",
-        "configuration": {
-          "items": [
-            {
-              "uuid": "Compendium.bbttcc-master-content.classes.Item.8mo6EwEjZrYGYGeP",
-              "optional": false
-            }
-          ],
-          "optional": false,
-          "spell": null
-        },
-        "value": {},
-        "level": 15,
-        "title": "Hex-Scope Refactor"
-      },
-      {
-        "_id": "WA00000000000023",
-        "type": "ItemGrant",
-        "configuration": {
-          "items": [
-            {
-              "uuid": "Compendium.bbttcc-master-content.classes.Item.4ElebzTv9azsMGb0",
-              "optional": false
-            }
-          ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 16,
-        "title": "Lattice Profiler"
+        "title": "Wyrdlens Adept: Level 16 Features"
       },
       {
         "_id": "WA00000000000024",
@@ -622,12 +297,31 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 17,
-        "title": "Wyrdlens Adept: Tier 4 — Nonviolent Spark Harvest"
+        "title": "Wyrdlens Adept: Tier 4 — Tikkun Sight"
+      },
+      {
+        "_id": "WA00000000000028",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.8mo6EwEjZrYGYGeP",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.4ElebzTv9azsMGb0",
+              "optional": false
+            }
+          ],
+          "optional": false
+        },
+        "value": {},
+        "level": 18,
+        "title": "Wyrdlens Adept: Level 18 Features"
       },
       {
         "_id": "WA00000000000027",
@@ -639,8 +333,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 20,
@@ -654,30 +347,14 @@
       "spent": 0
     },
     "levels": 1,
-    "primaryAbility": {
-      "value": [
-        "int"
-      ],
-      "all": false
-    },
     "properties": [],
-    "spellcasting": {
-      "progression": "full",
-      "ability": "int",
-      "preparation": {
-        "formula": "@int.mod + @classes.wyrdlens_adept.levels"
-      }
-    },
     "wealth": ""
   },
   "effects": [],
   "folder": "AnlupqhUqRCmEi6Q",
   "flags": {
     "bbttcc": {
-      "primary": "intelligence",
-      "opBonus": {
-        "intrigue": 2
-      }
+      "primary": "intelligence"
     },
     "fourththing": {
       "vocabScrub": "2026-05-16"

@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Mercy leaves a glow.</em></p><p>Whenever you <strong>heal</strong> a creature or successfully <strong>stabilize</strong> a dying creature using a manifestation, feature, or skill check, that creature also gains <strong>temporary Integrity equal to your tier</strong>.</p><ul><li>These temp Integrity last until the creature finishes a short or a Soma Break.</li><li>This applies once per instance of healing or stabilization.</li></ul><p>People walk away from your care buffered, not just patched.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Mercy leaves a glow.</em></p><p>Whenever you <strong>heal</strong> a creature or successfully <strong>stabilize</strong> a dying creature using a manifestation, feature, or skill check, that creature also gains <strong>temporary Integrity equal to your tier</strong>.</p><ul><li>These temp Integrity last until their next Soma Break.</li><li>This applies once per instance of healing or stabilization.</li></ul><p>People walk away from your care buffered, not just patched.</p>",
       "chat": ""
     },
     "activities": {},
@@ -42,8 +42,7 @@
     "bbttcc": {
       "subclassKey": "wyrdlens_refraction_mercy",
       "featureKey": "kind_light"
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

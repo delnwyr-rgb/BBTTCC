@@ -12,15 +12,11 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>\"Every threshold is also a doorway.\"</em></p>\n<p><strong>Mode:</strong> Transitional</p>\n<p>The Sapphire Gate treats walls as suggestions and distance as paperwork. Your Surge spends are repositioning made real — carrying allies clear, stepping through a threshold for the tactical edge, holding the line steady at the door.</p>\n<h3>Trance (spent via Surge)</h3>\n<ul>\n  <li><strong>Gate-Touched</strong> (1) — carry an ally through to safety: DR + a freed reaction.</li>\n  <li><strong>Sapphire Step</strong> (2) — you and an ally step through and out elsewhere: each banks a reroll + a freed reaction.</li>\n  <li><strong>Gate Held Open</strong> (3) — allies within 6 squares bank a reroll and gain DR (the threshold steadies them).</li>\n</ul>\n<p><em>Out-of-combat:</em> threshold-sight, the true teleport-by-linkage, the Gate Held Open evacuation, and the Gatewright capstone (make a door where none was) remain the explorer's powers.</p>",
+      "value": "<p><em>\"Every threshold is also a doorway.\"</em></p>\n<p><strong>Mode:</strong> Transitional</p>\n<p>The Sapphire Gate treats walls as suggestions and distance as paperwork. Your Surge spends are repositioning made real — carrying allies clear, stepping through a threshold for the tactical edge, holding the line steady at the door.</p>\n<h3>Trance (spent via Surge)</h3>\n<ul>\n  <li><strong>Gate-Touched</strong> (1) — carry an ally through to safety: DR + a freed reaction.</li>\n  <li><strong>Sapphire Step</strong> (2) — you and an ally step through and out elsewhere: each banks a reroll + a freed reaction.</li>\n  <li><strong>Gate Held Open</strong> (3) — allies within 6 squares bank a reroll and gain DR (the threshold steadies them).</li>\n</ul>\n<p><em>Out-of-combat:</em> Gate Anchor, Sapphire Lucidity, Dream Relay, Bright Hypnopomp, Sapphire Conduction and Blue Meridian remain the strategic flourishes.</p>",
       "chat": ""
     },
     "identifier": "bbttcc-dreamwalker-sapphire-gate",
-    "advancement": [],
-    "spellcasting": {
-      "progression": "none",
-      "preparation": {}
-    }
+    "advancement": []
   },
   "effects": [],
   "folder": "EpLuwx2VEkhesaOK",
@@ -32,11 +28,11 @@
   "sort": 300000,
   "_stats": {
     "systemId": "fourththing",
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "createdTime": 1776459469162,
-    "modifiedTime": 1782167240822,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
-    "systemVersion": "0.6.1",
+    "modifiedTime": 1792441189696,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "systemVersion": "0.6.35",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

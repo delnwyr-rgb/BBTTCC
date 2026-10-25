@@ -13,7 +13,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>Every door you knock on owes you an answer.</em></p><p>When you successfully deliver a Message, you may accept a <strong>Reply</strong> as a free action. The Reply becomes your next Message automatically and fills your Package slot immediately upon delivery (Pace still refills to max from the just-completed delivery).</p><p>The recipient is <strong>obligated to provide a Reply</strong> if they wish to fully benefit from the delivery you just made — they may decline, but doing so withdraws the L1 delivery effect (no Pace refill, no faction Intrigue OP) and any L11 Package Mastery bonus.</p><p>You may decline to carry a Reply. You usually shouldn't.</p>",
+      "value": "<p><em>Every door you knock on owes you an answer.</em></p><p>When you successfully deliver a Message, you may accept a <strong>Reply</strong> as a free action. The Reply becomes your next Message automatically and fills your Package slot immediately upon delivery (Surge still banks to full from the just-completed delivery).</p><p>The recipient is <strong>obligated to provide a Reply</strong> if they wish to fully benefit from the delivery you just made — they may decline, but doing so withdraws the L1 delivery effect (no Surge refill, no Intrigue marks) and any L11 Package Mastery bonus.</p><p>You may decline to carry a Reply. You usually shouldn't.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -33,9 +33,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "shadow_courier",
@@ -50,14 +47,196 @@
       "triggers": [
         {
           "event": "on-delivery",
+          "predicate": {
+            "tag": [
+              "message"
+            ]
+          },
           "effect": {
             "kind": "chat-prompt",
             "args": {
-              "body": "Every door you knock on owes you an answer. When you successfully deliver a Message, you may accept a Reply as a free action"
+              "body": "Reply With Interest. You delivered a Message: you may accept a Reply as a free action — it becomes your next Message and fills your Package slot immediately (set Package type: Message). The recipient may decline, but then forfeits the L1 delivery effect and any Package Mastery bonus. You may decline to carry a Reply; you usually shouldn't."
             }
           }
         }
       ]
+    },
+    "autoanimations": {
+      "id": "33fae309-d289-404f-a883-3023e8508fc7",
+      "label": "Wayfarer Tongue L13: Reply With Interest",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "music",
+          "animation": "notes",
+          "variant": "01",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "W1e3ZXUelQ4D70io",
@@ -65,11 +244,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1777005233963,
-    "modifiedTime": 1781116157024,
+    "modifiedTime": 1791344284845,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

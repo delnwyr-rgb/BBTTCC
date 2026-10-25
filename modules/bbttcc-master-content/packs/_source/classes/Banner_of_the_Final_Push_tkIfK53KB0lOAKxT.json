@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Your forge does not make weapons—your forge makes endings.”</em></p><p>As an <strong>action</strong>, you can raise the <strong>Final Push Standard</strong>, a spectral or physical banner that anchors a desperate charge or last stand.</p><ul><li>You create a <strong>6 squares-radius aura</strong> centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>Allies in the aura gain a <strong>+2 bonus</strong> to attack rolls and defense check.</li><li>At the start of each of their turns while in the aura, allies gain <strong>temporary Integrity equal to your tier</strong>.</li><li>When an ally in the aura reduces a creature to 0 Integrity or forces a surrender, they can immediately move up to <strong>2 squares</strong> without provoking opportunity attacks.</li><li>Enemies in the aura have <strong>disadvantage</strong> on defense check against being <strong>Shaken</strong>.</li></ul><p>You can use this feature once per <strong>a Soma Break</strong>.</p><p><strong>OP Echo.</strong> If a battle, siege, or parley ends decisively in your faction’s favor while the banner is active, your faction gains <strong>+1 Unity OP</strong> and <strong>+1 Diplomacy or Soft Power OP</strong> (your choice) for the next strategic turn.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Your forge does not make weapons—your forge makes endings.”</em></p><p>As an <strong>action</strong>, you can raise the <strong>Final Push Standard</strong>, a spectral or physical banner that anchors a desperate charge or last stand.</p><ul><li>You create a <strong>6 squares-radius aura</strong> centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>Allies in the aura gain a <strong>+2 bonus</strong> to attack rolls and defense check.</li><li>At the start of each of their turns while in the aura, allies gain <strong>temporary Integrity equal to your tier</strong>.</li><li>When an ally in the aura reduces a creature to 0 Integrity or forces a surrender, they can immediately move up to <strong>2 squares</strong> without provoking reaction strikes.</li><li>Enemies in the aura roll 3d10 and keep the lowest 2 on defense checks against being <strong>Shaken</strong>.</li></ul><p>You can use this feature once per <strong>a Soma Break</strong>.</p><p><strong>Domain Echo.</strong> If a battle, siege, or parley ends decisively in your Domain’s favor while the banner is active, your Domain gains <strong>+10 Diplomacy or Soft Power marks</strong> (your choice) for the next turn.</p>",
       "chat": ""
     },
     "activities": {
@@ -66,12 +66,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -81,7 +76,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 18
     },
     "properties": [],
     "requirements": "Soul-Smith 18, Forge of Victory",
@@ -93,7 +88,6 @@
   "effects": [],
   "folder": "dsO4fBFdVXDt6vRA",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "soulsmith_forge_victory",
       "featureKey": "banner_of_the_final_push"

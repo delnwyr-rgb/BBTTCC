@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Shared Dreamwork.</strong> You extend your dreamspace outward, creating a temporary link between your consciousness and another's.</p><p><strong>Once per Soma Break</strong>, as an action, choose one willing creature within 6 squares For 10 minutes, you and the linked creature share a dream-channel:</p><ul><li><strong>Dream-Link Insight (Soul):</strong> Both gain +1 Insight (Soul), and you may use either creature's Insight (Soul) bonus on Insight (Soul) checks.</li><li><strong>Emotional Mirror:</strong> Once during the link, when the ally fails a Soul or Presence check, you may use your reaction to let them reroll the save, adding your Soul modifier.</li><li><strong>Shared Omen:</strong> Once during the link, you or the ally may add +1d4 to an attribute check, attack roll, or defense check after seeing the roll but before knowing the result.</li></ul><p>During Shared Dreamwork, Sparks and metaphysical disturbances become easier for the ally to perceive, and certain Bad Eden travel, intrigue, and encounter systems may offer additional insights.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Shared Dreamwork.</strong> You extend your dreamspace outward, creating a temporary link between your consciousness and another's.</p><p><strong>Once per Soma Break</strong>, as an action, choose one willing creature within 6 squares. For 10 minutes, you and the linked creature share a dream-channel:</p><ul><li><strong>Dream-Link Insight (Soul):</strong> Both gain +1 Insight (Soul), and you may use either creature's Insight (Soul) bonus on Insight (Soul) checks.</li><li><strong>Emotional Mirror:</strong> Once during the link, when the ally fails a Soul or Presence check, you may use your reaction to let them reroll the save, adding your Soul value.</li><li><strong>Shared Omen:</strong> Once during the link, you or the ally may add +1d4 to an attribute check, attack roll, or defense check after seeing the roll but before knowing the result.</li></ul><p>During Shared Dreamwork, Sparks and metaphysical disturbances become easier for the ally to perceive, and certain Bad Eden travel, intrigue, and encounter systems may offer additional insights.</p>",
       "chat": ""
     },
     "activities": {
@@ -64,12 +64,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -136,8 +131,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!VleHwUCtUlA7hkWM.HwdqHAo6SeMMLz89"
+      "folder": null
     },
     {
       "name": "Shared Dreamwork: Emotional Mirror",
@@ -186,8 +180,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!VleHwUCtUlA7hkWM.qkzM6fVYAO7Fey0d"
+      "folder": null
     },
     {
       "name": "Shared Dreamwork: Shared Omen (1d4)",
@@ -236,8 +229,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!VleHwUCtUlA7hkWM.u25Q6zcsLwM3fFzB"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -247,7 +239,183 @@
         "sharedDreamwork": true
       }
     },
-    "dnd5e": {}
+    "autoanimations": {
+      "id": "1e0b5152-d9d2-4496-90c7-09e4219473f3",
+      "label": "Shared Dreamwork",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
   },
   "_stats": {
     "compendiumSource": null,

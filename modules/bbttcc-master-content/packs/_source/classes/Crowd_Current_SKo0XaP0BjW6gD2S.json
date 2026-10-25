@@ -42,8 +42,7 @@
     "bbttcc": {
       "subclassKey": "dreamwalker_thousand_faces",
       "featureKey": "crowd_current"
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

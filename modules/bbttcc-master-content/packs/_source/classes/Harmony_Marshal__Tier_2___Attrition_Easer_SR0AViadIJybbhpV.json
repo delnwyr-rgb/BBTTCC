@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Attrition Easer.</strong> Once per strategic turn, during your faction’s planning phase, you may spend <strong>1 Soft Power OP</strong> to remove <strong>1 point of Attrition</strong> from your faction, to a minimum of 0. This represents rest cycles, counseling, conflict resolution, and the very boring but vital work of actually processing the trauma.</p>",
+      "value": "<p><strong>Attrition Easer.</strong> Once per turn, during your Domain’s planning phase, you may spend <strong>10 Soft Power marks</strong> to remove <strong>1 point of Attrition</strong> from your Domain, to a minimum of 0. This represents rest cycles, counseling, conflict resolution, and the very boring but vital work of actually processing the trauma.</p>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 5
     },
     "properties": [],
-    "requirements": "Harmony Marshal (5th level)",
+    "requirements": "Harmony Marshal 5",
     "type": {
       "value": "",
       "subtype": ""
@@ -100,8 +100,7 @@
       "opHooks": {
         "attritionClearPerTurn": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

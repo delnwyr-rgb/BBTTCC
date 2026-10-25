@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“At this point, you aren’t just brokering peace. You are a mobile ceasefire architecture.</em>”</p><p>Once per <strong>a Soma Break</strong>, you can spend an <strong>action</strong> to invoke a full Accord Mandala, a pattern of sound, gesture, and presence that makes violence feel like a misnote.</p><ul><li>You create a <strong>6 squares-radius aura</strong> centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>At the start of each hostile creature’s turn inside the aura, it must succeed on a <strong>Soul check</strong> (DC = your Resolve DC) or choose one of the following for that turn:<ul><li>It cannot make weapon or manifestation attacks this turn, or</li><li>It may attack, but any attack rolls it makes against non-hostile or non-attacking creatures are made with <strong>disadvantage</strong>.</li></ul></li><li>Allies in the aura have <strong>reroll the lowest die on Diplomacy (Presence) checks</strong> and on defense check against being <strong>charmed</strong> or <strong>Shaken</strong>.</li></ul><p><strong>OP Echo.</strong> If a major conflict, siege, or Parley resolved under the Mandala’s influence ends in a <strong>durable, peaceful outcome</strong> (truce, alliance, withdrawal, or structural reform), your faction gains <strong>+1 Unity OP</strong> and <strong>+1 Diplomacy OP</strong>, and may convert an additional <strong>1 Soft Power OP</strong> into any other OP type as the new harmony resonates through the map.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“At this point, you aren’t just brokering peace. You are a mobile ceasefire architecture.</em>”</p><p>Once per <strong>Soma Break</strong>, you can spend an <strong>action</strong> to invoke a full Accord Mandala, a pattern of sound, gesture, and presence that makes violence feel like a misnote.</p><ul><li>You create a <strong>6 squares-radius aura</strong> centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>At the start of each hostile creature’s turn inside the aura, it must succeed on a <strong>Soul check</strong> (DC = your Resolve DC) or choose one of the following for that turn:<ul><li>It cannot make weapon or manifestation attacks this turn, or</li><li>It may attack, but any attack rolls it makes against non-hostile or non-attacking creatures are made rolling 3d10 and keeping the lowest 2.</li></ul></li><li>Allies in the aura <strong>reroll the lowest die on Diplomacy (Presence) checks</strong> and on defense checks against being <strong>charmed</strong> or <strong>Shaken</strong>.</li></ul><p><strong>Domain Echo.</strong> If a major conflict, siege, or Parley resolved under the Mandala’s influence ends in a <strong>durable, peaceful outcome</strong> (truce, alliance, withdrawal, or structural reform), your Domain gains <strong>+10 Diplomacy marks</strong>, and may convert an additional <strong>10 Soft Power marks</strong> into any other channel as the new harmony resonates through the map.</p>",
       "chat": ""
     },
     "activities": {
@@ -66,12 +66,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -93,7 +88,6 @@
   "effects": [],
   "folder": "w8AbiDc92Mb4wLnR",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "harmmarshal_mandate_accord",
       "featureKey": "accord_mandala"

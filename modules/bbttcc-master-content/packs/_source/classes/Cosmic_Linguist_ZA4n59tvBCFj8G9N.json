@@ -7,7 +7,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p><em>\"Strike the clause. Insert your own. Reality reads from the top.\"</em></p>\n<p>The Cosmic Linguist edits reality like text — meaning first, matter second. One currency now: <strong>Surge</strong>. The editor always has the next word, so you bank <strong>+1 Surge at the start of your turn</strong> (the old Resonance, Strain, and Editorial Authority pools are folded into this single pool).</p>\n<h3>The Edit (spent via Surge)</h3>\n<ul>\n  <li><strong>Emphasis</strong> (1) — your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li>\n  <li><strong>Stabilize</strong> (2) — you gain DR equal to Tier; your next cast resists counter / dispel (the sentence holds).</li>\n  <li><strong>Impose a Reading</strong> (3) — a foe's next attack and its saves are at disadvantage (only one correct interpretation: yours).</li>\n  <li><strong>Rewrite the Sentence</strong> (5) — a foe loses its reactions and rolls saves at disadvantage; allies near you bank a reroll.</li>\n</ul>\n<p><strong>The Sentence</strong> endures as your signature stance — while held, the manifestation's primary target is bound by name and rolls its checks against you at disadvantage.</p>",
+      "value": "<p><em>\"Strike the clause. Insert your own. Reality reads from the top.\"</em></p>\n<p>The Cosmic Linguist edits reality like text — meaning first, matter second. One currency now: <strong>Surge</strong>. The editor always has the next word, so you bank <strong>+1 Surge at the start of your turn</strong> (the old Resonance, Strain, and Editorial Authority pools are folded into this single pool).</p>\n<h3>The Edit (spent via Surge)</h3>\n<ul>\n  <li><strong>Emphasis</strong> (1) — your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li>\n  <li><strong>Stabilize</strong> (2) — you gain DR equal to Tier; your next cast resists counter / dispel (the sentence holds).</li>\n  <li><strong>Impose a Reading</strong> (3) — a foe's next attack and its saves are rolling 3d10 and keeping the lowest 2 (only one correct interpretation: yours).</li>\n  <li><strong>Rewrite the Sentence</strong> (5) — a foe loses its reactions and rolls saves rolling 3d10 and keeping the lowest 2; allies near you bank a reroll.</li>\n</ul>\n<p><strong>The Sentence</strong> endures as your signature stance — while held, the manifestation's primary target is bound by name and rolls its checks against you rolling 3d10 and keeping the lowest 2.</p>",
       "chat": ""
     },
     "hd": {
@@ -25,32 +25,15 @@
               "optional": false
             },
             {
-              "uuid": "Compendium.bbttcc-master-content.classes.Item.wc0V0gK05SnEXBR9",
-              "optional": false
-            },
-            {
-              "uuid": "Compendium.bbttcc-master-content.classes.Item.BiSJL6Gl0tnBLAmW",
-              "optional": false
-            },
-            {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.iIcYhYyA4LhD1Ei2",
-              "optional": false
-            },
-            {
-              "uuid": "Compendium.bbttcc-master-content.classes.Item.9c0g33iP1wGPGedB",
               "optional": false
             },
             {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.cLddE4bSelGil06x",
               "optional": false
-            },
-            {
-              "uuid": "Compendium.bbttcc-master-content.classes.Item.0THo7r8y2sUg8JlZ",
-              "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 1,
@@ -66,15 +49,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": {
-            "ability": "",
-            "preparation": "",
-            "uses": {
-              "max": "",
-              "per": ""
-            }
-          }
+          "optional": false
         },
         "value": {},
         "level": 1,
@@ -94,15 +69,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": {
-            "ability": "",
-            "preparation": "",
-            "uses": {
-              "max": "",
-              "per": ""
-            }
-          }
+          "optional": false
         },
         "value": {},
         "level": 6,
@@ -122,15 +89,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": {
-            "ability": "",
-            "preparation": "",
-            "uses": {
-              "max": "",
-              "per": ""
-            }
-          }
+          "optional": false
         },
         "value": {},
         "level": 11,
@@ -150,15 +109,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": {
-            "ability": "",
-            "preparation": "",
-            "uses": {
-              "max": "",
-              "per": ""
-            }
-          }
+          "optional": false
         },
         "value": {},
         "level": 16,
@@ -172,11 +123,7 @@
   },
   "flags": {
     "bbttcc": {
-      "primary": "charisma",
-      "opBonus": {
-        "intrigue": 2,
-        "faith": 2
-      }
+      "primary": "charisma"
     },
     "fourththing": {
       "vocabScrub": "2026-05-16"

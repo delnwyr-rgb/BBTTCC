@@ -30,7 +30,7 @@
       "level": 18
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (18th level)",
+    "requirements": "Wyrdlens Adept 18",
     "type": {
       "value": "",
       "subtype": ""
@@ -80,8 +80,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!4ElebzTv9azsMGb0.4VEFnnV3XRjb1Fgw"
+      "folder": null
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -90,8 +89,7 @@
       "wyrdlensAdept": {
         "latticeProfiler": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

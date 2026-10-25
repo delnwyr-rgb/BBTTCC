@@ -30,7 +30,7 @@
       "level": 10
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (10th level)",
+    "requirements": "Wyrdlens Adept 10",
     "type": {
       "value": "",
       "subtype": ""
@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!9X62SPa6emtijeRr.g35Ndv5cYsNefwaO"
+      "folder": null
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -100,8 +99,7 @@
       "hexHooks": {
         "tikkunPatchEvents": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

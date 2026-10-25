@@ -1,6 +1,6 @@
 {
   "_id": "ftsurge000000083",
-  "name": "Deny",
+  "name": "Refuse",
   "type": "feature",
   "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
   "system": {
@@ -31,7 +31,7 @@
     },
     "autoanimations": {
       "id": "ft-mt-deny",
-      "label": "Deny",
+      "label": "Refuse",
       "macro": {
         "enable": false,
         "playWhen": "0"

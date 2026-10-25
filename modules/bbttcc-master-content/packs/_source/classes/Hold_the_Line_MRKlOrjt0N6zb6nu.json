@@ -1,5 +1,5 @@
 {
-  "name": "Hold the Line",
+  "name": "Where the Front Is",
   "type": "feat",
   "img": "icons/magic/control/silhouette-hold-beam-blue.webp",
   "system": {
@@ -39,7 +39,6 @@
   "effects": [],
   "folder": "FLlH96uJfBcVDu4s",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "harmmarshal_resolve",
       "featureKey": "hold_the_line"

@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Shared Burden Harness.</strong> Your armor and rigging are built to pull impact off other people.</p><ul><li>When a creature you can see within 6 squares takes damage, you can use your reaction to take some of that damage onto yourself.</li><li>Reduce the damage the target takes by an amount equal to your <strong>tier</strong>, and you take the same amount of damage (this transfer occurs after resistance/vulnerability is applied).</li><li>You can use this feature a number of times per Soma Break equal to your Body modifier (minimum 1).</li></ul><p>You have literally welded your life onto your friends’ Athletics curves.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Shared Burden Harness.</strong> Your armor and rigging are built to pull impact off other people.</p><ul><li>When a creature you can see within 6 squares takes damage, you can use your reaction to take some of that damage onto yourself.</li><li>Reduce the damage the target takes by an amount equal to your <strong>tier</strong>, and you take the same amount of damage (this transfer occurs after resistance/vulnerability is applied).</li><li>You can use this feature a number of times per Soma Break equal to your Body value (minimum 1).</li></ul><p>You have literally welded your life onto your friends’ Integrity.</p>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 13
     },
     "properties": [],
-    "requirements": "Soul-Smith (13th level)",
+    "requirements": "Soul-Smith 13",
     "type": {
       "value": "",
       "subtype": ""
@@ -80,8 +80,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!XzsCfMiujDhD8025.gD2PwYAhxyn9HKiu"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -91,7 +90,6 @@
         "sharedBurdenHarness": true
       }
     },
-    "dnd5e": {},
     "fourththing": {
       "vocabScrub": "2026-05-16"
     },

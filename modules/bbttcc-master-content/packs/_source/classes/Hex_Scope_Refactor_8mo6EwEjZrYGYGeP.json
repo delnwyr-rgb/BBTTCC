@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Hex-Scope Refactor.</strong> You can rewrite how a hex’s story beat lands in the larger narrative.</p><ul><li>Once per strategic turn, after a hex-level outcome is resolved (Resolution Engine result, Encounter Engine outcome, or Turn Request effect), you can propose a <strong>refactor</strong> to the GM.</li><li>Mechanically, the GM may permit one small <strong>hex-level adjustment</strong>: downgrading a devastation result, softening a Darkness spike, slightly improving a Loyalty shift, or re-skinning the visible form of the damage without changing its full mechanical weight.</li><li>This is your hook for “symbolic reframing”—sometimes you can turn “we broke their walls” into “they willingly removed their own walls.” The map still changes, but the meaning is less poisonous.</li></ul>",
+      "value": "<p><strong>Hex-Scope Refactor.</strong> You can rewrite how a hex’s story beat lands in the larger narrative.</p><ul><li>Once per turn, after a hex-level outcome is resolved (Resolution Engine result, Encounter Engine outcome, or Turn Request effect), you can propose a <strong>refactor</strong> to the GM.</li><li>Mechanically, the GM may permit one small <strong>hex-level adjustment</strong>: downgrading a devastation result, softening a Darkness spike, slightly improving a Loyalty shift, or re-skinning the visible form of the damage without changing its full mechanical weight.</li><li>This is your hook for “symbolic reframing”—sometimes you can turn “we broke their walls” into “they willingly removed their own walls.” The map still changes, but the meaning is less poisonous.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 18
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (18th level)",
+    "requirements": "Wyrdlens Adept 18",
     "type": {
       "value": "",
       "subtype": ""
@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!8mo6EwEjZrYGYGeP.InsihXJxraEMh4DF"
+      "folder": null
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -100,8 +99,7 @@
       "hexHooks": {
         "hexRefactorEvents": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

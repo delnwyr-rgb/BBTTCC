@@ -12,25 +12,21 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>The contract exists to serve the people bound by it.</em></p>\n<p style='opacity:0.7;font-size:0.85em'>Mode: Care through obligation / drift: Away</p>\n<h3>Level 1: The Protected Clause</h3>\n<p>Your default Surge expenditure is <strong>Invocation of Protection</strong> — you identify a clause in an agreement, law, or institutional policy that protects a vulnerable party (a tenant, a prisoner, a refugee, a conscripted soldier, a debtor). You invoke the protection on that party's behalf, and the relevant authority must honor the clause or be in formal violation. Costs 2 Surge. Vulnerable parties don't need to know you're helping them; the Steward often works anonymously.</p>\n<h3>Level 5: Standing Writ</h3>\n<p>You may issue a <strong>Standing Writ</strong> on behalf of a single named individual or small group (up to 5 people). The Writ grants them: reroll the lowest die on checks against forced compliance (slavery, conscription, compelled contract signing), automatic success on checks to invoke their rights in formal proceedings, and a one hour detection when those rights are violated. Costs 4 Surge. Duration: until revoked or the Steward dies.</p>\n<h3>Level 9: The Community Precedent</h3>\n<p>When you invoke a clause for the protection of a group of 10 or more people, the invocation gains <em>community weight</em> — the authority compelled to honor it suffers Morale OP penalties if they attempt to resist, and the protected community gains a a +2 stability bonus to their hex's resilience for one week.</p>\n<h3>Level 13: Sanctuary</h3>\n<p>Once per session, you may declare a location a <strong>Sanctuary</strong> — a hex, building, or specific area where Stewardship-protected parties are protected from forcible removal, conscription, arrest under unjust law, or magical compulsion to leave. The Sanctuary's protection is binding on all parties who have any formal standing in the setting. Creatures outside formal standing (bandits, monsters, extra-dimensional hostiles) are unaffected and must be dealt with directly. Duration: one week, or until formally contested.</p>\n<h3>Level 17: The Living Body (Capstone)</h3>\n<p>You may declare a <strong>Living Body</strong> — a set of humane obligations that become binding on a faction, hex, or community of your choice that you have meaningfully served. The Body consists of 5 protections you specify: rights of the governed, limits on authority, conditions of succession. The Body becomes formally binding, enforceable by any Pactkeeper who invokes it, and gradually shifts the target's Political Drift toward Egalitarian / Democratic regardless of starting position.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p><p><em>Balance pass 2026-08-23: all costs and durations finalized against the live Surge economy and DC ladder.</em></p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>The contract exists to serve the people bound by it.</em></p><p style='opacity:0.7;font-size:0.85em'>Mode: Care through obligation / drift: Away</p><h3>Level 3: Community Contract</h3><p><em>No one left behind.</em> Once per scene, when an ally would fall: redirect some of the harm to yourself, stabilize them at once, or grant a protected withdrawal. Spend 1 Surge.</p><h3>Level 6: Cohesion Pulse</h3><p>A stabilizing surge through a panicked scene: fear and Loyalty collapse ease, unrest settles, and part of the fallout becomes a small Domain benefit (Soft Power or Loyalty). Spend 1 Surge.</p><h3>Level 10: Public Works Miracle</h3><p>Bless a site or community for a day — food stabilizes, shelter holds, calm spreads, structures repair, passage becomes reliable.</p><h3>Level 10: Mutual Aid Network</h3><p>Godhood as social work: allies contribute to your Surge through cooperation, and your healing and stabilization spread soft buffers across the group.</p><h3>Level 14: Integration Charter</h3><p>Help a community absorb change without breaking: drift fallout eases, minority pressure softens, unity holds under political stress. Noise −1.</p><h3>Level 18: Civic Apotheosis (Capstone)</h3><p>For a scene, your community rises into minor civic-deity mode: panic cannot spread, cooperation amplifies, protection and solidarity surge. Spend 2+ Surge.</p>",
       "chat": ""
     },
     "identifier": "bbttcc-pactkeeper-steward-of-living-communities",
-    "advancement": [],
-    "spellcasting": {
-      "progression": "none",
-      "preparation": {}
-    }
+    "advancement": []
   },
   "effects": [],
-  "folder": "b7c5HgxxTfcVph6r",
+  "folder": "qibebTsekqPdgSKt",
   "flags": {},
   "_id": "KyHQWp72dXTiVcnf",
   "_stats": {
     "systemId": "fourththing",
-    "coreVersion": "14.364",
+    "coreVersion": "14.367",
     "createdTime": 1776481562685,
-    "modifiedTime": 1782167240816,
+    "modifiedTime": 1787544464796,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "systemVersion": "0.6.1",
     "exportSource": null,

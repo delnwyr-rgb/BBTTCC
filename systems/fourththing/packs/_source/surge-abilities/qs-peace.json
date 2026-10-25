@@ -1,6 +1,6 @@
 {
   "_id": "ftsurge000000061",
-  "name": "Somnolent Peace",
+  "name": "Gentle Sleep",
   "type": "feature",
   "img": "icons/skills/social/diplomacy-peace-alliance.webp",
   "system": {
@@ -31,7 +31,7 @@
     },
     "autoanimations": {
       "id": "ft-qs-peace",
-      "label": "Somnolent Peace",
+      "label": "Gentle Sleep",
       "macro": {
         "enable": false,
         "playWhen": "0"

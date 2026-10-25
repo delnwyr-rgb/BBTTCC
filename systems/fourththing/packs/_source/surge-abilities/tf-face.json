@@ -1,6 +1,6 @@
 {
   "_id": "ftsurge000000066",
-  "name": "Borrowed Face",
+  "name": "Misremembered Face",
   "type": "feature",
   "img": "icons/magic/fire/flame-burning-tree-face.webp",
   "system": {
@@ -31,7 +31,7 @@
     },
     "autoanimations": {
       "id": "ft-tf-face",
-      "label": "Borrowed Face",
+      "label": "Misremembered Face",
       "macro": {
         "enable": false,
         "playWhen": "0"

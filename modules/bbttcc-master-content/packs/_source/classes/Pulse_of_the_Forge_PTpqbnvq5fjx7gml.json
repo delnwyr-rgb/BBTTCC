@@ -7,7 +7,7 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Pulse of the Forge.</strong> You can flare the metaphysical coals inside you and share that heat with others.</p><ul><li><p>Once per short or a Soma Break, as an action, you release a wave of stabilizing heat in a 3 squares radius around you.</p></li><li><p>Choose up to a number of creatures equal to your Body modifier (minimum one) in the area. Each target regains Integrity equal to your <strong>tier + Body modifier</strong>.</p></li><li><p>This does not affect constructs that have no metaphysical presence in your setting (at the GM’s discretion), but it absolutely works on anyone carrying scars, stress, or long nights.</p></li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Pulse of the Forge.</strong> You can flare the metaphysical coals inside you and share that heat with others.</p><ul><li><p>Once per Soma Break, as an action, you release a wave of stabilizing heat in a 3 squares radius around you.</p></li><li><p>Choose up to a number of creatures equal to your Body value (minimum one) in the area. Each target regains Integrity equal to your <strong>tier + Body value</strong>.</p></li><li><p>This does not affect constructs that have no metaphysical presence in your setting (at the GM’s discretion), but it absolutely works on anyone carrying scars, stress, or long nights.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -26,7 +26,7 @@
       "level": 10
     },
     "properties": [],
-    "requirements": "Soul-Smith (10th level)",
+    "requirements": "Soul-Smith 10",
     "type": {
       "value": "",
       "subtype": ""
@@ -76,8 +76,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!PTpqbnvq5fjx7gml.eb8NiEJGVXVMt7Ag"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -87,7 +86,6 @@
         "pulseOfTheForge": true
       }
     },
-    "dnd5e": {},
     "autoanimations": {
       "id": "2983bb56-9354-4619-827a-ebafbd9b5ebd",
       "label": "Pulse of the Forge",

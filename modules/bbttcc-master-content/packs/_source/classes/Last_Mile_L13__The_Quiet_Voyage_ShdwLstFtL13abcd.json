@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>The road belongs to those who already left.</em></p><p>While carrying a Soul, you may become <strong>temporarily insubstantial</strong> for up to <strong>your Initiation tier</strong> rounds per scene (3 at T3, 4 at T4 — note this feature unlocks at T3). Activate as a bonus action; deactivate as a free action on your turn.</p><p>While insubstantial:</p><ul><li><p>You and the Soul pass through <strong>non-magical barriers</strong> — walls, doors, terrain features, crowds.</p></li><li><p>You are <strong>immune to reaction strikes</strong> (opportunity attacks).</p></li><li><p>You are <strong>invisible to creatures not specifically attuned</strong> to death, transition, or the psychopomp domain. Such attuned creatures see you normally.</p></li><li><p>You <strong>cannot attack</strong>, manifest powers, or use any non-movement ability. The Soul is also protected for the duration.</p></li></ul><p>You may end The Quiet Voyage early as a free action, banking the unused rounds for later in the scene.</p>",
+      "value": "<p><em>The road belongs to those who already left.</em></p><p>While carrying a Soul, you may become <strong>temporarily insubstantial</strong> for up to <strong>your Initiation tier</strong> rounds per scene (3 at T3, 4 at T4 — note this feature unlocks at T3). Activate as a bonus action; deactivate as a free action on your turn.</p><p>While insubstantial:</p><ul><li><p>You and the Soul pass through <strong>non-magical barriers</strong> — walls, doors, terrain features, crowds.</p></li><li><p>You are <strong>immune to reaction strikes</strong> (reaction strikes).</p></li><li><p>You are <strong>invisible to creatures not specifically attuned</strong> to death, transition, or the psychopomp domain. Such attuned creatures see you normally.</p></li><li><p>You <strong>cannot attack</strong>, manifest powers, or use any non-movement ability. The Soul is also protected for the duration.</p></li></ul><p>You may end The Quiet Voyage early as a free action, banking the unused rounds for later in the scene.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -27,9 +27,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "shadow_courier",

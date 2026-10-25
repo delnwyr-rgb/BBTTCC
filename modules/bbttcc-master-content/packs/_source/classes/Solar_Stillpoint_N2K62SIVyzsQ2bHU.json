@@ -7,7 +7,7 @@
     "source": "Bad Eden Originals (2025 rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>You become the place where violence goes to lie down.</em></p><p>Once per <strong>a Soma Break</strong>, as an <strong>action</strong>, you can invoke the Solar Stillpoint for <strong>1 minute</strong>:</p><ul><li><p>You emit a <strong>6 squares-radius aura</strong> of quiet golden light that moves with you.</p></li><li><p>Allies within the aura have <strong>advantage</strong> on defense check against being Shaken or charmed, and gain a <strong>+1 bonus to Guard</strong>.</p></li><li><p>When a creature within the aura would reduce another creature to 0 Integrity with a melee or ranged attack, you may use your <strong>reaction</strong> (no action cost for the attacker) to cause that blow to be <strong>non-lethal</strong>, leaving the target unconscious and stable instead.</p></li></ul><p><strong>Strategic Echo.</strong> If a major battle, uprising, or crisis under the Stillpoint ends with a no-fatalities victory, you may reduce an appropriate <strong>Darkness Track</strong> by 1, gain <strong>+1 Unity OP</strong>, and <strong>+1 Diplomacy OP</strong> as the story of “the day the war didn’t happen” spreads.</p>",
+      "value": "<p><em>You become the place where violence goes to lie down.</em></p><p>Once per <strong>Soma Break</strong>, as an <strong>action</strong>, you can invoke the Solar Stillpoint for <strong>1 minute</strong>:</p><ul><li><p>You emit a <strong>6-square-radius aura</strong> of quiet golden light that moves with you.</p></li><li><p>Allies within the aura reroll the lowest die on defense checks against being Shaken or charmed, and gain a <strong>+1 bonus to Guard</strong>.</p></li><li><p>When a creature within the aura would reduce another creature to 0 Integrity with a melee or ranged attack, you may use your <strong>reaction</strong> (no action cost for the attacker) to cause that blow to be <strong>non-lethal</strong>, leaving the target unconscious and stable instead.</p></li></ul><p><strong>Strategic Echo.</strong> If a major battle, uprising, or crisis under the Stillpoint ends with a no-fatalities victory, you may reduce an appropriate <strong>Darkness Track</strong> by 1, gain <strong>+10 Diplomacy marks</strong> as the story of “the day the war didn’t happen” spreads.</p>",
       "chat": ""
     },
     "activities": {
@@ -62,12 +62,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -93,7 +88,6 @@
       "subclassKey": "dreamwalker_quiet_sun",
       "featureKey": "solar_stillpoint"
     },
-    "dnd5e": {},
     "autoanimations": {
       "id": "a0a3e528-cfec-4739-b641-7cff391c664a",
       "label": "Solar Stillpoint",

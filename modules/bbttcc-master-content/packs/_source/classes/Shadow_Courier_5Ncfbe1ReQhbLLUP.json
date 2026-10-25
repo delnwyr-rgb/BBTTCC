@@ -7,7 +7,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone — but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this — same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) — DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) — reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work — designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>",
+      "value": "<p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone — but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this — same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) — DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) — reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work — designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue marks, Darkness reduction, the arrival that mattered).</p>",
       "chat": ""
     },
     "advancement": [
@@ -27,10 +27,13 @@
             {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt01abc",
               "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwWayFtL01abcd",
+              "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 1,
@@ -48,10 +51,13 @@
             {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL05abcd",
               "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwWayFtL05abcd",
+              "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 5,
@@ -67,8 +73,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 6,
@@ -86,10 +91,13 @@
             {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL09abcd",
               "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwWayFtL09abcd",
+              "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 9,
@@ -105,8 +113,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 11,
@@ -124,10 +131,13 @@
             {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL13abcd",
               "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwWayFtL13abcd",
+              "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 13,
@@ -143,8 +153,7 @@
               "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 16,
@@ -162,10 +171,13 @@
             {
               "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL17abcd",
               "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwWayFtL17abcd",
+              "optional": false
             }
           ],
-          "optional": false,
-          "spell": null
+          "optional": false
         },
         "value": {},
         "level": 17,
@@ -175,11 +187,7 @@
   },
   "flags": {
     "bbttcc": {
-      "primary": "dexterity",
-      "opBonus": {
-        "intrigue": 2,
-        "logistics": 2
-      }
+      "primary": "dexterity"
     }
   },
   "_id": "5Ncfbe1ReQhbLLUP",

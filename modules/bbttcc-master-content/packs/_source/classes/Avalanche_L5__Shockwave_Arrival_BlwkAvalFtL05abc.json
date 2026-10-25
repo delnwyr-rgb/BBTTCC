@@ -13,7 +13,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>Arriving is the strike.</em></p><p>When you move <strong>2 squares or more in a straight line</strong> in a turn and finish with a melee weapon strike, you may spend <strong>1 Ruin Charge</strong> as part of that strike. If you do:</p><ul><li>The strike's damage is also applied to every creature and breakable object in a <strong>1 square line directly behind your target</strong>, in your direction of travel. Each secondary target may make a Body defense check (DC 12 + your Initiation tier × 2) — on success, the secondary target takes half damage; on a failed check the full strike damage applies.</li><li>The original target is pushed <strong>2 squares</strong> in the direction of your charge (no save).</li></ul>",
+      "value": "<p><em>Arriving is the strike.</em></p><p>When you move <strong>2 squares or more in a straight line</strong> in a turn and finish with a melee weapon strike, you may spend <strong>1 Surge</strong> as part of that strike. If you do:</p><ul><li>The strike's damage is also applied to every creature and breakable object in a <strong>1 square line directly behind your target</strong>, in your direction of travel. Each secondary target may make a Body defense check (DC 12 + your Initiation tier × 2) — on success, the secondary target takes half damage; on a failed check the full strike damage applies.</li><li>The original target is pushed <strong>2 squares</strong> in the direction of your charge (no save).</li></ul><p style=\"opacity:0.75\">Use the ▶ button on this feature to spend the Surge and post the card.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -33,9 +33,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "bulwark",
@@ -53,7 +50,7 @@
           "effect": {
             "kind": "chat-prompt",
             "args": {
-              "body": "Arriving is the strike. When you move 10 feet or more in a straight line in a turn and finish with a melee weapon strike, you may spend 1 Ruin Charge as part of that strike"
+              "body": "Arriving is the strike. When you move 2 squares or more in a straight line in a turn and finish with a melee weapon strike, you may spend 1 Surge as part of that strike (▶ Shockwave Arrival on your sheet)."
             }
           }
         }

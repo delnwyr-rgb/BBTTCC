@@ -30,7 +30,7 @@
       "level": 16
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (16th level)",
+    "requirements": "Wyrdlens Adept 16",
     "type": {
       "value": "",
       "subtype": ""
@@ -44,17 +44,44 @@
         "globalSymbolIndex": true
       }
     },
-    "dnd5e": {}
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "occult",
+          "attribute": "mind",
+          "vs": "one big-picture regional-trends check per downtime period, after reviewing logs/reports",
+          "note": "Global Symbol Index"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "lore",
+          "attribute": "mind",
+          "vs": "one big-picture regional-trends check per downtime period, after reviewing logs/reports",
+          "note": "Global Symbol Index"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "investigation",
+          "attribute": "mind",
+          "vs": "one big-picture regional-trends check per downtime period, after reviewing logs/reports",
+          "note": "Global Symbol Index"
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1776459984385,
-    "modifiedTime": 1782167240815,
+    "modifiedTime": 1791344264220,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

@@ -17,12 +17,7 @@
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -35,7 +30,7 @@
       "level": 18
     },
     "properties": [],
-    "requirements": "Dreamwalker (18th level)",
+    "requirements": "Dreamwalker 18",
     "type": {
       "value": "",
       "subtype": ""
@@ -43,7 +38,7 @@
   },
   "effects": [
     {
-      "name": "Fractal Self (Defense + Future Advantage)",
+      "name": "Fractal Self (Defense + Banked Reroll)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_nightmare.png",
       "origin": null,
       "transfer": false,
@@ -92,8 +87,7 @@
       "flags": {},
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!uD8rt09f8CkX4N94.9oyDqsC07ffSSUgy"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -103,7 +97,6 @@
         "fractalSelf": true
       }
     },
-    "dnd5e": {},
     "autoanimations": {
       "id": "a87fdd4c-ea9b-46b5-a953-bcfdfca8b474",
       "label": "Fractal Self",

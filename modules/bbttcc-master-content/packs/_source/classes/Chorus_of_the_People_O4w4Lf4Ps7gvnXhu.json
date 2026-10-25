@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“When the crowd sings with you, the world listens.”</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>peaceful objective</strong> succeeds—surrender accepted, negotiation concluded, unrest calmed—you may invoke the Chorus.</p><ul><li>Your faction gains <strong>+1 Unity/Victory Point</strong>.</li><li>Your faction gains <strong>+1 Soft Power OP</strong>.</li></ul><p>This occurs at <strong>scene end</strong> and should reflect genuine civic resonance.</p>",
+      "value": "<p><em>“When the crowd sings with you, the world listens.”</em></p><p>Once per <strong>Soma Break</strong>, when a <strong>peaceful objective</strong> succeeds—surrender accepted, negotiation concluded, unrest calmed—you may invoke the Chorus.</p><ul><li>Your Domain gains <strong>+10 Soft Power marks</strong>.</li><li>Your Domain gains <strong>+10 Soft Power marks</strong>.</li></ul><p>This occurs at <strong>scene end</strong> and should reflect genuine civic resonance.</p>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -44,7 +39,6 @@
   "effects": [],
   "folder": "2lNXuSAY9vKC4tM0",
   "flags": {
-    "dnd5e": {},
     "bbttcc": {
       "subclassKey": "harmmarshal_overwatch",
       "featureKey": "chorus_people"

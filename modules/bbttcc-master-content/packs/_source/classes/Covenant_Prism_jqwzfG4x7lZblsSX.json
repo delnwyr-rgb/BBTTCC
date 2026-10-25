@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You become a living agreement that the world should try again.</em></p><p>Once per <strong>a Soma Break</strong>, as an <strong>action</strong>, you can invoke the Covenant Prism for <strong>1 minute</strong>.</p><ul><li>Allies within <strong>6 squares</strong> of you gain <strong>resistance to psychic and sephirotic damage (radiant)</strong>, and reroll the lowest die on defense checks against being <strong>Shaken</strong> or <strong>charmed</strong>.</li><li>Enemies within 6 squares who attempt to reduce a creature to 0 Integrity must succeed on a <strong>Soul check</strong> (DC = 8 + your tier + your Soul or Presence modifier) or automatically treat that blow as <strong>non-lethal</strong>, leaving the target unconscious and stable.</li><li>At the end of the effect, choose one Hex involved in the scene: if the conflict resolved without massacres or wanton slaughter, that Hex’s alignment shifts one step toward a <strong>beneficial Sephirah</strong>, and your faction gains <strong>+1 Unity OP</strong> and <strong>+1 Soft Power OP</strong>.</li></ul><p>This is the moment the universe is gently told “no, we are not doing that again.”</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You become a living agreement that the world should try again.</em></p><p>Once per <strong>Soma Break</strong>, as an <strong>action</strong>, you can invoke the Covenant Prism for <strong>1 minute</strong>.</p><ul><li>Allies within <strong>6 squares</strong> of you gain <strong>resistance to psychic and sephirotic damage</strong>, and reroll the lowest die on defense checks against being <strong>Shaken</strong> or <strong>charmed</strong>.</li><li>Enemies within 6 squares who attempt to reduce a creature to 0 Integrity must succeed on a <strong>Soul check</strong> (DC = 8 + your tier + your Soul or Presence value) or automatically treat that blow as <strong>non-lethal</strong>, leaving the target unconscious and stable.</li><li>At the end of the effect, choose one Hex involved in the scene: if the conflict resolved without massacres or wanton slaughter, that Hex’s alignment shifts one step toward a <strong>beneficial Sephirah</strong>, and your Domain gains <strong>+10 Soft Power marks</strong>.</li></ul><p>This is the moment the universe is gently told “no, we are not doing that again.”</p>",
       "chat": ""
     },
     "activities": {
@@ -66,12 +66,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -97,7 +92,6 @@
       "subclassKey": "wyrdlens_refraction_mercy",
       "featureKey": "covenant_prism"
     },
-    "dnd5e": {},
     "autoanimations": {
       "id": "6edcd9d4-2454-45ae-a6fa-bae32f2cc7f0",
       "label": "Covenant Prism",

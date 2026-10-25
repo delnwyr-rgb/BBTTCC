@@ -30,7 +30,7 @@
       "level": 18
     },
     "properties": [],
-    "requirements": "Harmony Marshal (18th level)",
+    "requirements": "Harmony Marshal 18",
     "type": {
       "value": "",
       "subtype": ""
@@ -90,8 +90,7 @@
       "harmonyMarshal": {
         "diplomaticImmunity": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

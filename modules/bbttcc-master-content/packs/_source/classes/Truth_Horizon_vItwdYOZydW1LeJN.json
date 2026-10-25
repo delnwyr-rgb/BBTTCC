@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You walk at the edge where all lies eventually break.</em></p><p>Once per <strong>a Soma Break</strong>, as an <strong>action</strong>, you can open a Truth Horizon for <strong>1 minute</strong>.</p><ul><li>You create a <strong>6 squares-radius aura</strong> that moves with you.</li><li>Within the aura, creatures cannot gain the benefits of <strong>invisibility</strong> or <strong>illusion-based disguise</strong> against you and your allies; their true position and general outline are perceptible.</li><li>Creatures within the aura have <strong>disadvantage</strong> on <strong>Stealth (Intrigue) checks</strong>, and you and your allies have <strong>advantage</strong> on checks to see through lies, illusions, or glamours (usually Insight (Soul) or Investigation (Mind)).</li><li>The first time each creature within the aura attempts to impose roll 3d10 keep lowest 2 on a roll via Stealth, misdirection, or fear-mongering, that disadvantage is<strong>ignored</strong>.</li></ul><p><strong>Strategic Echo.</strong> If a major investigation, trial, or Spark/Tikkun operation resolved under the Truth Horizon exposes a hidden corruption and leads to a <strong>Justice/Reformation</strong> style outcome instead of Subjugation or Ruin, your faction may gain <strong>+1 Intrigue OP</strong>, <strong>+1 Soft Power OP</strong>, and reduce an appropriate <strong>Darkness Track</strong> by 1.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You walk at the edge where all lies eventually break.</em></p><p>Once per <strong>Soma Break</strong>, as an <strong>action</strong>, you can open a Truth Horizon for <strong>1 minute</strong>.</p><ul><li>You create a <strong>6 squares-radius aura</strong> that moves with you.</li><li>Within the aura, creatures cannot gain the benefits of <strong>invisibility</strong> or <strong>illusion-based disguise</strong> against you and your allies; their true position and general outline are perceptible.</li><li>Creatures within the aura roll 3d10 and keep the lowest 2 on <strong>Stealth (Intrigue) checks</strong>, and you and your allies reroll the lowest die on checks to see through lies, illusions, or glamours (usually Insight (Soul) or Investigation (Mind)).</li><li>The first time each creature within the aura attempts to impose roll 3d10 keep lowest 2 on a roll via Stealth, misdirection, or fear-mongering, throlling 3d10 and keeping the lowest 2 is<strong>ignored</strong>.</li></ul><p><strong>Strategic Echo.</strong> If a major investigation, trial, or Spark/Tikkun operation resolved under the Truth Horizon exposes a hidden corruption and leads to a <strong>Justice/Reformation</strong> style outcome instead of Subjugation or Ruin, your Domain may gain <strong>+10 Intrigue marks</strong>, <strong>+10 Soft Power marks</strong>, and reduce an appropriate <strong>Darkness Track</strong> by 1.</p>",
       "chat": ""
     },
     "activities": {
@@ -66,12 +66,7 @@
     },
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -97,7 +92,6 @@
       "subclassKey": "wyrdlens_refraction_truth",
       "featureKey": "truth_horizon"
     },
-    "dnd5e": {},
     "fourththing": {
       "vocabScrub": "2026-05-16"
     },

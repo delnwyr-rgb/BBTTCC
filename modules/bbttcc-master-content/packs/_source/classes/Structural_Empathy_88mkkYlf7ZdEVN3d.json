@@ -30,7 +30,7 @@
       "level": 14
     },
     "properties": [],
-    "requirements": "Soul-Smith (14th level)",
+    "requirements": "Soul-Smith 14",
     "type": {
       "value": "",
       "subtype": ""
@@ -94,8 +94,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!88mkkYlf7ZdEVN3d.s3WPhhaKsRTN8R6Y"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -104,8 +103,7 @@
       "soulSmith": {
         "structuralEmpathy": true
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

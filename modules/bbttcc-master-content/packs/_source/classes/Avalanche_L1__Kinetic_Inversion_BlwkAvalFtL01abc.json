@@ -13,7 +13,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>Nothing that moves can be stopped — and movement, for you, is what makes you real.</em></p><p><strong>Mode: Unstoppable Force / drift: Toward.</strong></p><p>You generate <strong>Frame Dice</strong> when you <em>end</em> a movement, not when you start one. When you move at least half your speed in a turn and end that turn with a successful Violence-attribute action or weapon strike, gain <strong>1 Frame Die</strong>. Maximum 1 Frame Die generated per turn from this feature.</p><p>Your Frame pool refreshes on a Soma Break. Pool max comes from your Bulwark class feature: <strong>max(2, ceil((Violence value + Bulwark Initiation) / 3))</strong>, capped at 8.</p>",
+      "value": "<p><em>Nothing that moves can be stopped — and movement, for you, is what makes you real.</em></p><p><strong>Mode:</strong> Unstoppable Force / <strong>drift:</strong> Toward.</p><p>You bank Surge when you arrive, not when you start. When you move at least half your speed in a turn and land a Violence strike that same turn, bank <strong>+1 Surge</strong>. Once per turn. This is on top of the class's eat-the-blow Surge; your cap is the ordinary one.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -33,9 +33,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "subclassfeat",
       "classIdentifier": "bulwark",
@@ -49,11 +46,22 @@
       "grants": {},
       "triggers": [
         {
-          "event": "on-move",
+          "event": "on-attack-hit",
+          "predicate": {
+            "movedMinFt": 15,
+            "tag": [
+              "violence"
+            ]
+          },
+          "limit": {
+            "window": "turn",
+            "uses": 1
+          },
           "effect": {
-            "kind": "chat-prompt",
+            "kind": "grant-resource",
             "args": {
-              "body": "You generate Frame Dice when you end a movement, not when you start one. When you move at least half your speed in a turn and end that turn with a successful Violence-attribute action or weapon strike, gain 1 F..."
+              "resource": "surge",
+              "amount": 1
             }
           }
         }
@@ -65,11 +73,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.3",
     "createdTime": 1777003646536,
-    "modifiedTime": 1781116122402,
+    "modifiedTime": 1791412961592,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

@@ -12,18 +12,14 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>Every ruling has already been made. I know where.</em></p>\n<p style='opacity:0.7;font-size:0.85em'>Mode: Historical enforcement / drift: Toward</p>\n<h3>Level 1: Read The Ledger</h3>\n<p>You are trained in a vast internal catalog of historical rulings, treaties, precedents, and case records spanning the setting's known Lore. At character creation and on each a Soma Break, you may prepare your Soul modifier <strong>Precedents</strong> — specific historical rulings relevant to situations you anticipate encountering. When a prepared Precedent becomes relevant in play, you may invoke it as an action, spending 2 Surge to compel the current situation to resolve under its terms. GM adjudicates fit.</p>\n<h3>Level 5: Citation In Hand</h3>\n<p>Once per scene, you may invoke a Precedent that you did <em>not</em> prepare, if you can plausibly know it (GM judgment). Treat this as a Precedent invocation at +1 Surge cost. The fact that an Archivist can produce a citation at any moment makes opposing legal positions significantly less stable, which is the actual game-state effect.</p>\n<h3>Level 9: Binding Lineage</h3>\n<p>When you invoke a Precedent in a political proceeding (faction-level dispute, hex-level governance, contract negotiation), the outcome is treated as <em>continuing the line</em> — it counts as an additional entry in the historical record for future invocations. You and any Archivist after you may invoke the present ruling as Precedent in future cases, making your in-play decisions genuinely load-bearing for the setting's legal Lore.</p>\n<h3>Level 13: The Unbroken Chain</h3>\n<p>You may declare a <strong>Chain of Precedent</strong> — a series of three or more historical rulings that, taken together, compel a specific outcome in the current situation. Chains are invoked as a single action for 8 Surge. The target of the Chain (a creature, faction, or ongoing effect) must make a Soul check DC 17 or be bound by the Chain's implied ruling. Binding effects last until the ruling is formally appealed or overturned.</p>\n<h3>Level 17: The Standing Record (Capstone)</h3>\n<p>You may declare a Precedent of your own at the end of a session — a ruling that the events of the session establish as binding going forward. The Precedent is permanent unless overturned by the session's recognized authority. From this point forward, you and future Pactkeepers may invoke this Precedent in play. Over a campaign, the Archivist of Precedent accumulates a body of <em>personal case law</em> that reshapes the setting's legal landscape.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p><p><em>Balance pass 2026-08-23: all costs and durations finalized against the live Surge economy and DC ladder.</em></p>",
+      "value": "<p><em>Every ruling has already been made. I know where.</em></p><p style='opacity:0.7;font-size:0.85em'>Mode: Historical enforcement / drift: Toward</p><h3>Level 3: Akashic Access</h3><p>Controlled access to the Akashic Layer. When you create a Precedent you specify which aspect it records — intent, outcome, method, cost or weight — and that aspect sticks hardest when cited.</p><h3>Level 3: Immutable Record</h3><p>Once per Soma Break, when an effect would rewrite memory, alter history or falsify a record, you declare: <em>the record stands</em>. It may work locally; it does not change what is true.</p><h3>Level 6: Archival Recall</h3><p>Once per Soma Break, consult the record and ask the GM one question about patterns — has this happened before, what precedent is being violated. Noise +1.</p><h3>Level 6: Cross-Reference Reality</h3><p>Link two or more active Precedents as supporting evidence; spend Surge to extend one to an analogous target or make the violator roll 3d10 and keep the lowest 2.</p><h3>Level 10: Expectation Gravity</h3><p>When a creature knowingly violates a relevant Precedent, the weight of record presses down: keep-lowest rolls, hesitation, a minor action tax (GM adjudicates).</p><h3>Level 10: Redundant Recordkeeping</h3><p>A Precedent that would be erased becomes a Latent Record instead — invisible, persistent, reactivated later at reduced strength.</p><h3>Level 14: Historiographic Authority</h3><p>Once per Soma Break, after a significant event resolves, you choose its framing — heroic, cautionary or ambiguous — and the fallout follows the frame.</p><h3>Level 18: Akashic Override (Capstone)</h3><p>Once per campaign arc, declare an event Canonically Resolved: no cascading consequences, no resurrection or re-litigation, no future leverage.</p>",
       "chat": ""
     },
     "identifier": "bbttcc-pactkeeper-archivist-of-precedent",
-    "advancement": [],
-    "spellcasting": {
-      "progression": "none",
-      "preparation": {}
-    }
+    "advancement": []
   },
   "effects": [],
-  "folder": "eNi1uCWJUfkKDdUU",
+  "folder": "qibebTsekqPdgSKt",
   "flags": {
     "fourththing": {
       "vocabScrub": "2026-05-16"
@@ -32,11 +28,11 @@
   "_id": "Aieqa43Z1sA9K8UX",
   "_stats": {
     "systemId": "fourththing",
-    "coreVersion": "14.363",
+    "coreVersion": "14.367",
     "createdTime": 1776481562683,
-    "modifiedTime": 1781116120299,
+    "modifiedTime": 1787544464564,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

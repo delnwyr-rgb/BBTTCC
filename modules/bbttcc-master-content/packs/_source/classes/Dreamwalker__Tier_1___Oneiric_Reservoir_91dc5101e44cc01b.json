@@ -4,14 +4,10 @@
   "img": "icons/sundries/flags/banner-standard-moon.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "custom": "Bad Eden",
-      "rules": "2024",
-      "revision": 1
-    },
+    "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Oneiric Reservoir.</strong> Your Clarity maximum is +2. On Soma Break you recover Clarity equal to your tier instead of the flat default. Detect Spark resonance in adjacent hexes (carryover).</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Clarity max +2.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Skill rank +1 in Perception and Faith.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Oneiric Reservoir</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Passive &nbsp;·&nbsp; <strong>Action:</strong> — &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Clarity max +2. On Soma Break recover Clarity equal to your tier (instead of flat default). Detect Spark resonance in adjacent hexes (carryover).</div>\n</div>",
+      "value": "<p><strong>Tier 1 — Oneiric Reservoir.</strong> Your Clarity maximum is +2. On Soma Break you recover Clarity equal to your tier instead of the flat default. Detect Spark resonance in adjacent hexes (carryover).</p><p><span style=\"opacity: 0.7; font-size: 0.85em\">Discipline (passive): Clarity max +2.</span> <span style=\"opacity: 0.7; font-size: 0.85em\">Skill rank +1 in Perception and Faith.</span></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Oneiric Reservoir</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> Passive  ·  <strong>Action:</strong> —  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Clarity max +2. On Soma Break recover Clarity equal to your tier (instead of flat default). Detect Spark resonance in adjacent hexes (carryover).</span></p></div>",
       "chat": ""
     },
     "activities": {},
@@ -30,13 +26,118 @@
       "level": 1
     },
     "properties": [],
-    "requirements": "Dreamwalker (1st level)",
+    "requirements": "Dreamwalker 1",
     "type": {
       "value": "",
       "subtype": ""
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Class L1: Brawl +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Dreamwalker: Tier 1 — Oneiric Reservoir at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Dreamwalker: Tier 1 — Oneiric Reservoir",
+          "aptitudeKind": "brawl"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.brawl.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "Njd44NPPUufFX4Gp",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374194,
+        "modifiedTime": 1791864374194,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Class L1: Fitting +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Dreamwalker: Tier 1 — Oneiric Reservoir at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Dreamwalker: Tier 1 — Oneiric Reservoir",
+          "aptitudeKind": "fitting"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.fitting.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "xzcyZkj3Lc3WA4ZM",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374195,
+        "modifiedTime": 1791864374195,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
   "folder": "YLUIFZ5nPOUSaSH2",
   "flags": {
     "fourththing": {
@@ -47,18 +148,17 @@
       },
       "vocabScrub": "2026-05-16"
     },
-    "bbttcc": {},
-    "dnd5e": {}
+    "bbttcc": {}
   },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.367",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1777312943677,
-    "modifiedTime": 1781116117868,
+    "modifiedTime": 1788667409663,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

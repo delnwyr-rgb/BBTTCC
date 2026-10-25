@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Relic of Rebirth.</strong> Your forge can now produce artifacts that drag whole places back from the brink.</p><ul><li>Once per <strong>a Soma Break</strong>, you may begin a special forging project to create a <strong>Relic of Rebirth</strong>. This typically requires a full scene, rare materials, and participation from allies (at the GM’s discretion).</li><li>When the Relic is properly installed or activated in a <strong>corrupted, devastated, or severely wounded region/hex</strong>, it triggers a major restorative effect: corruption is cleansed, ruin is reversed, or the hex’s status improves one or more steps as defined by your hex/Resolution/Tikkun rules.</li><li>Mechanically, this feature is your permission slip to <strong>restore one region or hex</strong> per use in a big, visible way, under the GM’s control for exact numbers (Darkness down, Loyalty up, status shifts, modifiers cleared, etc.).</li></ul>",
+      "value": "<p><strong>Relic of Rebirth.</strong> Your forge can now produce artifacts that drag whole places back from the brink.</p><ul><li>Once per <strong>Soma Break</strong>, you may begin a special forging project to create a <strong>Relic of Rebirth</strong>. This typically requires a full scene, rare materials, and participation from allies (at the GM’s discretion).</li><li>When the Relic is properly installed or activated in a <strong>corrupted, devastated, or severely wounded region/hex</strong>, it triggers a major restorative effect: corruption is cleansed, ruin is reversed, or the hex’s status improves one or more steps as defined by your hex/Resolution/Tikkun rules.</li><li>Mechanically, this feature is your permission slip to <strong>restore one region or hex</strong> per use in a big, visible way, under the GM’s control for exact numbers (Darkness down, Loyalty up, status shifts, modifiers cleared, etc.).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -30,7 +30,7 @@
       "level": 17
     },
     "properties": [],
-    "requirements": "Soul-Smith (17th level)",
+    "requirements": "Soul-Smith 17",
     "type": {
       "value": "",
       "subtype": ""
@@ -94,8 +94,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!Jl1bLrihM0go0cwL.QsKD3YEveDrqIYem"
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -108,8 +107,7 @@
       "hexHooks": {
         "relicRebirthEvents": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

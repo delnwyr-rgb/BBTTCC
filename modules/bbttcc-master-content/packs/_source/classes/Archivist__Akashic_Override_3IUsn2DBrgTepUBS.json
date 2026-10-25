@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p data-start=\"5592\" data-end=\"5606\"><em data-start=\"5592\" data-end=\"5606\">(18th Level)</em></p><p data-start=\"5608\" data-end=\"5633\"><em data-start=\"5608\" data-end=\"5633\">“Canonically resolved.”</em></p><p data-start=\"5635\" data-end=\"5683\">Once per campaign arc, you may declare an event:</p><blockquote data-start=\"5685\" data-end=\"5712\"><p data-start=\"5687\" data-end=\"5712\"><strong data-start=\"5687\" data-end=\"5712\">Canonically Resolved.</strong></p></blockquote><p data-start=\"5714\" data-end=\"5724\">The event:</p><ul data-start=\"5725\" data-end=\"5874\"><li data-start=\"5725\" data-end=\"5775\"><p data-start=\"5727\" data-end=\"5775\">Cannot generate further cascading consequences</p></li><li data-start=\"5776\" data-end=\"5828\"><p data-start=\"5778\" data-end=\"5828\">Cannot be resurrected, reframed, or re-litigated</p></li><li data-start=\"5829\" data-end=\"5874\"><p data-start=\"5831\" data-end=\"5874\">Cannot be used as leverage in future arcs</p></li></ul><p data-start=\"5876\" data-end=\"5943\">You do not undo what happened.<br data-start=\"5906\" data-end=\"5909\" />You end its narrative propagation.</p><h3 data-start=\"5945\" data-end=\"5953\">Cost</h3><p data-start=\"5954\" data-end=\"5996\">One use per arc. No Surge required.</p><h3 data-start=\"5998\" data-end=\"6010\">Pushback</h3><p data-start=\"6011\" data-end=\"6158\">Using this prematurely or to avoid earned fallout may spike Noise dramatically. Canon does not like being sealed before its time.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+      "value": "<p><em>(18th Level)</em></p><p><em>“Canonically resolved.”</em></p><p>Once per campaign arc, you may declare an event:</p><blockquote><p><strong>Canonically Resolved.</strong></p></blockquote><p>The event:</p><ul><li><p>Cannot generate further cascading consequences</p></li><li><p>Cannot be resurrected, reframed, or re-litigated</p></li><li><p>Cannot be used as leverage in future arcs</p></li></ul><p>You do not undo what happened.<br />You end its narrative propagation.</p><h3>Cost</h3><p>One use per arc. No Surge required.</p><h3>Pushback</h3><p>Using this prematurely or to avoid earned fallout may spike Noise dramatically. Canon does not like being sealed before its time.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -38,7 +38,184 @@
   },
   "effects": [],
   "flags": {
-    "bbttcc": {}
+    "bbttcc": {},
+    "autoanimations": {
+      "id": "394919e5-7f59-4b9d-9b83-8d581651c99e",
+      "label": "Archivist: Akashic Override",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
   },
   "folder": "eNi1uCWJUfkKDdUU",
   "_stats": {

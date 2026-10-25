@@ -30,7 +30,7 @@
       "level": 12
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (12th level)",
+    "requirements": "Wyrdlens Adept 12",
     "type": {
       "value": "",
       "subtype": ""
@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!dbmGJcTgEiHCiFe4.P5jjumoEyiMC7zRd"
+      "folder": null
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -100,8 +99,7 @@
       "opHooks": {
         "travelEventBias": 1
       }
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

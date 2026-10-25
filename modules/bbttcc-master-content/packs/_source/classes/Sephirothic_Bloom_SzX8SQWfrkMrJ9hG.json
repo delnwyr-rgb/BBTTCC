@@ -11,18 +11,13 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>You coax better worlds to sprout in the cracks of the old.</em></p><p>Once per <strong>a Soma Break</strong>, when you lead or are a clear moral center of a <strong>non-lethal victory</strong> (surrender, rout, negotiated peace) in a hex marked by corruption, occupation, or high Darkness, you may trigger a Sephirothic Bloom.</p><ul><li>Reduce the relevant <strong>Darkness Track</strong> by <strong>1</strong> (local, regional, or campaign-scale as the GM deems appropriate).</li><li>Shift the affected Hex one step toward a <strong>beneficial Sephirah</strong> (GM chooses which, based on narrative: Tiferet, Chesed, etc.).</li></ul><p>This is the world briefly remembering it was supposed to be kind.</p>",
+      "value": "<p><em>You coax better worlds to sprout in the cracks of the old.</em></p><p>Once per <strong>Soma Break</strong>, when you lead or are a clear moral center of a <strong>non-lethal victory</strong> (surrender, rout, negotiated peace) in a hex marked by corruption, occupation, or high Darkness, you may trigger a Sephirothic Bloom.</p><ul><li>Reduce the relevant <strong>Darkness Track</strong> by <strong>1</strong> (local, regional, or campaign-scale as the GM deems appropriate).</li><li>Shift the affected Hex one step toward a <strong>beneficial Sephirah</strong> (GM chooses which, based on narrative: Tiferet, Chesed, etc.).</li></ul><p>This is the world briefly remembering it was supposed to be kind.</p>",
       "chat": ""
     },
     "activities": {},
     "uses": {
       "spent": 0,
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
+      "recovery": [],
       "max": "1"
     },
     "advancement": {},
@@ -47,8 +42,7 @@
     "bbttcc": {
       "subclassKey": "wyrdlens_refraction_mercy",
       "featureKey": "sephirothic_bloom"
-    },
-    "dnd5e": {}
+    }
   },
   "_stats": {
     "compendiumSource": null,

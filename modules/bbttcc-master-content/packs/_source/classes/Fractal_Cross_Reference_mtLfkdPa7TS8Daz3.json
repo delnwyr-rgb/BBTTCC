@@ -26,7 +26,7 @@
       "level": 7
     },
     "properties": [],
-    "requirements": "Wyrdlens Adept (7th level)",
+    "requirements": "Wyrdlens Adept 7",
     "type": {
       "value": "",
       "subtype": ""
@@ -76,8 +76,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!mtLfkdPa7TS8Daz3.2wYkqG2CjT4M1CBR"
+      "folder": null
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -87,7 +86,6 @@
         "fractalCrossReference": true
       }
     },
-    "dnd5e": {},
     "fourththing": {
       "vocabScrub": "2026-05-16"
     }
