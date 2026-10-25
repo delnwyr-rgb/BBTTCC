@@ -9,8 +9,10 @@
 //   2. Patches the eight Saying beats: type "cinematic" + cinematic{startSceneId, durationMs} (the Tamsin-dream
 //      pattern), audio = the matching VO cut from Dave's 10-10 take ("Opening Slides, Take 3"; stems without the
 //      music — Section D stays the wake handler's job), autoplay + broadcast to players, the player text mirror OFF
-//      (the words are on screen), and a single "…" choice chaining B1 → … → B7 → B8. B8 (Adam Kadmon) keeps no
-//      choices: its resolve is what fires the onboarding "Report for training" card + Section D.
+//      (the words are on screen), and a single "…" choice chaining B1 → … → B7 → B8. B8 (Adam Kadmon) ends on ONE
+//      terminal choice ("Drop into bodies", no next): its resolve is what fires the onboarding "Report for training"
+//      card + Section D, and the cinematic runner only WAITS for the GM's click when the beat has choices — with
+//      none, B8 resolved the instant it started and the theme + card landed on top of the take (live-caught 2026-10-25).
 //   3. Clears `sceneId` on A0-B1 (the cinematic runner must not also activate it).
 // Media (deployed by hand — outside the repo): art/bbttcc/GOTTGAIT/GOTTGAIT Scene files/opening_titles/<file>.mp4 + .mp3
 // Offline check: node modules/bbttcc-campaign/tools/sim-patch.mjs <this> <campaigns-export.json> --out patched.json
@@ -112,13 +114,13 @@
       cinematic: { enabled: true, startSceneId: sceneUuidFor[s.beat], durationMs: s.ms, nextSceneId: null },
       audio: { enabled: true, src: DIR + s.file + ".mp3", volume: 0.85, loop: false, autoplay: true, broadcastPlayers: true, playlistSoundUuid: "" },
       playerFacing: false, playerFacingDialog: false, dialogPlayerFacing: false,
-      choices: nextBeat ? [{ label: "…", next: nextBeat, description: "" }] : (Array.isArray(b.choices) ? b.choices : [])
+      choices: nextBeat ? [{ label: "…", next: nextBeat, description: "" }] : [{ label: "Drop into bodies", next: "", description: "" }]
     };
     const before = {};
     for (const k of Object.keys(want)) before[k] = b[k];
     if (same(before, want)) { report.push(`· ok (already) ${s.beat}`); return; }
     const diffs = Object.keys(want).filter(k => !same(b[k], want[k]));
-    report.push(`✎ ${s.beat}: ${diffs.join(", ")}` + (nextBeat ? ` → "…" → ${nextBeat}` : " (no chain; resolve = wake card + Section D)"));
+    report.push(`✎ ${s.beat}: ${diffs.join(", ")}` + (nextBeat ? ` → "…" → ${nextBeat}` : ' → "Drop into bodies" (terminal; resolve = wake card + Section D)'));
     Object.assign(b, want);
     changes++;
   });
