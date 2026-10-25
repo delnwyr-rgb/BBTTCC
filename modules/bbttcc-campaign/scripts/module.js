@@ -9,6 +9,7 @@ import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
 import "./stage-cues.js";   // STAGE CUES (2026-10-15): recorded before/after scene states, played by button or beat
+import "./play-once-tiles.js";   // PLAY-ONCE VIDEO TILES (2026-10-25): slides rewind to frame 0 on canvasReady, play once, freeze
 import { registerFacilitationSettings, facilitation, installFacilitationAPI, GMEXEC_CHOICE_PICK } from "./facilitation.js";   // FACILITATION MODES (2026-10-07): Tabletop / Projectionist / Autopilot / Manual
 import { applyStoryData, rebuildRegistry, validateStoryData, scaffoldStory, codeStory, slugKey } from "./story-model.js";   // Layer 2 story data (2026-09-21)
 import { deriveSituation, QUEST_MAP, QUEST_SCRIPTS, scriptOf, registerScripts, scriptView, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl, isAnchorable, placeOf, hexKey, rewardFor, AWARD_MARKS, QUEST_REWARDS } from "./story-model.js";
