@@ -811,8 +811,15 @@ function _bbttccRemoveFloatingButtons(){
     document.querySelector("#bbttcc-campaign-fallback")?.remove();
 
     // Any other stray Bad Eden fixed-position button shells (defensive)
+    // 🪤 NEVER an Application window: the Campaign Builder's own window element is
+    // `body > div#bbttcc-campaign-builder.app.window-app`, and this sweep (it runs on
+    // every canvasReady) was pulling it out of the DOM while the app still thought it
+    // was rendered — so the toolbar's Campaigns button went "dead" (open() found the
+    // ghost and bring-to-front'ed nothing) until a refresh. Live-caught 2026-10-25.
+    const isAppWindow = (el) => el.matches?.(".app, .window-app, .application, .dialog") || !!el.querySelector?.(":scope > .window-header");
     const stray = Array.from(document.querySelectorAll("body > div, body > section"))
       .filter(el => {
+        if (isAppWindow(el)) return false;
         const id = String(el.id || "");
         if (id.startsWith("bbttcc-overview") || id.startsWith("bbttcc-market") || id.startsWith("bbttcc-campaign")) return true;
         return false;
