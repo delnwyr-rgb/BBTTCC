@@ -10,7 +10,8 @@
 // words), and the existing "Progress Slide" choices left exactly as they are (1→2→…→10→Thatwards Ho).
 // Idempotent, GM only, DRY_RUN first, backs up `campaigns`. The old "Offices of Fates and Destinies - Slide NN"
 // scenes are left untouched (the beats simply no longer point at them).
-// Media (deployed by hand — outside the repo): art/bbttcc/GOTTGAIT/GOTTGAIT Scene files/opening_titles/a0_tsNN.mp4
+// Media (deployed by hand — outside the repo): art/bbttcc/GOTTGAIT/GOTTGAIT Scene files/opening_titles/a0_tsNN.mp4 (v2 timings)
+//        + art/bbttcc/GOTTGAIT/Tunes/Mal Voice Acting/teaching-slide-N.v2.wav
 
 (async () => {
   const DRY_RUN = true;
@@ -20,21 +21,24 @@
   let changes = 0;
 
   const DIR = "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/opening_titles/";
+  const VO_DIR = "art/bbttcc/GOTTGAIT/Tunes/Mal%20Voice%20Acting/";
   const W = 1920, H = 1080;
   const SCENE_PREFIX = "Offices — Teaching Slides";
   const OBSERVER = globalThis.CONST?.DOCUMENT_OWNERSHIP_LEVELS?.OBSERVER ?? 2;
-  // ms = VO length + 2 s tail (render_teaching_slides.py VO table)
+  // ms = VO length + 2 s tail (render_teaching_slides.py VO table). v2 = Dave's 2026-10-25 re-record
+  // (one take, cut + cleaned by tools/teaching-slides/cut_teaching_vo.py → teaching-slide-N.v2.wav); the beats' audio
+  // src is re-pointed at the v2 files (the v1 wavs stay on disk).
   const SEGS = [
-    { n: 1,  beat: "fates_and_destinies_1",  label: "Perfection",            ms: 51050 },
-    { n: 2,  beat: "fates_and_destinies_2",  label: "Form",                  ms: 36180 },
-    { n: 3,  beat: "fates_and_destinies_3",  label: "Projector and Lens",    ms: 51790 },
-    { n: 4,  beat: "fates_and_destinies_4",  label: "Bad Choices",           ms: 56990 },
-    { n: 5,  beat: "fates_and_destinies_5",  label: "Jagged Edges",          ms: 65910 },
-    { n: 6,  beat: "fates_and_destinies_6",  label: "He Alone Could Fix It", ms: 59960 },
-    { n: 7,  beat: "fates_and_destinies_7",  label: "Shot the Hostage",      ms: 55500 },
-    { n: 8,  beat: "fates_and_destinies_8",  label: "Hexes",                 ms: 45840 },
-    { n: 9,  beat: "fates_and_destinies_9",  label: "Still Fucking It Up",   ms: 54020 },
-    { n: 10, beat: "fates_and_destinies_10", label: "The Frontier",          ms: 53270 }
+    { n: 1,  beat: "fates_and_destinies_1",  label: "Perfection",            ms: 23700 },
+    { n: 2,  beat: "fates_and_destinies_2",  label: "Form",                  ms: 26600 },
+    { n: 3,  beat: "fates_and_destinies_3",  label: "Projector and Lens",    ms: 41700 },
+    { n: 4,  beat: "fates_and_destinies_4",  label: "Bad Choices",           ms: 43400 },
+    { n: 5,  beat: "fates_and_destinies_5",  label: "Jagged Edges",          ms: 27700 },
+    { n: 6,  beat: "fates_and_destinies_6",  label: "He Alone Could Fix It", ms: 37620 },
+    { n: 7,  beat: "fates_and_destinies_7",  label: "Shot the Hostage",      ms: 33600 },
+    { n: 8,  beat: "fates_and_destinies_8",  label: "Hexes",                 ms: 56620 },
+    { n: 9,  beat: "fates_and_destinies_9",  label: "Still Fucking It Up",   ms: 33550 },
+    { n: 10, beat: "fates_and_destinies_10", label: "The Frontier",          ms: 19200 }
   ];
 
   // ── 1. the scenes ─────────────────────────────────────────────────────────
@@ -107,7 +111,7 @@
       type: "cinematic",
       sceneId: null,
       cinematic: { enabled: true, startSceneId: sceneUuidFor[s.beat], durationMs: s.ms, nextSceneId: null },
-      audio: { ...a0, enabled: true, volume: Number(a0.volume ?? 0.85), loop: false, autoplay: true, broadcastPlayers: true },
+      audio: { ...a0, src: `${VO_DIR}teaching-slide-${s.n}.v2.wav`, enabled: true, volume: Number(a0.volume ?? 0.85), loop: false, autoplay: true, broadcastPlayers: true },
       playerFacing: false, playerFacingDialog: false, dialogPlayerFacing: false
     };
     if (!String(want.audio.src || "").trim()) { report.push(`⚠ ${s.beat}: no audio src on the beat — left audio alone`); delete want.audio; }

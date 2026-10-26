@@ -6,7 +6,7 @@ point → line → cube → the Tree of Life as projector (Tiferet = lens) → t
 jagged edges each throwing their own picture → the bearded caretaker glues a crooked cube → it shoots the
 hostage → the pieces settle into flat-top hexes → neighbours heal a wounded hex → the frontier, sparks still out there.
 
-Each slide is timed to its VO (teaching-slide-N.wav on ember) + a 2 s tail; the last frame is the hold
+Each slide is timed to its VO (teaching-slide-N.v2.wav) + a 2 s tail; the last frame is the hold
 (the play-once tile freezes on it). Output: 1920×1080 h264 mp4, silent, one per slide.
 
 Usage:
@@ -18,7 +18,9 @@ from multiprocessing import Pool
 from PIL import Image, ImageDraw
 
 # ── timing ───────────────────────────────────────────────────────────────────
-VO = {1: 49.05, 2: 34.18, 3: 49.79, 4: 54.99, 5: 63.91, 6: 57.96, 7: 53.50, 8: 43.84, 9: 52.02, 10: 51.27}
+# v2 (2026-10-25 re-record, Dave's single-pass take cut + cleaned by tools/teaching-slides/cut_teaching_vo.py → teaching-slide-N.v2.wav).
+# v1 (the first per-slide wavs) was {1: 49.05, 2: 34.18, 3: 49.79, 4: 54.99, 5: 63.91, 6: 57.96, 7: 53.50, 8: 43.84, 9: 52.02, 10: 51.27}.
+VO = {1: 21.70, 2: 24.60, 3: 39.70, 4: 41.40, 5: 25.70, 6: 35.62, 7: 31.60, 8: 54.62, 9: 31.55, 10: 17.20}
 TAIL = 2.0
 FPS = 30
 W, H = 1920, 1080
