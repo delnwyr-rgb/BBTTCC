@@ -299,6 +299,7 @@ for (const b of beats) {
   const chain = b.storyChain || b.inject?.storyChain;
   if (chain) root(b.id, `director:${chain}`);                    // _storyBeatsFor: storyChain beats ONLY
   if (tagsOf(b).includes("inject.travel_threshold")) root(b.id, "injector");   // _matchesTravelThreshold
+  if (b.pinLeg && typeof b.pinLeg === "object") root(b.id, "pinned-leg");      // hex-travel maybeInject: pinned beats win their leg, no tag needed
   if (s(b.speakerActorId) && labeledChoices(b).length && b.dialogueOffer !== false) root(b.id, "dialogue");
   if (s(b.targetHexUuid) || tagsOf(b).some(t => /^discovery$|onenter|on-enter|arrival/i.test(t))) root(b.id, "hex-arrival");
   if (b.questRole === "start") root(b.id, "quest-start");        // acceptance prompt / visualizer fresh route
