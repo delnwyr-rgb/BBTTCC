@@ -376,6 +376,9 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
       get rig() { return ns?.resolve?.rig?.(this.faction) || null; },
       scene: (key) => ns?.resolve?.scene?.(key) || null,
       speak: _speak,
+      // The one slow screen line per section (Dave 2026-10-25); everything else is chat-only.
+      handoff: (line, o) => { const opts = { ...(o || {}) }; if (opts.audience == null) opts.audience = _defaultAudience();
+        const h = _ns()?.handoff; return typeof h === "function" ? h(line, opts) : _speak(line, opts); },
       // Riffs whisper to the trainee + GMs like the scripted lines (2026-10-25).
       riff: (a, o) => (ns?.riff ? ns.riff(a, { audience: `player:${user.id}`, ...(o || {}) }) : Promise.resolve(null)),
       prompt,

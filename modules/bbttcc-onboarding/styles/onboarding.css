@@ -260,6 +260,14 @@
 }
 
 /* Collapsed: just the header chip. */
+#bbttcc-operator-screen .ob-scr-foot {
+  padding: 0.15rem 0.5rem 0.3rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.02em;
+  opacity: 0.55;
+  border-top: 1px solid rgba(127, 214, 255, 0.15);
+}
+#bbttcc-operator-screen.ob-scr-min .ob-scr-foot,
 #bbttcc-operator-screen.ob-scr-min .ob-scr-line,
 #bbttcc-operator-screen.ob-scr-min .ob-scr-hist { display: none; }
 #bbttcc-operator-screen.ob-scr-min { width: 150px; }

@@ -116,8 +116,10 @@ function _registerVoice() {
  * @param {"all"|"self"|string[]} [opts.audience] whisper routing — default = this seat + GMs
  *        (or everyone when the world setting operatorAudience is "all")
  * @param {string} [opts.tag="OPERATOR"]
+ * @param {boolean} [opts.screen=false] also type it on the Operator screen (handoff lines only —
+ *        Dave 2026-10-25: the screen spoke over every walkthrough and players felt swamped)
  */
-async function speak(line, { audience = null, tag = "OPERATOR" } = {}) {
+async function speak(line, { audience = null, tag = "OPERATOR", screen = false } = {}) {
   if (audience == null) audience = _defaultSpeakAudience();
   const safe = foundry.utils.escapeHTML(String(line ?? ""));
   const html =
@@ -125,11 +127,26 @@ async function speak(line, { audience = null, tag = "OPERATOR" } = {}) {
       `<span class="ob-op-tag">◇ ${foundry.utils.escapeHTML(tag)}</span>` +
       `<span class="ob-op-line">${safe}</span>` +
     `</div>`;
-  const data = { content: html, flags: { [MODULE_ID]: { operatorLine: true } } };
+  const data = { content: html, flags: { [MODULE_ID]: { operatorLine: true, screen: !!screen } } };
   if (audience === "self") data.whisper = [game.user.id];
   else if (Array.isArray(audience)) data.whisper = audience;
   try { await ChatMessage.create(data); }
   catch (e) { console.warn(TAG, "speak failed", e); }
+}
+
+/**
+ * The HANDOFF line — one per instructional section (Dave, 2026-10-25). Types slowly on the
+ * Operator screen on THIS seat and waits until it has fully landed (plus a settle) before
+ * resolving, so the beat's next window opens after the line is read, not over it. Also posted
+ * to chat like every line. Everything else the Operator says is chat-only.
+ */
+async function handoff(line, opts = {}) {
+  const text = String(line ?? "").trim();
+  if (!text) return;
+  const typed = screenPush(text);
+  await speak(text, { ...opts, screen: true });
+  try { await typed; } catch (_) {}
+  await new Promise(r => setTimeout(r, HANDOFF_SETTLE_MS));
 }
 
 /**
@@ -158,10 +175,17 @@ async function riff(args = {}, { mode = "snark", lengthHint = 26, audience = nul
 const SCREEN_ID  = "bbttcc-operator-screen";
 const POS_KEY    = "bbttcc-onboarding.screenPos";
 const HISTORY_MAX = 8;
+// Dave (2026-10-25): a third of the old speed — a line lands in ~7.5s, not 2.5s —
+// and lines QUEUE instead of interrupting each other.
+const TYPE_MS           = 7500;
+const HANDOFF_SETTLE_MS = 1500;
+const QUEUE_GAP_MS      = 900;
 
 let _scr = null;          // { root, line, hist, led } once built
 let _typeTimer = null;    // active typewriter interval
 let _history = [];        // most-recent-first
+let _queue = [];          // [{ t, resolve }] lines waiting for the screen
+let _typing = false;
 
 function _loadPos() {
   try { return JSON.parse(localStorage.getItem(POS_KEY) || "null"); } catch (_) { return null; }
@@ -185,7 +209,8 @@ function _buildScreen() {
       `<span class="ob-scr-btn" data-act="close" title="Hide (reappears on the next line)">×</span>` +
     `</div>` +
     `<div class="ob-scr-hist"></div>` +
-    `<div class="ob-scr-line"></div>`;
+    `<div class="ob-scr-line"></div>` +
+    `<div class="ob-scr-foot">no rush — every line is kept in chat · ≡ shows the last few</div>`;
   document.body.appendChild(root);
 
   const pos = _loadPos();
@@ -251,10 +276,22 @@ function _renderHistory() {
     .join("");
 }
 
-/** Push a line onto the screen with a typewriter reveal. */
+/** Queue a line for the screen; resolves when THAT line has finished typing. */
 function screenPush(text) {
-  const t = String(text ?? "").trim();
-  if (!t) return;
+  return new Promise((resolve) => {
+    const t = String(text ?? "").trim();
+    if (!t) return resolve();
+    _queue.push({ t, resolve });
+    _pump();
+  });
+}
+function _pump() {
+  if (_typing || !_queue.length) return;
+  const { t, resolve } = _queue.shift();
+  _typing = true;
+  _typeLine(t, () => { _typing = false; resolve(); setTimeout(_pump, QUEUE_GAP_MS); });
+}
+function _typeLine(t, onDone) {
   const s = _buildScreen();
   _history.unshift(t);
   if (_history.length > HISTORY_MAX + 1) _history.length = HISTORY_MAX + 1;
@@ -267,26 +304,28 @@ function screenPush(text) {
   s.led.classList.add("ob-scr-led-live");
   s.line.textContent = "";
   s.line.classList.add("ob-scr-typing");
-  // Whole line lands in ~2.5s regardless of length; short lines type slower.
-  const step = Math.max(6, Math.min(18, Math.round(2500 / Math.max(1, t.length))));
+  // Whole line lands in ~TYPE_MS regardless of length; short lines type slower.
+  const step = Math.max(18, Math.min(60, Math.round(TYPE_MS / Math.max(1, t.length))));
   let i = 0;
   _typeTimer = setInterval(() => {
-    i += 1 + (t.length > 160 ? 1 : 0);
+    i += 1;
     s.line.textContent = t.slice(0, i);
     if (i >= t.length) {
       clearInterval(_typeTimer); _typeTimer = null;
       s.line.textContent = t;
       s.line.classList.remove("ob-scr-typing");
       s.led.classList.remove("ob-scr-led-live");
+      try { onDone?.(); } catch (_) {}
     }
   }, step);
 }
 
-/** Pull the Operator line out of a chat message this client can see, or null. */
+/** Pull a HANDOFF line out of a chat message this client can see, or null.
+ *  Only screen-flagged lines reach the screen (plain lines and Mal riffs are chat-only),
+ *  and the seat that spoke it already typed it locally via handoff(). */
 function _msgOperatorText(msg) {
-  const flagged = !!(msg?.flags?.[MODULE_ID]?.operatorLine);
-  const alias = msg?.speaker?.alias ?? "";
-  if (!flagged && alias !== "◇ OPERATOR") return null;
+  if (msg?.flags?.[MODULE_ID]?.screen !== true) return null;
+  if (((msg?.author ?? msg?.user)?.id) === game.user?.id) return null;
   if (msg?.visible === false) return null;   // whisper not addressed to us
   const html = String(msg?.content ?? "");
   try {
@@ -301,8 +340,8 @@ function _msgOperatorText(msg) {
 Hooks.once("ready", () => {
   _registerVoice();
 
-  // Mirror every visible Operator chat line (scripted speak() AND Mal riffs —
-  // both broadcast as ChatMessages, so one hook covers every client).
+  // Mirror HANDOFF lines spoken on other seats (the GM relay seat watches the
+  // students' handoffs land); plain lines and Mal riffs stay in chat.
   Hooks.on("createChatMessage", (msg) => {
     try {
       const text = _msgOperatorText(msg);
@@ -313,13 +352,14 @@ Hooks.once("ready", () => {
   const ns = globalThis.game?.bbttcc?.onboarding;
   if (ns) {
     ns.speak = speak;
+    ns.handoff = handoff;
     ns.riff = riff;
     ns.operatorAvailable = _operatorAvailable;
     ns.screen = {
       push: screenPush,
       show: () => { _buildScreen().root.classList.remove("ob-scr-hidden", "ob-scr-min"); },
       hide: () => { _scr?.root?.classList?.add("ob-scr-hidden"); },
-      clear: () => { _history = []; if (_scr) { _scr.line.textContent = ""; _renderHistory(); } }
+      clear: () => { _history = []; _queue = []; if (_scr) { _scr.line.textContent = ""; _renderHistory(); } }
     };
   }
 });

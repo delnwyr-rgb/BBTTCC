@@ -150,8 +150,7 @@ const incarnation = {
   scope: "shared",
 
   enter: async (ctx) => {
-    await ctx.speak("Connection established. You were The One — a perfect run, god-mode earned, a story told true enough to become load-bearing in the weave of things.");
-    await ctx.speak("So we spun you back in to fix what broke. The catch— *bzzt* —you'll be doing it from inside a homemade Foundry video game. Mine. Try not to touch the walls.");
+    await ctx.handoff("Connection established, One. You beat this world once; we spun you back in to fix it — from inside my homemade game. Try not to touch the walls.");
 
     const scene = await _requireScene(ctx, "incarnation", "Incarnation");
     if (scene) await _enterScene(scene, "Incarnate", ctx.lane);
@@ -193,8 +192,7 @@ const meatsuit = {
 
   enter: async (ctx) => {
     ctx._spawned = [];
-    await ctx.speak("Body's warm. Let's make sure it works before something tries to end it. Open your sheet — that's YOUR interface now, not a tutorial mock-up.");
-    await _pause(900);
+    await ctx.handoff("Body's warm. Open your sheet — it's yours, not a mock-up — and click through what it can do. Nothing out here counts.");
 
     const scene = await _requireScene(ctx, "meatsuit-range", "Proving Range");
     if (scene) { await _enterScene(scene, "Proving Range", ctx.lane); await _pause(800); } // let the dive settle before spawning
@@ -300,8 +298,7 @@ const driving = {
     ctx._spawned = (ctx._spawned || []).filter(e => e?._carry);   // meatsuit's standing Steward token, reaped at this exit
     ctx._rig = null;
     ctx._obstacles = [];
-    await ctx.speak("Every Steward gets a rig. Yours is parked trackside — let's see if you can move it without folding it into a wall.");
-    await _pause(900);
+    await ctx.handoff("Every Steward gets a rig; yours is parked trackside. Board it, steer it, and turn the four wrecks on the track back into scrap.");
 
     let rig = ctx.rig; // resolves the faction's real rig
     if (!rig && ctx.faction) {
@@ -455,8 +452,7 @@ const stewardshipClaim = {
   enter: async (ctx) => {
     ctx._spawned = [];
     ctx._sandboxHex = null;
-    await ctx.speak("Now the real work — stewardship. A hex is yours to shape, but first you have to CLAIM it. This one's a sandbox; nothing you do here touches the living world.");
-    await _pause(900);
+    await ctx.handoff("Now the real work: stewardship. A hex is yours to shape once you CLAIM it. This one's a sandbox — nothing here touches the living world.");
 
     const scene = await _requireScene(ctx, "sandbox-hex", "Sandbox Hold");
     if (scene) { await _enterScene(scene, "Sandbox Hold", ctx.lane); await _pause(800); }
@@ -555,12 +551,9 @@ const stewardshipTurn = {
       const sum = Object.values(st?.before || {}).reduce((n, v) => n + (Number(v) || 0), 0);
       if (sum > 0) total = op?.fmt ? op.fmt(sum) : `${Math.round(sum)} marks`;
     } catch (_) {}
-    await ctx.speak(total
-      ? `Your Domain has a treasury now — ${total}, sorted into pools. Every order it gives is paid from there; the land refills it each Turn.`
-      : "Your Domain has a treasury now, sorted into pools. Every order it gives is paid from there; the land refills it each Turn.");
-    await _pause(1800);
-    await ctx.speak("A Turn is the Domain's heartbeat: you plan, the GM runs it at Day's End, the land answers. Let's plan one — something small, on the hold you just claimed.");
-    await _pause(1200);
+    await ctx.handoff(total
+      ? `Your Domain has a treasury now — ${total}. A Turn is its heartbeat: you plan, the GM runs it, the land answers. Let's plan one small order on the hold you just claimed.`
+      : "Your Domain has a treasury now. A Turn is its heartbeat: you plan, the GM runs it, the land answers. Let's plan one small order on the hold you just claimed.");
   },
 
   detect: (ctx, done) => {
@@ -735,8 +728,7 @@ const outfitting = {
   scope: "personal",
 
   enter: async (ctx) => {
-    await ctx.speak("Before you cross into hostile ground, two problems: you're broke and you're under-dressed. Fixing both— *bzzt*");
-    await _pause(700);
+    await ctx.handoff("Hostile ground ahead, and you're broke and under-dressed. Fixing both: a stipend, then the Long Market.");
 
     // Training stipend — a fresh faction's banks are empty, and the Market, Travel
     // and raid maneuvers ahead all bill real OP. 130 marks/pool = the cost-band
@@ -1063,8 +1055,7 @@ const surgeBeat = {
     // shows — the raw resources.surge.max field read 10 (trailer shoot 2026-10-09).
     const max = Number(globalThis.game?.fourththing?.surge?.cap?.(ctx.steward)) || Number(sys?.resources?.surge?.max) || 10;
 
-    await ctx.speak("Next: the currency nobody explains until it's too late. *bzzt* Surge.");
-    await _pause(700);
+    await ctx.handoff("Last lesson: Surge — the currency nobody explains until it's too late. Conflict tab, ✦ Surge panel. Learn where the shop is.");
 
     await ctx.deck({
       title: "◇ OPERATOR — Surge",
@@ -3134,9 +3125,7 @@ const graduation = {
   enter: async (ctx) => {
     if (_alphaWorld()) {
       // ALPHA CUT ruling 23: the thirty-minute induction ends here — the road teaches the rest.
-      await ctx.speak("A body that works, a rig that moves, a hex with your banner on it, a Turn you've felt tick, gear on your back, people you know how to hire, Surge in the bank. That's a Steward on day one.");
-      await _pause(1000);
-      await ctx.speak("Training's done, One. No more sandbox. Your first fight, your first deal and your first con will come to you on the road — the story opens the table, you decide whether to sit. From here it's the real Bad Eden — your hold, your rig, your Domain, live in the weave. Go fix what broke. *bzzt*");
+      await ctx.handoff("Training's done, One. Body, rig, hex, Turn, gear, Surge — that's a Steward on day one. The road brings your first fight, deal and con; the story opens the table, you decide whether to sit. Go fix what broke.");
       return;
     }
     await ctx.speak("Three consoles, four anchors, one circle, and something that tried to unmake the whole board and had to sit down at a table instead. Battle, heist, parley — you can take ground any way the moment demands. That's a Steward.");

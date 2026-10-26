@@ -22,23 +22,21 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 **`incarnation.05`** Poured, cooled, and breathing: ⟨name⟩. That's you now — the sheet is the mirror. Continuing incarnation— *bzzt*
 
-**`incarnation.06`** Connection established. You were The One — a perfect run, god-mode earned, a story told true enough to become load-bearing in the weave of things.
+**`incarnation.06`** Connection established, One. You beat this world once; we spun you back in to fix it — from inside my homemade game. Try not to touch the walls.
 
-**`incarnation.07`** So we spun you back in to fix what broke. The catch— *bzzt* —you'll be doing it from inside a homemade Foundry video game. Mine. Try not to touch the walls.
+**`incarnation.07`** You're in, ⟨steward name⟩. Wiggle the fingers, check the seams. Next module loading— *bzzt*
 
-**`incarnation.08`** You're in, ⟨steward name⟩. Wiggle the fingers, check the seams. Next module loading— *bzzt*
+**`incarnation.08`** ⟨steward name⟩, under the ⟨Domain name⟩ banner. Rostered. Let's see what the two of you can break.
 
-**`incarnation.09`** ⟨steward name⟩, under the ⟨Domain name⟩ banner. Rostered. Let's see what the two of you can break.
+**`incarnation.09`** A body needs a banner, One. Before you drive, claim, or fight, the world wants to know: in whose name?
 
-**`incarnation.10`** A body needs a banner, One. Before you drive, claim, or fight, the world wants to know: in whose name?
+**`incarnation.10`** No banner, no problem — for now. Some beats ahead need one; I'll ask again when the world does.
 
-**`incarnation.11`** No banner, no problem — for now. Some beats ahead need one; I'll ask again when the world does.
-
-**`incarnation.12`** ⟨Domain name⟩ — raised, rostered, and yours. Treasury seeded, reputation unwritten. Best possible start— *bzzt* —nowhere to go but everywhere.
+**`incarnation.11`** ⟨Domain name⟩ — raised, rostered, and yours. Treasury seeded, reputation unwritten. Best possible start— *bzzt* —nowhere to go but everywhere.
 
 ### Test the Meatsuit `meatsuit`
 
-**`meatsuit.01`** Body's warm. Let's make sure it works before something tries to end it. Open your sheet — that's YOUR interface now, not a tutorial mock-up.
+**`meatsuit.01`** Body's warm. Open your sheet — it's yours, not a mock-up — and click through what it can do. Nothing out here counts.
 
 **`meatsuit.02`** Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. Nothing out here counts: spend freely, swing at the straw fellow if the mood takes you. When you've seen enough, hit my button and we roll on.
 
@@ -48,7 +46,7 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 ### Test the Driving `driving`
 
-**`driving.01`** Every Steward gets a rig. Yours is parked trackside — let's see if you can move it without folding it into a wall.
+**`driving.01`** Every Steward gets a rig; yours is parked trackside. Board it, steer it, and turn the four wrecks on the track back into scrap.
 
 **`driving.02`** No rig on file— *bzzt* —minted you a Hexmobile on the house. Don't get attached.
 
@@ -66,7 +64,7 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 ### Stewardship — Claim `stewardship_claim`
 
-**`stewardship_claim.01`** Now the real work — stewardship. A hex is yours to shape, but first you have to CLAIM it. This one's a sandbox; nothing you do here touches the living world.
+**`stewardship_claim.01`** Now the real work: stewardship. A hex is yours to shape once you CLAIM it. This one's a sandbox — nothing here touches the living world.
 
 **`stewardship_claim.02`** See the hex below — unclaimed, neutral ground. Make it yours. Your steward's writ handles the filing; you just give the word.
 
@@ -76,27 +74,25 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 ### Stewardship — OP & Turn `stewardship_turn`
 
-**`stewardship_turn.01`** Your Domain has a treasury now — ⟨total⟩, sorted into pools. Every order it gives is paid from there; the land refills it each Turn.  /  Your Domain has a treasury now, sorted into pools. Every order it gives is paid from there; the land refills it each Turn.
+**`stewardship_turn.01`** Your Domain has a treasury now — ⟨total⟩. A Turn is its heartbeat: you plan, the GM runs it, the land answers. Let's plan one small order on the hold you just claimed.  /  Your Domain has a treasury now. A Turn is its heartbeat: you plan, the GM runs it, the land answers. Let's plan one small order on the hold you just claimed.
 
-**`stewardship_turn.02`** A Turn is the Domain's heartbeat: you plan, the GM runs it at Day's End, the land answers. Let's plan one — something small, on the hold you just claimed.
+**`stewardship_turn.02`** The planner's shelf is bare for this hold— *bzzt* —skipping the order and running the heartbeat.
 
-**`stewardship_turn.03`** The planner's shelf is bare for this hold— *bzzt* —skipping the order and running the heartbeat.
+**`stewardship_turn.03`** That's the whole shelf. Pick Tutelary Hold as the target and plan one order there — or come back and take one of mine.
 
-**`stewardship_turn.04`** That's the whole shelf. Pick Tutelary Hold as the target and plan one order there — or come back and take one of mine.
+**`stewardship_turn.04`** Nothing filed over there — I'll take the first of mine, then.
 
-**`stewardship_turn.05`** Nothing filed over there — I'll take the first of mine, then.
+**`stewardship_turn.05`** Filed: ⟨chosen.label⟩ on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.
 
-**`stewardship_turn.06`** Filed: ⟨chosen.label⟩ on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.
+**`stewardship_turn.06`** The planner balked at that one— *bzzt* —no matter. The shape's the lesson: pick an order, it waits for the Turn.
 
-**`stewardship_turn.07`** The planner balked at that one— *bzzt* —no matter. The shape's the lesson: pick an order, it waits for the Turn.
+**`stewardship_turn.07`** That's a Turn. In the living world you plan at the table, the GM runs it at Day's End, and the land answers in the morning.
 
-**`stewardship_turn.08`** That's a Turn. In the living world you plan at the table, the GM runs it at Day's End, and the land answers in the morning.
-
-**`stewardship_turn.09`** Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.
+**`stewardship_turn.08`** Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.
 
 ### Outfitting `outfitting`
 
-**`outfitting.01`** Before you cross into hostile ground, two problems: you're broke and you're under-dressed. Fixing both— *bzzt*
+**`outfitting.01`** Hostile ground ahead, and you're broke and under-dressed. Fixing both: a stipend, then the Long Market.
 
 **`outfitting.02`** A training stipend just topped up ⟨Domain name⟩ — up to what your tier can hold, not a mark more (Economy +⟨econMarks⟩ marks). Check that banner's sheet, not an older one.
 
@@ -110,7 +106,7 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 ### Surge `surge`
 
-**`surge.01`** Next: the currency nobody explains until it's too late. *bzzt* Surge.
+**`surge.01`** Last lesson: Surge — the currency nobody explains until it's too late. Conflict tab, ✦ Surge panel. Learn where the shop is.
 
 **`surge.02`** Conflict tab, ✦ Surge panel — you're holding ⟨cur⟩. Open Spend and read what's on the menu. You don't have to buy anything; just learn where the shop is.  /  Conflict tab, ✦ Surge panel. You're empty right now — the bank fills the moment your dice start exploding. Open Spend anyway and read the menu so you know what you're saving for.
 
@@ -118,15 +114,13 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 ### Graduation `graduation`
 
-**`graduation.01`** A body that works, a rig that moves, a hex with your banner on it, a Turn you've felt tick, gear on your back, people you know how to hire, Surge in the bank. That's a Steward on day one.
+**`graduation.01`** Training's done, One. Body, rig, hex, Turn, gear, Surge — that's a Steward on day one. The road brings your first fight, deal and con; the story opens the table, you decide whether to sit. Go fix what broke.
 
-**`graduation.02`** Training's done, One. No more sandbox. Your first fight, your first deal and your first con will come to you on the road — the story opens the table, you decide whether to sit. From here it's the real Bad Eden — your hold, your rig, your Domain, live in the weave. Go fix what broke. *bzzt*
+**`graduation.02`** Three consoles, four anchors, one circle, and something that tried to unmake the whole board and had to sit down at a table instead. Battle, heist, parley — you can take ground any way the moment demands. That's a Steward.
 
-**`graduation.03`** Three consoles, four anchors, one circle, and something that tried to unmake the whole board and had to sit down at a table instead. Battle, heist, parley — you can take ground any way the moment demands. That's a Steward.
+**`graduation.03`** Training's done, One. No more sandbox, no more straw adversaries. From here it's the real Bad Eden — your hold, your rig, your Domain, live in the weave. Go fix what broke. *bzzt*
 
-**`graduation.04`** Training's done, One. No more sandbox, no more straw adversaries. From here it's the real Bad Eden — your hold, your rig, your Domain, live in the weave. Go fix what broke. *bzzt*
-
-**`graduation.05`** Connection handed off. You're live. Good luck, One — you'll need it. *bzzt* —Operator out.
+**`graduation.04`** Connection handed off. You're live. Good luck, One — you'll need it. *bzzt* —Operator out.
 
 ---
 

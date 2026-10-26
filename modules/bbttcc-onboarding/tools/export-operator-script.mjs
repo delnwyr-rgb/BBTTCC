@@ -88,7 +88,7 @@ function firstArgText(src, open) {
 /* ── beats ─────────────────────────────────────────────────────────── */
 function speakLines(file, { idRx = /^  id: "([a-z_]+)"/m } = {}) {
   const src = S(file); const lines = [];
-  const rx = /\b(?:ctx\.)?_?speak\(/g; let m;
+  const rx = /\b(?:ctx\.)?_?(?:speak|handoff)\(/g; let m;
   while ((m = rx.exec(src))) {
     const open = m.index + m[0].length - 1;
     const text = firstArgText(src, open);
