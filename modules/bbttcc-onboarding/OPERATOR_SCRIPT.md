@@ -78,17 +78,13 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 **`stewardship_turn.02`** The planner's shelf is bare for this hold— *bzzt* —skipping the order and running the heartbeat.
 
-**`stewardship_turn.03`** That's the whole shelf. Pick Tutelary Hold as the target and plan one order there — or come back and take one of mine.
+**`stewardship_turn.03`** Filed: ⟨chosen.label⟩ on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.
 
-**`stewardship_turn.04`** Nothing filed over there — I'll take the first of mine, then.
+**`stewardship_turn.04`** The planner balked at that one— *bzzt* —no matter. The shape's the lesson: pick an order, it waits for the Turn.
 
-**`stewardship_turn.05`** Filed: ⟨chosen.label⟩ on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.
+**`stewardship_turn.05`** That's a Turn. In the living world you plan at the table, the GM runs it at Day's End, and the land answers in the morning.
 
-**`stewardship_turn.06`** The planner balked at that one— *bzzt* —no matter. The shape's the lesson: pick an order, it waits for the Turn.
-
-**`stewardship_turn.07`** That's a Turn. In the living world you plan at the table, the GM runs it at Day's End, and the land answers in the morning.
-
-**`stewardship_turn.08`** Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.
+**`stewardship_turn.06`** Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.
 
 ### Outfitting `outfitting`
 

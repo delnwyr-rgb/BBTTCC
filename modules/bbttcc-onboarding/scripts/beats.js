@@ -523,6 +523,24 @@ async function _showTheHold(ctx) {
   try { canvas.ping(c, { style: "pulse" }); } catch (_) { try { canvas.ping(c); } catch (_e) {} }
 }
 async function _fx(key, ctx, opts) { try { return await globalThis.game?.bbttcc?.api?.fx?.playKey?.(key, ctx, opts); } catch (_) { return null; } }
+/** Dave 2026-10-25 ("close out all player owned tabs, leaving only the Tour window — otherwise they miss the kewl
+ *  graphics on the turn advance"): the Turn's banners and hex pings play on the MAP; a Steward sheet left open from
+ *  the claim beat covers them. Closes every app window on this seat except the Operator's own prompts and the
+ *  onboarding consoles, then gives the close animation a beat. */
+async function _clearTheStage() {
+  const keep = (a) => {
+    const id = String(a?.id ?? a?.options?.id ?? "");
+    const cls = [].concat(a?.options?.classes ?? []).join(" ");
+    const t = (typeof a?.title === "string" ? a.title : "") || String(a?.options?.window?.title ?? a?.options?.title ?? "");
+    return id.startsWith("bbttcc-ob-prompt-") || /bbttcc-onboarding|bbttcc-ob-/.test(id + " " + cls) || /^(Onboarding —|◇ OPERATOR)/.test(t);
+  };
+  const closing = [];
+  try { for (const a of Array.from(foundry?.applications?.instances?.values?.() ?? [])) { if (!keep(a)) { try { closing.push(a.close()); } catch (_) {} } } } catch (_) {}
+  try { for (const a of Object.values(ui.windows ?? {})) { if (!keep(a)) { try { closing.push(a.close()); } catch (_) {} } } } catch (_) {}
+  if (!closing.length) return;
+  try { await Promise.race([Promise.allSettled(closing), new Promise(r => setTimeout(r, 1200))]); } catch (_) {}
+  await _pause(250);
+}
 async function _hexIntegration(hexUuid) {
   try {
     const t = await fromUuid(hexUuid); const doc = t?.document ?? t;
@@ -591,49 +609,32 @@ const stewardshipTurn = {
       if (!options.length) {
         await ctx.speak("The planner's shelf is bare for this hold— *bzzt* —skipping the order and running the heartbeat.");
       } else {
+        // Dave 2026-10-25: no "Show me the full planner" door — Tutelary Hold is a sandbox hex the real planner can't
+        // target, and three choices is the whole lesson. The sheets close first so the order's flourish lands on the map.
+        await _clearTheStage();
         const content =
-          `<p><b>Give Tutelary Hold one order.</b> Three to choose from; the full planner holds dozens — this is the shape of it.</p><ul>` +
+          `<p><b>Give Tutelary Hold one order.</b> Three to choose from — this is the shape of it.</p><ul>` +
           options.map(o => `<li><b>${_escH(o.label)}</b> <span class="bbttcc-muted">(${_escH(o.catalogLabel)}${o.price ? ` · ${_escH(o.price)}` : ""})</span><br/><i>${_escH(o.why)}</i></li>`).join("") +
           `</ul>`;
-        let pick = await ctx.choose({
+        const pick = await ctx.choose({
           title: "◇ OPERATOR — Plan the Turn", content,
-          options: [...options.map(o => ({ action: o.key, label: o.label })), { action: "full", label: "Show me the full planner" }],
+          options: options.map(o => ({ action: o.key, label: o.label })),
           fallback: options[0].key
         });
         const before = (ctx.faction.getFlag("bbttcc-factions", "warLogs") || []).length;
-        let chosen = null, plannedByHand = null;
-        if (pick === "full") {
-          // Dave 2026-10-19: the door opens the planner and lets them PLAN THERE — it never auto-files one of mine.
-          try { raid.openActivityPlanner?.({ attackerId: fid }); } catch (_) {}
-          await ctx.speak("That's the whole shelf. Pick Tutelary Hold as the target and plan one order there — or come back and take one of mine.");
-          const again = await ctx.choose({
-            title: "◇ OPERATOR — Plan the Turn", content: `<p>Planned one in the full planner? Say so. Otherwise take one of these.</p>`,
-            options: [{ action: "planned", label: "I planned one in the planner" }, ...options.map(o => ({ action: o.key, label: o.label }))],
-            fallback: "planned"
-          });
-          const logsNow = ctx.faction.getFlag("bbttcc-factions", "warLogs") || [];
-          plannedByHand = logsNow.slice(before).reverse().find(e => e?.type === "planned") || null;
-          if (again !== "planned" || !plannedByHand) { chosen = options.find(o => o.key === again) || null; plannedByHand = null; }
-          if (!chosen && !plannedByHand) { chosen = options[0]; await ctx.speak("Nothing filed over there — I'll take the first of mine, then."); }
-        } else chosen = options.find(o => o.key === pick) || options[0];
+        const chosen = options.find(o => o.key === pick) || options[0];
         try {
-          if (!plannedByHand) await raid.planActivity({ attackerId: fid, targetUuid: hexUuid, activityKey: chosen.key, targetType: "hex", note: "Tutorial order — the Operator files it and clears it." });
+          await raid.planActivity({ attackerId: fid, targetUuid: hexUuid, activityKey: chosen.key, targetType: "hex", note: "Tutorial order — the Operator files it and clears it." });
           const logs = ctx.faction.getFlag("bbttcc-factions", "warLogs") || [];
-          const mine = plannedByHand || logs.slice(before).reverse().find(e => e?.type === "planned") || null;
-          if (plannedByHand) {
-            const k = String(mine.activityKey || mine.activity || mine.key || "");
-            const def = (raid.EFFECTS || {})[k];
-            chosen = { key: k, label: def?.label || String(mine.summary || k).replace(/^.*planned\s+/i, "").split(" on ")[0] || k, catalogLabel: def?.label || k,
-                       price: Object.entries(def?.cost || {}).filter(([, n]) => Number(n) > 0).map(([p, n]) => `${p} ${Math.round(Number(n))}`).join(" · ") };
-          }
-          ctx._tutorialPlan = mine?.ts ? { ts: mine.ts } : null;
-          try { const sh = ctx.steward?.sheet; if (sh) { sh.tabGroups ??= {}; sh.tabGroups.primary = "domain"; await sh.render(true, { focus: true }); sh._applyActiveTab?.(); } } catch (_) {}
-          ctx._tutorialPlan = Object.assign(ctx._tutorialPlan || {}, { key: chosen.key, label: chosen.label, catalogLabel: chosen.catalogLabel, price: chosen.price });
-          // The choice lands with a flourish: the order's own effect family on the banner, and the hold pinged on the map.
+          const mine = logs.slice(before).reverse().find(e => e?.type === "planned") || null;
+          ctx._tutorialPlan = Object.assign(mine?.ts ? { ts: mine.ts } : {}, { key: chosen.key, label: chosen.label, catalogLabel: chosen.catalogLabel, price: chosen.price });
+          // The choice lands with a flourish on the open map: the order's own effect family on the banner, the hold pinged.
           _fx(chosen.key, { label: `${chosen.label} — ordered` }, { phase: "invoke" });
           await _showTheHold(ctx);
           try { globalThis.game?.bbttcc?.api?.fx?.playHexActivity?.(chosen.key, hexUuid, { ms: 2600 }); } catch (_) {}
-          await _pause(600);
+          await _pause(2200);
+          // Only now the Domain tab, so they can see the order waiting under Next turn.
+          try { const sh = ctx.steward?.sheet; if (sh) { sh.tabGroups ??= {}; sh.tabGroups.primary = "domain"; await sh.render(true, { focus: true }); sh._applyActiveTab?.(); } } catch (_) {}
           await ctx.speak(`Filed: ${chosen.label} on Tutelary Hold. Look at your Domain tab — it sits under Next turn until the Turn ticks.`);
         } catch (e) {
           console.warn(TAG, "tutorial plan failed", e);
@@ -657,7 +658,8 @@ const stewardshipTurn = {
           : `<p>Now the heartbeat. This runs a <b>practice Turn</b> — the rhythm, with nothing committed to the living world.</p>`,
         label: "Run a practice Turn"
       });
-      // The Turn, with a face on it: banner in, the hold pinged, the order's impact, banner out.
+      // The Turn, with a face on it: banner in, the hold pinged, the order's impact, banner out — on a clear map.
+      await _clearTheStage();
       _fx("turn_start", { label: `Practice Turn ${turnNow + 1}` }, { phase: "invoke" });
       await _showTheHold(ctx);
       try { globalThis.game?.bbttcc?.api?.fx?.playHexActivity?.("harvest_season", hexUuid, { ms: 2400 }); } catch (_) {}
