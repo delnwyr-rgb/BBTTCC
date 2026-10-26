@@ -39,7 +39,7 @@ const stewardSheetTour = {
     {
       id: "identity", title: "Who the meat says you are",
       selector: ".ft-header",
-      text: "Your identity block: Path, Ancestry, Heritage and Doctrine set what your body can learn; the Faction pill links to the people who claim you.\nInitiation is your level — Tier gates the strongest gear, manifestations and faction plays."
+      text: "Your identity block: Path, Ancestry, Heritage and Doctrine set what your body can learn; the Faction label links to the people who claim you.\nInitiation is your level — Tier gates the strongest gear, manifestations and faction plays."
     },
     {
       id: "faculties", title: "Faculties — the six dials",
@@ -55,7 +55,7 @@ const stewardSheetTour = {
     {
       id: "defenses", title: "Guard · Evasion · Resolve",
       selector: ".ft-defenses",
-      text: "Your three defenses. Guard turns hits aside, Evasion keeps you from being hit at all, Resolve holds the mind together against fear, coercion and the uncanny.\nEach has its own ⚀ roll (2d10 explode + defense) when the world tests you directly. The chips underneath list immunities ⦿, resistances ◑ and vulnerabilities ▲."
+      text: "Your three defenses. Guard turns hits aside, Evasion keeps you from being hit at all, Resolve holds the mind together against fear, coercion and the uncanny.\nEach has its own ⚀ roll (2d10 explode + defense) when the world tests you directly. The small labels underneath list immunities ⦿, resistances ◑ and vulnerabilities ▲."
     },
     {
       id: "tabs", title: "The tabs",
@@ -106,7 +106,7 @@ const stewardSheetTour = {
     {
       id: "editmode", title: "Edit mode",
       selector: ".ft-edit-mode-btn",
-      text: "The ✎ toggle exposes the raw inputs — direct rank edits, identity fields, the normally-locked plumbing.\nDay to day you leave it off; the sheet plays itself through clicks and rolls."
+      text: "The ✎ switch opens the raw settings — direct rank edits, identity details, the normally-locked plumbing.\nDay to day you leave it off; the sheet plays itself through clicks and rolls."
     },
     {
       id: "faction", title: "Your Domain — the bigger body",
@@ -198,23 +198,23 @@ const DOMAIN_TAB_STEPS = [
   {
     id: "domain-head", title: "Your Domain",
     selector: ".ft-domain",
-    text: "This tab is the bigger body: the land you hold, the people under your banner and what they yield. Your Steward acts in scenes; your Domain acts in Turns.\nThe tier badge up top is the reach of your will over the land. It grows as the Domain grows."
+    text: "This tab is the bigger body: the land you hold, the people under your banner and what they yield. Your Steward acts in scenes; your Domain acts in Turns.\nThe tier mark up top is the reach of your will over the land. It grows as the Domain grows."
   },
   {
     id: "treasury", title: "Treasury — one purse",
     selector: ".ft-domain-treasury",
-    text: "Marks are what the land yields to you — one treasury for everything you buy, build, hire or wage. The chips are the pools it is sorted into: Violence, Intrigue, Economy and the rest, each with its cap.\nNothing here is spent in a Battle or a Heist; a Parley can sweeten a deal.",
+    text: "Marks are what the land yields to you — one treasury for everything you buy, build, hire or wage. The labels beneath are the pools it is sorted into: Violence, Intrigue, Economy and the rest, each with its cap.\nNothing here is spent in a Battle or a Heist; a Parley can sweeten a deal.",
     speak: "One purse. Nine pockets. Your enemies only ever count one of them."
   },
   {
     id: "land", title: "The land — how it feels about you",
     selector: ".ft-domain-feel",
-    text: "Loyalty is how your people hold; Darkness is the Qliphothic taint creeping in; Momentum is the strategic surge you bank from strong turns.\nThey move on their own each Turn. The chips tell you the band before the numbers get dangerous."
+    text: "Loyalty is how your people hold; Darkness is the Qliphothic taint creeping in; Momentum is the strategic surge you bank from strong turns.\nThey move on their own each Turn. The labels tell you the band before the numbers get dangerous."
   },
   {
     id: "holdings", title: "Holdings — hexes and rigs",
     selector: ".ft-domain-holdings",
-    text: "Every hex you hold is a chip here — click one to open its sheet. A Domain grows from held ground: you can only claim what sits next to a hex you already hold at level 2.\nRigs are the Domain's rolling bodies."
+    text: "Every hex you hold is listed here — click one to open its sheet. A Domain grows from held ground: you can only claim what sits next to a hex you already hold at level 2.\nRigs are the Domain's rolling bodies."
   },
   {
     id: "convictions", title: "Convictions — what you swore to",
@@ -325,7 +325,7 @@ const factionSheetTour = {
       pre: 'nav.bbttcc-tabs a.item[data-tab="assets"]',
       selector: ".bbttcc-tier-assets-wrap",
       optional: true,
-      text: "Faction Tier gates what you can field — higher tier, bigger plays, cheaper Bridge sacrifices.\nThe capacity strip shows asset load; the pressure chips (Overextension, Upkeep, Risk) warn when the empire is heavier than the foundation."
+      text: "Faction Tier gates what you can field — higher tier, bigger plays, cheaper Bridge sacrifices.\nThe capacity bar shows asset load; the pressure labels (Overextension, Upkeep, Risk) warn when the empire is heavier than the foundation."
     },
     {
       id: "hexes", title: "Owned Hexes — the land itself",
@@ -369,7 +369,7 @@ const factionGmTour = {
 
   steps: [
     {
-      id: "toggle", title: "The Edit toggle",
+      id: "toggle", title: "The Edit switch",
       selector: ".bbttcc-gm-edit-toggle",
       text: "This header button flips GM Edit Mode (a world setting) and re-renders the sheet.\nOFF, the sheet is what players see. ON, the GM Manual Edit fieldset appears on Overview."
     },
@@ -507,12 +507,12 @@ const travelConsoleTour = {
     {
       id: "planner", title: "Building the route",
       selector: '[data-action="rp-pick"]',
-      text: "Pick on Map lets you click hexes on the canvas to append legs. Auto-Plan A→B runs a shortest-path between two picked hexes and fills the legs for you.\nThe manual-entry drawer below does the same from dropdowns."
+      text: "Pick on Map lets you click hexes on the canvas to append legs. Auto-Plan A→B runs a shortest-path between two picked hexes and fills the legs for you.\nThe manual-entry drawer below does the same from lists."
     },
     {
       id: "legs", title: "The legs — where the cost lives",
       selector: ".rp-legs",
-      text: "One row per leg: terrain sets the OP cost (ley-gates discount up to 40%), the hazard chip flags environmental danger, and the weather chip prices the sky.\nA shield badge means someone in your party can mitigate that leg's weather. Hover any chip for the details.",
+      text: "One row per leg: terrain sets the OP cost (ley-gates discount up to 40%), the hazard label flags environmental danger, and the weather label prices the sky.\nA shield mark means someone in your party can mitigate that leg's weather. Hover any label for the details.",
       speak: "Every leg is a small bill. The route is the invoice."
     },
     {
@@ -588,10 +588,10 @@ const plannerTour = {
       id: "target", title: "Target hex",
       selector: 'button[data-act="pick"]',
       optional: true,
-      text: "Most activities aim at a hex — pick from the dropdown or click one on the map. The list offers the hexes you hold and the unclaimed ground next to a hex you hold at level 2: a Domain grows from held ground. The GM can bypass that.\nRig-repair activities swap this for a rig picker."
+      text: "Most activities aim at a hex — pick from the list or click one on the map. The list offers the hexes you hold and the unclaimed ground next to a hex you hold at level 2: a Domain grows from held ground. The GM can bypass that.\nRig-repair activities swap this for a rig picker."
     },
     {
-      id: "categories", title: "Category pills",
+      id: "categories", title: "Category buttons",
       selector: 'button[data-act="filter-cat"]',
       text: "Filter the catalog by the OP track each activity leans on — the same nine currencies as everywhere else. The search box narrows further by name."
     },
@@ -599,7 +599,7 @@ const plannerTour = {
       id: "list", title: "The activity list — tier-gated",
       selector: ".bbttcc-activity-row",
       optional: true,
-      text: "Each row shows its Tier requirement, OP costs, and package group. You can run anything at or under your faction's Tier; UNLOCKED badges mark activities you've learned above tier.\nClick a row to select it.",
+      text: "Each row shows its Tier requirement, OP costs, and package group. You can run anything at or under your faction's Tier; UNLOCKED marks flag activities you've learned above tier.\nClick a row to select it.",
       speak: "The locked rows exist. You just can't see them yet. Motivation— *bzzt* —included free."
     },
     {
@@ -614,7 +614,7 @@ const plannerTour = {
       // anywhere in the document (open() returns no root for this tour).
       selector: '#bbttcc-activity-planner input[type="checkbox"]',
       optional: true,
-      text: "GM-only: reveals tier-locked activities with their LOCKED badges and bypasses target filtering — for planning what a faction grows INTO, not what it can do today."
+      text: "GM-only: reveals tier-locked activities with their LOCKED marks and bypasses target filtering — for planning what a faction grows INTO, not what it can do today."
     },
     {
       id: "telemetry", title: "The tally",
@@ -716,9 +716,9 @@ const raidConsoleTour = {
 
   steps: [
     {
-      id: "ident", title: "The identity strip",
+      id: "ident", title: "The identity line",
       selector: ".bbttcc-raid-ident",
-      text: "Who's fighting over what: the target, the key this fight leans on (gold pill — the strength your Domain brings is read from it), and portraits of the attacker plus any coalition supporters."
+      text: "Who's fighting over what: the target, the key this fight leans on (the gold label — the strength your Domain brings is read from it), and portraits of the attacker plus any coalition supporters."
     },
     {
       id: "setup", title: "GM setup row",
@@ -748,7 +748,7 @@ const raidConsoleTour = {
       id: "maneuvers", title: "Maneuvers — the knives",
       selector: ".bbttcc-mans-cell",
       optional: true,
-      text: "Per-side maneuver picker inside an open round: each maneuver has a fire-mode badge and an ⓘ icon with its complete rules. Usable only hides what your Domain can't field.\nAvailability gates on Domain tier, your class and Beat grants."
+      text: "Per-side maneuver picker inside an open round: each maneuver has a fire-mode mark and an ⓘ icon with its complete rules. Usable only hides what your Domain can't field.\nAvailability gates on Domain tier, your class and Beat grants."
     },
     {
       id: "commit", title: "Commit (Roll) — resolving the round",
@@ -804,7 +804,7 @@ const rigSheetTour = {
     {
       id: "header", title: "Identity — mobility, state, owner",
       selector: "header.ft-rig-header",
-      text: "The pills that matter: Mobility (stationary / mobile / hybrid) decides if this thing travels at all; State runs the output throttle — Parked yields 100%, Deployed 50%, Destroyed 0.\nThe owner pill binds it to a faction; the duplicate button opens the Rig Builder pre-filled."
+      text: "The settings that matter: Mobility (stationary / mobile / hybrid) decides if this thing travels at all; State runs the output throttle — Parked yields 100%, Deployed 50%, Destroyed 0.\nThe Owner selector binds it to a faction; the Duplicate button opens the Rig Builder pre-filled."
     },
     {
       id: "stats", title: "The four tiles",
@@ -828,7 +828,7 @@ const rigSheetTour = {
       id: "weapons", title: "Weapons & heat",
       selector: ".ft-rig-weapons",
       optional: true,
-      text: "Hardpoints are slot-capped by the frame (the pill goes red on overage). Drop rig-weapon items to mount them.\nFiring builds heat — every shot adds +1, and a maxed heat meter locks the guns until it bleeds off."
+      text: "Hardpoints are slot-capped by the frame (the count goes red on overage). Drop rig-weapon items to mount them.\nFiring builds heat — every shot adds +1, and a maxed heat meter locks the guns until it bleeds off."
     },
     {
       id: "frame", title: "Gear — the frame is the law",
@@ -868,7 +868,7 @@ const marketTour = {
   id: "market",
   title: "The Long Market (Market)",
   audience: "player",
-  intro: "Opening the Market. Everything has a price, and the price on the row is yours — your Domain's weight is already in it. Hover a chip— *bzzt* —the chips know.",
+  intro: "Opening the Market. Everything has a price, and the price on the row is yours — your Domain's weight is already in it. Hover a price— *bzzt* —the prices know.",
   outro: "Market toured. Standard Issue is free, ambition costs more, and some things aren't for sale to anyone. That's not a bug, that's an economy.",
 
   open: async () => {
@@ -886,8 +886,8 @@ const marketTour = {
     { id: "hex",      title: "Delivery hex",       selector: '[data-tour="market.hex"]',      help: ["market", "hex"], optional: true },
     { id: "catalog",  title: "The catalog",        selector: '[data-tour="market.catalog"]',  help: ["market", "catalog"] },
     { id: "search",   title: "Finding things",     selector: '[data-tour="market.search"]',   help: ["market", "search"] },
-    { id: "chip",     title: "The price chip", selector: '[data-tour="market.chip"]', help: ["market", "chip"], optional: true,
-      speak: "The chip is the truth. Some of it is free because you're just that cool." },
+    { id: "chip",     title: "The price tag", selector: '[data-tour="market.chip"]', help: ["market", "chip"], optional: true,
+      speak: "The price tag is the truth. Some of it is free because you're just that cool." },
     { id: "cost",     title: "The price",          selector: '[data-tour="market.cost"]',     help: ["market", "cost"], optional: true },
     { id: "buy",      title: "Buy",                selector: '[data-tour="market.buy"]',      help: ["market", "buy"], optional: true },
     { id: "manage",   title: "Manage Catalogs (GM)", selector: '[data-tour="market.manage"]', help: ["market", "manage"], optional: true }
@@ -936,7 +936,7 @@ const banksTour = {
       id: "carried", title: "Carried — what can go in",
       selector: 'ul[data-side="carried"]',
       optional: true,
-      text: "Your bankable inventory, with tier badges and ⚡ salvage markers. Store moves the item out of your hands and into the vault."
+      text: "Your bankable inventory, with tier marks and ⚡ salvage markers. Store moves the item out of your hands and into the vault."
     },
     {
       id: "stored", title: "Stored — getting it back",
@@ -953,7 +953,7 @@ const banksTour = {
         if (f) { try { game.bbttcc?.api?.banks?.openFactionBank?.(f); } catch (_) {} }
         await new Promise(r => setTimeout(r, 500));
       },
-      text: "The Marks: one chip per pool, shown against its cap (full chips light up). Read-only here — Marks move through the land's turn, the Exchange and the Market, not by hand.",
+      text: "The Marks: one gauge per pool, shown against its cap (full ones light up). Read-only here — Marks move through the land's turn, the Exchange and the Market, not by hand.",
       speak: "This is the war chest. Everyone can see it. That's a feature."
     },
     {
@@ -1046,13 +1046,13 @@ const hexCraftTour = {
     {
       id: "economy", title: "Type × Size — the economic engine",
       selector: 'form.bbttcc-hex-config select[name="type"]',
-      text: "Terrain Type sets the resource base; settlement Size multiplies it; Sephirot alignment adds on top; the modifier checkboxes below adjust the total.\nThat computed number becomes the per-Turn yield row you see on the Overview."
+      text: "Terrain Type sets the resource base; settlement Size multiplies it; Sephirot alignment adds on top; the modifier switches below adjust the total.\nThat computed number becomes the per-Turn yield row you see on the Overview."
     },
     {
       id: "modifiers", title: "Modifiers",
       selector: 'form.bbttcc-hex-config input[name="modifiers"]',
       optional: true,
-      text: "Twelve toggles — Well-Maintained, Fortified, Trade Hub and friends (radiation is its own ☢ level dropdown) — each multiplying or adjusting the auto-calculated resources. These are the fast levers for making a hex feel lived-in or ruined."
+      text: "Twelve switches — Well-Maintained, Fortified, Trade Hub and friends (radiation is its own ☢ level list) — each multiplying or adjusting the auto-calculated resources. These are the fast levers for making a hex feel lived-in or ruined."
     },
     {
       id: "leylines", title: "Leylines & gates",
@@ -1148,7 +1148,7 @@ const dashboardTour = {
   },
 
   steps: [
-    { id: "header",  title: "The command strip",  selector: '[data-tour="dashboard.header"]',  help: ["dashboard", "header"] },
+    { id: "header",  title: "The command bar",  selector: '[data-tour="dashboard.header"]',  help: ["dashboard", "header"] },
     { id: "refresh", title: "Refresh",            selector: '[data-tour="dashboard.refresh"]', help: ["dashboard", "refresh"] },
     { id: "travel",  title: "Plan Travel",        selector: '[data-tour="dashboard.planTravel"]', help: ["dashboard", "planTravel"], optional: true },
     { id: "adopt",   title: "Adopt Hexes",        selector: '[data-tour="dashboard.adoptHexes"]', help: ["dashboard", "adoptHexes"], optional: true },
@@ -1158,7 +1158,7 @@ const dashboardTour = {
     { id: "table",   title: "The spreadsheet — live wires", selector: '[data-tour="dashboard.table"]', help: ["dashboard", "table"],
       text: "Every hex as a row; owner, status, type, size, population, capital and all five resources are edited INLINE — each change writes to the hex flags immediately with a ✓ Saved toast.\nThis is the fastest way to fix the world and the fastest way to break it. There is no draft mode." },
     { id: "actions", title: "Row actions",        selector: '[data-tour="dashboard.actions"]', help: ["dashboard", "colActions"], optional: true,
-      text: "Per-hex: Focus pans the canvas to it, Edit opens the full Hex Configuration dialog, Sheet opens the hex sheet, Delete removes the Drawing (with a confirm).\nFocus and Sheet are free; Edit holds writes until Save; Delete is forever." }
+      text: "Per-hex: Focus pans the canvas to it, Edit opens the full Hex Configuration window, Sheet opens the hex sheet, Delete removes the Drawing (with a confirm).\nFocus and Sheet are free; Edit holds writes until Save; Delete is forever." }
   ]
 };
 
@@ -1222,7 +1222,7 @@ const campaignEngineTour = {
       id: "campaigns", title: "The campaign list",
       pre: '[data-action="main-tab"][data-tab="campaign"]',
       selector: '[data-tour="campaign.campaigns"]',
-      text: "Your campaigns, with the Active chip marking which one drives the world — the Story Director tick, Reality-Tear draws and turn announcements all read the active campaign.\nRun First Beat does exactly what it says: fires the opener beat and nothing else."
+      text: "Your campaigns, with the Active label marking which one drives the world — the Story Director tick, Reality-Tear draws and turn announcements all read the active campaign.\nRun First Beat does exactly what it says: fires the opener beat and nothing else."
     },
     {
       id: "bundles", title: "Bundles — campaigns as cargo",
@@ -1247,19 +1247,19 @@ const campaignEngineTour = {
       id: "beats", title: "Beats — the story's ammunition",
       pre: '[data-action="main-tab"][data-tab="beats"]',
       selector: '[data-tour="campaign.panel-beats"]',
-      text: "Every beat in the campaign, in firing order. Filters by text, type, turn gate and quest; the chips show fired-state, quest binding and turn gating (turn gates are advisory — the GM gets a whisper, not a lock).\nReorder with the arrows; Set Index jumps a beat to a slot; Compact Order squeezes the numbering back to 1..N."
+      text: "Every beat in the campaign, in firing order. Filters by text, type, turn gate and quest; the labels show fired-state, quest binding and turn gating (turn gates are advisory — the GM gets a whisper, not a lock).\nReorder with the arrows; Set Index jumps a beat to a slot; Compact Order squeezes the numbering back to 1..N."
     },
     {
       id: "beatactions", title: "Per-beat actions",
       selector: '[data-tour="campaign.beat-actions"]',
       optional: true,
-      text: "Run executes the beat NOW — journal, audio, scene, dialog, world effects, time points, in that order — and soft-locks it behind the fired-chip confirm. Edit opens the Beat Editor (its own tour).\nDelete now scans the campaign for references first and offers 'Delete + Clear Links' — no more silent dangling routes."
+      text: "Run executes the beat NOW — journal, audio, scene, dialog, world effects, time points, in that order — and soft-locks it behind the fired confirm. Edit opens the Beat Editor (its own tour).\nDelete now scans the campaign for references first and offers 'Delete + Clear Links' — no more silent dangling routes."
     },
     {
       id: "quests", title: "Quests — story bound to land",
       pre: '[data-action="main-tab"][data-tab="quests"]',
       selector: '[data-tour="campaign.panel-quests"]',
-      text: "The quest registry: status lifecycle (edit, complete, archive, reopen), and hex links — bind a quest to territory, and players discover it when the hex is fog-revealed or you toggle its hint. GMs see everything; the hint switches control what players see.\nPan-to-hex jumps the canvas; the faction sheets' Quest Logs read from here."
+      text: "The quest registry: status lifecycle (edit, complete, archive, reopen), and hex links — bind a quest to territory, and players discover it when the hex is fog-revealed or you switch its hint on. GMs see everything; the hint switches control what players see.\nPan-to-hex jumps the canvas; the faction sheets' Quest Logs read from here."
     },
     {
       id: "flow", title: "The Visualizer — where you PLAY it",
@@ -1276,10 +1276,10 @@ const campaignEngineTour = {
       text: "The chart FOLLOWS the story by default: whichever quest the last fired beat belongs to is the one on screen, so after every beat it is already showing the right chart. Pick a quest here to look elsewhere (Follow switches off); ⟲ Follow the story snaps it back.\n▶ marks the quest the story stands in, ✓ the ones completed."
     },
     {
-      id: "flowmeta", title: "The truth strip",
+      id: "flowmeta", title: "The truth line",
       selector: '[data-tour="campaign.flow-meta"]',
       optional: true,
-      text: "Where the world stands, in one line: current ACT and its name, world turn, days spent against the month's budget, and how much of this quest has fired.\nWhen anyone asks 'where are we in the campaign?', the answer is this strip."
+      text: "Where the world stands, in one line: current ACT and its name, world turn, days spent against the month's budget, and how much of this quest has fired.\nWhen anyone asks 'where are we in the campaign?', the answer is this line."
     },
     {
       id: "nowpanel", title: "The rail — three blocks, nothing else",
@@ -1301,7 +1301,7 @@ const beatEditorTour = {
   id: "beat-editor",
   title: "Anatomy of a Beat (Beat Editor)",
   audience: "gm",
-  intro: "GM channel. Opening a real beat from your active campaign — the atom of the story engine. Five tabs, a lot of wiring, and a tooltip on every wire. Edits survive tab-hopping now; Save is still the only real commit.",
+  intro: "GM channel. Opening a real beat from your active campaign — the atom of the story engine. Five tabs, a lot of wiring, and a note on every wire. Edits survive tab-hopping now; Save is still the only real commit.",
   outro: "Beat toured. The rules in one breath: complete quests on terminal beats, treat the id field as load-bearing, and Save before you close. Everything else, hover for.",
 
   open: async () => {
@@ -1345,19 +1345,19 @@ const beatEditorTour = {
       id: "audio", title: "Audio — intro-on-open",
       selector: '[data-tour="beats.audio"]',
       optional: true,
-      text: "The beat's soundscape. Intro audio fires when the dialog OPENS (the locked design call), curtain-call rules handle the tail. Playlist sounds use their playlist volume; the volume knob here only governs raw file playback."
+      text: "The beat's soundscape. Intro audio fires when the beat window OPENS (the locked design call), curtain-call rules handle the tail. Playlist sounds use their playlist volume; the volume knob here only governs raw file playback."
     },
     {
       id: "injection", title: "Injection — firing on its own",
       pre: '.bbttcc-tab[data-tab="injection"]',
       selector: '[data-tour="beats.injection"]',
-      text: "Tag-matched injection lets travel and world systems pull this beat in dynamically. Once-per-hex, cooldown turns and repeatable control re-firing; once-per-firing semantics are engine-enforced.\nThe Governance quartet is visibly disabled with a 'not wired' badge — the injector reads those from trigger context, so the controls tell the truth until they're connected."
+      text: "Tag-matched injection lets travel and world systems pull this beat in dynamically. Once-per-hex, cooldown turns and repeatable control re-firing; once-per-firing semantics are engine-enforced.\nThe Governance quartet is visibly disabled with a 'not wired' mark — the injector reads those from trigger context, so the controls tell the truth until they're connected."
     },
     {
       id: "scene", title: "Scene — what the players see",
       pre: '.bbttcc-tab[data-tab="scene"]',
       selector: '[data-tour="beats.linkedScene"]',
-      text: "Scene link and activation, journal page reveal, and NPC actor placement — the beat can dress the stage before the dialog opens.\nCinematic-type beats get their transition block here."
+      text: "Scene link and activation, journal page reveal, and NPC actor placement — the beat can dress the stage before the window opens.\nCinematic-type beats get their transition block here."
     },
     {
       id: "choices", title: "Choices — the branches",

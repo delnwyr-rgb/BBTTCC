@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/gilbert_pov_demon.png",
   "system": {
-    "role": "Theater Attendant (Mal-Voiced)",
+    "role": "Theater Attendant",
     "tier": 3,
     "factionId": "",
     "notes": "<p><strong>Gilbert</strong> is a panic-wound knot of Qliphothic hospitality protocol, ruined nostalgia, and weaponized customer service. He was summoned to run an emergency screening of <em>Ghostbusters</em> in 1984 and then stranded when the world broke.</p><p>He is convinced that hundreds of guests are arriving at any second and the theater is not ready. Nothing is ever ready. The popcorn machine is insubordinate. The soda fountain argues doctrine. The mop bucket has labor concerns.</p><p>If shown mercy, help, and genuine civic purpose, Gilbert can invert into a Sephirotic Assistant Manager and reopen the theater as a source of culture, faith, and snack-based economy.</p>",

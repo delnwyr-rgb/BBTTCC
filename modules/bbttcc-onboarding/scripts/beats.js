@@ -867,7 +867,7 @@ const crewOccult = {
             title: "What they bring",
             body: `<p>Raid <b>maneuvers</b> — the special moves in the Domain Conflict console — are gated. Most are locked until something on your side grants them.</p>
               <p>Three things grant maneuvers: your hired <b>Crew</b>, your hired <b>Association</b>, and the <b>classes</b> in your Domain.</p>
-              <p>While the contract runs, their feats sit on your sheet and a granted maneuver wears a green <b>✦ badge</b> naming who unlocked it. Once a scene you may <b>Invoke</b> one of their people onto the screen.</p>`
+              <p>While the contract runs, their feats sit on your sheet and a granted maneuver wears a green <b>✦ mark</b> naming who unlocked it. Once a scene you may <b>Invoke</b> one of their people onto the screen.</p>`
           },
           {
             title: "When they walk",
@@ -903,7 +903,7 @@ const crewOccult = {
               <li>its active <b>Occult Associations</b></li>
               <li>the <b>classes</b> on its roster</li>
             </ul>
-            <p>In the Domain Conflict console a granted maneuver wears a green <b>✦ badge</b> naming exactly who unlocked it for you.</p>`
+            <p>In the Domain Conflict console a granted maneuver wears a green <b>✦ mark</b> naming exactly who unlocked it for you.</p>`
         },
         {
           title: "Why it's a real choice",
@@ -964,7 +964,7 @@ const crewOccult = {
         title: FALLBACK_TITLE,
         content:
           `<p>Crews and Associations are <b>hired at the Muster</b> in Allesh-Gilliam once the bandit road is yours — one Crew and one Association at a time, three turns a contract, paid from your Domain's treasury.</p>` +
-          `<p>Your <b>Domain tab → Retinue</b> shows who rides with you and for how long. Their maneuvers wear a ✦ badge in the Domain Conflict console while the contract runs.</p>` +
+          `<p>Your <b>Domain tab → Retinue</b> shows who rides with you and for how long. Their maneuvers wear a ✦ mark in the Domain Conflict console while the contract runs.</p>` +
           `<p><i>Nothing to set here yet — continue.</i></p>`,
         label: "Company noted"
       }).then(() => done());
@@ -1045,7 +1045,7 @@ async function _reportGrants(ctx) {
     const by = grants.grantedBy?.(faction, k);
     return by ? `${k} (${by})` : k;
   });
-  await ctx.speak(`${faction.name} can now attempt ${keys.length} granted maneuver${keys.length === 1 ? "" : "s"}: ${named.join(", ")}${keys.length > 6 ? "…" : ""}. Look for the ✦ badges when the story opens a fight.`);
+  await ctx.speak(`${faction.name} can now attempt ${keys.length} granted maneuver${keys.length === 1 ? "" : "s"}: ${named.join(", ")}${keys.length > 6 ? "…" : ""}. Look for the ✦ marks when the story opens a fight.`);
 }
 
 /* ───────────────────────────── SURGE ───────────────────────────── */

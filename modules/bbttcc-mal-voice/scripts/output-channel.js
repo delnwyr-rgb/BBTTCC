@@ -53,6 +53,13 @@ function _resolveAudience(audience) {
     return { whisper: [...new Set([...userIds, ...gmIds])] };
   }
 
+  // "players:<id,id,…>" — several seats + GMs (Operator riffs to an onboarding class, 2026-10-25).
+  if (a.startsWith("players:")) {
+    const ids = a.slice("players:".length).split(",").map(x => x.trim()).filter(id => game.users.get(id));
+    if (!ids.length) { warn(`audience '${a}' names no known users; defaulting to GM`); return { whisper: game.users.filter(u => u.isGM).map(u => u.id) }; }
+    return { whisper: [...new Set([...ids, ...game.users.filter(u => u.isGM).map(u => u.id)])] };
+  }
+
   if (a.startsWith("player:")) {
     const playerId = a.split(":")[1];
     const user = game.users.get(playerId);

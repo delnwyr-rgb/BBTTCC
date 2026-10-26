@@ -4990,7 +4990,6 @@
         "damageParts": [],
         "effect": "Target: Soul defense vs Cast DC. On fail: 1d4 psychic (stress), Shaken, and Evasion −2 for 1 round.",
         "tags": [
-          "mal-voiced",
           "stress",
           "distraction",
           "tier:1",
@@ -5326,7 +5325,6 @@
         "damageParts": [],
         "effect": "Target: Body defense vs Cast DC. On fail: Prone for 1 round.",
         "tags": [
-          "mal-voiced",
           "cc",
           "prone",
           "tier:1",
@@ -5647,7 +5645,6 @@
         "damageParts": [],
         "effect": "Target: Soul defense vs Cast DC each round. On fail: Compelled (must spend at least one action chasing the squirrel away from the fight) and Resolve −2 for 2 rounds.",
         "tags": [
-          "mal-voiced",
           "cc",
           "compel",
           "tier:2",
@@ -5974,7 +5971,6 @@
         "damageParts": [],
         "effect": "Target: Soul defense vs Cast DC. On fail: 1d4 psychic (stress), Shaken, and Resolve −2 for 1 round.",
         "tags": [
-          "mal-voiced",
           "stress",
           "earworm",
           "tier:1",
@@ -6310,7 +6306,6 @@
         "damageParts": [],
         "effect": "Target: Soul defense vs Cast DC each round. On fail: 3d6 psychic (stress), Compelled (must spend an action speaking; cannot attack), and Guard −2 for 2 rounds.",
         "tags": [
-          "mal-voiced",
           "cc",
           "compel",
           "stress",
@@ -6648,7 +6643,6 @@
         "damageParts": [],
         "effect": "Target: Body defense vs Cast DC. On fail: Restrained for 1 round (frantic self-search; Evasion → 10).",
         "tags": [
-          "mal-voiced",
           "cc",
           "restrain",
           "tier:2",
@@ -6961,7 +6955,6 @@
           "long": 1
         },
         "tags": [
-          "mal-voiced",
           "knife",
           "mercy"
         ],

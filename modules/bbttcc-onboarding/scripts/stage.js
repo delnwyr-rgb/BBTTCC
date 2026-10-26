@@ -228,6 +228,36 @@ function _integrityOf(actor) {
   return Number.isFinite(n) ? n : null;
 }
 
+/* ─── Prop lock (Dave, 2026-10-25: "players can move the tokens of the vehicles —
+ * that shouldn't be possible"). Every tutorial prop (Test Track wrecks, sim foes,
+ * markers, courtiers, the straw dummy) is spawned default-OWNER so a player's
+ * damage lands client-side — and Foundry reads OWNER as "may drag". The grant is
+ * for hits, never for moving: a player seat's position/rotation/elevation change
+ * on a spawned default-OWNER prop is cancelled here (preUpdate hooks cancel on
+ * the initiating client, which is the dragger's). The student's own rig and
+ * Steward are owned by name, not by default, so Steer-then-drag still works.
+ * GMs are never blocked. */
+const _PROP_LOCK_FIELDS = ["x", "y", "rotation", "elevation"];
+let _propLockWarnedAt = 0;
+function _isLockedProp(actor) {
+  if (!actor || actor.getFlag?.(MODULE_ID, "spawned") !== true) return false;
+  const OWN = CONST.DOCUMENT_OWNERSHIP_LEVELS?.OWNER ?? 3;
+  return Number(actor.ownership?.default ?? 0) >= OWN;
+}
+Hooks.on("preUpdateToken", (tokenDoc, change, _options, userId) => {
+  try {
+    if (game.user?.isGM || userId !== game.user?.id) return;
+    if (!_PROP_LOCK_FIELDS.some(k => change?.[k] !== undefined)) return;
+    if (!_isLockedProp(tokenDoc?.actor)) return;
+    const now = Date.now();
+    if (now - _propLockWarnedAt > 4000) {
+      _propLockWarnedAt = now;
+      ui.notifications?.warn?.(`${tokenDoc.name || "That"} isn't yours to move — target it and fire, or ram it.`);
+    }
+    return false;
+  } catch (e) { console.warn(TAG, "prop lock check failed", e); }
+});
+
 function _installHitTracker() {
   if (_hitTrackerOn || !game.user?.isGM) return;
   _hitTrackerOn = true;

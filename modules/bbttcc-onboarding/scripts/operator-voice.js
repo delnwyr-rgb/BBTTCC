@@ -42,6 +42,41 @@ function _operatorAvailable() {
   catch (_) { return false; }
 }
 
+/** World setting: "run" = trainee + GMs (default), "all" = the whole table. */
+function _audienceAll() {
+  try { return game.settings.get(MODULE_ID, "operatorAudience") === "all"; } catch (_) { return false; }
+}
+function _activeGmIds() {
+  return (game.users?.contents ?? []).filter(u => u.active && u.isGM).map(u => u.id);
+}
+/** Default whisper list for a scripted line: this seat (the trainee — the director runs
+ *  on the player's client) + every active GM. Two seats onboarding side by side must
+ *  never read each other's instructions (Dave, 2026-10-25). */
+function _defaultSpeakAudience() {
+  return _audienceAll() ? "all" : [...new Set([game.user.id, ..._activeGmIds()])];
+}
+/** Mal audience string for a riff: `player:<id>` whispers to that user + GMs. */
+function _riffAudience(audience) {
+  if (_audienceAll()) return "broadcast";
+  if (typeof audience === "string" && /^(broadcast|gm|faction:|players?:)/.test(audience)) return audience;
+  if (Array.isArray(audience)) {
+    const ids = [...new Set(audience.filter(id => id && game.users?.get(id)))];
+    if (ids.length) return `players:${ids.join(",")}`;
+  }
+  return `player:${game.user.id}`;
+}
+/** Operator contextBuilder: Mal's default context + the per-run whisper audience.
+ *  `_audienceOverride` steers this seat's chat render only; it never reaches the model. */
+async function _operatorContext(voice, triggerArgs = {}) {
+  const base = _mal()?.triggers?.defaultContextBuilder;
+  let ctx = null;
+  try { ctx = base ? await base(voice, triggerArgs) : null; } catch (_) { ctx = null; }
+  ctx ||= { trigger: { hook: triggerArgs.hook || "manual", args: triggerArgs.args || {} }, snapshot: null,
+            mode: triggerArgs.mode || "snark", lengthHint: triggerArgs.lengthHint || 30 };
+  ctx._audienceOverride = _riffAudience(triggerArgs.audience);
+  return ctx;
+}
+
 function _registerVoice() {
   const m = _mal();
   if (!m?.voices?.register) {
@@ -58,11 +93,14 @@ function _registerVoice() {
       model: "",             // module default
       maxTokens: 120,
       temperature: 0.7,
-      audience: "broadcast",
+      // Per-run audience (2026-10-25): two players onboarding at once read each
+      // other's asides when this was "broadcast". The builder below whispers
+      // every riff to the trainee + GMs (or the table, if the world setting says all).
+      audience: "trigger-resolved",
       outputChannel: "chat",
       speakAs: { alias: "◇ OPERATOR" },
       triggers: [{ hook: "bbttcc:onboarding:riff", debounceMs: 0 }],
-      contextBuilder: "default",
+      contextBuilder: _operatorContext,
       meta: { role: "tutorial_daemon", canonVersion: "2026-06-15" }
     });
     console.log(TAG, "Operator voice registered on Mal Voice.");
@@ -75,10 +113,12 @@ function _registerVoice() {
  * Deterministic, offline-safe Operator line — the INSTRUCTION channel.
  * @param {string} line
  * @param {object} [opts]
- * @param {"all"|"self"|string[]} [opts.audience="all"] whisper routing
+ * @param {"all"|"self"|string[]} [opts.audience] whisper routing — default = this seat + GMs
+ *        (or everyone when the world setting operatorAudience is "all")
  * @param {string} [opts.tag="OPERATOR"]
  */
-async function speak(line, { audience = "all", tag = "OPERATOR" } = {}) {
+async function speak(line, { audience = null, tag = "OPERATOR" } = {}) {
+  if (audience == null) audience = _defaultSpeakAudience();
   const safe = foundry.utils.escapeHTML(String(line ?? ""));
   const html =
     `<div class="bbttcc-onboarding-operator">` +
@@ -97,11 +137,11 @@ async function speak(line, { audience = "all", tag = "OPERATOR" } = {}) {
  * @param {object} args  trigger args (include {line, intent, beat} for grounding)
  * @param {object} [opts]
  */
-async function riff(args = {}, { mode = "snark", lengthHint = 26 } = {}) {
+async function riff(args = {}, { mode = "snark", lengthHint = 26, audience = null } = {}) {
   if (!_operatorAvailable()) return null;
   try {
     return await _mal().triggers.fire(OPERATOR_ID, {
-      hook: "bbttcc:onboarding:riff", args, mode, lengthHint
+      hook: "bbttcc:onboarding:riff", args, mode, lengthHint, audience
     });
   } catch (e) { console.warn(TAG, "riff failed", e); return null; }
 }

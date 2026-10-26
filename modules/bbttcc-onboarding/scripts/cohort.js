@@ -453,7 +453,8 @@ function _partyCtx(cohortId, beat, run) {
       await _mutate(cohortId, (c) => { c.partyScene = scene.uuid; });
       _emit({ t: "cohort-view", cohortId, to: present(), sceneUuid: scene.uuid, label });
     },
-    riff: (a, o) => (ns?.riff ? ns.riff(a, o) : Promise.resolve(null))
+    // Class riffs whisper to the present members + GMs, never the whole table (2026-10-25).
+    riff: (a, o) => (ns?.riff ? ns.riff(a, { audience: present(), ...(o || {}) }) : Promise.resolve(null))
   };
   return ctx;
 }

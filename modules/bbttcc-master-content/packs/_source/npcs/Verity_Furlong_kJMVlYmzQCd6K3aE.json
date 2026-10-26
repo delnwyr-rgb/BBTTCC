@@ -5386,7 +5386,6 @@
       "system": {
         "slot": "consumable",
         "tags": [
-          "mal-voiced",
           "consumable",
           "weird"
         ],
@@ -5568,7 +5567,6 @@
       "system": {
         "slot": "trinket",
         "tags": [
-          "mal-voiced",
           "trade-good",
           "pre-fall"
         ],
@@ -5651,7 +5649,6 @@
       "system": {
         "slot": "trinket",
         "tags": [
-          "mal-voiced",
           "talisman",
           "soulbound"
         ],
@@ -6091,7 +6088,6 @@
         "damageParts": [],
         "effect": "Target: Soul defense vs Cast DC. On fail: Staggered (movement halved, \u22122 attacks) and Guard \u22122 for 1 round.",
         "tags": [
-          "mal-voiced",
           "cc",
           "distraction",
           "tier:1",
@@ -6241,7 +6237,6 @@
         "damageParts": [],
         "effect": "Target: Body defense vs Cast DC. On fail: Prone for 1 round.",
         "tags": [
-          "mal-voiced",
           "cc",
           "prone",
           "tier:1",
@@ -7025,7 +7020,6 @@
         "damageParts": [],
         "effect": "All enemies within Near range: Body defense vs Cast DC. On fail: 1d6 psychic (stress) and Blinded for 1 round.",
         "tags": [
-          "mal-voiced",
           "aoe",
           "near",
           "blind",

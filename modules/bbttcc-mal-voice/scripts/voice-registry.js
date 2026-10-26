@@ -37,7 +37,7 @@ const CALLBACKS = { onRegister: [], onUnregister: [] };
 // "trigger-resolved" = the contextBuilder will set context._audienceOverride
 // dynamically per trigger (used by Faction Advisor to whisper to the correct
 // faction's leader based on which faction the trigger references).
-const AUDIENCE_VALUES = ["broadcast", "gm", "faction", "player", "trigger-resolved"];
+const AUDIENCE_VALUES = ["broadcast", "gm", "faction", "player", "players", "trigger-resolved"];
 const OUTPUT_VALUES   = ["chat", "whisper", "sheetPopup", "tokenSpeechBubble"];
 
 function _isFn(x) { return typeof x === "function"; }
@@ -213,7 +213,7 @@ function schema() {
     model:          "string, '' = provider default",
     maxTokens:      "number, default 256",
     temperature:    "number, default 0.85",
-    audience:       "string, 'broadcast' | 'gm' | 'faction:<id>' | 'player:<id>'",
+    audience:       "string, 'broadcast' | 'gm' | 'faction:<id>' | 'player:<id>' | 'players:<id,id>' | 'trigger-resolved'",
     outputChannel:  "string, 'chat' | 'whisper' | 'sheetPopup' | 'tokenSpeechBubble'",
     speakAs:        "object, { alias?, actorId?, tokenId? }",
     triggers:       "array of { hook, filter?: fn|string, debounceMs?: number }",

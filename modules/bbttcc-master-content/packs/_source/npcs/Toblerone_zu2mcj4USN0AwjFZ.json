@@ -3213,7 +3213,6 @@
         "armorSkill": "fitting",
         "equipped": false,
         "tags": [
-          "mal-voiced",
           "shield",
           "foam"
         ],
@@ -3358,7 +3357,6 @@
         "armorSkill": "fitting",
         "equipped": false,
         "tags": [
-          "mal-voiced",
           "vestment",
           "pre-fall"
         ],
@@ -3498,7 +3496,6 @@
         "armorSkill": "bracing",
         "equipped": false,
         "tags": [
-          "mal-voiced",
           "vestment",
           "companion"
         ],

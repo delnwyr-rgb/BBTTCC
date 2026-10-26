@@ -2,7 +2,7 @@
 
 One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file. A stub fetches the deployed file at run time, shows its header and offers **🧪 Dry run / ✍ APPLY** (tools with a `DRY_RUN` constant) or **▶ Run**. Gates: 🧪 = has a DRY_RUN switch · 👁 = read-only · ⚠ = writes with no dry-run gate (read the header first).
 
-## 🌱 Seeders (46)
+## 🌱 Seeders (47)
 
 | gate | tool | DRY_RUN default | purpose | path |
 |---|---|---|---|---|
@@ -31,6 +31,7 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | 🧪 | `seed-aircraft-rigs` | false | Bad Eden — Aircraft & Orbital Rigs (Air Vertical, 2026-06-23) | `modules/bbttcc-master-content/tools/seed-aircraft-rigs.macro.js` |
 | 🧪 | `seed-bad-eden-rigs` | false | Bad Eden — New Rigs, Content Sprint Batch 1 (2026-06-13) | `modules/bbttcc-master-content/tools/seed-bad-eden-rigs.macro.js` |
 | 🧪 | `seed-balance-maneuvers` | true | Bad Eden — Seed Balance-Pass Wave 1 Maneuvers into Doctrines Pack (2026-05-23) | `modules/bbttcc-master-content/tools/seed-balance-maneuvers.macro.js` |
+| 🧪 | `seed-basic-arms-2026-10-14` | true | seed-basic-arms-2026-10-14.macro.js — BASIC ARMS seed (GENERATED 2026-10-14 by build-basic-arms.mjs — do not hand-edit; rebuild from a fresh dump). | `modules/bbttcc-master-content/tools/seed-basic-arms-2026-10-14.macro.js` |
 | ⚠ | `seed-bestiary-attacks` | — | Bad Eden — Seed Bestiary Attacks & Abilities (2026-05-12) | `modules/bbttcc-master-content/tools/seed-bestiary-attacks.macro.js` |
 | 🧪 | `seed-bestiary` | false | Bad Eden — Phase 9 Seed: Bestiary (2026-05-11) | `modules/bbttcc-master-content/tools/seed-bestiary.macro.js` |
 | 🧪 | `seed-coalition-flagship-rigs` | false | Bad Eden — Iconic Coalition Flagship Rigs (2026-05-23) | `modules/bbttcc-master-content/tools/seed-coalition-flagship-rigs.macro.js` |
@@ -112,11 +113,13 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | 🧪 | `seed-named-statblocks-2026-10-07` | true | seed-named-statblocks-2026-10-07.macro.js — named NPC statblocks + missing canon NPCs (owner rulings 5 + 6; GENERATED 2026-10-08 | `modules/bbttcc-master-content/tools/seed-named-statblocks-2026-10-07.macro.js` |
 | 🧪 | `tune-bestiary-2026-10-07` | true | tune-bestiary-2026-10-07.macro.js — BESTIARY TUNING PASS (GENERATED 2026-10-08 by build-bestiary-tuning.mjs — do not hand-edit; rebuild from a fresh dump). | `modules/bbttcc-master-content/tools/tune-bestiary-2026-10-07.macro.js` |
 
-## 📦 auto-link (1)
+## 📦 auto-link (3)
 
 | gate | tool | DRY_RUN default | purpose | path |
 |---|---|---|---|---|
 | 🧪 | `backfill-monster-creaturetype` | true | Backfill flags.fourththing.creatureType on existing RFI monsters. | `modules/bbttcc-auto-link/tools/backfill-monster-creaturetype.macro.js` |
+| 🧪 | `clear-structure-from-mobile-rigs-2026-10-21` | true | clear-structure-from-mobile-rigs-2026-10-21.macro.js — owner ruling 2026-10-21: NO structure on rigs that move. | `modules/bbttcc-auto-link/tools/clear-structure-from-mobile-rigs-2026-10-21.macro.js` |
+| 🧪 | `sync-rig-integrity-to-frame-2026-10-21` | true | sync-rig-integrity-to-frame-2026-10-21.macro.js — owner ruling 2026-10-21: a rig's max integrity comes from its FRAME. | `modules/bbttcc-auto-link/tools/sync-rig-integrity-to-frame-2026-10-21.macro.js` |
 
 ## 📦 banks (1)
 
@@ -124,7 +127,7 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 |---|---|---|---|---|
 | ⚠ | `make-salvage` | — | modules/bbttcc-banks/tools/make-salvage.macro.js | `modules/bbttcc-banks/tools/make-salvage.macro.js` |
 
-## 📦 campaign (181)
+## 📦 campaign (265)
 
 | gate | tool | DRY_RUN default | purpose | path |
 |---|---|---|---|---|
@@ -156,42 +159,107 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | 🧪 | `migrate-story-declarations` | true | Bad Eden — Phase 2 migration: beats DECLARE quest · chapter · ending; the store is bootstrapped (2026-09-13) | `modules/bbttcc-campaign/tools/migrate-story-declarations.macro.js` |
 | 🧪 | `patch-absolutely-reliable-2026-10-04` | true | patch-absolutely-reliable-2026-10-04.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-absolutely-reliable-2026-10-04.macro.js` |
 | 🧪 | `patch-act0-opening-flow` | true | patch-act0-opening-flow.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-act0-opening-flow.macro.js` |
+| 🧪 | `patch-act01-etta-polish-2026-10-16` | true | patch-act01-etta-polish-2026-10-16.macro.js — DAVE'S ACT 0–1 POLISH PASS, THE ETTA BLOOM CHAIN (Beat Polish doc, 2026-10-16): | `modules/bbttcc-campaign/tools/patch-act01-etta-polish-2026-10-16.macro.js` |
 | 🧪 | `patch-act01-wordsmith-2026-10-05` | true | patch-act01-wordsmith-2026-10-05.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-act01-wordsmith-2026-10-05.macro.js` |
+| 🧪 | `patch-act1-convictions-tags-2026-10-18` | true | patch-act1-convictions-tags-2026-10-18.macro.js — ACT 0–1 CONVICTIONS TAGS (Alpha Cut ruling 17, 2026-10-18) | `modules/bbttcc-campaign/tools/patch-act1-convictions-tags-2026-10-18.macro.js` |
+| 🧪 | `patch-act1-market-marks-turn-2026-10-17` | true | patch-act1-market-marks-turn-2026-10-17.macro.js — TEACHING BEATS 5 · 6 · 7 (Alpha Cut, Dave 2026-10-17: | `modules/bbttcc-campaign/tools/patch-act1-market-marks-turn-2026-10-17.macro.js` |
+| 🧪 | `patch-act1-offered-fights-2026-10-18` | true | patch-act1-offered-fights-2026-10-18.macro.js — TEACHING BEATS 9 + 10 + the Battle's offer (Alpha Cut rulings 21/22/23, | `modules/bbttcc-campaign/tools/patch-act1-offered-fights-2026-10-18.macro.js` |
+| 🧪 | `patch-act1-offered-fights-routes-2026-10-18` | true | patch-act1-offered-fights-routes-2026-10-18.macro.js — THE WON PARLEY IS WIRED (Dave 2026-10-18: "Wire the won Parley to the | `modules/bbttcc-campaign/tools/patch-act1-offered-fights-routes-2026-10-18.macro.js` |
 | 🧪 | `patch-act1-travel-table` | true | patch-act1-travel-table.macro.js — Act 1 "Opening Roads" travel curation | `modules/bbttcc-campaign/tools/patch-act1-travel-table.macro.js` |
 | 🧪 | `patch-act2-punchlist` | true | patch-act2-punchlist.macro.js — the Act 2 pre-flight punch list (2026-09-06) | `modules/bbttcc-campaign/tools/patch-act2-punchlist.macro.js` |
 | 🧪 | `patch-act2-town-hubs` | true | patch-act2-town-hubs.macro.js — Act 2 gets its own town hubs (owner ruling 2026-09-09) | `modules/bbttcc-campaign/tools/patch-act2-town-hubs.macro.js` |
+| 🧪 | `patch-aldous-plumb-argument-2026-10-15` | true | patch-aldous-plumb-argument-2026-10-15.macro.js — ALDOUS PLUMB, REWRITTEN (Dave, Beat Polish doc 2026-10-15). | `modules/bbttcc-campaign/tools/patch-aldous-plumb-argument-2026-10-15.macro.js` |
+| 🧪 | `patch-aldous-plumb-canon-2026-10-15` | true | patch-aldous-plumb-canon-2026-10-15.macro.js — RE-AIM THE OLD ALDOUS (companion to patch-aldous-plumb-argument). | `modules/bbttcc-campaign/tools/patch-aldous-plumb-canon-2026-10-15.macro.js` |
 | 🧪 | `patch-bandit-ambush-mercy` | true | patch-bandit-ambush-mercy.macro.js — wire the old Bandit Ambush win beat | `modules/bbttcc-campaign/tools/patch-bandit-ambush-mercy.macro.js` |
 | 🧪 | `patch-bandit-vestigial-choices` | true | patch-bandit-vestigial-choices.macro.js — strip the copy-pasted Kill/Jail/ | `modules/bbttcc-campaign/tools/patch-bandit-vestigial-choices.macro.js` |
+| 🧪 | `patch-beat-polish-act01-2026-10-20` | true | patch-beat-polish-act01-2026-10-20.macro.js — Dave's Beat Polish doc edits of 2026-10-20 (Act 0–1 tab, 24 beats) spliced into live | `modules/bbttcc-campaign/tools/patch-beat-polish-act01-2026-10-20.macro.js` |
+| 🧪 | `patch-beat-polish-act01b-2026-10-20` | true | patch-beat-polish-act01b-2026-10-20.macro.js — Dave's SECOND round of Beat Polish doc edits of 2026-10-20 (Act 0–1 tab), | `modules/bbttcc-campaign/tools/patch-beat-polish-act01b-2026-10-20.macro.js` |
+| 🧪 | `patch-beat-polish-act01c-2026-10-20` | true | patch-beat-polish-act01c-2026-10-20.macro.js — Dave's THIRD round of Beat Polish doc edits of 2026-10-20 (Act 0–1 tab), found by the | `modules/bbttcc-campaign/tools/patch-beat-polish-act01c-2026-10-20.macro.js` |
+| 🧪 | `patch-beat-polish-act01d-2026-10-20` | true | patch-beat-polish-act01d-2026-10-20.macro.js — Dave's FOURTH round of Beat Polish doc edits of 2026-10-20 (Act 0–1 tab), found by the | `modules/bbttcc-campaign/tools/patch-beat-polish-act01d-2026-10-20.macro.js` |
+| 🧪 | `patch-beat-polish-act01e-2026-10-20` | true | patch-beat-polish-act01e-2026-10-20.macro.js — Dave's FIFTH round of Beat Polish doc edits (Act 0–1 tab, Lyrenn), found by the | `modules/bbttcc-campaign/tools/patch-beat-polish-act01e-2026-10-20.macro.js` |
+| 🧪 | `patch-beat-polish-ag-stab-2026-10-20` | true | patch-beat-polish-ag-stab-2026-10-20.macro.js — Allesh-Gilliam out of the stab register (the rapid one-line "not this, this" paragraphs | `modules/bbttcc-campaign/tools/patch-beat-polish-ag-stab-2026-10-20.macro.js` |
+| 🧪 | `patch-beat-polish-stab-rest-2026-10-20` | true | patch-beat-polish-stab-rest-2026-10-20.macro.js — the rest of the stab-register list, by town (Fixit, Khezek-Tor, Gloomgill, Maneuver Vault, | `modules/bbttcc-campaign/tools/patch-beat-polish-stab-rest-2026-10-20.macro.js` |
+| 🧪 | `patch-broken-bridge-2026-10-15` | false | patch-broken-bridge-2026-10-15.macro.js — the Broken Bridge gets a real | `modules/bbttcc-campaign/tools/patch-broken-bridge-2026-10-15.macro.js` |
+| 🧪 | `patch-bunker-hex-coast-2026-10-20` | true | patch-bunker-hex-coast-2026-10-20.macro.js — THE VALHAULAN BUNKER HEX MOVES TO THE COAST (Dave, Story Review Ledger round 2 open asks, | `modules/bbttcc-campaign/tools/patch-bunker-hex-coast-2026-10-20.macro.js` |
 | 🧪 | `patch-burnt-flats-quest-registry-2026-10-02` | true | patch-burnt-flats-quest-registry-2026-10-02.macro.js — GM, world script macro. | `modules/bbttcc-campaign/tools/patch-burnt-flats-quest-registry-2026-10-02.macro.js` |
+| 🧪 | `patch-coalition-ids-2026-10-19` | true | patch-coalition-ids-2026-10-19.macro.js — STORY REVIEW LEDGER Act 0–1 row 3 (Accept, Dave 2026-10-19), GLOBAL: | `modules/bbttcc-campaign/tools/patch-coalition-ids-2026-10-19.macro.js` |
 | 🧪 | `patch-crossroads-travel` | true | patch-crossroads-travel.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-crossroads-travel.macro.js` |
+| 🧪 | `patch-defer-expansion-2026-10-21` | true | patch-defer-expansion-2026-10-21.macro.js — DEFER the strands Dave moved to the expansion pile (2026-10-21, "Coco Chanel" cut): | `modules/bbttcc-campaign/tools/patch-defer-expansion-2026-10-21.macro.js` |
 | 🧪 | `patch-discovery-tags` | true | patch-discovery-tags.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-discovery-tags.macro.js` |
+| 🧪 | `patch-domain-words-2026-10-18` | true | patch-domain-words-2026-10-18.macro.js — RULING 16 WORD PASS, story side (Alpha Cut, Dave 2026-10-17/18: | `modules/bbttcc-campaign/tools/patch-domain-words-2026-10-18.macro.js` |
 | 🧪 | `patch-final-polish` | true | patch-final-polish.macro.js — Act 1 final polish pass | `modules/bbttcc-campaign/tools/patch-final-polish.macro.js` |
+| 🧪 | `patch-first-road-ambush-2026-10-17` | true | patch-first-road-ambush-2026-10-17.macro.js — TEACHING BEAT 1: BATTLE (Alpha Cut, Dave 2026-10-17: | `modules/bbttcc-campaign/tools/patch-first-road-ambush-2026-10-17.macro.js` |
+| 🧪 | `patch-first-signature-2026-10-18` | true | patch-first-signature-2026-10-18.macro.js — TEACHING BEAT 8: YOUR SIGNATURE (Alpha Cut, ruling 14, Dave 2026-10-17: | `modules/bbttcc-campaign/tools/patch-first-signature-2026-10-18.macro.js` |
 | 🧪 | `patch-fixit-board-vault-gate-2026-10-02` | true | patch-fixit-board-vault-gate-2026-10-02.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-fixit-board-vault-gate-2026-10-02.macro.js` |
 | 🧪 | `patch-fixit-early-alliance-2026-10-02` | true | patch-fixit-early-alliance-2026-10-02.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-fixit-early-alliance-2026-10-02.macro.js` |
+| 🧪 | `patch-fixit-sock-2026-10-20` | true | patch-fixit-sock-2026-10-20.macro.js — THE SELF WARMING SOCK (Dave's Beat Polish doc note, 2026-10-20: "a world item for the Fixit mystery bin"). | `modules/bbttcc-campaign/tools/patch-fixit-sock-2026-10-20.macro.js` |
 | 🧪 | `patch-gearbox-wordless-2026-10-05` | true | patch-gearbox-wordless-2026-10-05.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-gearbox-wordless-2026-10-05.macro.js` |
+| 🧪 | `patch-geometry-serpent-vestiges-2026-10-15` | true | patch-geometry-serpent-vestiges-2026-10-15.macro.js — the Geometry Serpent's | `modules/bbttcc-campaign/tools/patch-geometry-serpent-vestiges-2026-10-15.macro.js` |
 | 🧪 | `patch-green-ring-and-tier-reset` | true | patch-green-ring-and-tier-reset.macro.js — Green Ring stays Act 2; | `modules/bbttcc-campaign/tools/patch-green-ring-and-tier-reset.macro.js` |
+| 🧪 | `patch-grief-chuckle-softlanding-2026-10-21` | true | patch-grief-chuckle-softlanding-2026-10-21.macro.js — GRIEF TOWNS REWORK, Chuckle Creek + Soft Landing. | `modules/bbttcc-campaign/tools/patch-grief-chuckle-softlanding-2026-10-21.macro.js` |
+| 🧪 | `patch-grief-ladders-2026-10-21` | true | patch-grief-ladders-2026-10-21.macro.js — GRIEF TOWNS REWORK, the three quest-log LADDERS (campaign.story.scripts). | `modules/bbttcc-campaign/tools/patch-grief-ladders-2026-10-21.macro.js` |
+| 🧪 | `patch-grief-stillwater-2026-10-21` | true | patch-grief-stillwater-2026-10-21.macro.js — GRIEF TOWNS REWORK, Stillwater (Story Review Ledger rows SW1–SW13, all ACCEPTED by Dave 2026-10-21; | `modules/bbttcc-campaign/tools/patch-grief-stillwater-2026-10-21.macro.js` |
 | 🧪 | `patch-grief-towns-evergreen` | false | patch-grief-towns-evergreen.macro.js — RUN IN-WORLD (GM). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-grief-towns-evergreen.macro.js` |
+| 🧪 | `patch-gully-earned-name-2026-10-16` | true | patch-gully-earned-name-2026-10-16.macro.js — GULLY EARNS HIS NAME (Dave, 2026-10-16): | `modules/bbttcc-campaign/tools/patch-gully-earned-name-2026-10-16.macro.js` |
+| 🧪 | `patch-gully-second-round-2026-10-16` | true | patch-gully-second-round-2026-10-16.macro.js — THE SECOND ROUND (Dave, 2026-10-16): | `modules/bbttcc-campaign/tools/patch-gully-second-round-2026-10-16.macro.js` |
+| 🧪 | `patch-gullywasher-merge-2026-10-20` | true | patch-gullywasher-merge-2026-10-20.macro.js — ONE GULLYWASHER CONVERSATION (Dave, 2026-10-20 evening): | `modules/bbttcc-campaign/tools/patch-gullywasher-merge-2026-10-20.macro.js` |
 | 🧪 | `patch-hub-repeatable` | true | patch-hub-repeatable.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-hub-repeatable.macro.js` |
 | 🧪 | `patch-hum-tent-rails` | true | Bad Eden — The Tent at the Edge of Town goes on rails (2026-09-14) — DRY_RUN | `modules/bbttcc-campaign/tools/patch-hum-tent-rails.macro.js` |
 | 🧪 | `patch-invite-names` | true | patch-invite-names.macro.js — tell the two "A Word from X" quests apart (2026-09-09) | `modules/bbttcc-campaign/tools/patch-invite-names.macro.js` |
 | 🧪 | `patch-jeargan-garden-canon-2026-10-02` | true | patch-jeargan-garden-canon-2026-10-02.macro.js — Dave's Garden rulings (2026-10-02) applied to the Ninth Guest + Lost Statues arcs. | `modules/bbttcc-campaign/tools/patch-jeargan-garden-canon-2026-10-02.macro.js` |
 | 🧪 | `patch-joans-bootstrap-gate` | true | patch-joans-bootstrap-gate.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-joans-bootstrap-gate.macro.js` |
 | 🧪 | `patch-khezek-timeline` | true | Bad Eden — Khezek-Tor timeline prose patch (2026-09-13) — DRY_RUN | `modules/bbttcc-campaign/tools/patch-khezek-timeline.macro.js` |
+| 🧪 | `patch-kt-register-2026-10-20` | true | patch-kt-register-2026-10-20.macro.js — the last two Khezek-Tor beats in the old staccato register (Dave, 2026-10-20 evening: | `modules/bbttcc-campaign/tools/patch-kt-register-2026-10-20.macro.js` |
+| 🧪 | `patch-kt-settles-knows-2026-10-20` | true | patch-kt-settles-knows-2026-10-20.macro.js — THE MOUNTAIN SQUARES UP knows what the Stewards did (Dave, 2026-10-20 evening: | `modules/bbttcc-campaign/tools/patch-kt-settles-knows-2026-10-20.macro.js` |
+| 🧪 | `patch-lease-card-first-night-2026-10-17` | true | patch-lease-card-first-night-2026-10-17.macro.js — TEACHING BEAT 4: THE RIG (Alpha Cut, Dave 2026-10-17: | `modules/bbttcc-campaign/tools/patch-lease-card-first-night-2026-10-17.macro.js` |
 | 🧪 | `patch-legansus-second-hearing-2026-10-03` | true | patch-legansus-second-hearing-2026-10-03.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-legansus-second-hearing-2026-10-03.macro.js` |
 | 🧪 | `patch-leyline-stabilizer-gate` | true | patch-leyline-stabilizer-gate.macro.js — GM console/macro. DRY_RUN=true by default. | `modules/bbttcc-campaign/tools/patch-leyline-stabilizer-gate.macro.js` |
+| 🧪 | `patch-lyrenn-choir-step-2026-10-20` | true | patch-lyrenn-choir-step-2026-10-20.macro.js — the Water Choir reads as ONE chain in the quest log and the Beat Polish doc | `modules/bbttcc-campaign/tools/patch-lyrenn-choir-step-2026-10-20.macro.js` |
+| 🧪 | `patch-lyrenn-second-season-2026-10-20` | true | patch-lyrenn-second-season-2026-10-20.macro.js — LYRENN, SECOND SEASON (Dave, 2026-10-20 night): | `modules/bbttcc-campaign/tools/patch-lyrenn-second-season-2026-10-20.macro.js` |
 | 🧪 | `patch-lyrenn-turn1-clean` | true | patch-lyrenn-turn1-clean.macro.js — TURN 1 IS HANDSHAKES, NOT HOMEWORK | `modules/bbttcc-campaign/tools/patch-lyrenn-turn1-clean.macro.js` |
 | 🧪 | `patch-lyrenn-word-gates` | true | patch-lyrenn-word-gates.macro.js — GM console/macro. DRY_RUN=true by default. | `modules/bbttcc-campaign/tools/patch-lyrenn-word-gates.macro.js` |
+| 🧪 | `patch-market-dedupe-catalog-2026-10-17` | true | patch-market-dedupe-catalog-2026-10-17.macro.js — ONE ROW PER ITEM PER VENDOR (Dave, 2026-10-17): | `modules/bbttcc-campaign/tools/patch-market-dedupe-catalog-2026-10-17.macro.js` |
+| 🧪 | `patch-market-templates-frames-2026-10-16` | true | patch-market-templates-frames-2026-10-16.macro.js — TEMPLATES OUT OF THE MARKET, FIVE FRAMES STAMPED (Dave, 2026-10-16): | `modules/bbttcc-campaign/tools/patch-market-templates-frames-2026-10-16.macro.js` |
+| 🧪 | `patch-menace-predators-2026-10-21` | true | patch-menace-predators-2026-10-21.macro.js — MENACES (owner ruling 2026-10-21): the predator beats already say "these are | `modules/bbttcc-campaign/tools/patch-menace-predators-2026-10-21.macro.js` |
+| 🧪 | `patch-morale-to-loyalty-2026-10-20` | true | patch-morale-to-loyalty-2026-10-20.macro.js — MORALE → LOYALTY on every beat (ruling 19 follow-through, Dave 2026-10-20) | `modules/bbttcc-campaign/tools/patch-morale-to-loyalty-2026-10-20.macro.js` |
 | 🧪 | `patch-move-gloomgill-softlanding` | true | patch-move-gloomgill-softlanding.macro.js — RUN IN-WORLD (GM). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-move-gloomgill-softlanding.macro.js` |
+| 🧪 | `patch-muster-opens-2026-10-18` | true | patch-muster-opens-2026-10-18.macro.js — THE MUSTER OPENS AFTER THE BANDIT ROAD (ruling 15, Dave 2026-10-17: | `modules/bbttcc-campaign/tools/patch-muster-opens-2026-10-18.macro.js` |
 | 🧪 | `patch-no-exit-menus` | true | patch-no-exit-menus.macro.js — UNCHECKED EXITS for the six caged menus | `modules/bbttcc-campaign/tools/patch-no-exit-menus.macro.js` |
 | 🧪 | `patch-normalize-playerfacing` | true | patch-normalize-playerfacing.macro.js — ONE AUTHORITY for beat visibility | `modules/bbttcc-campaign/tools/patch-normalize-playerfacing.macro.js` |
+| 🧪 | `patch-odie-thorium-schism-2026-10-16` | true | patch-odie-thorium-schism-2026-10-16.macro.js — THE CULT INSIDE THE VALHAULANS (Dave's canon, 2026-10-16): | `modules/bbttcc-campaign/tools/patch-odie-thorium-schism-2026-10-16.macro.js` |
 | 🧪 | `patch-opening-closer` | true | Bad Eden — the Opening closes Act 0 (2026-09-14) — DRY_RUN | `modules/bbttcc-campaign/tools/patch-opening-closer.macro.js` |
 | 🧪 | `patch-opening-quest-offer` | true | patch-opening-quest-offer.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-opening-quest-offer.macro.js` |
 | 🧪 | `patch-owner-canon-2026-10-02` | true | patch-owner-canon-2026-10-02.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-owner-canon-2026-10-02.macro.js` |
+| 🧪 | `patch-pass3-act3-2026-10-21` | true | patch-pass3-act3-2026-10-21.macro.js — Story Review Ledger PASS 3, Act 3 table (P3-3-1…3-16): 14 ACCEPTED by Dave 2026-10-21; 3-11 and 3-13 REJECTED as worded ( | `modules/bbttcc-campaign/tools/patch-pass3-act3-2026-10-21.macro.js` |
+| 🧪 | `patch-pass3-acts46-2026-10-21` | true | patch-pass3-acts46-2026-10-21.macro.js — Story Review Ledger PASS 3, Acts 4–6 table (P3-4-1…4-41), all 41 ACCEPTED by Dave 2026-10-21. | `modules/bbttcc-campaign/tools/patch-pass3-acts46-2026-10-21.macro.js` |
+| 🧪 | `patch-pass3-coast-2026-10-21` | true | patch-pass3-coast-2026-10-21.macro.js — Story Review Ledger PASS 3, Coast towns table (P3-A1…A32), all 32 ACCEPTED by Dave 2026-10-21. | `modules/bbttcc-campaign/tools/patch-pass3-coast-2026-10-21.macro.js` |
+| 🧪 | `patch-pass3-encounters-2026-10-21` | true | patch-pass3-encounters-2026-10-21.macro.js — Story Review Ledger PASS 3, Encounters table (P3-E1…E19): 18 ACCEPTED by Dave 2026-10-21, E7 REJECTED (the smiley f | `modules/bbttcc-campaign/tools/patch-pass3-encounters-2026-10-21.macro.js` |
+| 🧪 | `patch-pass3-grief-2026-10-21` | true | patch-pass3-grief-2026-10-21.macro.js — Story Review Ledger PASS 3, grief towns + The Forgotten Cause table (P3-G1…G26), all 26 ACCEPTED by Dave 2026-10-21. | `modules/bbttcc-campaign/tools/patch-pass3-grief-2026-10-21.macro.js` |
+| 🧪 | `patch-pass3-road-2026-10-21` | true | patch-pass3-road-2026-10-21.macro.js — Story Review Ledger PASS 3, "Act 2 · the road" table (P3-R1…R26): 25 ACCEPTED by Dave 2026-10-21, R24 = Discuss (Clarity  | `modules/bbttcc-campaign/tools/patch-pass3-road-2026-10-21.macro.js` |
 | 🧪 | `patch-performance-contests-2026-10-04` | true | patch-performance-contests-2026-10-04.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-performance-contests-2026-10-04.macro.js` |
+| 🧪 | `patch-pike-wall-hunch-2026-10-15` | true | patch-pike-wall-hunch-2026-10-15.macro.js — Pike's East Wall outcome lines become his HUNCH, not a finding. | `modules/bbttcc-campaign/tools/patch-pike-wall-hunch-2026-10-15.macro.js` |
+| 🧪 | `patch-pipeline-backward-2026-10-20` | true | patch-pipeline-backward-2026-10-20.macro.js — RUN THE CHANNEL BACKWARD: Garren reads the sequence (Dave, 2026-10-20): | `modules/bbttcc-campaign/tools/patch-pipeline-backward-2026-10-20.macro.js` |
+| 🧪 | `patch-plumb-entry-east-wall-2026-10-16` | true | patch-plumb-entry-east-wall-2026-10-16.macro.js — "GO GET PLUMB" lives on the EAST WALL menu (Dave, 2026-10-16): | `modules/bbttcc-campaign/tools/patch-plumb-entry-east-wall-2026-10-16.macro.js` |
+| 🧪 | `patch-plumb-office-coalition-2026-10-19` | true | patch-plumb-office-coalition-2026-10-19.macro.js — THE PLUMB OFFICE: WHY HE'S HERE (Dave, Beat Polish doc, 2026-10-19): | `modules/bbttcc-campaign/tools/patch-plumb-office-coalition-2026-10-19.macro.js` |
+| 🧪 | `patch-qlipothic-sweep-2026-10-21` | true | patch-qlipothic-sweep-2026-10-21.macro.js — ONE SPELLING: "Qlipothic" (Dave, 2026-10-21) across every player-facing text field. | `modules/bbttcc-campaign/tools/patch-qlipothic-sweep-2026-10-21.macro.js` |
 | 🧪 | `patch-quest-steps` | true | patch-quest-steps.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-quest-steps.macro.js` |
+| 🧪 | `patch-r2-act01-2026-10-20` | true | patch-r2-act01-2026-10-20.macro.js — Story Review Ledger ROUND 2, "Act 0–1" rows 1–4 (all Accept, Dave 2026-10-20). | `modules/bbttcc-campaign/tools/patch-r2-act01-2026-10-20.macro.js` |
+| 🧪 | `patch-r2-act3-2026-10-20` | true | patch-r2-act3-2026-10-20.macro.js — Story Review Ledger ROUND 2, "Act 3" rows 1–5 (all Accept, Dave 2026-10-20). | `modules/bbttcc-campaign/tools/patch-r2-act3-2026-10-20.macro.js` |
+| 🧪 | `patch-r2-acts46-2026-10-20` | true | patch-r2-acts46-2026-10-20.macro.js — Story Review Ledger ROUND 2, "Acts 4–6" rows 1–4 (all Accept, Dave 2026-10-20). | `modules/bbttcc-campaign/tools/patch-r2-acts46-2026-10-20.macro.js` |
+| 🧪 | `patch-r2-encounters-2026-10-20` | true | patch-r2-encounters-2026-10-20.macro.js — Story Review Ledger ROUND 2, "Encounters and strays" rows 1, 3, 4 (Accept, Dave 2026-10-20). | `modules/bbttcc-campaign/tools/patch-r2-encounters-2026-10-20.macro.js` |
+| 🧪 | `patch-r2-grief-2026-10-20` | true | patch-r2-grief-2026-10-20.macro.js — Story Review Ledger ROUND 2, "Act 2 grief towns" row 1 (Accept, Dave 2026-10-20). | `modules/bbttcc-campaign/tools/patch-r2-grief-2026-10-20.macro.js` |
+| 🧪 | `patch-r2-road-2026-10-20` | true | patch-r2-road-2026-10-20.macro.js — Story Review Ledger ROUND 2, "Act 2 the road" rows 1–10 (all Accept, Dave 2026-10-20). | `modules/bbttcc-campaign/tools/patch-r2-road-2026-10-20.macro.js` |
+| 🧪 | `patch-r3-act1-2026-10-20` | true | patch-r3-act1-2026-10-20.macro.js — Dave's Act 0–1 read-through notes of 2026-10-20 (evening), four items: | `modules/bbttcc-campaign/tools/patch-r3-act1-2026-10-20.macro.js` |
+| 🧪 | `patch-radiation-delta-to-level-2026-10-22` | true | patch-radiation-delta-to-level-2026-10-22.macro.js — ONE RADIATION SWITCH (owner ruling 2026-10-22). | `modules/bbttcc-campaign/tools/patch-radiation-delta-to-level-2026-10-22.macro.js` |
+| 🧪 | `patch-radiation-pocket-hot-hexes-2026-10-22` | true | patch-radiation-pocket-hot-hexes-2026-10-22.macro.js — ONE RADIATION SWITCH (owner ruling 2026-10-22). | `modules/bbttcc-campaign/tools/patch-radiation-pocket-hot-hexes-2026-10-22.macro.js` |
+| 🧪 | `patch-raid-names-2026-10-18` | true | patch-raid-names-2026-10-18.macro.js — ALPHA CUT RULING 2 WORD PASS, story side (Dave, blessed 2026-10-18): | `modules/bbttcc-campaign/tools/patch-raid-names-2026-10-18.macro.js` |
+| 🧪 | `patch-recalcitrant-cafe-2026-10-13` | true | patch-recalcitrant-cafe-2026-10-13.macro.js — RUN IN-WORLD (GM, each live instance). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-recalcitrant-cafe-2026-10-13.macro.js` |
 | 🧪 | `patch-review-beats` | true | Bad Eden — the seven REVIEW beats, ruled (2026-09-14) — DRY_RUN | `modules/bbttcc-campaign/tools/patch-review-beats.macro.js` |
 | 🧪 | `patch-rite-closure` | true | patch-rite-closure.macro.js — "Once one of those four beats fires, The Rite Is Done." | `modules/bbttcc-campaign/tools/patch-rite-closure.macro.js` |
+| 🧪 | `patch-rockslide-lyrenn-2026-10-15` | true | patch-rockslide-lyrenn-2026-10-15.macro.js — two findings from the 2026-10-15 | `modules/bbttcc-campaign/tools/patch-rockslide-lyrenn-2026-10-15.macro.js` |
 | 🧪 | `patch-round-leaks` | true | patch-round-leaks.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-round-leaks.macro.js` |
+| 🧪 | `patch-runner-loft-2026-10-20` | true | patch-runner-loft-2026-10-20.macro.js — THE RUNNER LOFT (Dave, 2026-10-20 evening: "The route board dialog makes no sense to me and seems | `modules/bbttcc-campaign/tools/patch-runner-loft-2026-10-20.macro.js` |
+| 🧪 | `patch-seal-exits-2026-10-21` | true | patch-seal-exits-2026-10-21.macro.js — the three Valhaulan Seal outcome beats (restore / redirect / break) get a "Back down the shaft" exit. | `modules/bbttcc-campaign/tools/patch-seal-exits-2026-10-21.macro.js` |
 | 🧪 | `patch-settlement-walk-loops` | true | patch-settlement-walk-loops.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-settlement-walk-loops.macro.js` |
 | 🧪 | `patch-skill-scene-dcs` | true | patch-skill-scene-dcs.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-skill-scene-dcs.macro.js` |
 | 🧪 | `patch-spine-gaps` | true | patch-spine-gaps.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-spine-gaps.macro.js` |
@@ -201,18 +269,32 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | 🧪 | `patch-story-flow-phase-d2` | true | patch-story-flow-phase-d2.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-story-flow-phase-d2.macro.js` |
 | 🧪 | `patch-story-flow-playtest` | true | patch-story-flow-playtest.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-story-flow-playtest.macro.js` |
 | 🧪 | `patch-story-flow-receipts` | true | patch-story-flow-receipts.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-story-flow-receipts.macro.js` |
+| 🧪 | `patch-story-review-act01-2026-10-19` | true | patch-story-review-act01-2026-10-19.macro.js — STORY REVIEW, ACT 0–1, BATCH 1 (Ledger "Doc versus live" rows 1–15, all Accept, 2026-10-18/19): | `modules/bbttcc-campaign/tools/patch-story-review-act01-2026-10-19.macro.js` |
+| 🧪 | `patch-story-review-act01b-2026-10-19` | true | patch-story-review-act01b-2026-10-19.macro.js — STORY REVIEW LEDGER, "Act 0–1 findings" rows 1–35, ALL Accept (Dave, 2026-10-19) | `modules/bbttcc-campaign/tools/patch-story-review-act01b-2026-10-19.macro.js` |
+| 🧪 | `patch-story-review-act3-2026-10-19` | true | patch-story-review-act3-2026-10-19.macro.js — STORY REVIEW LEDGER, "Act 3 findings" rows 1–11, ALL Accept (Dave, 2026-10-19) | `modules/bbttcc-campaign/tools/patch-story-review-act3-2026-10-19.macro.js` |
+| 🧪 | `patch-story-review-acts46-2026-10-19` | true | patch-story-review-acts46-2026-10-19.macro.js — STORY REVIEW LEDGER, "Acts 4–6 findings, encounters and strays" rows 1–20, ALL Accept (Dave, 2026-10-19) | `modules/bbttcc-campaign/tools/patch-story-review-acts46-2026-10-19.macro.js` |
+| 🧪 | `patch-story-review-grief-2026-10-19` | true | patch-story-review-grief-2026-10-19.macro.js — STORY REVIEW LEDGER, "Act 2 findings: the grief towns" rows 1–11, ALL Accept (Dave, 2026-10-19) | `modules/bbttcc-campaign/tools/patch-story-review-grief-2026-10-19.macro.js` |
+| 🧪 | `patch-story-review-road-2026-10-19` | true | patch-story-review-road-2026-10-19.macro.js — STORY REVIEW LEDGER, "Act 2 findings: the road" rows 1–27, ALL Accept (Dave, 2026-10-19) | `modules/bbttcc-campaign/tools/patch-story-review-road-2026-10-19.macro.js` |
+| 🧪 | `patch-tallow-connection-2026-10-15` | true | patch-tallow-connection-2026-10-15.macro.js — THE TALLOW CONNECTION becomes a discovery (Dave, 2026-10-15): | `modules/bbttcc-campaign/tools/patch-tallow-connection-2026-10-15.macro.js` |
+| 🧪 | `patch-tamsin-dream-tell-2026-10-16` | true | patch-tamsin-dream-tell-2026-10-16.macro.js — THE DREAM GETS A TELL (Dave, 2026-10-16): | `modules/bbttcc-campaign/tools/patch-tamsin-dream-tell-2026-10-16.macro.js` |
+| 🧪 | `patch-tanneritos-handoff-2026-10-20` | true | patch-tanneritos-handoff-2026-10-20.macro.js — THE NEW EPISODE'S PEN CHANGES HANDS (Dave, Story Review Ledger round 2 open asks, 2026-10-20): | `modules/bbttcc-campaign/tools/patch-tanneritos-handoff-2026-10-20.macro.js` |
 | 🧪 | `patch-template-review-fixes-2026-10-01` | true | patch-template-review-fixes-2026-10-01.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-template-review-fixes-2026-10-01.macro.js` |
 | 🧪 | `patch-template-review-fixes-b-2026-10-01` | true | patch-template-review-fixes-b-2026-10-01.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-template-review-fixes-b-2026-10-01.macro.js` |
 | 🧪 | `patch-template-review-fixes-c-2026-10-02` | true | patch-template-review-fixes-c-2026-10-02.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-template-review-fixes-c-2026-10-02.macro.js` |
+| 🧪 | `patch-timeline-copperplate-2026-10-21` | true | patch-timeline-copperplate-2026-10-21.macro.js — three plot rulings from Dave (2026-10-21, after the happy-path story read): | `modules/bbttcc-campaign/tools/patch-timeline-copperplate-2026-10-21.macro.js` |
 | 🧪 | `patch-title-card-exit` | true | patch-title-card-exit.macro.js — THATWARDS HO! Title Card exits into Act 2 (2026-09-08) | `modules/bbttcc-campaign/tools/patch-title-card-exit.macro.js` |
 | 🧪 | `patch-title-card-turn-gate` | true | patch-title-card-turn-gate.macro.js — the Title Card waits for the turn | `modules/bbttcc-campaign/tools/patch-title-card-turn-gate.macro.js` |
 | 🧪 | `patch-turn1-exclusions` | true | patch-turn1-exclusions.macro.js — Turn 1 "meet everyone" exclusions | `modules/bbttcc-campaign/tools/patch-turn1-exclusions.macro.js` |
+| 🧪 | `patch-unquested-beats-2026-10-21` | true | patch-unquested-beats-2026-10-21.macro.js — 8 beats the Beat Builder showed with no quest (A1·B51, A1·B57, …). | `modules/bbttcc-campaign/tools/patch-unquested-beats-2026-10-21.macro.js` |
 | 🧪 | `patch-vacancy-rescene-2026-10-05` | true | patch-vacancy-rescene-2026-10-05.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-vacancy-rescene-2026-10-05.macro.js` |
 | 🧪 | `patch-vault-allies` | false | Bad Eden — the Vault makes Allies; the Back Stairs and the Generator open (2026-09-15) — DRY_RUN | `modules/bbttcc-campaign/tools/patch-vault-allies.macro.js` |
+| 🧪 | `patch-voice-off-2026-10-20` | true | patch-voice-off-2026-10-20.macro.js — every beat's voice track OFF by default (Dave, Story Review Ledger round 2 open asks, 2026-10-20): | `modules/bbttcc-campaign/tools/patch-voice-off-2026-10-20.macro.js` |
 | 🧪 | `patch-walk-flow-hq-tamsin` | true | patch-walk-flow-hq-tamsin.macro.js — Welcome Round flow polish | `modules/bbttcc-campaign/tools/patch-walk-flow-hq-tamsin.macro.js` |
 | 🧪 | `patch-welcome-ask-answers` | true | patch-welcome-ask-answers.macro.js — the asks get answered | `modules/bbttcc-campaign/tools/patch-welcome-ask-answers.macro.js` |
 | 🧪 | `patch-welcome-round-soma-break` | true | patch-welcome-round-soma-break.macro.js — give the Welcome Round a real | `modules/bbttcc-campaign/tools/patch-welcome-round-soma-break.macro.js` |
+| 🧪 | `patch-who-passed-2026-10-20` | true | patch-who-passed-2026-10-20.macro.js — CONVOY RECEIPTS THAT CARRY INFORMATION (Dave, Story Review Ledger round 2 open asks: "Love it let's go!"). | `modules/bbttcc-campaign/tools/patch-who-passed-2026-10-20.macro.js` |
 | 🧪 | `patch-wick-cover-2026-10-04` | true | patch-wick-cover-2026-10-04.macro.js — RUN IN-WORLD (GM, ember). DRY_RUN default true. | `modules/bbttcc-campaign/tools/patch-wick-cover-2026-10-04.macro.js` |
+| 🧪 | `patch-wick-seen-good-room-2026-10-20` | true | patch-wick-seen-good-room-2026-10-20.macro.js — two Allesh-Gilliam fixes (Dave, 2026-10-20 evening): | `modules/bbttcc-campaign/tools/patch-wick-seen-good-room-2026-10-20.macro.js` |
 | 🧪 | `prep-dress-rehearsal` | true | prep-dress-rehearsal.macro.js — set the Fixit Farm first-visit stage (2026-07-03) | `modules/bbttcc-campaign/tools/prep-dress-rehearsal.macro.js` |
 | ⚠ | `press-digest` | — | press-digest.macro.js — re-run The Turn Press by hand (2026-08-12) | `modules/bbttcc-campaign/tools/press-digest.macro.js` |
 | 🧪 | `quest-log-cleanup` | true | quest-log-cleanup.macro.js — ONE pass to put the Quest Log right (2026-09-09) | `modules/bbttcc-campaign/tools/quest-log-cleanup.macro.js` |
@@ -225,6 +307,7 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | 🧪 | `run-catch-up-2026-09-30` | true | run-catch-up-2026-09-30.macro.js — THE UBER MACRO: every macro Dave is in arrears on, in order, in one run. RUN IN-WORLD (GM, ember). | `modules/bbttcc-campaign/tools/run-catch-up-2026-09-30.macro.js` |
 | 🧪 | `run-catch-up-wave3-2026-09-30` | true | run-catch-up-wave3-2026-09-30.macro.js — WAVE 3 in one run: the ten remaining retrofits in the Chuckle shape. RUN IN-WORLD (GM, ember). | `modules/bbttcc-campaign/tools/run-catch-up-wave3-2026-09-30.macro.js` |
 | 🧪 | `run-golden-13-2026-10-02` | true | run-golden-13-2026-10-02.macro.js — GOLDEN MASTER 13 in one macro, two runs. RUN IN-WORLD (GM, ember). | `modules/bbttcc-campaign/tools/run-golden-13-2026-10-02.macro.js` |
+| 🧪 | `run-golden-15-2026-10-13` | true | run-golden-15-2026-10-13.macro.js — GOLDEN MASTER 15 in one macro, two runs. RUN IN-WORLD (GM, ember). | `modules/bbttcc-campaign/tools/run-golden-15-2026-10-13.macro.js` |
 | 🧪 | `run-golden-ritual-v2` | true | Bad Eden — GOLDEN RITUAL v2: catch a Golden v11 world up to the latest content, in one go (2026-09-21) | `modules/bbttcc-campaign/tools/run-golden-ritual-v2.macro.js` |
 | 🧪 | `run-golden-ritual` | true | Bad Eden — RUN THE GOLDEN RITUAL: every seeder since Golden v4, in order, in one go (2026-09-14) | `modules/bbttcc-campaign/tools/run-golden-ritual.macro.js` |
 | 🧪 | `scrub-orphan-beats` | true | Bad Eden — Scrub orphan beats (2026-09-14) — DRY_RUN | `modules/bbttcc-campaign/tools/scrub-orphan-beats.macro.js` |
@@ -261,7 +344,9 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | 🧪 | `seed-geburah-confer` | true | seed-geburah-confer.macro.js — THE STATUES CONFER | `modules/bbttcc-campaign/tools/seed-geburah-confer.macro.js` |
 | 🧪 | `seed-gloomgill-retrofit` | true | seed-gloomgill-retrofit.macro.js — GLOOMGILL to the Chuckle Creek template (2026-09-27). RUN IN-WORLD (GM). DRY_RUN default true. | `modules/bbttcc-campaign/tools/seed-gloomgill-retrofit.macro.js` |
 | 🧪 | `seed-handoffs` | true | seed-handoffs.macro.js — narrative handoffs: conversation → next scene (2026-07-03) | `modules/bbttcc-campaign/tools/seed-handoffs.macro.js` |
+| 🧪 | `seed-hexknight-encounter-2026-10-13` | true | seed-hexknight-encounter-2026-10-13.macro.js — THE HEXKNIGHT travel encounter (owner ruling 2026-10-13: | `modules/bbttcc-campaign/tools/seed-hexknight-encounter-2026-10-13.macro.js` |
 | 🧪 | `seed-hidden-vault-retrofit` | true | seed-hidden-vault-retrofit.macro.js — THE HIDDEN VAULT to the Chuckle Creek template (2026-09-27). RUN IN-WORLD (GM). DRY_RUN default true. | `modules/bbttcc-campaign/tools/seed-hidden-vault-retrofit.macro.js` |
+| 🧪 | `seed-high-tier-travel-tables-2026-10-13` | true | seed-high-tier-travel-tables-2026-10-13.macro.js — GENERATED by scratch gen_high_tables.py (owner ask 2026-10-13: | `modules/bbttcc-campaign/tools/seed-high-tier-travel-tables-2026-10-13.macro.js` |
 | 🧪 | `seed-hum-travel-entries` | true | Bad Eden — The Sarmoung Hum rungs ride the roads (2026-09-14) — DRY_RUN | `modules/bbttcc-campaign/tools/seed-hum-travel-entries.macro.js` |
 | 🧪 | `seed-invite-text` | true | seed-invite-text.macro.js — authored inviteText for conversation-hub beats | `modules/bbttcc-campaign/tools/seed-invite-text.macro.js` |
 | 🧪 | `seed-khezek-tor-retrofit` | true | seed-khezek-tor-retrofit.macro.js — KHEZEK-TOR to the Chuckle Creek template (2026-09-27). RUN IN-WORLD (GM). DRY_RUN default true. | `modules/bbttcc-campaign/tools/seed-khezek-tor-retrofit.macro.js` |
@@ -275,6 +360,7 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | 🧪 | `seed-ninth-guest-retrofit` | true | seed-ninth-guest-retrofit.macro.js — THE NINTH GUEST to the Chuckle Creek template (2026-09-30). RUN IN-WORLD (GM). DRY_RUN default true. | `modules/bbttcc-campaign/tools/seed-ninth-guest-retrofit.macro.js` |
 | 🧪 | `seed-npc-placements` | true | seed-npc-placements.macro.js — situational NPC placement rules (2026-07-03) | `modules/bbttcc-campaign/tools/seed-npc-placements.macro.js` |
 | ⚠ | `seed-opening-edition` | — | seed-opening-edition.macro.js — the day-one word going round (2026-08-14) | `modules/bbttcc-campaign/tools/seed-opening-edition.macro.js` |
+| 🧪 | `seed-opening-titles-slides` | true | seed-opening-titles-slides.macro.js — the Keynote opening titles ("As Above, So Below" crawl) become the | `modules/bbttcc-campaign/tools/seed-opening-titles-slides.macro.js` |
 | 🧪 | `seed-quest-completions` | true | seed-quest-completions.macro.js — Category-A completion wiring + routing repairs | `modules/bbttcc-campaign/tools/seed-quest-completions.macro.js` |
 | 🧪 | `seed-sarmoung-hum-retrofit` | true | seed-sarmoung-hum-retrofit.macro.js — THE SARMOUNG HUM: Tier 1 touch-ups (2026-09-27) + TIER 2 "THE SHAPE" (2026-10-02). RUN IN-WORLD (GM). DRY_RUN default true | `modules/bbttcc-campaign/tools/seed-sarmoung-hum-retrofit.macro.js` |
 | 🧪 | `seed-sarmoung-hum` | true | seed-sarmoung-hum.macro.js — TIER 1: THE HUM  (+ dormant houses, + T2 assets) | `modules/bbttcc-campaign/tools/seed-sarmoung-hum.macro.js` |
@@ -288,6 +374,7 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | 🧪 | `seed-story-flow-acts-3-6` | true | seed-story-flow-acts-3-6.macro.js — GM macro/console. Runs as a DRY RUN first and then ASKS to apply (no constant to flip). | `modules/bbttcc-campaign/tools/seed-story-flow-acts-3-6.macro.js` |
 | 🧪 | `seed-stub-quest-descriptions` | true | seed-stub-quest-descriptions.macro.js — write the ten empty April stubs | `modules/bbttcc-campaign/tools/seed-stub-quest-descriptions.macro.js` |
 | 🧪 | `seed-tamsin-dream` | true | Bad Eden — Father Tamsin's Dream: the cut cold open, wired back in (2026-09-13) — DRY_RUN | `modules/bbttcc-campaign/tools/seed-tamsin-dream.macro.js` |
+| 🧪 | `seed-teaching-slides` | true | seed-teaching-slides.macro.js — the ten Teaching Slides become play-once line animations (2026-10-25, Dave's | `modules/bbttcc-campaign/tools/seed-teaching-slides.macro.js` |
 | 🧪 | `seed-tifaret-retrofit` | true | seed-tifaret-retrofit.macro.js — THE FOREST OF EARLY TIFARET to the Chuckle Creek template (2026-09-30). RUN IN-WORLD (GM). DRY_RUN default true. | `modules/bbttcc-campaign/tools/seed-tifaret-retrofit.macro.js` |
 | 🧪 | `seed-tikkun-atonement` | true | seed-tikkun-atonement.macro.js — THE RITE OF ATONEMENT (owner ruling 2026-10-02). RUN IN-WORLD (GM). DRY_RUN default true. | `modules/bbttcc-campaign/tools/seed-tikkun-atonement.macro.js` |
 | 🧪 | `seed-trojan-gift-retrofit` | true | seed-trojan-gift-retrofit.macro.js — A GIFT. (NOT A TROJAN.) to the Chuckle Creek template (2026-09-30). RUN IN-WORLD (GM). DRY_RUN default true. | `modules/bbttcc-campaign/tools/seed-trojan-gift-retrofit.macro.js` |
@@ -322,6 +409,13 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | ⚠ | `fix-aptitude-grants-everywhere` | — | Fix Aptitude Grants — EVERYWHERE (actors + compendium packs), live, no restart. | `modules/bbttcc-character-options/tools/fix-aptitude-grants-everywhere.macro.js` |
 | ⚠ | `repair-aptitude-grants` | — | Repair — "Aptitude capped at rank 1 / can't be raised on the sheet." | `modules/bbttcc-character-options/tools/repair-aptitude-grants.macro.js` |
 | 🧪 | `repair-rank-inflation` | true | repair-rank-inflation.macro.js — fix promote-compounded aptitude ranks | `modules/bbttcc-character-options/tools/repair-rank-inflation.macro.js` |
+
+## 📦 core (2)
+
+| gate | tool | DRY_RUN default | purpose | path |
+|---|---|---|---|---|
+| 🧪 | `restamp-rig-art-2026-10-10` | false | restamp-rig-art-2026-10-10.macro.js — RUN IN-WORLD (GM) on EMBER (roll-for-initiation-bad-eden). | `modules/bbttcc-core/tools/restamp-rig-art-2026-10-10.macro.js` |
+| 👁 | `rfi-smoke` | — | bbttcc-core · tools/rfi-smoke.macro.js — THE RFI SMOKE (fourththing regression harness) | `modules/bbttcc-core/tools/rfi-smoke.macro.js` |
 
 ## 📦 epic (2)
 
@@ -377,11 +471,15 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | 🧪 | `seed-world-dossier-full` | false | seed-world-dossier-full.macro.js — World Dossier, full corpus seed (2026-07-03) | `modules/bbttcc-mal-voice/tools/seed-world-dossier-full.macro.js` |
 | 🧪 | `seed-world-dossier` | false | seed-world-dossier.macro.js — World Dossier bootstrap (Mara→Dougan prototype) | `modules/bbttcc-mal-voice/tools/seed-world-dossier.macro.js` |
 
-## 📦 market (1)
+## 📦 market (5)
 
 | gate | tool | DRY_RUN default | purpose | path |
 |---|---|---|---|---|
+| 🧪 | `patch-legacy-crew-picks-2026-10-18` | true | patch-legacy-crew-picks-2026-10-18.macro.js — LEGACY CREW / ASSOCIATION PICKS → CONTRACTS (ruling 15, 2026-10-18) | `modules/bbttcc-market/tools/patch-legacy-crew-picks-2026-10-18.macro.js` |
+| 🧪 | `patch-muster-contract-faces-2026-10-22` | true | patch-muster-contract-faces-2026-10-22.macro.js — the Muster's crews and associations get FACES (Dave 2026-10-22: | `modules/bbttcc-market/tools/patch-muster-contract-faces-2026-10-22.macro.js` |
+| 🧪 | `patch-muster-contracts-only-2026-10-22` | true | patch-muster-contracts-only-2026-10-22.macro.js — the Muster sells CONTRACTS only for now (Dave 2026-10-22: | `modules/bbttcc-market/tools/patch-muster-contracts-only-2026-10-22.macro.js` |
 | 🧪 | `seed-bestiary-hire-catalog` | false | seed-bestiary-hire-catalog.macro.js — GM script macro (2026-09-04) | `modules/bbttcc-market/tools/seed-bestiary-hire-catalog.macro.js` |
+| 🧪 | `seed-muster-contracts-2026-10-18` | true | seed-muster-contracts-2026-10-18.macro.js — THE MUSTER SELLS CONTRACTS (ruling 15, Dave 2026-10-17: crews and | `modules/bbttcc-market/tools/seed-muster-contracts-2026-10-18.macro.js` |
 
 ## 📦 onboarding (5)
 
@@ -425,7 +523,7 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | ⚠ | `sanity-check-derivation` | — | Bad Eden Structures — Derivation Sanity Sheet (Phase A) | `modules/bbttcc-structures/macros/sanity-check-derivation.macro.js` |
 | ⚠ | `stamp-test-bom` | — | Bad Eden Structures — Stamp Test BOM (Phase A paper-test tool) | `modules/bbttcc-structures/macros/stamp-test-bom.macro.js` |
 
-## 📦 territory (15)
+## 📦 territory (16)
 
 | gate | tool | DRY_RUN default | purpose | path |
 |---|---|---|---|---|
@@ -438,6 +536,7 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | ⚠ | `clear-hex-resource-nodes` | — | Bad Eden — Clear Hex Resource Nodes (live scene) | `modules/bbttcc-territory/macros/clear-hex-resource-nodes.macro.js` |
 | ⚠ | `edit-hex` | — | Bad Eden Open Hex Editor | `modules/bbttcc-territory/macros/edit-hex.js` |
 | ⚠ | `hide-quest-hint` | — | Bad Eden Hide Quest Hint | `modules/bbttcc-territory/macros/hide-quest-hint.macro.js` |
+| 🧪 | `migrate-hex-radiation-level-2026-10-22` | true | Bad Eden — Migrate to ONE radiation switch (2026-10-22) | `modules/bbttcc-territory/macros/migrate-hex-radiation-level-2026-10-22.macro.js` |
 | ⚠ | `patch-hex-node-drops` | — | Bad Eden — Patch Hex Resource Nodes with DROP TABLES (all region scenes) | `modules/bbttcc-territory/macros/patch-hex-node-drops.macro.js` |
 | ⚠ | `reveal-hex-and-neighbors` | — | Bad Eden Reveal Clicked Hex + Adjacent Hexes | `modules/bbttcc-territory/macros/reveal-hex-and-neighbors.js` |
 | ⚠ | `reveal-quest-hint` | — | Bad Eden Reveal Quest Hint | `modules/bbttcc-territory/macros/reveal-quest-hint.macro.js` |
@@ -494,7 +593,7 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | ⚠ | `surface-mechanics` | — | surface-mechanics.macro.js  —  BBTTCC / fourththing (RFI) | `modules/bbttcc-master-content/tools/surface-mechanics.macro.js` |
 | 👁 | `sync-maneuver-tags` | — | Bad Eden — Sync Maneuver Tags Audit (2026-05-14) | `modules/bbttcc-master-content/tools/sync-maneuver-tags.macro.js` |
 
-## 🛠 Repairs & Stamps (125)
+## 🛠 Repairs & Stamps (133)
 
 | gate | tool | DRY_RUN default | purpose | path |
 |---|---|---|---|---|
@@ -548,7 +647,10 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | ⚠ | `phase6-survey-caster-disciplines` | — | Bad Eden — Phase 6 survey: caster discipline class-features | `modules/bbttcc-master-content/tools/phase6-survey-caster-disciplines.console.js` |
 | ⚠ | `phase7-dump-flagged-descriptions` | — | Bad Eden — Phase 7 helper: dump flagged item descriptions as paste-friendly JSON | `modules/bbttcc-master-content/tools/phase7-dump-flagged-descriptions.console.js` |
 | ⚠ | `phase7-survey-discipline-kit-and-subclass` | — | Bad Eden — Phase 7 survey: caster-discipline kit + subclass per-uses | `modules/bbttcc-master-content/tools/phase7-survey-discipline-kit-and-subclass.console.js` |
+| 🧪 | `price-hygiene-2026-10-07` | true | price-hygiene-2026-10-07.macro.js — PRICING HYGIENE PASS, bbttcc-master-content.items (GENERATED 2026-10-07 by build-price-hygiene.mjs — rebuild from a fresh du | `modules/bbttcc-master-content/tools/price-hygiene-2026-10-07.macro.js` |
+| 🧪 | `price-hygiene` | true | price-hygiene.macro.js — PRICING HYGIENE PASS (2026-10-07, owner ask). Companion to price-audit (read) and price-stamp (fill-only). | `modules/bbttcc-master-content/tools/price-hygiene.macro.js` |
 | 🧪 | `price-stamp` | true | Bad Eden — RFI Price Stamp (Phase 2, 2026-05-10) | `modules/bbttcc-master-content/tools/price-stamp.macro.js` |
+| 🧪 | `promote-archetype-t1-aptitudes` | true | Promote Archetype / Crew-Type Tier 1 proficiency grants into real aptitude ranks. | `modules/bbttcc-master-content/tools/promote-archetype-t1-aptitudes.macro.js` |
 | 🧪 | `promote-stamped-aptitude-aes` | false | Bad Eden — Promote stamped class-L1 aptitude AEs into source skill ranks (2026-05-08) | `modules/bbttcc-master-content/tools/promote-stamped-aptitude-aes.macro.js` |
 | 🧪 | `prune-pactkeeper-cruft` | true | Bad Eden master-content / tools / prune-pactkeeper-cruft.macro.js | `modules/bbttcc-master-content/tools/prune-pactkeeper-cruft.macro.js` |
 | 🧪 | `prune-surge-folded-feats` | true | Bad Eden master-content / tools / prune-surge-folded-feats.macro.js | `modules/bbttcc-master-content/tools/prune-surge-folded-feats.macro.js` |
@@ -567,6 +669,8 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | ⚠ | `repair-shadow-courier-double-grant` | — | Repair Shadow Courier route double-grant on existing actors. | `modules/bbttcc-master-content/tools/repair-shadow-courier-double-grant.macro.js` |
 | ⚠ | `repair-shadow-courier-pace-trigger` | — | Ensure the Shadow Courier "Liminal Operator" T1 feat on every SC actor | `modules/bbttcc-master-content/tools/repair-shadow-courier-pace-trigger.macro.js` |
 | ⚠ | `repair-skill-rank-cap` | — | Defensive sweep: clamp every actor's `system.skills.X.value` to ≤5. | `modules/bbttcc-master-content/tools/repair-skill-rank-cap.macro.js` |
+| 🧪 | `restamp-bandits-2026-10-13` | true | restamp-bandits-2026-10-13.macro.js — GENERATED by scratch gen_bandits.py (owner ruling 2026-10-13): | `modules/bbttcc-master-content/tools/restamp-bandits-2026-10-13.macro.js` |
+| 🧪 | `restamp-icons-2026-10-14` | true | restamp-icons-2026-10-14.macro.js — RUN IN-WORLD (GM) on EMBER (roll-for-initiation-bad-eden). | `modules/bbttcc-master-content/tools/restamp-icons-2026-10-14.macro.js` |
 | 🧪 | `restamp-requirements-level-mismatch` | true | Bad Eden master-content / tools / restamp-requirements-level-mismatch.macro.js | `modules/bbttcc-master-content/tools/restamp-requirements-level-mismatch.macro.js` |
 | 🧪 | `restamp-techniques` | true | restamp-techniques.macro.js — RUN IN-WORLD (GM). Run in BOTH worlds (foundry + ember). | `modules/bbttcc-master-content/tools/restamp-techniques.macro.js` |
 | 🧪 | `retro-apply-class-l1-aptitudes` | false | Bad Eden — Retro-apply Class L1 Aptitudes (Phase A companion, 2026-05-04) | `modules/bbttcc-master-content/tools/retro-apply-class-l1-aptitudes.macro.js` |
@@ -607,6 +711,9 @@ One compendium (`bbttcc-master-content.tool-macros`) holds a STUB per tool file.
 | 🧪 | `stamp-tier-from-legacy` | false | Bad Eden — Consolidate stray flags.rfi.item → flags.fourththing.rfi.item (pack + world) | `modules/bbttcc-master-content/tools/stamp-tier-from-legacy.macro.js` |
 | 🧪 | `stamp-triggers-bulk` | false | Bad Eden — Bulk-stamp Phase C triggers (Chunk 6 bulk-author) | `modules/bbttcc-master-content/tools/stamp-triggers-bulk.macro.js` |
 | 🧪 | `stamp-triggers-pilot` | false | Bad Eden — Pilot batch: stamp Phase C triggers on 5 high-visibility items | `modules/bbttcc-master-content/tools/stamp-triggers-pilot.macro.js` |
+| 🧪 | `stamp-untiered-market-items-2026-10-12` | false | stamp-untiered-market-items-2026-10-12.macro.js — GENERATED by scratch stamp_untiered.py (owner ruling 2026-10-12: | `modules/bbttcc-master-content/tools/stamp-untiered-market-items-2026-10-12.macro.js` |
+| 🧪 | `strip-doctrine-drift-2026-10-19` | true | strip-doctrine-drift-2026-10-19.macro.js — Dave (2026-10-19): "Drift is an old concept… let's strip away the Drift text." | `modules/bbttcc-master-content/tools/strip-doctrine-drift-2026-10-19.macro.js` |
+| 🧪 | `strip-mal-voiced-tag-2026-10-25` | true | strip-mal-voiced-tag-2026-10-25.macro.js — Dave (2026-10-25): "remove 'Mal voiced' descriptor tags from | `modules/bbttcc-master-content/tools/strip-mal-voiced-tag-2026-10-25.macro.js` |
 | ⚠ | `strip-placeholder-uuid-note` | — | Bad Eden — Strip placeholder-UUID notes from heritage / ancestry items | `modules/bbttcc-master-content/tools/strip-placeholder-uuid-note.console.js` |
 | 🧪 | `swap-metaphor-auditor-parents` | true | Bad Eden master-content / tools / swap-metaphor-auditor-parents.macro.js | `modules/bbttcc-master-content/tools/swap-metaphor-auditor-parents.macro.js` |
 | 🧪 | `sync-class-fossil-prune` | false | sync-class-fossil-prune.macro.js — GM macro/console. DRY_RUN default true. | `modules/bbttcc-master-content/tools/sync-class-fossil-prune.macro.js` |
